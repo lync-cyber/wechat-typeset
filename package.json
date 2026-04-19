@@ -3,7 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "InkFlow · 微信公众号 Markdown 排版工具（自研）",
+  "description": "Browser-only Markdown editor that produces WeChat-official-account-ready rich text, with pluggable themes, 20+ container extensions and one-click copy.",
+  "keywords": [
+    "markdown",
+    "wechat",
+    "weixin",
+    "editor",
+    "vue",
+    "markdown-to-html",
+    "typesetting",
+    "publishing"
+  ],
+  "author": "lync-cyber",
+  "license": "MIT",
+  "homepage": "https://github.com/lync-cyber/wechat-typeset#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lync-cyber/wechat-typeset.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lync-cyber/wechat-typeset/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
