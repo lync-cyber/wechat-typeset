@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Browser-only Markdown editor that produces WeChat-official-account-ready rich text, with pluggable themes, 20+ container extensions and one-click copy.",
+  "description": "Browser-only Markdown editor for WeChat official-account articles: pluggable themes, 20+ container extensions, one-click rich-text copy.",
   "keywords": [
     "markdown",
     "wechat",

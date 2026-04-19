@@ -5,15 +5,10 @@
  * 主题严禁在任何层级声明 font-family——微信客户端会用系统字体覆盖，
  * themeCSS 生成器遇到 font-family 会直接 throw ThemeAuthoringError。
  *
- * v2 变更（variants）：
- *   P1「同质化」源头是 admonitions.ts 把"左 3px 色条 + 浅底"写死。
- *   v2 引入 ThemeVariants：主题在 variants 里选骨架，渲染器按 variant 分派。
- *   variant 模块只允许返回受类型约束的 { wrapperCSS, titleCSS, bodyCSS, svgSlot }
- *   四段式产物，不允许任意属性——避免"CSS 片段超市"。
- *
- *   variants 选择不放进 ThemeTokens（tokens 是纯数值令牌），而挂在 Theme 顶层，
- *   ContainerRenderContext 同步携带。主题不声明时用 DEFAULT_VARIANTS 回退，
- *   保持对现有 5 套主题向后兼容。
+ * ThemeVariants：每类容器可选多个"视觉骨架"，主题在 variants 里声明 id；
+ * 渲染器按 id 查表分派到 variants/{kind}/{id}.ts。variant 模块只允许返回
+ * { wrapperCSS, titleCSS, bodyCSS, svgSlot } 四段产物，杜绝"CSS 片段超市"。
+ * 主题不声明 variants 时，buildTheme 填入 DEFAULT_VARIANTS。
  */
 
 export type CSSObject = Record<string, string | number>

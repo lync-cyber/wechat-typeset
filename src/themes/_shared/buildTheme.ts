@@ -43,7 +43,7 @@ export interface BuildThemeOptions {
   pre?: CSSObject
   code?: CSSObject
   /**
-   * v2 骨架变体。未声明时用 DEFAULT_VARIANTS（对齐 v1 视觉行为，零破坏兼容）。
+   * 骨架变体。未声明时用 DEFAULT_VARIANTS。
    * Partial 支持"只换一项骨架" —— 比如某主题想 admonition 走 terminal、其余默认。
    */
   variants?: Partial<ThemeVariants>
@@ -252,7 +252,7 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     id: opts.id,
     name: opts.name,
     description: opts.description,
-    author: opts.author ?? 'InkFlow',
+    author: opts.author ?? '',
     preview: opts.preview ?? '',
     tokens: opts.tokens,
     elements,

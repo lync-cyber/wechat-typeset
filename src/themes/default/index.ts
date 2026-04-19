@@ -348,7 +348,7 @@ export const defaultTheme: Theme = {
   id: 'default',
   name: '默认主题',
   description: '中性白底，语义色 + 几何装饰 SVG',
-  author: 'InkFlow',
+  author: '',
   preview: '',
   tokens,
   elements,
