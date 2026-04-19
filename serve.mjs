@@ -2,7 +2,7 @@
 /**
  * wx-md 本地静态服务器
  *
- * 服务 app/dist/ 到 http://127.0.0.1:7788
+ * 服务 dist/ 到 http://127.0.0.1:7788
  * 127.0.0.1 被浏览器视为 secure context，Clipboard API 可用（file:// 不行）。
  * 零外部依赖，只用 Node 18+ 自带的 http / fs / url 模块。
  */
@@ -14,9 +14,8 @@ import { fileURLToPath } from 'node:url'
 import { exec, spawnSync } from 'node:child_process'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
-const APP = resolve(HERE, 'app')
-const DIST = resolve(APP, 'dist')
-const SRC = resolve(APP, 'src')
+const DIST = resolve(HERE, 'dist')
+const SRC = resolve(HERE, 'src')
 const HOST = '127.0.0.1'
 const PORT = Number(process.env.WX_MD_PORT ?? 7788)
 
@@ -39,7 +38,7 @@ const MIME = {
 
 if (!existsSync(DIST)) {
   console.error(`[wx-md] dist 目录不存在：${DIST}`)
-  console.error('[wx-md] 请先运行：cd framework/tools/typeset/app && npm install && npm run build')
+  console.error('[wx-md] 请先运行：npm install && npm run build')
   process.exit(1)
 }
 
@@ -82,16 +81,16 @@ function maybeRebuild() {
   const distMtime = statSync(distStamp).mtimeMs
   const srcMtime = Math.max(
     latestMtime(SRC),
-    fileMtime(resolve(APP, 'package.json')),
-    fileMtime(resolve(APP, 'vite.config.ts')),
-    fileMtime(resolve(APP, 'index.html')),
-    fileMtime(resolve(APP, 'tsconfig.json')),
+    fileMtime(resolve(HERE, 'package.json')),
+    fileMtime(resolve(HERE, 'vite.config.ts')),
+    fileMtime(resolve(HERE, 'index.html')),
+    fileMtime(resolve(HERE, 'tsconfig.json')),
   )
   if (srcMtime <= distMtime) return
   console.log('[wx-md] 检测到源码更新，正在重建（npm run build）…')
   const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm'
   const result = spawnSync(npmCmd, ['run', 'build'], {
-    cwd: APP,
+    cwd: HERE,
     stdio: 'inherit',
   })
   if (result.status !== 0) {

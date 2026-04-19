@@ -1,8 +1,5 @@
 node_modules/
 dist/
-app/node_modules/
-app/dist/
-app/scripts/.baseline/
 scripts/.baseline/
 *.log
 .DS_Store
