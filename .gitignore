@@ -6,5 +6,6 @@ scripts/.baseline/
 .vscode/
 .idea/
 
-# 开发侧的 Claude Code skill / 本地设置：不发布到公开仓库
-.claude/
+# 本地 Claude Code 设置不发布；但 .claude/skill/ 里是给 LLM 使用的公开扩展指引
+.claude/*
+!.claude/skill/
