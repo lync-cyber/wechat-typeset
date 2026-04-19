@@ -8,15 +8,16 @@
 npm ci             # 严格按 package-lock.json 装，避免版本漂移
 npm run dev        # 开发服务器，热更新，http://127.0.0.1:5173
 npm run build      # 生产构建 → dist/
-npm test           # 全量 vitest
+npm test           # 全量 vitest + sample-full 端到端校验
+npm run test:unit  # 只跑 vitest（开发中快速回归）
+npm run test:e2e   # 只跑 sample-full 校验（改 variant/主题后必跑）
 npm run typecheck  # 单独跑 vue-tsc
 ```
 
 ## 提 PR 前的自检清单
 
 - [ ] `npm run build` 无报错（含 `vue-tsc --noEmit`）
-- [ ] `npm test` 全绿
-- [ ] 如改动渲染/主题/变体：`npx tsx scripts/verify-sample-full.ts` 34/34 通过
+- [ ] `npm test` 全绿（vitest + sample-full 端到端 34/34）
 - [ ] 提交信息用 Conventional Commits（`feat: ...` / `fix: ...` / `refactor: ...` / `docs: ...`）
 - [ ] 不引入任何新网络请求（analytics / 远程字体 / 远程模板一律禁止）
 - [ ] 不引入新依赖，除非能用等量代码替换掉更重的现有依赖

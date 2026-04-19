@@ -31,8 +31,10 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 7788",
-    "test": "vitest run",
+    "test": "vitest run && tsx scripts/verify-sample-full.ts",
+    "test:unit": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "tsx scripts/verify-sample-full.ts",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -62,6 +64,7 @@
     "@vitest/ui": "^2.1.5",
     "chroma-js": "^3.1.2",
     "jsdom": "^25.0.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
     "vite-plugin-node-polyfills": "^0.22.0",
