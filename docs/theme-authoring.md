@@ -1,7 +1,7 @@
 # 第三方主题开发指南
 
-> Step 1 占位文档，完整规范在 Step 5/6 定稿。
-> 此处先锁定**硬约束**，供主题作者提前规划。
+本指南面向想新增一套内置主题、或 fork 后自用定制的作者。
+硬约束部分是**不可协商**的——违反即 throw 或在公众号粘贴后丢失。
 
 ## 主题 = 设计系统
 
@@ -73,8 +73,7 @@ elements: { h1: { 'font-size': '24px', 'font-weight': '700' } }
 ## 调试
 
 ```bash
-cd framework/tools/typeset/app
-npm run test     # 含 themeCSS.spec.ts —— 主题对象的 font-family 守卫
+npm test         # 含 themeCSS 守卫：主题对象里任何 font-family 都会 throw
 npm run dev      # 热更新预览
 ```
 

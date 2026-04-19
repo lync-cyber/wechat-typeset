@@ -6,10 +6,9 @@
 ## 环境准备
 
 ```bash
-cd framework/tools/typeset/app
-pnpm install
-pnpm build
-node ../serve.mjs        # 或 framework/tools/typeset/launcher.{bat,command}
+npm install
+npm run build
+node serve.mjs           # 或双击 ./launcher.{bat,command}
 ```
 
 浏览器打开 `http://127.0.0.1:7788`。
@@ -140,10 +139,10 @@ node ../serve.mjs        # 或 framework/tools/typeset/launcher.{bat,command}
 
 1. 打开 DevTools Console 看有无红字
 2. 打开 Preview iframe 的 srcdoc 看 HTML 结构
-3. 跑 `pnpm test` 确认契约未破
-4. 跑 `pnpm typecheck` 确认类型未破
-5. 对照 `.claude/rules/data/platform-limits.yaml` 确认约束未破
+3. 跑 `npm test` 确认契约未破
+4. 跑 `npm run typecheck` 确认类型未破
+5. 对照 `src/pipeline/rules.ts` 确认微信平台约束未破
 
 ---
 
-自动化测试对照：`app/tests/` · 单次命令 `pnpm test` 应见 114 条以上全绿。
+自动化测试对照：`tests/` · 单次命令 `npm test` 应见 280+ 条全绿。
