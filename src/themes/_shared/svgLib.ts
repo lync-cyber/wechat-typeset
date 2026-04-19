@@ -1,9 +1,34 @@
 /**
- * SVG 字符串工具：压空白（保持单行）并统一去除 id。
+ * 主题 SVG 资产的共享小工具。
  *
- * 主题作者写多行 SVG 方便阅读，过 strip() 后变单行字符串，便于拼进 HTML。
- * wxPatch 会再做一次 id/url 清洗，但主题层先自觉避免 id 和 url 引号，
- * 让 wxPatch 层保持"幂等断言"语义。
+ * strip(): 主题作者写多行 SVG 方便阅读，过一遍 strip() 变单行字符串，便于拼进 HTML。
+ *          wxPatch 会再做一次 id/url 清洗，但主题层先自觉不要写 id / 不加 url 引号，
+ *          让 wxPatch 层保持"幂等断言"语义。
+ *
+ * StatusPalette / BasePalette / ExtendedPalette: 四套内置主题的 Palette 形状高度重合，
+ *          只在"是否需要 secondary / textInverse"这两点分化。抽成共享类型，让新主题的
+ *          assets 工厂可以按需选形，而不是各写一份几乎相同的 interface。
  */
 
 export const strip = (s: string): string => s.replace(/\s+/g, ' ').trim()
+
+/** 四条语义状态色（tip / warning / info / danger），4 套主题 assets 工厂都要。 */
+export interface StatusPalette {
+  tipAccent: string
+  warningAccent: string
+  infoAccent: string
+  dangerAccent: string
+}
+
+/** 最小 assets 工厂入参：品牌三色 + 边界 + 四状态色。tech-geek 等冷色主题用这份。 */
+export interface BasePalette extends StatusPalette {
+  primary: string
+  accent: string
+  border: string
+}
+
+/** 加 secondary / textInverse —— business-finance / literary-humanism 这类报告 / 书卷主题用。 */
+export interface ExtendedPalette extends BasePalette {
+  secondary: string
+  textInverse: string
+}

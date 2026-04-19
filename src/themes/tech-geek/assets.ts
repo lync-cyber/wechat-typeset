@@ -13,19 +13,9 @@
  */
 
 import type { ThemeAssets } from '../types'
-import { strip } from '../_shared/svgLib'
+import { strip, type BasePalette } from '../_shared/svgLib'
 
-interface Palette {
-  primary: string
-  accent: string
-  border: string
-  tipAccent: string
-  warningAccent: string
-  infoAccent: string
-  dangerAccent: string
-}
-
-export function techGeekAssets(p: Palette): ThemeAssets {
+export function techGeekAssets(p: BasePalette): ThemeAssets {
   // ---------- H2 Prefix：扫描线竖条 ---------- //
   const h2Prefix = strip(`
     <svg viewBox="0 0 14 22" width="12" height="18" xmlns="http://www.w3.org/2000/svg"

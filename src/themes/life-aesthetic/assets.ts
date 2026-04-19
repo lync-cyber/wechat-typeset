@@ -13,20 +13,12 @@
  */
 
 import type { ThemeAssets } from '../types'
-import { strip } from '../_shared/svgLib'
+import { strip, type BasePalette } from '../_shared/svgLib'
 
-interface Palette {
-  primary: string
-  secondary: string
-  accent: string
-  border: string
-  tipAccent: string
-  warningAccent: string
-  infoAccent: string
-  dangerAccent: string
-}
+/** life-aesthetic 在 BasePalette 之上只多一个 secondary（叶脉描边色）。 */
+type LifePalette = BasePalette & { secondary: string }
 
-export function lifeAestheticAssets(p: Palette): ThemeAssets {
+export function lifeAestheticAssets(p: LifePalette): ThemeAssets {
   // ---------- H2 Prefix：一片叶子 + 细茎 ---------- //
   const h2Prefix = strip(`
     <svg viewBox="0 0 22 22" width="18" height="18" xmlns="http://www.w3.org/2000/svg"

@@ -18,21 +18,9 @@
  */
 
 import type { ThemeAssets } from '../types'
-import { strip } from '../_shared/svgLib'
+import { strip, type ExtendedPalette } from '../_shared/svgLib'
 
-interface Palette {
-  primary: string   // 深红
-  secondary: string // 深海蓝
-  accent: string    // 金点缀
-  border: string
-  textInverse: string
-  tipAccent: string
-  warningAccent: string
-  infoAccent: string
-  dangerAccent: string
-}
-
-export function businessFinanceAssets(p: Palette): ThemeAssets {
+export function businessFinanceAssets(p: ExtendedPalette): ThemeAssets {
   // ---------- H2 Prefix：实心方块 + 细线（图表 legend 风） ---------- //
   const h2Prefix = strip(`
     <svg viewBox="0 0 18 18" width="14" height="14" xmlns="http://www.w3.org/2000/svg"

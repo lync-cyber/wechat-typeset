@@ -17,21 +17,9 @@
  */
 
 import type { ThemeAssets } from '../types'
-import { strip } from '../_shared/svgLib'
+import { strip, type ExtendedPalette } from '../_shared/svgLib'
 
-interface Palette {
-  primary: string   // 书卷棕
-  secondary: string // 竹墨青
-  accent: string    // 胭脂红
-  border: string
-  textInverse: string
-  tipAccent: string
-  warningAccent: string
-  infoAccent: string
-  dangerAccent: string
-}
-
-export function literaryHumanismAssets(p: Palette): ThemeAssets {
+export function literaryHumanismAssets(p: ExtendedPalette): ThemeAssets {
   // ---------- H2 Prefix：如意云头 + 细横线 ---------- //
   // 如意云纹由三个半圆与下方水平线组合，是古籍装饰最典型的元素。
   const h2Prefix = strip(`
