@@ -3,7 +3,14 @@ import vue from '@vitejs/plugin-vue'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { fileURLToPath, URL } from 'node:url'
 
+// public-path 配置：
+//   - 默认 '/'（根域名部署：Vercel / Cloudflare Pages / 自建域名）
+//   - 部署到 GitHub Pages 项目页（repo 名为子路径）时设 VITE_BASE=/<repo>/
+//   - 需以 '/' 开头与结尾；本地 dev 不读此变量，始终从 '/' 提供
+const BASE = process.env.VITE_BASE ?? '/'
+
 export default defineConfig({
+  base: BASE,
   plugins: [
     vue(),
     // juice 的浏览器入口 juice/client 依赖 cheerio → 需要 node polyfill
