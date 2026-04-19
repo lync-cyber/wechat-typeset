@@ -1,111 +1,111 @@
 # wx-md
 
-**Browser-only Markdown editor that produces WeChat-official-account-ready rich text.**
+**纯前端 Markdown → 微信公众号富文本编辑器。**
 
-Write Markdown on the left, preview the 375 px mobile-viewport render on the right, and copy the whole article as rich text — no backend, no account, no tracking.
+左边写 Markdown，右边 375 px 移动端实时预览，点一下把整篇文章当富文本复制出去——不跑后端、不登账号、不发任何数据到外部。
 
-- 🎨 5 built-in themes + tokenised design system + in-app colour generator
-- 🧩 20+ container extensions (`::: tip`, `::: compare`, `::: steps`, …) across 23 visual variants
-- 📋 One-click **Clipboard API** copy with `execCommand` fallback — paste straight into the WeChat backend
-- 💾 Multi-draft CRUD + template market + export (HTML / Markdown / long image)
-- ⌨️ Built-in keyboard shortcuts (Ctrl/⌘ + K to copy, etc.)
-- 🔒 Fully client-side: your drafts never leave the browser
+- 🎨 5 套内置主题 + 设计令牌体系 + 内置配色生成器
+- 🧩 20+ 容器扩展语法（`::: tip` / `::: compare` / `::: steps` …）× 23 个视觉骨架
+- 📋 一键 Clipboard API 复制（`execCommand` 降级）——粘到公众号后台即可
+- 💾 多草稿 CRUD + 模板市场 + 导出（HTML / Markdown / 长图）
+- ⌨️ 内置快捷键（Ctrl/⌘ + K 复制、Ctrl/⌘ + S 保存……）
+- 🔒 100% 浏览器端运行：草稿不离开本机
 
-> _Screenshot placeholder — drop a PNG at `docs/screenshot.png` after first build._
+> _首屏截图占位 —— 首次构建后把图放在 `docs/screenshot.png` 再更新这段。_
 
-## Try it
+## 在线体验
 
-**Hosted preview:** _replace this line with the URL once you deploy it._
+**托管地址：** _部署完成后替换这一行。_
 
-The app is a pure static SPA. Any static host works:
+项目产物是纯静态 SPA，任何静态托管都能跑：
 
-| Host | Command |
+| 托管环境 | 构建命令 |
 | --- | --- |
-| GitHub Pages (project page) | `VITE_BASE=/<repo>/ npm run build` then publish `dist/` |
-| GitHub Pages (user / org page) | `npm run build` then publish `dist/` |
-| Vercel / Netlify / Cloudflare Pages | Build command `npm run build`, output `dist/`, no env vars needed |
-| Any S3-style bucket | Upload `dist/` contents after `npm run build` |
+| GitHub Pages（项目页 / 子路径） | `VITE_BASE=/<repo>/ npm run build`，把 `dist/` 发布出去 |
+| GitHub Pages（用户 / 组织主页） | `npm run build`，把 `dist/` 发布出去 |
+| Vercel / Netlify / Cloudflare Pages | 构建命令 `npm run build`，输出目录 `dist/`，无需任何环境变量 |
+| S3 / OSS / COS 等对象存储 | `npm run build` 后把 `dist/` 里的文件整体上传 |
 
-> WeChat's Clipboard API requires a **secure context**. `https://` and `http://127.0.0.1` / `localhost` both qualify. `file://` does not — the copy path falls back to `execCommand` and may lose rich-text formatting.
+> Clipboard API 需要 **secure context**。`https://` 以及 `http://127.0.0.1` / `localhost` 都算；`file://` 不算——复制会退化成 `execCommand`，富文本格式在部分浏览器里会丢。
 
-## Run locally
+## 本地运行
 
-Requirements: **Node 18+** (Node 20 recommended).
+环境要求：**Node 18 +**（推荐 Node 20）。
 
 ```bash
 npm install
-npm run dev         # hot-reload dev server on http://127.0.0.1:5173
+npm run dev         # 开发服务器，热更新，http://127.0.0.1:5173
 ```
 
-For the production-style local run used by the double-click launchers:
+想跑生产构建 + 本地 secure-context 服务：
 
 ```bash
 npm run build
-node serve.mjs      # serves dist/ on http://127.0.0.1:7788
+node serve.mjs      # 127.0.0.1:7788 提供 dist/
 ```
 
-Or just double-click `launcher.bat` (Windows) or `launcher.command` (macOS / Linux) — the script installs deps, builds once, and serves.
+也可以双击 `launcher.bat`（Windows）或 `launcher.command`（macOS / Linux）——脚本会自动装依赖、构建一次、然后启服务并打开浏览器。
 
-## Why 127.0.0.1, not `file://`
+## 为什么必须走 127.0.0.1，而不是 `file://`
 
-`navigator.clipboard.write(ClipboardItem)` is gated on a secure context. `file://` is not secure, so copying would silently degrade to `document.execCommand('copy')`, which drops rich-text on several browsers. `127.0.0.1` / `localhost` are considered secure by the spec — this is a browser rule, not a tool limitation.
+`navigator.clipboard.write(ClipboardItem)` 要求 secure context。`file://` 协议下 `window.isSecureContext === false`，Clipboard API 不可用，复制路径会降级到 `document.execCommand('copy')`——在某些浏览器上会丢富文本，粘到公众号只剩纯文本。`127.0.0.1` / `localhost` 被浏览器规范视作 secure，Clipboard API 完整可用。这是浏览器规则，不是工具的限制。
 
-## Architecture
+## 架构
 
 ```
 src/
-├── App.vue                # three-column layout: toolbar / editor / preview
-├── components/            # Editor (CodeMirror 6) · Preview (iframe 375px) · Toolbar · drawers
-├── pipeline/              # markdown -> html (see below)
-│   ├── rules.ts           # single source of truth for wechat paste constraints
-│   ├── markdown.ts        # markdown-it + containers + inline extensions
-│   ├── themeCSS.ts        # theme tokens -> <style> string (guards against forbidden css)
-│   ├── highlight.ts       # highlight.js wrapper (font-family stripped)
-│   ├── juiceInline.ts     # juice/client wrapper for inlining <style> into element style
-│   ├── wxPatch/           # 8 DOM post-processors (forbidden tags / attrs / flex fallback / svg fixes)
-│   └── containers/        # 19 container renderers + 23 visual variants
-├── themes/                # 5 built-in themes + shared factories
-├── samples/               # per-theme demo Markdown shown on first run
-├── storage/               # localStorage wrappers (drafts, user components)
-├── clipboard/             # copy / export to HTML / Markdown / long-image
-└── color/                 # palette generator (chroma-js LCH + WCAG contrast)
+├── App.vue                # 三栏：Toolbar / Editor / Preview
+├── components/            # Editor（CodeMirror 6）/ Preview（375px iframe）/ Toolbar / 各抽屉
+├── pipeline/              # Markdown → HTML 渲染管线（见下）
+│   ├── rules.ts           # 微信粘贴约束的单一事实来源
+│   ├── markdown.ts        # markdown-it + 容器 + 行内插件
+│   ├── themeCSS.ts        # 主题 tokens → <style> 字符串，含 font-family 等守卫
+│   ├── highlight.ts       # highlight.js 包装（已剔除 font-family）
+│   ├── juiceInline.ts     # juice/client 封装，<style> 内联到元素 style
+│   ├── wxPatch/           # 8 个 DOM 后处理器（剥 forbidden / flex fallback / SVG 修补）
+│   └── containers/        # 19 个容器渲染器 + 23 个视觉骨架
+├── themes/                # 5 套内置主题 + 共享工厂
+├── samples/               # 每套主题的演示 Markdown
+├── storage/               # localStorage 封装（草稿、用户组件）
+├── clipboard/             # 复制 / 导出（HTML / Markdown / 长图）
+└── color/                 # 配色生成器（chroma-js LCH + WCAG 对比度）
 ```
 
-Rendering pipeline (unidirectional):
+单向渲染管线：
 
 ```
-md source
-  └─► [1] markdown-it (containers / mark / ins / footnote / task-lists)
-        └─► [2] container renderers -> <section> with inline SVG assets
-              └─► [3] wrap <section class="markdown-body"> + inject <style>
-                    └─► [4] highlight.js over <pre><code>
-                          └─► [5] juice/client: <style> -> element style
-                                └─► [6] wxPatch DOM passes (strip / rewrite)
-                                      └─► [7] final HTML
-                                            ├─► preview iframe srcdoc
-                                            └─► clipboard text/html + text/plain
+md 源文本
+  └─► [1] markdown-it（容器 / mark / ins / footnote / task-lists）
+        └─► [2] 容器渲染器：容器节点 → 带 SVG 装饰的 section 结构
+              └─► [3] 包 <section class="markdown-body"> + 注入主题 <style>
+                    └─► [4] highlight.js 处理 <pre><code>
+                          └─► [5] juice/client：<style> → 元素 style
+                                └─► [6] wxPatch 兼容性补丁层
+                                      └─► [7] 最终 HTML
+                                            ├─► 预览 iframe srcdoc
+                                            └─► 剪贴板 text/html + text/plain
 ```
 
-**Invariants**
+**不变量**
 
-1. Preview and clipboard share one HTML string — WYSIWYG is mandatory.
-2. Visual polish lives in inline SVG + design tokens; no external fonts, no `::before` / `::after`.
-3. Container extensions are first-class — every complex layout goes through the container system, not ad-hoc HTML.
+1. 预览与剪贴板共享同一份 HTML——所见即所得是硬契约。
+2. 视觉质感依托内联 SVG + 设计令牌；不加载外部字体，也不用 `::before` / `::after`。
+3. 容器扩展语法是一等公民——复杂版式都走容器系统，不写零散 HTML。
 
-## Dev docs
+## 开发文档
 
-- [Container syntax reference](docs/container-syntax.md)
-- [Theme authoring guide](docs/theme-authoring.md)
-- [Manual acceptance checklist](docs/TESTING.md)
+- [容器语法参考](docs/container-syntax.md)
+- [第三方主题开发指南](docs/theme-authoring.md)
+- [手动验收清单](docs/TESTING.md)
 
-## Known limits
+## 已知限制
 
-- **WeChat voice `<mpvoice>`**: can only be inserted from the WeChat backend media library. Rendered as a placeholder card.
-- **WeChat video `<mpvideo>`**: same as voice for the native format. Tencent Video (`qqvid`) renders as a `v.qq.com` iframe and survives paste.
-- **External links `<a>`**: WeChat limits their behaviour; do not treat them as visual-critical elements.
-- **Safari clipboard**: `ClipboardItem` must be constructed in the synchronous user-gesture path; async copy paths fail silently.
-- **`file://` protocol**: Clipboard API disabled — see the note above.
-- **Custom fonts**: WeChat client overrides `font-family` with system fonts. Declaring `font-family` in a theme throws `ThemeAuthoringError` at build time.
+- **微信语音 `<mpvoice>`**：只能在公众号后台素材库插入，粘贴富文本无法保留。`::: mpvoice` 渲染为占位提示卡。
+- **微信视频 `<mpvideo>`**：原生视频同上；腾讯视频（`qqvid`）走 `v.qq.com` iframe，粘贴后可保留。
+- **外链 `<a>`**：公众号对外链有限制，不建议作为视觉关键元素。
+- **Safari 剪贴板**：`ClipboardItem` 必须在用户手势的同步路径内构造，异步路径会失败。
+- **`file://` 协议**：Clipboard API 不可用，必须走 `127.0.0.1`（见上）。
+- **自定义字体**：微信客户端会用系统字体覆盖 `font-family`；主题层声明 `font-family` 会被 `themeCSS` 生成器直接 throw。
 
 ## License
 
