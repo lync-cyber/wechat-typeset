@@ -15,6 +15,7 @@
  */
 
 import { parseFragment, parseStyle, serializeFragment, stringifyStyle, walkElements } from './utils'
+import { NEAR_WHITE } from '../rules'
 
 const WHITE_VALUES = new Set(['#fff', '#ffffff', 'white'])
 const RGB_WHITE_RE = /^\s*rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)\s*$/i
@@ -23,8 +24,6 @@ function isWhite(v: string): boolean {
   const s = v.trim().toLowerCase()
   return WHITE_VALUES.has(s) || RGB_WHITE_RE.test(s)
 }
-
-const NEAR_WHITE = '#fefefe'
 
 const COLOR_ATTRS = new Set(['fill', 'stroke', 'stop-color', 'flood-color', 'lighting-color'])
 const COLOR_STYLE_PROPS = new Set(['fill', 'stroke', 'color', 'background', 'background-color', 'stop-color'])

@@ -20,6 +20,7 @@ import { describe, expect, it } from 'vitest'
 import { render } from '../src/pipeline'
 import { themeList, defaultTheme } from '../src/themes'
 import { VARIANT_IDS, type VariantKind } from '../src/themes/types'
+import { FORBIDDEN_CSS_PATTERNS } from '../src/pipeline/rules'
 
 type Kind = VariantKind
 type VariantCase = {
@@ -95,17 +96,7 @@ function buildCases(): VariantCase[] {
 
 const CASES = buildCases()
 
-// 微信粘贴会剥离的 CSS / 伪类（与 .claude/rules/data/platform-limits.yaml 的 forbidden_css 对齐）
-const FORBIDDEN_CSS_PATTERNS: Array<[RegExp, string]> = [
-  [/position\s*:/i, 'position:* 在微信粘贴后被剥离'],
-  [/float\s*:/i, 'float:* 会被微信剥离'],
-  [/@media\b/i, '@media 查询不被微信支持'],
-  [/@keyframes\b/i, '@keyframes 动画不被微信支持'],
-  [/:hover\b/i, ':hover 伪类在微信无效'],
-  [/:active\b/i, ':active 伪类在微信无效'],
-  [/-webkit-(?!print-color-adjust)/i, '-webkit- 前缀会被剥离（print-color-adjust 为 juice 注入例外）'],
-]
-
+// 禁用模式来自 src/pipeline/rules.ts · FORBIDDEN_CSS_PATTERNS（单一事实来源）
 function assertNoForbiddenCss(html: string, label: string): void {
   for (const [pattern, reason] of FORBIDDEN_CSS_PATTERNS) {
     if (pattern.test(html)) {

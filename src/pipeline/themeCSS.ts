@@ -8,33 +8,24 @@
 
 import type { CSSObject, Theme } from '../themes/types'
 import { ThemeAuthoringError } from '../themes/types'
+import {
+  FORBIDDEN_CSS_PROPS,
+  FORBIDDEN_DISPLAY_VALUES,
+  FORBIDDEN_VALUE_PATTERNS,
+} from './rules'
 
 const ROOT_CLASS = 'markdown-body'
 
 type Selector = string
 
-/**
- * 与 `.claude/rules/data/platform-limits.yaml` 的 forbidden_css 对齐：
- * 主题作者触碰任一条即 throw，让问题在开发阶段立刻暴露而不是粘贴后失效。
- */
-const FORBIDDEN_PROPS = ['font-family', 'fontfamily', 'position', 'float']
-const FORBIDDEN_VALUE_PATTERNS: Array<[RegExp, string]> = [
-  [/-webkit-/i, '-webkit- 前缀在公众号会被剥离'],
-  [/@media/i, '@media 查询会被公众号剥离'],
-  [/@keyframes/i, '@keyframes 动画不被公众号支持'],
-  [/:hover/i, ':hover 伪类粘贴后无效'],
-  [/:active/i, ':active 伪类粘贴后无效'],
-]
-
 // display:flex / inline-flex 在公众号粘贴后会被剥成 display: 空值，
 // 子项仍带 flex:1 / flex-direction 等 orphan 样式，布局必塌。
 // patchFlexToFallback 只在 DOM 后处理阶段把已经写进产物的 flex 改回 block，
 // 这里在"主题写 CSS"更早的阶段直接 throw，避免主题作者以为自己能用。
-const FORBIDDEN_DISPLAY_VALUES = new Set(['flex', 'inline-flex', 'grid', 'inline-grid'])
 
 function assertSafeProp(prop: string, value: string, path: string): void {
   const lower = prop.toLowerCase()
-  if (FORBIDDEN_PROPS.includes(lower)) {
+  if (FORBIDDEN_CSS_PROPS.includes(lower)) {
     throw new ThemeAuthoringError(
       `[themeCSS] 主题在 ${path} 声明了 \`${prop}\`，违反微信平台约束。请移除。`,
     )

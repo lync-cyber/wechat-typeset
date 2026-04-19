@@ -17,15 +17,7 @@
  */
 
 import { parseFragment, parseStyle, serializeFragment, stringifyStyle, walkElements, isInSvg } from './utils'
-
-const FORBIDDEN_CSS_PROPS = new Set([
-  'position',
-  'top',
-  'right',
-  'bottom',
-  'left',
-  'z-index',
-])
+import { FORBIDDEN_POSITION_PROPS } from '../rules'
 
 const ID_WHITELIST = /^(fn|fnref|footnote)[-\d]/i
 
@@ -44,7 +36,7 @@ export function stripForbiddenAttrs(html: string): string {
     const style = el.getAttribute('style')
     if (!style) return
     const decls = parseStyle(style)
-    const kept = decls.filter((d) => !FORBIDDEN_CSS_PROPS.has(d.prop.toLowerCase()))
+    const kept = decls.filter((d) => !FORBIDDEN_POSITION_PROPS.has(d.prop.toLowerCase()))
     if (kept.length === decls.length) return
     if (kept.length === 0) {
       el.removeAttribute('style')

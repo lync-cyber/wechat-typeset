@@ -16,10 +16,7 @@
  */
 
 import { parseFragment, serializeFragment } from './utils'
-
-const HARD_REMOVE_TAGS = new Set(['style', 'script', 'noscript', 'link', 'meta'])
-
-const IFRAME_SRC_ALLOW = [/^https?:\/\/v\.qq\.com\//i]
+import { HARD_REMOVE_TAGS, IFRAME_SRC_ALLOW } from '../rules'
 
 export function stripForbiddenTags(html: string): string {
   const { container } = parseFragment(html)
