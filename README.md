@@ -15,7 +15,9 @@
 
 ## 在线体验
 
-**托管地址：** _部署完成后替换这一行。_
+- **GitHub Pages（自动部署）：** https://lync-cyber.github.io/wechat-typeset/ ——
+  `.github/workflows/deploy-pages.yml` 在每次 `main` 更新时用 `VITE_BASE=/wechat-typeset/` 构建并发布（首次部署前需到 `Settings → Pages → Source` 选 **GitHub Actions**）
+- **Vercel 一键部署：** [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Flync-cyber%2Fwechat-typeset) —— `vercel.json` 已声明 framework=vite + output=dist，无需额外环境变量
 
 项目产物是纯静态 SPA，任何静态托管都能跑：
 
