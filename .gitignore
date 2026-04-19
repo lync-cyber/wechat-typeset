@@ -1,0 +1,13 @@
+node_modules/
+dist/
+app/node_modules/
+app/dist/
+app/scripts/.baseline/
+scripts/.baseline/
+*.log
+.DS_Store
+.vscode/
+.idea/
+
+# 开发侧的 Claude Code skill / 本地设置：不发布到公开仓库
+.claude/
