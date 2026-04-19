@@ -5,20 +5,16 @@
  * 适合文学/人文主题；极简且辨识度高（不是典型 admonition 左条）。
  */
 
-import type { QuoteVariant } from '../registry'
+import { defineQuote } from '../registry'
 
-export const columnRule: QuoteVariant = {
-  id: 'column-rule',
-  kind: 'quote',
-  render: (ctx) => {
-    const accent = ctx.tokens.colors.primary
-    return {
-      wrapperCSS:
-        `padding:18px 28px;` +
-        `margin:22px 12px;` +
-        `border-left:3px solid ${accent};` +
-        `border-right:3px solid ${accent}`,
-      bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
-    }
-  },
-}
+export const columnRule = defineQuote('column-rule', (ctx) => {
+  const accent = ctx.tokens.colors.primary
+  return {
+    wrapperCSS:
+      `padding:18px 28px;` +
+      `margin:22px 12px;` +
+      `border-left:3px solid ${accent};` +
+      `border-right:3px solid ${accent}`,
+    bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
+  }
+})

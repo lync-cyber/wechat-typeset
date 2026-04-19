@@ -81,6 +81,45 @@ export type StepsVariant = VariantModule<StepsVariantId>
 export type DividerVariant = VariantModule<DividerVariantId>
 export type SectionTitleVariant = VariantModule<SectionTitleVariantId>
 
+// 定义辅助：省掉每个 variant 文件里 `id: '...'` + `kind: '...'` 的样板。
+// 运行时产物 {id, kind, render} 与手写完全一致。
+
+export function defineAdmonition(
+  id: AdmonitionVariantId,
+  render: AdmonitionVariant['render'],
+): AdmonitionVariant {
+  return { id, kind: 'admonition', render }
+}
+
+export function defineQuote(id: QuoteVariantId, render: QuoteVariant['render']): QuoteVariant {
+  return { id, kind: 'quote', render }
+}
+
+export function defineCompare(
+  id: CompareVariantId,
+  render: CompareVariant['render'],
+): CompareVariant {
+  return { id, kind: 'compare', render }
+}
+
+export function defineSteps(id: StepsVariantId, render: StepsVariant['render']): StepsVariant {
+  return { id, kind: 'steps', render }
+}
+
+export function defineDivider(
+  id: DividerVariantId,
+  render: DividerVariant['render'],
+): DividerVariant {
+  return { id, kind: 'divider', render }
+}
+
+export function defineSectionTitle(
+  id: SectionTitleVariantId,
+  render: SectionTitleVariant['render'],
+): SectionTitleVariant {
+  return { id, kind: 'sectionTitle', render }
+}
+
 /** 工具：把 CSSObject 样式串中的空值剔除并用 `;` 拼接。 */
 export function joinCss(entries: ReadonlyArray<string | false | null | undefined>): string {
   return entries.filter(Boolean).join(';')

@@ -5,13 +5,9 @@
  * 或未来 DOM 后处理 pass 自动注入；variant 本身不做 h3 级联。
  */
 
-import type { StepsVariant } from '../registry'
+import { defineSteps } from '../registry'
 
-export const numberCircle: StepsVariant = {
-  id: 'number-circle',
-  kind: 'steps',
-  render: (_ctx) => ({
-    wrapperCSS: `margin:16px 0`,
-    titleCSS: `font-weight:700;margin-bottom:12px`,
-  }),
-}
+export const numberCircle = defineSteps('number-circle', (_ctx) => ({
+  wrapperCSS: `margin:16px 0`,
+  titleCSS: `font-weight:700;margin-bottom:12px`,
+}))

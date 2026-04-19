@@ -6,7 +6,7 @@
  * 注意：SVG 不用 id，viewBox 等比缩放；颜色走 currentColor 以便主色切换。
  */
 
-import type { QuoteVariant } from '../registry'
+import { defineQuote } from '../registry'
 
 function bracketsSvg(accent: string): string {
   return (
@@ -20,14 +20,8 @@ function bracketsSvg(accent: string): string {
   )
 }
 
-export const frameBrackets: QuoteVariant = {
-  id: 'frame-brackets',
-  kind: 'quote',
-  render: (ctx) => {
-    return {
-      wrapperCSS: `padding:26px 22px;margin:22px 0`,
-      bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
-      svgSlot: bracketsSvg(ctx.tokens.colors.primary),
-    }
-  },
-}
+export const frameBrackets = defineQuote('frame-brackets', (ctx) => ({
+  wrapperCSS: `padding:26px 22px;margin:22px 0`,
+  bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
+  svgSlot: bracketsSvg(ctx.tokens.colors.primary),
+}))

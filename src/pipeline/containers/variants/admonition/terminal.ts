@@ -9,7 +9,7 @@
  * 这是为了让 svgSlot 的圆点行能贴在 wrapper 顶边不露缝。
  */
 
-import type { AdmonitionVariant } from '../registry'
+import { defineAdmonition } from '../registry'
 import { escText } from '../../types'
 
 const TRAFFIC_LIGHTS =
@@ -28,11 +28,8 @@ const DEFAULT_TITLES: Record<string, string> = {
   danger: 'error',
 }
 
-export const terminal: AdmonitionVariant = {
-  id: 'terminal',
-  kind: 'admonition',
-  themeCompat: ['tech-geek', 'default'],
-  render: (ctx, { kind }) => {
+export const terminal = {
+  ...defineAdmonition('terminal', (ctx, { kind }) => {
     // titleCSS='' 约定：renderer 跳过默认 title 渲染，交给 svgSlot 自建
     const title = ctx.info.trim() || DEFAULT_TITLES[kind] || kind
     return {
@@ -52,5 +49,6 @@ export const terminal: AdmonitionVariant = {
         escText(title) +
         '</section>',
     }
-  },
+  }),
+  themeCompat: ['tech-geek', 'default'],
 }

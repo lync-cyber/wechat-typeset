@@ -5,21 +5,17 @@
  * 默认字符 ❦（fleuron）；主题可通过 attrs.glyph 在 markdown 端临时覆盖。
  */
 
-import type { DividerVariant } from '../registry'
+import { defineDivider } from '../registry'
 
-export const glyph: DividerVariant = {
-  id: 'glyph',
-  kind: 'divider',
-  render: (ctx) => {
-    const char = ctx.attrs.glyph || '❦'
-    const color = ctx.tokens.colors.primary
-    const line = ctx.tokens.colors.border
-    return {
-      wrapperCSS: `text-align:center;margin:26px 0;color:${color};font-size:18px`,
-      svgSlot:
-        `<span style="display:inline-block;width:60px;height:1px;background-color:${line};vertical-align:middle;margin-right:12px"></span>` +
-        `<span style="display:inline-block;vertical-align:middle">${char}</span>` +
-        `<span style="display:inline-block;width:60px;height:1px;background-color:${line};vertical-align:middle;margin-left:12px"></span>`,
-    }
-  },
-}
+export const glyph = defineDivider('glyph', (ctx) => {
+  const char = ctx.attrs.glyph || '❦'
+  const color = ctx.tokens.colors.primary
+  const line = ctx.tokens.colors.border
+  return {
+    wrapperCSS: `text-align:center;margin:26px 0;color:${color};font-size:18px`,
+    svgSlot:
+      `<span style="display:inline-block;width:60px;height:1px;background-color:${line};vertical-align:middle;margin-right:12px"></span>` +
+      `<span style="display:inline-block;vertical-align:middle">${char}</span>` +
+      `<span style="display:inline-block;width:60px;height:1px;background-color:${line};vertical-align:middle;margin-left:12px"></span>`,
+  }
+})
