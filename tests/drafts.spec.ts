@@ -17,10 +17,7 @@ import {
   getActiveDraftId,
   importDraftsJSON,
   listDrafts,
-  loadDraft,
   readDraft,
-  saveDraft,
-  setActiveDraftId,
   updateDraft,
 } from '../src/storage/drafts'
 
@@ -107,28 +104,5 @@ describe('导出 / 导入 JSON 往返', () => {
   it('非法 JSON 不抛错，返回 0', () => {
     expect(importDraftsJSON('not json')).toBe(0)
     expect(listDrafts()).toHaveLength(0)
-  })
-})
-
-describe('向后兼容 loadDraft / saveDraft', () => {
-  it('saveDraft 首次调用触发建草稿', () => {
-    saveDraft('# 初稿')
-    const list = listDrafts()
-    expect(list).toHaveLength(1)
-    expect(loadDraft()).toBe('# 初稿')
-  })
-
-  it('saveDraft 后续写入同一篇', () => {
-    saveDraft('v1')
-    const first = getActiveDraftId()
-    saveDraft('v2')
-    expect(getActiveDraftId()).toBe(first)
-    expect(loadDraft()).toBe('v2')
-  })
-
-  it('setActiveDraftId(null) → loadDraft 返回空', () => {
-    createDraft({ body: 'x' })
-    setActiveDraftId(null)
-    expect(loadDraft()).toBe('')
   })
 })

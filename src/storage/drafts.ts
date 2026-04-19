@@ -1,14 +1,13 @@
 /**
- * 草稿存储 · 多篇 CRUD（Step 8）
+ * 草稿存储 · 多篇 CRUD
  *
  * 存储策略：
  *   - 主索引 (wx-md:drafts:index)：Draft 元数据列表（id / title / themeId / updatedAt），单条 localStorage
  *   - 每篇正文 (wx-md:drafts:body:<id>)：独立 key，避免一条记录超 5MB 限制
  *   - 当前活跃 id (wx-md:drafts:active)
- *   - 向后兼容：若发现遗留 key wx-md:draft:single，自动迁移为一篇 "未命名"
  *
- * 接口保持同步；Step 1 的 loadDraft/saveDraft 仍保留（读写当前活跃草稿正文），
- * 这样老调用点不需要改动即可兼容。
+ * 用户数据迁移：若发现 0.1 以前的遗留 key wx-md:draft:single，
+ * 会静默迁移为一篇"未命名草稿"后删除旧 key。
  */
 
 const LEGACY_KEY = 'wx-md:draft:single'
@@ -249,26 +248,4 @@ export function importDraftsJSONDetailed(json: string): ImportResult {
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v)
-}
-
-// --------------------- 向后兼容接口 --------------------- //
-
-/** @deprecated Step 1 签名，内部转发到活跃草稿正文 */
-export function loadDraft(): string {
-  migrateLegacy()
-  const id = getActiveDraftId()
-  if (!id) return ''
-  return safeRead(`${BODY_PREFIX}${id}`) ?? ''
-}
-
-/** @deprecated Step 1 签名，内部转发到活跃草稿正文 */
-export function saveDraft(md: string): void {
-  migrateLegacy()
-  let id = getActiveDraftId()
-  if (!id) {
-    const created = createDraft({ body: md })
-    id = created.id
-    return
-  }
-  updateDraft(id, { body: md })
 }
