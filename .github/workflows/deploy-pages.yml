@@ -9,6 +9,10 @@ on:
 # Vite `base` must match the sub-path, else JS/CSS/image requests 404.
 env:
   VITE_BASE: /wechat-typeset/
+  # GitHub forces JS actions onto Node 24 from 2026-06-02 and removes Node 20
+  # on 2026-09-16. Opt in early to suppress the deprecation warnings and
+  # validate the upgrade ahead of the forced cutover.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: read
