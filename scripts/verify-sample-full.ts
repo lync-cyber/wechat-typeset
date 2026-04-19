@@ -1,7 +1,7 @@
 /**
  * sample-full.md 端到端渲染校验
  *
- * 目的：确保 content/styles/_typeset/sample-full.md 在默认主题下
+ * 目的：确保同目录的 sample-full.md 在默认主题下
  *   - pipeline 不抛异常
  *   - 23 个 variant 的 class 全部出现
  *   - 9 个无 variant 的容器 class 也都出现
@@ -30,7 +30,7 @@ import { defaultTheme } from '../src/themes/default'
 import { VARIANT_IDS } from '../src/themes/types'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
-const SAMPLE = resolve(HERE, '../../../../../content/styles/_typeset/sample-full.md')
+const SAMPLE = resolve(HERE, 'sample-full.md')
 
 const md = readFileSync(SAMPLE, 'utf8')
 const { html, wordCount } = render({ md, theme: defaultTheme })
