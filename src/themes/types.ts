@@ -150,6 +150,16 @@ export interface ThemeAssets {
    * （如 literary-humanism 的藏经朱）——其他主题留空即可，renderer 不做默认兜底。
    */
   sealMark?: SVGString
+  /**
+   * 期号印章（newsletter 期刊戳）。当主题提供 + markdown 容器上声明了 issue/date/kind
+   * 任一 attr 时，cover / author / footerCTA renderer 会在各自配置的位置注入该 SVG。
+   * 设计意图：industry-observer 家族（周刊 / newsletter）的"ISSUE #023 · 2025-04-20 · 周刊"
+   * 戳记，跨三个容器保持视觉一致；非 newsletter 主题不提供即可。
+   *
+   * 参数：issue（期号，如 "023"）、date（日期字符串）、kind（刊物类型，如 "周刊"）。
+   * 任一参数可为空串，由主题自行决定占位。
+   */
+  issueStamp?: (issue: string, date: string, kind: string) => SVGString
 }
 
 export interface ThemeTemplates {

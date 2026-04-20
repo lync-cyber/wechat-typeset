@@ -11,6 +11,19 @@
 import type { ContainerRenderer } from './types'
 import { escText } from './types'
 
+// 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）
+function resolveIssueStampForFooter(
+  ctx: Parameters<ContainerRenderer['open']>[0],
+): string {
+  const stamp = ctx.assets.issueStamp
+  if (!stamp) return ''
+  const issue = ctx.attrs.issue ?? ''
+  const date = ctx.attrs.date ?? ''
+  const kind = ctx.attrs.kind ?? ''
+  if (!issue && !date && !kind) return ''
+  return stamp(issue, date, kind)
+}
+
 export const footerCTAContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim() || '关注我'
@@ -20,8 +33,13 @@ export const footerCTAContainer: ContainerRenderer = {
         `<span style="display:inline-block;padding:6px 14px;border-radius:${ctx.tokens.radius.lg}px;background-color:${ctx.tokens.colors.primary};color:${ctx.tokens.colors.textInverse}">${cta}</span>` +
         `</section>`
       : ''
+    const stamp = resolveIssueStampForFooter(ctx)
+    const stampEl = stamp
+      ? `<section class="container-footer-cta__stamp" style="text-align:center;margin-bottom:10px">${stamp}</section>`
+      : ''
     return (
       `<section class="container-footer-cta" style="text-align:center">\n` +
+      stampEl +
       `<section class="container-footer-cta__title" style="font-weight:700;font-size:16px;margin-bottom:8px">${escText(title)}</section>\n` +
       ctaEl +
       `\n`

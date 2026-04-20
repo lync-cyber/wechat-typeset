@@ -24,13 +24,31 @@ export const introContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
+/**
+ * 若主题提供 issueStamp 资产 + 容器声明了 issue/date/kind 任一 attr，
+ * 返回该主题的期号戳 SVG；否则空串。用于 cover / author / footerCTA 三个容器共享。
+ */
+function resolveIssueStamp(ctx: ContainerRenderContext): string {
+  const stamp = ctx.assets.issueStamp
+  if (!stamp) return ''
+  const issue = ctx.attrs.issue ?? ''
+  const date = ctx.attrs.date ?? ''
+  const kind = ctx.attrs.kind ?? ''
+  if (!issue && !date && !kind) return ''
+  return stamp(issue, date, kind)
+}
+
 export const coverContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim()
     const head = title
       ? `<section class="container-cover__title" style="text-align:center;font-weight:700;font-size:18px;margin-bottom:10px">${escText(title)}</section>`
       : ''
-    return `<section class="container-cover">\n${head}`
+    const stamp = resolveIssueStamp(ctx)
+    const stampEl = stamp
+      ? `<section class="container-cover__stamp" style="margin-top:12px">${stamp}</section>`
+      : ''
+    return `<section class="container-cover">\n${head}${stampEl}`
   },
   close: '</section>\n',
 }
@@ -41,10 +59,14 @@ export const authorContainer: ContainerRenderer = {
     const role = ctx.attrs.role
       ? `<span style="color:${ctx.tokens.colors.textMuted};margin-left:8px">${escText(ctx.attrs.role)}</span>`
       : ''
+    const stamp = resolveIssueStamp(ctx)
+    const stampEl = stamp
+      ? `<span class="container-author__stamp" style="margin-left:10px;vertical-align:middle">${stamp}</span>`
+      : ''
     return (
       `<section class="container-author">\n` +
       `<section class="container-author__header" style="margin-bottom:8px">` +
-      `<strong>${escText(name)}</strong>${role}` +
+      `<strong>${escText(name)}</strong>${role}${stampEl}` +
       `</section>\n`
     )
   },
