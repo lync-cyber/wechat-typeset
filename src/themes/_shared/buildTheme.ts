@@ -10,6 +10,7 @@ import type {
   CSSObject,
   Theme,
   ThemeAssets,
+  ThemeBehavior,
   ThemeContainers,
   ThemeElements,
   ThemeInline,
@@ -47,6 +48,10 @@ export interface BuildThemeOptions {
    * Partial 支持"只换一项骨架" —— 比如某主题想 admonition 走 terminal、其余默认。
    */
   variants?: Partial<ThemeVariants>
+  /**
+   * 渲染器级行为开关。仅 people-story 家族使用（introDropcap + h2RomanNumerals）。
+   */
+  behavior?: ThemeBehavior
 }
 
 export function baseElements(tokens: ThemeTokens, pre?: CSSObject, code?: CSSObject): ThemeElements {
@@ -285,5 +290,6 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     templates: opts.templates ?? {},
     inline,
     variants,
+    ...(opts.behavior ? { behavior: opts.behavior } : {}),
   }
 }

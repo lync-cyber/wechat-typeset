@@ -327,6 +327,25 @@ export const VARIANT_IDS = {
 
 export type VariantKind = keyof ThemeVariants
 
+/**
+ * 主题行为开关。**不是样式，不是 token，是 renderer 级别的结构改动**——
+ * 某些主题（如 people-story 杂志特稿）需要的视觉签名必须由渲染管线参与生成：
+ *   - introDropcap：intro 首段首字拆成 `<span class="intro-dropcap">X</span>`，
+ *     使 CSS 能独立放大首字而不走 ::first-letter / float（公众号都不稳）。
+ *   - h2RomanNumerals：h2 标题前自动注入罗马数字前缀（I / II / III ...），
+ *     取代 theme.assets.h2Prefix 的 SVG 装饰；计数器 per-render 重置。
+ *
+ * 不声明 behavior 或字段为 false/undefined 时，pipeline 保持原行为。
+ * 新增行为开关需遵守：**只在主题明确需要 renderer 参与时使用**；能用 token / CSS /
+ * assets 解决的需求不引入 behavior 开关。
+ */
+export interface ThemeBehavior {
+  /** intro 首段首字下沉：渲染器把首个实字拆成 `<span class="intro-dropcap">X</span>` */
+  introDropcap?: boolean
+  /** h2 自动编号：渲染器按 h2 顺序注入罗马数字前缀 span，取代 h2Prefix SVG 装饰位 */
+  h2RomanNumerals?: boolean
+}
+
 export interface Theme {
   id: string
   name: string
@@ -345,6 +364,11 @@ export interface Theme {
    * 渲染器在 ContainerRenderContext.variants 里读取。
    */
   variants: ThemeVariants
+  /**
+   * 渲染器级行为开关。绝大多数主题不需要；只有需要 renderer 参与生成视觉签名
+   * 的主题（如 people-story 的 dropcap / 罗马数字）才声明。
+   */
+  behavior?: ThemeBehavior
 }
 
 export class ThemeAuthoringError extends Error {

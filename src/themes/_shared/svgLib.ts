@@ -12,6 +12,31 @@
 
 export const strip = (s: string): string => s.replace(/\s+/g, ' ').trim()
 
+/**
+ * 整数 → 罗马数字（1..50 覆盖杂志特稿章节 / 人生阶段 的上限情形）。
+ * people-story 的 h2RomanNumerals 行为 + stepBadge 罗马徽章共用此函数。
+ */
+export function toRoman(n: number): string {
+  const map: Array<[number, string]> = [
+    [50, 'L'],
+    [40, 'XL'],
+    [10, 'X'],
+    [9, 'IX'],
+    [5, 'V'],
+    [4, 'IV'],
+    [1, 'I'],
+  ]
+  let out = ''
+  let x = n
+  for (const [v, r] of map) {
+    while (x >= v) {
+      out += r
+      x -= v
+    }
+  }
+  return out || 'I'
+}
+
 /** 四条语义状态色（tip / warning / info / danger），4 套主题 assets 工厂都要。 */
 export interface StatusPalette {
   tipAccent: string
