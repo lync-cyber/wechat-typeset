@@ -9,14 +9,18 @@
  *   - 不存主题 CSS（主题是独立维度；同一组件可跨主题）
  *   - 不存 Vue 节点（UI 只消费 markdownSnippet + thumbnailSvg）
  *   - 不强制 kind 一对一（存在 intro / author / footer-cta 等 kind=none 的自由组件）
+ *
+ * 结构：`ComponentEntry` 是 `BuiltinEntry | UserComponent` 的判别联合，
+ * 用 `source` 字段区分。UI 对只读列表按 ComponentEntry 迭代；
+ * "删除/编辑"这类用户组件专属动作通过 `entry.source === 'user'` 收敛类型。
  */
 
 import type { VariantKind } from '../themes/types'
 
 export type ComponentKind = VariantKind | 'none'
 
-export interface ComponentEntry {
-  /** 全局稳定 id，如 'admonition-tip-terminal' / 'quote-frame-brackets' */
+interface EntryBase {
+  /** 全局稳定 id，如 'admonition-tip-terminal' / 'quote-frame-brackets' / 'uc_xxx' */
   id: string
   /** 显示名（短）：Terminal Tip / 票根 Warning */
   name: string
@@ -30,11 +34,6 @@ export interface ComponentEntry {
    */
   variantId?: string
   /**
-   * 推荐主题 id 列表（UI 用来显示"推荐"徽章）。空数组/undefined 等价于全兼容。
-   * 兼容只是推荐，不强制——用户把 terminal 放进文学主题也允许。
-   */
-  themeCompat?: string[]
-  /**
    * 可直接插入 markdown 的 fence 片段。需自带换行收尾。
    * 占位文本用"{标题}/{正文}"等花括号 token；UI 不做模板替换，直接原文插入
    * 让用户自己改（避免"魔法替换"带来的歧义）。
@@ -47,9 +46,21 @@ export interface ComponentEntry {
   thumbnailSvg: string
 }
 
-export interface UserComponent extends ComponentEntry {
+export interface BuiltinEntry extends EntryBase {
+  source: 'builtin'
+  /**
+   * 推荐主题 id 列表（UI 用来显示"推荐"徽章）。空数组/undefined 等价于全兼容。
+   * 兼容只是推荐，不强制——用户把 terminal 放进文学主题也允许。
+   */
+  themeCompat?: string[]
+}
+
+export interface UserComponent extends EntryBase {
+  source: 'user'
   /** 用户创建组件时自动填入的时间戳，用于排序与删除 */
   createdAt: number
   /** 原始选区文本（便于"溯源"展示） */
   sourceMarkdown?: string
 }
+
+export type ComponentEntry = BuiltinEntry | UserComponent

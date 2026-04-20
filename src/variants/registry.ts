@@ -269,6 +269,7 @@ export const VARIANT_IDS = {
 // ─────────────────────────────────────────────────────────────
 
 export interface BuiltinEntry {
+  source: 'builtin'
   id: string
   name: string
   description: string
@@ -282,6 +283,7 @@ export interface BuiltinEntry {
 function toEntry(def: AnyDef, s: (typeof def.snippets)[number]): BuiltinEntry {
   const thumb = def.thumbnail ? def.thumbnail(s.thumbArgs) : ''
   return {
+    source: 'builtin',
     id: s.presetId,
     name: s.name,
     description: s.description,
