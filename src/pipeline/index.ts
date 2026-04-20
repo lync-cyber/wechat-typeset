@@ -14,7 +14,7 @@ import { generateThemeCSS } from './themeCSS'
 import { atomOneDarkCss, highlightCode } from './highlight'
 import { inlineHtml } from './juiceInline'
 import { applyWxPatches, type WxPatchOptions } from './wxPatch'
-import { CODE_BLOCK_VARIANTS } from './containers/variants'
+import { CODE_BLOCK_VARIANTS } from '../variants/registry'
 
 export interface RenderInput {
   md: string

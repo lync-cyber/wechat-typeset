@@ -11,7 +11,7 @@
 import type { QuoteVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './types'
-import { QUOTE_VARIANTS } from './variants'
+import { QUOTE_VARIANTS } from '../../variants/registry'
 
 function resolveVariantId(ctx: ContainerRenderContext): QuoteVariantId {
   const override = ctx.attrs.variant

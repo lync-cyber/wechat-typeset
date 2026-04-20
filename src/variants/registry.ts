@@ -16,8 +16,29 @@
  * 目前没有任何 variant 被新注册表消费——P3 才做生产切换。
  */
 
-import type { AdmonitionKind, CodeBlockDef, VariantDef } from './_core'
-import type { VariantKind } from '../themes/types'
+import type {
+  AdmonitionKind,
+  AdmonitionRenderArgs,
+  CodeBlockDef,
+  CompareRenderArgs,
+  VariantDef,
+  VariantRender,
+} from './_core'
+import type {
+  AdmonitionVariantId,
+  CompareVariantId,
+  DividerVariantId,
+  QuoteVariantId,
+  SectionTitleVariantId,
+  StepsVariantId,
+  VariantKind,
+} from '../themes/types'
+
+/**
+ * 容器 variant 的 render 必选变体：pipeline/containers/*.ts 查表后直接 `.render()`，
+ * 不该处理 undefined。kind='none' 的自由组件无 render，不入这些桶。
+ */
+type RequiredRender<Args> = VariantDef<Args> & { render: NonNullable<VariantRender<Args>> }
 
 // ─────────────────────────────────────────────────────────────
 // 展示顺序。与文件系统顺序解耦：改顺序动这里，不动目录名。
@@ -123,25 +144,32 @@ const ALL_DEFS = collectDefs()
 // 按 kind 派生运行时注册表（消费方：pipeline/containers/*.ts）。
 // ─────────────────────────────────────────────────────────────
 
-type VariantRecord<Args> = Record<string, VariantDef<Args>>
-
-function asRecord<Args>(defs: AnyDef[], kind: VariantKind): VariantRecord<Args> {
-  const out: VariantRecord<Args> = {}
+function asRecord<Id extends string, Args>(
+  defs: AnyDef[],
+  kind: VariantKind,
+): Record<Id, RequiredRender<Args>> {
+  const out = {} as Record<Id, RequiredRender<Args>>
   for (const d of orderedByKind(defs, kind)) {
-    out[d.meta.id] = d as unknown as VariantDef<Args>
+    out[d.meta.id as Id] = d as unknown as RequiredRender<Args>
   }
   return out
 }
 
-export const ADMONITION_VARIANTS = asRecord<{ kind: AdmonitionKind }>(ALL_DEFS, 'admonition')
-export const QUOTE_VARIANTS = asRecord<void>(ALL_DEFS, 'quote')
-export const COMPARE_VARIANTS = asRecord<{ slot: 'wrapper' | 'pros' | 'cons'; title?: string }>(
+export const ADMONITION_VARIANTS = asRecord<AdmonitionVariantId, AdmonitionRenderArgs>(
   ALL_DEFS,
-  'compare',
+  'admonition',
 )
-export const STEPS_VARIANTS = asRecord<void>(ALL_DEFS, 'steps')
-export const DIVIDER_VARIANTS = asRecord<void>(ALL_DEFS, 'divider')
-export const SECTION_TITLE_VARIANTS = asRecord<void>(ALL_DEFS, 'sectionTitle')
+export const QUOTE_VARIANTS = asRecord<QuoteVariantId, void>(ALL_DEFS, 'quote')
+export const COMPARE_VARIANTS = asRecord<CompareVariantId, CompareRenderArgs>(ALL_DEFS, 'compare')
+export const STEPS_VARIANTS = asRecord<StepsVariantId, void>(ALL_DEFS, 'steps')
+export const DIVIDER_VARIANTS = asRecord<DividerVariantId, void>(ALL_DEFS, 'divider')
+export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
+  ALL_DEFS,
+  'sectionTitle',
+)
+
+// 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
+export type { AdmonitionKind }
 
 export const CODE_BLOCK_VARIANTS: Record<string, CodeBlockDef> = (() => {
   const out: Record<string, CodeBlockDef> = {}

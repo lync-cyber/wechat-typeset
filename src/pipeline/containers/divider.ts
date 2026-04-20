@@ -8,7 +8,7 @@
 
 import type { DividerVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
-import { DIVIDER_VARIANTS } from './variants'
+import { DIVIDER_VARIANTS } from '../../variants/registry'
 
 function resolveVariantId(ctx: ContainerRenderContext): DividerVariantId {
   const raw = (ctx.attrs.variant ?? '').toLowerCase().trim()

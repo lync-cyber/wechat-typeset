@@ -11,7 +11,7 @@
 import type { SectionTitleVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './types'
-import { SECTION_TITLE_VARIANTS } from './variants'
+import { SECTION_TITLE_VARIANTS } from '../../variants/registry'
 
 export const introContainer: ContainerRenderer = {
   open: (ctx) => {
