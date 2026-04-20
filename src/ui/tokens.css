@@ -1,0 +1,383 @@
+/* ================================================================
+ * wx-md · Typesetter's Bench — Design Tokens
+ * ----------------------------------------------------------------
+ * Scope: App shell only (toolbar / editor chrome / drawers / modals).
+ *        NOT for the in-iframe WeChat article output.
+ *
+ * Character: paper + ink + proof-red. Three materials, one voice.
+ *
+ * Hard rules:
+ *   - No gradients. No backdrop-filter. No elevation overload.
+ *   - Radii capped at 6px (with one pill exception for status dots).
+ *   - Proof red is allowed in exactly 3 contexts:
+ *       (1) primary action, (2) errors/delete, (3) brand/ruler marks.
+ *   - All numerics (stats, px, hex, ratios) MUST render in mono + tnum.
+ *   - Single motion curve, 3 durations. Linear settle, no bounce.
+ * ================================================================ */
+
+:root {
+  /* --------------------------------------------------------------
+   * 1. COLOR — 纸 / 墨 / 朱 + 3 semantic hues, each 9–10 steps
+   * -------------------------------------------------------------- */
+
+  /* Paper (neutral warm) — the base surface */
+  --paper-50:  #fdfcf8;
+  --paper-100: #f8f6ef;
+  --paper-200: #eeebe0;
+  --paper-300: #d8d4c4;
+  --paper-400: #b8b3a0;
+  --paper-500: #8f8a77;
+  --paper-600: #6a6655;
+  --paper-700: #4a4739;
+  --paper-800: #2c2a22;
+  --paper-900: #1a1914;
+  --paper-950: #0e0e0a;
+
+  /* Ink (true dark, warm black) */
+  --ink-50:  #e7e5df;
+  --ink-100: #b8b4a8;
+  --ink-200: #898574;
+  --ink-300: #5b5749;
+  --ink-400: #3e3b30;
+  --ink-500: #2a2822;
+  --ink-600: #1f1d18;
+  --ink-700: #16140f;
+  --ink-800: #0e0d09;
+  --ink-900: #050503;
+
+  /* Proof red (校样红) — the single expressive hue */
+  --proof-50:  #fbeeeb;
+  --proof-100: #f4d1ca;
+  --proof-200: #e8a498;
+  --proof-300: #d87465;
+  --proof-400: #c54a38;
+  --proof-500: #a83420; /* canonical accent */
+  --proof-600: #8a271a;
+  --proof-700: #6c1e14;
+  --proof-800: #4e150e;
+  --proof-900: #2e0c08;
+
+  /* Sage (success) — restrained, not "bright green" */
+  --sage-50:  #eef1ed;
+  --sage-100: #d5dcd1;
+  --sage-200: #aab8a4;
+  --sage-300: #7f9378;
+  --sage-400: #5c7155;
+  --sage-500: #46573f;
+  --sage-600: #374630;
+  --sage-700: #2a3724;
+  --sage-800: #1e291a;
+  --sage-900: #131b10;
+
+  /* Amber (warn) — low-sat ochre, not "yellow" */
+  --amber-50:  #faf3dd;
+  --amber-100: #f0dfad;
+  --amber-200: #debf71;
+  --amber-300: #c29a3d;
+  --amber-400: #a17d24;
+  --amber-500: #8a6a1c;
+  --amber-600: #6d5413;
+  --amber-700: #54410c;
+  --amber-800: #3b2d07;
+  --amber-900: #241b03;
+
+  /* Indigo-ink (info) — deep slate, not "tech blue" */
+  --iink-50:  #e6eaf1;
+  --iink-100: #c2cad9;
+  --iink-200: #95a1ba;
+  --iink-300: #6d7b9a;
+  --iink-400: #4c5a7a;
+  --iink-500: #37465f;
+  --iink-600: #2a3750;
+  --iink-700: #202b40;
+  --iink-800: #161e2d;
+  --iink-900: #0c121b;
+
+  /* ---- Semantic mappings (LIGHT, default) ---- */
+  --bg:             var(--paper-50);
+  --surface:        var(--paper-100);
+  --surface-alt:    var(--paper-200);
+  --surface-raised: #ffffff;          /* modals, floating cards */
+  --border:         var(--paper-300);
+  --border-strong:  var(--paper-400);
+  --text:           var(--paper-800);
+  --text-muted:     var(--paper-600);
+  --text-subtle:    var(--paper-500);
+  --text-inverse:   var(--paper-50);
+
+  --accent:         var(--proof-500);
+  --accent-hover:   var(--proof-600);
+  --accent-press:   var(--proof-700);
+  --accent-soft:    var(--proof-50);
+  --accent-on:      var(--paper-50);  /* text on accent fill */
+
+  --success:        var(--sage-600);
+  --success-soft:   var(--sage-50);
+  --warn:           var(--amber-600);
+  --warn-soft:      var(--amber-50);
+  --danger:         var(--proof-500);
+  --danger-soft:    var(--proof-50);
+  --info:           var(--iink-600);
+  --info-soft:      var(--iink-50);
+
+  /* Editor pane is intentionally dark even in light mode — the
+     "CodeMirror slot" on the bench. Tokens are named explicitly. */
+  --editor-bg:      var(--ink-500);
+  --editor-surface: var(--ink-600);
+  --editor-text:    var(--ink-50);
+  --editor-muted:   var(--ink-100);
+  --editor-selection: rgba(168, 52, 32, 0.22);
+  --editor-linenum:   var(--ink-200);
+
+  /* --------------------------------------------------------------
+   * 2. TYPOGRAPHY — 3 families, modular scale (1.125), base 15
+   * -------------------------------------------------------------- */
+  --font-display:
+    "GT Super Display", "Tiempos Headline", "Noto Serif SC",
+    "Songti SC", Georgia, serif;
+  --font-text:
+    "Inter var", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+  --font-mono:
+    "JetBrains Mono NL", "JetBrains Mono", "Berkeley Mono",
+    ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+
+  /* font-sizes — 1.125 modular scale, hand-tuned */
+  --fs-11: 10.7px;
+  --fs-12: 11.9px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;   /* BASE */
+  --fs-17: 16.9px;
+  --fs-19: 19px;
+  --fs-22: 21.4px;
+  --fs-24: 24.1px;
+  --fs-30: 30.5px;
+  --fs-38: 38.7px;
+
+  /* line-heights */
+  --lh-tight:  1.2;
+  --lh-snug:   1.35;
+  --lh-normal: 1.5;
+  --lh-read:   1.7;
+
+  /* letter-spacing */
+  --ls-display:  -0.02em;
+  --ls-tight:   -0.005em;
+  --ls-normal:   0;
+  --ls-wide:     0.04em;
+  --ls-kicker:   0.12em;
+
+  /* weights (Inter var channel) */
+  --fw-regular:  400;
+  --fw-medium:   510;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* Inter OpenType features — enabled globally via body */
+  --font-feat-text: "ss01", "cv11", "calt", "kern";
+  --font-feat-num:  "tnum", "lnum";
+
+  /* --------------------------------------------------------------
+   * 3. SPACING — multiples of 4, named by step, not by px
+   * -------------------------------------------------------------- */
+  --sp-0:  0;
+  --sp-1:  2px;
+  --sp-2:  4px;
+  --sp-3:  8px;    /* base unit */
+  --sp-4:  12px;
+  --sp-5:  16px;
+  --sp-6:  24px;
+  --sp-7:  32px;
+  --sp-8:  48px;
+  --sp-9:  64px;
+  --sp-10: 96px;
+
+  /* --------------------------------------------------------------
+   * 4. RADII — 3 steps + pill. Nothing larger than 6px.
+   * -------------------------------------------------------------- */
+  --radius-0:    0;
+  --radius-1:    3px;
+  --radius-2:    6px;
+  --radius-pill: 9999px;
+
+  /* --------------------------------------------------------------
+   * 5. SHADOWS — 3 layers, warm-ink tint. No pure-black shadows.
+   * -------------------------------------------------------------- */
+  --shadow-rest:
+    0 1px 0 0 rgba(35, 30, 20, 0.04),
+    0 1px 2px 0 rgba(35, 30, 20, 0.06);
+
+  --shadow-lift:
+    0 1px 0 0 rgba(35, 30, 20, 0.05),
+    0 4px 8px -2px rgba(35, 30, 20, 0.09),
+    0 12px 20px -8px rgba(35, 30, 20, 0.08);
+
+  --shadow-modal:
+    0 2px 0 0 rgba(35, 30, 20, 0.05),
+    0 16px 32px -12px rgba(35, 30, 20, 0.18),
+    0 32px 64px -24px rgba(35, 30, 20, 0.12);
+
+  /* Inset shadow for the CodeMirror slot & code blocks */
+  --shadow-inset:
+    inset 0 1px 0 0 rgba(0, 0, 0, 0.30),
+    inset -14px 0 10px -10px rgba(0, 0, 0, 0.35);
+
+  --focus-ring:
+    0 0 0 2px var(--bg),
+    0 0 0 4px rgba(168, 52, 32, 0.45);
+
+  /* --------------------------------------------------------------
+   * 6. MOTION — one curve, three durations
+   * -------------------------------------------------------------- */
+  --ease-craft:  cubic-bezier(0.2, 0.7, 0.1, 1);
+
+  --dur-instant: 80ms;
+  --dur-quick:   160ms;
+  --dur-settled: 280ms;
+
+  --t-instant: all var(--dur-instant) var(--ease-craft);
+  --t-quick:   all var(--dur-quick)   var(--ease-craft);
+  --t-settled: all var(--dur-settled) var(--ease-craft);
+
+  /* --------------------------------------------------------------
+   * 7. ICONS — grid + stroke + caps
+   * -------------------------------------------------------------- */
+  --ico-size-sm:  16px;
+  --ico-size-md:  20px;
+  --ico-size-lg:  24px;
+  --ico-stroke:   1.25;
+  --ico-linecap:  square;
+  --ico-linejoin: miter;
+
+  /* --------------------------------------------------------------
+   * 8. LAYOUT PRIMITIVES — the bench structure
+   * -------------------------------------------------------------- */
+  --toolbar-h:  52px;       /* 48 + 4px ruler strip */
+  --ruler-h:    4px;
+  --drawer-w-sm: 340px;
+  --drawer-w-md: 400px;
+  --drawer-w-lg: 440px;
+  --preview-w:  375px;      /* WeChat fidelity constraint */
+}
+
+/* ================================================================
+ * DARK MODE — "night shift": paper darkens to ink, ink lightens slightly
+ * ================================================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:             var(--ink-700);
+    --surface:        var(--ink-600);
+    --surface-alt:    var(--ink-500);
+    --surface-raised: var(--ink-500);
+    --border:         var(--ink-400);
+    --border-strong:  var(--ink-300);
+    --text:           var(--ink-50);
+    --text-muted:     var(--ink-100);
+    --text-subtle:    var(--ink-200);
+    --text-inverse:   var(--paper-900);
+
+    --accent:         var(--proof-400);
+    --accent-hover:   var(--proof-300);
+    --accent-press:   var(--proof-200);
+    --accent-soft:    var(--proof-900);
+    --accent-on:      var(--paper-50);
+
+    --success-soft:   var(--sage-900);
+    --warn-soft:      var(--amber-900);
+    --danger-soft:    var(--proof-900);
+    --info-soft:      var(--iink-900);
+
+    --focus-ring:
+      0 0 0 2px var(--bg),
+      0 0 0 4px rgba(216, 116, 101, 0.55);
+  }
+}
+
+/* Manual toggle override (data-theme on <html>) */
+[data-theme="dark"] {
+  --bg:             var(--ink-700);
+  --surface:        var(--ink-600);
+  --surface-alt:    var(--ink-500);
+  --surface-raised: var(--ink-500);
+  --border:         var(--ink-400);
+  --border-strong:  var(--ink-300);
+  --text:           var(--ink-50);
+  --text-muted:     var(--ink-100);
+  --text-subtle:    var(--ink-200);
+  --accent:         var(--proof-400);
+  --accent-hover:   var(--proof-300);
+  --accent-soft:    var(--proof-900);
+}
+
+/* ================================================================
+ * REDUCED MOTION — collapse all durations
+ * ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms;
+    --dur-quick:   0ms;
+    --dur-settled: 0ms;
+  }
+}
+
+/* ================================================================
+ * UTILITIES (optional) — semantic text primitives
+ * These are the ONLY type utilities sanctioned in this system.
+ * Use tokens directly in scoped Vue components otherwise.
+ * ================================================================ */
+.tx-display {
+  font-family: var(--font-display);
+  font-size: var(--fs-38);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  font-weight: var(--fw-bold);
+  color: var(--text);
+}
+.tx-title {
+  font-family: var(--font-text);
+  font-size: var(--fs-22);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  font-weight: var(--fw-semibold);
+  color: var(--text);
+}
+.tx-section {
+  font-family: var(--font-text);
+  font-size: var(--fs-17);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+  color: var(--text);
+}
+.tx-body {
+  font-family: var(--font-text);
+  font-size: var(--fs-15);
+  line-height: var(--lh-normal);
+  color: var(--text);
+}
+.tx-ui {
+  font-family: var(--font-text);
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--text);
+}
+.tx-micro {
+  font-family: var(--font-text);
+  font-size: var(--fs-12);
+  line-height: var(--lh-normal);
+  color: var(--text-muted);
+}
+.tx-kicker {
+  font-family: var(--font-text);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-kicker);
+  text-transform: uppercase;
+  font-weight: var(--fw-medium);
+  color: var(--text-subtle);
+}
+.tx-num, .mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum", "lnum";
+  font-variant-numeric: tabular-nums lining-nums;
+}

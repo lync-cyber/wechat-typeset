@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import {
   createDraft,
-  deleteDraft,
   exportDraftsJSON,
-  importDraftsJSON,
+  importDraftsJSONDetailed,
   listDrafts,
+  readDraft,
+  updateDraft,
   type DraftMeta,
 } from '../storage/drafts'
 
@@ -13,10 +14,17 @@ const props = defineProps<{ activeId: string | null }>()
 const emit = defineEmits<{
   (e: 'select', id: string): void
   (e: 'close'): void
+  (e: 'requestDelete', id: string, title: string): void
   (e: 'refresh'): void
 }>()
 
 const refreshTick = ref(0)
+const query = ref('')
+const renamingId = ref<string | null>(null)
+const renameValue = ref('')
+const renameInputRef = ref<HTMLInputElement | null>(null)
+const importFeedback = ref<string | null>(null)
+
 watch(
   () => props.activeId,
   () => {
@@ -25,10 +33,33 @@ watch(
 )
 
 const drafts = computed<DraftMeta[]>(() => {
-  // 访问一下 tick，强制依赖
   void refreshTick.value
   return listDrafts()
 })
+
+const filtered = computed<DraftMeta[]>(() => {
+  const q = query.value.trim().toLowerCase()
+  if (!q) return drafts.value
+  return drafts.value.filter((d) => (d.title || '').toLowerCase().includes(q))
+})
+
+/** 粗略估算 localStorage 已用字节（wx-md:* key）——UTF-16 近似双字节 */
+const storageUsed = computed(() => {
+  void refreshTick.value
+  try {
+    let total = 0
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (!k || !k.startsWith('wx-md:')) continue
+      const v = localStorage.getItem(k) ?? ''
+      total += (k.length + v.length) * 2
+    }
+    return total
+  } catch {
+    return 0
+  }
+})
+const storagePct = computed(() => Math.min(100, Math.round((storageUsed.value / (5 * 1024 * 1024)) * 100)))
 
 function refresh() {
   refreshTick.value += 1
@@ -37,11 +68,24 @@ function refresh() {
 
 function fmt(ts: number): string {
   const d = new Date(ts)
-  const m = (d.getMonth() + 1).toString().padStart(2, '0')
-  const day = d.getDate().toString().padStart(2, '0')
+  const now = new Date()
+  const sameDay = d.toDateString() === now.toDateString()
   const hh = d.getHours().toString().padStart(2, '0')
   const mm = d.getMinutes().toString().padStart(2, '0')
+  if (sameDay) return `今天 ${hh}:${mm}`
+  const m = (d.getMonth() + 1).toString().padStart(2, '0')
+  const day = d.getDate().toString().padStart(2, '0')
   return `${m}-${day} ${hh}:${mm}`
+}
+
+function bodySummary(id: string): string {
+  const body = readDraft(id)?.body ?? ''
+  const first = body
+    .split('\n')
+    .map((l) => l.replace(/^#+\s*/, '').replace(/^\s*[-*>:]+\s*/, '').trim())
+    .find((l) => l.length > 0 && !l.startsWith(':::'))
+  if (!first) return '（空白草稿）'
+  return first.length > 60 ? first.slice(0, 60) + '…' : first
 }
 
 function newDraft() {
@@ -50,10 +94,28 @@ function newDraft() {
   emit('select', created.id)
 }
 
-function remove(id: string) {
-  if (!confirm('确定删除此草稿？此操作不可撤销。')) return
-  deleteDraft(id)
+function startRename(d: DraftMeta, ev: Event) {
+  ev.stopPropagation()
+  renamingId.value = d.id
+  renameValue.value = d.title || ''
+  void nextTick(() => renameInputRef.value?.focus())
+}
+
+function commitRename() {
+  if (!renamingId.value) return
+  const title = renameValue.value.trim() || '未命名草稿'
+  updateDraft(renamingId.value, { title })
+  renamingId.value = null
   refresh()
+}
+
+function cancelRename() {
+  renamingId.value = null
+}
+
+function requestDelete(d: DraftMeta, ev: Event) {
+  ev.stopPropagation()
+  emit('requestDelete', d.id, d.title || '未命名草稿')
 }
 
 function download(filename: string, text: string, mime = 'application/json') {
@@ -78,90 +140,289 @@ function onImport(ev: Event) {
   if (!file) return
   const reader = new FileReader()
   reader.onload = () => {
-    const added = importDraftsJSON(String(reader.result ?? ''))
-    alert(`已导入 ${added} 篇草稿`)
+    const r = importDraftsJSONDetailed(String(reader.result ?? ''))
+    importFeedback.value = `导入 ${r.added} 篇（跳过 ${r.skipped}，非法 ${r.invalid}）`
     refresh()
     input.value = ''
+    setTimeout(() => (importFeedback.value = null), 3200)
   }
   reader.readAsText(file)
 }
+
+defineExpose({ refresh })
 </script>
 
 <template>
-  <aside class="drawer">
+  <aside class="drawer" aria-label="草稿列表">
     <header class="drawer-head">
-      <h3>草稿</h3>
-      <button class="btn-text" @click="emit('close')">关闭</button>
+      <h3 class="tx-section">草稿</h3>
+      <button class="btn-text" @click="emit('close')" aria-label="关闭抽屉">关闭</button>
     </header>
 
-    <div class="toolbar">
-      <button class="btn-primary" @click="newDraft">+ 新建</button>
-      <button class="btn-ghost" @click="exportAll">导出 JSON</button>
-      <label class="btn-ghost">
+    <div class="head-tools">
+      <button class="btn btn-primary" @click="newDraft">+ 新建</button>
+      <div class="search">
+        <span class="search-icon">⌕</span>
+        <input
+          v-model="query"
+          class="search-input"
+          type="search"
+          placeholder="搜索标题"
+          aria-label="搜索草稿"
+        />
+      </div>
+    </div>
+
+    <div class="io-row">
+      <button class="btn btn-ghost" @click="exportAll">导出 JSON</button>
+      <label class="btn btn-ghost">
         导入 JSON
         <input type="file" accept="application/json" hidden @change="onImport" />
       </label>
+      <span v-if="importFeedback" class="io-feedback">{{ importFeedback }}</span>
     </div>
 
     <ul class="list">
       <li
-        v-for="d in drafts"
+        v-for="d in filtered"
         :key="d.id"
         class="item"
         :class="{ active: d.id === props.activeId }"
         @click="emit('select', d.id)"
       >
         <div class="item-main">
-          <div class="title">{{ d.title || '未命名' }}</div>
-          <div class="meta">
-            <span>{{ d.themeId }}</span>
+          <div v-if="renamingId === d.id" class="rename-row" @click.stop>
+            <input
+              ref="renameInputRef"
+              v-model="renameValue"
+              class="rename-input"
+              maxlength="48"
+              @keydown.enter.prevent="commitRename"
+              @keydown.esc.prevent="cancelRename"
+              @blur="commitRename"
+            />
+          </div>
+          <div
+            v-else
+            class="title"
+            :title="`双击重命名 · ${d.title}`"
+            @dblclick.stop="startRename(d, $event)"
+          >{{ d.title || '未命名' }}</div>
+          <div class="summary">{{ bodySummary(d.id) }}</div>
+          <div class="meta mono">
+            <span class="meta-theme">{{ d.themeId }}</span>
             <span class="dot">·</span>
             <span>{{ fmt(d.updatedAt) }}</span>
           </div>
         </div>
-        <button class="btn-danger" @click.stop="remove(d.id)">删</button>
+        <div class="item-actions">
+          <button class="icon-btn" title="重命名" @click="startRename(d, $event)">✎</button>
+          <button class="icon-btn danger" title="删除" @click="requestDelete(d, $event)">×</button>
+        </div>
       </li>
-      <li v-if="drafts.length === 0" class="empty">暂无草稿</li>
+      <li v-if="drafts.length === 0" class="empty">
+        <div class="empty-body">
+          <div class="empty-title">还没有草稿</div>
+          <div class="empty-hint">新建一篇开始，或者把旧 JSON 导进来继续写。</div>
+          <button class="btn btn-primary" @click="newDraft">新建第一篇</button>
+        </div>
+      </li>
+      <li v-else-if="filtered.length === 0" class="empty">
+        <div class="empty-body">
+          <div class="empty-title mono">没有匹配 "{{ query }}" 的草稿</div>
+        </div>
+      </li>
     </ul>
+
+    <footer class="drawer-foot mono">
+      <div class="cap-bar">
+        <div class="cap-fill" :style="{ width: storagePct + '%' }" />
+      </div>
+      <div class="cap-text">
+        <span>{{ drafts.length }} 篇</span>
+        <span class="dot">·</span>
+        <span>{{ storagePct }}% 本地存储（上限 ≈ 5MB）</span>
+      </div>
+    </footer>
   </aside>
 </template>
 
 <style scoped>
 .drawer {
-  width: 280px; height: 100%; display: flex; flex-direction: column;
-  background: #fff; border-right: 1px solid #e1e4e8; font-size: 13px; color: #1f2328;
+  width: var(--drawer-w-sm);
+  height: 100%;
+  display: flex; flex-direction: column;
+  background: var(--surface-raised);
+  border-right: 1px solid var(--border);
+  font-family: var(--font-text);
+  font-size: var(--fs-13);
+  color: var(--text);
 }
 .drawer-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; border-bottom: 1px solid #eaecef;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--border);
 }
-.drawer-head h3 { margin: 0; font-size: 14px; }
-.btn-text { background: none; border: none; color: #6a737d; cursor: pointer; font-size: 12px; }
-.toolbar { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid #f1f3f5; }
-.btn-primary, .btn-ghost {
-  height: 28px; padding: 0 10px; font-size: 12px; border-radius: 6px; cursor: pointer;
+.drawer-head h3 { margin: 0; font-size: var(--fs-14); font-weight: var(--fw-semibold); }
+
+.btn-text {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: var(--fs-12);
 }
-.btn-primary { background: #2d6fdd; color: #fff; border: 1px solid #2d6fdd; }
-.btn-primary:hover { background: #1f5ec9; }
-.btn-ghost { background: transparent; color: #1f2328; border: 1px solid #d0d7de; }
-.btn-ghost:hover { background: #f6f8fa; }
-.btn-ghost input[type="file"] { display: none; }
-.list { list-style: none; margin: 0; padding: 4px 0; overflow-y: auto; flex: 1 1 auto; }
+.btn-text:hover { color: var(--text); }
+
+.head-tools {
+  display: flex; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.search {
+  flex: 1 1 auto;
+  display: flex; align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  padding: 0 var(--sp-3);
+}
+.search:focus-within { border-color: var(--accent); box-shadow: var(--focus-ring); }
+.search-icon { color: var(--text-subtle); font-size: var(--fs-13); margin-right: 4px; }
+.search-input {
+  flex: 1 1 auto;
+  border: none;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  height: 26px;
+  color: var(--text);
+}
+
+.io-row {
+  display: flex; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.io-feedback {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--success);
+  letter-spacing: var(--ls-wide);
+}
+
+.btn {
+  height: 26px; padding: 0 var(--sp-3);
+  font-size: var(--fs-12); border-radius: var(--radius-2);
+  cursor: pointer; font-family: var(--font-text);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.btn-primary {
+  background: var(--accent); color: var(--accent-on);
+  border: 1px solid var(--accent);
+}
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-ghost {
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--surface); }
+
+.list {
+  list-style: none; margin: 0; padding: var(--sp-2) 0;
+  overflow-y: auto; flex: 1 1 auto;
+}
 .item {
-  display: flex; align-items: center; gap: 6px;
-  padding: 8px 12px; cursor: pointer;
-  border-left: 3px solid transparent;
+  position: relative;
+  display: flex; align-items: flex-start; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  border-left: 2px solid transparent;
 }
-.item:hover { background: #f6f8fa; }
-.item.active { background: #eef4ff; border-left-color: #2d6fdd; }
+.item:hover { background: var(--surface); }
+.item:hover .item-actions { opacity: 1; }
+.item.active {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+}
 .item-main { flex: 1 1 auto; min-width: 0; }
-.title { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.meta { font-size: 11px; color: #6a737d; margin-top: 2px; }
-.dot { opacity: .5; margin: 0 4px; }
-.btn-danger {
-  background: transparent; border: 1px solid transparent; color: #b42318;
-  font-size: 12px; height: 24px; padding: 0 6px; border-radius: 4px; cursor: pointer;
+.title {
+  font-size: var(--fs-13);
+  font-weight: var(--fw-semibold);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.btn-danger:hover { background: #fdecec; border-color: #fcc4c1; }
-.empty { padding: 16px; color: #6a737d; text-align: center; font-size: 12px; }
+.summary {
+  font-size: var(--fs-12);
+  color: var(--text-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  margin-top: 2px;
+}
+.meta {
+  font-size: var(--fs-11);
+  color: var(--text-subtle);
+  margin-top: 4px;
+  font-feature-settings: var(--font-feat-num);
+  letter-spacing: var(--ls-wide);
+}
+.meta-theme { text-transform: lowercase; }
+.dot { opacity: .5; margin: 0 4px; }
+
+.item-actions {
+  display: flex; gap: 2px;
+  opacity: 0;
+  transition: var(--t-quick);
+}
+.icon-btn {
+  width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-1);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--fs-13);
+}
+.icon-btn:hover { background: var(--surface-raised); border-color: var(--border); color: var(--text); }
+.icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+
+.rename-row { display: flex; }
+.rename-input {
+  width: 100%; height: 22px; padding: 0 6px;
+  font: inherit; font-size: var(--fs-13); font-weight: var(--fw-semibold);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-1);
+  background: var(--surface-raised);
+  color: var(--text);
+  outline: none;
+}
+
+.empty {
+  list-style: none;
+  padding: var(--sp-6) var(--sp-5);
+}
+.empty-body {
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+}
+.empty-title { color: var(--text); font-size: var(--fs-13); font-weight: var(--fw-medium); }
+.empty-hint { color: var(--text-muted); font-size: var(--fs-12); line-height: var(--lh-normal); max-width: 240px; }
+
+.drawer-foot {
+  flex: 0 0 auto;
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  font-size: var(--fs-11);
+  color: var(--text-subtle);
+  letter-spacing: var(--ls-wide);
+}
+.cap-bar {
+  height: 2px; background: var(--border); border-radius: var(--radius-pill); overflow: hidden;
+  margin-bottom: 4px;
+}
+.cap-fill {
+  height: 100%; background: var(--accent); transition: var(--t-quick);
+}
+.cap-text { display: flex; gap: 4px; align-items: baseline; }
 </style>
