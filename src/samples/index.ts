@@ -8,16 +8,22 @@
 
 import { commonSample } from './common'
 import { techGeekSample } from './tech-geek'
+import { techExplainerSample } from './tech-explainer'
 import { lifeAestheticSample } from './life-aesthetic'
 import { businessFinanceSample } from './business-finance'
 import { literaryHumanismSample } from './literary-humanism'
+import { industryObserverSample } from './industry-observer'
+import { peopleStorySample } from './people-story'
 
 export const sampleByTheme: Record<string, string> = {
   default: commonSample,
   'tech-geek': techGeekSample,
+  'tech-explainer': techExplainerSample,
   'life-aesthetic': lifeAestheticSample,
   'business-finance': businessFinanceSample,
   'literary-humanism': literaryHumanismSample,
+  'industry-observer': industryObserverSample,
+  'people-story': peopleStorySample,
 }
 
 export function getSample(themeId: string): string {
