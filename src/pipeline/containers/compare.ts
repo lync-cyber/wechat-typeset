@@ -16,7 +16,7 @@
 
 import type { CompareVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
-import { COMPARE_VARIANTS } from './variants'
+import { COMPARE_VARIANTS } from '../../variants/registry'
 
 function resolveVariantId(ctx: ContainerRenderContext): CompareVariantId {
   const override = ctx.attrs.variant

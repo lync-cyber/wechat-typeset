@@ -9,7 +9,7 @@
 import type { StepsVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './types'
-import { STEPS_VARIANTS } from './variants'
+import { STEPS_VARIANTS } from '../../variants/registry'
 
 function resolveVariantId(ctx: ContainerRenderContext): StepsVariantId {
   const override = ctx.attrs.variant

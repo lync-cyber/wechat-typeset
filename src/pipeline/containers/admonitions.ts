@@ -18,8 +18,8 @@ import type {
 } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './types'
-import { ADMONITION_VARIANTS } from './variants'
-import type { AdmonitionKind } from './variants'
+import { ADMONITION_VARIANTS } from '../../variants/registry'
+import type { AdmonitionKind } from '../../variants/_core'
 
 const DEFAULT_TITLES: Record<AdmonitionKind, string> = {
   tip: '小贴士',

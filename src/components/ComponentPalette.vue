@@ -19,7 +19,6 @@ import {
   createUserComponent,
   deleteUserComponent,
   listUserComponents,
-  toEntry,
 } from '../storage/userComponents'
 import type { Theme } from '../themes/types'
 
@@ -36,7 +35,7 @@ const refreshTick = ref(0)
 
 const userComponents = computed<ComponentEntry[]>(() => {
   void refreshTick.value
-  return listUserComponents().map(toEntry)
+  return listUserComponents()
 })
 
 const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
@@ -70,6 +69,7 @@ const themeTemplateList = computed<ComponentEntry[]>(() => {
   return defs
     .filter((d): d is { id: string; name: string; md: string; hint: string } => !!d.md)
     .map<ComponentEntry>((d) => ({
+      source: 'builtin',
       id: `tpl-${d.id}`,
       name: d.name,
       description: d.hint,

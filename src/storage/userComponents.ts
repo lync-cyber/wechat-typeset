@@ -11,7 +11,7 @@
  *   - 长按/右键 → 删除
  */
 
-import type { UserComponent, ComponentEntry, ComponentKind } from '../components-lib/types'
+import type { UserComponent, ComponentKind } from '../components-lib/types'
 
 const STORAGE_KEY = 'wx-md:user-components'
 
@@ -41,7 +41,8 @@ function readList(): UserComponent[] {
   try {
     const arr = JSON.parse(raw)
     if (!Array.isArray(arr)) return []
-    return arr.filter(isUserComponent)
+    // 旧数据（预 Wrap 版本）没有 source 字段——按位置补齐，避免读旧 localStorage 被过滤掉。
+    return arr.filter(isUserComponent).map((uc) => ({ ...uc, source: 'user' as const }))
   } catch {
     return []
   }
@@ -80,6 +81,7 @@ export interface CreateUserComponentInput {
 export function createUserComponent(input: CreateUserComponentInput): UserComponent {
   const list = readList()
   const uc: UserComponent = {
+    source: 'user',
     id: genId(),
     name: input.name.trim() || '未命名组件',
     description: input.description?.trim() ?? '',
@@ -141,19 +143,6 @@ export function importUserComponentsJSON(json: string): number {
   }
   writeList(list)
   return added
-}
-
-/** 把 UserComponent 转为 ComponentEntry（UI 渲染统一视图） */
-export function toEntry(uc: UserComponent): ComponentEntry {
-  return {
-    id: uc.id,
-    name: uc.name,
-    description: uc.description,
-    kind: uc.kind,
-    variantId: uc.variantId,
-    markdownSnippet: uc.markdownSnippet,
-    thumbnailSvg: uc.thumbnailSvg,
-  }
 }
 
 function defaultThumb(name: string): string {

@@ -2,31 +2,26 @@
  * 组件库注册表
  *
  * 汇总所有内置预设，供 ComponentPalette.vue 消费。
+ * 数据源：src/variants/ 下各 VariantDef 的 snippets 字段（单一真相）。
  * 用户自创组件通过 storage/userComponents.ts 独立管理，
  * UI 展示时在"我的组件"分类里叠加呈现。
- *
- * 约束：此文件只做聚合，不做运行时变形。新增预设 = 在 presets/ 下加条目。
  */
 
 import type { ComponentEntry, ComponentKind } from './types'
 import type { VariantKind } from '../themes/types'
-import { admonitionPresets } from './presets/admonition'
-import { quotePresets } from './presets/quote'
-import { comparePresets } from './presets/compare'
-import { stepsPresets } from './presets/steps'
-import { dividerPresets } from './presets/divider'
-import { sectionTitlePresets } from './presets/section-title'
-import { freePresets } from './presets/free'
+import { BUILTIN_COMPONENTS as VARIANT_ENTRIES } from '../variants/registry'
 
-export const BUILTIN_COMPONENTS: ComponentEntry[] = [
-  ...admonitionPresets,
-  ...quotePresets,
-  ...comparePresets,
-  ...stepsPresets,
-  ...dividerPresets,
-  ...sectionTitlePresets,
-  ...freePresets,
-]
+export const BUILTIN_COMPONENTS: ComponentEntry[] = VARIANT_ENTRIES.map((e) => ({
+  source: 'builtin',
+  id: e.id,
+  name: e.name,
+  description: e.description,
+  kind: e.kind,
+  variantId: e.variantId,
+  themeCompat: e.themeCompat ? [...e.themeCompat] : undefined,
+  markdownSnippet: e.markdownSnippet,
+  thumbnailSvg: e.thumbnailSvg,
+}))
 
 /** UI 分类：展示在抽屉 tab 上。顺序即抽屉 tab 顺序。 */
 export const COMPONENT_TABS: ReadonlyArray<{

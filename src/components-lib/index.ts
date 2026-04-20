@@ -5,4 +5,3 @@ export {
   filterByKind,
   findPresetByVariant,
 } from './registry'
-export { thumb } from './thumbnail'

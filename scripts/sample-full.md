@@ -32,7 +32,7 @@
 
 ---
 
-## 提示容器 6 种 variant
+## 提示容器 9 种 variant
 
 ::: tip 温和提示 variant=accent-bar
 这是 `accent-bar` 骨架 —— 左侧 3px 色条 + 浅底 + 右侧轻圆角。
@@ -56,6 +56,18 @@
 
 ::: info 终端风格 variant=terminal
 这是 `terminal` 骨架 —— 顶部三色圆点 + 等宽正文。
+:::
+
+::: tip // NOTE variant=dashed-border
+这是 `dashed-border` 骨架 —— 左 2px 虚线 + 浅底，工程"附注"铅笔感。
+:::
+
+::: info // REF §2.3 variant=double-border
+这是 `double-border` 骨架 —— 左 4px 双线 + 透明底，manpage 交叉引用风。
+:::
+
+::: danger // PITFALL variant=top-bottom-rule
+这是 `top-bottom-rule` 骨架 —— 顶底 1px 实线，报纸 errata 勘误条。
 :::
 
 ---
