@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>wx-md · Typesetter's Bench — Token Spec</title>
+<link rel="stylesheet" href="../src/ui/tokens.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+SC:wght@400;700&display=swap">
+<style>
+  /* Page chrome only — everything below this line uses tokens. */
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+  body {
+    font-family: var(--font-text);
+    font-size: var(--fs-15);
+    line-height: var(--lh-normal);
+    font-feature-settings: "kern", "calt", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  * { box-sizing: border-box; }
+  .num, code, kbd, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums lining-nums; }
+
+  /* ----- Page structure ----- */
+  .page { max-width: 1160px; margin: 0 auto; padding: 0 var(--sp-8) var(--sp-10); }
+
+  /* Masthead */
+  .mast { padding: var(--sp-10) 0 var(--sp-7); border-bottom: 1px solid var(--border); position: relative; }
+  .mast::after {
+    /* the ruler strip — brand mark #2 */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 4px;
+    background-image:
+      linear-gradient(to right, var(--proof-500) 1px, transparent 1px),
+      linear-gradient(to right, var(--paper-400) 1px, transparent 1px);
+    background-size: 48px 4px, 8px 4px;
+    background-position: 0 bottom, 0 bottom;
+    background-repeat: repeat-x;
+    /* color the long ticks red, short ticks paper-400 via opacity trick:
+       proof-500 at 48px intervals, paper-400 at 8px. both 1px wide. */
+  }
+  .mast-row { display: flex; align-items: baseline; gap: var(--sp-5); flex-wrap: wrap; }
+  .brand {
+    font-family: var(--font-display);
+    font-size: var(--fs-38);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--ls-display);
+    font-weight: var(--fw-bold);
+    color: var(--text);
+    display: inline-flex; align-items: center; gap: var(--sp-4);
+  }
+  .brand .tmark { color: var(--accent); }
+  .mast-sub {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+  .mast-tag {
+    max-width: 640px;
+    margin-top: var(--sp-5);
+    font-size: var(--fs-17);
+    line-height: var(--lh-snug);
+    color: var(--text-muted);
+  }
+  .mast-meta {
+    margin-top: var(--sp-6);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+  }
+  .mast-meta dt {
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-kicker);
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    font-family: var(--font-mono);
+  }
+  .mast-meta dd { margin: var(--sp-2) 0 0; font-size: var(--fs-14); color: var(--text); }
+
+  /* Section rhythm */
+  section { padding: var(--sp-9) 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  .sec-head { display: flex; align-items: baseline; gap: var(--sp-5); margin-bottom: var(--sp-7); }
+  .sec-num {
+    font-family: var(--font-mono);
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-kicker);
+    color: var(--accent);
+    padding-top: 4px;
+  }
+  .sec-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-30);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--ls-display);
+    color: var(--text);
+    margin: 0;
+    font-weight: var(--fw-bold);
+  }
+  .sec-lede {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-15);
+    color: var(--text-muted);
+    max-width: 64ch;
+  }
+
+  /* Subhead */
+  .subhead {
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-kicker);
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    font-family: var(--font-mono);
+    margin: var(--sp-6) 0 var(--sp-3);
+    display: flex; align-items: center; gap: var(--sp-3);
+  }
+  .subhead::before {
+    content: ""; display: inline-block; width: 10px; height: 1px;
+    background: var(--accent);
+  }
+
+  /* ----- Color scales ----- */
+  .scale {
+    display: grid;
+    grid-template-columns: 120px repeat(11, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: var(--sp-4);
+  }
+  .scale-name {
+    background: var(--surface);
+    padding: var(--sp-4);
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 68px;
+  }
+  .scale-name b { font-size: var(--fs-13); color: var(--text); font-weight: var(--fw-semibold); }
+  .scale-name span { color: var(--text-subtle); letter-spacing: var(--ls-wide); text-transform: uppercase; font-size: var(--fs-11); }
+  .swatch {
+    padding: var(--sp-3);
+    min-height: 68px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .swatch .step { font-weight: var(--fw-semibold); font-size: var(--fs-11); }
+  .swatch .hex  { opacity: 0.8; }
+  .swatch.light { color: var(--paper-800); }
+  .swatch.dark  { color: var(--paper-50); }
+
+  /* Semantic pair cards */
+  .sem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); }
+  .sem {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: var(--sp-5);
+  }
+  .sem-dot {
+    width: 10px; height: 10px; border-radius: var(--radius-pill);
+    display: inline-block; margin-right: var(--sp-3);
+  }
+  .sem-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-kicker);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: var(--sp-3);
+  }
+  .sem-msg { font-size: var(--fs-13); color: var(--text); line-height: var(--lh-snug); }
+  .sem-vars {
+    margin-top: var(--sp-4); padding-top: var(--sp-3);
+    border-top: 1px dashed var(--border-strong);
+    font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-subtle);
+  }
+  .sem-vars div { display: flex; justify-content: space-between; }
+
+  /* ----- Type spec ----- */
+  .type-stack > div { display: grid; grid-template-columns: 120px 1fr 260px; gap: var(--sp-5); align-items: baseline; padding: var(--sp-4) 0; border-bottom: 1px dashed var(--border); }
+  .type-stack > div:last-child { border-bottom: none; }
+  .type-tag { font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: var(--ls-kicker); text-transform: uppercase; color: var(--text-subtle); padding-top: 6px; }
+  .type-sample { color: var(--text); }
+  .type-meta { font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-muted); text-align: right; }
+
+  /* Family cards */
+  .families { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); margin-bottom: var(--sp-6); }
+  .family { border: 1px solid var(--border); padding: var(--sp-5) var(--sp-5) var(--sp-6); background: var(--surface); position: relative; }
+  .family .fam-kicker { font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: var(--ls-kicker); text-transform: uppercase; color: var(--accent); }
+  .family .fam-name { font-size: var(--fs-22); color: var(--text); margin-top: var(--sp-3); font-weight: var(--fw-semibold); }
+  .family .fam-spec { font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-subtle); margin-top: var(--sp-2); }
+  .family .fam-demo { margin-top: var(--sp-5); font-size: var(--fs-30); line-height: var(--lh-tight); color: var(--text); }
+  .family.display .fam-demo { font-family: var(--font-display); font-weight: var(--fw-bold); letter-spacing: var(--ls-display); }
+  .family.text .fam-demo    { font-family: var(--font-text); }
+  .family.mono .fam-demo    { font-family: var(--font-mono); font-size: var(--fs-24); letter-spacing: 0; }
+  .family .fam-alphabet { margin-top: var(--sp-4); font-size: var(--fs-13); color: var(--text-muted); letter-spacing: 0.02em; }
+
+  /* ----- Spacing spec ----- */
+  .space-row { display: grid; grid-template-columns: 80px 60px 1fr; align-items: center; gap: var(--sp-5); padding: var(--sp-2) 0; }
+  .space-bar { height: 12px; background: var(--accent); }
+  .space-token { font-family: var(--font-mono); font-size: var(--fs-12); color: var(--text-muted); }
+
+  /* ----- Radius spec ----- */
+  .radii { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
+  .rad {
+    width: 120px; height: 120px; background: var(--surface); border: 1px solid var(--border-strong);
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    padding: var(--sp-3);
+    font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-muted);
+  }
+
+  /* ----- Shadow spec ----- */
+  .shad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-6); }
+  .shad { background: var(--surface-raised); padding: var(--sp-6) var(--sp-5); border: 1px solid var(--border); min-height: 96px; }
+  .shad.rest  { box-shadow: var(--shadow-rest); }
+  .shad.lift  { box-shadow: var(--shadow-lift); }
+  .shad.modal { box-shadow: var(--shadow-modal); }
+  .shad.focus { outline: 2px solid rgba(168,52,32,0.45); outline-offset: 2px; }
+  .shad-name { font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: var(--ls-kicker); text-transform: uppercase; color: var(--accent); }
+  .shad-note { margin-top: var(--sp-3); font-size: var(--fs-13); color: var(--text); }
+
+  /* ----- Motion spec ----- */
+  .motion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-6); }
+  .motion { border: 1px solid var(--border); padding: var(--sp-5); background: var(--surface); }
+  .motion-name { font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: var(--ls-kicker); text-transform: uppercase; color: var(--accent); }
+  .motion-dur { font-family: var(--font-mono); font-size: var(--fs-24); color: var(--text); margin: var(--sp-2) 0 var(--sp-4); }
+  .motion-track {
+    height: 4px; background: var(--border); position: relative; overflow: hidden;
+  }
+  .motion-dot {
+    position: absolute; top: -4px; left: 0; width: 12px; height: 12px;
+    background: var(--accent);
+    transition: transform var(--dur-instant) var(--ease-craft);
+  }
+  .motion-dur-quick .motion-dot { transition-duration: var(--dur-quick); }
+  .motion-dur-settled .motion-dot { transition-duration: var(--dur-settled); }
+  .motion:hover .motion-dot { transform: translateX(calc(100% + 220px)); }
+  .motion small { display: block; margin-top: var(--sp-4); font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-subtle); }
+
+  /* ----- Icon spec ----- */
+  .ico-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--sp-5); }
+  .ico {
+    border: 1px solid var(--border); padding: var(--sp-5);
+    display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
+    background: var(--surface);
+  }
+  .ico svg { width: 24px; height: 24px; color: var(--text); }
+  .ico-name { font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-muted); }
+
+  /* Grid overlay sample */
+  .ico-grid-sample {
+    width: 96px; height: 96px;
+    background-image:
+      linear-gradient(to right, var(--border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+    background-size: 6px 6px;
+    position: relative;
+    margin: 0 auto;
+  }
+  .ico-grid-sample svg { position: absolute; inset: 0; margin: auto; width: 96px; height: 96px; color: var(--accent); }
+
+  /* ----- Component sample (bench) ----- */
+  .bench {
+    border: 1px solid var(--border);
+    background: var(--surface-raised);
+    margin-top: var(--sp-4);
+  }
+  .bench-tool {
+    height: 48px; background: var(--surface-raised);
+    display: flex; align-items: center; gap: var(--sp-2);
+    padding: 0 var(--sp-5);
+    border-bottom: 1px solid var(--border);
+  }
+  .bench-brand {
+    display: flex; align-items: baseline; gap: var(--sp-3);
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-19);
+    color: var(--text);
+    margin-right: var(--sp-5);
+  }
+  .bench-brand .tmark { color: var(--accent); }
+  .bench-brand small { font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: var(--ls-kicker); text-transform: uppercase; color: var(--text-subtle); font-weight: var(--fw-regular); }
+  .btn {
+    height: 28px; padding: 0 var(--sp-4);
+    font-family: var(--font-text);
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-1);
+    cursor: pointer;
+    transition: var(--t-instant);
+    display: inline-flex; align-items: center; gap: var(--sp-3);
+  }
+  .btn:hover { background: var(--surface-alt); color: var(--text); }
+  .btn.ghost { border-color: var(--border); }
+  .btn.ghost:hover { border-color: var(--border-strong); background: var(--surface); }
+  .btn.primary {
+    background: var(--accent); color: var(--accent-on);
+    height: 30px; padding: 0 var(--sp-5);
+    font-weight: var(--fw-semibold);
+  }
+  .btn.primary:hover { background: var(--accent-hover); }
+  .btn.primary:active { background: var(--accent-press); }
+  .btn.primary:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+  .bench-sep { width: 1px; height: 18px; background: var(--border); margin: 0 var(--sp-3); }
+  .bench-spacer { flex: 1; }
+  .bench-stat {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .bench-stat .sep-dot { opacity: 0.4; margin: 0 var(--sp-3); }
+
+  /* ruler strip */
+  .bench-ruler {
+    height: 4px;
+    background-image:
+      linear-gradient(to right, var(--accent) 1px, transparent 1px),
+      linear-gradient(to right, var(--paper-400) 1px, transparent 1px);
+    background-size: 48px 100%, 8px 100%;
+    background-position: 0 bottom, 0 bottom;
+    background-repeat: repeat-x;
+  }
+  [data-theme="dark"] .bench-ruler,
+  @media (prefers-color-scheme: dark) {}
+
+  .bench-body { display: grid; grid-template-columns: 1fr 375px; min-height: 260px; }
+  .bench-editor {
+    background: var(--editor-bg);
+    color: var(--editor-text);
+    font-family: var(--font-mono);
+    font-size: var(--fs-13);
+    line-height: 1.65;
+    padding: var(--sp-5) var(--sp-6);
+    box-shadow: var(--shadow-inset);
+  }
+  .bench-editor .ln { color: var(--editor-linenum); user-select: none; display: inline-block; width: 28px; text-align: right; margin-right: var(--sp-4); }
+  .bench-editor .kw { color: var(--proof-300); }
+  .bench-editor .st { color: var(--amber-200); }
+  .bench-editor .co { color: var(--editor-muted); }
+  .bench-editor .h1 { color: var(--proof-300); font-weight: var(--fw-bold); }
+  .bench-editor .em { color: var(--paper-50); }
+
+  .bench-preview {
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    padding: var(--sp-5) var(--sp-5) var(--sp-5) var(--sp-7);
+  }
+  .bench-preview::before {
+    /* vertical ruler at left edge — brand mark #3 */
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 20px;
+    background-image:
+      linear-gradient(to bottom, var(--paper-400) 1px, transparent 1px);
+    background-size: 100% 8px;
+    border-right: 1px solid var(--border);
+  }
+  .bench-preview .ruler-num {
+    position: absolute; left: 2px; width: 18px; font-family: var(--font-mono);
+    font-size: 9px; color: var(--text-subtle); text-align: right;
+  }
+  .bench-article {
+    background: #ffffff;
+    min-height: 220px;
+    box-shadow: var(--shadow-lift);
+    padding: var(--sp-5);
+    font-size: var(--fs-13);
+    line-height: 1.75;
+    color: var(--paper-800);
+  }
+  .bench-article h3 {
+    font-size: 17px; margin: 0 0 10px; font-weight: 700;
+    padding-bottom: 6px; border-bottom: 2px solid var(--accent);
+  }
+  .bench-article p { margin: 0 0 10px; }
+  .bench-article .hl { background: #fff3b0; padding: 0 2px; }
+
+  /* status strip */
+  .bench-foot {
+    height: 28px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; padding: 0 var(--sp-5); gap: var(--sp-4);
+    font-family: var(--font-mono); font-size: var(--fs-11); color: var(--text-subtle);
+    letter-spacing: var(--ls-wide);
+  }
+  .bench-foot .status-dot {
+    width: 6px; height: 6px; border-radius: var(--radius-pill); background: var(--sage-500); display: inline-block; margin-right: var(--sp-2);
+  }
+
+  /* ----- Motif blocks ----- */
+  .motif-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+  .motif { border: 1px solid var(--border); padding: var(--sp-5); background: var(--surface); min-height: 120px; }
+  .motif-label { font-family: var(--font-mono); font-size: var(--fs-11); letter-spacing: var(--ls-kicker); text-transform: uppercase; color: var(--text-subtle); margin-bottom: var(--sp-4); }
+  .ruler-demo { height: 4px;
+    background-image:
+      linear-gradient(to right, var(--accent) 1px, transparent 1px),
+      linear-gradient(to right, var(--paper-400) 1px, transparent 1px);
+    background-size: 48px 100%, 8px 100%;
+    background-repeat: repeat-x;
+    background-position: 0 0;
+  }
+  .reg-mark-demo { display: flex; justify-content: center; padding: var(--sp-4); }
+  .reg-mark-demo svg { color: var(--accent); width: 64px; height: 64px; }
+
+  /* ----- Footer ----- */
+  .foot {
+    padding: var(--sp-8) 0 var(--sp-4);
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-wide);
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    display: flex; justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- =============================================================
+       MASTHEAD
+  ============================================================== -->
+  <header class="mast">
+    <div class="mast-row">
+      <div class="brand">
+        <svg class="tmark" width="40" height="40" viewBox="0 0 40 40" fill="none"
+             stroke="currentColor" stroke-width="1.25"
+             stroke-linecap="square" stroke-linejoin="miter">
+          <!-- T-shaped registration mark -->
+          <line x1="4" y1="8" x2="36" y2="8"/>
+          <line x1="20" y1="8" x2="20" y2="36"/>
+          <line x1="14" y1="20" x2="26" y2="20"/>
+          <circle cx="20" cy="20" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+        <span>wx-md</span>
+      </div>
+      <div class="mast-sub">Typesetter&rsquo;s Bench&nbsp;·&nbsp;Token Spec&nbsp;v1</div>
+    </div>
+
+    <p class="mast-tag">
+      工具要像排字房的工作台——纸张、铅字、标尺，一切都有物理重量。
+      本页展示 wx-md App shell 的全部设计 token；产物（公众号文章）不在本谱系之内。
+    </p>
+
+    <dl class="mast-meta">
+      <div><dt>Surface</dt><dd>App shell only</dd></div>
+      <div><dt>Version</dt><dd class="num">0.1 · 2026-04</dd></div>
+      <div><dt>Materials</dt><dd>Paper · Ink · Proof red</dd></div>
+      <div><dt>Scale</dt><dd class="num">1.125 / base 15px</dd></div>
+    </dl>
+  </header>
+
+  <!-- =============================================================
+       01. COLOR
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 01</span>
+      <div>
+        <h2 class="sec-title">Color</h2>
+        <p class="sec-lede">
+          Three materials hold the system: <b>paper</b> (warm neutral base), <b>ink</b> (warm black),
+          and <b>proof red</b>. Three semantic hues (sage · amber · indigo-ink) exist so that states read
+          as states, not as brand. Proof red is allowed in exactly three places: primary action, errors,
+          and brand/ruler marks.
+        </p>
+      </div>
+    </div>
+
+    <div class="subhead">Core scales · 11 steps</div>
+
+    <!-- PAPER -->
+    <div class="scale">
+      <div class="scale-name"><b>Paper</b><span>neutral · warm</span></div>
+      <div class="swatch light" style="background:#fdfcf8"><span class="step">50</span><span class="hex">#fdfcf8</span></div>
+      <div class="swatch light" style="background:#f8f6ef"><span class="step">100</span><span class="hex">#f8f6ef</span></div>
+      <div class="swatch light" style="background:#eeebe0"><span class="step">200</span><span class="hex">#eeebe0</span></div>
+      <div class="swatch light" style="background:#d8d4c4"><span class="step">300</span><span class="hex">#d8d4c4</span></div>
+      <div class="swatch light" style="background:#b8b3a0"><span class="step">400</span><span class="hex">#b8b3a0</span></div>
+      <div class="swatch light" style="background:#8f8a77"><span class="step">500</span><span class="hex">#8f8a77</span></div>
+      <div class="swatch dark"  style="background:#6a6655"><span class="step">600</span><span class="hex">#6a6655</span></div>
+      <div class="swatch dark"  style="background:#4a4739"><span class="step">700</span><span class="hex">#4a4739</span></div>
+      <div class="swatch dark"  style="background:#2c2a22"><span class="step">800</span><span class="hex">#2c2a22</span></div>
+      <div class="swatch dark"  style="background:#1a1914"><span class="step">900</span><span class="hex">#1a1914</span></div>
+      <div class="swatch dark"  style="background:#0e0e0a"><span class="step">950</span><span class="hex">#0e0e0a</span></div>
+    </div>
+
+    <!-- INK (10 steps) -->
+    <div class="scale" style="grid-template-columns: 120px repeat(10, 1fr);">
+      <div class="scale-name"><b>Ink</b><span>warm black</span></div>
+      <div class="swatch light" style="background:#e7e5df"><span class="step">50</span><span class="hex">#e7e5df</span></div>
+      <div class="swatch light" style="background:#b8b4a8"><span class="step">100</span><span class="hex">#b8b4a8</span></div>
+      <div class="swatch dark"  style="background:#898574"><span class="step">200</span><span class="hex">#898574</span></div>
+      <div class="swatch dark"  style="background:#5b5749"><span class="step">300</span><span class="hex">#5b5749</span></div>
+      <div class="swatch dark"  style="background:#3e3b30"><span class="step">400</span><span class="hex">#3e3b30</span></div>
+      <div class="swatch dark"  style="background:#2a2822"><span class="step">500</span><span class="hex">#2a2822</span></div>
+      <div class="swatch dark"  style="background:#1f1d18"><span class="step">600</span><span class="hex">#1f1d18</span></div>
+      <div class="swatch dark"  style="background:#16140f"><span class="step">700</span><span class="hex">#16140f</span></div>
+      <div class="swatch dark"  style="background:#0e0d09"><span class="step">800</span><span class="hex">#0e0d09</span></div>
+      <div class="swatch dark"  style="background:#050503"><span class="step">900</span><span class="hex">#050503</span></div>
+    </div>
+
+    <!-- PROOF RED (10 steps) -->
+    <div class="scale" style="grid-template-columns: 120px repeat(10, 1fr);">
+      <div class="scale-name"><b>Proof</b><span>accent&nbsp;·&nbsp;red</span></div>
+      <div class="swatch light" style="background:#fbeeeb"><span class="step">50</span><span class="hex">#fbeeeb</span></div>
+      <div class="swatch light" style="background:#f4d1ca"><span class="step">100</span><span class="hex">#f4d1ca</span></div>
+      <div class="swatch light" style="background:#e8a498"><span class="step">200</span><span class="hex">#e8a498</span></div>
+      <div class="swatch dark"  style="background:#d87465"><span class="step">300</span><span class="hex">#d87465</span></div>
+      <div class="swatch dark"  style="background:#c54a38"><span class="step">400</span><span class="hex">#c54a38</span></div>
+      <div class="swatch dark"  style="background:#a83420"><span class="step">500</span><span class="hex">#a83420</span></div>
+      <div class="swatch dark"  style="background:#8a271a"><span class="step">600</span><span class="hex">#8a271a</span></div>
+      <div class="swatch dark"  style="background:#6c1e14"><span class="step">700</span><span class="hex">#6c1e14</span></div>
+      <div class="swatch dark"  style="background:#4e150e"><span class="step">800</span><span class="hex">#4e150e</span></div>
+      <div class="swatch dark"  style="background:#2e0c08"><span class="step">900</span><span class="hex">#2e0c08</span></div>
+    </div>
+
+    <div class="subhead">Semantic hues · 9 steps each</div>
+
+    <!-- SAGE -->
+    <div class="scale" style="grid-template-columns: 120px repeat(9, 1fr);">
+      <div class="scale-name"><b>Sage</b><span>success</span></div>
+      <div class="swatch light" style="background:#eef1ed"><span class="step">50</span><span class="hex">#eef1ed</span></div>
+      <div class="swatch light" style="background:#d5dcd1"><span class="step">100</span><span class="hex">#d5dcd1</span></div>
+      <div class="swatch light" style="background:#aab8a4"><span class="step">200</span><span class="hex">#aab8a4</span></div>
+      <div class="swatch dark"  style="background:#7f9378"><span class="step">300</span><span class="hex">#7f9378</span></div>
+      <div class="swatch dark"  style="background:#5c7155"><span class="step">400</span><span class="hex">#5c7155</span></div>
+      <div class="swatch dark"  style="background:#46573f"><span class="step">500</span><span class="hex">#46573f</span></div>
+      <div class="swatch dark"  style="background:#374630"><span class="step">600</span><span class="hex">#374630</span></div>
+      <div class="swatch dark"  style="background:#2a3724"><span class="step">700</span><span class="hex">#2a3724</span></div>
+      <div class="swatch dark"  style="background:#1e291a"><span class="step">800</span><span class="hex">#1e291a</span></div>
+    </div>
+
+    <!-- AMBER -->
+    <div class="scale" style="grid-template-columns: 120px repeat(9, 1fr);">
+      <div class="scale-name"><b>Amber</b><span>warn&nbsp;·&nbsp;ochre</span></div>
+      <div class="swatch light" style="background:#faf3dd"><span class="step">50</span><span class="hex">#faf3dd</span></div>
+      <div class="swatch light" style="background:#f0dfad"><span class="step">100</span><span class="hex">#f0dfad</span></div>
+      <div class="swatch light" style="background:#debf71"><span class="step">200</span><span class="hex">#debf71</span></div>
+      <div class="swatch light" style="background:#c29a3d"><span class="step">300</span><span class="hex">#c29a3d</span></div>
+      <div class="swatch dark"  style="background:#a17d24"><span class="step">400</span><span class="hex">#a17d24</span></div>
+      <div class="swatch dark"  style="background:#8a6a1c"><span class="step">500</span><span class="hex">#8a6a1c</span></div>
+      <div class="swatch dark"  style="background:#6d5413"><span class="step">600</span><span class="hex">#6d5413</span></div>
+      <div class="swatch dark"  style="background:#54410c"><span class="step">700</span><span class="hex">#54410c</span></div>
+      <div class="swatch dark"  style="background:#3b2d07"><span class="step">800</span><span class="hex">#3b2d07</span></div>
+    </div>
+
+    <!-- INDIGO-INK -->
+    <div class="scale" style="grid-template-columns: 120px repeat(9, 1fr);">
+      <div class="scale-name"><b>Indigo-ink</b><span>info</span></div>
+      <div class="swatch light" style="background:#e6eaf1"><span class="step">50</span><span class="hex">#e6eaf1</span></div>
+      <div class="swatch light" style="background:#c2cad9"><span class="step">100</span><span class="hex">#c2cad9</span></div>
+      <div class="swatch light" style="background:#95a1ba"><span class="step">200</span><span class="hex">#95a1ba</span></div>
+      <div class="swatch dark"  style="background:#6d7b9a"><span class="step">300</span><span class="hex">#6d7b9a</span></div>
+      <div class="swatch dark"  style="background:#4c5a7a"><span class="step">400</span><span class="hex">#4c5a7a</span></div>
+      <div class="swatch dark"  style="background:#37465f"><span class="step">500</span><span class="hex">#37465f</span></div>
+      <div class="swatch dark"  style="background:#2a3750"><span class="step">600</span><span class="hex">#2a3750</span></div>
+      <div class="swatch dark"  style="background:#202b40"><span class="step">700</span><span class="hex">#202b40</span></div>
+      <div class="swatch dark"  style="background:#161e2d"><span class="step">800</span><span class="hex">#161e2d</span></div>
+    </div>
+
+    <div class="subhead">Semantic mapping · in use</div>
+    <div class="sem-grid">
+      <div class="sem">
+        <div class="sem-label"><span class="sem-dot" style="background:var(--sage-600)"></span>Success</div>
+        <div class="sem-msg">已复制（富文本）</div>
+        <div class="sem-vars">
+          <div><span>--success</span><span>sage-600</span></div>
+          <div><span>--success-soft</span><span>sage-50</span></div>
+        </div>
+      </div>
+      <div class="sem">
+        <div class="sem-label"><span class="sem-dot" style="background:var(--amber-600)"></span>Warn</div>
+        <div class="sem-msg">Secure context 缺失，复制将降级</div>
+        <div class="sem-vars">
+          <div><span>--warn</span><span>amber-600</span></div>
+          <div><span>--warn-soft</span><span>amber-50</span></div>
+        </div>
+      </div>
+      <div class="sem">
+        <div class="sem-label"><span class="sem-dot" style="background:var(--proof-500)"></span>Danger</div>
+        <div class="sem-msg">确定清空当前草稿？此操作不可撤销。</div>
+        <div class="sem-vars">
+          <div><span>--danger</span><span>proof-500</span></div>
+          <div><span>--danger-soft</span><span>proof-50</span></div>
+        </div>
+      </div>
+      <div class="sem">
+        <div class="sem-label"><span class="sem-dot" style="background:var(--iink-600)"></span>Info</div>
+        <div class="sem-msg">自动保存每 400 ms 触发一次</div>
+        <div class="sem-vars">
+          <div><span>--info</span><span>iink-600</span></div>
+          <div><span>--info-soft</span><span>iink-50</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       02. TYPOGRAPHY
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 02</span>
+      <div>
+        <h2 class="sec-title">Typography</h2>
+        <p class="sec-lede">
+          Three families, one modular scale (1.125, base 15 px). Display sets tone, text sets voice,
+          mono sets facts — every number, px, hex and hotkey renders tabular mono. Letter-spacing is
+          tightened on display, loosened to <span class="num">0.12em</span> on uppercase kickers.
+        </p>
+      </div>
+    </div>
+
+    <div class="subhead">Families</div>
+    <div class="families">
+      <div class="family display">
+        <div class="fam-kicker">Display · Serif</div>
+        <div class="fam-name">GT Super Display</div>
+        <div class="fam-spec">fallback: Tiempos Headline, Noto Serif SC, Georgia</div>
+        <div class="fam-demo">Typesetter&rsquo;s</div>
+        <div class="fam-alphabet">ABCDEFGHIJKLMNOPQR abcdefghijklmn 0123456789</div>
+      </div>
+      <div class="family text">
+        <div class="fam-kicker">Text · Sans</div>
+        <div class="fam-name">Inter&nbsp;var</div>
+        <div class="fam-spec">ss01 · cv11 · calt · kern</div>
+        <div class="fam-demo">Compose &amp; copy.</div>
+        <div class="fam-alphabet">ABCDEFGHIJKLMNOPQR abcdefghijklmn 你好世界 0123456789</div>
+      </div>
+      <div class="family mono">
+        <div class="fam-kicker">Mono · Grotesque</div>
+        <div class="fam-name">JetBrains Mono NL</div>
+        <div class="fam-spec">tnum · lnum · ligatures off</div>
+        <div class="fam-demo">#a83420 &middot; 48px</div>
+        <div class="fam-alphabet">0123456789 a1 b2 c3 d4 =&gt; != &lt;= &gt;=</div>
+      </div>
+    </div>
+
+    <div class="subhead">Scale · 1.125 modular</div>
+    <div class="type-stack">
+      <div>
+        <div class="type-tag">Display</div>
+        <div class="type-sample" style="font-family:var(--font-display); font-size:38.7px; line-height:1.2; letter-spacing:-.02em; font-weight:700;">Compose &amp; copy.</div>
+        <div class="type-meta">fs-38 &middot; lh-tight &middot; ls-display</div>
+      </div>
+      <div>
+        <div class="type-tag">Title</div>
+        <div class="type-sample" style="font-size:21.4px; line-height:1.35; letter-spacing:-.005em; font-weight:600;">wx-md 编辑器外壳 token</div>
+        <div class="type-meta">fs-22 &middot; lh-snug &middot; fw-600</div>
+      </div>
+      <div>
+        <div class="type-tag">Section</div>
+        <div class="type-sample" style="font-size:16.9px; line-height:1.35; font-weight:600;">顶栏、编辑器、预览</div>
+        <div class="type-meta">fs-17 &middot; lh-snug &middot; fw-600</div>
+      </div>
+      <div>
+        <div class="type-tag">Body</div>
+        <div class="type-sample" style="font-size:15px; line-height:1.5;">
+          工具要像排字房的工作台。左边写 Markdown，右边 375 px 移动端实时预览。
+        </div>
+        <div class="type-meta">fs-15 &middot; lh-normal &middot; BASE</div>
+      </div>
+      <div>
+        <div class="type-tag">UI</div>
+        <div class="type-sample" style="font-size:13px; line-height:1.5;">按钮、标签、tooltip 走这一档</div>
+        <div class="type-meta">fs-13 &middot; lh-normal</div>
+      </div>
+      <div>
+        <div class="type-tag">Micro</div>
+        <div class="type-sample" style="font-size:11.9px; line-height:1.5; color:var(--text-muted);">secondary meta · drawer caption</div>
+        <div class="type-meta">fs-12 &middot; text-muted</div>
+      </div>
+      <div>
+        <div class="type-tag">Kicker</div>
+        <div class="type-sample" style="font-family:var(--font-mono); font-size:10.7px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-subtle);">RULER · 48PX GRID · PROOF</div>
+        <div class="type-meta">fs-11 &middot; mono &middot; ls-kicker</div>
+      </div>
+      <div>
+        <div class="type-tag">Num</div>
+        <div class="type-sample num" style="font-size:15px;">字数 <b>4,812</b> &middot; 阅读 <b>13 min</b> &middot; 对比度 <b>4.82 : 1</b></div>
+        <div class="type-meta">mono &middot; tnum &middot; lnum</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       03. SPACING
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 03</span>
+      <div>
+        <h2 class="sec-title">Spacing</h2>
+        <p class="sec-lede">
+          11-step scale built on a 4 px unit, with an 8 px "base". Component-level spacing defaults to
+          <span class="num">sp-3 / sp-4 / sp-5</span>. Nothing uses an off-grid value.
+        </p>
+      </div>
+    </div>
+
+    <div style="max-width:720px;">
+      <div class="space-row"><span class="space-token">--sp-1</span><span class="space-token num">2&nbsp;px</span><div class="space-bar" style="width:2px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-2</span><span class="space-token num">4&nbsp;px</span><div class="space-bar" style="width:4px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-3</span><span class="space-token num">8&nbsp;px</span><div class="space-bar" style="width:8px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-4</span><span class="space-token num">12&nbsp;px</span><div class="space-bar" style="width:12px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-5</span><span class="space-token num">16&nbsp;px</span><div class="space-bar" style="width:16px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-6</span><span class="space-token num">24&nbsp;px</span><div class="space-bar" style="width:24px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-7</span><span class="space-token num">32&nbsp;px</span><div class="space-bar" style="width:32px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-8</span><span class="space-token num">48&nbsp;px</span><div class="space-bar" style="width:48px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-9</span><span class="space-token num">64&nbsp;px</span><div class="space-bar" style="width:64px"></div></div>
+      <div class="space-row"><span class="space-token">--sp-10</span><span class="space-token num">96&nbsp;px</span><div class="space-bar" style="width:96px"></div></div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       04. RADIUS
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 04</span>
+      <div>
+        <h2 class="sec-title">Radius</h2>
+        <p class="sec-lede">
+          Three steps, plus one pill. The largest rectangular radius in the entire shell is
+          <span class="num">6 px</span>. No exceptions — "softer" is not an argument.
+        </p>
+      </div>
+    </div>
+
+    <div class="radii">
+      <div class="rad" style="border-radius:var(--radius-0)">0 &middot; hard</div>
+      <div class="rad" style="border-radius:var(--radius-1)">3 &middot; tight</div>
+      <div class="rad" style="border-radius:var(--radius-2)">6 &middot; max</div>
+      <div class="rad" style="border-radius:var(--radius-pill); width:72px; height:20px; padding:0 var(--sp-3); align-items:center;">pill</div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       05. SHADOWS
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 05</span>
+      <div>
+        <h2 class="sec-title">Shadow</h2>
+        <p class="sec-lede">
+          Three tiers. Shadows are tinted warm-ink <span class="num">rgba(35,&nbsp;30,&nbsp;20,&nbsp;α)</span>
+          rather than neutral black — the "paper" base calls for it. One focus ring, double-stroke, pausing
+          proof red at 45 % alpha.
+        </p>
+      </div>
+    </div>
+
+    <div class="shad-grid">
+      <div class="shad rest">
+        <div class="shad-name">Shadow · Rest</div>
+        <div class="shad-note">Toolbar底边、input 静态态。几乎察觉不到，仅给出"纸压着纸"的提示。</div>
+      </div>
+      <div class="shad lift">
+        <div class="shad-name">Shadow · Lift</div>
+        <div class="shad-note">抽屉、浮动面板。投影方向略偏下，暗示"自上而下"照明。</div>
+      </div>
+      <div class="shad modal">
+        <div class="shad-name">Shadow · Modal</div>
+        <div class="shad-note">存选对话框、确认。最重的一档——"校样置于工作台"的意象。</div>
+      </div>
+      <div class="shad focus">
+        <div class="shad-name">Focus · Ring</div>
+        <div class="shad-note">双层外环：先 2 px 底色、再 2 px 朱红半透明。键盘可达性优先。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       06. MOTION
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 06</span>
+      <div>
+        <h2 class="sec-title">Motion</h2>
+        <p class="sec-lede">
+          One easing curve — <span class="num">cubic-bezier(0.2,&nbsp;0.7,&nbsp;0.1,&nbsp;1)</span> — three
+          durations. No spring, no bounce, no overshoot. Hover each card to run the curve; reduced-motion
+          users receive <span class="num">0 ms</span>.
+        </p>
+      </div>
+    </div>
+
+    <div class="motion-grid">
+      <div class="motion">
+        <div class="motion-name">Dur · Instant</div>
+        <div class="motion-dur num">80 ms</div>
+        <div class="motion-track"><div class="motion-dot"></div></div>
+        <small>hover fills, tooltip show/hide</small>
+      </div>
+      <div class="motion motion-dur-quick">
+        <div class="motion-name">Dur · Quick</div>
+        <div class="motion-dur num">160 ms</div>
+        <div class="motion-track"><div class="motion-dot"></div></div>
+        <small>buttons, tabs, in-drawer transitions</small>
+      </div>
+      <div class="motion motion-dur-settled">
+        <div class="motion-name">Dur · Settled</div>
+        <div class="motion-dur num">280 ms</div>
+        <div class="motion-track"><div class="motion-dot"></div></div>
+        <small>drawer push-in, modal enter</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       07. ICONS
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 07</span>
+      <div>
+        <h2 class="sec-title">Icons</h2>
+        <p class="sec-lede">
+          16 / 24 px grid. 1.25 px stroke, square caps, miter joins, single
+          <span class="num">currentColor</span>. Filled forms reserved for indicators
+          (status dots, numeric badges). Never used as a substitute for a text label.
+        </p>
+      </div>
+    </div>
+
+    <div class="subhead">Grid &amp; construction</div>
+    <div style="display:grid; grid-template-columns:160px 1fr; gap:var(--sp-6); align-items:center; margin-bottom:var(--sp-6);">
+      <div class="ico-grid-sample">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+          <line x1="3" y1="5" x2="21" y2="5"/>
+          <line x1="12" y1="5" x2="12" y2="21"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div>
+        <div class="mono" style="font-size:var(--fs-12); color:var(--text-muted); line-height:1.9;">
+          viewBox <b>24 &times; 24</b> &middot; base grid 6 px<br>
+          stroke <b>1.25</b> &middot; cap <b>square</b> &middot; join <b>miter</b><br>
+          path alignment <b>0.5 px</b> off-grid<br>
+          fills <b>currentColor only</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="subhead">Sample set · brand + UI</div>
+    <div class="ico-row">
+      <!-- T-mark brand -->
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter" style="color:var(--accent)">
+          <line x1="3" y1="5" x2="21" y2="5"/><line x1="12" y1="5" x2="12" y2="21"/><line x1="8" y1="13" x2="16" y2="13"/>
+          <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="ico-name">ico-brand-t</span>
+      </div>
+      <!-- copy -->
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+          <rect x="8" y="8" width="12" height="12"/>
+          <path d="M16 4 H4 V16"/>
+        </svg>
+        <span class="ico-name">ico-ui-copy</span>
+      </div>
+      <!-- close -->
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+          <line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+        <span class="ico-name">ico-ui-close</span>
+      </div>
+      <!-- drafts -->
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+          <rect x="4" y="4" width="14" height="16"/>
+          <line x1="8" y1="9" x2="14" y2="9"/>
+          <line x1="8" y1="13" x2="14" y2="13"/>
+          <line x1="8" y1="17" x2="11" y2="17"/>
+        </svg>
+        <span class="ico-name">ico-tool-drafts</span>
+      </div>
+      <!-- palette -->
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+          <rect x="3" y="7" width="5" height="10"/>
+          <rect x="10" y="7" width="5" height="10"/>
+          <rect x="17" y="7" width="4" height="10"/>
+        </svg>
+        <span class="ico-name">ico-tool-palette</span>
+      </div>
+      <!-- status dot -->
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+          <circle cx="12" cy="12" r="4" fill="currentColor" stroke="none" style="color:var(--sage-500)"/>
+          <circle cx="12" cy="12" r="8"/>
+        </svg>
+        <span class="ico-name">ico-status-ok</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       08. BRAND MOTIFS
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 08</span>
+      <div>
+        <h2 class="sec-title">Brand motifs</h2>
+        <p class="sec-lede">
+          Three fixed marks carry identity: the T-shape registration mark, the toolbar ruler strip, and the
+          preview's left-edge px ruler. These are structural, not decorative — removing them breaks the system.
+        </p>
+      </div>
+    </div>
+
+    <div class="motif-grid">
+      <div class="motif">
+        <div class="motif-label">T-mark · registration</div>
+        <div class="reg-mark-demo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter">
+            <line x1="3" y1="5" x2="21" y2="5"/><line x1="12" y1="5" x2="12" y2="21"/><line x1="8" y1="13" x2="16" y2="13"/>
+            <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+      <div class="motif">
+        <div class="motif-label">Ruler strip · toolbar footer</div>
+        <div class="ruler-demo" style="margin-top:var(--sp-6)"></div>
+        <div class="mono" style="font-size:var(--fs-11); color:var(--text-subtle); margin-top:var(--sp-4);">8 px ticks · 48 px marks · 1 px wide</div>
+      </div>
+      <div class="motif">
+        <div class="motif-label">Edge ruler · preview gutter</div>
+        <div style="height:80px; margin-top:var(--sp-5); position:relative; border-left:1px solid var(--border);
+                    background-image: linear-gradient(to bottom, var(--paper-400) 1px, transparent 1px);
+                    background-size: 100% 8px; padding-left: var(--sp-4);
+                    font-family: var(--font-mono); font-size:9px; color: var(--text-subtle);">
+          <div style="position:absolute; left:4px; top:-2px;">0</div>
+          <div style="position:absolute; left:4px; top:46px;">48</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================
+       09. IN USE — THE BENCH
+  ============================================================== -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">§ 09</span>
+      <div>
+        <h2 class="sec-title">In use · the bench</h2>
+        <p class="sec-lede">
+          All tokens composed: toolbar with T-mark brand, ruler strip underline, CodeMirror-dark editor slot,
+          375 px proof pinned under a light shadow, mono status strip at the foot.
+        </p>
+      </div>
+    </div>
+
+    <div class="bench">
+      <div class="bench-tool">
+        <div class="bench-brand">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" stroke-linejoin="miter" style="color:var(--accent)">
+            <line x1="3" y1="5" x2="21" y2="5"/><line x1="12" y1="5" x2="12" y2="21"/><line x1="8" y1="13" x2="16" y2="13"/>
+            <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+          <span>wx-md</span>
+          <small>typeset</small>
+        </div>
+        <button class="btn ghost">草稿</button>
+        <button class="btn ghost">模板</button>
+        <button class="btn ghost">组件</button>
+        <button class="btn ghost">存选</button>
+        <button class="btn ghost">配色</button>
+        <span class="bench-sep"></span>
+        <button class="btn ghost">HTML</button>
+        <button class="btn ghost">MD</button>
+        <button class="btn ghost">长图</button>
+        <span class="bench-spacer"></span>
+        <span class="bench-stat num">字数 <b style="color:var(--text)">4,812</b><span class="sep-dot">·</span>阅读 <b style="color:var(--text)">13&nbsp;min</b></span>
+        <button class="btn primary">一键复制 <span class="num" style="opacity:.75;">⌘K</span></button>
+      </div>
+      <div class="bench-ruler"></div>
+      <div class="bench-body">
+        <div class="bench-editor">
+<pre style="margin:0;"><span class="ln">1</span><span class="h1"># wx-md &middot; 全量示例</span>
+<span class="ln">2</span>
+<span class="ln">3</span><span class="co">::: intro 本文通过一篇完整样稿演示所有容器、行内扩展与代码块。</span>
+<span class="ln">4</span>这份示例用来验证：<span class="em">**所有容器在新主题下都有得体呈现**</span>
+<span class="ln">5</span><span class="co">:::</span>
+<span class="ln">6</span>
+<span class="ln">7</span>## 一、段落与行内扩展
+<span class="ln">8</span>
+<span class="ln">9</span>本工具把 Markdown 映射到公众号约束之上。<span class="st">==高亮==</span>、
+<span class="ln">10</span><span class="st">~~波浪~~</span>、<span class="em">*斜体*</span>、<span class="em">**加粗**</span>、<span class="kw">`inline code`</span>
+<span class="ln">11</span>在 4 套主题下都会跟着 tokens 走。</pre>
+        </div>
+        <div class="bench-preview">
+          <div class="ruler-num" style="top:8px">0</div>
+          <div class="ruler-num" style="top:64px">64</div>
+          <div class="ruler-num" style="top:120px">120</div>
+          <div class="ruler-num" style="top:176px">176</div>
+          <div class="bench-article">
+            <h3>段落与行内扩展</h3>
+            <p>本工具把 Markdown 映射到公众号约束之上。<span class="hl">高亮</span>、<b>加粗</b>、<code style="background:#eef1f6; color:#a83420; padding:1px 4px; font-size:12px;">inline code</code> 在 4 套主题下都会跟着 tokens 走。</p>
+            <p style="color:#6a737d;">一个普通引用块：用来引出观点，不抢焦点。</p>
+          </div>
+        </div>
+      </div>
+      <div class="bench-foot">
+        <span><span class="status-dot"></span>READY</span>
+        <span>CURSOR 4:12</span>
+        <span>UTF-8</span>
+        <span>MD</span>
+        <span style="margin-left:auto; color:var(--sage-500);">已复制（富文本）&middot; 12:04:33</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <span>wx-md &middot; typesetter&rsquo;s bench</span>
+    <span>tokens v1 &middot; 2026-04</span>
+  </div>
+</div>
+
+</body>
+</html>
