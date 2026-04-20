@@ -196,3 +196,41 @@ describe('info / attrs 解析', () => {
     expect(out).toMatch(/<circle/)
   })
 })
+
+describe('Phase 5 signature containers', () => {
+  it('note：第五态 fence + 默认标题"补注"', () => {
+    const out = run('::: note\n正文\n:::\n')
+    expect(out).toMatch(/class="container-note"/)
+    expect(out).toContain('补注')
+    expect(out).toContain('正文')
+  })
+
+  it('note：自定义标题覆盖默认', () => {
+    const out = run('::: note 免责声明\n文本\n:::\n')
+    expect(out).toContain('免责声明')
+  })
+
+  it('abstract：kicker + bgSoft 外框', () => {
+    const out = run('::: abstract 摘要\n三句话总结。\n:::\n')
+    expect(out).toMatch(/class="container-abstract"/)
+    expect(out).toMatch(/class="container-abstract__kicker"/)
+    expect(out).toContain('摘要')
+    expect(out).toContain('三句话总结')
+  })
+
+  it('key-number：attrs.value 驱动大字号数字', () => {
+    const out = run('::: key-number 年度 ARR value=45%\nSaaS 企业版拉动。\n:::\n')
+    expect(out).toMatch(/class="container-key-number"/)
+    expect(out).toMatch(/class="container-key-number__value"/)
+    expect(out).toContain('45%')
+    expect(out).toContain('年度 ARR')
+    expect(out).toContain('SaaS 企业版拉动')
+  })
+
+  it('see-also：默认标题"延伸阅读"', () => {
+    const out = run('::: see-also\n- [相关 A](https://example.com/a)\n- [相关 B](https://example.com/b)\n:::\n')
+    expect(out).toMatch(/class="container-see-also"/)
+    expect(out).toContain('延伸阅读')
+    expect(out).toMatch(/<a[^>]*href="https:\/\/example\.com\/a"/)
+  })
+})

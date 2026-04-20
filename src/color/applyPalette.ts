@@ -64,9 +64,9 @@ export function applyPalette(opts: ApplyPaletteOptions): Theme {
     description: `基于 ${base.name} 的自定义配色`,
     variant,
     tokens: newTokens,
-    elementOverrides: recolor(elementsDelta, base.tokens.colors, newColors) as never,
-    containerOverrides: recolor(containersDelta, base.tokens.colors, newColors) as never,
-    inlineOverrides: recolor(inlineDelta, base.tokens.colors, newColors) as never,
+    elements: recolor(elementsDelta, base.tokens.colors, newColors) as never,
+    containers: recolor(containersDelta, base.tokens.colors, newColors) as never,
+    inline: recolor(inlineDelta, base.tokens.colors, newColors) as never,
   })
 }
 

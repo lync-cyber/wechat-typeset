@@ -57,11 +57,10 @@ describe('applyPalette', () => {
     expect(newTheme.id).toBe('default--custom')
     expect(newTheme.tokens.colors.primary.toLowerCase()).toBe('#2d6fdd')
     // primary 应渗透进主题对象（tokens 或 elements/containers 里的 border/color/a 等字段）。
-    // 注意：buildTheme 对 elements/containers/inline 是"按键浅合并"——elementOverrides 里的
-    // h2 delta（margin/line-height/letter-spacing）会整体替换掉 baseElements(newTokens) 的 h2，
-    // 所以单看 newTheme.elements.h2 读不到 border-bottom 的色值。
-    // 换用"整个 Theme JSON 串"断言：baseElements(newTokens).a.color、containers.sectionTitle
-    // 的 border-bottom 等字段都会带上新 primary，从而捕获 applyPalette 的 recolor 效果。
+    // Phase 0 后：buildTheme 对 elements/containers/inline 走属性级深合并——delta（由 applyPalette
+    // 从基主题差值提取）会叠加到 baseElements(newTokens) 之上，所以 elements.h2 会带齐所有属性。
+    // 这里用 "整个 Theme JSON 串" 断言足以覆盖 recolor 效果：baseElements(newTokens).a.color、
+    // containers.sectionTitle 的 border-bottom 等字段都会带上新 primary。
     // default 的 primary 已从 #2d6fdd 改成 #2558b0（规范 §1.1 编辑蓝）。
     // 命中 #2d6fdd 即"seed 渗透成功"；命中 #2558b0 则说明原 primary 作为 hardcoded 字面量
     // 残留在某个未进 recolor 的字段里，也视为合法（recolor 覆盖面限制是已知限制）。

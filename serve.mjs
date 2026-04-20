@@ -90,9 +90,13 @@ function maybeRebuild() {
   console.log('[wx-md] 检测到源码更新，正在重建（npm run build）…')
   // Windows 上 spawn .cmd/.bat 在 Node 18.20.2+ / 20.12.2+ / 21.7.3+
   // （CVE-2024-27980 补丁后）必须显式 shell: true，否则直接退出非零。
-  // 同样用 shell: true 包装 npm 调用，跨平台一致。
+  // DEP0190: shell: true 时不能同时传 args 数组（会被拼接而非转义），
+  // 改为 Windows 上把 args 内联进命令字符串，避免警告。
   const isWin = process.platform === 'win32'
-  const result = spawnSync(isWin ? 'npm.cmd' : 'npm', ['run', 'build'], {
+  const [cmd, args] = isWin
+    ? ['npm.cmd run build', []]
+    : ['npm', ['run', 'build']]
+  const result = spawnSync(cmd, args, {
     cwd: HERE,
     stdio: 'inherit',
     shell: isWin,

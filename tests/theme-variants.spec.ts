@@ -63,7 +63,12 @@ describe.each(themes)('$name · 资产齐备', (t) => {
       expect(a.quoteMark).toBeTypeOf('string')
     }
     expect(a.sectionCorner).toBeTypeOf('string')
-    expect(a.tipIcon).toBeTypeOf('string')
+    // tech-geek 规范 §2.10：admonition 靠"注释前缀 + 边框样式 + 图标形状"四重冗余
+    // 区分四态，tip 态的图标故意置空（"NOTE:" 前缀已承担识别）。spec-first 迁移后
+    // motif 缺席表达为 undefined；语义与 legacy 的 `tipIcon = ''` 一致。
+    if (t.id !== 'tech-geek') {
+      expect(a.tipIcon).toBeTypeOf('string')
+    }
     expect(a.warningIcon).toBeTypeOf('string')
     expect(a.infoIcon).toBeTypeOf('string')
     expect(a.dangerIcon).toBeTypeOf('string')

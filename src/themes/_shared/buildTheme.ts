@@ -1,9 +1,17 @@
 /**
  * 主题工厂：给 tokens 就能得到完整 Theme。
  *
- * 4 套内置主题共用同一组 elements/containers/inline 结构模板，
- * 视觉差异由 tokens + variant + templates + 少量 overrides 承担。
- * 这样主题作者关心"色彩/字号/圆角/变体"，不重复写一整套 CSS。
+ * API 形态（Phase 0 扁平化后）：
+ *   - elements / containers / inline / assets 四个**深合并**样式字段
+ *   - pre / code / elementOverrides / elementPatches 等双模式字段已移除
+ *   - "整段重置某一 key" 极少场景用 sentinel：`elements: { h1: { __reset: true, ... } }`
+ *
+ * 深合并语义（element/container/inline 三者一致）：
+ *   patch[key] 不存在 → 保留 base[key] 原样
+ *   patch[key] 存在 → 默认"属性级合并"：{ ...base[key], ...patch[key] }
+ *   patch[key].__reset === true → 切换为"整段替换"：仅保留 patch[key] 自身的属性
+ *
+ * assets 是扁平 key → string/function 的映射，无嵌套 CSS，故走浅合并即可。
  */
 
 import type {
@@ -21,6 +29,20 @@ import type {
 import { DEFAULT_VARIANTS } from '../types'
 import { buildAssets, type SvgVariant } from './svgAssets'
 
+/**
+ * 单 key 样式补丁值：宽于 CSSObject 以容纳 `__reset: true` sentinel。
+ * 非 `__reset` key 的值仍应是 `string | number`；类型由消费方通过 CSSObject 收窄。
+ */
+export type CSSObjectPatch = { __reset?: true; [prop: string]: string | number | true | undefined }
+
+/**
+ * 样式补丁类型：每个 key 是 CSSObjectPatch，可选追加 `__reset: true` 触发整段替换。
+ * 运行时从对象上剥离 `__reset` 再做合并。
+ */
+export type StylePatch<T> = {
+  [K in keyof T]?: CSSObjectPatch
+}
+
 export interface BuildThemeOptions {
   id: string
   name: string
@@ -28,46 +50,28 @@ export interface BuildThemeOptions {
   author?: string
   preview?: string
   tokens: ThemeTokens
-  /** 直接提供手工 SVG 资产。优先级高于 variant。4 套内置主题用这条路径。 */
-  assets?: ThemeAssets
-  /** 参数化 SVG 工厂变体。未提供 assets 时生效；默认 'geometric'。 */
+  /**
+   * 参数化 SVG 工厂变体。缺省 `geometric`。
+   * `assets` 字段（如提供）在工厂产物上做浅合并。
+   */
   variant?: SvgVariant
   /**
-   * 资产覆盖补丁：应用在 `assets`（或 `buildAssets({variant})` 的产物）之上，
-   * 仅覆盖列出的 key（浅合并——assets 字段是扁平字符串/函数，无需深合并）。
-   *
-   * 典型场景：主题采用工厂 variant='soft' 产出的大部分装饰，仅想换掉 quoteMark
-   * 为手工 SVG。原先需完全走 `assets` 手工路径、把其他 10+ 个装饰都复制一遍。
+   * 元素级样式：属性级深合并到 baseElements(tokens) 之上。
+   * `__reset: true` sentinel 可在某 key 上切换为整段替换。
+   * 包含 pre / code（v1 的顶层 pre/code 字段已并入此处）。
    */
-  assetsPatches?: Partial<ThemeAssets>
+  elements?: StylePatch<ThemeElements>
+  /** 容器级样式（同 elements 语义） */
+  containers?: StylePatch<ThemeContainers>
+  /** 内联级样式（同 elements 语义） */
+  inline?: StylePatch<ThemeInline>
   /**
-   * 元素级样式覆盖——**整块替换**语义：如果某 key 出现在 override 里，整段 CSSObject
-   * 替换掉 baseElements 的同 key。9 套内置主题都用这条路径，展开写全所有 CSS 属性。
-   *
-   * 想"只改一两个属性、其余继承 base" → 用下面的 `elementPatches`（深合并）。
+   * SVG 资产补丁：与工厂产物（buildAssets({variant})）做浅合并。
+   * ThemeAssets 是扁平 string/function，无需深合并。
    */
-  elementOverrides?: Partial<ThemeElements>
-  /** 容器级样式覆盖（同 elementOverrides 语义） */
-  containerOverrides?: Partial<ThemeContainers>
-  /** 内联级样式覆盖（同 elementOverrides 语义） */
-  inlineOverrides?: Partial<ThemeInline>
-  /**
-   * 元素级深合并补丁——**按属性合并**语义：应用在 elementOverrides 之后。
-   * 主题作者只写想增/改的属性即可，其他属性继承 base/override 的结果。
-   *
-   * 典型场景：某主题想在公共 h2 基础上多加一行 `letter-spacing: 1px` —— 走这条路径
-   * 比"把整段 h2 再拷一遍"少 8 行样板。
-   */
-  elementPatches?: Partial<ThemeElements>
-  /** 容器级深合并补丁（同 elementPatches 语义） */
-  containerPatches?: Partial<ThemeContainers>
-  /** 内联级深合并补丁（同 elementPatches 语义） */
-  inlinePatches?: Partial<ThemeInline>
+  assets?: Partial<ThemeAssets>
   /** 模板片段（封面卡 / 作者栏 / CTA / 推荐） */
   templates?: ThemeTemplates
-  /** 代码块样式覆盖（部分主题需要浅色代码块） */
-  pre?: CSSObject
-  code?: CSSObject
   /**
    * 骨架变体。未声明时用 DEFAULT_VARIANTS。
    * Partial 支持"只换一项骨架" —— 比如某主题想 admonition 走 terminal、其余默认。
@@ -79,7 +83,7 @@ export interface BuildThemeOptions {
   behavior?: ThemeBehavior
 }
 
-export function baseElements(tokens: ThemeTokens, pre?: CSSObject, code?: CSSObject): ThemeElements {
+export function baseElements(tokens: ThemeTokens): ThemeElements {
   const { colors, typography } = tokens
   return {
     h1: {
@@ -145,7 +149,7 @@ export function baseElements(tokens: ThemeTokens, pre?: CSSObject, code?: CSSObj
       'line-height': String(typography.lineHeight),
       color: colors.text,
     },
-    code: code ?? {
+    code: {
       'background-color': colors.bgMuted,
       color: colors.code,
       padding: '2px 6px',
@@ -166,7 +170,7 @@ export function baseElements(tokens: ThemeTokens, pre?: CSSObject, code?: CSSObj
       'line-height': '1.4',
       'vertical-align': 'middle',
     },
-    pre: pre ?? {
+    pre: {
       'background-color': '#282c34',
       color: '#abb2bf',
       'padding-top': '14px',
@@ -297,39 +301,53 @@ export function baseInline(tokens: ThemeTokens): ThemeInline {
 }
 
 /**
- * 深合并一层 CSSObject：对 patch 里出现的每个 key，把 CSSObject 里的属性叠到 base 同 key 上。
- * patch 未提供的 key 原样透传。
+ * 属性级深合并：对 patch 里出现的每个 key，把其 CSSObject 属性叠到 base 同 key 上。
+ *   - patch[key] 不存在：透传 base[key]
+ *   - patch[key].__reset === true：剥离 __reset 后整段替换 base[key]
+ *   - 否则：patch 属性在前、base 独有属性在后（生成 CSS 时属性顺序 = 主题作者排版顺序）
+ *
+ * 顺序纪律：CSS 规则属性顺序是阅读语义的一部分（"先外后内"/"先主后辅"）。主题作者
+ * 排版 CSSObject 的顺序代表他的认知模型；deep-merge 必须保留这份意图——把 patch 键
+ * 以原序插入，base 独有键补在末尾。这也保证"主题写全所有属性"的常见场景下 merge 输出
+ * 字节等价于"整段替换"。
  */
-function mergePatches<T extends Record<string, CSSObject | undefined>>(
-  base: T,
-  patches: Partial<T> | undefined,
-): T {
-  if (!patches) return base
-  const out: Record<string, CSSObject | undefined> = { ...base }
-  for (const key of Object.keys(patches)) {
-    const patchVal = patches[key as keyof T]
+function mergeStyle<T>(base: T, patch: StylePatch<T> | undefined): T {
+  if (!patch) return base
+  const out: Record<string, CSSObject> = { ...(base as Record<string, CSSObject>) }
+  for (const key of Object.keys(patch) as Array<keyof T & string>) {
+    const patchVal = patch[key] as CSSObjectPatch | undefined
     if (!patchVal) continue
-    const baseVal = out[key]
-    out[key] = baseVal ? { ...baseVal, ...patchVal } : { ...patchVal }
+    const { __reset, ...rest } = patchVal
+    const cleanPatch = rest as CSSObject
+    if (__reset === true) {
+      out[key] = cleanPatch
+      continue
+    }
+    const baseVal = out[key] ?? {}
+    const merged: CSSObject = {}
+    for (const k of Object.keys(cleanPatch)) merged[k] = cleanPatch[k]
+    for (const k of Object.keys(baseVal)) {
+      if (!(k in merged)) merged[k] = baseVal[k]
+    }
+    out[key] = merged
   }
   return out as T
 }
 
 export function buildTheme(opts: BuildThemeOptions): Theme {
-  const elements = mergePatches(
-    { ...baseElements(opts.tokens, opts.pre, opts.code), ...(opts.elementOverrides ?? {}) },
-    opts.elementPatches,
-  )
-  const containers = mergePatches(
-    { ...baseContainers(opts.tokens), ...(opts.containerOverrides ?? {}) },
-    opts.containerPatches,
-  )
-  const inline = mergePatches(
-    { ...baseInline(opts.tokens), ...(opts.inlineOverrides ?? {}) },
-    opts.inlinePatches,
-  )
-  const baseAssets = opts.assets ?? buildAssets({ tokens: opts.tokens, variant: opts.variant ?? 'geometric' })
-  const assets: ThemeAssets = opts.assetsPatches ? { ...baseAssets, ...opts.assetsPatches } : baseAssets
+  const elements = mergeStyle(baseElements(opts.tokens), opts.elements)
+  const containers = mergeStyle(baseContainers(opts.tokens), opts.containers)
+  const inline = mergeStyle(baseInline(opts.tokens), opts.inline)
+  // 资产基线：仅当显式指定 variant 时才调用工厂；否则不引入工厂默认。
+  //   这样 assets 里没列出的 key（如 default 故意不导出 quoteMark）不会被"工厂默认值偷偷补回来"。
+  //   applyPalette 的 runtime 路径显式传 variant，走 factory + partial merge。
+  let assets: ThemeAssets
+  if (opts.variant !== undefined) {
+    const factoryAssets = buildAssets({ tokens: opts.tokens, variant: opts.variant })
+    assets = opts.assets ? { ...factoryAssets, ...opts.assets } : factoryAssets
+  } else {
+    assets = (opts.assets ?? {}) as ThemeAssets
+  }
   const variants: ThemeVariants = { ...DEFAULT_VARIANTS, ...(opts.variants ?? {}) }
   return {
     id: opts.id,

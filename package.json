@@ -35,7 +35,10 @@
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "tsx scripts/verify-sample-full.ts",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "gen:schema": "tsx scripts/gen-schema.ts",
+    "gen:gallery": "tsx scripts/gen-gallery.ts",
+    "validate:spec": "tsx scripts/validate-spec.ts"
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.0",

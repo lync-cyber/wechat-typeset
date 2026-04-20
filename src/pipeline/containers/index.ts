@@ -33,6 +33,12 @@ import {
   qrcodeContainer,
 } from './footer'
 import { mpvoiceContainer, mpvideoContainer } from './media'
+import {
+  noteContainer,
+  abstractContainer,
+  keyNumberContainer,
+  seeAlsoContainer,
+} from './signature'
 
 /**
  * free · 自由容器（escape hatch）
@@ -59,6 +65,7 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   warning: warningContainer,
   info: infoContainer,
   danger: dangerContainer,
+  note: noteContainer,
   'quote-card': quoteCardContainer,
   highlight: highlightContainer,
   compare: compareContainer,
@@ -72,6 +79,45 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   mpvoice: mpvoiceContainer,
   mpvideo: mpvideoContainer,
   free: freeContainer,
+  // Phase 5 · Signature Container gap-closing
+  abstract: abstractContainer,
+  'key-number': keyNumberContainer,
+  'see-also': seeAlsoContainer,
+}
+
+/**
+ * spec.signatureContainers 用的 camelCase id 到 markdown fence 名（kebab）的映射。
+ *
+ * 为什么需要：ThemeContainers 的类型键沿用 JS 字段习惯（quoteCard / sectionTitle），
+ * 而 markdown-it-container 按 `::: quote-card` 匹配 fence。这张表是两个世界的中介，
+ * 也是 conformance 测试 "每个 signatureContainer 都有 renderer" 的底表。
+ *
+ * 新增 signatureContainer id：在此登记对应的 markdown 名（通常 kebab-case）；
+ * 不登记 → conformance.spec.ts "每个 signatureContainer 有 renderer" 会失败。
+ */
+export const SIGNATURE_CONTAINER_MARKDOWN_NAME: Readonly<Record<string, string>> = {
+  intro: 'intro',
+  author: 'author',
+  cover: 'cover',
+  tip: 'tip',
+  warning: 'warning',
+  info: 'info',
+  danger: 'danger',
+  note: 'note',
+  quoteCard: 'quote-card',
+  highlight: 'highlight',
+  compare: 'compare',
+  steps: 'steps',
+  sectionTitle: 'section-title',
+  footerCTA: 'footer-cta',
+  recommend: 'recommend',
+  qrcode: 'qrcode',
+  mpvoice: 'mpvoice',
+  mpvideo: 'mpvideo',
+  abstract: 'abstract',
+  keyNumber: 'key-number',
+  seeAlso: 'see-also',
+  // Phase 5 候选未实现（尚无主题声明使用）：algorithm / seal / prelude
 }
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'
