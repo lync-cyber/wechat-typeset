@@ -15,6 +15,7 @@ import { defaultTheme } from '../src/themes/default'
 import { industryObserverTheme } from '../src/themes/industry-observer'
 import { lifeAestheticTheme } from '../src/themes/life-aesthetic'
 import { literaryHumanismTheme } from '../src/themes/literary-humanism'
+import { peopleStoryTheme } from '../src/themes/people-story'
 import { techGeekTheme } from '../src/themes/tech-geek'
 import type { Theme } from '../src/themes/types'
 
@@ -25,6 +26,7 @@ const themes: Theme[] = [
   businessFinanceTheme,
   literaryHumanismTheme,
   industryObserverTheme,
+  peopleStoryTheme,
 ]
 
 function collectSvgs(t: Theme): string[] {

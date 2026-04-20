@@ -175,7 +175,7 @@ describe('枚举完整性', () => {
     expect([...VARIANT_IDS.codeBlock]).toEqual(['bare', 'header-bar'])
   })
 
-  it('7 套主题都进入矩阵', () => {
+  it('8 套主题都进入矩阵', () => {
     expect(themeList.map((t) => t.id)).toEqual([
       'default',
       'tech-geek',
@@ -184,6 +184,7 @@ describe('枚举完整性', () => {
       'business-finance',
       'literary-humanism',
       'industry-observer',
+      'people-story',
     ])
   })
 })

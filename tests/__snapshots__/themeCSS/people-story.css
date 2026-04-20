@@ -1,0 +1,320 @@
+.markdown-body {
+  background-color: #f2efe7;
+  color: #17171a;
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: 0.5px;
+  padding: 20px 16px;
+}
+
+.markdown-body h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #17171a;
+  margin-top: 28px;
+  margin-bottom: 16px;
+  line-height: 1.35;
+  letter-spacing: 1.2px;
+  text-align: left;
+}
+
+.markdown-body h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #17171a;
+  margin-top: 30px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #17171a;
+  margin-top: 22px;
+  margin-bottom: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.8px;
+}
+
+.markdown-body h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #17171a;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+
+.markdown-body p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #17171a;
+  margin-top: 0;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.markdown-body blockquote {
+  border-left: 1px solid #5d5d63;
+  border-right: 1px solid #5d5d63;
+  background-color: transparent;
+  color: #5d5d63;
+  padding-top: 8px;
+  padding-right: 20px;
+  padding-bottom: 8px;
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 18px;
+  border-radius: 0;
+  font-size: 16px;
+  letter-spacing: 0.8px;
+}
+
+.markdown-body ul {
+  padding-left: 24px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.markdown-body ol {
+  padding-left: 24px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.markdown-body li {
+  margin-bottom: 10px;
+  line-height: 1.75;
+  color: #17171a;
+  letter-spacing: 0.5px;
+}
+
+.markdown-body code {
+  background-color: #dcd7c9;
+  color: #5d5d63;
+  padding: 1px 5px;
+  border-radius: 0;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  background-color: #e9e5db;
+  color: #17171a;
+  border: 1px solid #c8c2b3;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.markdown-body pre {
+  background-color: #dcd7c9;
+  color: #17171a;
+  padding-top: 14px;
+  padding-right: 16px;
+  padding-bottom: 14px;
+  padding-left: 16px;
+  border-radius: 0;
+  border: 1px solid #c8c2b3;
+  overflow-x: auto;
+  white-space: pre;
+  max-width: 100%;
+  box-sizing: border-box;
+  box-shadow: inset -14px 0 10px -10px rgba(0,0,0,0.12);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.markdown-body pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  word-break: normal;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  display: block;
+  margin-top: 12px;
+  margin-right: auto;
+  margin-bottom: 12px;
+  margin-left: auto;
+  border-radius: 0;
+}
+
+.markdown-body a {
+  color: #1b2330;
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  border: none;
+  height: 1px;
+  background-color: #c8c2b3;
+  margin-top: 36px;
+  margin-bottom: 36px;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+.markdown-body th {
+  border: 1px solid #c8c2b3;
+  padding: 6px 10px;
+  background-color: #e9e5db;
+  text-align: left;
+}
+
+.markdown-body td {
+  border: 1px solid #c8c2b3;
+  padding: 6px 10px;
+}
+
+.markdown-body strong {
+  font-weight: 500;
+  color: #17171a;
+}
+
+.markdown-body em {
+  font-style: italic;
+  color: #17171a;
+}
+
+.markdown-body mark {
+  background-color: #e9e5db;
+  color: #17171a;
+  padding: 0 3px;
+  border-radius: 0;
+}
+
+.markdown-body .wx-wavy {
+  text-decoration: underline wavy;
+  text-decoration-color: #1b2330;
+  text-underline-offset: 3px;
+}
+
+.markdown-body .wx-emphasis {
+  color: #1b2330;
+  font-weight: 500;
+}
+
+.markdown-body .container-intro {
+  background-color: #e9e5db;
+  border-radius: 0;
+  padding: 20px 24px;
+  margin: 0 0 32px 0;
+  color: #17171a;
+}
+
+.markdown-body .container-author {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 10px 0;
+  margin: 0 0 24px 0;
+}
+
+.markdown-body .container-cover {
+  margin: 0 0 40px 0;
+}
+
+.markdown-body .container-quote-card {
+  background-color: transparent;
+  border-radius: 0;
+  border: none;
+  padding: 24px 24px 20px 36px;
+  margin: 32px 0;
+}
+
+.markdown-body .container-highlight {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 16px 0;
+  margin: 20px 0;
+}
+
+.markdown-body .container-compare {
+  margin: 24px 0;
+}
+
+.markdown-body .container-steps {
+  margin: 28px 0;
+}
+
+.markdown-body .container-section-title {
+  margin: 48px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #c8c2b3;
+}
+
+.markdown-body .container-footer-cta {
+  margin: 40px 0 0 0;
+  padding: 32px 0 24px 0;
+  background-color: transparent;
+  border-radius: 0;
+  text-align: center;
+}
+
+.markdown-body .container-recommend {
+  margin: 28px 0;
+  padding: 18px 22px;
+  background-color: #e9e5db;
+  border-radius: 0;
+}
+
+.markdown-body .container-qrcode {
+  margin: 24px auto;
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.markdown-body .container-pros, .markdown-body .container-cons {
+  letter-spacing: 0;
+}
+
+.markdown-body .container-pros p, .markdown-body .container-cons p {
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.markdown-body .container-pros li, .markdown-body .container-cons li {
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+
+.markdown-body .container-pros ul, .markdown-body .container-cons ul, .markdown-body .container-pros ol, .markdown-body .container-cons ol {
+  padding-left: 18px;
+  margin-bottom: 8px;
+}
+
+.markdown-body .container-pros h3, .markdown-body .container-cons h3 {
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.markdown-body .container-pros code, .markdown-body .container-cons code {
+  font-size: 12px;
+  padding: 1px 4px;
+}
