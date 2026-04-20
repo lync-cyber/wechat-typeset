@@ -148,10 +148,10 @@ const modKey = isMac ? '⌘' : 'Ctrl'
         </span>
       </div>
 
-      <button class="btn btn-ghost icon" :title="`命令面板  ${modKey}+K`" @click="emit('openCommand')">
+      <button class="btn btn-ghost icon btn-cmd" :title="`命令面板  ${modKey}+K`" @click="emit('openCommand')">
         <span class="kbd">{{ modKey }}K</span>
       </button>
-      <button class="btn btn-ghost icon" title="快捷键与帮助  ?" @click="emit('openHelp')">
+      <button class="btn btn-ghost icon btn-help" title="快捷键与帮助  ?" @click="emit('openHelp')">
         ?
       </button>
 
@@ -163,6 +163,16 @@ const modKey = isMac ? '⌘' : 'Ctrl'
           @click="overflowOpen = !overflowOpen; themeOpen = false"
         >···</button>
         <div v-if="overflowOpen" class="popover popover-menu">
+          <button class="menu-item" @click="emit('toggleDrafts'); overflowOpen = false">
+            <span>{{ props.drawer.drafts ? '关闭草稿列表' : '草稿列表' }}</span>
+          </button>
+          <button class="menu-item" @click="emit('toggleComponents'); overflowOpen = false">
+            <span>{{ props.drawer.components ? '关闭组件库' : '插入组件' }}</span>
+          </button>
+          <button class="menu-item" @click="emit('toggleCustomizer'); overflowOpen = false">
+            <span>{{ props.drawer.customizer ? '关闭自定义配色' : '自定义配色' }}</span>
+          </button>
+          <div class="menu-sep" />
           <button class="menu-item" @click="emit('saveSelection'); overflowOpen = false">
             <span>保存选区为组件</span>
           </button>
@@ -178,6 +188,13 @@ const modKey = isMac ? '⌘' : 'Ctrl'
           </button>
           <button class="menu-item" @click="emit('exportImage'); overflowOpen = false">
             <span>导出长图</span>
+          </button>
+          <div class="menu-sep" />
+          <button class="menu-item" @click="emit('openCommand'); overflowOpen = false">
+            <span>命令面板</span><span class="menu-kbd">{{ modKey }}K</span>
+          </button>
+          <button class="menu-item" @click="emit('openHelp'); overflowOpen = false">
+            <span>快捷键与帮助</span>
           </button>
           <div class="menu-sep" />
           <button class="menu-item danger" @click="emit('clear'); overflowOpen = false">
@@ -363,6 +380,12 @@ const modKey = isMac ? '⌘' : 'Ctrl'
 }
 @media (max-width: 900px) {
   .stats { display: none; }
+}
+@media (max-width: 767px) {
+  .zone-center { display: none; }
+  .btn-cmd, .btn-help { display: none; }
+  .draft-title { max-width: 120px; }
+  .draft-switch { max-width: 160px; }
 }
 .saving-dot {
   width: 6px; height: 6px; border-radius: var(--radius-pill);

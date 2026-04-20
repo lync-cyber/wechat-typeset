@@ -58,6 +58,8 @@ const onboardDismissed = ref<boolean>(
   typeof localStorage !== 'undefined' && localStorage.getItem(ONBOARD_STORAGE_KEY) === '1',
 )
 
+const mobileTab = ref<'editor' | 'preview'>('editor')
+
 const activeTheme = computed<Theme>(() => customTheme.value ?? getTheme(baseThemeId.value))
 
 const draftIndexTick = ref(0) // 强制重算草稿标题（重命名后）
@@ -162,6 +164,11 @@ watch(md, (val) => {
   savingState.value = 'saving'
   if (draftSaveTimer !== null) window.clearTimeout(draftSaveTimer)
   draftSaveTimer = window.setTimeout(flushDraftSave, DRAFT_SAVE_DELAY)
+})
+
+watch(mobileTab, () => {
+  ui.leftSlot = null
+  ui.rightSlot = null
 })
 
 watch(baseThemeId, (val, prev) => {
@@ -578,7 +585,7 @@ onBeforeUnmount(() => {
       @export-md="doExportMd"
       @export-image="doExportImage"
     />
-    <main class="main">
+    <main class="main" :data-mobile-tab="mobileTab">
       <DraftDrawer
         v-if="ui.leftSlot === 'drafts'"
         :active-id="activeDraftId"
@@ -638,6 +645,24 @@ onBeforeUnmount(() => {
       @undo="onUndo"
       @expire="onUndoExpire"
     />
+
+    <!-- Mobile bottom tab bar -->
+    <nav class="mobile-tabs" aria-label="视图切换">
+      <button
+        class="mobile-tab"
+        :class="{ active: mobileTab === 'editor' }"
+        @click="mobileTab = 'editor'"
+      >编辑</button>
+      <button
+        class="mobile-tab-copy"
+        @click="handleCopy"
+      >一键复制</button>
+      <button
+        class="mobile-tab"
+        :class="{ active: mobileTab === 'preview' }"
+        @click="mobileTab = 'preview'"
+      >预览</button>
+    </nav>
   </div>
 </template>
 
@@ -669,5 +694,96 @@ onBeforeUnmount(() => {
   flex: 0 0 auto;
   width: calc(var(--preview-w) + var(--sp-7));
   background: var(--paper-300);
+}
+
+/* Mobile bottom tab bar — hidden on desktop */
+.mobile-tabs {
+  display: none;
+}
+.mobile-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-text);
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  border-radius: var(--radius-2);
+  transition: var(--t-quick);
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-tab.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.mobile-tab-copy {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 var(--sp-5);
+  border: none;
+  background: var(--accent);
+  color: var(--accent-on);
+  font-family: var(--font-text);
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  transition: var(--t-quick);
+  -webkit-tap-highlight-color: transparent;
+}
+.mobile-tab-copy:hover { background: var(--accent-hover); }
+.mobile-tab-copy:active { background: var(--accent-press); }
+
+@media (max-width: 767px) {
+  .app {
+    --mobile-tabs-h: 56px;
+  }
+
+  /* Show the tab bar */
+  .mobile-tabs {
+    display: flex;
+    flex: 0 0 auto;
+    height: var(--mobile-tabs-h);
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 0 var(--sp-3);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--surface-raised);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Preview pane: full width on mobile */
+  .pane-preview {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  /* Hide the inactive pane */
+  .main[data-mobile-tab="editor"] .pane-preview { display: none; }
+  .main[data-mobile-tab="preview"] .pane-editor { display: none; }
+
+  /* No border between panes on mobile */
+  .pane-editor { border-right: none; }
+
+  /* Side panels become full-screen overlays */
+  .main :deep(.drawer),
+  .main :deep(.panel) {
+    position: fixed;
+    top: var(--toolbar-h);
+    right: 0;
+    bottom: var(--mobile-tabs-h, 56px);
+    left: 0;
+    width: 100% !important;
+    z-index: 50;
+    overflow-y: auto;
+  }
 }
 </style>
