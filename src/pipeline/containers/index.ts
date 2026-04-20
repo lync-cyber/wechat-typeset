@@ -34,6 +34,22 @@ import {
 } from './footer'
 import { mpvoiceContainer, mpvideoContainer } from './media'
 
+/**
+ * free · 自由容器（escape hatch）
+ *
+ * 主题规范里 "19 容器" 中排最末的"兜底位"：给作者写不归类内容的地方。
+ * 渲染器**刻意不施加视觉**——无 border、无底色、仅一层 `<section class="container-free">`
+ * 包裹，margin 与正文段落对齐。各主题在 sample 里用它装"编辑部补注 / 致谢列表"
+ * 这类结构外内容。
+ *
+ * 不进入 ThemeContainers 是自觉选择——free 的承诺是 "不施加主题样式"，
+ * 写进 Theme 类型反而诱导主题作者往里塞 CSS，违反它的定位。
+ */
+const freeContainer: ContainerRenderer = {
+  open: () => '<section class="container-free">\n',
+  close: '</section>\n',
+}
+
 export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   intro: introContainer,
   cover: coverContainer,
@@ -55,6 +71,7 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   qrcode: qrcodeContainer,
   mpvoice: mpvoiceContainer,
   mpvideo: mpvideoContainer,
+  free: freeContainer,
 }
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'
