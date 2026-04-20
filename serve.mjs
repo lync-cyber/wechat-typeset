@@ -88,10 +88,14 @@ function maybeRebuild() {
   )
   if (srcMtime <= distMtime) return
   console.log('[wx-md] 检测到源码更新，正在重建（npm run build）…')
-  const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm'
-  const result = spawnSync(npmCmd, ['run', 'build'], {
+  // Windows 上 spawn .cmd/.bat 在 Node 18.20.2+ / 20.12.2+ / 21.7.3+
+  // （CVE-2024-27980 补丁后）必须显式 shell: true，否则直接退出非零。
+  // 同样用 shell: true 包装 npm 调用，跨平台一致。
+  const isWin = process.platform === 'win32'
+  const result = spawnSync(isWin ? 'npm.cmd' : 'npm', ['run', 'build'], {
     cwd: HERE,
     stdio: 'inherit',
+    shell: isWin,
   })
   if (result.status !== 0) {
     console.error('[wx-md] 重建失败。保留现有 dist/ 继续启动；手动修复后重启即可。')
