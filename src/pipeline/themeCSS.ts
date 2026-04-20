@@ -101,6 +101,7 @@ export function generateThemeCSS(theme: Theme): string {
     ['h1', theme.elements.h1],
     ['h2', theme.elements.h2],
     ['h3', theme.elements.h3],
+    ['h4', theme.elements.h4],
     ['p', theme.elements.p],
     ['blockquote', theme.elements.blockquote],
     ['ul', theme.elements.ul],
@@ -109,6 +110,7 @@ export function generateThemeCSS(theme: Theme): string {
     // inline code 容易塞超长 token（UUID / 长 URL / 模块路径），不加 word-break 会撑宽段落。
     // 只针对 inline 场景打破；紧跟的 `pre code` 会显式复位成 normal，保留代码块的保真排版。
     ['code', { ...theme.elements.code, 'word-break': 'break-all' }],
+    ['kbd', theme.elements.kbd],
     ['pre', theme.elements.pre],
     ['pre code', {
       'background-color': 'transparent',

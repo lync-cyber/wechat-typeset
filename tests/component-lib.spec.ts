@@ -25,6 +25,9 @@ import {
 describe('BUILTIN_COMPONENTS', () => {
   it('每个 variant 都有至少一条预设覆盖', () => {
     for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
+      // codeBlock 是主题级 variant（每个代码块共用同一骨架，由主题决定），
+      // 不是"可插入的组件单元"——用户只写 fence，不选骨架；跳过预设覆盖检查。
+      if (kind === 'codeBlock') continue
       for (const id of ids) {
         const found = findPresetByVariant(kind as keyof typeof VARIANT_IDS, id)
         expect(found, `${kind}:${id} 缺预设`).toBeTruthy()

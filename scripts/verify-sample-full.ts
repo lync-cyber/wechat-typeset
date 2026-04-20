@@ -42,8 +42,11 @@ function check(label: string, predicate: () => boolean, detail = ''): void {
   results.push({ label, ok: predicate(), detail })
 }
 
-// 1. 23 个 variant class 枚举
+// 1. 23 个容器 variant class 枚举（codeBlock 走独立命名，下面单独检查）
 for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
+  // codeBlock 不是 `:::` 容器，产物不带 container- 前缀；sample 渲染下只会出现主题选中的
+  // 那一个 variant（默认主题 codeBlock=bare → 产物是裸 <pre><code>）。单独在下面断言。
+  if (kind === 'codeBlock') continue
   for (const id of ids as readonly string[]) {
     // admonition 的 kind 对应多个容器名（tip/warning/info/danger），任何一个出现即算过
     if (kind === 'admonition') {
@@ -63,6 +66,11 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
     check(`${kind}:${id}`, () => html.includes(cls), cls)
   }
 }
+
+// 1b. codeBlock 单独检查：默认主题 variant=bare，产物应含 <pre><code class="... hljs">，
+// 且不应残留 wx-code-block wrapper（wrapper 是 header-bar 专属）。
+check('codeBlock:bare(default theme)', () => /<pre[^>]*>\s*<code[^>]*hljs/.test(html), '<pre><code class="...hljs">')
+check('codeBlock:no-wrapper-on-bare', () => !html.includes('wx-code-block'), '不含 wx-code-block')
 
 // 2. 无 variant 容器 class 出现
 const plainContainers = [

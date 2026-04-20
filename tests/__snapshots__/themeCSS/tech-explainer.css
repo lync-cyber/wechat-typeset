@@ -1,0 +1,329 @@
+.markdown-body {
+  background-color: #fafbfc;
+  color: #1a2233;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: 0.3px;
+  padding: 20px 16px;
+}
+
+.markdown-body h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a2233;
+  margin-top: 28px;
+  margin-bottom: 14px;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+  font-weight: 600;
+  color: #1a2233;
+  margin-top: 32px;
+  margin-bottom: 14px;
+  line-height: 1.4;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d9dee5;
+  letter-spacing: 0;
+}
+
+.markdown-body h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a2233;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.markdown-body h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0066cc;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+}
+
+.markdown-body p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #1a2233;
+  margin-top: 0;
+  margin-bottom: 18px;
+  letter-spacing: 0.3px;
+}
+
+.markdown-body blockquote {
+  border-left: 3px solid #d9dee5;
+  background-color: transparent;
+  color: #5c6778;
+  padding-top: 4px;
+  padding-right: 0;
+  padding-bottom: 4px;
+  padding-left: 16px;
+  margin-top: 0;
+  margin-bottom: 18px;
+  border-radius: 0;
+  font-style: italic;
+}
+
+.markdown-body ul {
+  padding-left: 24px;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.markdown-body ol {
+  padding-left: 24px;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.markdown-body li {
+  margin-bottom: 8px;
+  line-height: 1.75;
+  color: #1a2233;
+}
+
+.markdown-body code {
+  background-color: #e8ecf1;
+  color: #0066cc;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  word-break: break-all;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  background-color: #fafbfc;
+  color: #1a2233;
+  border: 1px solid #d9dee5;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  vertical-align: middle;
+}
+
+.markdown-body pre {
+  background-color: #1e2533;
+  color: #e8ebf0;
+  padding-top: 14px;
+  padding-right: 16px;
+  padding-bottom: 14px;
+  padding-left: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre;
+  max-width: 100%;
+  box-sizing: border-box;
+  box-shadow: inset -14px 0 10px -10px rgba(0,0,0,0.25);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.markdown-body pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  word-break: normal;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  display: block;
+  margin-top: 18px;
+  margin-right: auto;
+  margin-bottom: 18px;
+  margin-left: auto;
+  border: 1px solid #d9dee5;
+  border-radius: 6px;
+}
+
+.markdown-body a {
+  color: #0066cc;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.markdown-body hr {
+  border: none;
+  height: 1px;
+  background-color: #d9dee5;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+
+.markdown-body th {
+  border: 1px solid #d9dee5;
+  padding: 6px 10px;
+  background-color: #f3f5f8;
+  text-align: left;
+}
+
+.markdown-body td {
+  border: 1px solid #d9dee5;
+  padding: 6px 10px;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: #1a2233;
+}
+
+.markdown-body em {
+  font-style: italic;
+  color: #1a2233;
+}
+
+.markdown-body mark {
+  background-color: #e6f0fb;
+  color: #0066cc;
+  padding: 0 3px;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+.markdown-body .wx-wavy {
+  text-decoration: underline wavy;
+  text-decoration-color: #f59e0b;
+  text-underline-offset: 3px;
+}
+
+.markdown-body .wx-emphasis {
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.markdown-body .container-intro {
+  background-color: #f3f5f8;
+  border-left: 3px solid #0066cc;
+  border-radius: 0 6px 6px 0;
+  padding: 14px 18px;
+  margin: 20px 0;
+  color: #5c6778;
+}
+
+.markdown-body .container-author {
+  background-color: transparent;
+  padding: 8px 0;
+  margin: 12px 0;
+  color: #5c6778;
+  border-bottom: 1px solid #d9dee5;
+}
+
+.markdown-body .container-cover {
+  background-color: #fafbfc;
+  padding: 20px 0 24px;
+  margin: 16px 0;
+  border-bottom: 1px solid #d9dee5;
+}
+
+.markdown-body .container-quote-card {
+  background-color: #f3f5f8;
+  border-left: 3px solid #0d9f7f;
+  padding: 16px 18px;
+  margin: 20px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.markdown-body .container-highlight {
+  background-color: #fdf4e2;
+  border-left: 3px solid #f59e0b;
+  padding: 14px 18px;
+  margin: 18px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+.markdown-body .container-compare {
+  margin: 20px 0;
+}
+
+.markdown-body .container-steps {
+  margin: 20px 0;
+  border-left: 1px solid #d9dee5;
+  padding-left: 24px;
+}
+
+.markdown-body .container-section-title {
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d9dee5;
+}
+
+.markdown-body .container-footer-cta {
+  margin: 28px 0;
+  padding: 16px 18px;
+  background-color: #f3f5f8;
+  border-radius: 6px;
+}
+
+.markdown-body .container-recommend {
+  margin: 24px 0;
+  padding: 14px 0;
+  background-color: transparent;
+  border-top: 1px solid #d9dee5;
+  border-bottom: 1px solid #d9dee5;
+}
+
+.markdown-body .container-qrcode {
+  margin: 24px 0;
+  padding: 16px;
+  background-color: #f3f5f8;
+  border-radius: 6px;
+}
+
+.markdown-body .container-pros, .markdown-body .container-cons {
+  letter-spacing: 0;
+}
+
+.markdown-body .container-pros p, .markdown-body .container-cons p {
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.markdown-body .container-pros li, .markdown-body .container-cons li {
+  font-size: 13px;
+  letter-spacing: 0;
+  line-height: 1.55;
+  margin-bottom: 4px;
+}
+
+.markdown-body .container-pros ul, .markdown-body .container-cons ul, .markdown-body .container-pros ol, .markdown-body .container-cons ol {
+  padding-left: 18px;
+  margin-bottom: 8px;
+}
+
+.markdown-body .container-pros h3, .markdown-body .container-cons h3 {
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.markdown-body .container-pros code, .markdown-body .container-cons code {
+  font-size: 12px;
+  padding: 1px 4px;
+}
