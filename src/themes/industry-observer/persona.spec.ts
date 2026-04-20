@@ -260,7 +260,7 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2）
   // ============================================================
   variants: {
-    admonition: 'pill-tag', // tip 签名：胶囊悬挂
+    admonition: 'report-section', // 全主题签名：顶 3px 底 1px + § 方角标签，研究报告条款感（从圆角胶囊升级到方角标签）
     quote: 'column-rule', // quoteCard：左右双竖线，Benedict Evans 风 pull-quote
     compare: 'column-card', // 多列矩阵；拒绝 ledger
     steps: 'timeline-dot', // 拒绝 number-circle / ribbon-chain

@@ -158,11 +158,11 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 26 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
+  it('6 kind × 33 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      admonition: 9,
+      admonition: 16,
       quote: 4,
       compare: 3,
       steps: 3,

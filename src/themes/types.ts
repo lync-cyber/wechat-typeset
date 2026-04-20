@@ -210,6 +210,20 @@ export type AdmonitionVariantId =
   | 'double-border'
   // 上下各一根 1px 实线（"勘误贴条"，tech-geek // PITFALL）
   | 'top-bottom-rule'
+  // manpage 日志输出块：顶底分隔线 + 深底状态标签条（tech-geek 专属）
+  | 'manpage-log'
+  // LaTeX 旁注定理框：1px 细边框 + 小型大写起始标题（academic-frontier 专属）
+  | 'sidenote-latex'
+  // 书页批注：无框无底、墨色一色、【按/疑/注/辨】CJK 符号区分类型（literary-humanism 专属）
+  | 'marginalia'
+  // 账本单元格：深色表头条 + 硬边框，Bloomberg Terminal 数据感（business-finance 专属）
+  | 'ledger-cell'
+  // 有机气泡：大圆角 + 单侧柔软阴影，手绘信笺气质（life-aesthetic 专属）
+  | 'bubble-organic'
+  // 杂志拉引框：上下细线 + 浮空小字标签（people-story 专属）
+  | 'magazine-pull'
+  // 报告条款：顶 3px 底 1px + § 方角标签，研究报告条款感（industry-observer 专属）
+  | 'report-section'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -300,6 +314,13 @@ export const VARIANT_IDS = {
     'dashed-border',
     'double-border',
     'top-bottom-rule',
+    'manpage-log',
+    'sidenote-latex',
+    'marginalia',
+    'ledger-cell',
+    'bubble-organic',
+    'magazine-pull',
+    'report-section',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',

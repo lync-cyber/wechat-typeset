@@ -42,11 +42,15 @@ export const spec: PersonaSpec = {
     code: '#d4a65a', // = primary（签名：inline code 与正文同家族）
   },
 
-  // 语义四色（规范 §1.1）——全部压进琥珀家族 + 冷绿 + 冷蓝点缀
+  // 语义四色（规范 §1.1）——终端语境里**不走交通灯**：
+  //   - warning 不用黄（黄色在终端是 stdout 正常输出）→ 改 HN 橙 #e06a28（accent）
+  //     真正的警告是橙红闪烁，不是"黄色请注意"
+  //   - tip 灰绿（NOTE 附注感，非 success 绿勾）；info 冷蓝（REF 引用感）
+  //   - danger 陶土红（PITFALL 陷阱，非 error 红警）
   status: {
     tip: { accent: '#a8c08a', soft: '#1e1f16' }, // NOTE 灰绿
-    warning: { accent: '#d4a65a', soft: '#1e1a14' }, // CAVEAT = primary
-    info: { accent: '#7a9cb8', soft: '#161b1f' }, // REF 冷蓝
+    warning: { accent: '#e06a28', soft: '#1e1710' }, // CAVEAT HN 橙（打破 warning=黄公式）
+    info: { accent: '#7a9cb8', soft: '#161b1f' }, // SEE ALSO 冷蓝
     danger: { accent: '#c85a3a', soft: '#1f1612' }, // PITFALL 陶土红
   },
 
@@ -290,7 +294,7 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2 —— manpage / RFC 工程写作语汇）
   // ============================================================
   variants: {
-    admonition: 'dashed-border', // tip 签名；warning/info/danger 靠 markdown variant= 覆盖
+    admonition: 'manpage-log', // 全主题签名：manpage 日志输出块（顶底分隔线 + :: TAG :: 状态条）
     quote: 'frame-brackets', // manpage 四角括号
     compare: 'column-card', // RFC alternatives
     steps: 'number-circle', // 方括号脚注号

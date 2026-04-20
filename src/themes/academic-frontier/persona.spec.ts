@@ -51,6 +51,11 @@ export const spec: PersonaSpec = {
   },
 
   // 语义四色（规范 §1.1 语义色表）
+  //
+  // 学术语境**不走交通灯**——Nature/arXiv 里 "Caveat" 不用红色警示，
+  // 而是用"更灰、更轻"的存疑标识：读者注意到的不是"危险"而是"学者的犹豫"。
+  //   - danger 改 **墨灰** #3a3e48（不再是深酒红）——视觉比正文更轻而非更重
+  //   - 其余保持：tip=primary 深靛 / info=secondary 靛灰 / warning=古土黄
   status: {
     // tip = Definition；与 primary 共色
     tip: { accent: '#1e2c4a', soft: '#f3f4f7' },
@@ -58,8 +63,8 @@ export const spec: PersonaSpec = {
     info: { accent: '#4a5670', soft: '#f1f2f4' },
     // warning = Limitations；古文献土黄
     warning: { accent: '#5a4a18', soft: '#f5f2e8' },
-    // danger = Fallacy；= accent 深酒红
-    danger: { accent: '#8a2a2a', soft: '#f7eeee' },
+    // danger = Caveat；墨灰（打破 danger=红公式 —— 学术语境要"轻"）
+    danger: { accent: '#3a3e48', soft: '#eeeff2' },
   },
 
   // ============================================================
@@ -230,7 +235,9 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2 每节的 primary variant）
   // ============================================================
   variants: {
-    admonition: 'accent-bar',
+    // 全主题签名：LaTeX 定理框（细 1px 边框 + DEFINITION./REMARK./LEMMA./CAVEAT. 小型大写标题）
+    // 取代泛用 accent-bar——academic-frontier 真正承继的是 Nature/arXiv 的 \begin{theorem} 视觉
+    admonition: 'sidenote-latex',
     quote: 'frame-brackets',
     compare: 'column-card',
     steps: 'timeline-dot',

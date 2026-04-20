@@ -318,7 +318,7 @@ export const spec: PersonaSpec = {
   // 骨架变体（life-aesthetic 之前未显式声明 → 保持 DEFAULT_VARIANTS）
   // ============================================================
   variants: {
-    admonition: 'accent-bar',
+    admonition: 'bubble-organic', // 全主题签名：大圆角气泡 + 单侧柔软阴影，手绘信笺气质（取代工业网格矩阵的 accent-bar）
     quote: 'classic',
     compare: 'column-card',
     steps: 'number-circle',

@@ -55,6 +55,13 @@ const ADMONITION_ORDER: readonly string[] = [
   'dashed-border',
   'double-border',
   'top-bottom-rule',
+  'manpage-log',
+  'sidenote-latex',
+  'marginalia',
+  'ledger-cell',
+  'bubble-organic',
+  'magazine-pull',
+  'report-section',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
@@ -101,7 +108,7 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
 
 type AnyDef = VariantDef<unknown> | CodeBlockDef
 
-// admonition（9）
+// admonition（16）
 import admonitionAccentBar from './admonition/accent-bar'
 import admonitionPillTag from './admonition/pill-tag'
 import admonitionTicketNotch from './admonition/ticket-notch'
@@ -111,6 +118,13 @@ import admonitionTerminal from './admonition/terminal'
 import admonitionDashedBorder from './admonition/dashed-border'
 import admonitionDoubleBorder from './admonition/double-border'
 import admonitionTopBottomRule from './admonition/top-bottom-rule'
+import admonitionManpageLog from './admonition/manpage-log'
+import admonitionSidenoteLatex from './admonition/sidenote-latex'
+import admonitionMarginalia from './admonition/marginalia'
+import admonitionLedgerCell from './admonition/ledger-cell'
+import admonitionBubbleOrganic from './admonition/bubble-organic'
+import admonitionMagazinePull from './admonition/magazine-pull'
+import admonitionReportSection from './admonition/report-section'
 // quote（4）
 import quoteClassic from './quote/classic'
 import quoteMagazineDropcap from './quote/magazine-dropcap'
@@ -158,6 +172,13 @@ function collectDefs(): AnyDef[] {
     admonitionDashedBorder,
     admonitionDoubleBorder,
     admonitionTopBottomRule,
+    admonitionManpageLog,
+    admonitionSidenoteLatex,
+    admonitionMarginalia,
+    admonitionLedgerCell,
+    admonitionBubbleOrganic,
+    admonitionMagazinePull,
+    admonitionReportSection,
     quoteClassic,
     quoteMagazineDropcap,
     quoteColumnRule,
