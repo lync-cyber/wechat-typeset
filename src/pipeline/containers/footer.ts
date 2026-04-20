@@ -27,7 +27,14 @@ export const footerCTAContainer: ContainerRenderer = {
       `\n`
     )
   },
-  close: '</section>\n',
+  // sealMark 可选注入（规范：literary-humanism §2 footerCTA "右下角一枚大钤印"）。
+  // 主题不提供时保持原行为；提供时在容器末尾追加一个右对齐的收束印。
+  close: (ctx) => {
+    const seal = ctx.assets.sealMark
+      ? `<section class="container-footer-cta__seal" style="text-align:right;margin-top:18px;line-height:0">${ctx.assets.sealMark}</section>\n`
+      : ''
+    return seal + '</section>\n'
+  },
 }
 
 export const recommendContainer: ContainerRenderer = {

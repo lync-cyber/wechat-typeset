@@ -144,6 +144,12 @@ export interface ThemeAssets {
    * 当前未被 highlight hook 自动注入，作为主题可选资产暴露供未来扩展消费。
    */
   terminalPrompt?: SVGString
+  /**
+   * 卷尾钤印。当主题提供时，footerCTA renderer 会在容器底部右下角自动注入一枚 24×24
+   * 装饰印章，作为"全文收束"视觉签名。规范上只在"稀缺色"语义强的主题里使用
+   * （如 literary-humanism 的藏经朱）——其他主题留空即可，renderer 不做默认兜底。
+   */
+  sealMark?: SVGString
 }
 
 export interface ThemeTemplates {
