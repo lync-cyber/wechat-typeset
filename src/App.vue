@@ -177,6 +177,11 @@ watch(baseThemeId, (val, prev) => {
       lastSeed.value = prevSeed
     })
   }
+  // 正文还停在前一主题的示例（用户没动过）就自动换成新主题的示例；
+  // 已经输入过内容则保留，避免覆盖用户草稿。
+  if (val !== prev && md.value === getSample(prev)) {
+    md.value = getSample(val)
+  }
   if (activeDraftId.value) {
     updateDraft(activeDraftId.value, { themeId: val })
     draftIndexTick.value += 1

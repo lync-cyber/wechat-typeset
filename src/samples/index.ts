@@ -14,6 +14,7 @@ import { businessFinanceSample } from './business-finance'
 import { literaryHumanismSample } from './literary-humanism'
 import { industryObserverSample } from './industry-observer'
 import { peopleStorySample } from './people-story'
+import { academicFrontierSample } from './academic-frontier'
 
 export const sampleByTheme: Record<string, string> = {
   default: commonSample,
@@ -24,6 +25,7 @@ export const sampleByTheme: Record<string, string> = {
   'literary-humanism': literaryHumanismSample,
   'industry-observer': industryObserverSample,
   'people-story': peopleStorySample,
+  'academic-frontier': academicFrontierSample,
 }
 
 export function getSample(themeId: string): string {
