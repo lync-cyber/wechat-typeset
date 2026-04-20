@@ -32,12 +32,37 @@ export interface BuildThemeOptions {
   assets?: ThemeAssets
   /** 参数化 SVG 工厂变体。未提供 assets 时生效；默认 'geometric'。 */
   variant?: SvgVariant
-  /** 元素级样式补丁，按标签覆盖 */
+  /**
+   * 资产覆盖补丁：应用在 `assets`（或 `buildAssets({variant})` 的产物）之上，
+   * 仅覆盖列出的 key（浅合并——assets 字段是扁平字符串/函数，无需深合并）。
+   *
+   * 典型场景：主题采用工厂 variant='soft' 产出的大部分装饰，仅想换掉 quoteMark
+   * 为手工 SVG。原先需完全走 `assets` 手工路径、把其他 10+ 个装饰都复制一遍。
+   */
+  assetsPatches?: Partial<ThemeAssets>
+  /**
+   * 元素级样式覆盖——**整块替换**语义：如果某 key 出现在 override 里，整段 CSSObject
+   * 替换掉 baseElements 的同 key。9 套内置主题都用这条路径，展开写全所有 CSS 属性。
+   *
+   * 想"只改一两个属性、其余继承 base" → 用下面的 `elementPatches`（深合并）。
+   */
   elementOverrides?: Partial<ThemeElements>
-  /** 容器级样式补丁 */
+  /** 容器级样式覆盖（同 elementOverrides 语义） */
   containerOverrides?: Partial<ThemeContainers>
-  /** 内联级样式补丁 */
+  /** 内联级样式覆盖（同 elementOverrides 语义） */
   inlineOverrides?: Partial<ThemeInline>
+  /**
+   * 元素级深合并补丁——**按属性合并**语义：应用在 elementOverrides 之后。
+   * 主题作者只写想增/改的属性即可，其他属性继承 base/override 的结果。
+   *
+   * 典型场景：某主题想在公共 h2 基础上多加一行 `letter-spacing: 1px` —— 走这条路径
+   * 比"把整段 h2 再拷一遍"少 8 行样板。
+   */
+  elementPatches?: Partial<ThemeElements>
+  /** 容器级深合并补丁（同 elementPatches 语义） */
+  containerPatches?: Partial<ThemeContainers>
+  /** 内联级深合并补丁（同 elementPatches 语义） */
+  inlinePatches?: Partial<ThemeInline>
   /** 模板片段（封面卡 / 作者栏 / CTA / 推荐） */
   templates?: ThemeTemplates
   /** 代码块样式覆盖（部分主题需要浅色代码块） */
@@ -271,11 +296,40 @@ export function baseInline(tokens: ThemeTokens): ThemeInline {
   }
 }
 
+/**
+ * 深合并一层 CSSObject：对 patch 里出现的每个 key，把 CSSObject 里的属性叠到 base 同 key 上。
+ * patch 未提供的 key 原样透传。
+ */
+function mergePatches<T extends Record<string, CSSObject | undefined>>(
+  base: T,
+  patches: Partial<T> | undefined,
+): T {
+  if (!patches) return base
+  const out: Record<string, CSSObject | undefined> = { ...base }
+  for (const key of Object.keys(patches)) {
+    const patchVal = patches[key as keyof T]
+    if (!patchVal) continue
+    const baseVal = out[key]
+    out[key] = baseVal ? { ...baseVal, ...patchVal } : { ...patchVal }
+  }
+  return out as T
+}
+
 export function buildTheme(opts: BuildThemeOptions): Theme {
-  const elements = { ...baseElements(opts.tokens, opts.pre, opts.code), ...(opts.elementOverrides ?? {}) }
-  const containers = { ...baseContainers(opts.tokens), ...(opts.containerOverrides ?? {}) }
-  const inline = { ...baseInline(opts.tokens), ...(opts.inlineOverrides ?? {}) }
-  const assets = opts.assets ?? buildAssets({ tokens: opts.tokens, variant: opts.variant ?? 'geometric' })
+  const elements = mergePatches(
+    { ...baseElements(opts.tokens, opts.pre, opts.code), ...(opts.elementOverrides ?? {}) },
+    opts.elementPatches,
+  )
+  const containers = mergePatches(
+    { ...baseContainers(opts.tokens), ...(opts.containerOverrides ?? {}) },
+    opts.containerPatches,
+  )
+  const inline = mergePatches(
+    { ...baseInline(opts.tokens), ...(opts.inlineOverrides ?? {}) },
+    opts.inlinePatches,
+  )
+  const baseAssets = opts.assets ?? buildAssets({ tokens: opts.tokens, variant: opts.variant ?? 'geometric' })
+  const assets: ThemeAssets = opts.assetsPatches ? { ...baseAssets, ...opts.assetsPatches } : baseAssets
   const variants: ThemeVariants = { ...DEFAULT_VARIANTS, ...(opts.variants ?? {}) }
   return {
     id: opts.id,
