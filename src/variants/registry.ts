@@ -91,34 +91,102 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
 }
 
 // ─────────────────────────────────────────────────────────────
-// glob 收集：variant 文件在各 kind 子目录下（`./<kind>/<id>.ts`）。
-// `_*.ts` 与 `index.ts` 不参与收集（共享工具 / 注释型汇总文件）。
+// 静态 import 收集。
+//
+// 历史说明：初版用 `import.meta.glob` 自动发现，但 `scripts/verify-sample-full.ts`
+// 通过 tsx 直接在 Node 下执行 pipeline，tsx 没有 Vite 的 glob 转换，会 TypeError。
+// 为了让同一份 registry 在 Vite 和 Node 两套运行时都可用，改为显式 import。
+// 新增 variant = 在下方对应 kind 追加一行 import + 塞进数组，没有额外成本。
 // ─────────────────────────────────────────────────────────────
 
 type AnyDef = VariantDef<unknown> | CodeBlockDef
 
-const modules = import.meta.glob<Record<string, unknown>>(
-  ['./*/*.ts', '!./_*.ts', '!./*/_*.ts', '!./*/index.ts'],
-  { eager: true },
-)
-
-function isVariantDef(value: unknown): value is AnyDef {
-  return (
-    !!value &&
-    typeof value === 'object' &&
-    'meta' in (value as object) &&
-    'snippets' in (value as object)
-  )
-}
+// admonition（9）
+import admonitionAccentBar from './admonition/accent-bar'
+import admonitionPillTag from './admonition/pill-tag'
+import admonitionTicketNotch from './admonition/ticket-notch'
+import admonitionCardShadow from './admonition/card-shadow'
+import admonitionMinimalUnderline from './admonition/minimal-underline'
+import admonitionTerminal from './admonition/terminal'
+import admonitionDashedBorder from './admonition/dashed-border'
+import admonitionDoubleBorder from './admonition/double-border'
+import admonitionTopBottomRule from './admonition/top-bottom-rule'
+// quote（4）
+import quoteClassic from './quote/classic'
+import quoteMagazineDropcap from './quote/magazine-dropcap'
+import quoteColumnRule from './quote/column-rule'
+import quoteFrameBrackets from './quote/frame-brackets'
+// compare（3）
+import compareColumnCard from './compare/column-card'
+import compareStackedRow from './compare/stacked-row'
+import compareLedger from './compare/ledger'
+// steps（3）
+import stepsNumberCircle from './steps/number-circle'
+import stepsRibbonChain from './steps/ribbon-chain'
+import stepsTimelineDot from './steps/timeline-dot'
+// divider（5）
+import dividerWave from './divider/wave'
+import dividerDots from './divider/dots'
+import dividerFlower from './divider/flower'
+import dividerRule from './divider/rule'
+import dividerGlyph from './divider/glyph'
+// sectionTitle（2）
+import sectionTitleBordered from './section-title/bordered'
+import sectionTitleCornered from './section-title/cornered'
+// codeBlock（2）
+import codeBlockBare from './codeBlock/bare'
+import codeBlockHeaderBar from './codeBlock/header-bar'
+// free（9）— kind='none' 自由组件
+import freeIntro from './free/intro'
+import freeAuthor from './free/author'
+import freeCover from './free/cover'
+import freeHighlight from './free/highlight'
+import freeFooterCta from './free/footer-cta'
+import freeRecommend from './free/recommend'
+import freeQrcode from './free/qrcode'
+import freeMpvoice from './free/mpvoice'
+import freeMpvideo from './free/mpvideo'
 
 function collectDefs(): AnyDef[] {
-  const found: AnyDef[] = []
-  for (const mod of Object.values(modules)) {
-    for (const value of Object.values(mod)) {
-      if (isVariantDef(value)) found.push(value)
-    }
-  }
-  return found
+  return [
+    admonitionAccentBar,
+    admonitionPillTag,
+    admonitionTicketNotch,
+    admonitionCardShadow,
+    admonitionMinimalUnderline,
+    admonitionTerminal,
+    admonitionDashedBorder,
+    admonitionDoubleBorder,
+    admonitionTopBottomRule,
+    quoteClassic,
+    quoteMagazineDropcap,
+    quoteColumnRule,
+    quoteFrameBrackets,
+    compareColumnCard,
+    compareStackedRow,
+    compareLedger,
+    stepsNumberCircle,
+    stepsRibbonChain,
+    stepsTimelineDot,
+    dividerWave,
+    dividerDots,
+    dividerFlower,
+    dividerRule,
+    dividerGlyph,
+    sectionTitleBordered,
+    sectionTitleCornered,
+    codeBlockBare,
+    codeBlockHeaderBar,
+    freeIntro,
+    freeAuthor,
+    freeCover,
+    freeHighlight,
+    freeFooterCta,
+    freeRecommend,
+    freeQrcode,
+    freeMpvoice,
+    freeMpvideo,
+  ] as unknown as AnyDef[]
 }
 
 function orderedByKind(defs: AnyDef[], kind: VariantKind | 'none'): AnyDef[] {
