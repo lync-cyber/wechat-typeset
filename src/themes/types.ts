@@ -67,12 +67,22 @@ export interface ThemeElements {
   h1: CSSObject
   h2: CSSObject
   h3: CSSObject
+  /**
+   * 四级小标题。教程主题常用于 "Step 1. 初始化项目" 这类可操作步骤题头。
+   * 介于 h3 章节小节与 p 正文之间，和 steps 容器搭配使用。
+   */
+  h4: CSSObject
   p: CSSObject
   blockquote: CSSObject
   ul: CSSObject
   ol: CSSObject
   li: CSSObject
   code: CSSObject
+  /**
+   * 键盘按键帽样式。微信约束下不能用 box-shadow 模拟立体，
+   * 通过 `border 1px + border-bottom 2px` 的不对称边框表达键帽感。
+   */
+  kbd: CSSObject
   pre: CSSObject
   img: CSSObject
   a: CSSObject
@@ -114,6 +124,26 @@ export interface ThemeAssets {
   warningIcon?: SVGString
   infoIcon?: SVGString
   dangerIcon?: SVGString
+  /**
+   * Note（中性补充说明）图标。五态模型的第五档，区别于 info（"此处有延伸知识"）。
+   * 教程主题里最常见，其他主题可选。
+   */
+  noteIcon?: SVGString
+  /**
+   * 代码块右上角"可复制"装饰图标。公众号不能真复制，但该图标是"这段代码是给你抄的"的文化信号。
+   * 由 codeBlock variant = 'header-bar' 消费；variant 为 'bare' 时忽略。
+   */
+  copyIcon?: SVGString
+  /**
+   * 外链箭头，用于 <a> 元素末尾装饰（MDN / Stripe Docs 的 universal 外链标识）。
+   * 当前未被任何渲染器自动注入，作为主题可选资产暴露供未来 inline 扩展消费。
+   */
+  externalLinkIcon?: SVGString
+  /**
+   * bash 代码块前缀 `$` 字符 SVG，提示"这行是 shell 命令"。
+   * 当前未被 highlight hook 自动注入，作为主题可选资产暴露供未来扩展消费。
+   */
+  terminalPrompt?: SVGString
 }
 
 export interface ThemeTemplates {
@@ -198,6 +228,12 @@ export type SectionTitleVariantId =
   // 左上角装饰 SVG（当前 assets.sectionCorner 对应）
   | 'cornered'
 
+export type CodeBlockVariantId =
+  // 裸 <pre><code>（默认，与 v1 行为等价）
+  | 'bare'
+  // 顶部语言标签带：语言名大写 + 可选 copy 图标；Stripe Docs / MDN 家族 signature
+  | 'header-bar'
+
 /**
  * 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。
  *
@@ -210,6 +246,7 @@ export interface ThemeVariants {
   steps: StepsVariantId
   divider: DividerVariantId
   sectionTitle: SectionTitleVariantId
+  codeBlock: CodeBlockVariantId
 }
 
 /**
@@ -223,6 +260,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   steps: 'number-circle',
   divider: 'rule',
   sectionTitle: 'bordered',
+  codeBlock: 'bare',
 }
 
 /**
@@ -265,6 +303,10 @@ export const VARIANT_IDS = {
     'bordered',
     'cornered',
   ] as const satisfies readonly SectionTitleVariantId[],
+  codeBlock: [
+    'bare',
+    'header-bar',
+  ] as const satisfies readonly CodeBlockVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

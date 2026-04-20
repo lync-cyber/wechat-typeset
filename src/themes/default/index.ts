@@ -72,6 +72,14 @@ const elements = {
     'margin-bottom': '10px',
     'line-height': '1.5',
   },
+  h4: {
+    'font-size': '16px',
+    'font-weight': '600',
+    color: tokens.colors.text,
+    'margin-top': '18px',
+    'margin-bottom': '8px',
+    'line-height': '1.5',
+  },
   p: {
     'font-size': '15px',
     'line-height': '1.8',
@@ -113,6 +121,18 @@ const elements = {
     padding: '2px 6px',
     'border-radius': '3px',
     'font-size': '14px',
+  },
+  kbd: {
+    display: 'inline-block',
+    'background-color': tokens.colors.bgSoft,
+    color: tokens.colors.text,
+    border: `1px solid ${tokens.colors.border}`,
+    'border-bottom-width': '2px',
+    'border-radius': '3px',
+    padding: '1px 6px',
+    'font-size': '12px',
+    'line-height': '1.4',
+    'vertical-align': 'middle',
   },
   pre: {
     'background-color': '#282c34',

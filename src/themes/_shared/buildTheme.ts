@@ -78,6 +78,16 @@ export function baseElements(tokens: ThemeTokens, pre?: CSSObject, code?: CSSObj
       'margin-bottom': '10px',
       'line-height': '1.5',
     },
+    // h4 介于 h3 和 p 之间，默认不带装饰、只靠字重拉开。
+    // 教程向主题（tech-explainer）会覆盖为主色 + 600 字重的"Step 小标题"。
+    h4: {
+      'font-size': `${typography.baseSize + 1}px`,
+      'font-weight': '600',
+      color: colors.text,
+      'margin-top': '18px',
+      'margin-bottom': '8px',
+      'line-height': '1.5',
+    },
     p: {
       'font-size': `${typography.baseSize}px`,
       'line-height': String(typography.lineHeight),
@@ -111,6 +121,20 @@ export function baseElements(tokens: ThemeTokens, pre?: CSSObject, code?: CSSObj
       padding: '2px 6px',
       'border-radius': '3px',
       'font-size': '14px',
+    },
+    // 键帽：不对称边框（底边 2px 比其他三边 1px 更深）模拟微小立体感。
+    // 微信粘贴剥 box-shadow，只能这样"借边框"实现键帽感。
+    kbd: {
+      display: 'inline-block',
+      'background-color': colors.bgSoft,
+      color: colors.text,
+      border: `1px solid ${colors.border}`,
+      'border-bottom-width': '2px',
+      'border-radius': '3px',
+      padding: '1px 6px',
+      'font-size': '12px',
+      'line-height': '1.4',
+      'vertical-align': 'middle',
     },
     pre: pre ?? {
       'background-color': '#282c34',

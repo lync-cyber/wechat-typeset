@@ -36,6 +36,15 @@
   line-height: 1.5;
 }
 
+.markdown-body h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2328;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 15px;
   line-height: 1.8;
@@ -83,6 +92,19 @@
   border-radius: 3px;
   font-size: 14px;
   word-break: break-all;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  background-color: #f7f8fa;
+  color: #1f2328;
+  border: 1px solid #e1e4e8;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  vertical-align: middle;
 }
 
 .markdown-body pre {
