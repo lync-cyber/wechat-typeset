@@ -1,55 +1,77 @@
 /**
- * business-finance · 专属 SVG 资产
+ * business-finance · 专属 SVG 资产（规范 §1.3 SVG motif）
  *
- * 视觉语言：报告 & 图表
- *   - H2 前缀：色块 + 标签（图表 legend 风）
- *   - 分割线：K 线柱状分布（红绿交错）/ 方块序列 / 中心对称方块 + 横线
- *   - 金句：干净无装饰引号，短直粗笔
- *   - sectionCorner：L 形直角（报告卡片角标）
- *   - 图标：方形硬边，锐利
- *   - stepBadge：正方形徽章 + 白色数字
+ * 视觉语言：**研报图表 & 内参装帧**，不是"涨跌箭头"廉价暗示。
  *
- * 共 11 个资产，超过"≥ 8"要求。
- * 严格遵守平台约束：
- *   - SVG 无 id
- *   - <text> 不声明 font-family（走系统默认）
- *   - 徽章数字 font-size ≥ 14（viewBox = 渲染尺寸等比）
- *   - 无纯白 #fff 填充（本主题为白底，不需 patchSvgWhiteBg）
+ * 保留的瑰宝（规范 §1.3）：
+ *   - dividerWave · K 线柱状分割线 —— 全项目单件最强资产
+ *     精修：前 5 根压 + 后 4 根反弹的 V 型走势 / 涨柱走 danger 红 / stroke 0.8 → 1.0
+ *   - h2Prefix · legend 色块 + 辅横条 —— 几何微调（主块 3×13 更瘦，辅块 14×3 更细）
+ *   - sectionCorner · L 形直角 —— accent 方块 4×4 → 3×3 更克制
+ *   - stepBadge · 正方形钤印 —— primary 栗墨底 + accent 琥珀底条 + #fefefe 数字
+ *
+ * 重做（规范 §1.3）：
+ *   - dividerFlower · 章节编号 Sec. I —— 双线夹中央 text 标签，替代旧"中心方块+横线"
+ *   - dividerDots · 6 方块 → 3 方块，红/蓝/红 交替
+ *   - quoteMark · 保留方头几何，primary 栗墨色（旧红让位）
+ *
+ * 四态图标形状差异化（规范 §1.3 四态骨架）：
+ *   - tipIcon: 方框 + ✓（两笔折线）—— 建议采纳
+ *   - warningIcon: 方框 + !（上长下短）—— 当前方向保留
+ *   - infoIcon: 方框 + i（上点下长）—— 和 warning 视觉镜像
+ *   - dangerIcon: 方框 + ×（两笔交叉）—— 勘误感
+ *
+ * 导出 11 件资产。严守平台约束：无 id / 无 url 引号 / `<text>` 不声 font-family /
+ * 光栅字号 ≥ 14 / 纯白用 #fefefe。
  */
 
 import type { ThemeAssets } from '../types'
 import { strip, type ExtendedPalette } from '../_shared/svgLib'
 
-export function businessFinanceAssets(p: ExtendedPalette): ThemeAssets {
-  // ---------- H2 Prefix：实心方块 + 细线（图表 legend 风） ---------- //
+/** business-finance 专属 palette：在 ExtendedPalette 基础上多一项 textMuted（dividerFlower 文字色）。 */
+interface BFPalette extends ExtendedPalette {
+  textMuted: string
+}
+
+export function businessFinanceAssets(p: BFPalette): ThemeAssets {
+  // ---------- ① h2Prefix · legend 色块 + 辅横条（规范 §1.3 ②） ---------- //
+  // 规范原文：主块 3×13 primary 深栗墨 + 辅块 14×3 secondary opacity 0.75
+  //   几何比旧版更瘦更细，像 figure legend 的"方块 + 标签线"
   const h2Prefix = strip(`
     <svg viewBox="0 0 18 18" width="14" height="14" xmlns="http://www.w3.org/2000/svg"
          style="display:inline-block;vertical-align:middle;margin-right:8px">
-      <rect x="0" y="3" width="4" height="12" fill="${p.primary}"/>
-      <rect x="6" y="7" width="12" height="4" fill="${p.secondary}" opacity="0.75"/>
+      <rect x="0" y="2" width="3" height="13" fill="${p.primary}"/>
+      <rect x="4" y="7" width="14" height="3" fill="${p.secondary}" opacity="0.75"/>
     </svg>
   `)
 
-  // ---------- 分割线 · wave：K 线柱状（深红/深蓝交替，涨跌节律） ---------- //
+  // ---------- ② dividerWave · K 线 V 型走势（规范 §1.3 ① 瑰宝精修） ---------- //
+  // 规范原文：前 5 根下压 + 后 4 根反弹的 V 型（触底回升）；涨柱走 danger 红 #9a1b20，
+  //   阴柱走 secondary 蓝 #0e3654；柱宽 4px 保留；stroke 0.8 → 1.0。
+  // 柱体中心高度：6 → 8 → 10 → 12 → 14（V 底） → 12 → 10 → 8 → 6（反弹顶）
+  // 红蓝交替：1 红 2 蓝 3 红 4 蓝 5 红 6 蓝 7 红 8 蓝 9 红
   const dividerWave = strip(`
     <svg viewBox="0 0 240 20" width="220" height="20" xmlns="http://www.w3.org/2000/svg">
       <line x1="0" y1="10" x2="240" y2="10" stroke="${p.border}" stroke-width="0.8"/>
       ${[
-        { x: 70, open: 14, close: 6, color: p.primary }, // 阳
-        { x: 82, open: 6, close: 12, color: p.secondary }, // 阴
-        { x: 94, open: 12, close: 5, color: p.primary },
-        { x: 106, open: 5, close: 14, color: p.secondary },
-        { x: 118, open: 14, close: 4, color: p.primary },
-        { x: 130, open: 4, close: 10, color: p.secondary },
-        { x: 142, open: 10, close: 3, color: p.primary },
-        { x: 154, open: 3, close: 9, color: p.secondary },
-        { x: 166, open: 9, close: 2, color: p.primary },
+        { x: 70, cy: 6, color: p.dangerAccent },
+        { x: 82, cy: 8, color: p.secondary },
+        { x: 94, cy: 10, color: p.dangerAccent },
+        { x: 106, cy: 12, color: p.secondary },
+        { x: 118, cy: 14, color: p.dangerAccent },
+        { x: 130, cy: 12, color: p.secondary },
+        { x: 142, cy: 10, color: p.dangerAccent },
+        { x: 154, cy: 8, color: p.secondary },
+        { x: 166, cy: 6, color: p.dangerAccent },
       ]
-        .map(({ x, open, close, color }) => {
-          const top = Math.min(open, close)
-          const h = Math.abs(close - open)
+        .map(({ x, cy, color }) => {
+          const h = 4
+          const top = cy - h / 2
+          // 影线：柱体上下各延伸 2px
+          const shadowTop = cy - h / 2 - 2
+          const shadowBot = cy + h / 2 + 2
           return (
-            `<line x1="${x + 2}" y1="${Math.min(open, close) - 2}" x2="${x + 2}" y2="${Math.max(open, close) + 2}" stroke="${color}" stroke-width="0.8"/>` +
+            `<line x1="${x + 2}" y1="${shadowTop}" x2="${x + 2}" y2="${shadowBot}" stroke="${color}" stroke-width="1.0"/>` +
             `<rect x="${x}" y="${top}" width="4" height="${h}" fill="${color}"/>`
           )
         })
@@ -57,45 +79,54 @@ export function businessFinanceAssets(p: ExtendedPalette): ThemeAssets {
     </svg>
   `)
 
-  // ---------- 分割线 · dots：方块序列（data-grid 感） ---------- //
+  // ---------- ③ dividerDots · 紧凑 3 方块（规范 §1.3 ⑥） ---------- //
+  // 规范原文：6 方块降到 3，居中，红/蓝/红 交替
+  //   用于段落间紧凑停顿，频率较低
   const dividerDots = strip(`
     <svg viewBox="0 0 240 10" width="220" height="10" xmlns="http://www.w3.org/2000/svg">
-      ${[76, 92, 108, 124, 140, 156]
-        .map((x, i) => `<rect x="${x - 2}" y="3" width="4" height="4" fill="${i % 2 === 0 ? p.primary : p.secondary}"/>`)
-        .join('')}
+      <rect x="108" y="3" width="4" height="4" fill="${p.dangerAccent}"/>
+      <rect x="118" y="3" width="4" height="4" fill="${p.secondary}"/>
+      <rect x="128" y="3" width="4" height="4" fill="${p.dangerAccent}"/>
     </svg>
   `)
 
-  // ---------- 分割线 · flower：中心方块 + 横线（章节切换，报告感） ---------- //
+  // ---------- ④ dividerFlower · 章节编号 Sec. I（规范 §1.3 ⑤） ---------- //
+  // 规范原文：双线夹中央 text 标签"Sec.I"，替代旧"中心方块+横线"
+  //   左右各一根 1px border 细线（92px），中央 text letter-spacing 1.5px
+  //   编号默认 "Sec. I"（规范支持后续通过 attrs / 递增扩展）
+  //   viewBox 高 20，font-size 14 光栅后仍 ≥ 14 —— 纪律
   const dividerFlower = strip(`
-    <svg viewBox="0 0 240 14" width="220" height="14" xmlns="http://www.w3.org/2000/svg">
-      <line x1="0" y1="7" x2="102" y2="7" stroke="${p.border}" stroke-width="1"/>
-      <line x1="138" y1="7" x2="240" y2="7" stroke="${p.border}" stroke-width="1"/>
-      <rect x="108" y="3" width="8" height="8" fill="${p.primary}"/>
-      <rect x="120" y="5" width="4" height="4" fill="${p.accent}"/>
-      <rect x="128" y="3" width="8" height="8" fill="${p.secondary}"/>
+    <svg viewBox="0 0 240 20" width="220" height="16" xmlns="http://www.w3.org/2000/svg">
+      <line x1="4" y1="10" x2="96" y2="10" stroke="${p.border}" stroke-width="1"/>
+      <line x1="144" y1="10" x2="236" y2="10" stroke="${p.border}" stroke-width="1"/>
+      <text x="120" y="14" text-anchor="middle" font-size="14" font-weight="600"
+            fill="${p.textMuted}" letter-spacing="1.5">Sec. I</text>
     </svg>
   `)
 
-  // ---------- 金句引号：锐利方头双引号 ---------- //
+  // ---------- ⑤ quoteMark · 方头锐利引号（规范 §1.3 ⑦） ---------- //
+  // 规范原文：保留方头几何（M4,6 L4,14 ...），primary 栗墨色（旧红让位）
+  //   放在 quoteCard 左上角 inline-block + margin-right 8px
   const quoteMark = strip(`
     <svg viewBox="0 0 40 32" width="34" height="28" xmlns="http://www.w3.org/2000/svg"
          style="display:inline-block;vertical-align:top;margin-right:4px">
       <path d="M4,6 L4,14 L8,14 L8,20 L14,20 L14,6 Z M22,6 L22,14 L26,14 L26,20 L32,20 L32,6 Z"
-            fill="${p.primary}" opacity="0.42"/>
+            fill="${p.primary}" opacity="0.5"/>
     </svg>
   `)
 
-  // ---------- Section 角花：L 形直角（报告卡片角标） ---------- //
+  // ---------- ⑥ sectionCorner · L 形直角（规范 §1.3 ③） ---------- //
+  // 规范原文：accent 方块 4×4 → 3×3（更克制）
+  //   配合 sectionTitle 的 cornered variant
   const sectionCorner = strip(`
     <svg viewBox="0 0 18 18" width="14" height="14" xmlns="http://www.w3.org/2000/svg"
          style="display:inline-block;vertical-align:middle;margin-right:6px">
       <path d="M0,0 L6,0 L6,3 L3,3 L3,18 L0,18 Z" fill="${p.primary}"/>
-      <rect x="8" y="14" width="4" height="4" fill="${p.accent}"/>
+      <rect x="9" y="14" width="3" height="3" fill="${p.accent}"/>
     </svg>
   `)
 
-  // ---------- 图标：方形硬边 ---------- //
+  // ---------- ⑦-⑩ 四态图标（规范 §1.3 四态骨架，形状差异化） ---------- //
   const iconSquare = (color: string, inner: string) => strip(`
     <svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg"
          style="display:inline-block;vertical-align:middle;margin-right:6px">
@@ -104,37 +135,41 @@ export function businessFinanceAssets(p: ExtendedPalette): ThemeAssets {
     </svg>
   `)
 
+  // tip · ✓（两笔折线）—— "要点 · 建议采纳"
   const tipIcon = iconSquare(
     p.tipAccent,
-    `<rect x="7" y="4" width="2" height="5" fill="${p.tipAccent}"/>` +
-      `<rect x="7" y="10" width="2" height="2" fill="${p.tipAccent}"/>`,
+    `<path d="M4,8 L7,11 L12,5" fill="none" stroke="${p.tipAccent}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`,
   )
+
+  // warning · !（上长下短 —— 旧版保留方向）
   const warningIcon = iconSquare(
     p.warningAccent,
-    `<rect x="7" y="4" width="2" height="5" fill="${p.warningAccent}"/>` +
-      `<rect x="7" y="10" width="2" height="2" fill="${p.warningAccent}"/>` +
-      `<path d="M1,1 L8,1" stroke="${p.warningAccent}" stroke-width="1.5"/>`,
+    `<rect x="7" y="3" width="2" height="7" fill="${p.warningAccent}"/>` +
+      `<rect x="7" y="11" width="2" height="2" fill="${p.warningAccent}"/>`,
   )
+
+  // info · i（上短下长 —— 与 warning 视觉镜像）
   const infoIcon = iconSquare(
     p.infoAccent,
     `<rect x="7" y="3" width="2" height="2" fill="${p.infoAccent}"/>` +
       `<rect x="7" y="6" width="2" height="7" fill="${p.infoAccent}"/>`,
   )
+
+  // danger · ×（两笔交叉 —— 勘误感）
   const dangerIcon = iconSquare(
     p.dangerAccent,
-    `<rect x="3" y="7" width="10" height="2" fill="${p.dangerAccent}"/>`,
+    `<path d="M4,4 L12,12 M12,4 L4,12" fill="none" stroke="${p.dangerAccent}" stroke-width="1.8" stroke-linecap="round"/>`,
   )
 
-  // ---------- 步骤徽章：正方形 + 大号数字 ---------- //
-  // viewBox 24×24，渲染尺寸 24×24 等比；font-size=15 在公众号光栅化后 ≥ 14px；
-  // 数字色用 "#fefefe" 近白，避开公众号 SVG→PNG 把纯白转透明的问题
-  // （详见 wxPatch.patchSvgWhiteBg 的背景说明）。
+  // ---------- ⑪ stepBadge · 正方形钤印（规范 §1.3 ④） ---------- //
+  // 规范原文：primary 栗墨底（旧红已让位）+ 底部 3px accent 琥珀条 + #fefefe 数字
+  //   viewBox 24×24，font-size=15 ≥ 14 光栅下限；数字色 #fefefe 规避平台透明化
   const stepBadge = (n: number) => strip(`
     <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg"
          style="display:inline-block;vertical-align:middle;margin-right:8px">
       <rect x="1" y="1" width="22" height="22" fill="${p.primary}"/>
       <rect x="1" y="20" width="22" height="3" fill="${p.accent}"/>
-      <text x="12" y="16" text-anchor="middle" font-size="15" font-weight="700" fill="#fefefe">${n}</text>
+      <text x="12" y="16" text-anchor="middle" font-size="15" font-weight="700" fill="${p.textInverse}">${n}</text>
     </svg>
   `)
 
