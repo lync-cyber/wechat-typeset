@@ -44,14 +44,18 @@ function collectSvgs(t: Theme): string[] {
 }
 
 describe.each(themes)('$name · 资产齐备', (t) => {
-  it('资产都给值（default 10 件：规范 §1.4 删 quoteMark；其他主题 11 件）', () => {
+  it('资产都给值（default / literary-humanism 10 件：规范 §1.4 / §2.6 删 quoteMark；其他主题 11 件）', () => {
     const a = t.assets
     expect(a.h2Prefix).toBeTypeOf('string')
     expect(a.dividerWave).toBeTypeOf('string')
     expect(a.dividerDots).toBeTypeOf('string')
     expect(a.dividerFlower).toBeTypeOf('string')
-    // default 故意不导出 quoteMark（规范 §1.4 / §2.6 "故意留白"）
-    if (t.id !== 'default') {
+    // default / literary-humanism 故意不导出 quoteMark：
+    //   - default 规范 §1.4 / §2.6："故意留白"
+    //   - literary-humanism personas/literary-humanism.md §2.6 第 253 行：
+    //     "**不用** quoteMark SVG —— 首字本身已经是装饰，再加引号就太满"
+    //     magazine-dropcap variant 的首字 + accent 色 dropcap 替代引号 SVG
+    if (t.id !== 'default' && t.id !== 'literary-humanism') {
       expect(a.quoteMark).toBeTypeOf('string')
     }
     expect(a.sectionCorner).toBeTypeOf('string')
@@ -94,8 +98,13 @@ describe.each(themes)('$name · 资产齐备', (t) => {
 })
 
 describe('5 套主题相互有视觉差异', () => {
-  it('quoteMark 字符串不雷同', () => {
-    const marks = themes.map((t) => t.assets.quoteMark ?? '')
+  it('quoteMark 字符串不雷同（default / literary-humanism 显式不导出，走字符回退）', () => {
+    // default（规范 §2.6）和 literary-humanism（personas/literary-humanism.md §2.6
+    // 第 253 行）都**刻意不导出** quoteMark —— quoteCard 走 magazine-dropcap variant
+    // 的首字装饰替代引号 SVG。参与差异性校验的只有导出 quoteMark 的主题。
+    const marks = themes
+      .filter((t) => t.id !== 'default' && t.id !== 'literary-humanism')
+      .map((t) => t.assets.quoteMark ?? '')
     const unique = new Set(marks)
     expect(unique.size).toBe(marks.length)
   })
