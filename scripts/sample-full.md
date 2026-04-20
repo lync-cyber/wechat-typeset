@@ -70,6 +70,34 @@
 这是 `top-bottom-rule` 骨架 —— 顶底 1px 实线，报纸 errata 勘误条。
 :::
 
+::: tip 工程附注 variant=manpage-log
+这是 `manpage-log` 骨架 —— 顶底分隔线 + `:: NOTE ::` 状态条，终端日志输出感（tech-geek 专属签名）。
+:::
+
+::: info 定义 variant=sidenote-latex
+这是 `sidenote-latex` 骨架 —— 1px 细边框 + `DEFINITION.` 小型大写起始，LaTeX 定理框语汇（academic-frontier 专属签名）。
+:::
+
+::: warning 按 variant=marginalia
+这是 `marginalia` 骨架 —— 无框无底、墨色一色；靠【按/疑/注/辨】CJK 符号区分类型（literary-humanism 专属签名）。
+:::
+
+::: danger 异常 · ALERT variant=ledger-cell
+这是 `ledger-cell` 骨架 —— 深色表头条 + 硬边框，Bloomberg Terminal 数据感（business-finance 专属签名）。
+:::
+
+::: tip 今日小发现 variant=bubble-organic
+这是 `bubble-organic` 骨架 —— 大圆角 + 单侧柔软阴影，手绘信笺气质（life-aesthetic 专属签名）。
+:::
+
+::: info 采访手记 variant=magazine-pull
+这是 `magazine-pull` 骨架 —— 上下细线 + 浮空小字标签，《人物》特稿 pull-quote（people-story 专属签名）。
+:::
+
+::: warning 需要警惕 variant=report-section
+这是 `report-section` 骨架 —— 顶 3px 底 1px + § 方角标签，研究报告条款感（industry-observer 专属签名）。
+:::
+
 ---
 
 ## 引用卡 4 种 variant

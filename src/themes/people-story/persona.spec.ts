@@ -238,7 +238,7 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2）
   // ============================================================
   variants: {
-    admonition: 'minimal-underline', // tip 签名：采访手记（最轻的一档）
+    admonition: 'magazine-pull', // 全主题签名：上下细线 + 浮空小字标签，《人物》拉引框（取代左竖线的 minimal-underline）
     quote: 'magazine-dropcap', // quoteCard：巨号 serif 引号 + 金句 + byline
     compare: 'column-card',
     steps: 'timeline-dot', // stepBadge 走本主题罗马徽章

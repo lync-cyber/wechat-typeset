@@ -411,8 +411,9 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2 每节 primary variant）
   // ============================================================
   variants: {
-    // 规范 §2.10：tip 走 minimal-underline —— literary 签名气质（最轻、铅笔划）
-    admonition: 'minimal-underline',
+    // 真正的无框书页批注：无底、无边；靠 CJK 符号【按/疑/注/辨】区分四态，墨色一色
+    // 取代 minimal-underline（仍有左竖线 + 色差），回归宋版书批注传统
+    admonition: 'marginalia',
     // 规范 §2.6：quoteCard 走 magazine-dropcap —— 题辞签名
     quote: 'magazine-dropcap',
     // 规范 §2.12：compare 走 column-card（甲说/乙说）

@@ -7503,7 +7503,14 @@
             "terminal",
             "dashed-border",
             "double-border",
-            "top-bottom-rule"
+            "top-bottom-rule",
+            "manpage-log",
+            "sidenote-latex",
+            "marginalia",
+            "ledger-cell",
+            "bubble-organic",
+            "magazine-pull",
+            "report-section"
           ]
         },
         "quote": {

@@ -287,7 +287,7 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2）
   // ============================================================
   variants: {
-    admonition: 'accent-bar', // tip 签名（其他三态靠 markdown 覆盖）
+    admonition: 'ledger-cell', // 全主题签名：Bloomberg Terminal 风表头条 + 硬边框数据单元
     quote: 'frame-brackets', // 四角 L 形 + attribution 位
     compare: 'ledger', // 账本双列
     steps: 'timeline-dot', // 阶段时间轴
