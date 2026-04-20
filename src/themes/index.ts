@@ -5,6 +5,7 @@ import { techExplainerTheme } from './tech-explainer'
 import { lifeAestheticTheme } from './life-aesthetic'
 import { businessFinanceTheme } from './business-finance'
 import { literaryHumanismTheme } from './literary-humanism'
+import { industryObserverTheme } from './industry-observer'
 
 export const themeRegistry: Record<string, Theme> = {
   default: defaultTheme,
@@ -13,6 +14,7 @@ export const themeRegistry: Record<string, Theme> = {
   'life-aesthetic': lifeAestheticTheme,
   'business-finance': businessFinanceTheme,
   'literary-humanism': literaryHumanismTheme,
+  'industry-observer': industryObserverTheme,
 }
 
 export const themeList: Theme[] = Object.values(themeRegistry)
@@ -28,4 +30,5 @@ export {
   lifeAestheticTheme,
   businessFinanceTheme,
   literaryHumanismTheme,
+  industryObserverTheme,
 }
