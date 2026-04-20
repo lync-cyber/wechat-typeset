@@ -10,6 +10,16 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:card-shadow
 <section class="container-tip__title" style="font-weight:700;color:#1f8a4c;margin-bottom:8px;font-size:15px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#1f8a4c" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#1f8a4c"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#1f8a4c"></rect> </svg>测试标题</section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:dashed-border 1`] = `
+"<section class="container-tip container-tip--dashed-border" style="background-color:#eef6ef;border-left:2px dashed #1f8a4c;padding:12px 16px;border-radius:0 4px 4px 0;margin:16px 0">
+<section class="container-tip__title" style="font-weight:600;color:#1f8a4c;margin-bottom:6px;letter-spacing:1px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#1f8a4c" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#1f8a4c"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#1f8a4c"></rect> </svg>测试标题</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:double-border 1`] = `
+"<section class="container-tip container-tip--double-border" style="border-left:4px double #1f8a4c;padding:12px 16px;margin:16px 0">
+<section class="container-tip__title" style="font-weight:600;color:#1f8a4c;margin-bottom:6px;letter-spacing:1px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#1f8a4c" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#1f8a4c"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#1f8a4c"></rect> </svg>测试标题</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:minimal-underline 1`] = `
 "<section class="container-tip container-tip--minimal-underline" style="padding:4px 0 4px 12px;margin:14px 0;border-left:2px solid #1f8a4c">
 <section class="container-tip__title" style="display:inline-block;color:#1f8a4c;font-weight:700;padding-bottom:4px;border-bottom:2px solid #1f8a4c;margin-bottom:10px;letter-spacing:0.5px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#1f8a4c" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#1f8a4c"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#1f8a4c"></rect> </svg>测试标题</section>"
@@ -28,6 +38,11 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:terminal 1`
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:ticket-notch 1`] = `
 "<section class="container-tip container-tip--ticket-notch" style="background-color:#eef6ef;border:1px dashed #1f8a4c;border-left:2px dotted #1f8a4c;border-right:2px dotted #1f8a4c;padding:16px 20px;margin:18px 0;border-radius:3px">
 <section style="text-align:center;margin-bottom:4px"><svg viewBox="0 0 8 8" width="8" height="8" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 6px"><circle cx="4" cy="4" r="3" fill="#1f8a4c"></circle></svg><svg viewBox="0 0 8 8" width="8" height="8" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 6px"><circle cx="4" cy="4" r="3" fill="#1f8a4c"></circle></svg><svg viewBox="0 0 8 8" width="8" height="8" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 6px"><circle cx="4" cy="4" r="3" fill="#1f8a4c"></circle></svg></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:top-bottom-rule 1`] = `
+"<section class="container-tip container-tip--top-bottom-rule" style="background-color:#eef6ef;border-top:1px solid #1f8a4c;border-bottom:1px solid #1f8a4c;padding:14px 16px;margin:18px 0">
+<section class="container-tip__title" style="font-weight:600;color:#1f8a4c;margin-bottom:8px;letter-spacing:1.2px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#1f8a4c" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#1f8a4c"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#1f8a4c"></rect> </svg>测试标题</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > compare:column-card 1`] = `

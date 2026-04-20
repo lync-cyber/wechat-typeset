@@ -204,6 +204,12 @@ export type AdmonitionVariantId =
   | 'minimal-underline'
   // 终端窗口：顶部三色圆点条 + 单色字号小的正文
   | 'terminal'
+  // 左 2px 虚线（"附注"铅笔感，tech-geek // NOTE）
+  | 'dashed-border'
+  // 左 4px 双线（"交叉引用"manpage/RFC，tech-geek // REF）
+  | 'double-border'
+  // 上下各一根 1px 实线（"勘误贴条"，tech-geek // PITFALL）
+  | 'top-bottom-rule'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -291,6 +297,9 @@ export const VARIANT_IDS = {
     'card-shadow',
     'minimal-underline',
     'terminal',
+    'dashed-border',
+    'double-border',
+    'top-bottom-rule',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',

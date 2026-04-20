@@ -13,6 +13,9 @@ import { ticketNotch } from './ticket-notch'
 import { cardShadow } from './card-shadow'
 import { minimalUnderline } from './minimal-underline'
 import { terminal } from './terminal'
+import { dashedBorder } from './dashed-border'
+import { doubleBorder } from './double-border'
+import { topBottomRule } from './top-bottom-rule'
 
 export const ADMONITION_VARIANTS: Record<AdmonitionVariantId, AdmonitionVariant> = {
   'accent-bar': accentBar,
@@ -21,4 +24,7 @@ export const ADMONITION_VARIANTS: Record<AdmonitionVariantId, AdmonitionVariant>
   'card-shadow': cardShadow,
   'minimal-underline': minimalUnderline,
   terminal,
+  'dashed-border': dashedBorder,
+  'double-border': doubleBorder,
+  'top-bottom-rule': topBottomRule,
 }
