@@ -103,6 +103,43 @@ export const thumb = {
       `<rect x="12" y="42" width="46" height="2" fill="#9ca3af"/>` +
       `<rect x="12" y="50" width="28" height="2" fill="#9ca3af"/>`,
     ),
+  // dashed-border：左 2px 虚线 + soft 底（tech-geek tip `// NOTE` 签名）
+  dashedBorder: (a: ThumbArgs = {}) => {
+    const { accent, soft } = merge(a)
+    return svg(
+      `<rect x="6" y="14" width="63" height="47" rx="3" fill="${soft}"/>` +
+      `<line x1="7" y1="15" x2="7" y2="60" stroke="${accent}" stroke-width="2" stroke-dasharray="3 2"/>` +
+      `<rect x="16" y="22" width="30" height="3" fill="${accent}"/>` +
+      `<rect x="16" y="32" width="46" height="2" fill="#c0c6cf"/>` +
+      `<rect x="16" y="39" width="40" height="2" fill="#c0c6cf"/>` +
+      `<rect x="16" y="46" width="32" height="2" fill="#c0c6cf"/>`,
+    )
+  },
+  // double-border：左 4px 双线 + 透明底（tech-geek info `// REF` 签名）
+  doubleBorder: (a: ThumbArgs = {}) => {
+    const { accent } = merge(a)
+    return svg(
+      `<rect x="5" y="14" width="2" height="47" fill="${accent}"/>` +
+      `<rect x="9" y="14" width="2" height="47" fill="${accent}"/>` +
+      `<rect x="18" y="22" width="30" height="3" fill="${accent}"/>` +
+      `<rect x="18" y="32" width="46" height="2" fill="#c0c6cf"/>` +
+      `<rect x="18" y="39" width="40" height="2" fill="#c0c6cf"/>` +
+      `<rect x="18" y="46" width="32" height="2" fill="#c0c6cf"/>`,
+    )
+  },
+  // top-bottom-rule：上下各 1px 实线 + soft 底（tech-geek danger `// PITFALL` 签名）
+  topBottomRule: (a: ThumbArgs = {}) => {
+    const { accent, soft } = merge(a)
+    return svg(
+      `<rect x="6" y="16" width="63" height="43" fill="${soft}"/>` +
+      `<rect x="6" y="16" width="63" height="1.5" fill="${accent}"/>` +
+      `<rect x="6" y="57.5" width="63" height="1.5" fill="${accent}"/>` +
+      `<rect x="14" y="24" width="30" height="3" fill="${accent}"/>` +
+      `<rect x="14" y="34" width="46" height="2" fill="#c0c6cf"/>` +
+      `<rect x="14" y="42" width="38" height="2" fill="#c0c6cf"/>` +
+      `<rect x="14" y="50" width="32" height="2" fill="#c0c6cf"/>`,
+    )
+  },
   quoteClassic: (a: ThumbArgs = {}) => {
     const { accent, soft } = merge(a)
     return svg(

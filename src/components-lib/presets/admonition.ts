@@ -140,4 +140,43 @@ export const admonitionPresets: ComponentEntry[] = [
       '::: info $ deploy.sh variant=terminal\n2026-04-19 success\n:::\n',
     thumbnailSvg: thumb.terminal(),
   },
+
+  // ───── dashed-border（左虚线，tech-geek `// NOTE`）
+  {
+    id: 'ad-tip-dashed-border',
+    name: '虚线框 Tip',
+    description: '左 2px 虚线 + 浅底，工程写作"附注"感',
+    kind: 'admonition',
+    variantId: 'dashed-border',
+    themeCompat: ['tech-geek'],
+    markdownSnippet:
+      '::: tip // NOTE variant=dashed-border\n这是一条工程附注。\n:::\n',
+    thumbnailSvg: thumb.dashedBorder({ accent: '#a8c08a', soft: '#1e1f16' }),
+  },
+
+  // ───── double-border（左双线，tech-geek `// REF`）
+  {
+    id: 'ad-info-double-border',
+    name: '双线框 Info',
+    description: '左 4px 双线 + 透明底，"交叉引用"manpage 风',
+    kind: 'admonition',
+    variantId: 'double-border',
+    themeCompat: ['tech-geek'],
+    markdownSnippet:
+      '::: info // REF §2.3 variant=double-border\n参见另一节。\n:::\n',
+    thumbnailSvg: thumb.doubleBorder({ accent: '#7a9cb8' }),
+  },
+
+  // ───── top-bottom-rule（上下双线，tech-geek `// PITFALL`）
+  {
+    id: 'ad-danger-top-bottom-rule',
+    name: '上下线 Danger',
+    description: '顶底 1px 实线，像报纸 errata 勘误条',
+    kind: 'admonition',
+    variantId: 'top-bottom-rule',
+    themeCompat: ['tech-geek'],
+    markdownSnippet:
+      '::: danger // PITFALL variant=top-bottom-rule\n这是一个典型陷阱。\n:::\n',
+    thumbnailSvg: thumb.topBottomRule({ accent: '#c85a3a', soft: '#1f1612' }),
+  },
 ]
