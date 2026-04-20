@@ -10,6 +10,8 @@
 
 <sub>（截图待补：左栏 CodeMirror 暗底编辑区 + 右栏 375 px 预览 iframe，顶栏为主题选择器与「一键复制」。）</sub>
 
+**🧩 即插即用的 LLM 技能**——仓库内 [`skills/wechat-typeset/`](skills/wechat-typeset/) 是一份可直接挂载到 Claude / 其它 Agent 的 skill 包：命中"公众号""微信排版"等信号自动启用，喂 LLM 一份 `PersonaSpec` JSON Schema 让它**生成主题**，再由 `validatePersona` 把违反微信约束的输出挡回去修订。
+
 ---
 
 ## 为什么存在这个工具
@@ -120,6 +122,16 @@ src/
 ├── storage/                  # localStorage 草稿层，本地 only
 └── samples/                  # sample-full.md 端到端验收样本
 ```
+
+## 作为 LLM 技能（Agent Skill）
+
+`skills/wechat-typeset/` 是一份独立的 Claude Code / Agent SDK skill 包。接入后，Agent 在遇到"把这篇 Markdown 发公众号""给财经稿挑套主题""为这个话题造一套人设"之类诉求时会自动装载，拿到：
+
+- **9 套内置人格**的摘要 + 完整 `PersonaSpec`（`listPersonas()` / `getPersona(id)`）
+- **`PersonaSpec` 的 JSON Schema**（`getSchema()`），直接塞进结构化输出约束
+- **`validatePersona(spec)`**——返回 `{ path, message, severity }` 列表，LLM 按反馈改写一轮就能拿到一份稳定粘贴的 spec
+
+参考文档在 `skills/wechat-typeset/references/`：`api.md` / `hard-rules.md` / `motif-ast.md` / `personas.md`——都是压缩给 LLM 吃的密度写法。想自己集成而非挂 skill，直接从 `src/public` 导入同一套符号即可，见 [docs/theme-authoring.md](docs/theme-authoring.md#公共-api给外部集成方)。
 
 ## 贡献与扩展
 
