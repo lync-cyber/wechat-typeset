@@ -35,7 +35,7 @@ export const ticketNotch = defineAdmonition('ticket-notch', (ctx, { kind }) => {
       `font-weight:700;` +
       `letter-spacing:1px;` +
       `text-transform:uppercase;` +
-      `font-size:13px;` +
+      `font-size:14px;` +
       `margin-bottom:8px`,
     svgSlot: `<section style="text-align:center;margin-bottom:4px">${dot(pair.accent)}${dot(pair.accent)}${dot(pair.accent)}</section>`,
   }

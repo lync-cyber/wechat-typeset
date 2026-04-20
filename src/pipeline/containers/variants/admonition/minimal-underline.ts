@@ -19,11 +19,12 @@ export const minimalUnderline: AdmonitionVariant = {
         `border-left:2px solid ${pair.accent}`,
       titleCSS:
         `display:inline-block;` +
+        `font-size:14px;` +
         `color:${pair.accent};` +
         `font-weight:700;` +
-        `padding-bottom:4px;` +
-        `border-bottom:2px solid ${pair.accent};` +
-        `margin-bottom:10px;` +
+        `padding-bottom:2px;` +
+        `border-bottom:1px solid ${pair.accent};` +
+        `margin-bottom:8px;` +
         `letter-spacing:0.5px`,
     }
   },

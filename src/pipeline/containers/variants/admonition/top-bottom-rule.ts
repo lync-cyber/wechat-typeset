@@ -30,6 +30,6 @@ export const topBottomRule = defineAdmonition('top-bottom-rule', (ctx, { kind })
       `padding:14px ${padX}px;` +
       `margin:18px 0`,
     titleCSS:
-      `font-weight:600;color:${pair.accent};margin-bottom:8px;letter-spacing:1.2px`,
+      `font-size:14px;font-weight:600;color:${pair.accent};margin-bottom:8px;letter-spacing:1.2px`,
   }
 })

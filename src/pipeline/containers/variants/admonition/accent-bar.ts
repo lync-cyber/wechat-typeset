@@ -22,7 +22,7 @@ export const accentBar: AdmonitionVariant = {
         `padding:${padY}px ${padX}px;` +
         `border-radius:0 ${radius}px ${radius}px 0;` +
         `margin:16px 0`,
-      titleCSS: `font-weight:700;color:${pair.accent};margin-bottom:6px;letter-spacing:0.3px`,
+      titleCSS: `font-size:14px;font-weight:700;color:${pair.accent};margin-bottom:6px;letter-spacing:0.3px`,
     }
   },
 }

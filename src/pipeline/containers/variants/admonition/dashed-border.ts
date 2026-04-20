@@ -28,6 +28,6 @@ export const dashedBorder = defineAdmonition('dashed-border', (ctx, { kind }) =>
       `border-radius:0 ${radius}px ${radius}px 0;` +
       `margin:16px 0`,
     titleCSS:
-      `font-weight:600;color:${pair.accent};margin-bottom:6px;letter-spacing:1px`,
+      `font-size:14px;font-weight:600;color:${pair.accent};margin-bottom:6px;letter-spacing:1px`,
   }
 })

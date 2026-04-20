@@ -29,6 +29,6 @@ export const doubleBorder = defineAdmonition('double-border', (ctx, { kind }) =>
       `padding:${padY}px ${padX}px;` +
       `margin:16px 0`,
     titleCSS:
-      `font-weight:600;color:${pair.accent};margin-bottom:6px;letter-spacing:1px`,
+      `font-size:14px;font-weight:600;color:${pair.accent};margin-bottom:6px;letter-spacing:1px`,
   }
 })
