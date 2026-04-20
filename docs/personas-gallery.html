@@ -1,0 +1,1746 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Personas Gallery · wechat-typeset</title>
+<link rel="stylesheet" href="../src/ui/tokens.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap">
+<style>
+/* ===== Page chrome ===== */
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+body {
+  font-family: var(--font-text);
+  font-size: var(--fs-15);
+  line-height: var(--lh-normal);
+  font-feature-settings: "kern", "calt", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+* { box-sizing: border-box; }
+.num, code, kbd, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums lining-nums; }
+
+.page { max-width: 1240px; margin: 0 auto; padding: 0 var(--sp-8) var(--sp-10); }
+
+/* Masthead */
+.mast { padding: var(--sp-10) 0 var(--sp-7); border-bottom: 1px solid var(--border); position: relative; }
+.mast::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 4px;
+  background-image:
+    linear-gradient(to right, var(--proof-500) 1px, transparent 1px),
+    linear-gradient(to right, var(--paper-400) 1px, transparent 1px);
+  background-size: 48px 4px, 8px 4px;
+  background-position: 0 bottom, 0 bottom;
+  background-repeat: repeat-x;
+}
+.mast-row { display: flex; align-items: baseline; gap: var(--sp-5); flex-wrap: wrap; }
+.brand {
+  font-family: var(--font-display);
+  font-size: var(--fs-38);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-display);
+  font-weight: var(--fw-bold);
+  color: var(--text);
+}
+.brand .tmark { color: var(--accent); }
+.mast-sub {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+.lead {
+  max-width: 780px;
+  margin-top: var(--sp-5);
+  font-size: var(--fs-17);
+  line-height: var(--lh-snug);
+  color: var(--text-muted);
+}
+
+/* Anchor bar */
+.anchor-bar {
+  margin: var(--sp-7) 0 var(--sp-6);
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.anchor-chip {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-kicker);
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  text-decoration: none;
+  background: var(--surface);
+}
+.anchor-chip:hover { border-color: var(--accent); color: var(--accent); }
+.anchor-chip .num { color: var(--text-subtle); margin-right: 6px; }
+
+/* Hue strip */
+.hue-strip {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0;
+  margin-bottom: var(--sp-8);
+  border: 1px solid var(--border);
+}
+.hue-cell {
+  min-height: 64px;
+  padding: 10px 10px 8px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.25;
+}
+.hue-cell:last-child { border-right: none; }
+.hue-cell .hue-name { font-weight: 600; letter-spacing: 0.05em; }
+.hue-cell .hue-hex { opacity: 0.75; }
+.hue-cell.light-fg { color: #fefefe; }
+.hue-cell.dark-fg { color: #14110d; }
+
+/* ===== Persona card skeleton ===== */
+.persona-card {
+  background: var(--p-bg);
+  color: var(--p-text);
+  border: 1px solid var(--p-border);
+  padding: 32px 36px 40px;
+  margin: 0 0 48px;
+  border-radius: 2px;
+  position: relative;
+}
+.persona-card a { color: inherit; }
+
+/* Card head */
+.card-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px 20px;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--p-border);
+}
+.card-idx {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--p-text-muted);
+  padding: 4px 8px;
+  border: 1px solid var(--p-border);
+  align-self: start;
+  white-space: nowrap;
+}
+.card-title-row { display: flex; flex-direction: column; gap: 6px; }
+.card-zh {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--p-text);
+  letter-spacing: 0.02em;
+}
+.card-slug {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--p-text-muted);
+  text-transform: lowercase;
+}
+.card-tagline {
+  grid-column: 1 / -1;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--p-text);
+  margin-top: 4px;
+}
+.card-coords {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin-top: 4px;
+}
+.coord-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--p-text-muted);
+}
+.coord-row .coord-kicker {
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.coord-row.accept .coord-kicker { color: var(--p-primary); }
+.coord-row.reject .coord-kicker { color: #a83420; }
+
+/* Section label (inside each persona card) */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--p-text-muted);
+  margin: 26px 0 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before {
+  content: "§§"; color: var(--p-primary); font-weight: 600;
+}
+
+/* Swatch grid */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1px;
+  background: var(--p-border);
+  border: 1px solid var(--p-border);
+  margin-bottom: 12px;
+}
+.swatch {
+  background: var(--p-bg);
+  padding: 0;
+  display: flex; flex-direction: column;
+}
+.swatch-chip {
+  height: 44px;
+  border-bottom: 1px solid var(--p-border);
+}
+.swatch-meta {
+  padding: 6px 8px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.35;
+  background: var(--p-bg);
+}
+.swatch-meta b { display: block; font-size: 11px; color: var(--p-text); font-weight: 600; }
+.swatch-meta span { color: var(--p-text-muted); letter-spacing: 0.02em; }
+
+/* Semantic swatch pairs */
+.sem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+.sem-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--p-border);
+}
+.sem-side {
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.35;
+  min-height: 52px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.sem-side b { font-size: 11px; font-weight: 600; }
+.sem-wrap {
+  grid-column: 1 / -1;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--p-text-muted);
+  background: var(--p-bg);
+  border-top: 1px solid var(--p-border);
+  display: flex; justify-content: space-between;
+}
+
+/* Type sample stack */
+.type-stack > div {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--p-border);
+}
+.type-stack > div:last-child { border-bottom: none; }
+.type-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--p-text-muted);
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+
+/* Motif grid */
+.motif-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.motif-tile {
+  border: 1px solid var(--p-border);
+  background: var(--p-bg);
+  padding: 14px;
+  min-height: 120px;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  gap: 10px;
+}
+.motif-svg-box {
+  width: 80px; height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--p-primary);
+}
+.motif-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--p-text-muted);
+  text-align: center;
+  line-height: 1.35;
+}
+
+/* Container preview grid */
+.container-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.container-tile {
+  border: 1px solid var(--p-border);
+  background: var(--p-bg);
+  padding: 12px 14px 14px;
+  display: flex; flex-direction: column;
+  min-height: 140px;
+}
+.container-tile .c-body {
+  flex: 1;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.container-tile .c-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--p-text-muted);
+  border-top: 1px dashed var(--p-border);
+  padding-top: 8px;
+}
+
+/* Anti-pattern */
+.anti-pattern {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-left: 3px solid #a83420;
+  background: rgba(168, 52, 32, 0.05);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--p-text);
+}
+.anti-pattern .ap-kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #a83420;
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* Footer */
+.foot {
+  padding: var(--sp-8) 0 var(--sp-4);
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-wide);
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  display: flex; justify-content: space-between;
+}
+
+/* Persona-scoped typographic helpers — real samples */
+.ts-h1, .ts-h2, .ts-h3, .ts-p, .ts-quote { margin: 0; padding: 0; }
+
+/* Mini admonition shapes used inside container-tile */
+.ad-accent-bar { border-left: 3px solid var(--p-primary); padding: 6px 10px; background: rgba(0,0,0,0.03); }
+.ad-frame { border: 1px solid var(--p-primary); padding: 6px 10px; }
+.ad-dashed { border: 1px dashed var(--p-border); padding: 6px 10px; }
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ============================================================
+       Masthead
+  ============================================================= -->
+  <header class="mast">
+    <div class="mast-row">
+      <div class="brand">Personas Gallery<span class="tmark"> ·</span> wechat-typeset</div>
+      <div class="mast-sub">09 Personas &middot; v2 &middot; 2026-04</div>
+    </div>
+    <p class="lead">
+      九张卡片，九种内容人格。每张卡不是"换一套颜色叫新主题"的皮肤——是一次被写死的编辑部气质承诺：
+      底色、字距、装饰母题、容器语汇全部共同服役一条立场线。翻一遍就能分辨：
+      这张出自研究所内参，那张出自周二早晨的 newsletter；这张是凌晨 3 点的 manpage，那张是杂志特稿的肖像页。
+      落到 default 的兜底位不该像被迫接受，落到任何 committed 主题不该像换了张贴纸。
+    </p>
+  </header>
+
+  <!-- ============================================================
+       Anchor bar
+  ============================================================= -->
+  <nav class="anchor-bar">
+    <a class="anchor-chip" href="#persona-default"><span class="num">01</span>Default</a>
+    <a class="anchor-chip" href="#persona-tech-geek"><span class="num">02</span>Tech Geek</a>
+    <a class="anchor-chip" href="#persona-literary-humanism"><span class="num">03</span>Literary</a>
+    <a class="anchor-chip" href="#persona-life-aesthetic"><span class="num">04</span>Life</a>
+    <a class="anchor-chip" href="#persona-business-finance"><span class="num">05</span>Business</a>
+    <a class="anchor-chip" href="#persona-industry-observer"><span class="num">06</span>Industry</a>
+    <a class="anchor-chip" href="#persona-academic-frontier"><span class="num">07</span>Academic</a>
+    <a class="anchor-chip" href="#persona-people-story"><span class="num">08</span>People</a>
+    <a class="anchor-chip" href="#persona-tech-explainer"><span class="num">09</span>Tech Explainer</a>
+  </nav>
+
+  <!-- ============================================================
+       Hue strip · 9 primary colors横排
+  ============================================================= -->
+  <div class="hue-strip">
+    <div class="hue-cell light-fg" style="background:#2558b0">
+      <div class="hue-name">Default</div>
+      <div class="hue-hex">#2558b0 · 编辑蓝</div>
+    </div>
+    <div class="hue-cell dark-fg" style="background:#d4a65a">
+      <div class="hue-name">Tech Geek</div>
+      <div class="hue-hex">#d4a65a · VT220 琥珀</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#5a4a3a">
+      <div class="hue-name">Literary</div>
+      <div class="hue-hex">#5a4a3a · 宋椠褐</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#9c6b4f">
+      <div class="hue-name">Life</div>
+      <div class="hue-hex">#9c6b4f · 陶土褐</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#2a1a14">
+      <div class="hue-name">Business</div>
+      <div class="hue-hex">#2a1a14 · 深栗墨</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#24364f">
+      <div class="hue-name">Industry</div>
+      <div class="hue-hex">#24364f · 深墨蓝</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#1e2c4a">
+      <div class="hue-name">Academic</div>
+      <div class="hue-hex">#1e2c4a · 正刊深靛</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#1b2330">
+      <div class="hue-name">People</div>
+      <div class="hue-hex">#1b2330 · 深墨靛</div>
+    </div>
+    <div class="hue-cell light-fg" style="background:#0066cc">
+      <div class="hue-name">Tech Explainer</div>
+      <div class="hue-hex">#0066cc · 文档蓝</div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       Persona cards · 9 sections
+  ============================================================= -->
+
+  <!-- PERSONA_CARD:default START -->
+  <section id="persona-default" class="persona-card" data-persona="default" style="
+    --p-bg:#fdfdfc;
+    --p-bg-soft:#f5f5f3;
+    --p-bg-muted:#eceae4;
+    --p-text:#1c1f24;
+    --p-text-muted:#636870;
+    --p-primary:#2558b0;
+    --p-secondary:#8a8f98;
+    --p-accent:#2558b0;
+    --p-border:#d8d8d4;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">01 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">出厂中立</div>
+        <div class="card-slug">default</div>
+      </div>
+      <p class="card-tagline">
+        有意识的中立——不是没有主张，而是对所有题材保持公平。committed 主题做加法，default 做减法：一条一条地主动放弃七套签名动作。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>Medium / Notion / Substack 未定制 / MDN Web Docs / Apple HIG / 《读者》《南方周末》</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>Bootstrap 鲜蓝 · Word 默认样式 · 七套已占气质语汇 · emoji · 渐变阴影 · 大圆角</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 色板</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#fdfdfc;border-bottom:1px solid #d8d8d4"></div><div class="swatch-meta"><b>bg</b><span>微暖白 #fdfdfc</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#f5f5f3"></div><div class="swatch-meta"><b>bgSoft</b><span>浅灰米 #f5f5f3</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#eceae4"></div><div class="swatch-meta"><b>bgMuted</b><span>深浅灰米 #eceae4</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1c1f24"></div><div class="swatch-meta"><b>text</b><span>中性墨 #1c1f24</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#636870"></div><div class="swatch-meta"><b>textMuted</b><span>中性灰 #636870</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#2558b0"></div><div class="swatch-meta"><b>primary</b><span>编辑蓝 #2558b0</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#8a8f98"></div><div class="swatch-meta"><b>secondary</b><span>中性石墨 #8a8f98</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#2558b0"></div><div class="swatch-meta"><b>accent</b><span>= primary #2558b0</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d8d8d4"></div><div class="swatch-meta"><b>border</b><span>细线灰 #d8d8d4</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · 语义四态</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#1f8a4c;color:#fefefe"><b>tip</b><span>#1f8a4c</span></div>
+        <div class="sem-side" style="background:#eef6ef;color:#1f8a4c"><b>soft</b><span>#eef6ef</span></div>
+        <div class="sem-wrap"><span>提示 · AA 4.9:1</span><span>on bg</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#2558b0;color:#fefefe"><b>info</b><span>#2558b0</span></div>
+        <div class="sem-side" style="background:#eef2f9;color:#2558b0"><b>soft</b><span>#eef2f9</span></div>
+        <div class="sem-wrap"><span>信息 · AA 8.2:1</span><span>= primary</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#9a6b1a;color:#fefefe"><b>warning</b><span>#9a6b1a</span></div>
+        <div class="sem-side" style="background:#f7f0df;color:#9a6b1a"><b>soft</b><span>#f7f0df</span></div>
+        <div class="sem-wrap"><span>注意 · AA 5.1:1</span><span>on bg</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#b42318;color:#fefefe"><b>danger</b><span>#b42318</span></div>
+        <div class="sem-side" style="background:#fbecea;color:#b42318"><b>soft</b><span>#fbecea</span></div>
+        <div class="sem-wrap"><span>危险 · AA 5.6:1</span><span>on bg</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · 字体节奏</div>
+    <div class="type-stack">
+      <div>
+        <div class="ts-h1" style="font-size:22px;font-weight:700;letter-spacing:0.3px;line-height:1.45;color:var(--p-text)">一份被认真排过的稿子</div>
+        <div class="type-meta mono">h1 · 22 / 700 / ls-0.3 / lh-1.45 / text</div>
+      </div>
+      <div>
+        <div class="ts-h2" style="font-size:19px;font-weight:700;letter-spacing:0.3px;line-height:1.5;color:var(--p-text)">章节没有签名动作</div>
+        <div class="type-meta mono">h2 · 19 / 700 / ls-0.3 / lh-1.5 / text</div>
+      </div>
+      <div>
+        <div class="ts-h3" style="font-size:16px;font-weight:700;letter-spacing:0.2px;line-height:1.55;color:var(--p-text)">小节与正文同号</div>
+        <div class="type-meta mono">h3 · 16 / 700 / ls-0.2 / lh-1.55 / text</div>
+      </div>
+      <div>
+        <div class="ts-p" style="font-size:15px;font-weight:400;letter-spacing:0.3px;line-height:1.75;color:var(--p-text)">
+          正文行高 1.75 是 Notion 默认的中位值。字距 0.3px——比 tech-geek 的等宽字距窄、比 literary 的 1px 书斋字距窄。段间 18px margin，不做首行缩进。
+        </div>
+        <div class="type-meta mono">p · 15 / 400 / ls-0.3 / lh-1.75 / text</div>
+      </div>
+      <div>
+        <div class="ts-quote" style="font-size:17px;font-weight:500;letter-spacing:0.3px;line-height:1.7;color:var(--p-text);padding-left:14px;border-left:3px solid #2558b0;">
+          刻意压到几乎不 "pull"——只比正文大 2px、重一档。default 的引用不做大字号戏剧化。
+        </div>
+        <div class="type-meta mono">pull-quote · 17 / 500 / ls-0.3 / lh-1.7 / text</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · 签名母题</div>
+    <div class="motif-grid">
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="6" height="40" viewBox="0 0 3 20"><rect x="0" y="0" width="3" height="20" fill="#2558b0"/></svg></div>
+        <div class="motif-label">h2Prefix · 单竖条</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="12" viewBox="0 0 240 12"><path d="M0 6 Q 30 0 60 6 T 120 6 T 180 6 T 240 6" fill="none" stroke="#d8d8d4" stroke-width="1.2"/></svg></div>
+        <div class="motif-label">dividerWave</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="8" viewBox="0 0 240 8"><circle cx="96" cy="4" r="2" fill="#d8d8d4"/><circle cx="120" cy="4" r="2" fill="#d8d8d4"/><circle cx="144" cy="4" r="2" fill="#d8d8d4"/></svg></div>
+        <div class="motif-label">dividerDots · 3 点</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2558b0"/><text x="12" y="16" text-anchor="middle" font-size="14" font-weight="700" fill="#fefefe">1</text></svg></div>
+        <div class="motif-label">stepBadge · 圆徽</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · 六件容器</div>
+    <div class="container-grid">
+      <div class="container-tile">
+        <div class="c-body" style="background:#f5f5f3;padding:10px 12px;border-radius:6px;color:#636870">
+          <div style="font-size:12px;color:#1c1f24;margin-bottom:4px">一份被认真排过的稿子</div>
+          <div style="font-size:11px">出厂中立 · 一张图 + 一行标题 + 一行作者——封面结束。</div>
+        </div>
+        <div class="c-label">Cover · 封面</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body">
+          <div style="font-size:14px;font-weight:700;padding-bottom:4px;border-bottom:2px solid #2558b0;display:inline-block">章节标题</div>
+          <div style="font-size:12px;color:#636870;margin-top:6px">bordered variant · 不编号、不加前缀</div>
+        </div>
+        <div class="c-label">SectionTitle · 章节</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="background:#f5f5f3;padding:12px 14px;border-left:3px solid #2558b0;border-radius:0 4px 4px 0">
+          <div style="font-size:14px;font-weight:500;text-align:center;color:#1c1f24">中立不是没有主张，是对所有题材保持公平。</div>
+          <div style="font-size:11px;color:#636870;text-align:right;margin-top:6px">——编辑部自述</div>
+        </div>
+        <div class="c-label">QuoteCard · 引用卡</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body ad-accent-bar" style="border-left-color:#1f8a4c;background:#eef6ef">
+          <div style="font-size:12px;font-weight:700;color:#1f8a4c">提示</div>
+          <div style="font-size:12px;color:#1c1f24;margin-top:2px">左 3px 色条 + 浅底——tip 绿</div>
+        </div>
+        <div class="c-label">Tip · 提示（accent-bar）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body">
+          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2558b0"/><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="#fefefe">1</text></svg><div style="font-size:12px"><b>第一步</b><br/><span style="color:#636870">数字圆圈 + 文字纵向堆叠</span></div></div>
+          <div style="display:flex;gap:8px;align-items:flex-start"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#2558b0"/><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="#fefefe">2</text></svg><div style="font-size:12px"><b>第二步</b><br/><span style="color:#636870">不做 ribbon 不做 timeline</span></div></div>
+        </div>
+        <div class="c-label">Steps · 步骤（number-circle）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="display:flex;align-items:center;justify-content:center;padding:20px 0">
+          <svg width="100%" height="12" viewBox="0 0 240 12" preserveAspectRatio="none"><line x1="0" y1="6" x2="240" y2="6" stroke="#d8d8d4" stroke-width="1"/></svg>
+        </div>
+        <div class="c-label">Divider · 分割（rule）</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern">
+      <span class="ap-kicker">✕ Anti-pattern</span>
+      不自觉借 Bootstrap 鲜蓝变成"企业官网文档"；加 emoji 💡⚠️ 把版面拉到小红书；用纯黑 #333 和黑边框表格做成 Word 粘贴感——default 的每一处克制都是训练出来的，不是懒出来的。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:default END -->
+
+  <!-- PERSONA_CARD:tech-geek START -->
+  <section id="persona-tech-geek" class="persona-card" data-persona="tech-geek" style="
+    --p-bg:#14110d;
+    --p-bg-soft:#1e1a14;
+    --p-bg-muted:#2a241c;
+    --p-text:#e6d9c2;
+    --p-text-muted:#8c8272;
+    --p-primary:#d4a65a;
+    --p-secondary:#8a7a54;
+    --p-accent:#e06a28;
+    --p-border:#3a3228;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">02 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">工程师写作</div>
+        <div class="card-slug">tech-geek</div>
+      </div>
+      <p class="card-tagline">
+        不是"程序员皮肤"，是写了二十年系统代码的工程师在 manpage 纪律下写事故复盘。墨炭暖底 + VT220 琥珀 + HN 橙，远离 neon，走进 amber。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>Plan 9 manpage · Phrack zine · ACM Queue · Dan Luu · Knuth TAOCP · Fabien Sanglard</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>VSCode Dracula / One Dark / Monokai · Tron 霓虹 · CRT scanline · 🚀💻⚡ emoji · 四色警报灯</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 色板（墨炭 + 琥珀 + HN 橙）</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#14110d"></div><div class="swatch-meta"><b>bg</b><span>墨炭底 #14110d</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1e1a14"></div><div class="swatch-meta"><b>bgSoft</b><span>炉火暗 #1e1a14</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#2a241c"></div><div class="swatch-meta"><b>bgMuted</b><span>旧纸炭 #2a241c</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#e6d9c2"></div><div class="swatch-meta"><b>text</b><span>羊皮黄 #e6d9c2</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#8c8272"></div><div class="swatch-meta"><b>textMuted</b><span>雾色批注 #8c8272</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d4a65a"></div><div class="swatch-meta"><b>primary</b><span>VT220 琥珀 #d4a65a</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#8a7a54"></div><div class="swatch-meta"><b>secondary</b><span>旧铜灰 #8a7a54</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#e06a28"></div><div class="swatch-meta"><b>accent</b><span>HN 橙 #e06a28</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#3a3228"></div><div class="swatch-meta"><b>border</b><span>边栏线 #3a3228</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · 琥珀家族四态</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#a8c08a;color:#14110d"><b>tip</b><span>#a8c08a</span></div>
+        <div class="sem-side" style="background:#1e1f16;color:#a8c08a"><b>soft</b><span>#1e1f16</span></div>
+        <div class="sem-wrap"><span>// NOTE · 9.4:1</span><span>on 墨炭</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#d4a65a;color:#14110d"><b>warn</b><span>#d4a65a</span></div>
+        <div class="sem-side" style="background:#1e1a14;color:#d4a65a"><b>soft</b><span>#1e1a14</span></div>
+        <div class="sem-wrap"><span>// CAVEAT · 9.0:1</span><span>= primary</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#7a9cb8;color:#14110d"><b>info</b><span>#7a9cb8</span></div>
+        <div class="sem-side" style="background:#161b1f;color:#7a9cb8"><b>soft</b><span>#161b1f</span></div>
+        <div class="sem-wrap"><span>// REF · 7.6:1</span><span>on 墨炭</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#c85a3a;color:#14110d"><b>danger</b><span>#c85a3a</span></div>
+        <div class="sem-side" style="background:#1f1612;color:#c85a3a"><b>soft</b><span>#1f1612</span></div>
+        <div class="sem-wrap"><span>// PITFALL · 6.3:1</span><span>on 墨炭</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · 深底字重补偿</div>
+    <div class="type-stack">
+      <div>
+        <div style="font-size:25px;font-weight:600;letter-spacing:2px;line-height:1.4;color:#e6d9c2">§ I. 事故复盘：etcd 的那一夜</div>
+        <div class="type-meta mono" style="color:#8c8272">h1 · 25 / 600 / ls-2 / lh-1.4 / 羊皮黄</div>
+      </div>
+      <div>
+        <div style="font-size:19px;font-weight:600;letter-spacing:1.5px;line-height:1.5;color:#e6d9c2">II. Leader 选举的 split-brain</div>
+        <div class="type-meta mono" style="color:#8c8272">h2 · 19 / 600 / ls-1.5 / lh-1.5 / 罗马章号</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:500;letter-spacing:0.6px;line-height:1.85;color:#e6d9c2">
+          凌晨 3:14，监控告警。<span style="color:#d4a65a;letter-spacing:0.8px">raft_proposal_failed_total</span> 每秒 4000+。这不是写坏的代码，是时钟漂移撞上了 <span style="color:#d4a65a">heartbeat-interval</span>。<sup style="color:#e06a28;font-weight:500">[1]</sup>
+        </div>
+        <div class="type-meta mono" style="color:#8c8272">p · 15 / 500 / ls-0.6 / lh-1.85 · inline code 同色琥珀一笔</div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;letter-spacing:0;line-height:1.7;color:#e6d9c2;background:#1e1a14;padding:10px 14px;border-radius:2px;font-family:var(--font-mono)">
+<span style="color:#d4a65a">$</span> etcdctl endpoint status --cluster -w table<br/>
+<span style="color:#8c8272">// CAVEAT</span> 节点时钟漂移超 500ms
+        </div>
+        <div class="type-meta mono" style="color:#8c8272">pre · 13 / 500 / 同家族深底，不外加 border-left</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · manpage 印刷符</div>
+    <div class="motif-grid">
+      <div class="motif-tile" style="background:#1e1a14;border-color:#3a3228">
+        <div class="motif-svg-box" style="color:#d4a65a"><svg width="64" height="40" viewBox="0 0 80 40"><text x="8" y="28" font-size="22" font-weight="600" fill="#d4a65a" style="font-family:serif">§ II.</text></svg></div>
+        <div class="motif-label" style="color:#8c8272">h2Prefix · 罗马章号</div>
+      </div>
+      <div class="motif-tile" style="background:#1e1a14;border-color:#3a3228">
+        <div class="motif-svg-box" style="color:#d4a65a"><svg width="80" height="14" viewBox="0 0 240 14"><text x="4" y="11" font-size="12" fill="#d4a65a">§</text><line x1="18" y1="7" x2="222" y2="7" stroke="#3a3228" stroke-width="1" stroke-dasharray="3 2"/><text x="226" y="11" font-size="12" fill="#d4a65a">§</text></svg></div>
+        <div class="motif-label" style="color:#8c8272">Ruler · manpage 虚横规</div>
+      </div>
+      <div class="motif-tile" style="background:#1e1a14;border-color:#3a3228">
+        <div class="motif-svg-box" style="color:#d4a65a"><svg width="40" height="24" viewBox="0 0 40 24"><text x="4" y="18" font-size="16" font-weight="600" fill="#d4a65a" style="font-family:monospace">[1]</text></svg></div>
+        <div class="motif-label" style="color:#8c8272">stepBadge · 脚注方括号</div>
+      </div>
+      <div class="motif-tile" style="background:#1e1a14;border-color:#3a3228">
+        <div class="motif-svg-box" style="color:#8c8272"><svg width="40" height="24" viewBox="0 0 40 24"><text x="20" y="18" text-anchor="middle" font-size="20" fill="#8c8272">⁂</text></svg></div>
+        <div class="motif-label" style="color:#8c8272">Asterism · 三星号</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · manpage 容器</div>
+    <div class="container-grid">
+      <div class="container-tile" style="background:#14110d;border-color:#3a3228">
+        <div class="c-body" style="color:#e6d9c2;border-top:1px solid #3a3228;border-bottom:1px solid #3a3228;padding:10px 0;font-size:12px">
+          <div style="font-size:10px;letter-spacing:2px;color:#8c8272;margin-bottom:6px">ABSTRACT</div>
+          <span style="color:#8c8272">凌晨三点，一次 etcd leader 选举风暴的复盘。</span>
+        </div>
+        <div class="c-label" style="color:#8c8272;border-top-color:#3a3228">Abstract · 摘要</div>
+      </div>
+      <div class="container-tile" style="background:#14110d;border-color:#3a3228">
+        <div class="c-body" style="color:#e6d9c2;font-size:12px">
+          <div style="border-left:2px dashed #3a3228;padding:6px 10px;background:#1e1f16;color:#e6d9c2">
+            <span style="color:#a8c08a;font-weight:600;letter-spacing:1px">// NOTE</span><br/>
+            raft 的 heartbeat 不是网络包，是时间片。
+          </div>
+        </div>
+        <div class="c-label" style="color:#8c8272;border-top-color:#3a3228">// NOTE · tip（虚线左条）</div>
+      </div>
+      <div class="container-tile" style="background:#14110d;border-color:#3a3228">
+        <div class="c-body" style="color:#e6d9c2;font-size:12px">
+          <div style="border-top:1px solid #c85a3a;border-bottom:1px solid #c85a3a;padding:8px 10px;background:#1f1612">
+            <span style="color:#c85a3a;font-weight:600;letter-spacing:1.2px">// PITFALL [X]</span><br/>
+            不要在生产环境直接 kill -9 etcd leader。
+          </div>
+        </div>
+        <div class="c-label" style="color:#8c8272;border-top-color:#3a3228">// PITFALL · danger（上下双线）</div>
+      </div>
+      <div class="container-tile" style="background:#14110d;border-color:#3a3228">
+        <div class="c-body" style="color:#e6d9c2;font-size:12px">
+          <div style="background:#1e1a14;padding:10px;display:flex;gap:12px">
+            <div><div style="font-size:24px;font-weight:700;color:#d4a65a;letter-spacing:0">4000</div><div style="font-size:10px;color:#8c8272;letter-spacing:1px">proposal/s</div></div>
+            <div style="flex:1;font-size:11px;color:#e6d9c2;line-height:1.5">峰值 raft 提案失败速率，持续 17 分钟。</div>
+          </div>
+        </div>
+        <div class="c-label" style="color:#8c8272;border-top-color:#3a3228">Key Number · 数据 callout</div>
+      </div>
+      <div class="container-tile" style="background:#14110d;border-color:#3a3228">
+        <div class="c-body" style="color:#e6d9c2;font-size:12px;line-height:1.9;font-family:var(--font-mono)">
+          <div><span style="color:#d4a65a;font-weight:600">[1]</span> 检查时钟漂移</div>
+          <div><span style="color:#d4a65a;font-weight:600">[2]</span> 隔离异常节点</div>
+          <div><span style="color:#d4a65a;font-weight:600">[3]</span> 重启 leader；<span style="color:#8c8272">; end.</span></div>
+        </div>
+        <div class="c-label" style="color:#8c8272;border-top-color:#3a3228">Algorithm · 方括号步骤</div>
+      </div>
+      <div class="container-tile" style="background:#14110d;border-color:#3a3228">
+        <div class="c-body" style="color:#8c8272;font-size:11px;letter-spacing:1.5px;padding-top:8px">
+          <div style="margin-bottom:6px">SEE ALSO</div>
+          <div style="border-top:1px dashed #3a3228;padding-top:6px;color:#e6d9c2;font-family:var(--font-mono);font-size:11px">
+            <span style="color:#d4a65a">[1]</span> raft(5) — consensus manual<br/>
+            <span style="color:#d4a65a">[2]</span> Dan Luu, Postmortems (2024)
+          </div>
+        </div>
+        <div class="c-label" style="color:#8c8272;border-top-color:#3a3228">See Also · 参见</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern" style="background:rgba(200,90,58,0.08);border-left-color:#c85a3a;color:#e6d9c2">
+      <span class="ap-kicker" style="color:#c85a3a">✕ Anti-pattern</span>
+      VSCode Dracula 六彩霓虹是 syntax highlighting 调色板搬到正文——等于把读者放进 IDE 截屏里阅读。CRT scanline 是 CRT 的缺陷不是 feature；怀念扫描线的人从未在 CRT 上工作过。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:tech-geek END -->
+
+  <!-- PERSONA_CARD:literary-humanism START -->
+  <section id="persona-literary-humanism" class="persona-card" data-persona="literary-humanism" style="
+    --p-bg:#f4efe3;
+    --p-bg-soft:#ece5d1;
+    --p-bg-muted:#ddd3bb;
+    --p-text:#1f1b14;
+    --p-text-muted:#6b5f4a;
+    --p-primary:#5a4a3a;
+    --p-secondary:#3d4a3d;
+    --p-accent:#9a3b2e;
+    --p-border:#cfc3a8;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">03 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">人文札记</div>
+        <div class="card-slug">literary-humanism</div>
+      </div>
+      <p class="card-tagline">
+        不是"新中式"，是出版物。三联书店的毛边本、中华书局的竖排集、《读库》正文页、岩波文库的奶白封皮——克制、藏锋、留白、纸感。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>三联书店 · 中华书局 · 《读库》 · 岩波文库 · 古籍扉页与版心规制</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>古风茶楼套餐 · 大红大金 · 书法体水印 · 梅兰竹菊 · 圆角 8px · emoji</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 宋椠褐 + 藏经朱</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#f4efe3"></div><div class="swatch-meta"><b>bg</b><span>宣纸米 #f4efe3</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#ece5d1"></div><div class="swatch-meta"><b>bgSoft</b><span>旧纸阴影 #ece5d1</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#ddd3bb"></div><div class="swatch-meta"><b>bgMuted</b><span>装帧衬布 #ddd3bb</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1f1b14"></div><div class="swatch-meta"><b>text</b><span>松烟墨 #1f1b14</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#6b5f4a"></div><div class="swatch-meta"><b>textMuted</b><span>墨灰 #6b5f4a</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#5a4a3a"></div><div class="swatch-meta"><b>primary</b><span>宋椠褐 #5a4a3a</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#3d4a3d"></div><div class="swatch-meta"><b>secondary</b><span>青瓷釉 #3d4a3d</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#9a3b2e"></div><div class="swatch-meta"><b>accent</b><span>藏经朱 #9a3b2e</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#cfc3a8"></div><div class="swatch-meta"><b>border</b><span>版框线 #cfc3a8</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · 批注 / 案语 / 商榷 / 校勘</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#4a6b3e;color:#f4efe3"><b>tip · 批注</b><span>#4a6b3e</span></div>
+        <div class="sem-side" style="background:#e3e8d6;color:#4a6b3e"><b>soft</b><span>#e3e8d6</span></div>
+        <div class="sem-wrap"><span>旁批 · 眉批 · AA 5.1:1</span><span>on 米底</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#3d5a75;color:#f4efe3"><b>info · 案语</b><span>#3d5a75</span></div>
+        <div class="sem-side" style="background:#dce3ec;color:#3d5a75"><b>soft</b><span>#dce3ec</span></div>
+        <div class="sem-wrap"><span>按：编者补注 · 5.4:1</span><span>on 米底</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8a6428;color:#f4efe3"><b>warn · 商榷</b><span>#8a6428</span></div>
+        <div class="sem-side" style="background:#efe3c9;color:#8a6428"><b>soft</b><span>#efe3c9</span></div>
+        <div class="sem-wrap"><span>存疑 · 待考 · AA 4.7:1</span><span>on 米底</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8e3a2d;color:#f4efe3"><b>danger · 校勘</b><span>#8e3a2d</span></div>
+        <div class="sem-side" style="background:#ecd6cf;color:#8e3a2d"><b>soft</b><span>#ecd6cf</span></div>
+        <div class="sem-wrap"><span>异文 · 误植 · AA 5.3:1</span><span>on 米底</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · 大字距 + 2.0 行高（书斋签名）</div>
+    <div class="type-stack">
+      <div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:3px;line-height:1.5;color:#1f1b14;font-family:'Noto Serif SC', serif">释"礼失而求诸野"</div>
+        <div class="type-meta mono">h1 · 26 / 700 / ls-3 / lh-1.5 / text · 古籍大字题签</div>
+      </div>
+      <div>
+        <div style="font-size:19px;font-weight:600;letter-spacing:2px;line-height:1.6;color:#1f1b14;font-family:'Noto Serif SC', serif;border-left:2px solid #5a4a3a;padding-left:10px">一、文本的流传与失散</div>
+        <div class="type-meta mono">h2 · 19 / 600 / ls-2 / lh-1.6 / 单竖条</div>
+      </div>
+      <div>
+        <div style="font-size:16px;font-weight:600;letter-spacing:1.2px;line-height:1.7;color:#1f1b14;font-family:'Noto Serif SC', serif">（一）宋本与元本的分野</div>
+        <div class="type-meta mono">h3 · 16 / 600 / ls-1.2 / lh-1.7 · 与正文同号</div>
+      </div>
+      <div>
+        <div style="font-size:16px;font-weight:400;letter-spacing:1px;line-height:2.0;color:#1f1b14;font-family:'Noto Serif SC', serif">
+          孔子说"礼失而求诸野"，意思并非感叹礼崩乐坏，而是指出文化传承的一个机制——当中心失其礼，边缘反而保存着它的原貌。这句话的重音不在"失"，而在"求"。
+        </div>
+        <div class="type-meta mono">p · 16 / 400 / ls-1 / lh-2.0 / text · 书斋行高</div>
+      </div>
+      <div>
+        <div style="font-size:22px;font-weight:500;letter-spacing:1.5px;line-height:1.8;color:#5a4a3a;font-family:'Noto Serif SC', serif;padding-left:14px">
+          稀缺制造贵气，泛滥只剩廉价。
+        </div>
+        <div class="type-meta mono">pull-quote · 22 / 500 / ls-1.5 / lh-1.8 / primary · 镇纸</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · 云头 · 回纹 · 钤印</div>
+    <div class="motif-grid">
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="8" height="60" viewBox="0 0 4 22"><rect x="0" y="1" width="2" height="20" fill="#5a4a3a"/></svg></div>
+        <div class="motif-label">h2 · 单竖条版框</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="18" viewBox="0 0 80 18"><path d="M20 10 q3 -6 6 0 q3 -6 6 0 q3 -6 6 0 q3 -6 6 0 q3 -6 6 0" fill="none" stroke="#5a4a3a" stroke-width="0.9"/><circle cx="40" cy="15" r="1.5" fill="#9a3b2e"/></svg></div>
+        <div class="motif-label">dividerFlower · 三连云头</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="12" viewBox="0 0 80 12"><line x1="0" y1="6" x2="30" y2="6" stroke="#5a4a3a" stroke-width="1"/><rect x="34" y="2" width="12" height="8" fill="none" stroke="#5a4a3a" stroke-width="1"/><path d="M37 4 L 41 4 L 41 8" fill="none" stroke="#5a4a3a" stroke-width="0.8"/><line x1="50" y1="6" x2="80" y2="6" stroke="#5a4a3a" stroke-width="1"/></svg></div>
+        <div class="motif-label">dividerDots · 单枚回纹</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="42" height="42" viewBox="0 0 42 42"><circle cx="21" cy="21" r="19" fill="rgba(154,59,46,0.08)" stroke="#9a3b2e" stroke-width="1.2"/><circle cx="21" cy="21" r="15" fill="none" stroke="#9a3b2e" stroke-width="0.6" opacity="0.55"/><text x="21" y="27" text-anchor="middle" font-size="16" font-weight="700" fill="#5a4a3a" font-family="serif">一</text></svg></div>
+        <div class="motif-label">钤印 · stepBadge</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · 题解 · 题辞 · 卷次</div>
+    <div class="container-grid">
+      <div class="container-tile">
+        <div class="c-body" style="font-family:'Noto Serif SC',serif;border-left:2px solid #5a4a3a;padding:10px 14px;background:#ece5d1;letter-spacing:1.5px;color:#6b5f4a;font-size:13px">
+          引　本文所考，乃宋版《道藏》一则残卷。所录之篇，今传本或缺或异。
+        </div>
+        <div class="c-label">Intro · 卷首语（题解）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="font-family:'Noto Serif SC',serif;text-align:center;padding:16px 8px">
+          <div style="font-size:36px;font-weight:700;color:#9a3b2e;float:left;margin:0 6px 0 0;line-height:1">大</div>
+          <div style="font-size:16px;font-weight:500;letter-spacing:1.2px;color:#5a4a3a;line-height:1.75">道之行也，天下为公。</div>
+          <div style="clear:both;font-size:11px;color:#6b5f4a;text-align:right;margin-top:6px">——《礼记·礼运》</div>
+        </div>
+        <div class="c-label">QuoteCard · 题辞（首字朱砂下沉）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="padding:4px 0 10px">
+          <div style="font-size:12px;font-weight:700;color:#4a6b3e;padding-bottom:3px;border-bottom:1px solid #4a6b3e;width:80%;display:inline-block">〖批注〗 眉批体式</div>
+          <div style="font-size:12px;color:#1f1b14;margin-top:6px;font-family:'Noto Serif SC',serif">书页上一道铅笔划，不动容器只点一线。</div>
+        </div>
+        <div class="c-label">Tip · 批注（minimal-underline）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border:1px solid #8e3a2d;padding:8px 12px;background:#ecd6cf;position:relative">
+          <div style="border-top:0.5px dashed #8e3a2d;border-bottom:0.5px dashed #8e3a2d;padding:6px 0">
+            <div style="font-size:12px;font-weight:700;color:#8e3a2d;font-family:'Noto Serif SC',serif">校』 异文校勘</div>
+            <div style="font-size:12px;color:#1f1b14;margin-top:3px;font-family:'Noto Serif SC',serif">甲本作"求"，乙本作"取"，当从甲本。</div>
+          </div>
+        </div>
+        <div class="c-label">Danger · 校勘（ticket-notch 双框）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="font-family:'Noto Serif SC',serif;font-size:12px;color:#1f1b14">
+          <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;border-left:1px solid #cfc3a8;padding-left:10px;margin-left:10px">
+            <div style="width:26px;height:26px;border:1px solid #5a4a3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#5a4a3a;margin-left:-23px;background:#f4efe3">一</div>
+            <div><b>卷一 · 源流</b><br/><span style="color:#6b5f4a">墨褐钤印编号</span></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start;border-left:1px solid #cfc3a8;padding-left:10px;margin-left:10px">
+            <div style="width:26px;height:26px;border:1px solid #5a4a3a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#5a4a3a;margin-left:-23px;background:#f4efe3">二</div>
+            <div><b>卷二 · 异文</b><br/><span style="color:#6b5f4a">时间 / 层次递进</span></div>
+          </div>
+        </div>
+        <div class="c-label">Steps · 卷次（timeline-dot）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="text-align:center;padding:12px 0 6px">
+          <svg width="80%" height="18" viewBox="0 0 240 18" preserveAspectRatio="none"><line x1="0" y1="9" x2="100" y2="9" stroke="#cfc3a8" stroke-width="1"/><path d="M108 12 q3 -6 6 0 q3 -6 6 0 q3 -6 6 0" fill="none" stroke="#5a4a3a" stroke-width="0.9"/><circle cx="120" cy="15" r="1.5" fill="#9a3b2e"/><line x1="140" y1="9" x2="240" y2="9" stroke="#cfc3a8" stroke-width="1"/></svg>
+          <div style="font-size:11px;color:#6b5f4a;margin-top:10px;letter-spacing:2px;font-family:'Noto Serif SC',serif">——卷末——</div>
+          <div style="width:26px;height:26px;background:#9a3b2e;color:#f4efe3;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Noto Serif SC',serif;margin-top:6px">钤</div>
+        </div>
+        <div class="c-label">FooterCTA · 卷尾（云头 + 朱印）</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern">
+      <span class="ap-kicker">✕ Anti-pattern</span>
+      古风茶楼套餐——朱砂通货膨胀、书法 PNG 水印、红配绿同饱和、圆角 8px 当可爱。稀缺制造贵气，泛滥只剩廉价。朱砂全文只出现两处（quoteCard 首字 + footer 钤印），云头最多出现三次。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:literary-humanism END -->
+
+  <!-- PERSONA_CARD:life-aesthetic START -->
+  <section id="persona-life-aesthetic" class="persona-card" data-persona="life-aesthetic" style="
+    --p-bg:#efece4;
+    --p-bg-soft:#e6e2d6;
+    --p-bg-muted:#d8d3c2;
+    --p-text:#26221c;
+    --p-text-muted:#706a5e;
+    --p-primary:#9c6b4f;
+    --p-secondary:#6b7a72;
+    --p-accent:#a89775;
+    --p-border:#c9c2b2;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">04 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">生活美学</div>
+        <div class="card-slug">life-aesthetic</div>
+      </div>
+      <p class="card-tagline">
+        不是"咖啡馆博主"，是编辑部静物台。Kinfolk / Cereal / Apartamento / 《暮しの手帖》——冷米 + 灰青 + 器物几何 + 巨大留白，不可爱但端正得体。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>Kinfolk · Cereal · Apartamento · 《暮しの手帖》 · Magnolia Journal</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>Canva "Slow Living" · ins 风奶油橙 · 水彩花束 · 温柔治愈少女心 · 莫兰迪雾粉 · 圆角 12px</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 陶土褐 + 青瓷灰绿 + 亚麻线</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#efece4"></div><div class="swatch-meta"><b>bg</b><span>亚麻米 #efece4</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#e6e2d6"></div><div class="swatch-meta"><b>bgSoft</b><span>旧棉布 #e6e2d6</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d8d3c2"></div><div class="swatch-meta"><b>bgMuted</b><span>窑灰 #d8d3c2</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#26221c"></div><div class="swatch-meta"><b>text</b><span>墨陶 #26221c</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#706a5e"></div><div class="swatch-meta"><b>textMuted</b><span>灰陶 #706a5e</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#9c6b4f"></div><div class="swatch-meta"><b>primary</b><span>陶土褐 #9c6b4f</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#6b7a72"></div><div class="swatch-meta"><b>secondary</b><span>青瓷灰绿 #6b7a72</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#a89775"></div><div class="swatch-meta"><b>accent</b><span>亚麻线 #a89775</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#c9c2b2"></div><div class="swatch-meta"><b>border</b><span>细棉线 #c9c2b2</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · 小记 / 案头 / 留心 / 慎（器物实物色）</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#6f8268;color:#efece4"><b>tip · 小记</b><span>#6f8268</span></div>
+        <div class="sem-side" style="background:#dfe4d8;color:#6f8268"><b>soft</b><span>#dfe4d8</span></div>
+        <div class="sem-wrap"><span>菜叶绿 · 4.8:1</span><span>on 亚麻</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#5c7283;color:#efece4"><b>info · 案头</b><span>#5c7283</span></div>
+        <div class="sem-side" style="background:#d8dde3;color:#5c7283"><b>soft</b><span>#d8dde3</span></div>
+        <div class="sem-wrap"><span>石板蓝灰 · 4.7:1</span><span>on 亚麻</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#9a7b3e;color:#efece4"><b>warn · 留心</b><span>#9a7b3e</span></div>
+        <div class="sem-side" style="background:#e8dfc4;color:#9a7b3e"><b>soft</b><span>#e8dfc4</span></div>
+        <div class="sem-wrap"><span>黄铜色 · 4.9:1</span><span>on 亚麻</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8c4a3f;color:#efece4"><b>danger · 慎</b><span>#8c4a3f</span></div>
+        <div class="sem-side" style="background:#e5cfc9;color:#8c4a3f"><b>soft</b><span>#e5cfc9</span></div>
+        <div class="sem-wrap"><span>赤陶深 · 5.1:1</span><span>on 亚麻</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · 杂志页眉（稀 + 不过粗）</div>
+    <div class="type-stack">
+      <div>
+        <div style="font-size:28px;font-weight:500;letter-spacing:4px;line-height:1.35;color:#26221c">厨 房 窗 边 的 一 盆 薄 荷</div>
+        <div class="type-meta mono">h1 · 28 / 500 / ls-4 / lh-1.35 · 展签</div>
+      </div>
+      <div>
+        <div style="font-size:18px;font-weight:600;letter-spacing:3px;line-height:1.5;color:#26221c">器 物 志</div>
+        <div class="type-meta mono">h2 · 18 / 600 / ls-3 / lh-1.5 · 栏目名（反直觉小而粗）</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:600;letter-spacing:1.5px;line-height:1.6;color:#26221c">一只素陶碗</div>
+        <div class="type-meta mono">h3 · 15 / 600 / ls-1.5 / lh-1.6 · 条目</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:400;letter-spacing:0.8px;line-height:1.75;color:#26221c">
+          这只碗是在城南小市集上买的，老板说是北边窑口的粗陶，未上釉。早餐装一勺粥、一瓢酱菜，刚好。桌面摄影里它最好看的时候不是清晨的正光，是午后窗帘漏出的那一道斜光。
+        </div>
+        <div class="type-meta mono">p · 15 / 400 / ls-0.8 / lh-1.75 · 杂志节奏</div>
+      </div>
+      <div>
+        <div style="font-size:20px;font-weight:400;letter-spacing:2px;line-height:1.5;color:#706a5e">
+          器 物 不 必 昂 贵 ， 只 要 端 正 。
+        </div>
+        <div class="type-meta mono">pull-quote · 20 / 400 / ls-2 / lh-1.5 / textMuted · 展签旁说明牌</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · 薄切线 · 器皿 · 窗格 · 日课格</div>
+    <div class="motif-grid">
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="40" height="44" viewBox="0 0 14 18"><path d="M0 2 L 10 2 M 2 2 L 2 16" fill="none" stroke="#9c6b4f" stroke-width="1"/></svg></div>
+        <div class="motif-label">h2Prefix · hairline bracket</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="22" viewBox="0 0 80 22"><line x1="0" y1="12" x2="20" y2="12" stroke="#c9c2b2" stroke-width="1"/><path d="M22 8 Q22 4 26 4 L 54 4 Q 58 4 58 8 L 58 16 L 22 16 Z" fill="none" stroke="#9c6b4f" stroke-width="1.2"/><line x1="60" y1="12" x2="80" y2="12" stroke="#c9c2b2" stroke-width="1"/></svg></div>
+        <div class="motif-label">dividerGlyph · 陶碗侧剖</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="12" viewBox="0 0 80 12"><line x1="0" y1="6" x2="36" y2="6" stroke="#c9c2b2" stroke-width="1"/><line x1="36" y1="2" x2="44" y2="2" stroke="#9c6b4f" stroke-width="0.9" style="display:none"/><path d="M36 6 L 44 6 M 40 2 L 40 10" stroke="#9c6b4f" stroke-width="0.9"/><line x1="44" y1="6" x2="80" y2="6" stroke="#c9c2b2" stroke-width="1"/></svg></div>
+        <div class="motif-label">dividerRule · 窗格十字</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="36" height="36" viewBox="0 0 20 20"><rect x="0.5" y="0.5" width="18" height="18" fill="none" stroke="#9c6b4f" stroke-width="1"/><text x="10" y="14" text-anchor="middle" font-size="13" font-weight="600" fill="#9c6b4f">1</text></svg></div>
+        <div class="motif-label">stepBadge · 日课方格</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · 短札 · 栏目引言 · 留言条</div>
+    <div class="container-grid">
+      <div class="container-tile">
+        <div class="c-body" style="padding:10px 8px;position:relative;color:#706a5e;font-size:12px;letter-spacing:2px;line-height:1.7">
+          <svg width="12" height="12" viewBox="0 0 18 18" style="position:absolute;top:0;left:0"><path d="M0 6 L 6 0 L 12 6 L 6 6 Z" fill="none" stroke="#9c6b4f" stroke-width="0.8"/></svg>
+          短札正文，textMuted 字距 2px，对角折角呼应。
+          <svg width="12" height="12" viewBox="0 0 18 18" style="position:absolute;bottom:0;right:0"><path d="M18 12 L 12 18 L 6 12 L 12 12 Z" fill="none" stroke="#9c6b4f" stroke-width="0.8"/></svg>
+        </div>
+        <div class="c-label">Intro · 短札（信封折角）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="padding:14px 14px 10px;text-align:center">
+          <svg width="12" height="14" viewBox="0 0 16 20" style="display:block"><path d="M2 8 L 2 2 L 8 2" fill="none" stroke="#9c6b4f" stroke-width="1"/></svg>
+          <div style="font-size:15px;font-weight:400;letter-spacing:2px;color:#706a5e;line-height:1.5;padding:10px 6px">器 物 不 必 昂 贵<br/>只 要 端 正</div>
+          <svg width="12" height="14" viewBox="0 0 16 20" style="display:block;margin-left:auto"><path d="M14 12 L 14 18 L 8 18" fill="none" stroke="#9c6b4f" stroke-width="1"/></svg>
+          <div style="font-size:10px;color:#706a5e;text-align:right;letter-spacing:1px">——《器物志·一》</div>
+        </div>
+        <div class="c-label">QuoteCard · 栏目引言（〔 〕）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="padding:6px 0 10px;color:#26221c;font-size:12px">
+          <div style="padding-bottom:3px;border-bottom:1px solid #6f8268;width:60%;display:inline-block">— 小记</div>
+          <div style="margin-top:6px">铅笔划一道，无框无底。</div>
+        </div>
+        <div class="c-label">Tip · 小记（minimal-underline）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="padding:0;position:relative;background:#e8dfc4">
+          <div style="background:#9a7b3e;color:#efece4;font-size:11px;font-weight:600;letter-spacing:1px;padding:2px 10px;display:inline-block;margin:-3px 0 0 6px">留心</div>
+          <div style="padding:8px 12px;color:#26221c;font-size:12px;border:1px solid #9a7b3e">
+            顶部便签条悬出边界，像贴纸。
+          </div>
+        </div>
+        <div class="c-label">Warning · 留心（pill-tag 悬贴）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-top:2px solid #8c4a3f;border-bottom:2px solid #8c4a3f;padding:8px 12px;background:#e5cfc9">
+          <span style="font-size:12px;font-weight:600;color:#8c4a3f">慎：</span>
+          <span style="font-size:12px;color:#26221c">上下胶带封条，左右不加线。</span>
+        </div>
+        <div class="c-label">Danger · 慎（ticket-notch 封条）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="font-size:12px;color:#26221c">
+          <div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start">
+            <svg width="20" height="20" viewBox="0 0 20 20"><rect x="0.5" y="0.5" width="18" height="18" fill="none" stroke="#9c6b4f" stroke-width="1"/><text x="10" y="14" text-anchor="middle" font-size="13" font-weight="600" fill="#9c6b4f">1</text></svg>
+            <div><b>晨 · 煮一壶茶</b><br/><span style="color:#706a5e">方格不是圆章 · 无连接线</span></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <svg width="20" height="20" viewBox="0 0 20 20"><rect x="0.5" y="0.5" width="18" height="18" fill="none" stroke="#9c6b4f" stroke-width="1"/><text x="10" y="14" text-anchor="middle" font-size="13" font-weight="600" fill="#9c6b4f">2</text></svg>
+            <div><b>午 · 洗一篮菜</b><br/><span style="color:#706a5e">晨 / 午 / 夕 三时</span></div>
+          </div>
+        </div>
+        <div class="c-label">Steps · 一日三时（日课格）</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern">
+      <span class="ap-kicker">✕ Anti-pattern</span>
+      "生活美学 = 圆角 + 米色"是认知偷懒。圆角不是信号、质地才是。米色有冷暖分野——亚麻冷米是对的，奶油暖米立刻跌入 Canva "Slow Living"。植物砍到一件，换上器物几何，才是这套规范的升格。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:life-aesthetic END -->
+
+  <!-- PERSONA_CARD:business-finance START -->
+  <section id="persona-business-finance" class="persona-card" data-persona="business-finance" style="
+    --p-bg:#fefefe;
+    --p-bg-soft:#f3f1ec;
+    --p-bg-muted:#e6e2d8;
+    --p-text:#0f141b;
+    --p-text-muted:#56606e;
+    --p-primary:#2a1a14;
+    --p-secondary:#0e3654;
+    --p-accent:#b8821f;
+    --p-border:#d0cec8;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">05 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">硬核财经</div>
+        <div class="card-slug">business-finance</div>
+      </div>
+      <p class="card-tagline">
+        不是"涨停板红配金"，是研究所的内刊。《财新》《经济观察报》FT 中文、Bloomberg Terminal 的黑橙对照、HBR 侧栏——克制到近乎冷酷的排版。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>《财新周刊》 · 《经济观察报》 · FT 中文 · Bloomberg · HBR pull-quote · The Economist sidebar</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>券商 PPT 大红大金 · 自媒体荧光 highlight · emoji 📈📉 · 涨绿跌红欧美习惯 · 圆角 ≥ 6</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 深栗墨 + 琥珀（红让给 danger）</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#fefefe;border-bottom:1px solid #d0cec8"></div><div class="swatch-meta"><b>bg</b><span>报纸白 #fefefe</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#f3f1ec"></div><div class="swatch-meta"><b>bgSoft</b><span>新闻纸米 #f3f1ec</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#e6e2d8"></div><div class="swatch-meta"><b>bgMuted</b><span>档案袋灰 #e6e2d8</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#0f141b"></div><div class="swatch-meta"><b>text</b><span>内参墨 #0f141b</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#56606e"></div><div class="swatch-meta"><b>textMuted</b><span>批注灰 #56606e</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#2a1a14"></div><div class="swatch-meta"><b>primary</b><span>深栗墨 #2a1a14</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#0e3654"></div><div class="swatch-meta"><b>secondary</b><span>内参蓝 #0e3654</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#b8821f"></div><div class="swatch-meta"><b>accent</b><span>琥珀黄 #b8821f</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d0cec8"></div><div class="swatch-meta"><b>border</b><span>版框线 #d0cec8</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · 要点 · 补注 · 风险提示 · 警报</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#1f4f6b;color:#fefefe"><b>tip · 要点</b><span>#1f4f6b</span></div>
+        <div class="sem-side" style="background:#dfe8ee;color:#1f4f6b"><b>soft</b><span>#dfe8ee</span></div>
+        <div class="sem-wrap"><span>钢青 · 7.8:1</span><span>Key Takeaway</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#3d5a75;color:#fefefe"><b>info · 补注</b><span>#3d5a75</span></div>
+        <div class="sem-side" style="background:#dde4ec;color:#3d5a75"><b>soft</b><span>#dde4ec</span></div>
+        <div class="sem-wrap"><span>烟蓝 · 5.6:1</span><span>Memo</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8a6416;color:#fefefe"><b>warn · 风险</b><span>#8a6416</span></div>
+        <div class="sem-side" style="background:#f1e8d1;color:#8a6416"><b>soft</b><span>#f1e8d1</span></div>
+        <div class="sem-wrap"><span>琥珀 · 5.9:1</span><span>Risk Note</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#9a1b20;color:#fefefe"><b>danger · 警报</b><span>#9a1b20</span></div>
+        <div class="sem-side" style="background:#f0dadc;color:#9a1b20"><b>soft</b><span>#f0dadc</span></div>
+        <div class="sem-wrap"><span>深朱 · 6.8:1</span><span>Alert</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · 内参节奏（字重压阵 + .num 签名）</div>
+    <div class="type-stack">
+      <div>
+        <div style="font-size:26px;font-weight:800;letter-spacing:0.5px;line-height:1.35;color:#0f141b">专题：A 股新能源板块的 Q1 拐点</div>
+        <div class="type-meta mono">h1 · 26 / 800 / ls-0.5 / lh-1.35 / text</div>
+      </div>
+      <div>
+        <div style="font-size:21px;font-weight:700;letter-spacing:0.3px;line-height:1.4;color:#0f141b;border-left:4px solid #2a1a14;padding-left:12px">一、基本面改善的三条主线</div>
+        <div class="type-meta mono">h2 · 21 / 700 / 竖条 + 琥珀短横</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:400;letter-spacing:0.3px;line-height:1.75;color:#0f141b">
+          2026 Q1 板块营收同比 <span style="font-family:var(--font-mono);font-weight:600;color:#2a1a14">+12.3%</span>、利润增速 <span style="font-family:var(--font-mono);font-weight:600;color:#2a1a14">+7.2pp</span>。<span style="color:#9a1b20;font-family:var(--font-mono);font-weight:600">▲</span> 数字走 <span style="font-family:var(--font-mono);color:#2a1a14;font-weight:600">.num</span> 样式——字重 600、字距 0、primary 色。
+        </div>
+        <div class="type-meta mono">p · 15 / 400 / 0.3px / 1.75 · 签名动作 .num</div>
+      </div>
+      <div>
+        <div style="font-size:20px;font-weight:600;letter-spacing:0.2px;line-height:1.55;color:#0f141b;border-left:2px solid #0e3654;border-right:2px solid #0e3654;padding:8px 16px;text-align:center">
+          政策底已出，市场底未到——Q2 仍是震荡磨底期。
+        </div>
+        <div class="type-meta mono">pull-quote · 20 / 600 / 研究员核心判断 · 双竖线夹</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · K 线（瑰宝）+ Sec 编号 + 钤印徽章</div>
+    <div class="motif-grid">
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="40" viewBox="0 0 80 40"><g><rect x="4" y="14" width="4" height="12" fill="#9a1b20"/><line x1="6" y1="10" x2="6" y2="30" stroke="#9a1b20" stroke-width="1"/><rect x="14" y="18" width="4" height="10" fill="#0e3654"/><line x1="16" y1="12" x2="16" y2="32" stroke="#0e3654" stroke-width="1"/><rect x="24" y="22" width="4" height="8" fill="#9a1b20"/><line x1="26" y1="18" x2="26" y2="34" stroke="#9a1b20" stroke-width="1"/><rect x="34" y="20" width="4" height="10" fill="#0e3654"/><line x1="36" y1="14" x2="36" y2="34" stroke="#0e3654" stroke-width="1"/><rect x="44" y="14" width="4" height="14" fill="#9a1b20"/><line x1="46" y1="8" x2="46" y2="32" stroke="#9a1b20" stroke-width="1"/><rect x="54" y="10" width="4" height="14" fill="#9a1b20"/><line x1="56" y1="4" x2="56" y2="28" stroke="#9a1b20" stroke-width="1"/><rect x="64" y="6" width="4" height="16" fill="#9a1b20"/><line x1="66" y1="2" x2="66" y2="26" stroke="#9a1b20" stroke-width="1"/></g></svg></div>
+        <div class="motif-label">dividerWave · K 线（V 形）</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="18" viewBox="0 0 80 18"><line x1="0" y1="9" x2="26" y2="9" stroke="#d0cec8" stroke-width="1"/><text x="40" y="13" text-anchor="middle" font-size="12" fill="#56606e" letter-spacing="1.5">Sec.II</text><line x1="54" y1="9" x2="80" y2="9" stroke="#d0cec8" stroke-width="1"/></svg></div>
+        <div class="motif-label">dividerFlower · 章节编号</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="40" height="40" viewBox="0 0 40 40"><rect x="2" y="2" width="36" height="36" fill="#2a1a14"/><rect x="2" y="32" width="36" height="6" fill="#b8821f"/><text x="20" y="24" text-anchor="middle" font-size="15" font-weight="700" fill="#fefefe">1</text></svg></div>
+        <div class="motif-label">stepBadge · 方形钤印</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M2 2 L 10 2 M 2 2 L 2 10 M 38 38 L 30 38 M 38 38 L 38 30" fill="none" stroke="#2a1a14" stroke-width="1.5"/><rect x="2" y="2" width="4" height="4" fill="#b8821f"/></svg></div>
+        <div class="motif-label">sectionCorner · L + 琥珀</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · 数据卡 · Ledger 账本 · 订阅栏</div>
+    <div class="container-grid">
+      <div class="container-tile">
+        <div class="c-body" style="border:1px solid #d0cec8;background:#fefefe;padding:12px 14px;border-radius:2px">
+          <div style="font-size:10px;font-weight:600;color:#0e3654;letter-spacing:1.5px;border-left:3px solid #0e3654;padding-left:6px">CPI · 消费者物价指数</div>
+          <div style="display:flex;align-items:baseline;gap:10px;margin-top:10px">
+            <div style="font-size:32px;font-weight:800;color:#2a1a14;font-family:var(--font-mono);letter-spacing:-0.5px">12.3%</div>
+            <div style="font-family:var(--font-mono);font-size:12px;color:#9a1b20;font-weight:600">▲ +2.1pp</div>
+          </div>
+          <div style="font-size:10px;color:#56606e;text-align:right;margin-top:6px;font-family:var(--font-mono)">数据源：国家统计局 2026Q1</div>
+        </div>
+        <div class="c-label">Highlight · 数据卡（primitive）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border:1px solid #d0cec8;border-radius:2px;font-size:11px">
+          <div style="display:flex;border-bottom:1px solid #d0cec8">
+            <div style="flex:1;background:#2a1a14;color:#fefefe;padding:5px 8px;text-align:center;font-weight:700">多方观点</div>
+            <div style="flex:1;background:#2a1a14;color:#fefefe;padding:5px 8px;text-align:center;font-weight:700;border-left:1px solid #56606e">空方观点</div>
+          </div>
+          <div style="display:flex">
+            <div style="flex:1;padding:8px;color:#0f141b;background:rgba(154,27,32,0.06)">基本面改善<br/>政策底已出</div>
+            <div style="flex:1;padding:8px;color:#0f141b;border-left:1px solid #d0cec8;background:rgba(14,54,84,0.06)">估值偏高<br/>流动性偏紧</div>
+          </div>
+        </div>
+        <div class="c-label">Compare · Ledger 账本</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-left:3px solid #1f4f6b;background:#dfe8ee;padding:8px 12px">
+          <div style="font-size:12px;font-weight:700;color:#1f4f6b">✓ 要点</div>
+          <div style="font-size:12px;color:#0f141b;margin-top:2px">新能源板块 Q2 仍值得配置。</div>
+        </div>
+        <div class="c-label">Tip · 要点（accent-bar）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="margin-top:8px;position:relative;padding:0;background:#f1e8d1;border:1px solid #8a6416">
+          <div style="background:#8a6416;color:#fefefe;font-size:11px;font-weight:700;letter-spacing:1px;padding:2px 10px;position:absolute;top:-10px;left:14px">风险提示</div>
+          <div style="padding:14px 14px 10px;color:#0f141b;font-size:12px">胶囊悬挂顶沿——Pill-tag variant。</div>
+        </div>
+        <div class="c-label">Warning · 风险（pill-tag 悬挂）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border:1.5px solid #9a1b20;padding:10px 14px;background:#f0dadc;position:relative">
+          <div style="border:0.5px dashed #9a1b20;padding:4px 8px">
+            <span style="font-size:12px;font-weight:700;color:#9a1b20">[×] 警报</span>
+            <div style="font-size:12px;color:#0f141b;margin-top:2px">退市风险 · 勘误贴条</div>
+          </div>
+        </div>
+        <div class="c-label">Danger · 警报（ticket-notch 双框）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-top:1.5px solid #2a1a14;border-bottom:1.5px solid #2a1a14;padding:10px 12px">
+          <div style="font-size:13px;font-weight:700;color:#0f141b">关注「硬核财经」</div>
+          <div style="font-size:11px;color:#56606e;margin:4px 0 8px">不吹票、不带节奏，只讲值得下判断的数据</div>
+          <div style="text-align:right"><span style="background:#2a1a14;color:#fefefe;padding:4px 10px;font-size:11px;border-radius:2px">扫码订阅 ▸</span></div>
+        </div>
+        <div class="c-label">FooterCTA · 订阅栏</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern">
+      <span class="ap-kicker">✕ Anti-pattern</span>
+      券商研报 PPT 套餐——h1 居中巨红字 + 金色渐变 + 📈 emoji + 荧光黄 highlight + "扫码进群领免费研报！！！"。红色稀缺才有分量——全篇 ≤ 8 次。涨绿跌红是欧美习惯，本主题涨红跌蓝是 A 股纪律。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:business-finance END -->
+
+  <!-- PERSONA_CARD:industry-observer START -->
+  <section id="persona-industry-observer" class="persona-card" data-persona="industry-observer" style="
+    --p-bg:#fbf8f1;
+    --p-bg-soft:#f5efe1;
+    --p-bg-muted:#ece3cf;
+    --p-text:#1a2332;
+    --p-text-muted:#5a6778;
+    --p-primary:#24364f;
+    --p-secondary:#3d5063;
+    --p-accent:#b86f2a;
+    --p-border:#e0d6c0;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">06 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">行业观察</div>
+        <div class="card-slug">industry-observer</div>
+      </div>
+      <p class="card-tagline">
+        周二早上那封 newsletter——Stratechery / Benedict Evans / 晚点 LatePost。有观点但不嚷嚷，有温度但不油腻，有态度但不插科打诨。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>Stratechery · Benedict Evans weekly · The Information · Matt Levine · 晚点 LatePost · Pragmatic Engineer</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>36Kr / 虎嗅首页多色块 · 营销号大红圈 · 创投"独角兽"徽章 · 📈🚀💰 emoji</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 深墨蓝 + 晚点橙金（冷 + 暖）</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#fbf8f1"></div><div class="swatch-meta"><b>bg</b><span>Stratechery 米 #fbf8f1</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#f5efe1"></div><div class="swatch-meta"><b>bgSoft</b><span>档案米 #f5efe1</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#ece3cf"></div><div class="swatch-meta"><b>bgMuted</b><span>期号卡背 #ece3cf</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1a2332"></div><div class="swatch-meta"><b>text</b><span>观察者墨 #1a2332</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#5a6778"></div><div class="swatch-meta"><b>textMuted</b><span>批注灰蓝 #5a6778</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#24364f"></div><div class="swatch-meta"><b>primary</b><span>深墨蓝 #24364f</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#3d5063"></div><div class="swatch-meta"><b>secondary</b><span>雾蓝 #3d5063</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#b86f2a"></div><div class="swatch-meta"><b>accent</b><span>晚点橙金 #b86f2a</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#e0d6c0"></div><div class="swatch-meta"><b>border</b><span>米纸边 #e0d6c0</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · 要点 · 背景 · 存疑 · 错判</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#2d6a5a;color:#fbf8f1"><b>tip · 要点</b><span>#2d6a5a</span></div>
+        <div class="sem-side" style="background:#dceae4;color:#2d6a5a"><b>soft</b><span>#dceae4</span></div>
+        <div class="sem-wrap"><span>墨绿 · 6.8:1</span><span>TL;DR</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#3d5a75;color:#fbf8f1"><b>info · 背景</b><span>#3d5a75</span></div>
+        <div class="sem-side" style="background:#dce4ec;color:#3d5a75"><b>soft</b><span>#dce4ec</span></div>
+        <div class="sem-wrap"><span>烟蓝 · 5.6:1</span><span>Context</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8a5a1a;color:#fbf8f1"><b>warn · 存疑</b><span>#8a5a1a</span></div>
+        <div class="sem-side" style="background:#ece0c5;color:#8a5a1a"><b>soft</b><span>#ece0c5</span></div>
+        <div class="sem-wrap"><span>琥珀褐 · 5.9:1</span><span>Questioned</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8a2a1c;color:#fbf8f1"><b>danger · 错判</b><span>#8a2a1c</span></div>
+        <div class="sem-side" style="background:#ecd4cf;color:#8a2a1c"><b>soft</b><span>#ecd4cf</span></div>
+        <div class="sem-wrap"><span>铁锈红 · 6.7:1</span><span>Flawed</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · newsletter 节奏（长读感 + issue stamp）</div>
+    <div class="type-stack">
+      <div>
+        <div style="font-size:26px;font-weight:700;letter-spacing:0.4px;line-height:1.4;color:#1a2332">互联网巨头的"搜索"围城：三家公司的不同赌注</div>
+        <div class="type-meta mono">h1 · 26 / 700 / ls-0.4 / lh-1.4 / text</div>
+      </div>
+      <div>
+        <div style="font-size:20px;font-weight:700;letter-spacing:0.3px;line-height:1.45;color:#1a2332;padding-left:12px;border-left:3px solid #24364f">一、A 公司：把搜索做成入口</div>
+        <div class="type-meta mono">h2 · 20 / 700 / 3×13 深墨蓝竖条</div>
+      </div>
+      <div>
+        <div style="font-size:16px;font-weight:400;letter-spacing:0.3px;line-height:1.85;color:#1a2332">
+          过去五年，这个赛道的融资总额增长了约四倍，但盈利公司数量从十二家降到了不到五家。<strong style="color:#24364f;font-weight:600">数据服从洞察</strong>，不是反过来——这是 observer 相对 analyst 的立场差异。
+        </div>
+        <div class="type-meta mono">p · 16 / 400 / 0.3px / 1.85 · 长读感</div>
+      </div>
+      <div>
+        <div style="font-size:22px;font-weight:500;letter-spacing:0.2px;line-height:1.5;color:#1a2332;padding:0 20px;border-left:2px solid #24364f;border-right:2px solid #24364f">
+          技术并不会淘汰公司，淘汰公司的是那些用新技术重新想象行业边界的人。
+          <div style="font-size:11px;color:#5a6778;text-align:right;margin-top:8px;letter-spacing:0.3px">—— 王兴，美团创始人 · 2024 年内部信</div>
+        </div>
+        <div class="type-meta mono">pull-quote · 22 / 500 / 双竖线 + attribution</div>
+      </div>
+      <div>
+        <div style="display:inline-block;padding:3px 10px;border:1px solid #b86f2a;font-size:11px;color:#b86f2a;letter-spacing:1.5px;font-weight:600;font-family:var(--font-mono)">ISSUE #023 · 2025-04-20 · 周刊</div>
+        <div style="border-bottom:1px solid #b86f2a;width:180px;margin-top:-1px"></div>
+        <div class="type-meta mono">issue stamp · 11 / 600 / ls-1.5 / 橙金 · 跨容器期号印章</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · 期号印章 · 方头引号 · 菱形</div>
+    <div class="motif-grid">
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="24" viewBox="0 0 120 24"><rect x="0.5" y="0.5" width="119" height="23" fill="none" stroke="#b86f2a" stroke-width="1"/><text x="8" y="16" font-size="11" font-weight="600" fill="#b86f2a" letter-spacing="1.5">ISSUE #023</text></svg></div>
+        <div class="motif-label">issueStamp · 双线矩形</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="50" height="40" viewBox="0 0 32 28"><path d="M2,20 L2,12 C2,8 4,6 8,4 L8,7 C5,8 4,10 4,12 L8,12 L8,20 Z M18,20 L18,12 C18,8 20,6 24,4 L24,7 C21,8 20,10 20,12 L24,12 L24,20 Z" fill="#24364f"/></svg></div>
+        <div class="motif-label">quoteMark · 方头双引号</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="40" height="20" viewBox="0 0 24 12"><path d="M12 2 L 16 6 L 12 10 L 8 6 Z" fill="#24364f"/></svg></div>
+        <div class="motif-label">ornamentDiamond · 饰记</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="10" fill="#24364f"/><circle cx="20" cy="20" r="18" fill="none" stroke="#b86f2a" stroke-width="1" stroke-dasharray="2 2"/></svg></div>
+        <div class="motif-label">timeline dot · 实心圆</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · 期号 · 断言 · 矩阵</div>
+    <div class="container-grid">
+      <div class="container-tile">
+        <div class="c-body" style="border-left:3px solid #b86f2a;padding:8px 12px">
+          <div style="font-size:11px;font-weight:600;color:#b86f2a;letter-spacing:1px">本期观察</div>
+          <div style="font-size:13px;color:#1a2332;margin-top:4px">这周我们盯住三家公司：A、B、C。它们有一个共同点——都在试图改写搜索入口。</div>
+        </div>
+        <div class="c-label">Intro · 编者按</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-left:2px solid #24364f;border-right:2px solid #24364f;padding:12px 18px;background:#f5efe1;border-radius:3px">
+          <svg width="24" height="20" viewBox="0 0 32 28" style="display:inline-block;margin-bottom:4px"><path d="M2,20 L2,12 C2,8 4,6 8,4 L8,7 C5,8 4,10 4,12 L8,12 L8,20 Z M18,20 L18,12 C18,8 20,6 24,4 L24,7 C21,8 20,10 20,12 L24,12 L24,20 Z" fill="#b86f2a"/></svg>
+          <div style="font-size:14px;font-weight:500;color:#1a2332;letter-spacing:0.2px;line-height:1.55">
+            技术并不会淘汰公司，淘汰公司的是那些用新技术重新想象行业边界的人。
+          </div>
+          <div style="font-size:11px;color:#5a6778;text-align:right;margin-top:6px">—— 王兴 · 2024 年内部信</div>
+        </div>
+        <div class="c-label">QuoteCard · 行业断言</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="font-size:11px">
+          <table style="width:100%;border-collapse:collapse;border:1px solid #e0d6c0;border-radius:3px">
+            <tr style="background:#ece3cf;color:#3d5063;font-weight:700"><td style="padding:4px 6px"></td><td style="padding:4px 6px;text-align:center">A</td><td style="padding:4px 6px;text-align:center">B</td><td style="padding:4px 6px;text-align:center">C</td></tr>
+            <tr style="border-top:1px solid #e0d6c0"><td style="padding:4px 6px;font-weight:600">核心</td><td style="padding:4px 6px;text-align:center">搜索</td><td style="padding:4px 6px;text-align:center">社交</td><td style="padding:4px 6px;text-align:center">电商</td></tr>
+            <tr style="border-top:1px solid #e0d6c0"><td style="padding:4px 6px;font-weight:600">引擎</td><td style="padding:4px 6px;text-align:center">海外</td><td style="padding:4px 6px;text-align:center">视频</td><td style="padding:4px 6px;text-align:center">下沉</td></tr>
+          </table>
+        </div>
+        <div class="c-label">Compare · 矩阵（非 ledger）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="position:relative;padding:12px;border:1px solid #2d6a5a;background:#dceae4;margin-top:10px">
+          <span style="position:absolute;top:-10px;left:10px;background:#2d6a5a;color:#fefefe;font-size:11px;font-weight:700;padding:2px 8px;letter-spacing:1px">要点</span>
+          <div style="font-size:12px;color:#1a2332;margin-top:4px">· 本期核心观察一<br/>· 本期核心观察二<br/>· 本期核心观察三</div>
+        </div>
+        <div class="c-label">Tip · TL;DR（胶囊悬挂）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-left:3px solid #b86f2a;background:#f5efe1;padding:8px 14px;border-radius:2px">
+          <div style="font-size:13px;color:#1a2332;line-height:1.7">
+            ▊ 过去五年融资总额增长 <span style="font-family:var(--font-mono);font-weight:500;color:#24364f">约四倍</span>，但盈利公司从 <span style="font-family:var(--font-mono);font-weight:500;color:#24364f">十二家</span> 降到 <span style="font-family:var(--font-mono);font-weight:500;color:#24364f">不到五家</span>。
+          </div>
+        </div>
+        <div class="c-label">Highlight · 嵌入式洞察（非大数字卡）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-top:1.5px solid #24364f;border-bottom:1.5px solid #24364f;padding:10px 12px">
+          <div style="font-size:11px;font-weight:600;color:#b86f2a;letter-spacing:1.5px">ISSUE #023 · 周刊</div>
+          <div style="border-bottom:1px solid #b86f2a;width:120px"></div>
+          <div style="font-size:13px;font-weight:700;color:#1a2332;margin-top:8px">订阅「某某观察」</div>
+          <div style="font-size:11px;color:#5a6778;margin:3px 0 6px">每周二清晨送到，30 分钟读完。</div>
+          <div style="text-align:right"><span style="background:#24364f;color:#fefefe;padding:3px 10px;font-size:11px;border-radius:3px">扫码订阅 ▸</span></div>
+        </div>
+        <div class="c-label">FooterCTA · newsletter 订阅</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern">
+      <span class="ap-kicker">✕ Anti-pattern</span>
+      36Kr 首页套餐——h1 巨红大字 + 金色渐变描边 + [重磅]标签 + 荧光黄 highlight + 📈🚀 emoji + "限时免费领研报"。highlight 故意不做巨号数字卡——那是 business 的 DNA。observer 的 highlight 是 <i>左 3px 橙金竖条 + 正文嵌入 .num 轻强调</i>——数字服从洞察。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:industry-observer END -->
+
+  <!-- PERSONA_CARD:academic-frontier START -->
+  <section id="persona-academic-frontier" class="persona-card" data-persona="academic-frontier" style="
+    --p-bg:#fefefe;
+    --p-bg-soft:#f6f6f4;
+    --p-bg-muted:#ececea;
+    --p-text:#16181d;
+    --p-text-muted:#5a5d64;
+    --p-primary:#1e2c4a;
+    --p-secondary:#4a5670;
+    --p-accent:#8a2a2a;
+    --p-border:#d8d8d4;
+  ">
+    <!-- === Card head === -->
+    <div class="card-head">
+      <div class="card-idx">07 / 09</div>
+      <div class="card-title-row">
+        <div class="card-zh">学术前沿</div>
+        <div class="card-slug">academic-frontier</div>
+      </div>
+      <p class="card-tagline">
+        不是"科普号"，是同行评审级论文被搬到公众号。Nature / Science / NeurIPS / arXiv preprint / Knuth TAOCP——论文、证据、克制、无装饰。
+      </p>
+      <div class="card-coords">
+        <div class="coord-row accept"><span class="coord-kicker">Accept</span><span>Nature / Science / Cell · arXiv preprint · ACM / IEEE transactions · Anthropic/OpenAI research · LaTeX article</span></div>
+        <div class="coord-row reject"><span class="coord-kicker">Reject</span><span>科普号卡通 🧬🔬🤖 · 学术百家号金红banner · PPT 多色块 · 课本教辅红线 · 小红书手账学术笔记</span></div>
+      </div>
+    </div>
+
+    <!-- === Palette === -->
+    <div class="section-label">Palette · 正刊深靛 + 勘误深酒红（唯一 accent）</div>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#fefefe;border-bottom:1px solid #d8d8d4"></div><div class="swatch-meta"><b>bg</b><span>论文白 #fefefe</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#f6f6f4"></div><div class="swatch-meta"><b>bgSoft</b><span>定理浅底 #f6f6f4</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#ececea"></div><div class="swatch-meta"><b>bgMuted</b><span>表头灰 #ececea</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#16181d"></div><div class="swatch-meta"><b>text</b><span>正刊墨 #16181d</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#5a5d64"></div><div class="swatch-meta"><b>textMuted</b><span>caption 灰 #5a5d64</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1e2c4a"></div><div class="swatch-meta"><b>primary</b><span>正刊深靛 #1e2c4a</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#4a5670"></div><div class="swatch-meta"><b>secondary</b><span>引文靛灰 #4a5670</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#8a2a2a"></div><div class="swatch-meta"><b>accent</b><span>勘误深酒红 #8a2a2a</span></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d8d8d4"></div><div class="swatch-meta"><b>border</b><span>版框灰 #d8d8d4</span></div></div>
+    </div>
+
+    <div class="section-label">Semantic · Definition · Methods · Limitations · Fallacy</div>
+    <div class="sem-grid">
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#1e2c4a;color:#fefefe"><b>Definition</b><span>#1e2c4a</span></div>
+        <div class="sem-side" style="background:#f3f4f7;color:#1e2c4a"><b>soft</b><span>#f3f4f7</span></div>
+        <div class="sem-wrap"><span>tip = primary · 13.2:1</span><span>on 白</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#4a5670;color:#fefefe"><b>Methods</b><span>#4a5670</span></div>
+        <div class="sem-side" style="background:#f1f2f4;color:#4a5670"><b>soft</b><span>#f1f2f4</span></div>
+        <div class="sem-wrap"><span>info = secondary · 7.8:1</span><span>on 白</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#5a4a18;color:#fefefe"><b>Limitations</b><span>#5a4a18</span></div>
+        <div class="sem-side" style="background:#f5f2e8;color:#5a4a18"><b>soft</b><span>#f5f2e8</span></div>
+        <div class="sem-wrap"><span>古文献土黄 · 9.1:1</span><span>on 白</span></div>
+      </div>
+      <div class="sem-pair">
+        <div class="sem-side" style="background:#8a2a2a;color:#fefefe"><b>Fallacy</b><span>#8a2a2a</span></div>
+        <div class="sem-side" style="background:#f7eeee;color:#8a2a2a"><b>soft</b><span>#f7eeee</span></div>
+        <div class="sem-wrap"><span>danger = accent · 7.4:1</span><span>on 白</span></div>
+      </div>
+    </div>
+
+    <!-- === Typography === -->
+    <div class="section-label">Typography · &lt;em&gt; 替 &lt;strong&gt;（学术硬纪律）</div>
+    <div class="type-stack">
+      <div>
+        <div style="font-size:24px;font-weight:600;letter-spacing:0.2px;line-height:1.4;color:#16181d">On the Emergence of In-Context Learning in Large Language Models</div>
+        <div class="type-meta mono">h1 · 24 / 600（不 700）/ 清瘦而非宽厚</div>
+      </div>
+      <div>
+        <div style="font-size:18px;font-weight:600;letter-spacing:0.1px;line-height:1.45;color:#16181d">2 · Methods</div>
+        <div class="type-meta mono">h2 · 18 / 600 · 阿拉伯章号 `2 ·`</div>
+      </div>
+      <div>
+        <div style="font-size:16px;font-weight:600;letter-spacing:0;line-height:1.55;color:#16181d">2.1 · Dataset Construction</div>
+        <div class="type-meta mono">h3 · 16 / 600 · 两级大纲 `2.1`</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:400;letter-spacing:0.3px;line-height:1.75;color:#16181d">
+          We denote by <em style="font-style:italic;color:#16181d">x</em> the input and <em style="font-style:italic">y</em> the output. The <em style="font-style:italic;font-weight:500">attention mechanism</em> can be written as <code style="background:#f6f6f4;padding:1px 4px;font-family:var(--font-mono);font-weight:500">softmax(QK^T/√d)V</code><sup style="color:#16181d;font-weight:500">1</sup>.
+        </div>
+        <div class="type-meta mono">p · 15 / 400 / 1.75 · &lt;em&gt; 为强调主力</div>
+      </div>
+      <div>
+        <div style="border:1px solid #d8d8d4;border-radius:2px">
+          <div style="background:#1e2c4a;color:#fefefe;padding:6px 12px;font-size:13px;font-weight:600;letter-spacing:0.5px">Theorem 1.1</div>
+          <div style="padding:12px 14px;color:#16181d;font-size:14px;font-style:italic;line-height:1.7">设 <em>X</em> 为紧致 Hausdorff 空间，则存在唯一的 <em>μ</em> 使得 <em>f(X) = μ</em> 成立。
+            <div style="text-align:right;margin-top:6px"><span style="display:inline-block;width:8px;height:8px;background:#1e2c4a"></span></div>
+          </div>
+        </div>
+        <div class="type-meta mono">pull-quote · Theorem 框 + QED ■ 结束符</div>
+      </div>
+    </div>
+
+    <!-- === Motifs === -->
+    <div class="section-label">Motifs · 极少装饰（纪律不是偷懒）</div>
+    <div class="motif-grid">
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="14" height="14" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="#1e2c4a"/></svg></div>
+        <div class="motif-label">theoremMark · ■ QED</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="80" height="12" viewBox="0 0 80 12"><line x1="0" y1="6" x2="80" y2="6" stroke="#d8d8d4" stroke-width="1"/></svg></div>
+        <div class="motif-label">rule · 极细横规</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="40" height="20" viewBox="0 0 40 20"><text x="20" y="15" text-anchor="middle" font-size="14" fill="#5a5d64" letter-spacing="3">⁂</text></svg></div>
+        <div class="motif-label">glyph · 三星号 scene break</div>
+      </div>
+      <div class="motif-tile">
+        <div class="motif-svg-box"><svg width="18" height="18" viewBox="0 0 14 14"><path d="M0 0 L 6 0 M 0 0 L 0 6" stroke="#d8d8d4" stroke-width="1"/></svg></div>
+        <div class="motif-label">figureCorner · L 形角标</div>
+      </div>
+    </div>
+
+    <!-- === Signature Containers === -->
+    <div class="section-label">Signature Containers · Abstract · Theorem · References</div>
+    <div class="container-grid">
+      <div class="container-tile">
+        <div class="c-body" style="border-top:1px solid #d8d8d4;border-bottom:1px solid #d8d8d4;padding:10px 0">
+          <div style="font-size:11px;font-weight:600;color:#5a5d64;letter-spacing:2px">ABSTRACT</div>
+          <div style="font-size:12px;color:#5a5d64;margin-top:4px;line-height:1.6">We study the phenomenon of in-context learning in large language models...</div>
+        </div>
+        <div class="c-label">Abstract · 摘要</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border:1px solid #d8d8d4;border-radius:2px">
+          <div style="background:#1e2c4a;color:#fefefe;padding:5px 10px;font-size:12px;font-weight:600;letter-spacing:0.5px">Theorem 1.1</div>
+          <div style="padding:10px 12px;font-size:12px;color:#16181d;font-style:italic;line-height:1.7">
+            设 <em>X</em> 为紧致 Hausdorff 空间，则存在唯一的 <em>μ</em>。
+            <div style="text-align:right"><span style="display:inline-block;width:7px;height:7px;background:#1e2c4a"></span></div>
+          </div>
+        </div>
+        <div class="c-label">QuoteCard · Theorem Box</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border-left:2px solid #1e2c4a;padding:8px 12px;background:#f3f4f7">
+          <span style="font-size:13px;font-weight:600;color:#1e2c4a">Definition.</span>
+          <span style="font-size:13px;color:#16181d"> 若 <em>f : X → Y</em> 连续且双射，则称 <em>f</em> 为同胚。</span>
+        </div>
+        <div class="c-label">Tip · Definition（左竖条）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="padding:6px 0">
+          <span style="font-size:13px;font-weight:600;color:#4a5670">Methods.</span>
+          <div style="border-bottom:1px solid #4a5670;width:60px;margin-top:2px"></div>
+          <span style="font-size:13px;color:#16181d">使用 Adam 优化器，lr = 1e-3。</span>
+        </div>
+        <div class="c-label">Info · Methods（下划线）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="border:1px dashed #5a4a18;padding:8px 12px;background:#f5f2e8">
+          <span style="font-size:13px;font-weight:600;color:#5a4a18">Limitations.</span>
+          <span style="font-size:13px;color:#16181d"> 本研究样本仅限 XX，推广需谨慎。</span>
+        </div>
+        <div class="c-label">Warning · Limitations（虚框）</div>
+      </div>
+      <div class="container-tile">
+        <div class="c-body" style="padding:8px 12px;background:#f7eeee;position:relative">
+          <div style="position:absolute;top:0;left:0;width:10px;height:10px;border-top:1.5px solid #8a2a2a;border-left:1.5px solid #8a2a2a"></div>
+          <div style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-bottom:1.5px solid #8a2a2a;border-right:1.5px solid #8a2a2a"></div>
+          <span style="font-size:13px;font-weight:600;color:#8a2a2a">Fallacy.</span>
+          <span style="font-size:13px;color:#16181d"> 常见错误假设 "X 必然导致 Y"，反例如下。</span>
+        </div>
+        <div class="c-label">Danger · Fallacy（L 形双边）</div>
+      </div>
+    </div>
+
+    <!-- === Anti-pattern === -->
+    <div class="anti-pattern">
+      <span class="ap-kicker">✕ Anti-pattern</span>
+      科普号卡通 + 🧬🔬 emoji + "权威发布！！！" + PPT 多色块阴影图标——把学术包装成"重大新闻"是自媒体路径，真正的学术克制到近乎冷漠。 <i>&lt;em&gt;</i> italic 替 <b>&lt;strong&gt;</b>：学术不划重点，学术靠论证。
+    </div>
+  </section>
+  <!-- PERSONA_CARD:academic-frontier END -->
+
+  <!-- PERSONA_CARD:people-story START -->
+  <section id="persona-people-story" class="persona-card" data-persona="people-story" style="
+    --p-bg:#f2efe7;
+    --p-bg-soft:#e9e5db;
+    --p-bg-muted:#dcd7c9;
+    --p-text:#17171a;
+    --p-text-muted:#5d5d63;
+    --p-primary:#1b2330;
+    --p-secondary:#4a5260;
+    --p-accent:#8a3f2b;
+    --p-border:#c8c2b3;
+  ">
+    <!-- FILL:people-story -->
+  </section>
+  <!-- PERSONA_CARD:people-story END -->
+
+  <!-- PERSONA_CARD:tech-explainer START -->
+  <section id="persona-tech-explainer" class="persona-card" data-persona="tech-explainer" style="
+    --p-bg:#fafbfc;
+    --p-bg-soft:#f3f5f8;
+    --p-bg-muted:#e8ecf1;
+    --p-text:#1a2233;
+    --p-text-muted:#5c6778;
+    --p-primary:#0066cc;
+    --p-secondary:#4a90e2;
+    --p-accent:#f59e0b;
+    --p-border:#d9dee5;
+  ">
+    <!-- FILL:tech-explainer -->
+  </section>
+  <!-- PERSONA_CARD:tech-explainer END -->
+
+  <div class="foot">
+    <span>wechat-typeset &middot; personas gallery</span>
+    <span>v2 &middot; 2026-04</span>
+  </div>
+</div>
+
+</body>
+</html>
