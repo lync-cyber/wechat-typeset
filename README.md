@@ -10,7 +10,7 @@
   <img src="docs/design/hero-personas.svg" alt="wechat-typeset 九套主题人格色板总览——从学术前沿到慢生活，每套人格自带一整组色板、字距、motif" width="100%"/>
 </p>
 
-**🧩 即插即用的 LLM 技能**——仓库内 [`skills/wechat-typeset/`](skills/wechat-typeset/) 是一份可直接挂载到 Claude / 其它 Agent 的 skill 包：命中"公众号""微信排版"等信号自动启用，喂 LLM 一份 `PersonaSpec` JSON Schema 让它**生成主题**，再由 `validatePersona` 把违反微信约束的输出挡回去修订。
+**即插即用的 LLM 技能**——仓库内 [`skills/wechat-typeset/`](skills/wechat-typeset/) 是一份可直接挂载到 Claude / 其它 Agent 的 skill 包：命中"公众号""微信排版"等信号自动启用，喂 LLM 一份 `PersonaSpec` JSON Schema 让它**生成主题**，再由 `validatePersona` 把违反微信约束的输出挡回去修订。
 
 ---
 
