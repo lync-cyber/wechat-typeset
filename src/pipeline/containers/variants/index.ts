@@ -10,6 +10,7 @@ export { COMPARE_VARIANTS } from './compare'
 export { STEPS_VARIANTS } from './steps'
 export { DIVIDER_VARIANTS } from './divider'
 export { SECTION_TITLE_VARIANTS } from './section-title'
+export { CODE_BLOCK_VARIANTS } from './code-block'
 export type {
   VariantRenderResult,
   VariantModule,
@@ -19,7 +20,9 @@ export type {
   StepsVariant,
   DividerVariant,
   SectionTitleVariant,
+  CodeBlockVariant,
   AdmonitionKind,
   AdmonitionRenderArgs,
   CompareRenderArgs,
+  CodeBlockRenderArgs,
 } from './registry'

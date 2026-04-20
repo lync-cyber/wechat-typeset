@@ -21,11 +21,13 @@
 
 import type {
   AdmonitionVariantId,
+  CodeBlockVariantId,
   CompareVariantId,
   DividerVariantId,
   QuoteVariantId,
   SectionTitleVariantId,
   StepsVariantId,
+  Theme,
   VariantKind,
 } from '../../../themes/types'
 import type { ContainerRenderContext } from '../types'
@@ -80,6 +82,35 @@ export type StepsVariant = VariantModule<StepsVariantId>
 /** Divider 的 svgSlot 承担全部可视；wrapperCSS 仅管对齐和间距。 */
 export type DividerVariant = VariantModule<DividerVariantId>
 export type SectionTitleVariant = VariantModule<SectionTitleVariantId>
+
+/**
+ * CodeBlockVariant 与其他 variant 签名完全不同：
+ *   - 入参是 highlight hook 产物（语言 id + 已 syntax-highlighted 的内层 HTML），不是 ctx
+ *   - 出参是完整的 <pre>...</pre> 级 HTML 字符串（可选外层 wrapper），不走 wrapperCSS/titleCSS 四段
+ *
+ * 因为它消费的位置（md.options.highlight）和容器渲染器不同，强行套 VariantModule 会让签名
+ * 充满 any/断言，得不偿失。独立成一条类型，更诚实。
+ */
+export interface CodeBlockRenderArgs {
+  /** 已识别的语言 id（'javascript' / 'python' / ''），空串 = 无法识别或未指定 */
+  language: string
+  /** hljs 产出的 <code> 内层 HTML（已 escape，已 span 着色）；需要自行包一层 <pre><code>…</code></pre> */
+  codeInnerHtml: string
+}
+
+export interface CodeBlockVariant {
+  id: CodeBlockVariantId
+  kind: 'codeBlock'
+  /**
+   * 直接接收 theme 而非 ContainerRenderContext —— codeBlock 走 highlight hook 路径，
+   * 不经容器栈；也不需要 variants/containers/inline 只取 tokens/assets 即可。
+   */
+  render: (theme: Theme, args: CodeBlockRenderArgs) => string
+}
+
+export function defineCodeBlock(id: CodeBlockVariantId, render: CodeBlockVariant['render']): CodeBlockVariant {
+  return { id, kind: 'codeBlock', render }
+}
 
 // 定义辅助：省掉每个 variant 文件里 `id: '...'` + `kind: '...'` 的样板。
 // 运行时产物 {id, kind, render} 与手写完全一致。

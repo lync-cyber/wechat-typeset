@@ -14,6 +14,7 @@ import { generateThemeCSS } from './themeCSS'
 import { atomOneDarkCss, highlightCode } from './highlight'
 import { inlineHtml } from './juiceInline'
 import { applyWxPatches, type WxPatchOptions } from './wxPatch'
+import { CODE_BLOCK_VARIANTS } from './containers/variants'
 
 export interface RenderInput {
   md: string
@@ -50,10 +51,19 @@ function getMarkdown(theme: Theme): MarkdownIt {
     return cached
   }
   const md = createMarkdown({ theme })
-  md.options.highlight = (code: string, lang: string) => {
-    const { html, language } = highlightCode(code, lang)
-    const langClass = language ? ` class="language-${language} hljs"` : ' class="hljs"'
-    return `<pre><code${langClass}>${html}</code></pre>`
+  // 接管 fence 规则而不走 md.options.highlight：
+  //   markdown-it 的默认 fence 规则要求 highlight hook 返回值以 `<pre` 开头，
+  //   否则会把整段当作 <code> 内容再包一层 <pre><code>—— header-bar variant 需要
+  //   以 <section> 外壳开头，直接装进 highlight hook 会被默认 fence 规则吞掉外壳。
+  //   换到 renderer.rules.fence 层接管整段 token → HTML 映射，variant 可自由决定
+  //   外壳结构而不受 markdown-it 的 "<pre 前缀检测" 约束。
+  md.renderer.rules.fence = (tokens, idx) => {
+    const token = tokens[idx]
+    const info = token.info ? token.info.trim() : ''
+    const lang = info.split(/\s+/)[0] ?? ''
+    const { html, language } = highlightCode(token.content, lang)
+    const variant = CODE_BLOCK_VARIANTS[theme.variants.codeBlock] ?? CODE_BLOCK_VARIANTS.bare
+    return variant.render(theme, { language, codeInnerHtml: html }) + '\n'
   }
   mdCache.set(theme.id, md)
   // 超出容量淘汰最老（Map 迭代序 = 插入序）

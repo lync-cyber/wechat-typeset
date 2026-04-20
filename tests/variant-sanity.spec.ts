@@ -2,11 +2,14 @@
  * Variant Sanity 契约（v2 P1 同质化修复后的回归基线）
  *
  * 覆盖矩阵：
- *   6 kind（admonition / quote / compare / steps / divider / sectionTitle）
- *   × 23 个 variant
- *   × 5 套主题（default / tech-geek / life-aesthetic / business-finance / literary-humanism）
+ *   6 kind 容器类（admonition / quote / compare / steps / divider / sectionTitle）
+ *     × 23 个 variant
+ *     × 5 套主题（default / tech-geek / life-aesthetic / business-finance / literary-humanism）
+ *   + 1 kind 非容器类（codeBlock）— 走 md.options.highlight 而非 `:::` 容器栈，单独成组测试
+ *     × 2 个 variant（bare / header-bar）
+ *     × 5 套主题
  *
- * 每组 render 必须：
+ * 每组容器 render 必须：
  *   ① 零抛错（variant 代码不炸、themeCSS 守卫不炸、juice / wxPatch 全程不炸）
  *   ② 输出含 `container-{kindName}--{variantId}` 双 class（组件库 UI 反查点）
  *   ③ HTML 全文不得出现被微信剥离的 CSS（position:/float:/@media/@keyframes/:hover/:active/-webkit-）
@@ -155,7 +158,7 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 23 variant 全部进入测试矩阵', () => {
+  it('6 kind × 23 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
@@ -168,10 +171,15 @@ describe('枚举完整性', () => {
     })
   })
 
-  it('5 套主题都进入矩阵', () => {
+  it('codeBlock 的 2 个 variant 全部在 VARIANT_IDS 登记', () => {
+    expect([...VARIANT_IDS.codeBlock]).toEqual(['bare', 'header-bar'])
+  })
+
+  it('6 套主题都进入矩阵', () => {
     expect(themeList.map((t) => t.id)).toEqual([
       'default',
       'tech-geek',
+      'tech-explainer',
       'life-aesthetic',
       'business-finance',
       'literary-humanism',
@@ -205,5 +213,53 @@ describe('默认主题 · 每 variant 渲染片段快照', () => {
       // 写入 __snapshots__/variant-sanity.spec.ts.snap；首次运行自动生成
       expect(chunk).toMatchSnapshot()
     })
+  }
+})
+
+// -------------------- codeBlock 专项：走 highlight hook，不是容器栈 --------------------
+
+const CODE_BLOCK_MD = [
+  '```javascript',
+  "const x = 1",
+  "console.log('hi')",
+  '```',
+  '',
+].join('\n')
+
+describe('codeBlock variant · 5 主题 × 2 variant', () => {
+  for (const theme of themeList) {
+    for (const id of VARIANT_IDS.codeBlock) {
+      const label = `${theme.id} · codeBlock:${id}`
+      it(label, () => {
+        // getMarkdown 按 theme.id 缓存 MD 实例，fence rule 闭包绑死首次创建时的 theme；
+        // 覆写 variants 不改 id 会让缓存返回旧实例（variants.codeBlock 被冻结）。
+        // 测试里显式拼后缀 id 绕开缓存。
+        const themed = {
+          ...theme,
+          id: `${theme.id}--cb-${id}`,
+          variants: { ...theme.variants, codeBlock: id },
+        }
+        const { html } = render({ md: CODE_BLOCK_MD, theme: themed })
+
+        // 所有 variant 都产出 <pre><code>
+        expect(html, `${label} 缺 <pre><code>`).toMatch(/<pre[^>]*>[\s\S]*<code[^>]*>/)
+
+        if (id === 'bare') {
+          // bare 零 wrapper
+          expect(html, `${label} bare 不应出现 wrapper`).not.toMatch(/wx-code-block/)
+        } else {
+          // header-bar 应有双 class wrapper + 大写语言标签
+          expect(html, `${label} 缺 wrapper`).toMatch(
+            /class="wx-code-block wx-code-block--header-bar"/,
+          )
+          expect(html, `${label} 缺语言标签`).toMatch(/>JAVASCRIPT</)
+        }
+
+        // 共同约束：CSS 禁用字清零、SVG 安全、无 <style> 残留
+        assertNoForbiddenCss(html, label)
+        assertSvgSafe(html, label)
+        expect(html, `${label} 残留 <style>`).not.toMatch(/<style\b/i)
+      })
+    }
   }
 })
