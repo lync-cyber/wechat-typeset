@@ -6,9 +6,9 @@
 [![license](https://img.shields.io/badge/license-MIT-a83420.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D18-2a1a14.svg)](package.json)
 
-![编辑器截图待补](docs/design/preview-placeholder.png)
-
-<sub>（截图待补：左栏 CodeMirror 暗底编辑区 + 右栏 375 px 预览 iframe，顶栏为主题选择器与「一键复制」。）</sub>
+<p align="center">
+  <img src="docs/design/hero-personas.svg" alt="wechat-typeset 九套主题人格色板总览——从学术前沿到慢生活，每套人格自带一整组色板、字距、motif" width="100%"/>
+</p>
 
 **🧩 即插即用的 LLM 技能**——仓库内 [`skills/wechat-typeset/`](skills/wechat-typeset/) 是一份可直接挂载到 Claude / 其它 Agent 的 skill 包：命中"公众号""微信排版"等信号自动启用，喂 LLM 一份 `PersonaSpec` JSON Schema 让它**生成主题**，再由 `validatePersona` 把违反微信约束的输出挡回去修订。
 
@@ -35,6 +35,11 @@ npm run dev       # http://127.0.0.1:5173，secure context 下剪贴板才能写
 ## 主题人格系统（Theme Personas）
 
 每套人格是一份 JSON-serializable 的 `PersonaSpec`——色板、字号、motif AST、容器变体全部在里面。`specToTheme(spec)` 把它投影成运行时 `Theme`，`validatePersona` 用同一份 schema 把微信平台约束（禁 `font-family` / 禁 1 px 以下描边 / 禁 `<14px` 字号）在构造期挡下来。
+
+<p align="center">
+  <img src="docs/design/spec-pipeline.svg" alt="PersonaSpec 三条投影路径示意图——specToTheme 投运行时、specToGallery 投目录页、getSchema 投 LLM 结构化输出约束" width="100%"/>
+</p>
+
 
 | 人格 | slug | 气质定语 | 适用场景 |
 | --- | --- | --- | --- |

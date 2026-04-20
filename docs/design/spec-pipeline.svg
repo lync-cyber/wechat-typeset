@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 260" role="img" aria-label="PersonaSpec 三条投影路径示意图">
+  <title>PersonaSpec · 一份 spec 三条投影</title>
+  <desc>persona.spec.ts 是主题的唯一真相来源。三条投影 specToTheme / specToGallery / getSchema 分别喂给运行时、人类目录、LLM 约束。</desc>
+
+  <!-- Backdrop -->
+  <rect x="0" y="0" width="960" height="260" fill="#fdfcf8"/>
+
+  <!-- Title -->
+  <text x="480" y="30" text-anchor="middle" font-family="Georgia, 'Noto Serif SC', serif" font-size="16" fill="#2c2a22" font-weight="600">一份 spec，三条投影</text>
+  <text x="480" y="48" text-anchor="middle" font-family="-apple-system, 'PingFang SC', sans-serif" font-size="11" fill="#636870">改色板 / 改字距 / 改 motif —— 全部在 persona.spec.ts；运行时、目录页、LLM schema 自动对齐</text>
+
+  <!-- Source: persona.spec.ts (left) -->
+  <g transform="translate(40,90)">
+    <rect width="210" height="100" fill="#fefefe" stroke="#2c2a22" stroke-width="1.5" rx="2"/>
+    <rect x="0" y="0" width="210" height="22" fill="#2c2a22"/>
+    <text x="105" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#fdfcf8" font-weight="600">persona.spec.ts</text>
+    <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">id, name, description</text>
+    <text x="12" y="56" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">palette · typography</text>
+    <text x="12" y="72" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">motifs (SVG AST)</text>
+    <text x="12" y="88" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">variants · signatureContainers</text>
+    <!-- corner tag -->
+    <rect x="160" y="4" width="46" height="14" fill="#a83420"/>
+    <text x="183" y="14" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#fefefe" font-weight="700">SOURCE</text>
+  </g>
+
+  <!-- Projection arrows -->
+  <g stroke="#636870" stroke-width="1.3" fill="none">
+    <!-- to top: specToTheme -->
+    <path d="M 255 105 Q 360 105 420 75"/>
+    <polygon points="420,75 413,72 414,79" fill="#636870" stroke="none"/>
+    <!-- to middle: specToGallery -->
+    <path d="M 255 140 L 420 140"/>
+    <polygon points="420,140 413,137 413,143" fill="#636870" stroke="none"/>
+    <!-- to bottom: getSchema -->
+    <path d="M 255 175 Q 360 175 420 205"/>
+    <polygon points="420,205 413,201 414,208" fill="#636870" stroke="none"/>
+  </g>
+
+  <!-- arrow labels -->
+  <text x="340" y="85" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" fill="#a83420">specToTheme</text>
+  <text x="340" y="134" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" fill="#a83420">specToGallery</text>
+  <text x="340" y="197" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" fill="#a83420">getSchema</text>
+
+  <!-- Sink 1: runtime Theme (top right) -->
+  <g transform="translate(430,55)">
+    <rect width="200" height="40" fill="#fdfdfc" stroke="#d8d8d4" stroke-width="1" rx="2"/>
+    <rect x="0" y="0" width="4" height="40" fill="#2558b0"/>
+    <text x="14" y="17" font-family="Georgia, 'Noto Serif SC', serif" font-size="11" fill="#2c2a22" font-weight="600">运行时 Theme</text>
+    <text x="14" y="32" font-family="'JetBrains Mono', monospace" font-size="9" fill="#636870">→ render() → 公众号 HTML</text>
+  </g>
+
+  <!-- Sink 2: gallery -->
+  <g transform="translate(430,120)">
+    <rect width="200" height="40" fill="#fefefe" stroke="#d8d8d4" stroke-width="1" rx="2"/>
+    <rect x="0" y="0" width="4" height="40" fill="#b86f2a"/>
+    <text x="14" y="17" font-family="Georgia, 'Noto Serif SC', serif" font-size="11" fill="#2c2a22" font-weight="600">人类目录 HTML</text>
+    <text x="14" y="32" font-family="'JetBrains Mono', monospace" font-size="9" fill="#636870">→ personas-gallery.html</text>
+  </g>
+
+  <!-- Sink 3: JSON Schema -->
+  <g transform="translate(430,185)">
+    <rect width="200" height="40" fill="#fefefe" stroke="#d8d8d4" stroke-width="1" rx="2"/>
+    <rect x="0" y="0" width="4" height="40" fill="#5a8759"/>
+    <text x="14" y="17" font-family="Georgia, 'Noto Serif SC', serif" font-size="11" fill="#2c2a22" font-weight="600">LLM JSON Schema</text>
+    <text x="14" y="32" font-family="'JetBrains Mono', monospace" font-size="9" fill="#636870">→ 结构化输出约束 · validatePersona</text>
+  </g>
+
+  <!-- Downstream: render -->
+  <g transform="translate(670,120)">
+    <rect width="250" height="40" fill="#1f1d18" stroke="#1f1d18" stroke-width="1" rx="2"/>
+    <text x="14" y="17" font-family="'JetBrains Mono', monospace" font-size="11" fill="#fdfcf8" font-weight="600">render({ md, persona|spec|theme })</text>
+    <text x="14" y="32" font-family="'JetBrains Mono', monospace" font-size="9" fill="#d4a65a">markdown-it → juice → wxPatch → 富文本 HTML</text>
+  </g>
+
+  <!-- Arrow from Theme sink to render -->
+  <g stroke="#636870" stroke-width="1.3" fill="none">
+    <path d="M 630 75 Q 680 75 750 120"/>
+    <polygon points="750,120 743,115 747,122" fill="#636870" stroke="none"/>
+  </g>
+
+  <!-- Arrow from validatePersona back (feedback loop) -->
+  <g stroke="#a83420" stroke-width="1" fill="none" stroke-dasharray="3 2">
+    <path d="M 530 205 Q 420 240 150 200"/>
+    <polygon points="150,200 158,198 155,205" fill="#a83420" stroke="none"/>
+  </g>
+  <text x="340" y="240" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="9" fill="#a83420" font-style="italic">validatePersona → 反馈 { path, message, severity } 给 LLM 改写</text>
+</svg>
