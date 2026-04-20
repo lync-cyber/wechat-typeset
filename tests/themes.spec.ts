@@ -28,13 +28,14 @@ function cloneTheme(id: string, patch: (base: Theme) => Theme): Theme {
 }
 
 describe('默认主题 · 资产完整', () => {
-  it('提供 h2Prefix / dividerXxx / quoteMark / sectionCorner / 4 图标 / stepBadge', () => {
+  it('提供 h2Prefix / dividerXxx / sectionCorner / 4 图标 / stepBadge（规范 §1.4 故意删 quoteMark）', () => {
     const a = defaultTheme.assets
     expect(a.h2Prefix).toBeTypeOf('string')
     expect(a.dividerWave).toBeTypeOf('string')
     expect(a.dividerDots).toBeTypeOf('string')
     expect(a.dividerFlower).toBeTypeOf('string')
-    expect(a.quoteMark).toBeTypeOf('string')
+    // 规范 §1.4 / §2.6：default 刻意不导出 quoteMark，quote-card 走字符回退
+    expect(a.quoteMark).toBeUndefined()
     expect(a.sectionCorner).toBeTypeOf('string')
     expect(a.tipIcon).toBeTypeOf('string')
     expect(a.warningIcon).toBeTypeOf('string')
@@ -74,23 +75,28 @@ describe('主题资产在最终 HTML 中确实注入', () => {
   })
 
   it('divider wave/dots/flower 来自 theme.assets（≥ 200 宽度视图）', () => {
+    // 规范 §1.4 "三档装饰强度全部退一档"：
+    //   wave 240×12（原 240×14）、dots 240×8（3 点而非 4 点）、flower 240×10（原 240×18，去中央菱形）
     const wave = run('::: divider variant=wave\n:::\n')
-    expect(wave).toMatch(/<svg[^>]*viewBox="0 0 240 14"/)
+    expect(wave).toMatch(/<svg[^>]*viewBox="0 0 240 12"/)
     const dots = run('::: divider variant=dots\n:::\n')
     expect(dots).toMatch(/<svg[^>]*viewBox="0 0 240 8"/)
     const flower = run('::: divider variant=flower\n:::\n')
-    expect(flower).toMatch(/<svg[^>]*viewBox="0 0 240 18"/)
+    expect(flower).toMatch(/<svg[^>]*viewBox="0 0 240 10"/)
   })
 
-  it('quote-card 使用 theme.assets.quoteMark', () => {
+  it('quote-card 在 default 下不渲染 quoteMark SVG（规范 §1.4 / §2.6 故意留白，走字符回退）', () => {
     const out = run('::: quote-card 苏轼\n人生如逆旅\n:::\n')
-    // 主题自带大号 SVG 引号（viewBox 0 0 40 32）
-    expect(out).toMatch(/<svg[^>]*viewBox="0 0 40 32"/)
+    // default 刻意不导出 quoteMark——classic variant 走 FALLBACK_OPEN_MARK `「` 字符
+    expect(out).not.toMatch(/<svg[^>]*viewBox="0 0 40 32"/)
+    // 确认 fallback 字符出现（classic.ts 的 FALLBACK_OPEN_MARK）
+    expect(out).toContain('「')
   })
 
   it('section-title 使用 theme.assets.sectionCorner', () => {
     const out = run('::: section-title 第一章\n:::\n')
-    expect(out).toMatch(/<svg[^>]*viewBox="0 0 18 18"/)
+    // 规范 §1.4：sectionCorner 从 18×18 粗实心 L 改到 14×14 的 2px stroke 细描边
+    expect(out).toMatch(/<svg[^>]*viewBox="0 0 14 14"/)
     expect(out).toContain('第一章')
   })
 

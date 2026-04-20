@@ -230,3 +230,32 @@ export function hello(name: string): string {
 ::: mpvideo qqvid=w0000examplevid
 腾讯视频示例容器：占位 iframe 会保留 `v.qq.com` 白名单源。
 :::
+
+---
+
+## Default 主题专属验证 · h4 / kbd / bare codeBlock
+
+以下片段覆盖 default 落地后新增的渲染点 —— h4 层级在 steps 之外的独立出现、inline kbd 键帽、以及 bare variant 的 codeBlock（default 拒绝 header-bar）。
+
+### 小节标题示例 h3
+
+正文一段，紧接着 h4 作为更小一档的分项：
+
+#### 分项 A · h4 独立出现
+
+h4 在 default 里走 14px / 600 / text 色 —— 不染 primary（那是 tech-explainer 教程签名）。
+
+#### 分项 B · 与 kbd 共现
+
+按 <kbd>Ctrl</kbd> + <kbd>K</kbd>（或 Mac 下 <kbd>⌘</kbd> + <kbd>K</kbd>）复制富文本到公众号后台。
+
+### bare codeBlock（default 默认）
+
+default 的 codeBlock 走 bare variant，**没有** header-bar 语言标签带（那是 tech-explainer 签名）。代码块底色用中性深灰 `#2a2d32`，不沾 Atom One Dark `#282c34` / VSCode Dark+ `#1e1e1e` 出处：
+
+```python
+def greet(name: str) -> str:
+    return f"hello, {name}"
+```
+
+> 同一段话用裸 blockquote：default 的 blockquote 走 3px primary 左边 + bgSoft 浅底 + textMuted 文字色。

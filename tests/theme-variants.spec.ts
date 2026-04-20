@@ -44,13 +44,16 @@ function collectSvgs(t: Theme): string[] {
 }
 
 describe.each(themes)('$name · 资产齐备', (t) => {
-  it('11 个资产都给值', () => {
+  it('资产都给值（default 10 件：规范 §1.4 删 quoteMark；其他主题 11 件）', () => {
     const a = t.assets
     expect(a.h2Prefix).toBeTypeOf('string')
     expect(a.dividerWave).toBeTypeOf('string')
     expect(a.dividerDots).toBeTypeOf('string')
     expect(a.dividerFlower).toBeTypeOf('string')
-    expect(a.quoteMark).toBeTypeOf('string')
+    // default 故意不导出 quoteMark（规范 §1.4 / §2.6 "故意留白"）
+    if (t.id !== 'default') {
+      expect(a.quoteMark).toBeTypeOf('string')
+    }
     expect(a.sectionCorner).toBeTypeOf('string')
     expect(a.tipIcon).toBeTypeOf('string')
     expect(a.warningIcon).toBeTypeOf('string')
