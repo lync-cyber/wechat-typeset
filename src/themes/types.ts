@@ -92,6 +92,17 @@ export interface ThemeElements {
   em: CSSObject
 }
 
+/**
+ * 主题容器样式集。每个字段对应 src/containers/vocabulary.ts 里 `styleKey` 非 null 的容器。
+ *
+ * 约束：字段集必须与 STYLED_CONTAINERS 的 styleKey 集合一致；新增容器时两边同步。
+ * 有运行时对齐检查（buildTheme + containers/api）；漏加字段会在 baseContainers()
+ * 层抛 TS 编译错。
+ *
+ * 不含 `free` / `pros` / `cons` —— 它们在 vocabulary 里 styleKey=null：
+ *   - free：刻意不施加主题样式（escape hatch）
+ *   - pros / cons：样式由外层 compare 的 CSS 派生（compare 两栏专属收敛规则）
+ */
 export interface ThemeContainers {
   intro: CSSObject
   author: CSSObject
@@ -100,6 +111,8 @@ export interface ThemeContainers {
   warning: CSSObject
   info: CSSObject
   danger: CSSObject
+  /** 第五态补注（note）。中性色、低对比；未设置也不影响 renderer，走 token 兜底。 */
+  note: CSSObject
   quoteCard: CSSObject
   highlight: CSSObject
   compare: CSSObject
@@ -108,6 +121,16 @@ export interface ThemeContainers {
   footerCTA: CSSObject
   recommend: CSSObject
   qrcode: CSSObject
+  /** 公众号语音占位卡 */
+  mpvoice: CSSObject
+  /** 公众号视频占位卡 */
+  mpvideo: CSSObject
+  /** 文首 tl;dr 摘要块（signature 容器） */
+  abstract: CSSObject
+  /** 大数字 + 说明（signature 容器） */
+  keyNumber: CSSObject
+  /** 相关阅读（signature 容器） */
+  seeAlso: CSSObject
 }
 
 export interface ThemeAssets {

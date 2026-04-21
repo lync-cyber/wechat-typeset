@@ -68,6 +68,12 @@
 的上下双线像 errata 勘误条，把这种**稀缺的严重警告**夹起来。
 :::
 
+::: note // NOTE on scope
+本篇只谈"对内 postmortem"；对外公开的 learning 文章（面向客户 / 监管）是另一套
+体裁——语气更克制，数据更少，结构更像新闻稿。note 在 tech-geek 里就是 manpage 里
+那种"aside"附注：不改变主叙事，只为专业读者留一条旁路。
+:::
+
 ::: divider variant=dots
 :::
 

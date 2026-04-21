@@ -249,9 +249,9 @@ export interface MotifSpec {
 
 /**
  * 项目已登记的"签名容器"。每个主题在 PersonaSpec.signatureContainers 里列出
- * 该主题必须具备（渲染层有对应实现）的容器 id。Phase 4 conformance 会校验：
- * 每个 signatureContainer 要么在 baseContainers / variants 里有实现，要么在
- * Phase 5 中补全（free 组件 / admonition variant / template）。
+ * 该主题必须具备（渲染层有对应实现）的容器 id。conformance 测试会校验：
+ * 每个 signatureContainer 都在渲染注册表里有实现，或通过 free 组件 /
+ * admonition variant / template 承载。
  *
  * 超出此清单的 id 判作 spec 错误；添加新容器需同步扩展这里。
  */
@@ -274,7 +274,7 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'qrcode',
   'mpvoice',
   'mpvideo',
-  // Phase 5 候选（plan §Phase 5）
+  // 签名容器扩展（abstract / keyNumber / seeAlso 已实现；algorithm / seal 保留占位）
   'abstract',
   'algorithm',
   'keyNumber',

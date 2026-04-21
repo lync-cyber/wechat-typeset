@@ -534,7 +534,7 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // Phase 5 gap-closing: abstract（报告摘要）+ keyNumber（大数字数据栏，财报核心）
+  // 签名容器：abstract（报告摘要）+ keyNumber（大数字数据栏，财报核心）
   signatureContainers: ['abstract', 'keyNumber'],
 
   // ============================================================

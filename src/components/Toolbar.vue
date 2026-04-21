@@ -77,6 +77,14 @@ onBeforeUnmount(() => {
 
 const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
 const modKey = isMac ? '⌘' : 'Ctrl'
+
+/** 允许父组件（如 OnboardingCard 移动端引导）打开 "更多操作" 菜单 */
+defineExpose({
+  openOverflow() {
+    overflowOpen.value = true
+    themeOpen.value = false
+  },
+})
 </script>
 
 <template>

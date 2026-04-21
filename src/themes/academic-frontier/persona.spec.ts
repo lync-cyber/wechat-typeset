@@ -498,7 +498,7 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // Phase 5 gap-closing: abstract（文首 tl;dr，学术综述自然入口）+ seeAlso（参考文献列表）
+  // 签名容器：abstract（文首 tl;dr，学术综述自然入口）+ seeAlso（参考文献列表）
   signatureContainers: ['abstract', 'seeAlso'],
 
   // ============================================================

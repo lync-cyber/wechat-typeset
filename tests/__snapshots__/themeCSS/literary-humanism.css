@@ -222,6 +222,10 @@
   letter-spacing: 1.5px;
 }
 
+.markdown-body .container-cover {
+  margin: 0 0 36px 0;
+}
+
 .markdown-body .container-author {
   display: inline-block;
   background-color: #ece5d1;
@@ -233,8 +237,10 @@
   letter-spacing: 1px;
 }
 
-.markdown-body .container-cover {
-  margin: 0 0 36px 0;
+.markdown-body .container-section-title {
+  margin: 40px 0 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #cfc3a8;
 }
 
 .markdown-body .container-quote-card {
@@ -261,12 +267,6 @@
   margin: 24px 0;
 }
 
-.markdown-body .container-section-title {
-  margin: 40px 0 18px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #cfc3a8;
-}
-
 .markdown-body .container-footer-cta {
   margin: 36px 0;
   padding: 28px 0 20px 0;
@@ -286,6 +286,26 @@
   padding: 16px;
   background-color: transparent;
   border-radius: 0;
+}
+
+.markdown-body .container-mpvoice {
+  margin: 20px 0;
+}
+
+.markdown-body .container-mpvideo {
+  margin: 20px 0;
+}
+
+.markdown-body .container-abstract {
+  margin: 18px 0 24px;
+}
+
+.markdown-body .container-key-number {
+  margin: 18px 0;
+}
+
+.markdown-body .container-see-also {
+  margin: 20px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

@@ -18,11 +18,9 @@ import { dirname, resolve } from 'node:path'
 
 import { listPersonas } from '../src/public'
 import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/themes/types'
-import {
-  CONTAINER_REGISTRY,
-  SIGNATURE_CONTAINER_MARKDOWN_NAME,
-} from '../src/pipeline/containers'
+import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
+import { CONTAINER_VOCABULARY } from '../src/containers/vocabulary'
 
 interface CapabilitiesV2 {
   schemaVersion: '2.0'
@@ -46,10 +44,24 @@ interface CapabilitiesV2 {
   }>
   containers: Array<{
     id: string
-    kind: 'variantized' | 'admonition' | 'free' | 'nested'
+    category: string
+    /**
+     * kind 是对 category 的"渲染行为"维度归纳：
+     *   variantized - 有 variant slot，可通过 variant=xxx 切骨架
+     *   admonition  - tip/warning/info/danger 四态；共享 admonition variant 清单
+     *   nested      - pros/cons，必须嵌在父容器内
+     *   fixed       - 固定骨架但有主题化 CSS 槽位（highlight / footer-cta / recommend / note 等）
+     *   free        - 兜底 escape hatch（只有 `free`）
+     */
+    kind: 'variantized' | 'admonition' | 'nested' | 'fixed' | 'free'
     variants?: readonly string[]
     defaultVariant?: string
     children?: readonly string[]
+    parent?: string
+    fenceLength: 3 | 4
+    description: string
+    example: string
+    attrs?: ReadonlyArray<{ key: string; description: string; enum?: readonly string[]; example?: string }>
     notes?: string
   }>
   signatureContainerIds: readonly string[]
@@ -75,50 +87,56 @@ function pkgJson(): { name: string; version: string; homepage?: string } {
 }
 
 function buildContainers(): CapabilitiesV2['containers'] {
-  const variantized: Record<string, keyof typeof VARIANT_IDS> = {
-    'quote-card': 'quote',
-    compare: 'compare',
-    steps: 'steps',
-    divider: 'divider',
-    'section-title': 'sectionTitle',
-  }
-  const admonitions = new Set(['tip', 'warning', 'info', 'danger'])
-  const nested: Record<string, readonly string[]> = {
-    compare: ['pros', 'cons'],
-  }
-
+  // 单一真相：直接迭代 CONTAINER_VOCABULARY；新增容器只需在 vocabulary 登记。
+  const admonitions = new Set(['tip', 'warning', 'info', 'danger', 'note'])
   const result: CapabilitiesV2['containers'] = []
-  for (const id of Object.keys(CONTAINER_REGISTRY)) {
-    if (id in variantized) {
-      const kind = variantized[id]
-      result.push({
-        id,
-        kind: 'variantized',
-        variants: VARIANT_IDS[kind],
-        defaultVariant: DEFAULT_VARIANTS[kind],
-        children: nested[id],
-      })
-    } else if (admonitions.has(id)) {
-      result.push({
-        id,
-        kind: 'admonition',
-        variants: VARIANT_IDS.admonition,
-        defaultVariant: DEFAULT_VARIANTS.admonition,
-        notes: 'admonition 四态共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。',
-      })
-    } else if (id === 'pros' || id === 'cons') {
-      result.push({
-        id,
-        kind: 'nested',
-        notes: `必须嵌在 ::: compare 内（外层 ::::，内层 :::）`,
-      })
+
+  for (const spec of CONTAINER_VOCABULARY) {
+    const isAdmonition = admonitions.has(spec.name)
+    const isNested = spec.parent !== undefined
+    const isFree = spec.category === 'free'
+
+    // variantKind 存在 → 可切骨架
+    let variants: readonly string[] | undefined
+    let defaultVariant: string | undefined
+    let kind: CapabilitiesV2['containers'][number]['kind']
+
+    if (spec.variantKind) {
+      variants = VARIANT_IDS[spec.variantKind]
+      defaultVariant = DEFAULT_VARIANTS[spec.variantKind]
+      kind = isAdmonition ? 'admonition' : 'variantized'
+    } else if (isNested) {
+      kind = 'nested'
+    } else if (isFree) {
+      kind = 'free'
     } else {
-      result.push({
-        id,
-        kind: 'free',
-        notes: '无 variant 切换；按主题默认样式渲染。',
-      })
+      // 其他都是"固定骨架 + 主题化 CSS"：highlight / footer-cta / recommend / note /
+      // qrcode / mpvoice / mpvideo / abstract / key-number / see-also
+      kind = 'fixed'
     }
+
+    const notes = isNested
+      ? `必须嵌在 ${spec.parent} 内（外层 ::::，内层 :::）`
+      : isAdmonition
+        ? 'admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。'
+        : isFree
+          ? '兜底 escape hatch：无主题样式，按作者内容原样透传。'
+          : undefined
+
+    result.push({
+      id: spec.name,
+      category: spec.category,
+      kind,
+      variants: spec.name === 'note' ? undefined : variants,
+      defaultVariant: spec.name === 'note' ? undefined : defaultVariant,
+      children: spec.children,
+      parent: spec.parent,
+      fenceLength: spec.fenceLength,
+      description: spec.description,
+      example: spec.example,
+      attrs: spec.attrs,
+      notes,
+    })
   }
   // 稳定排序：按 id 字典序
   result.sort((a, b) => a.id.localeCompare(b.id))

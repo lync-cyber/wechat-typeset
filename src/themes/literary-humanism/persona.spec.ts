@@ -672,7 +672,7 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // literary 只用通用容器 + variant（不声明任何签名容器；Phase 5 再补）
+  // literary 只用通用容器 + variant；暂不声明签名容器
   signatureContainers: [],
 
   // ============================================================

@@ -1,5 +1,5 @@
 /**
- * Phase 5 · Signature Container gap-closing
+ * 签名容器渲染器
  *
  * 补齐 SUPPORTED_SIGNATURE_CONTAINERS 里有条目但注册表缺实现的容器：
  *   - note：第五态提示。视觉逻辑与 tip/info/warning/danger 同骨架，但颜色走 textMuted

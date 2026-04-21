@@ -1,10 +1,11 @@
 # API 详细参考
 
-`src/public` 暴露 12 个符号 + 1 个错误类型。以下按分组列出签名、返回值和典型用法。主线任务里不要把本文件整段读入——按需查。
+`src/public` 暴露 17 个符号 + 1 个错误类型。以下按分组列出签名、返回值和典型用法。主线任务里不要把本文件整段读入——按需查。
 
 ## 目录
 
 - [元信息（6）](#元信息)
+- [容器词汇表（5）](#容器词汇表)
 - [校验（2）](#校验)
 - [渲染（2）](#渲染)
 - [Motif 工具（3）](#motif-工具)
@@ -58,7 +59,82 @@ getVariantIds().admonition
 //    'minimal-underline','terminal','dashed-border','double-border','top-bottom-rule']
 ```
 
-完整类目：`admonition`(9) · `quote`(4) · `compare`(3) · `steps`(3) · `divider`(5) · `sectionTitle`(2) · `codeBlock`(2)。
+完整类目：`admonition`(16) · `quote`(4) · `compare`(3) · `steps`(3) · `divider`(5) · `sectionTitle`(2) · `codeBlock`(2)。
+
+## 容器词汇表
+
+**词汇表是 Headless 契约层的单一真相**：所有 `:::` 容器的 fence 名、分类、是否可切骨架、可用 attrs、最小示例都在 `CONTAINER_VOCABULARY` 里。5 个函数提供作者视角查询。
+
+### `getContainerVocabulary(): readonly ContainerSpec[]`
+
+返回全部 25 条 `ContainerSpec`（主题无关）。每条结构：
+
+```ts
+interface ContainerSpec {
+  name: string                    // markdown fence（kebab，如 'quote-card'）
+  styleKey: string | null         // ThemeContainers 的 JS 字段（camel）；null = 无主题样式
+  category: ContainerCategory     // 'structure'|'admonition'|'content'|'navigation'|'media'|'signature'|'free'
+  variantKind?: VariantKind       // 绑定的 variant slot（无则固定骨架）
+  nestable?: boolean
+  attrs?: AttrSpec[]              // 允许的 key=value
+  children?: readonly string[]    // 可嵌套的子容器（compare → pros/cons）
+  parent?: string                 // 必须嵌在此父容器内（pros/cons → compare）
+  fenceLength: 3 | 4              // `:::` 或 `::::`
+  description: string
+  example: string                 // 最小可插入 markdown
+}
+```
+
+**作者写作工作流**：需要「摘要容器」时直接 `getContainerVocabulary().find(c => c.category === 'signature' && c.name === 'abstract')` 拿到 example 即可插入，不需要查主题。
+
+### `getContainerSpec(name: string): ContainerSpec | undefined`
+
+按 fence 名（kebab）查单条。未知名返回 `undefined`（不抛错，方便 fuzzy 查询）。
+
+### `getVariantsForContainer(name: string): VariantDescriptor[]`
+
+容器可切换的骨架 variant 列表：
+
+```ts
+interface VariantDescriptor {
+  id: string
+  kind: VariantKind | 'codeBlock'
+  name: string
+  description: string
+  themeCompat?: readonly string[]  // 推荐主题；不声明等于全兼容
+}
+```
+
+不支持 variant 的容器（`note`、`intro`、`highlight` 等 `fixed` 型）返回空数组。典型用法：
+
+```ts
+const tipVariants = getVariantsForContainer('tip')
+// → 16 条（accent-bar / pill-tag / ticket-notch / ... / report-section）
+```
+
+### `getThemeDefaultVariants(variants: ThemeVariants): VariantDescriptor[]`
+
+解包 `PersonaSpec.variants` 里 7 个 id 为描述对象：
+
+```ts
+const spec = getPersona('tech-geek')
+getThemeDefaultVariants(spec.variants)
+// → [{ id:'manpage-log', kind:'admonition', name:'日志块', ... }, ...]
+```
+
+### `getContainerSnippet(name: string, options?: SnippetOptions): string`
+
+生成最小可插入 markdown。`options.variantId` 会追加 `variant=xxx` 到 open 行：
+
+```ts
+getContainerSnippet('tip')
+// → '::: tip 小贴士\n内容 …\n:::\n'
+
+getContainerSnippet('tip', { variantId: 'terminal' })
+// → '::: tip 小贴士 variant=terminal\n内容 …\n:::\n'
+```
+
+未知 name 抛 `Error`。不校验 variantId 合法性——调用方用 `getVariantsForContainer` 先确认。
 
 ## 校验
 

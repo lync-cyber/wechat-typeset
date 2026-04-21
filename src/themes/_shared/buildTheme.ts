@@ -277,6 +277,16 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'border-radius': '6px',
     },
     qrcode: { margin: '20px 0', padding: '14px 16px' },
+    // 第五态 note + 签名块 abstract / key-number / see-also + media 占位。默认值刻意
+    // 最小（多为空对象或仅 margin）——这些容器 renderer 本身在
+    // pipeline/containers/signature.ts|media.ts 里用 token 直接绘外框，这里的 CSS
+    // 槽位留给主题 voice 做微调（加边框色 / 改 padding 节奏）用。
+    note: {},
+    mpvoice: { margin: '20px 0' },
+    mpvideo: { margin: '20px 0' },
+    abstract: { margin: '18px 0 24px' },
+    keyNumber: { margin: '18px 0' },
+    seeAlso: { margin: '20px 0' },
   }
 }
 

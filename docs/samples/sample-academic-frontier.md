@@ -1,6 +1,6 @@
-export const academicFrontierSample = `# 关于对比学习中表征坍缩的一个新观察
+# 关于对比学习中表征坍缩的一个新观察
 
-::: intro ABSTRACT
+::: abstract ABSTRACT
 本文重新审视对比学习（contrastive learning）中的*表征坍缩*现象。不同于以往将坍缩归因于负样本不足的主流观点，我们在三个公开基准上的实验表明：**当批次规模固定时，温度系数 *τ* 的选择比负样本数量更能决定坍缩是否发生**。我们进一步给出一个理论解释，并提出一种不依赖于大批次的轻量级缓解方案。
 :::
 
@@ -32,7 +32,7 @@ export const academicFrontierSample = `# 关于对比学习中表征坍缩的一
 :::
 
 ::: info Methods.
-我们在 ResNet-50 骨干网络上按 SimCLR 协议训练 200 epoch，batch size 固定为 256。所有实验在 8×A100 集群上完成，代码基于 PyTorch 2.1 与 \`timm\` 库。关键超参搜索范围：\`τ ∈ [0.05, 0.5]\`，\`lr ∈ [0.1, 1.0]\`。
+我们在 ResNet-50 骨干网络上按 SimCLR 协议训练 200 epoch，batch size 固定为 256。所有实验在 8×A100 集群上完成，代码基于 PyTorch 2.1 与 `timm` 库。关键超参搜索范围：`τ ∈ [0.05, 0.5]`，`lr ∈ [0.1, 1.0]`。
 :::
 
 ::: warning Limitations.
@@ -61,14 +61,14 @@ export const academicFrontierSample = `# 关于对比学习中表征坍缩的一
 
 核心算法伪码如下：
 
-\`\`\`python
+```python
 for epoch in range(E):
     tau = schedule(epoch, tau_star)
     for x in loader:
         z1, z2 = f(aug(x)), f(aug(x))
         loss = info_nce(z1, z2, tau)
         loss.backward(); opt.step()
-\`\`\`
+```
 
 ::: divider
 :::
@@ -110,6 +110,12 @@ for epoch in range(E):
 CITE AS — 张三, 李四, 王五. (2026). 关于对比学习中表征坍缩的一个新观察. 公众号《学术前沿》, 第 42 期. DOI: 10.48550/arXiv.2604.12345
 :::
 
+::: see-also SEE ALSO · 相关工作导览
+- *Wang & Isola, 2020* 的 alignment–uniformity 视角与本文温度主导观点互补
+- *Dubois et al., 2022* 对小批次场景的分析可参照本文 §4.2
+- OpenReview 上本文预印本：arxiv.org/abs/2604.12345v2 含扩展附录
+:::
+
 ::: recommend REFERENCES
 - [1] Chen, T., Kornblith, S., Norouzi, M., & Hinton, G. (2020). A simple framework for contrastive learning of visual representations. *ICML*, 1597–1607.
 - [2] He, K., Fan, H., Wu, Y., Xie, S., & Girshick, R. (2020). Momentum contrast for unsupervised visual representation learning. *CVPR*, 9729–9738.
@@ -117,4 +123,3 @@ CITE AS — 张三, 李四, 王五. (2026). 关于对比学习中表征坍缩的
 - [4] Wang, T., & Isola, P. (2020). Understanding contrastive representation learning through alignment and uniformity on the hypersphere. *ICML*, 9929–9939.
 - [5] Liu, M. (2026). On temperature scaling in contrastive objectives. arXiv: 2604.01234.
 :::
-`

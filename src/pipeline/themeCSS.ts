@@ -13,6 +13,7 @@ import {
   FORBIDDEN_DISPLAY_VALUES,
   FORBIDDEN_VALUE_PATTERNS,
 } from './rules'
+import { STYLED_CONTAINERS } from '../containers/vocabulary'
 
 const ROOT_CLASS = 'markdown-body'
 
@@ -145,26 +146,13 @@ export function generateThemeCSS(theme: Theme): string {
   chunks.push(rule(`.${ROOT_CLASS} .wx-wavy`, theme.inline.wavy, 'inline.wavy'))
   chunks.push(rule(`.${ROOT_CLASS} .wx-emphasis`, theme.inline.emphasis, 'inline.emphasis'))
 
-  // Containers（Step 1 大多为空对象，生成空规则被自然跳过）
-  const containerMap: Array<[string, CSSObject]> = [
-    ['intro', theme.containers.intro],
-    ['author', theme.containers.author],
-    ['cover', theme.containers.cover],
-    ['tip', theme.containers.tip],
-    ['warning', theme.containers.warning],
-    ['info', theme.containers.info],
-    ['danger', theme.containers.danger],
-    ['quote-card', theme.containers.quoteCard],
-    ['highlight', theme.containers.highlight],
-    ['compare', theme.containers.compare],
-    ['steps', theme.containers.steps],
-    ['section-title', theme.containers.sectionTitle],
-    ['footer-cta', theme.containers.footerCTA],
-    ['recommend', theme.containers.recommend],
-    ['qrcode', theme.containers.qrcode],
-  ]
-  for (const [name, obj] of containerMap) {
-    const r = rule(containerSelector(name), obj, `containers.${name}`)
+  // Containers：按 CONTAINER_VOCABULARY 迭代。每个 styleKey 非 null 的容器都生成一条
+  // `.markdown-body .container-{name} { ... }` 规则；空 CSS 对象被 `rule()` 自然跳过。
+  // 迭代顺序由 vocabulary 定义顺序决定（稳定），而不是此处手动列举。
+  for (const spec of STYLED_CONTAINERS) {
+    const obj = (theme.containers as unknown as Record<string, CSSObject | undefined>)[spec.styleKey]
+    if (!obj) continue
+    const r = rule(containerSelector(spec.name), obj, `containers.${spec.styleKey}`)
     if (r) chunks.push(r)
   }
 

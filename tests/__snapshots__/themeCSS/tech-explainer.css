@@ -224,6 +224,13 @@
   color: #5c6778;
 }
 
+.markdown-body .container-cover {
+  background-color: #fafbfc;
+  padding: 20px 0 24px;
+  margin: 16px 0;
+  border-bottom: 1px solid #d9dee5;
+}
+
 .markdown-body .container-author {
   background-color: transparent;
   padding: 8px 0;
@@ -232,10 +239,9 @@
   border-bottom: 1px solid #d9dee5;
 }
 
-.markdown-body .container-cover {
-  background-color: #fafbfc;
-  padding: 20px 0 24px;
-  margin: 16px 0;
+.markdown-body .container-section-title {
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #d9dee5;
 }
 
@@ -265,12 +271,6 @@
   padding-left: 24px;
 }
 
-.markdown-body .container-section-title {
-  margin: 32px 0 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #d9dee5;
-}
-
 .markdown-body .container-footer-cta {
   margin: 28px 0;
   padding: 16px 18px;
@@ -291,6 +291,26 @@
   padding: 16px;
   background-color: #f3f5f8;
   border-radius: 6px;
+}
+
+.markdown-body .container-mpvoice {
+  margin: 20px 0;
+}
+
+.markdown-body .container-mpvideo {
+  margin: 20px 0;
+}
+
+.markdown-body .container-abstract {
+  margin: 18px 0 24px;
+}
+
+.markdown-body .container-key-number {
+  margin: 18px 0;
+}
+
+.markdown-body .container-see-also {
+  margin: 20px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

@@ -28,9 +28,10 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build && npm run gen:schema && npm run build:capabilities",
+    "dev": "npm run build:samples && vite",
+    "build": "npm run build:samples && vue-tsc --noEmit && vite build && npm run gen:schema && npm run build:capabilities",
     "build:capabilities": "tsx scripts/build-capabilities.ts",
+    "build:samples": "tsx scripts/build-samples.ts",
     "preview": "vite preview --host 127.0.0.1 --port 7788",
     "test": "vitest run && tsx tests/verify-sample-full.ts",
     "test:unit": "vitest run",

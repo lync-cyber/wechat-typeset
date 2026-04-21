@@ -3,8 +3,13 @@
  *
  * 目的：确保 docs/samples/sample-full.md 在默认主题下
  *   - pipeline 不抛异常
- *   - 23 个 variant 的 class 全部出现
- *   - 9 个无 variant 的容器 class 也都出现
+ *   - 33 个 variant 的 class 全部出现（admonition 16 + quote 4 + compare 3 + steps 3
+ *     + divider 5 + sectionTitle 2；codeBlock 独立检查）
+ *   - 14 个无 variant 容器 class 也都出现：
+ *       · 既有 9 个：intro / cover / author / highlight / footer-cta / recommend
+ *                   / qrcode / mpvoice / mpvideo
+ *       · 补齐 5 个：note（第五态）+ abstract / key-number / see-also（签名块）
+ *                   + free（兜底）
  *
  * 运行：npx tsx tests/verify-sample-full.ts
  */
@@ -72,7 +77,7 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
 check('codeBlock:bare(default theme)', () => /<pre[^>]*>\s*<code[^>]*hljs/.test(html), '<pre><code class="...hljs">')
 check('codeBlock:no-wrapper-on-bare', () => !html.includes('wx-code-block'), '不含 wx-code-block')
 
-// 2. 无 variant 容器 class 出现
+// 2. 无 variant 容器 class 出现（含补齐的 5 个：note + abstract / key-number / see-also + free）
 const plainContainers = [
   'container-intro',
   'container-cover',
@@ -83,6 +88,12 @@ const plainContainers = [
   'container-qrcode',
   'container-mpvoice',
   'container-mpvideo',
+  // 补齐五档：note（第五态）+ signature（abstract/key-number/see-also）+ free（escape hatch）
+  'container-note',
+  'container-abstract',
+  'container-key-number',
+  'container-see-also',
+  'container-free',
 ]
 for (const c of plainContainers) {
   check(`plain:${c}`, () => html.includes(c), c)

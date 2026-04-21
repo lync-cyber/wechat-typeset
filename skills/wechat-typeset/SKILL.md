@@ -31,6 +31,9 @@ import {
   // 元信息
   listPersonas, getPersona, getPersonaSummary,
   getSchema, getSupportedSignatureContainers, getVariantIds,
+  // 容器词汇表（Headless 契约层 · 作者视角）
+  getContainerVocabulary, getContainerSpec,
+  getVariantsForContainer, getThemeDefaultVariants, getContainerSnippet,
   // 校验
   validatePersona, SpecValidationError,
   // 渲染
@@ -39,10 +42,26 @@ import {
   getMotifSpec, renderMotif, renderMotifWithValues,
   // 类型
   type PersonaSpec, type PersonaSummary, type Theme,
+  type ContainerSpec, type VariantDescriptor,
 } from '../src/public'
 ```
 
 详细签名速查见 [references/api.md](references/api.md)。
+
+## 心智模型 · Headless 契约 + 主题化渲染
+
+架构有两层清晰的分离：
+
+- **契约层（主题无关）**：`src/containers/vocabulary.ts` 是所有合法 `:::` 容器的**单一真相**——name（kebab fence）、category、variantKind、attrs、example。作者写 markdown 时只与这层打交道。
+- **实现层（主题相关）**：`Theme.containers` 为契约层每个 styleKey 提供 CSS；`Theme.variants` 为每个 variant slot 选一个骨架 id。换主题 = 换整套实现层，markdown 源码原封不动。
+
+**关键 invariant**：`CONTAINER_VOCABULARY` ↔ `ThemeContainers` 字段集 ↔ `themeCSS.ts` 迭代 ↔ `capabilities.json` **四处由词汇表统一派生**，不会再出现"老同步问题"。
+
+LLM 作为作者时只需要两件事：
+1. 用 `getContainerVocabulary()` 查 fence 名、example、可选 attrs。
+2. 需要切骨架时用 `getVariantsForContainer(name)` + 在 open 行写 `variant=xxx`。
+
+LLM 作为主题作者时的完整 CRUD 工作流见 [references/theme-crud.md](references/theme-crud.md)。
 
 ## 五条主力工作流
 
@@ -105,7 +124,35 @@ const badge3   = renderMotifWithValues(motifs.stepBadge!, { N: 3 })
 
 用于图标表、motif 画廊、色板预览等不走完整 Markdown 管线的场景。MotifShape / MotifTemplate / 基元类型详见 [references/motif-ast.md](references/motif-ast.md)。
 
-### 5. 临时微调一套内置 persona
+### 5. 让 LLM 挑容器 + 变体（作者视角）
+
+主题选定后，作者要写 `:::` 容器时不需要查主题——词汇表是契约层唯一入口：
+
+```ts
+// 列出所有可用容器
+const vocab = getContainerVocabulary()
+// → 25 条：fence name / category / fenceLength / example / attrs / 是否可切骨架
+
+// 选中某容器后拿最小 markdown 骨架
+getContainerSnippet('compare')
+// → ':::: compare\n::: pros 优点\n- A\n:::\n::: cons 缺点\n- B\n:::\n::::\n'
+
+// 想切骨架：先查有哪些可选
+getVariantsForContainer('quote-card')
+// → [{id:'classic',...},{id:'magazine-dropcap',...},...]
+
+// 生成带 variant 覆盖的 snippet
+getContainerSnippet('tip', { variantId: 'terminal' })
+// → '::: tip 小贴士 variant=terminal\n...\n'
+```
+
+**作者视角规则**：
+1. 容器 fence 名永远是 **kebab**（`quote-card`、`section-title`、`key-number`、`see-also`）。
+2. admonition 家族是 5 态（tip/warning/info/danger/note），**没有** `::: admonition` fence。
+3. compare 外层 `::::`（4 个冒号），pros/cons 内层 `:::`（3 个）；fenceLength 字段标注了这一点。
+4. `variant=xxx` 写在 open 行 name 之后，不是 HTML 注释里。
+
+### 6. 临时微调一套内置 persona
 
 ```ts
 const base = getPersona('tech-explainer')
@@ -147,7 +194,8 @@ const { html } = render({ md: userMarkdown, spec: tweaked })
 
 只在真正需要查某块细节时读对应文件，避免在主线任务里过度加载：
 
-- [references/api.md](references/api.md)——12 个符号的完整签名 + 返回类型 + 典型调用。
+- [references/api.md](references/api.md)——17 个符号的完整签名 + 返回类型 + 典型调用（含容器词汇表 5 个新函数）。
+- [references/theme-crud.md](references/theme-crud.md)——LLM 作为主题作者的完整 C/R/U/D 工作流：查、读、改、持久化。
 - [references/hard-rules.md](references/hard-rules.md)——硬约束清单 + 每条规则**为什么存在**（微信平台上的具体现象）。
 - [references/motif-ast.md](references/motif-ast.md)——MotifShape / MotifTemplate / 7 种基元的字段语义 + 嵌套规则 + 占位符替换。
 - [references/personas.md](references/personas.md)——9 套内置 persona 的速查表：受众、配色签名、signature 容器、适配话题。

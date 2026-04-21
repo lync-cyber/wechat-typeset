@@ -1,9 +1,4 @@
-/**
- * 通用示例：覆盖全部 19 个容器 + 所有行内扩展 + 代码块 / 列表 / 图片 / 引用。
- * 切主题时可用此 md 作为基准；4 套主题的个性化示例则各自覆盖一份不同 slug。
- */
-
-export const commonSample = `# wechat-typeset · 全量示例
+# wechat-typeset · 全量示例
 
 ::: intro 本文通过一篇完整样稿演示所有容器、行内扩展与代码块。
 这份示例用来验证：**所有容器在新主题下都有得体呈现**，且没有硬编码颜色遗留。
@@ -22,7 +17,7 @@ export const commonSample = `# wechat-typeset · 全量示例
 
 ## 一、段落与行内扩展
 
-本工具把 Markdown 映射到公众号约束之上。==高亮==、~~波浪~~、*斜体*、**加粗**、\`inline code\` 在 4 套主题下都会跟着 tokens 走。
+本工具把 Markdown 映射到公众号约束之上。==高亮==、~~波浪~~、*斜体*、**加粗**、`inline code` 在 4 套主题下都会跟着 tokens 走。
 
 > 一个普通引用块：用来引出观点，不抢焦点。
 
@@ -32,19 +27,23 @@ export const commonSample = `# wechat-typeset · 全量示例
 ## 二、四色提示
 
 ::: tip 小贴士
-高亮 \`ctx.tokens\` 里的色值——主题切换时会自然同步。
+高亮 `ctx.tokens` 里的色值——主题切换时会自然同步。
 :::
 
 ::: warning 注意
-\`:::: compare\` 必须用 4 个冒号，内层 pros/cons 用 3 个。
+`:::: compare` 必须用 4 个冒号，内层 pros/cons 用 3 个。
 :::
 
 ::: info 说明
-公众号不支持 \`<style>\` 块与 \`class\`——所有样式在导出阶段内联。
+公众号不支持 `<style>` 块与 `class`——所有样式在导出阶段内联。
 :::
 
 ::: danger 警告
-禁止在主题里写 \`font-family\`；\`themeCSS\` 会抛出 \`ThemeAuthoringError\`。
+禁止在主题里写 `font-family`；`themeCSS` 会抛出 `ThemeAuthoringError`。
+:::
+
+::: note 第五态补注
+note 不抢色、走 textMuted + noteIcon —— 用于"不构成警示、但读者可能错过"的旁注。
 :::
 
 ::: divider variant=flower
@@ -98,7 +97,7 @@ export const commonSample = `# wechat-typeset · 全量示例
 
 ## 五、代码与数据
 
-\`\`\`ts
+```ts
 import { renderPipeline } from './pipeline'
 import { getTheme } from './themes'
 
@@ -107,7 +106,7 @@ const { html, wordCount } = renderPipeline({
   md: '# Hello wechat-typeset',
   theme,
 })
-\`\`\`
+```
 
 | 主题 | 基调 | 适用栏目 |
 | --- | --- | --- |
@@ -136,6 +135,12 @@ const { html, wordCount } = renderPipeline({
 每周一篇深度，愿意被慢慢读。
 :::
 
+::: see-also 看完本文还可以
+- 切到 `tech-geek` 主题看这段代码在琥珀终端里的样子
+- 切到 `literary-humanism` 主题看引言与按语如何被素雅化
+- 切到 `business-finance` 主题看 compare / key-number 的报告感
+:::
+
 ::: recommend 延伸阅读
 - [从零开始的 wechat-typeset](https://example.com/a)
 - [主题工程的五个误区](https://example.com/b)
@@ -145,4 +150,3 @@ const { html, wordCount } = renderPipeline({
 ::: qrcode 扫码加入读者群
 ![二维码占位](https://placehold.co/240x240?text=QR)
 :::
-`

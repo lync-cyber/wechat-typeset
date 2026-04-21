@@ -214,6 +214,10 @@
   color: #7a6a58;
 }
 
+.markdown-body .container-cover {
+  margin: 16px 0;
+}
+
 .markdown-body .container-author {
   background-color: #f2ead8;
   border-radius: 6px;
@@ -221,8 +225,10 @@
   margin: 16px 0;
 }
 
-.markdown-body .container-cover {
-  margin: 16px 0;
+.markdown-body .container-section-title {
+  margin: 24px 0 12px;
+  border-bottom: 2px solid #d98141;
+  padding-bottom: 6px;
 }
 
 .markdown-body .container-quote-card {
@@ -248,12 +254,6 @@
   margin: 16px 0;
 }
 
-.markdown-body .container-section-title {
-  margin: 24px 0 12px;
-  border-bottom: 2px solid #d98141;
-  padding-bottom: 6px;
-}
-
 .markdown-body .container-footer-cta {
   margin: 24px 0;
   padding: 16px;
@@ -271,6 +271,26 @@
 .markdown-body .container-qrcode {
   margin: 20px 0;
   padding: 14px 16px;
+}
+
+.markdown-body .container-mpvoice {
+  margin: 20px 0;
+}
+
+.markdown-body .container-mpvideo {
+  margin: 20px 0;
+}
+
+.markdown-body .container-abstract {
+  margin: 18px 0 24px;
+}
+
+.markdown-body .container-key-number {
+  margin: 18px 0;
+}
+
+.markdown-body .container-see-also {
+  margin: 20px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

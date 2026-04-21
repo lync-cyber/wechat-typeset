@@ -16,7 +16,7 @@ import type { Theme } from './themes/types'
 import { applyPalette } from './color/applyPalette'
 import { copyHtmlToClipboard } from './clipboard/copyHtml'
 import { exportHtml, exportImage, exportMd } from './clipboard/exportFile'
-import { getSample } from './samples'
+import { getSample, SAMPLE_BY_THEME } from './samples'
 import {
   createDraft,
   deleteDraft,
@@ -45,6 +45,7 @@ const lastSeed = ref<Seed | null>(null)
 
 const editorRef = ref<InstanceType<typeof Editor> | null>(null)
 const previewRef = ref<InstanceType<typeof Preview> | null>(null)
+const toolbarRef = ref<InstanceType<typeof Toolbar> | null>(null)
 const paletteRef = ref<InstanceType<typeof ComponentPalette> | null>(null)
 
 const ui = reactive({
@@ -184,10 +185,20 @@ watch(baseThemeId, (val, prev) => {
       lastSeed.value = prevSeed
     })
   }
-  // 正文还停在前一主题的示例（用户没动过）就自动换成新主题的示例；
-  // 已经输入过内容则保留，避免覆盖用户草稿。
-  if (val !== prev && md.value === getSample(prev)) {
-    md.value = getSample(val)
+  // 正文还停在"任意主题的示例"（用户没动过）就自动换成新主题的示例；已经
+  // 输入过内容则保留，避免覆盖用户草稿。
+  //
+  // 不只比对 prev 那一个样本——考虑两类场景：
+  //   1. 用户首次打开 → 自动创建 default 示例 → 切到 tech-geek：旧实现里因 md.value
+  //      恰好等于 getSample('default') 能 swap；但若 sample 内容刚刚更新（比如新增容器）
+  //      而用户的草稿正文仍按老版 default 样本入库，会导致切主题后保持老文案。
+  //   2. 用户自己选了"载入 B 主题示例"后，再切到 C 主题：旧实现要求 md.value ==
+  //      getSample(B) 但 prev 是 B 之前的那个主题——条件永远不成立，用户被迫再次手动
+  //      "载入当前主题示例"。
+  // 改为"命中任意主题 sample"即视作 pristine，主题切换自动跟随。
+  if (val !== prev) {
+    const isPristineSample = Object.values(SAMPLE_BY_THEME).some((s) => s === md.value)
+    if (isPristineSample) md.value = getSample(val)
   }
   if (activeDraftId.value) {
     updateDraft(activeDraftId.value, { themeId: val })
@@ -561,6 +572,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="app">
     <Toolbar
+      ref="toolbarRef"
       :draft-title="currentDraftTitle"
       :word-count="rendered.wordCount"
       :reading-time="rendered.readingTime"
@@ -604,6 +616,7 @@ onBeforeUnmount(() => {
           @dismiss="dismissOnboard"
           @open-help="ui.helpOpen = true; dismissOnboard()"
           @open-command="ui.commandOpen = true; dismissOnboard()"
+          @open-overflow="toolbarRef?.openOverflow(); dismissOnboard()"
         />
       </section>
       <section class="pane pane-preview">

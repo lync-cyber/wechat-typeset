@@ -1,6 +1,6 @@
 # wx-md · 全量容器 & 变体演示
 
-这篇 Markdown 覆盖全部 23 个 variant 与 9 个无 variant 容器，用于：
+这篇 Markdown 覆盖全部 33 个 variant 与 14 个无 variant 容器（含第五态 note + 签名块 abstract / key-number / see-also + 兜底 free），用于：
 
 - `scripts/verify-sample-full.ts` 端到端渲染自检
 - 人工审阅任何一次 variant / 容器改动的视觉回归
@@ -241,6 +241,36 @@ export function hello(name: string): string {
   return `hello, ${name}`
 }
 ```
+
+---
+
+## 签名容器 & 兜底 · abstract / key-number / see-also / note / free
+
+::: abstract TL;DR
+本文梳理 wx-md 的 24+ 容器：覆盖五档提示（tip / warning / info / danger / note）、
+三种签名块（abstract / key-number / see-also）、全部 33 个 variant。新容器在这里一次过目。
+:::
+
+::: key-number value="33" variant 数量
+覆盖 admonition 16 × quote 4 × compare 3 × steps 3 × divider 5 × sectionTitle 2 × codeBlock 2。
+换骨架不动 markdown 源码。
+:::
+
+::: note 第五态补注
+note 是"中性补注"——不抢色（走 textMuted），与 tip / warning / info / danger 四态形成互补。
+教程主题里最常见。
+:::
+
+::: see-also 延伸阅读
+- [Headless 容器契约设计](https://example.com/headless)
+- [微信硬约束清单](https://example.com/hard-rules)
+- [主题 CRUD 工作流](https://example.com/theme-crud)
+:::
+
+::: free 编辑部补注
+`free` 是兜底 escape hatch —— 渲染器刻意不施加主题样式，只套一层 `<section>`。
+写不归类内容（致谢名单、编辑后记、补丁记录）的地方。
+:::
 
 ---
 

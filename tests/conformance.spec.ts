@@ -274,10 +274,10 @@ describe('D. JSON Schema contract', () => {
 })
 
 // ============================================================
-// E. Signature Container gap-closing（Phase 5）
+// E. Signature Container 注册表闭合性
 // ============================================================
 
-describe('E. Signature Container gap-closing', () => {
+describe('E. Signature Container 注册表闭合性', () => {
   it('每个 spec 的 signatureContainers 都能映射到 markdown 名', () => {
     for (const { spec, dir } of eachSpec()) {
       for (const sig of spec.signatureContainers ?? []) {
@@ -301,7 +301,7 @@ describe('E. Signature Container gap-closing', () => {
     }
   })
 
-  it('Phase 5 新增 renderer 都已注册（note / abstract / key-number / see-also）', () => {
+  it('签名与第五态 renderer 都已注册（note / abstract / key-number / see-also）', () => {
     for (const name of ['note', 'abstract', 'key-number', 'see-also']) {
       expect(CONTAINER_REGISTRY[name], `renderer ${name}`).toBeTruthy()
     }

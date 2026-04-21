@@ -228,6 +228,10 @@
   line-height: 1.75;
 }
 
+.markdown-body .container-cover {
+  margin: 0 0 24px 0;
+}
+
 .markdown-body .container-author {
   background-color: transparent;
   border-radius: 0;
@@ -238,8 +242,10 @@
   line-height: 1.7;
 }
 
-.markdown-body .container-cover {
-  margin: 0 0 24px 0;
+.markdown-body .container-section-title {
+  margin: 36px 0 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #4a5670;
 }
 
 .markdown-body .container-quote-card {
@@ -266,12 +272,6 @@
   margin: 22px 0;
 }
 
-.markdown-body .container-section-title {
-  margin: 36px 0 16px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #4a5670;
-}
-
 .markdown-body .container-footer-cta {
   margin: 40px 0 24px 0;
   padding: 18px 0;
@@ -294,6 +294,26 @@
   padding: 0;
   background-color: transparent;
   border-radius: 0;
+}
+
+.markdown-body .container-mpvoice {
+  margin: 20px 0;
+}
+
+.markdown-body .container-mpvideo {
+  margin: 20px 0;
+}
+
+.markdown-body .container-abstract {
+  margin: 18px 0 24px;
+}
+
+.markdown-body .container-key-number {
+  margin: 18px 0;
+}
+
+.markdown-body .container-see-also {
+  margin: 20px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

@@ -232,6 +232,10 @@
   letter-spacing: 0.5px;
 }
 
+.markdown-body .container-cover {
+  margin: 0 0 28px 0;
+}
+
 .markdown-body .container-author {
   display: inline-block;
   background-color: transparent;
@@ -244,8 +248,9 @@
   letter-spacing: 0.6px;
 }
 
-.markdown-body .container-cover {
-  margin: 0 0 28px 0;
+.markdown-body .container-section-title {
+  margin: 36px 0 16px;
+  padding-bottom: 6px;
 }
 
 .markdown-body .container-quote-card {
@@ -271,11 +276,6 @@
   margin: 24px 0;
 }
 
-.markdown-body .container-section-title {
-  margin: 36px 0 16px;
-  padding-bottom: 6px;
-}
-
 .markdown-body .container-footer-cta {
   margin: 32px 0 0 0;
   padding: 18px 0 4px 0;
@@ -296,6 +296,26 @@
   padding: 0;
   background-color: transparent;
   border-radius: 0;
+}
+
+.markdown-body .container-mpvoice {
+  margin: 20px 0;
+}
+
+.markdown-body .container-mpvideo {
+  margin: 20px 0;
+}
+
+.markdown-body .container-abstract {
+  margin: 18px 0 24px;
+}
+
+.markdown-body .container-key-number {
+  margin: 18px 0;
+}
+
+.markdown-body .container-see-also {
+  margin: 20px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

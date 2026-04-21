@@ -37,6 +37,18 @@ import {
 import { render as pipelineRender, type RenderOutput } from '../pipeline'
 import type { WxPatchOptions } from '../pipeline/wxPatch'
 import { PERSONA_REGISTRY, PERSONA_SPECS } from './personas'
+import {
+  getContainerVocabulary as _getContainerVocabulary,
+  getContainerSpec as _getContainerSpec,
+  getVariantsForContainer as _getVariantsForContainer,
+  getThemeDefaultVariants as _getThemeDefaultVariants,
+  getContainerSnippet as _getContainerSnippet,
+  type ContainerSpec,
+  type ContainerCategory,
+  type AttrSpec,
+  type VariantDescriptor,
+  type SnippetOptions,
+} from '../containers'
 
 // ============================================================
 // 只读元信息
@@ -105,6 +117,57 @@ export function getSupportedSignatureContainers(): readonly SignatureContainerId
 /** 各 variant 类目的合法 id 清单（admonition/quote/compare/steps/divider/sectionTitle/codeBlock）。 */
 export function getVariantIds(): typeof VARIANT_IDS {
   return VARIANT_IDS
+}
+
+// ============================================================
+// Container Vocabulary（Headless 契约层的作者查询接口）
+// ============================================================
+
+/**
+ * 返回所有合法 `:::` 容器的权威词汇表（主题无关）。
+ *
+ * 每个条目含：name（kebab fence）、category、variantKind?、fenceLength、
+ * description、example、attrs? —— 足够 LLM 直接生成合法 markdown 而不需要
+ * 反查任何主题。
+ */
+export function getContainerVocabulary(): readonly ContainerSpec[] {
+  return _getContainerVocabulary()
+}
+
+/** 按 fence 名查单个容器描述。未知名返回 undefined。 */
+export function getContainerSpec(name: string): ContainerSpec | undefined {
+  return _getContainerSpec(name)
+}
+
+/**
+ * 某容器可切换的所有 variant 骨架（id + 中文名 + description + themeCompat）。
+ * 不支持 variant 切换的容器（note / intro / highlight 等）返回空数组。
+ */
+export function getVariantsForContainer(containerName: string): VariantDescriptor[] {
+  return _getVariantsForContainer(containerName)
+}
+
+/**
+ * 某主题为各 variant slot 选的默认骨架描述集。
+ *
+ * 典型用法：先 getPersona(id) 拿 PersonaSpec，再把 spec.variants 传进来。
+ */
+export function getThemeDefaultVariants(
+  variants: import('../themes/types').ThemeVariants,
+): VariantDescriptor[] {
+  return _getThemeDefaultVariants(variants)
+}
+
+/**
+ * 为指定容器生成最小 markdown snippet。
+ *   - 不传 options：返回 spec.example 原样
+ *   - 传 variantId：在 open 行追加/替换 variant=xxx
+ */
+export function getContainerSnippet(
+  containerName: string,
+  options?: SnippetOptions,
+): string {
+  return _getContainerSnippet(containerName, options)
 }
 
 // ============================================================
@@ -238,4 +301,9 @@ export type {
   Theme,
   ThemeVariants,
   WxPatchOptions,
+  ContainerSpec,
+  ContainerCategory,
+  AttrSpec,
+  VariantDescriptor,
+  SnippetOptions,
 }

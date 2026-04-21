@@ -79,7 +79,7 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   mpvoice: mpvoiceContainer,
   mpvideo: mpvideoContainer,
   free: freeContainer,
-  // Phase 5 · Signature Container gap-closing
+  // 签名容器（abstract / key-number / see-also）
   abstract: abstractContainer,
   'key-number': keyNumberContainer,
   'see-also': seeAlsoContainer,
@@ -117,7 +117,7 @@ export const SIGNATURE_CONTAINER_MARKDOWN_NAME: Readonly<Record<string, string>>
   abstract: 'abstract',
   keyNumber: 'key-number',
   seeAlso: 'see-also',
-  // Phase 5 候选未实现（尚无主题声明使用）：algorithm / seal / prelude
+  // 保留占位未实现（尚无主题声明使用）：algorithm / seal / prelude
 }
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'

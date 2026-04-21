@@ -197,7 +197,7 @@ describe('info / attrs 解析', () => {
   })
 })
 
-describe('Phase 5 signature containers', () => {
+describe('signature containers（note / abstract / key-number / see-also）', () => {
   it('note：第五态 fence + 默认标题"补注"', () => {
     const out = run('::: note\n正文\n:::\n')
     expect(out).toMatch(/class="container-note"/)
