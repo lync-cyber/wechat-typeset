@@ -29,7 +29,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && npm run gen:schema && npm run build:capabilities",
+    "build:capabilities": "tsx scripts/build-capabilities.ts",
     "preview": "vite preview --host 127.0.0.1 --port 7788",
     "test": "vitest run && tsx tests/verify-sample-full.ts",
     "test:unit": "vitest run",
@@ -38,7 +39,8 @@
     "typecheck": "vue-tsc --noEmit",
     "gen:schema": "tsx scripts/gen-schema.ts",
     "gen:gallery": "tsx scripts/gen-gallery.ts",
-    "validate:spec": "tsx scripts/validate-spec.ts"
+    "validate:spec": "tsx scripts/validate-spec.ts",
+    "cli": "tsx scripts/wechat-typeset-cli.ts"
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.0",
