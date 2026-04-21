@@ -45,6 +45,28 @@ const groups = groupedWithShortcut()
         </div>
       </section>
 
+      <section class="help-icons">
+        <div class="group-title mono">移动端工具栏</div>
+        <ul class="icon-list">
+          <li class="icon-item">
+            <span class="icon-glyph">●</span>
+            <span class="icon-desc"><strong>切换主题</strong> — 更换排版风格与配色方案</span>
+          </li>
+          <li class="icon-item">
+            <span class="icon-glyph">＋</span>
+            <span class="icon-desc"><strong>插入组件</strong> — 封面、引用、代码块等预置模板</span>
+          </li>
+          <li class="icon-item">
+            <span class="icon-glyph">◐</span>
+            <span class="icon-desc"><strong>自定义配色</strong> — 调整强调色与文字颜色</span>
+          </li>
+          <li class="icon-item">
+            <span class="icon-glyph">···</span>
+            <span class="icon-desc"><strong>更多操作</strong> — 导出、清空、载入示例等</span>
+          </li>
+        </ul>
+      </section>
+
       <section class="help-shortcuts">
         <div v-for="[group, items] in groups" :key="group" class="shortcut-group">
           <div class="group-title mono">{{ group }}</div>
@@ -109,6 +131,33 @@ const groups = groupedWithShortcut()
 }
 .intro-line + .intro-line { margin-top: 4px; }
 .intro-line strong { color: var(--text); }
+
+.help-icons {
+  display: none;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 767px) {
+  .help-icons { display: block; }
+}
+.icon-list { list-style: none; margin: var(--sp-2) 0 0; padding: 0; }
+.icon-item {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  padding: 6px 0;
+  font-size: var(--fs-13);
+  border-bottom: 1px dashed var(--border);
+}
+.icon-item:last-child { border-bottom: none; }
+.icon-glyph {
+  flex: 0 0 28px;
+  text-align: center;
+  font-size: var(--fs-15);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+.icon-desc { color: var(--text-muted); line-height: var(--lh-normal); }
+.icon-desc strong { color: var(--text); font-weight: var(--fw-medium); }
 
 .help-shortcuts {
   padding: var(--sp-4) var(--sp-5);

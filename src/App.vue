@@ -765,6 +765,7 @@ onBeforeUnmount(() => {
 @media (max-width: 767px) {
   .app {
     --mobile-tabs-h: 56px;
+    --toolbar-h: 93px; /* 两行工具栏：40px 标题行 + 1px 分隔线 + 52px 工具行 */
   }
 
   /* Show the tab bar */

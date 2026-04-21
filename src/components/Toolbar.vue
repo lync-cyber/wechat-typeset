@@ -95,6 +95,7 @@ const modKey = isMac ? '⌘' : 'Ctrl'
         @click="emit('toggleDrafts')"
       >
         <span class="draft-title">{{ props.draftTitle || '未命名草稿' }}</span>
+        <span class="draft-mobile-hint">导入</span>
         <span class="chevron">▾</span>
       </button>
     </div>
@@ -293,6 +294,7 @@ const modKey = isMac ? '⌘' : 'Ctrl'
   font-weight: var(--fw-medium);
 }
 .chevron { color: var(--text-subtle); font-size: 10px; }
+.draft-mobile-hint { display: none; }
 
 .btn {
   display: inline-flex; align-items: center; gap: var(--sp-2);
@@ -385,34 +387,84 @@ const modKey = isMac ? '⌘' : 'Ctrl'
   .stats { display: none; }
 }
 @media (max-width: 767px) {
-  .toolbar { padding: 0 var(--sp-3); gap: var(--sp-2); }
-  .btn-cmd, .btn-help { display: none; }
-  .draft-title { max-width: 110px; }
-  .draft-switch { max-width: 150px; }
-  /* 把「主题 / 插入 / 配色」收纳为 44×44 图标按钮 —— 不再 display:none */
-  .zone-center { gap: 4px; }
-  .zone-center .btn {
-    min-width: 44px; height: 44px; padding: 0; justify-content: center;
+  /* ── 两行工具栏 ──────────────────────────────────────────
+     第一行（40px）：品牌名左 / 导入草稿按钮右
+     第二行（52px）：工具图标左 / 操作按钮右
+     ──────────────────────────────────────────────────────── */
+  .toolbar {
+    height: auto;
+    padding: 0;
+    gap: 0;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
   }
+
+  /* 第一行：品牌名与草稿入口两端对齐 */
+  .zone-left {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    overflow: hidden;
+    justify-self: stretch;
+    align-self: stretch;
+    justify-content: space-between;
+    padding: 0 var(--sp-3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* 移动端：隐藏草稿标题，显示功能说明 */
+  .draft-title { display: none; }
+  .draft-mobile-hint {
+    display: inline;
+    font-size: var(--fs-13);
+    font-weight: var(--fw-medium);
+    color: var(--text);
+  }
+
+  /* 草稿按钮收缩为功能入口 */
+  .draft-switch {
+    width: auto;
+    max-width: none;
+    height: 40px;
+    padding: 0 var(--sp-3);
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  /* 第二行：左区工具按钮 */
+  .zone-center {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    padding: 4px var(--sp-3);
+    gap: 4px;
+  }
+
+  /* 第二行：右区操作按钮 */
+  .zone-right {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+    padding: 4px var(--sp-3);
+    gap: 4px;
+  }
+
+  .btn-cmd, .btn-help { display: none; }
+
+  /* 中区：44×44 图标按钮 */
+  .zone-center .btn { min-width: 44px; height: 44px; padding: 0; justify-content: center; }
   .btn-theme .theme-name-full,
   .btn-theme .custom-chip,
   .btn-insert .btn-label,
   .btn-palette .btn-label { display: none; }
   .btn-insert .btn-glyph,
-  .btn-palette .btn-glyph {
-    display: inline-flex;
-    font-size: var(--fs-15);
-    line-height: 1;
-  }
-  /* 顶栏右侧也压小间距 */
-  .zone-right { gap: 4px; }
+  .btn-palette .btn-glyph { display: inline-flex; font-size: var(--fs-15); line-height: 1; }
+
+  /* 右区 */
   .zone-right .btn.icon { min-width: 44px; height: 44px; }
   .btn-primary { height: 36px; padding: 0 var(--sp-3); min-width: 80px; }
-  /* 防止 brand 在 <340px 时抢占空间 */
 }
-@media (max-width: 380px) {
-  .brand { display: none; }
-}
+
+/* 两行工具栏总高约 92px（40px 标题行 + 52px 工具行），品牌名不再需要隐藏 */
 /* popover 宽度兜底：不溢出视口 */
 .popover { max-width: calc(100vw - 16px); }
 .saving-dot {
