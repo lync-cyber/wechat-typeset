@@ -141,7 +141,7 @@ const { html } = render({ md: userMarkdown, spec: tweaked })
 - [src/themes/default/persona.spec.ts](../../src/themes/default/persona.spec.ts)——金标准参考；其余 8 套都是对它的变奏。
 - [scripts/validate-spec.ts](../../scripts/validate-spec.ts)——`npx tsx scripts/validate-spec.ts` 一键校验所有内置 spec。
 - [scripts/gen-schema.ts](../../scripts/gen-schema.ts)——导出 `dist/schema/persona-spec.schema.json` 给外部消费方。
-- [scripts/gen-gallery.ts](../../scripts/gen-gallery.ts)——从实时 spec 重新生成 `docs/personas-spec-gallery.html`。
+- [scripts/gen-gallery.ts](../../scripts/gen-gallery.ts)——从实时 spec 重新生成 `docs/generated/personas-spec-gallery.html`。
 
 ## references/ 目录
 

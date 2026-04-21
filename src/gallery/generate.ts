@@ -7,7 +7,7 @@
  * specToGallery（本文件）/ specToJsonSchema（schema.ts）。
  *
  * Drift 检查策略（见 tests/gallery-generator.spec.ts）：
- *   toMatchFileSnapshot 对 docs/personas-spec-gallery.html 做 byte 级快照——
+ *   toMatchFileSnapshot 对 docs/generated/personas-spec-gallery.html 做 byte 级快照——
  *   spec 改 → 快照 diff 显式浮现，审核流程看 diff 决定是补录快照还是回滚 spec。
  */
 

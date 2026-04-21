@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # wx-md launcher (macOS / Linux)
 # 首次运行：npm install && npm run build
-# 之后运行：node serve.mjs -> 127.0.0.1:7788 -> 自动开浏览器
+# 之后运行：node scripts/serve.mjs -> 127.0.0.1:7788 -> 自动开浏览器
 #
 # macOS first double-click may be blocked by Gatekeeper. Unblock:
 #   xattr -d com.apple.quarantine ./launcher.command
@@ -30,4 +30,4 @@ if [ ! -f "dist/index.html" ]; then
     }
 fi
 
-node serve.mjs
+node scripts/serve.mjs

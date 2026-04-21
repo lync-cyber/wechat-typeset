@@ -14,8 +14,9 @@ import { fileURLToPath } from 'node:url'
 import { exec, spawnSync } from 'node:child_process'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
-const DIST = resolve(HERE, 'dist')
-const SRC = resolve(HERE, 'src')
+const ROOT = resolve(HERE, '..')
+const DIST = resolve(ROOT, 'dist')
+const SRC = resolve(ROOT, 'src')
 const HOST = '127.0.0.1'
 const PORT = Number(process.env.WX_MD_PORT ?? 7788)
 
@@ -81,10 +82,10 @@ function maybeRebuild() {
   const distMtime = statSync(distStamp).mtimeMs
   const srcMtime = Math.max(
     latestMtime(SRC),
-    fileMtime(resolve(HERE, 'package.json')),
-    fileMtime(resolve(HERE, 'vite.config.ts')),
-    fileMtime(resolve(HERE, 'index.html')),
-    fileMtime(resolve(HERE, 'tsconfig.json')),
+    fileMtime(resolve(ROOT, 'package.json')),
+    fileMtime(resolve(ROOT, 'vite.config.ts')),
+    fileMtime(resolve(ROOT, 'index.html')),
+    fileMtime(resolve(ROOT, 'tsconfig.json')),
   )
   if (srcMtime <= distMtime) return
   console.log('[wx-md] 检测到源码更新，正在重建（npm run build）…')
@@ -97,7 +98,7 @@ function maybeRebuild() {
     ? ['npm.cmd run build', []]
     : ['npm', ['run', 'build']]
   const result = spawnSync(cmd, args, {
-    cwd: HERE,
+    cwd: ROOT,
     stdio: 'inherit',
     shell: isWin,
   })

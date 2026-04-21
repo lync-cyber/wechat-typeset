@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * 生成 docs/personas-spec-gallery.html。
+ * 生成 docs/generated/personas-spec-gallery.html。
  *
  * 读取 src/themes/*\/persona.spec.ts 里的 9 份 spec，按目录名排序后投射为单文件 HTML。
  * 输出路径固定，drift 检查在 tests/gallery-generator.spec.ts 用 toMatchFileSnapshot。
@@ -31,7 +31,7 @@ async function main() {
   }
 
   const html = generateGallery(specs)
-  const out = resolve(process.cwd(), 'docs/personas-spec-gallery.html')
+  const out = resolve(process.cwd(), 'docs/generated/personas-spec-gallery.html')
   writeFileSync(out, html, 'utf8')
   console.log(`wrote ${out} (${specs.length} personas, ${html.length} chars)`)
 }

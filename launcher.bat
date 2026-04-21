@@ -4,7 +4,7 @@ setlocal
 
 REM wx-md launcher (Windows)
 REM 首次运行：npm install && npm run build
-REM 之后运行：node serve.mjs -> 127.0.0.1:7788 -> 自动开浏览器
+REM 之后运行：node scripts\serve.mjs -> 127.0.0.1:7788 -> 自动开浏览器
 
 cd /d "%~dp0"
 
@@ -37,5 +37,5 @@ if not exist "dist\index.html" (
     )
 )
 
-node "serve.mjs"
+node "scripts\serve.mjs"
 pause

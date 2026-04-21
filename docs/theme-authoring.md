@@ -14,7 +14,7 @@
 
 ```
 persona.spec.ts  ──┬─► specToTheme(spec)   → 运行时 Theme（渲染管线吃这个）
-                   ├─► specToGallery(spec) → 人看的目录页（personas-gallery.html）
+                   ├─► specToGallery(spec) → 人看的目录页（generated/personas-spec-gallery.html）
                    └─► getSchema()         → JSON Schema（约束 LLM 结构化输出）
 ```
 
@@ -228,7 +228,7 @@ if (!validation.ok) console.warn(validation.errors)  // [{ path, message, severi
 
 ```bash
 npm run validate:spec    # 只跑 spec 校验，改主题时最快反馈
-npm run gen:gallery      # 重新生成 docs/personas-gallery.html
+npm run gen:gallery      # 重新生成 docs/generated/personas-spec-gallery.html
 npm run gen:schema       # 重新导出 JSON Schema（用于 LLM 结构化输出）
 npm test                 # 全量：vitest + sample-full 端到端
 ```

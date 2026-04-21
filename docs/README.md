@@ -32,8 +32,8 @@
 | [TESTING.md](TESTING.md) | 发版前跑 QA 的人 | 自动化测试以外的端到端视觉验收清单 |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | 提 PR 的贡献者 | 本地命令、自检清单、不可破坏的硬约束 |
 
-## 生成产物（不要手改）
+## generated/（不要手改）
 
-- `personas-gallery.html` —— 9 套主题的样例文章画廊（`npm run gen:gallery` 产出）
-- `personas-spec-gallery.html` —— spec 级字段画廊，方便对照调色
-- `tokens-spec.html` —— 编辑器外壳 token 的可视化规范页
+- `generated/personas-gallery.html` —— 9 套主题的样例文章画廊（手工维护）
+- `generated/personas-spec-gallery.html` —— spec 级字段画廊，方便对照调色（`npm run gen:gallery` 产出）
+- `generated/tokens-spec.html` —— 编辑器外壳 token 的可视化规范页

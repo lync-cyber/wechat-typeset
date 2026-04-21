@@ -1,7 +1,7 @@
 /**
  * Gallery 生成器 · drift 检查
  *
- * 验证 generateGallery(specs) 产出与 docs/personas-spec-gallery.html 完全一致。
+ * 验证 generateGallery(specs) 产出与 docs/generated/personas-spec-gallery.html 完全一致。
  * 任何 spec 改动 → 本测试先红 → 作者需跑 `pnpm gen:gallery` 补录快照并 commit，
  * 才能让 CI 再次通过。这是 spec 与 gallery 之间的 contract 守卫。
  *
@@ -30,11 +30,11 @@ async function loadAllSpecs(): Promise<PersonaSpec[]> {
 }
 
 describe('gallery generator', () => {
-  it('产物与 docs/personas-spec-gallery.html 快照一致', async () => {
+  it('产物与 docs/generated/personas-spec-gallery.html 快照一致', async () => {
     const specs = await loadAllSpecs()
     const html = generateGallery(specs)
     await expect(html).toMatchFileSnapshot(
-      resolve(process.cwd(), 'docs/personas-spec-gallery.html'),
+      resolve(process.cwd(), 'docs/generated/personas-spec-gallery.html'),
     )
   })
 
