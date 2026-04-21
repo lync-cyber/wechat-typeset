@@ -24,7 +24,7 @@ export const commonTemplates = {
 :::
 `,
   recommend: `::: recommend 推荐阅读
-- [从零开始的 wx-md](https://example.com/a)
+- [从零开始的 wechat-typeset](https://example.com/a)
 - [主题工程的五个误区](https://example.com/b)
 - [LCH 色彩生成手册](https://example.com/c)
 :::

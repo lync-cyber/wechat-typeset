@@ -2,7 +2,7 @@
  * 用户自创组件存储（localStorage）
  *
  * 模式：单 key JSON 数组（组件片段短，不像草稿正文会很大，无需拆 body key）。
- *   - key: 'wx-md:user-components'
+ *   - key: 'wechat-typeset:user-components'
  *   - value: JSON.stringify(UserComponent[])
  *
  * 交互入口（在 ComponentPalette.vue）：
@@ -13,7 +13,7 @@
 
 import type { UserComponent, ComponentKind } from '../components-lib/types'
 
-const STORAGE_KEY = 'wx-md:user-components'
+const STORAGE_KEY = 'wechat-typeset:user-components'
 
 function safeRead(): string | null {
   try {

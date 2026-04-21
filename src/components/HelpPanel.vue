@@ -38,7 +38,7 @@ const groups = groupedWithShortcut()
 
       <section class="help-intro">
         <div class="intro-line">
-          <strong>wx-md</strong> 是纯浏览器里的微信公众号 Markdown 排版工具。
+          <strong>wechat-typeset</strong> 是纯浏览器里的微信公众号 Markdown 排版工具。
         </div>
         <div class="intro-line">
           草稿保存在本地浏览器，切 tab / 关 tab 都不丢；一键复制后直接粘贴进公众号编辑器即可保留排版。

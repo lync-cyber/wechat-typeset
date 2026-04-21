@@ -43,14 +43,14 @@ const filtered = computed<DraftMeta[]>(() => {
   return drafts.value.filter((d) => (d.title || '').toLowerCase().includes(q))
 })
 
-/** 粗略估算 localStorage 已用字节（wx-md:* key）——UTF-16 近似双字节 */
+/** 粗略估算 localStorage 已用字节（wechat-typeset:* key）——UTF-16 近似双字节 */
 const storageUsed = computed(() => {
   void refreshTick.value
   try {
     let total = 0
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i)
-      if (!k || !k.startsWith('wx-md:')) continue
+      if (!k || !k.startsWith('wechat-typeset:')) continue
       const v = localStorage.getItem(k) ?? ''
       total += (k.length + v.length) * 2
     }
@@ -131,7 +131,7 @@ function download(filename: string, text: string, mime = 'application/json') {
 }
 
 function exportAll() {
-  download(`wx-md-drafts-${Date.now()}.json`, exportDraftsJSON())
+  download(`wechat-typeset-drafts-${Date.now()}.json`, exportDraftsJSON())
 }
 
 function onImport(ev: Event) {
@@ -342,6 +342,10 @@ defineExpose({ refresh })
 }
 .item:hover { background: var(--surface); }
 .item:hover .item-actions { opacity: 1; }
+/* 触摸设备上无 hover —— 操作按钮常驻显示 */
+@media (hover: none) {
+  .item-actions { opacity: 1; }
+}
 .item.active {
   background: var(--accent-soft);
   border-left-color: var(--accent);
@@ -425,4 +429,24 @@ defineExpose({ refresh })
   height: 100%; background: var(--accent); transition: var(--t-quick);
 }
 .cap-text { display: flex; gap: 4px; align-items: baseline; }
+
+/* ---- 移动端适配 ---- */
+@media (max-width: 767px) {
+  /* 关闭按钮和操作按钮达到 44px 触摸目标 */
+  .btn-text { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }
+  .icon-btn { width: 40px; height: 40px; font-size: var(--fs-15); }
+  .btn { height: 40px; padding: 0 var(--sp-4); font-size: 16px; }
+  .search-input { height: 40px; font-size: 16px; }
+  .rename-input { height: 36px; font-size: 16px; }
+  /* head-tools 两行堆叠：新建在第一行，搜索单独一行 */
+  .head-tools { flex-wrap: wrap; }
+  .search { flex: 1 1 100%; order: 2; }
+  /* io-row 同理换行更容易阅读 */
+  .io-row { gap: var(--sp-3); }
+  .io-row .btn { flex: 1 1 calc(50% - var(--sp-3)); justify-content: center; }
+  .io-feedback { flex: 1 1 100%; text-align: center; }
+  /* 草稿项：按钮常驻，留出右侧可触区域 */
+  .item { padding: var(--sp-4); }
+  .item-actions { gap: 4px; }
+}
 </style>

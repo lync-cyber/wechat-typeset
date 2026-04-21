@@ -86,7 +86,7 @@ const modKey = isMac ? '⌘' : 'Ctrl'
     <!-- Left zone: brand + current draft -->
     <div class="zone zone-left">
       <span class="brand">
-        <span class="brand-mark">wx</span><span class="brand-dot">·</span><span class="brand-name">md</span>
+        <span class="brand-mark">wechat</span><span class="brand-dot">-</span><span class="brand-name">typeset</span>
       </span>
       <button
         class="draft-switch"
@@ -103,13 +103,13 @@ const modKey = isMac ? '⌘' : 'Ctrl'
     <div class="zone zone-center">
       <div class="pop-wrap" data-popover-root>
         <button
-          class="btn btn-ghost"
+          class="btn btn-ghost btn-theme"
           :class="{ active: themeOpen }"
           :title="'切换主题'"
           @click="themeOpen = !themeOpen; overflowOpen = false"
         >
           <span class="dot-mark" />
-          {{ currentThemeName }}
+          <span class="theme-name-full">{{ currentThemeName }}</span>
           <span v-if="props.hasCustomColor" class="custom-chip" title="已有自定义配色">·自定义</span>
         </button>
         <div v-if="themeOpen" class="popover popover-theme">
@@ -120,17 +120,19 @@ const modKey = isMac ? '⌘' : 'Ctrl'
         </div>
       </div>
       <button
-        class="btn btn-ghost"
+        class="btn btn-ghost btn-insert"
         :class="{ active: props.drawer.components }"
         :title="`插入组件 / 主题模板  ${modKey}+Shift+P`"
+        :aria-label="`插入组件 / 主题模板  ${modKey}+Shift+P`"
         @click="emit('toggleComponents')"
-      >插入</button>
+      ><span class="btn-label">插入</span><span class="btn-glyph" aria-hidden="true">＋</span></button>
       <button
-        class="btn btn-ghost"
+        class="btn btn-ghost btn-palette"
         :class="{ active: props.drawer.customizer }"
         :title="`自定义配色  ${modKey}+Shift+C`"
+        :aria-label="`自定义配色  ${modKey}+Shift+C`"
         @click="emit('toggleCustomizer')"
-      >配色</button>
+      ><span class="btn-label">配色</span><span class="btn-glyph" aria-hidden="true">◐</span></button>
     </div>
 
     <!-- Right zone: stats / command / overflow / copy -->
@@ -308,6 +310,7 @@ const modKey = isMac ? '⌘' : 'Ctrl'
   flex: 0 0 auto;
 }
 .btn.icon { padding: 0 var(--sp-3); min-width: 28px; justify-content: center; }
+.btn-glyph { display: none; }
 .btn-ghost { border-color: var(--border); background: var(--surface-raised); }
 .btn-ghost:hover { background: var(--surface); }
 .btn-ghost.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-soft); }
@@ -382,11 +385,36 @@ const modKey = isMac ? '⌘' : 'Ctrl'
   .stats { display: none; }
 }
 @media (max-width: 767px) {
-  .zone-center { display: none; }
+  .toolbar { padding: 0 var(--sp-3); gap: var(--sp-2); }
   .btn-cmd, .btn-help { display: none; }
-  .draft-title { max-width: 120px; }
-  .draft-switch { max-width: 160px; }
+  .draft-title { max-width: 110px; }
+  .draft-switch { max-width: 150px; }
+  /* 把「主题 / 插入 / 配色」收纳为 44×44 图标按钮 —— 不再 display:none */
+  .zone-center { gap: 4px; }
+  .zone-center .btn {
+    min-width: 44px; height: 44px; padding: 0; justify-content: center;
+  }
+  .btn-theme .theme-name-full,
+  .btn-theme .custom-chip,
+  .btn-insert .btn-label,
+  .btn-palette .btn-label { display: none; }
+  .btn-insert .btn-glyph,
+  .btn-palette .btn-glyph {
+    display: inline-flex;
+    font-size: var(--fs-15);
+    line-height: 1;
+  }
+  /* 顶栏右侧也压小间距 */
+  .zone-right { gap: 4px; }
+  .zone-right .btn.icon { min-width: 44px; height: 44px; }
+  .btn-primary { height: 36px; padding: 0 var(--sp-3); min-width: 80px; }
+  /* 防止 brand 在 <340px 时抢占空间 */
 }
+@media (max-width: 380px) {
+  .brand { display: none; }
+}
+/* popover 宽度兜底：不溢出视口 */
+.popover { max-width: calc(100vw - 16px); }
 .saving-dot {
   width: 6px; height: 6px; border-radius: var(--radius-pill);
   background: var(--text-subtle);

@@ -3,7 +3,7 @@
  * 切主题时可用此 md 作为基准；4 套主题的个性化示例则各自覆盖一份不同 slug。
  */
 
-export const commonSample = `# wx-md · 全量示例
+export const commonSample = `# wechat-typeset · 全量示例
 
 ::: intro 本文通过一篇完整样稿演示所有容器、行内扩展与代码块。
 这份示例用来验证：**所有容器在新主题下都有得体呈现**，且没有硬编码颜色遗留。
@@ -68,7 +68,7 @@ export const commonSample = `# wx-md · 全量示例
 
 :::: compare
 
-::: pros 为什么选 wx-md
+::: pros 为什么选 wechat-typeset
 - 一个工具打穿 "写、排、发" 全链
 - 主题与内容解耦，换色不改结构
 - 容器语法无 HTML 依赖，可版本化
@@ -104,7 +104,7 @@ import { getTheme } from './themes'
 
 const theme = getTheme('tech-geek')
 const { html, wordCount } = renderPipeline({
-  md: '# Hello wx-md',
+  md: '# Hello wechat-typeset',
   theme,
 })
 \`\`\`
@@ -137,7 +137,7 @@ const { html, wordCount } = renderPipeline({
 :::
 
 ::: recommend 延伸阅读
-- [从零开始的 wx-md](https://example.com/a)
+- [从零开始的 wechat-typeset](https://example.com/a)
 - [主题工程的五个误区](https://example.com/b)
 - [LCH 色彩生成手册](https://example.com/c)
 :::

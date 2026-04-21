@@ -272,4 +272,20 @@ function resetToTheme() {
   margin-top: auto;
   border-top: 1px solid var(--border);
 }
+
+/* ---- 移动端适配 ---- */
+@media (max-width: 767px) {
+  .panel { width: 100%; border-left: none; }
+  .btn-text { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }
+  /* 预设网格更宽松 —— 窄屏单列 */
+  .preset-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--sp-3);
+  }
+  .preset { min-height: 44px; padding: var(--sp-2) var(--sp-3); }
+  .swatch { width: 16px; height: 16px; }
+  .field input[type="color"] { width: 44px; height: 32px; }
+  .btn { height: 40px; font-size: 16px; }
+  .btn.wide { height: 44px; }
+}
 </style>

@@ -351,6 +351,11 @@ defineExpose({ openSaveDialog })
 }
 .cell:hover .cell-del { opacity: 1; }
 
+/* 触摸设备（无 hover）时，删除按钮常驻 */
+@media (hover: none) {
+  .cell-del { opacity: 1; }
+}
+
 /* modal */
 .modal-mask {
   position: absolute; inset: 0;
@@ -412,4 +417,27 @@ defineExpose({ openSaveDialog })
 .btn-ghost:hover { background: var(--surface); }
 .btn-primary { background: var(--accent); color: var(--accent-on); border: 1px solid var(--accent); }
 .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+/* ---- 移动端适配 ---- */
+@media (max-width: 767px) {
+  /* 关闭按钮达到 44px 触摸目标 */
+  .btn-text { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }
+  /* 分类 tab 改为横向滚动，单行 */
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { height: 32px; flex: 0 0 auto; scroll-snap-align: start; }
+  /* 保存选区弹窗：fixed 居中、宽度响应 */
+  .modal-mask { position: fixed; z-index: 60; }
+  .modal { width: min(320px, calc(100vw - 32px)); }
+  .modal-field input { height: 40px; font-size: 16px; }
+  /* 删除按钮可触 */
+  .cell-del { width: 28px; height: 28px; font-size: var(--fs-15); }
+}
 </style>

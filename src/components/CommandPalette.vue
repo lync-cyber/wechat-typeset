@@ -181,6 +181,12 @@ function indexOf(cmd: Command): number {
   font-size: var(--fs-15);
   color: var(--text);
 }
+@media (max-width: 767px) {
+  .cmd-input { font-size: 16px; height: 40px; }
+  .cmd-item { padding: 12px var(--sp-5); min-height: 44px; }
+  .cmd-panel { max-height: 80vh; }
+  .cmd-mask { padding-top: 6vh; }
+}
 .cmd-input::placeholder { color: var(--text-subtle); }
 .cmd-hint {
   color: var(--text-subtle);

@@ -71,6 +71,12 @@ const srcdoc = computed(() => {
     min-height: 100vh;
     background: #ffffff;
     box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+    transform-origin: top center;
+  }
+  /* 当 iframe 宿主窄于 375 时，等比缩放，避免横向滚动 */
+  @media (max-width: 374px) {
+    body { align-items: flex-start; }
+    .phone-viewport { transform: scale(calc(100vw / 375)); transform-origin: top left; }
   }
 </style>
 </head>
@@ -106,7 +112,7 @@ function onIframeLoad() {
   <div class="preview-shell">
     <div class="preview-meta mono">
       <span class="meta-dot" />
-      375px · iPhone 视口保真
+      移动端视口 · 所见即所得
     </div>
     <iframe
       ref="iframeEl"

@@ -29,8 +29,8 @@ import {
   type Draft,
 } from './storage/drafts'
 
-const THEME_STORAGE_KEY = 'wx-md:theme:last'
-const ONBOARD_STORAGE_KEY = 'wx-md:onboard:dismissed'
+const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
+const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
 
 interface Seed { primary: string; secondary: string; accent: string; dark: boolean }
 
@@ -106,7 +106,7 @@ function initActiveDraft(preferredThemeId: string = 'default') {
     if (first.themeId) baseThemeId.value = first.themeId
   } else {
     const created = createDraft({
-      title: 'wx-md 示例',
+      title: 'wechat-typeset 示例',
       body: getSample(preferredThemeId),
       themeId: preferredThemeId,
     })
@@ -345,11 +345,11 @@ function handleSaveSelection() {
 }
 
 function fileStem(): string {
-  const t = (listDrafts().find((d) => d.id === activeDraftId.value)?.title ?? 'wx-md-export').replace(
+  const t = (listDrafts().find((d) => d.id === activeDraftId.value)?.title ?? 'wechat-typeset-export').replace(
     /[\\/:*?"<>|\s]+/g,
     '-',
   )
-  return t || 'wx-md-export'
+  return t || 'wechat-typeset-export'
 }
 
 function doExportHtml() {
@@ -646,19 +646,32 @@ onBeforeUnmount(() => {
       @expire="onUndoExpire"
     />
 
+    <!-- Mobile backdrop: tap outside an open drawer to dismiss (mobile only via CSS) -->
+    <div
+      v-if="ui.leftSlot || ui.rightSlot"
+      class="mobile-drawer-mask"
+      aria-hidden="true"
+      @click="ui.leftSlot = null; ui.rightSlot = null"
+    />
+
     <!-- Mobile bottom tab bar -->
-    <nav class="mobile-tabs" aria-label="视图切换">
+    <nav class="mobile-tabs" role="tablist" aria-label="视图切换">
       <button
         class="mobile-tab"
+        role="tab"
+        :aria-selected="mobileTab === 'editor'"
         :class="{ active: mobileTab === 'editor' }"
         @click="mobileTab = 'editor'"
       >编辑</button>
       <button
         class="mobile-tab-copy"
+        aria-label="复制到剪贴板"
         @click="handleCopy"
       >一键复制</button>
       <button
         class="mobile-tab"
+        role="tab"
+        :aria-selected="mobileTab === 'preview'"
         :class="{ active: mobileTab === 'preview' }"
         @click="mobileTab = 'preview'"
       >预览</button>
@@ -696,6 +709,11 @@ onBeforeUnmount(() => {
   background: var(--paper-300);
 }
 
+/* Mobile drawer mask (hidden on desktop) */
+.mobile-drawer-mask {
+  display: none;
+}
+
 /* Mobile bottom tab bar — hidden on desktop */
 .mobile-tabs {
   display: none;
@@ -726,7 +744,9 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 36px;
+  min-height: 44px;
+  min-width: 96px;
+  height: 44px;
   padding: 0 var(--sp-5);
   border: none;
   background: var(--accent);
@@ -773,17 +793,46 @@ onBeforeUnmount(() => {
   /* No border between panes on mobile */
   .pane-editor { border-right: none; }
 
-  /* Side panels become full-screen overlays */
+  /* Side panels become full-screen overlays — cover .drawer / .panel / .palette */
   .main :deep(.drawer),
-  .main :deep(.panel) {
+  .main :deep(.panel),
+  .main :deep(.palette) {
     position: fixed;
     top: var(--toolbar-h);
     right: 0;
     bottom: var(--mobile-tabs-h, 56px);
     left: 0;
     width: 100% !important;
+    max-width: 100vw;
     z-index: 50;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    animation: sheet-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @keyframes sheet-in {
+    from { transform: translateY(8px); opacity: 0; }
+    to   { transform: translateY(0);   opacity: 1; }
+  }
+
+  /* Tap-outside mask */
+  .mobile-drawer-mask {
+    display: block;
+    position: fixed;
+    top: var(--toolbar-h);
+    left: 0; right: 0;
+    bottom: var(--mobile-tabs-h, 56px);
+    background: rgba(14, 14, 10, 0.32);
+    z-index: 45;
+  }
+
+  /* Prevent iOS focus-zoom: all text inputs >= 16px */
+  :deep(input[type="text"]),
+  :deep(input[type="search"]),
+  :deep(input:not([type])),
+  :deep(textarea) {
+    font-size: 16px;
   }
 }
 </style>
