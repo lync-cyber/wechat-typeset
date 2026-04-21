@@ -7,7 +7,7 @@
  *   - ADMONITION_VARIANTS / QUOTE_VARIANTS / ... 6 个 kind 的 Record（消费方：
  *     pipeline/containers/*.ts 按 variant id 分派 render）
  *   - CODE_BLOCK_VARIANTS（signature 异质，独立桶）
- *   - VARIANT_IDS（按 kind 分桶的 readonly tuple，供 types.ts 反向派生联合类型 & tests 枚举）
+ *   - VARIANT_IDS 在 src/themes/types.ts 统一定义（带 satisfies 类型约束）；registry 不重复导出
  *   - BUILTIN_COMPONENTS（摊平所有 snippets；供组件库 UI）
  *
  * 顺序：`DISPLAY_ORDER` 决定 UI / snapshot 稳定排序，未列出的按 id 字典序追加。
@@ -266,23 +266,8 @@ export const CODE_BLOCK_VARIANTS: Record<string, CodeBlockDef> = (() => {
   return out
 })()
 
-// ─────────────────────────────────────────────────────────────
-// VARIANT_IDS（派生常量；tests/component-lib 消费）
-// ─────────────────────────────────────────────────────────────
-
-function idsOf(kind: VariantKind | 'none'): readonly string[] {
-  return orderedByKind(ALL_DEFS, kind).map((d) => d.meta.id)
-}
-
-export const VARIANT_IDS = {
-  admonition: idsOf('admonition') as readonly string[],
-  quote: idsOf('quote') as readonly string[],
-  compare: idsOf('compare') as readonly string[],
-  steps: idsOf('steps') as readonly string[],
-  divider: idsOf('divider') as readonly string[],
-  sectionTitle: idsOf('sectionTitle') as readonly string[],
-  codeBlock: idsOf('codeBlock') as readonly string[],
-} as const
+// VARIANT_IDS 权威定义在 src/themes/types.ts（带 satisfies 类型约束）。
+// registry.ts 不重复导出——消费方统一从 types.ts 导入。
 
 // ─────────────────────────────────────────────────────────────
 // BUILTIN_COMPONENTS：摊平所有 snippet → ComponentEntry

@@ -6,11 +6,11 @@
  *   - 每篇正文 (wechat-typeset:drafts:body:<id>)：独立 key，避免一条记录超 5MB 限制
  *   - 当前活跃 id (wechat-typeset:drafts:active)
  *
- * 用户数据迁移：若发现 0.1 以前的遗留 key wechat-typeset:draft:single，
+ * 用户数据迁移：若发现 0.1 以前的遗留 key wx-md:draft:single，
  * 会静默迁移为一篇"未命名草稿"后删除旧 key。
  */
 
-const LEGACY_KEY = 'wechat-typeset:draft:single'
+const LEGACY_KEY = 'wx-md:draft:single'
 const INDEX_KEY = 'wechat-typeset:drafts:index'
 const ACTIVE_KEY = 'wechat-typeset:drafts:active'
 const BODY_PREFIX = 'wechat-typeset:drafts:body:'
