@@ -22,7 +22,7 @@ LLM 已经能把任何想法润色成段落，真正稀缺的不是文字，是*
 
 ## 在线演示
 
-👉 **[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** —— 无需安装，浏览器里即刻体验
+**[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** —— 无需安装，浏览器里即刻体验
 
 ---
 
