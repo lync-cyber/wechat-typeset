@@ -41,8 +41,10 @@ import {
   // Motif 工具
   getMotifSpec, renderMotif, renderMotifWithValues,
   // 类型
-  type PersonaSpec, type PersonaSummary, type Theme,
-  type ContainerSpec, type VariantDescriptor,
+  type PersonaSpec, type PersonaSummary, type Theme, type ThemeVariants,
+  type ContainerSpec, type ContainerCategory, type AttrSpec,
+  type VariantDescriptor, type SnippetOptions,
+  type SpecValidationResult, type PublicRenderOutput,
 } from '../src/public'
 ```
 
