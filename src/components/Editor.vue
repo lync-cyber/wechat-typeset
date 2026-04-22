@@ -158,6 +158,38 @@ function insertImagesAsync(targetView: EditorView, files: readonly File[]): void
   })
 }
 
+/**
+ * 移动端虚拟键盘上浮时把光标滚到可视区中部。
+ *
+ * 现象：iOS Safari / Android Chrome 上 CodeMirror focus 后键盘弹起会遮挡底部大半屏；
+ * CM 自带的 scrollIntoView 基于 window.innerHeight，键盘弹起时它以为"视口还是全屏"，
+ * 光标就停在键盘后面看不见。
+ *
+ * 解决：监听 window.visualViewport.resize —— 键盘弹起时 visualViewport.height 会缩水，
+ * 触发一次 scrollIntoView(head, { y: 'center' })，让 CM 按"减去键盘后的实际视区"重新定位。
+ *
+ * 保护：
+ *   - 仅 viewport width ≤ 767 时启用（桌面键盘弹起不关注）
+ *   - visualViewport 不支持（旧 Safari / 某些 Android）时降级为 no-op
+ *   - 高度变化 < 100px 不触发（浏览器工具栏隐藏也会缩水，阈值避开）
+ */
+const MOBILE_BREAKPOINT = 767
+const KEYBOARD_HEIGHT_THRESHOLD = 100
+
+function onVisualViewportResize() {
+  if (!view) return
+  if (typeof window === 'undefined') return
+  if (window.innerWidth > MOBILE_BREAKPOINT) return
+  const vv = window.visualViewport
+  if (!vv) return
+  const keyboardHeight = window.innerHeight - vv.height
+  if (keyboardHeight < KEYBOARD_HEIGHT_THRESHOLD) return
+  const { head } = view.state.selection.main
+  view.dispatch({
+    effects: EditorView.scrollIntoView(head, { y: 'center' }),
+  })
+}
+
 let lastEmit = 0
 function onScroll(ev: Event) {
   const el = ev.target as HTMLElement | null
@@ -206,6 +238,10 @@ function createView(doc: string) {
 
 onMounted(() => {
   createView(props.modelValue)
+  // 移动端键盘遮挡防护；visualViewport 不存在时不 attach 等于 no-op
+  if (typeof window !== 'undefined' && window.visualViewport) {
+    window.visualViewport.addEventListener('resize', onVisualViewportResize)
+  }
 })
 
 watch(
@@ -220,6 +256,9 @@ watch(
 )
 
 onBeforeUnmount(() => {
+  if (typeof window !== 'undefined' && window.visualViewport) {
+    window.visualViewport.removeEventListener('resize', onVisualViewportResize)
+  }
   view?.destroy()
   view = null
 })

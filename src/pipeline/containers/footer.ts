@@ -32,7 +32,9 @@ export const footerCTAContainer: ContainerRenderer = {
     // 按钮胶囊样式（span / a 共用）；color + bg 走主题 primary。
     // 有 href 时渲染为 <a>，打 data-wx-footer-cta 标记让 outlinkDegrade 绕过——
     // footer-cta 是作者核心转化入口，不参与 keep/tail-list/drop 三策略。
-    const pill = `display:inline-block;padding:6px 14px;border-radius:${ctx.tokens.radius.lg}px;background-color:${ctx.tokens.colors.primary};color:${ctx.tokens.colors.textInverse};text-decoration:none`
+    // inline-flex + min-height:44px 保证移动端 tap target 达到 iOS HIG 最低建议（44×44）；
+    // 短 cta 文字（2 字）时不至于高度缩到 ~28px 难点。桌面端视觉等价（文字居中）。
+    const pill = `display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:6px 18px;box-sizing:border-box;border-radius:${ctx.tokens.radius.lg}px;background-color:${ctx.tokens.colors.primary};color:${ctx.tokens.colors.textInverse};text-decoration:none`
     const ctaInner = cta
       ? href
         ? `<a href="${escAttr(href)}" data-wx-footer-cta="" style="${pill}">${cta}</a>`

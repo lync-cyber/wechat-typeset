@@ -30,7 +30,7 @@
 
 | 文档 | 面向 | 回答什么 |
 | --- | --- | --- |
-| [TESTING.md](TESTING.md) | 发版前跑 QA 的人 | 自动化测试以外的端到端视觉验收清单 |
+| [release-checklist.md](release-checklist.md) | 发版前跑 QA 的人 | 自动化测试以外的端到端视觉验收清单 |
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | 提 PR 的贡献者 | 本地命令、自检清单、不可破坏的硬约束 |
 
 ## generated/（不要手改）

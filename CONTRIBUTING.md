@@ -14,6 +14,18 @@ npm run test:e2e   # 只跑 sample-full 校验（改 variant/主题后必跑）
 npm run typecheck  # 单独跑 vue-tsc
 ```
 
+### Playwright 移动端 E2E（可选）
+
+移动端布局与 footer-cta 链接相关变更建议跑一遍 Playwright：
+
+```bash
+npm run test:e2e:pw:install   # 首次装浏览器（~200MB）
+npm run test:e2e:pw           # 跑 e2e/ 下全部用例
+npx playwright test --project=mobile-chromium --ui   # 调试模式
+```
+
+viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。CI 只跑 chromium；本地可加 `--project=mobile-webkit` 验 iOS Safari。
+
 ## 提 PR 前的自检清单
 
 - [ ] `npm run build` 无报错（含 `vue-tsc --noEmit`）
@@ -35,7 +47,7 @@ npm run typecheck  # 单独跑 vue-tsc
 - [作者契约](docs/writer-contract.md)
 - [容器扩展语法](docs/container-syntax.md)
 - [第三方主题开发指南](docs/theme-authoring.md)
-- [手动验收清单](docs/TESTING.md)
+- [手动验收清单](docs/release-checklist.md)
 
 ## 许可
 

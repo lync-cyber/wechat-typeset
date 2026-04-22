@@ -38,6 +38,8 @@
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "tsx tests/verify-sample-full.ts",
+    "test:e2e:pw": "playwright test",
+    "test:e2e:pw:install": "playwright install --with-deps chromium webkit",
     "typecheck": "vue-tsc --noEmit",
     "gen:schema": "tsx scripts/gen-schema.ts",
     "gen:gallery": "tsx scripts/gen-gallery.ts",
@@ -67,6 +69,7 @@
   },
   "devDependencies": {
     "@codemirror/commands": "^6.10.3",
+    "@playwright/test": "^1.59.1",
     "@types/chroma-js": "^3.1.2",
     "@types/jsdom": "^28.0.1",
     "@types/markdown-it": "^14.1.2",

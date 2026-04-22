@@ -139,6 +139,47 @@ node serve.mjs            # 或双击 ./launcher.{bat,command}
 
 ---
 
+## 移动端手动验收（375×667）
+
+Chrome DevTools 开 Device toolbar，选 iPhone SE (375×667)。或真机浏览器访问开发服。
+
+### 布局
+
+- [ ] 两行工具栏：第一行 40px（品牌名 + 当前草稿），第二行 52px（中心工具图标 + 右侧动作）
+- [ ] 底部 tab 栏 56px + safe-area 内边距：`编辑` / `一键复制` / `预览`
+- [ ] 编辑 / 预览 pane 互斥显示（tab 切换切面板，非 split view）
+- [ ] Drawer（草稿 / 组件 / 配色 / 发文清单）打开时**全屏**覆盖 pane，带 180ms sheet-in 动画
+- [ ] Drawer 打开时背后出现半透明 mask，点 mask 关闭
+- [ ] OnboardingCard 首次访问可见且不被两行 toolbar 挤占到屏幕外
+
+### 触控
+
+- [ ] `::: footer-cta cta=点此关注 href=https://mp.weixin.qq.com/s/xxx` 预览里按钮**可点**
+- [ ] footer-cta 按钮 tap target ≥ 44×44（DevTools 标尺 / Accessibility inspector 验证）
+- [ ] 所有 toolbar 图标按钮实际点击区域 ≥ 44×44（CSS 里定义 44×44）
+- [ ] ThemeStrip 横向滚动流畅（`-webkit-overflow-scrolling:touch`），无卡顿
+
+### 输入 & 虚拟键盘
+
+- [ ] 编辑器 focus 时 iOS 不自动放大（靠 `font-size: 16px` 防缩放）
+- [ ] 虚拟键盘弹起时光标位置**不被键盘遮挡**（见 Editor.vue 的 visualViewport 处理）
+- [ ] 搜索 / 重命名等内联输入框同样不触发 iOS 缩放
+
+### 功能
+
+- [ ] 草稿抽屉：搜索 / 过滤 tag / 新建 / 删除 / 导入导出 JSON 均可用
+- [ ] 分享链接：`#share=...` hash URL 打开能正确解码为新草稿（iOS Safari / Android Chrome 都测）
+- [ ] 一键复制：Clipboard API 可用时直接复制；不可用时 toolbar 降级提示（不崩）
+- [ ] 导出 Markdown / HTML：下载文件在手机文件 app 可见
+- [ ] 导出长图：移动端 html2canvas 可能受限于内存（大文档可能失败），失败时有 persistentError 而非白屏
+
+### 已知降级
+
+- [ ] 某些移动浏览器 Clipboard API 仅在 https 可用；http://127.0.0.1 在 iOS Safari 会降级到 execCommand
+- [ ] Android 版微信内置浏览器无 Clipboard API 读写；需外部浏览器使用
+
+---
+
 ## 真机粘贴验收（最关键）
 
 Chrome / Edge / Safari 各**复制一次**，分别粘贴到公众号后台：
