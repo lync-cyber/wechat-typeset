@@ -9,10 +9,10 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { render } from '../src/pipeline'
-import { generateThemeCSS } from '../src/pipeline/themeCSS'
-import { defaultTheme } from '../src/themes/default'
-import { ThemeAuthoringError } from '../src/themes/types'
+import { render } from '../../src/pipeline'
+import { generateThemeCSS } from '../../src/pipeline/themeCSS'
+import { defaultTheme } from '../../src/themes/default'
+import { ThemeAuthoringError } from '../../src/themes/types'
 
 describe('render (Step 1 最小管线)', () => {
   it('输出 HTML 为字符串且包含根节点 class', () => {

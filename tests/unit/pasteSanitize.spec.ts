@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { sanitizePastedHtml, shouldSanitize } from '../src/clipboard/pasteSanitize'
+import { sanitizePastedHtml, shouldSanitize } from '../../src/clipboard/pasteSanitize'
 
 describe('sanitizePastedHtml · 基本降级', () => {
   it('空字符串返回空', () => {

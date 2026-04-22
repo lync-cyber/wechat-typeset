@@ -9,9 +9,9 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
-import { useDebouncedRender } from '../src/composables/useDebouncedRender'
-import { defaultTheme } from '../src/themes/default'
-import type { RenderInput, RenderOutput } from '../src/pipeline'
+import { useDebouncedRender } from '../../src/composables/useDebouncedRender'
+import { defaultTheme } from '../../src/themes/default'
+import type { RenderInput, RenderOutput } from '../../src/pipeline'
 
 // 用 fake timer 精确控制 80ms 防抖窗口
 beforeEach(() => {

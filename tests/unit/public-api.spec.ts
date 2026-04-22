@@ -24,9 +24,9 @@ import {
   renderMotif,
   renderMotifWithValues,
   validatePersona,
-} from '../src/public'
-import { VARIANT_IDS } from '../src/themes/types'
-import type { PersonaSpec } from '../src/themes/_shared/spec'
+} from '../../src/public'
+import { VARIANT_IDS } from '../../src/themes/types'
+import type { PersonaSpec } from '../../src/themes/_shared/spec'
 
 describe('listPersonas / getPersona / getPersonaSummary', () => {
   it('listPersonas 返回 9 份摘要，default 排第一', () => {

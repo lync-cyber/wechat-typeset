@@ -50,7 +50,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    include: ['tests/**/*.spec.ts'],
+    // 只抓 tests/unit/；tests/e2e/ 是 Playwright 专属，在 jsdom 下跑会炸
+    include: ['tests/unit/**/*.spec.ts'],
     // Node 24+ 的原生退化 localStorage 会影子掉 jsdom 的实现；setup 里强制替换
     setupFiles: ['tests/setup.ts'],
   },

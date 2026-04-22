@@ -9,10 +9,10 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { applyPalette } from '../src/color/applyPalette'
-import { checkContrast, derivePalette, seedFromPrimary } from '../src/color/generator'
-import { defaultTheme } from '../src/themes/default'
-import { lifeAestheticTheme } from '../src/themes/life-aesthetic'
+import { applyPalette } from '../../src/color/applyPalette'
+import { checkContrast, derivePalette, seedFromPrimary } from '../../src/color/generator'
+import { defaultTheme } from '../../src/themes/default'
+import { lifeAestheticTheme } from '../../src/themes/life-aesthetic'
 
 describe('derivePalette', () => {
   it('给出 seed → 11 个基础色 + 4 套 status', () => {

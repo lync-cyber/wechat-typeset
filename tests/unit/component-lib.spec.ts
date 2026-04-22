@@ -10,17 +10,17 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { BUILTIN_COMPONENTS, findPresetByVariant } from '../src/components-lib'
-import { VARIANT_IDS } from '../src/themes/types'
-import { render } from '../src/pipeline'
-import { defaultTheme } from '../src/themes/default'
+import { BUILTIN_COMPONENTS, findPresetByVariant } from '../../src/components-lib'
+import { VARIANT_IDS } from '../../src/themes/types'
+import { render } from '../../src/pipeline'
+import { defaultTheme } from '../../src/themes/default'
 import {
   listUserComponents,
   createUserComponent,
   deleteUserComponent,
   importUserComponentsJSON,
   exportUserComponentsJSON,
-} from '../src/storage/userComponents'
+} from '../../src/storage/userComponents'
 
 describe('BUILTIN_COMPONENTS', () => {
   it('每个 variant 都有至少一条预设覆盖', () => {

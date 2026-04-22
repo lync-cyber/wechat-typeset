@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { diagnose } from '../src/pipeline/diagnose'
+import { diagnose } from '../../src/pipeline/diagnose'
 
 describe('diagnose · 合法输入', () => {
   it('空文本不产出诊断', () => {

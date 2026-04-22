@@ -9,8 +9,8 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { render } from '../src/pipeline'
-import { defaultTheme } from '../src/themes/default'
+import { render } from '../../src/pipeline'
+import { defaultTheme } from '../../src/themes/default'
 
 function run(md: string): string {
   return render({ md, theme: defaultTheme }).html

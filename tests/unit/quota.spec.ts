@@ -3,7 +3,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { formatBytes, getStorageStat, QUOTA_WARN_THRESHOLD } from '../src/storage/quota'
+import { formatBytes, getStorageStat, QUOTA_WARN_THRESHOLD } from '../../src/storage/quota'
 
 function resetStorage() {
   localStorage.clear()

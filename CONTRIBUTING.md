@@ -20,7 +20,7 @@ npm run typecheck  # 单独跑 vue-tsc
 
 ```bash
 npm run test:e2e:pw:install   # 首次装浏览器（~200MB）
-npm run test:e2e:pw           # 跑 e2e/ 下全部用例
+npm run test:e2e:pw           # 跑 tests/e2e/ 下全部用例
 npx playwright test --project=mobile-chromium --ui   # 调试模式
 ```
 

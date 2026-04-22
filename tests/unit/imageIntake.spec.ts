@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { uploadImages, isImageFile, type ImageProvider } from '../src/clipboard/imageIntake'
+import { uploadImages, isImageFile, type ImageProvider } from '../../src/clipboard/imageIntake'
 
 function makeFile(name: string, type: string, size = 100): File {
   const blob = new Blob(['x'.repeat(size)], { type })

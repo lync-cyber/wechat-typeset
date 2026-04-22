@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { buildChecklist } from '../src/publish/checklist'
+import { buildChecklist } from '../../src/publish/checklist'
 
 describe('buildChecklist · 空稿与边界', () => {
   it('空串产出 fail 条目', () => {

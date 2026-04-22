@@ -3,15 +3,16 @@ import { defineConfig, devices } from '@playwright/test'
 /**
  * Playwright 端到端配置 —— 专注移动端（375×667）验收。
  *
- * 为什么单独的 e2e/ 目录：
- *   - vitest 的 `include: ['tests/**\/*.spec.ts']` 只抓 tests/，不会误跑 e2e/
- *   - Playwright testDir 指向 e2e/，反向独立
+ * 目录分工：
+ *   - `tests/unit/**\/*.spec.ts` —— vitest 在 jsdom 下跑（见 vite.config.ts test.include）
+ *   - `tests/e2e/**\/*.spec.ts`  —— Playwright 在真实浏览器下跑（本配置 testDir）
+ *   两者共享 tests/helpers / tests/setup.ts 时按需引入，互不越界。
  *
  * webServer：本地与 CI 都用 `npm run dev`（Vite 5.x 开发服），避免先 build 的额外耗时。
  *   真机粘贴验收仍走 docs/release-checklist.md 的手动清单，自动化只覆盖静态交互链路。
  */
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests/e2e',
   timeout: 30_000,
   expect: { timeout: 5_000 },
   fullyParallel: true,

@@ -20,10 +20,10 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { render } from '../src/pipeline'
-import { themeList, defaultTheme } from '../src/themes'
-import { VARIANT_IDS, type VariantKind } from '../src/themes/types'
-import { FORBIDDEN_CSS_PATTERNS } from '../src/pipeline/rules'
+import { render } from '../../src/pipeline'
+import { themeList, defaultTheme } from '../../src/themes'
+import { VARIANT_IDS, type VariantKind } from '../../src/themes/types'
+import { FORBIDDEN_CSS_PATTERNS } from '../../src/pipeline/rules'
 
 type Kind = VariantKind
 type VariantCase = {

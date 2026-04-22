@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { inspectPatchTargets } from '../src/pipeline/wxPatch/inspect'
+import { inspectPatchTargets } from '../../src/pipeline/wxPatch/inspect'
 
 describe('inspectPatchTargets · 零命中', () => {
   it('空 HTML 返回空 log', () => {

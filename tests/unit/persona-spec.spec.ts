@@ -18,8 +18,8 @@ import {
   specToTheme,
   validateSpec,
   type PersonaSpec,
-} from '../src/themes/_shared/spec'
-import { generateThemeCSS } from '../src/pipeline/themeCSS'
+} from '../../src/themes/_shared/spec'
+import { generateThemeCSS } from '../../src/pipeline/themeCSS'
 
 // ============================================================
 // Fixture：最小可用 spec（所有必填字段 + 一个 motif + 一个模板）

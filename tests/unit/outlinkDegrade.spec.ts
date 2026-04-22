@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { degradeOutlinks } from '../src/clipboard/outlinkDegrade'
+import { degradeOutlinks } from '../../src/clipboard/outlinkDegrade'
 
 describe('degradeOutlinks · keep', () => {
   it('保留策略不改 HTML，count = 0', () => {

@@ -15,7 +15,7 @@ import {
   patchSvgIds,
   patchFlexToFallback,
   patchSvgWhiteBg,
-} from '../src/pipeline/wxPatch'
+} from '../../src/pipeline/wxPatch'
 
 describe('patchListWrap', () => {
   it('ul/ol 被包一层 section，并带上 data-wx-list-wrap', () => {

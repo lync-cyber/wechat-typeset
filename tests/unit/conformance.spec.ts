@@ -25,14 +25,14 @@ import {
   specToTheme,
   validateSpec,
   type PersonaSpec,
-} from '../src/themes/_shared/spec'
-import { generateGallery } from '../src/gallery/generate'
-import { themeList } from '../src/themes'
-import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/themes/types'
+} from '../../src/themes/_shared/spec'
+import { generateGallery } from '../../src/gallery/generate'
+import { themeList } from '../../src/themes'
+import { VARIANT_IDS, DEFAULT_VARIANTS } from '../../src/themes/types'
 import {
   CONTAINER_REGISTRY,
   SIGNATURE_CONTAINER_MARKDOWN_NAME,
-} from '../src/pipeline/containers'
+} from '../../src/pipeline/containers'
 
 // ============================================================
 // 加载器：9 份 persona.spec.ts → 按目录名排序
@@ -256,7 +256,7 @@ describe('D. JSON Schema contract', () => {
   it('schema JSON 与快照一致（drift 防护）', async () => {
     const json = JSON.stringify(PERSONA_SPEC_SCHEMA, null, 2)
     await expect(json).toMatchFileSnapshot(
-      resolve(process.cwd(), 'tests/__snapshots__/persona-spec.schema.json'),
+      resolve(process.cwd(), 'tests/unit/__snapshots__/persona-spec.schema.json'),
     )
   })
 

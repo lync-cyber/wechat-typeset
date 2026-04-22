@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { scanZhTypo, fixZhTypo } from '../src/pipeline/zhTypo'
+import { scanZhTypo, fixZhTypo } from '../../src/pipeline/zhTypo'
 
 describe('scanZhTypo · 规则 1 中英空格', () => {
   it('CJK 后紧邻 ASCII 字母命中', () => {

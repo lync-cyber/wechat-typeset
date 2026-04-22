@@ -13,7 +13,7 @@ import {
   decodeShare,
   buildShareUrl,
   parseShareHash,
-} from '../src/share/shareLink'
+} from '../../src/share/shareLink'
 
 describe('encodeShare / decodeShare · 往返', () => {
   it('英文 ASCII', () => {

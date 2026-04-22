@@ -17,7 +17,7 @@ import {
   getThemeDefaultVariants,
   getContainerSnippet,
   getPersona,
-} from '../src/public'
+} from '../../src/public'
 
 describe('getContainerVocabulary', () => {
   it('返回非空数组，每项有必填字段', () => {
