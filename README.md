@@ -3,7 +3,7 @@
 > 写 Markdown，看手机预览，一键复制进公众号——不登账号，不跑后端，草稿存在本地不丢。
 
 [![license](https://img.shields.io/badge/license-MIT-a83420.svg)](LICENSE)
-[![node](https://img.shields.io/badge/node-%3E%3D18-2a1a14.svg)](package.json)
+[![node](https://img.shields.io/badge/node-%3E%3D24-2a1a14.svg)](package.json)
 
 <p align="center">
   <img src="docs/design/hero-personas.svg" alt="wechat-typeset 九套主题预览：从极客夜行到慢生活，每套主题自带配色、字距与装饰风格" width="100%"/>
