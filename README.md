@@ -11,6 +11,8 @@
 
 **[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** — 无需安装，浏览器打开即用。
 
+> [作者契约](docs/writer-contract.md)：25 容器 fence + 5 行内扩展 = 全部作者 API。主题间切换不塌版，复制到公众号不丢样。
+
 ---
 
 ## 用法

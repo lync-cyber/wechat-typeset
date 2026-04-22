@@ -16,7 +16,7 @@
 
 ---
 
-## Stage 0 · 契约地基清理 ✅ 完成
+## Stage 0 · 契约地基清理 [已完成]
 
 - [x] **#1** `validate.ts` export `HEX_RE`/`MIN_FONT_SIZE`/`MIN_STROKE_WIDTH`/`ALLOWED_FONT_FAMILIES`；`build-capabilities.ts` 的 hardRules 值改为派生自 validate.ts + rules.ts
 - [x] **#2** 删 `SIGNATURE_CONTAINER_MARKDOWN_NAME` 手写 21 条 → re-export `STYLE_KEY_TO_CONTAINER_NAME`；同步更新 hard-rules.md 中旧表引用
@@ -35,9 +35,21 @@
 
 ---
 
-## 后续阶段（等 Stage 0 合并后展开）
+## Stage 1 · 作者契约 & 编辑器入口 [已完成]
 
-- Stage 1（1 Sprint）: #6 writer-contract.md / #7 HelpPanel 接速查 / #8 CodeMirror 补全 / #9 diagnose.ts
+- [x] **#6** 新增 `docs/writer-contract.md`（25 fence + 5 inline 硬承诺 + 主题边界 + 契约演进）；CONTRIBUTING 补"不得扩展 fence 词汇"硬规则；README 顶部链出
+- [x] **#9** 新增 `src/pipeline/diagnose.ts` + 20 项测试：未知容器 / fence 长度 / 嵌套错位 / 未知 variant / 未闭合 / YAML 风格 attr 六类诊断
+- [x] **#8** package.json 显式登记 `@codemirror/autocomplete` + `@codemirror/lint`（已作为 codemirror 传递依赖安装）；新增 `src/components/editor-extensions.ts` 提供 `createContainerAutocomplete()` + `createContainerLinter()`；Editor.vue 接入
+- [x] **#7** HelpPanel 新增"容器速查"段：数据源 `CONTAINER_VOCABULARY`，分组 + 搜索 + 点击插入（复用 App 的 `handleInsertTemplate`）
+
+验收：vue-tsc 静默通过；vitest 631/631（新增 20 项 diagnose 测试）；verify-sample-full 51/51；vite build 成功。
+
+待手动 UI 验证（没有本地 browser 测试）：
+- CodeMirror 在 `::: ` 和 `variant=` 后弹出补全
+- 写错的容器 / variant 在编辑器左侧 gutter 显红波浪
+- HelpPanel 容器搜索 + 点击插入光标处
+
+## 后续阶段
 - Stage 2（1-2 Sprint）: #10 图片入站 / #11 粘贴清洗 / #12 嵌套列表自愈
 - Stage 3（1 Sprint）: #13 中文排版 lint / #14 多主题并排 / #15 发文清单 / #16 透明度面板
 - Stage 4（1 Sprint）: #17 外链降级 / #18 MD 导出 / #19 分享链接 / #20 IndexedDB 迁移

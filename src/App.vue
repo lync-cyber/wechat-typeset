@@ -651,6 +651,7 @@ onBeforeUnmount(() => {
       v-if="ui.helpOpen"
       :commands="commands"
       @close="ui.helpOpen = false"
+      @insert="handleInsertTemplate"
     />
     <UndoToast
       v-if="undo"

@@ -5,6 +5,7 @@ import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirro
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
+import { createContainerAutocomplete, createContainerLinter } from './editor-extensions'
 
 const props = defineProps<{ modelValue: string }>()
 const emit = defineEmits<{
@@ -87,6 +88,8 @@ function createView(doc: string) {
       keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
       markdown(),
       oneDark,
+      createContainerAutocomplete(),
+      createContainerLinter(),
       EditorView.lineWrapping,
       EditorView.updateListener.of((upd) => {
         if (upd.docChanged) {

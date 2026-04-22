@@ -2,16 +2,25 @@
 /**
  * 帮助 / 快捷键面板
  *
- * 数据源是 App.vue 登记的 Command 列表——一处登记，两处显示。
- * 另外附一小段"首次上手"提示。
+ * 数据源：
+ *   - Command 列表（快捷键）由 App.vue 传入
+ *   - 容器速查直接读 CONTAINER_VOCABULARY（与 docs/container-syntax.md 同源）
+ * 作者看见的每条容器都能点击插入编辑器——不需要手抄 fence 到粘贴板。
  */
+import { computed, ref } from 'vue'
 import type { Command } from './CommandPalette.vue'
+import { CONTAINER_VOCABULARY } from '../containers/vocabulary'
+
+type ContainerSpec = (typeof CONTAINER_VOCABULARY)[number]
 
 const props = defineProps<{
   commands: Command[]
 }>()
 
-const emit = defineEmits<{ (e: 'close'): void }>()
+const emit = defineEmits<{
+  (e: 'close'): void
+  (e: 'insert', snippet: string): void
+}>()
 
 function groupedWithShortcut() {
   const map = new Map<string, Command[]>()
@@ -26,6 +35,55 @@ function groupedWithShortcut() {
 }
 
 const groups = groupedWithShortcut()
+
+// ── 容器速查（vocabulary 派生） ────────────────────────────
+const CATEGORY_LABEL: Record<ContainerSpec['category'], string> = {
+  structure: '文章结构',
+  admonition: '提示',
+  content: '内容',
+  navigation: '导航',
+  media: '媒体',
+  signature: '签名',
+  free: '兜底',
+}
+const CATEGORY_ORDER: ContainerSpec['category'][] = [
+  'structure',
+  'admonition',
+  'content',
+  'navigation',
+  'media',
+  'signature',
+  'free',
+]
+
+const containerQuery = ref('')
+
+const groupedContainers = computed(() => {
+  const q = containerQuery.value.trim().toLowerCase()
+  const filtered = q
+    ? CONTAINER_VOCABULARY.filter(
+        (s) =>
+          s.name.toLowerCase().includes(q) ||
+          s.description.toLowerCase().includes(q) ||
+          s.category.toLowerCase().includes(q),
+      )
+    : CONTAINER_VOCABULARY
+
+  const bucket = new Map<ContainerSpec['category'], ContainerSpec[]>()
+  for (const spec of filtered) {
+    const list = bucket.get(spec.category) ?? []
+    list.push(spec)
+    bucket.set(spec.category, list)
+  }
+  return CATEGORY_ORDER
+    .map((cat) => [cat, bucket.get(cat) ?? []] as const)
+    .filter(([, list]) => list.length > 0)
+})
+
+function insertContainer(spec: ContainerSpec) {
+  emit('insert', spec.example)
+  emit('close')
+}
 </script>
 
 <template>
@@ -76,6 +134,38 @@ const groups = groupedWithShortcut()
               <span class="item-kbd mono">{{ c.shortcut }}</span>
             </li>
           </ul>
+        </div>
+      </section>
+
+      <section class="help-containers">
+        <div class="group-title mono">容器速查 · 点击插入光标处</div>
+        <input
+          v-model="containerQuery"
+          type="search"
+          class="container-search"
+          placeholder="搜索容器名或用途（例：金句 / admonition / compare）"
+          aria-label="搜索容器"
+        />
+        <div
+          v-for="[cat, specs] in groupedContainers"
+          :key="cat"
+          class="container-group"
+        >
+          <div class="container-cat mono">{{ CATEGORY_LABEL[cat] }}</div>
+          <ul class="container-list">
+            <li
+              v-for="spec in specs"
+              :key="spec.name"
+              class="container-item"
+              @click="insertContainer(spec)"
+            >
+              <code class="container-name">::: {{ spec.name }}</code>
+              <span class="container-desc">{{ spec.description }}</span>
+            </li>
+          </ul>
+        </div>
+        <div v-if="groupedContainers.length === 0" class="container-empty">
+          无匹配容器
         </div>
       </section>
 
@@ -187,6 +277,71 @@ const groups = groupedWithShortcut()
   border: 1px solid var(--border);
   border-radius: var(--radius-1);
   padding: 2px 6px;
+}
+
+.help-containers {
+  padding: var(--sp-4) var(--sp-5);
+  border-top: 1px solid var(--border);
+  overflow-y: auto;
+}
+.container-search {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: var(--sp-2) 0 var(--sp-3);
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: var(--fs-12);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-1);
+  outline: none;
+}
+.container-search:focus {
+  border-color: var(--accent);
+}
+.container-group + .container-group { margin-top: var(--sp-3); }
+.container-cat {
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-kicker);
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 4px;
+}
+.container-list { list-style: none; margin: 0; padding: 0; }
+.container-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  padding: 5px 6px;
+  border-radius: var(--radius-1);
+  cursor: pointer;
+  font-size: var(--fs-12);
+}
+.container-item:hover {
+  background: var(--surface);
+}
+.container-name {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-1);
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+.container-desc {
+  color: var(--text-muted);
+  line-height: var(--lh-normal);
+}
+.container-empty {
+  color: var(--text-subtle);
+  font-size: var(--fs-12);
+  padding: var(--sp-3) 0;
+  text-align: center;
 }
 
 .help-tips {
