@@ -1,7 +1,6 @@
-# 极客夜行 · 全量示例
+# 极客夜行 · 工程随笔 Vol.03
 
 > 本篇用于在 tech-geek 主题下肉眼校验 **VT220 琥珀 + 墨炭暖底 + HN 橙脚注** 的深底气质。
-> 覆盖 19 个容器与四态 admonition 的**四重冗余**（注释前缀 / 边框样式 / 边框位置 / 图标形状）。
 >
 > 参照坐标：Plan 9 manpage · Phrack ASCII zine · ACM Queue · TAOCP 脚注 · Fabien Sanglard。
 > 气质关键词：**成年、克制、琥珀、脚注**。

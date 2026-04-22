@@ -1,8 +1,6 @@
-# 硬核财经 · 全量示例
+# 硬核财经 · 本期议题
 
 > 本篇用于在 business-finance 主题下肉眼校验 **深栗墨 + 内参蓝 + 琥珀黄** 的版面气质。
-> 覆盖 19 个容器与 7 类 variant 的签名选择（accent-bar / frame-brackets / ledger /
-> timeline-dot / wave / cornered / bare）。
 >
 > 参照坐标：FT 中文网 · 财新周刊 · Bloomberg Terminal · The Economist。
 > 气质关键词：**报告、数据、分栏、纪律**。

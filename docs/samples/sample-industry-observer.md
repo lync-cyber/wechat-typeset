@@ -1,9 +1,7 @@
-# 行业观察 · Issue #023 · 全量示例
+# 行业观察 · Issue #023
 
 > 本篇用于在 industry-observer 主题下肉眼校验 **Stratechery 米 + 深墨蓝 + 晚点橙金**
-> 的 newsletter 气质。覆盖 19 个容器与 7 类 variant 的签名选择（pill-tag / column-rule /
-> column-card / timeline-dot / cornered / glyph / bare），并展示 issueStamp 跨 cover / author /
-> footerCTA 三处的印章注入。
+> 的 newsletter 气质。
 >
 > 参照坐标：Stratechery · Benedict Evans Weekly · The Information · 晚点 LatePost。
 > 气质关键词：**周报、断言、矩阵、issue 感**。

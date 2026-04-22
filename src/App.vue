@@ -196,8 +196,14 @@ watch(baseThemeId, (val, prev) => {
   //      getSample(B) 但 prev 是 B 之前的那个主题——条件永远不成立，用户被迫再次手动
   //      "载入当前主题示例"。
   // 改为"命中任意主题 sample"即视作 pristine，主题切换自动跟随。
+  //
+  // 两侧都 `replace(/\r\n/g, '\n')` 归一：生成器已经规范化为 LF，但编辑器 /
+  // 草稿存储 / 剪贴板粘贴任意一环若未来再引入 CRLF，仍能命中 pristine 判断。
   if (val !== prev) {
-    const isPristineSample = Object.values(SAMPLE_BY_THEME).some((s) => s === md.value)
+    const current = md.value.replace(/\r\n/g, '\n')
+    const isPristineSample = Object.values(SAMPLE_BY_THEME).some(
+      (s) => s.replace(/\r\n/g, '\n') === current,
+    )
     if (isPristineSample) md.value = getSample(val)
   }
   if (activeDraftId.value) {

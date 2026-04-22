@@ -38,7 +38,10 @@ function buildOutput(): string {
     const m = FILE_RE.exec(file)
     if (!m) continue
     const id = m[1]
-    const content = readFileSync(resolve(SAMPLES_DIR, file), 'utf8')
+    // 统一 LF：Windows 的 CRLF 源文件会让 CodeMirror 在编辑后把 md.value
+    // 归一为 LF，导致 App.vue 里"是否 pristine sample"的等值比较永远 false，
+    // 切主题时不会自动换 sample。生成器规范化为 LF 是最上游的修复点。
+    const content = readFileSync(resolve(SAMPLES_DIR, file), 'utf8').replace(/\r\n/g, '\n')
     if (id === FULL_SAMPLE_THEMEID) {
       fullSample = content
     } else {

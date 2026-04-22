@@ -1,8 +1,6 @@
-# 人文札记 · 全量示例
+# 人文札记 · 卷首语
 
 > 本篇用于在 literary-humanism 主题下肉眼校验 **宋椠褐 + 藏经朱 + 宣纸米** 的版面气质。
-> 覆盖 19 个容器与 7 类 variant 的签名选择（minimal-underline / magazine-dropcap /
-> timeline-dot / column-card / cornered / flower / bare）。
 >
 > 参照坐标：三联毛边本、《读库》目录页、岩波文库奶白封皮。
 > 气质关键词：**克制、藏锋、留白、纸感**。
