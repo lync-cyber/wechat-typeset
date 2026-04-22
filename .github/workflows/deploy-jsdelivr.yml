@@ -1,0 +1,61 @@
+name: Deploy to jsDelivr (CDN mirror)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# jsDelivr 把 GitHub repo 的任意 ref 当作 CDN 源分发。
+# 我们把 vite 的构建产物推到专用分支 `jsdelivr-cdn`，用户经
+#   https://cdn.jsdelivr.net/gh/<owner>/<repo>@jsdelivr-cdn/index.html
+# 访问。jsDelivr 在国内有 CDN 节点（网宿/联通云），免备案、
+# 微信内置浏览器也放行该域名——这是当前成本最低的国内入口。
+#
+# VITE_BASE 必须是绝对 URL，否则 index.html 内 <script>/<link>
+# 的相对路径会解析到 cdn.jsdelivr.net 根目录下而 404。
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  CDN_BRANCH: jsdelivr-cdn
+  VITE_BASE: https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@jsdelivr-cdn/
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jsdelivr-cdn
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build (absolute jsDelivr base)
+        run: npm run build
+
+      - name: Publish dist/ to ${{ env.CDN_BRANCH }}
+        run: |
+          cd dist
+          git init -b "$CDN_BRANCH"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add -A
+          git commit -m "build: ${GITHUB_SHA}"
+          git push -f \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            "HEAD:${CDN_BRANCH}"
+
+      - name: Purge jsDelivr cache for entry HTML
+        # Hashed asset filenames self-bust; only index.html needs an explicit
+        # purge because floating-branch refs cache for 12 h.
+        run: |
+          curl -fsS "https://purge.jsdelivr.net/gh/${{ github.repository }}@${CDN_BRANCH}/index.html" || true

@@ -11,6 +11,15 @@
 
 **[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** — 无需安装，浏览器打开即用。
 
+> 国内访问不畅、或在微信内被拦？任选一个可达镜像，四个入口同源同步。
+
+| 入口 | 地址 | 适用 |
+|---|---|---|
+| GitHub Pages（主） | https://lync-cyber.github.io/wechat-typeset | 海外默认 |
+| Cloudflare Pages | https://wechat-typeset.pages.dev | 国内多数可达 |
+| Netlify | https://wechat-typeset.netlify.app | 国内备用 |
+| **jsDelivr CDN**（微信内推荐） | https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@jsdelivr-cdn/index.html | 国内 / 微信内最稳 |
+
 > [作者契约](docs/writer-contract.md)：25 容器 fence + 5 行内扩展 = 全部作者 API。主题间切换不塌版，复制到公众号不丢样。
 
 ---
@@ -108,6 +117,18 @@ npm run dev
 ```
 
 浏览器打开 `http://127.0.0.1:5173` 即是完整编辑器。`npm run build` 产出静态文件，`npm test` 跑单测与端到端校验。
+
+---
+
+## 镜像部署
+
+四个入口同构于 main 分支，差别只在部署目标：
+
+- **GitHub Pages** — `.github/workflows/deploy-pages.yml`，`VITE_BASE=/wechat-typeset/`
+- **jsDelivr CDN** — `.github/workflows/deploy-jsdelivr.yml` 把产物推到 `jsdelivr-cdn` 分支；jsDelivr 自动从该 ref 分发，`VITE_BASE` 为绝对 URL；floating branch 缓存 12 h，workflow 末端 purge `index.html` 触发立即刷新
+- **Cloudflare Pages / Netlify** — 在各自控制台一键连接仓库即可：CF 选 framework preset `Vite`（无需额外配置）；Netlify 自动读取仓库根的 `netlify.toml`
+
+想自建镜像？把 `dist/` 上传任意静态主机。`VITE_BASE` 默认 `/`，部署到子路径时设为 `/subpath/`，部署到异域 CDN 时设为完整绝对 URL。
 
 ---
 
