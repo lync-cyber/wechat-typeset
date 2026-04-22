@@ -113,14 +113,13 @@ describe('主题资产在最终 HTML 中确实注入', () => {
 })
 
 describe('主题切换 · 完整脱钩', () => {
-  it('覆盖 status.tip.accent → admonition tip 左色条 / 标题色都换', () => {
+  it('覆盖 status.tip.accent → admonition tip 底色 / 标题色都换', () => {
     const custom = cloneTheme('custom-tip', (base) => {
       base.tokens.colors.status.tip = { accent: '#ff0055', soft: '#fff0f4' }
       return base
     })
     const out = run('::: tip 自定义\n正文\n:::\n', custom)
-    // 小写 hex 规范化保留
-    expect(out.toLowerCase()).toMatch(/border-left:\s*3px solid #ff0055/)
+    // accent-bar v2 的 tip 态不再有左色条，靠 soft 底色 + 标题 accent 色承担色相
     expect(out.toLowerCase()).toMatch(/background-color:\s*#fff0f4/)
     expect(out.toLowerCase()).toMatch(/color:\s*#ff0055/)
   })
