@@ -1,0 +1,698 @@
+{
+  "schemaVersion": "2.1",
+  "tool": {
+    "name": "wechat-typeset",
+    "version": "0.2.0",
+    "repo": "https://github.com/lync-cyber/wechat-typeset#readme"
+  },
+  "generatedAt": "2026-04-22T13:34:31.141Z",
+  "contract": {
+    "fenceOuter": "::::",
+    "fenceInner": ":::",
+    "attrSyntax": "key=value key2=\"with space\" — 写在 open 行 name 之后；不接受 {key=\"...\"}  JSX 风格",
+    "variantKey": "variant",
+    "notes": [
+      "容器名必须是 kebab-case（quote-card，不是 quoteCard）",
+      "admonition 不是容器名；用 tip / warning / info / danger / note 之一",
+      "compare 外层用 :::: 四冒号，内层 pros/cons 用 ::: 三冒号",
+      "<!-- variant=X --> HTML 注释不被解析；variant 必须写在 open 行"
+    ]
+  },
+  "personas": [
+    {
+      "id": "default",
+      "name": "默认主题",
+      "description": "有意识的中立——Medium/Notion/Substack 默认家族",
+      "audience": "通用（全题材公平阅读）",
+      "signatureContainers": [],
+      "variants": {
+        "admonition": "accent-bar",
+        "quote": "classic",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "rule",
+        "sectionTitle": "bordered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#2558b0"
+    },
+    {
+      "id": "tech-geek",
+      "name": "极客夜行",
+      "description": "VT220 琥珀 + 墨炭暖底 + manpage 印刷传统，成年工程师的工程写作",
+      "audience": "技术布道 / 工程随笔 / 架构评论（manpage / RFC / TAOCP 脚注风）",
+      "signatureContainers": [],
+      "variants": {
+        "admonition": "manpage-log",
+        "quote": "frame-brackets",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "wave",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#c89759"
+    },
+    {
+      "id": "tech-explainer",
+      "name": "文档白昼",
+      "description": "Stripe Docs / MDN 家族，手把手跟做的技术产品文档",
+      "audience": "技术布道 / 产品文档 / 教程",
+      "signatureContainers": [
+        "note",
+        "seeAlso"
+      ],
+      "variants": {
+        "admonition": "accent-bar",
+        "quote": "column-rule",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "rule",
+        "sectionTitle": "bordered",
+        "codeBlock": "header-bar"
+      },
+      "palettePrimary": "#0066cc"
+    },
+    {
+      "id": "life-aesthetic",
+      "name": "慢生活",
+      "description": "暖米底 + 圆角柔和，写写饮食、旅行与长日",
+      "audience": "生活写作 / 非虚构随笔",
+      "signatureContainers": [],
+      "variants": {
+        "admonition": "bubble-organic",
+        "quote": "classic",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "rule",
+        "sectionTitle": "bordered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#d98141"
+    },
+    {
+      "id": "business-finance",
+      "name": "硬核财经",
+      "description": "深栗墨 + 内参蓝，研究所内参版面，数字与判断优先",
+      "audience": "财经内参 / 研究所 newsletter（FT 中文、财新周刊、Bloomberg Terminal、HBR）",
+      "signatureContainers": [
+        "abstract",
+        "keyNumber"
+      ],
+      "variants": {
+        "admonition": "ledger-cell",
+        "quote": "frame-brackets",
+        "compare": "ledger",
+        "steps": "timeline-dot",
+        "divider": "wave",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#2a1a14"
+    },
+    {
+      "id": "literary-humanism",
+      "name": "人文札记",
+      "description": "宋椠古籍 + 克制留白，给散文、书评、长评留足呼吸",
+      "audience": "人文非虚构（散文 / 书评 / 长评 / 札记）",
+      "signatureContainers": [],
+      "variants": {
+        "admonition": "marginalia",
+        "quote": "magazine-dropcap",
+        "compare": "column-card",
+        "steps": "timeline-dot",
+        "divider": "flower",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#5a4a3a"
+    },
+    {
+      "id": "industry-observer",
+      "name": "行业观察",
+      "description": "Stratechery / Benedict Evans 家族，业内人写给业内人的周刊深度稿",
+      "audience": "内参 newsletter / 行业周报 / analyst essay 读者",
+      "signatureContainers": [
+        "cover",
+        "author",
+        "footerCTA",
+        "abstract",
+        "keyNumber",
+        "seeAlso"
+      ],
+      "variants": {
+        "admonition": "report-section",
+        "quote": "column-rule",
+        "compare": "column-card",
+        "steps": "timeline-dot",
+        "divider": "glyph",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#24364f"
+    },
+    {
+      "id": "people-story",
+      "name": "人物特稿",
+      "description": "《人物》杂志 / New Yorker Profiles 家族，特稿的\"肖像感\"排版",
+      "audience": "人物特稿 / 人文非虚构 / 杂志 Profile",
+      "signatureContainers": [],
+      "variants": {
+        "admonition": "magazine-pull",
+        "quote": "magazine-dropcap",
+        "compare": "column-card",
+        "steps": "timeline-dot",
+        "divider": "rule",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#1b2330"
+    },
+    {
+      "id": "academic-frontier",
+      "name": "学术前沿",
+      "description": "Nature / arXiv / LaTeX article 家族，研究者写给同行评审的严谨陈述",
+      "audience": "学术研究者 / 同行评审向的论文化陈述",
+      "signatureContainers": [
+        "abstract",
+        "seeAlso"
+      ],
+      "variants": {
+        "admonition": "sidenote-latex",
+        "quote": "frame-brackets",
+        "compare": "column-card",
+        "steps": "timeline-dot",
+        "divider": "rule",
+        "sectionTitle": "bordered",
+        "codeBlock": "bare"
+      },
+      "palettePrimary": "#1e2c4a"
+    }
+  ],
+  "containers": [
+    {
+      "id": "abstract",
+      "category": "signature",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。",
+      "example": "::: abstract 摘要\n本文论点 …\n:::\n"
+    },
+    {
+      "id": "author",
+      "category": "structure",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "作者栏：头像 + 名字 + 日期／期号。",
+      "example": "::: author\n作者 · 日期\n:::\n",
+      "attrs": [
+        {
+          "key": "issue",
+          "description": "期号（newsletter 主题可用）",
+          "example": "023"
+        },
+        {
+          "key": "date",
+          "description": "日期",
+          "example": "2026-04-20"
+        }
+      ]
+    },
+    {
+      "id": "compare",
+      "category": "content",
+      "kind": "variantized",
+      "variants": [
+        "column-card",
+        "stacked-row",
+        "ledger"
+      ],
+      "defaultVariant": "column-card",
+      "children": [
+        "pros",
+        "cons"
+      ],
+      "fenceLength": 4,
+      "description": "双列对比（外层 4 个冒号，内层 pros/cons 用 3 个）。",
+      "example": ":::: compare\n::: pros 优点\n- A\n:::\n::: cons 缺点\n- B\n:::\n::::\n"
+    },
+    {
+      "id": "cons",
+      "category": "content",
+      "kind": "nested",
+      "parent": "compare",
+      "fenceLength": 3,
+      "description": "compare 的\"反面\"列（必须嵌在 :::: compare 内）。",
+      "example": "::: cons 缺点\n- A\n- B\n:::\n",
+      "notes": "必须嵌在 compare 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "cover",
+      "category": "structure",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "封面卡（封面图 + 题头 + 可选期号戳）。",
+      "example": "::: cover\n![](cover.png)\n\n## 主标题\n:::\n",
+      "attrs": [
+        {
+          "key": "issue",
+          "description": "期号（newsletter 主题会渲染期号戳）",
+          "example": "023"
+        },
+        {
+          "key": "date",
+          "description": "日期",
+          "example": "2026-04-20"
+        },
+        {
+          "key": "kind",
+          "description": "刊物类型",
+          "example": "周刊"
+        }
+      ]
+    },
+    {
+      "id": "danger",
+      "category": "admonition",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "ticket-notch",
+        "card-shadow",
+        "minimal-underline",
+        "terminal",
+        "dashed-border",
+        "double-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "danger：高风险警告／错误示范。",
+      "example": "::: danger 警告\n内容 …\n:::\n",
+      "notes": "admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。"
+    },
+    {
+      "id": "divider",
+      "category": "navigation",
+      "kind": "variantized",
+      "variants": [
+        "wave",
+        "dots",
+        "flower",
+        "rule",
+        "glyph"
+      ],
+      "defaultVariant": "rule",
+      "fenceLength": 3,
+      "description": "装饰分隔线。可切 wave / dots / flower / rule / glyph。",
+      "example": "::: divider\n:::\n"
+    },
+    {
+      "id": "footer-cta",
+      "category": "navigation",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。",
+      "example": "::: footer-cta 觉得有用？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/xxx\n如果这篇对你有启发，欢迎关注。\n:::\n",
+      "attrs": [
+        {
+          "key": "cta",
+          "description": "按钮文字（visual only）",
+          "example": "点此关注"
+        },
+        {
+          "key": "href",
+          "description": "按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：https://mp.weixin.qq.com/s/*（同域文章）/ weixin://dl/*（小程序协议）/ tel:* / mailto:* / 页内锚点 #*。非白名单 URL 会触发 diagnose warning。",
+          "example": "https://mp.weixin.qq.com/s/xxx"
+        }
+      ]
+    },
+    {
+      "id": "free",
+      "category": "free",
+      "kind": "free",
+      "fenceLength": 3,
+      "description": "兜底容器：渲染器刻意不施加主题样式，写不归类内容。",
+      "example": "::: free\n编辑部补注 …\n:::\n",
+      "notes": "兜底 escape hatch：无主题样式，按作者内容原样透传。"
+    },
+    {
+      "id": "highlight",
+      "category": "content",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "高亮段落（bgMuted 底色块）。无 variant 切换。",
+      "example": "::: highlight\n需要读者停下来的一段话 …\n:::\n"
+    },
+    {
+      "id": "info",
+      "category": "admonition",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "ticket-notch",
+        "card-shadow",
+        "minimal-underline",
+        "terminal",
+        "dashed-border",
+        "double-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "info：中性说明／补充信息。",
+      "example": "::: info 说明\n内容 …\n:::\n",
+      "notes": "admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。"
+    },
+    {
+      "id": "intro",
+      "category": "structure",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "文首引子／导语卡。独立 bgSoft 底，区别于正文段落。",
+      "example": "::: intro\n本文探讨 …\n:::\n"
+    },
+    {
+      "id": "key-number",
+      "category": "signature",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "大数字 + 说明（研究报告／内参版面）。attrs.value 为数字，info 为 kicker。",
+      "example": "::: key-number value=\"42%\" 同比涨幅\n占全年营收 12pp …\n:::\n",
+      "attrs": [
+        {
+          "key": "value",
+          "description": "大字号数字本体",
+          "example": "42%"
+        }
+      ]
+    },
+    {
+      "id": "mpvideo",
+      "category": "media",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "公众号视频卡（占位，粘贴后在公众号编辑器补真 mpvideo 节点）。",
+      "example": "::: mpvideo title=\"片段\" src=\"...\"\n:::\n",
+      "attrs": [
+        {
+          "key": "src",
+          "description": "视频 URL（公众号素材库链接）"
+        },
+        {
+          "key": "title",
+          "description": "标题"
+        }
+      ]
+    },
+    {
+      "id": "mpvoice",
+      "category": "media",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "公众号语音卡（占位，粘贴后在公众号编辑器补真 mpvoice 节点）。",
+      "example": "::: mpvoice title=\"片头曲\" src=\"...\"\n:::\n",
+      "attrs": [
+        {
+          "key": "src",
+          "description": "音频 URL（公众号素材库链接）"
+        },
+        {
+          "key": "title",
+          "description": "标题"
+        }
+      ]
+    },
+    {
+      "id": "note",
+      "category": "admonition",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。",
+      "example": "::: note 补注\n内容 …\n:::\n",
+      "notes": "admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。"
+    },
+    {
+      "id": "pros",
+      "category": "content",
+      "kind": "nested",
+      "parent": "compare",
+      "fenceLength": 3,
+      "description": "compare 的\"正面\"列（必须嵌在 :::: compare 内）。",
+      "example": "::: pros 优点\n- A\n- B\n:::\n",
+      "notes": "必须嵌在 compare 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "qrcode",
+      "category": "media",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "二维码块（图 + 说明文案）。",
+      "example": "::: qrcode\n![](qr.png)\n扫码关注\n:::\n"
+    },
+    {
+      "id": "quote-card",
+      "category": "content",
+      "kind": "variantized",
+      "variants": [
+        "classic",
+        "magazine-dropcap",
+        "column-rule",
+        "frame-brackets"
+      ],
+      "defaultVariant": "classic",
+      "fenceLength": 3,
+      "description": "大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。",
+      "example": "::: quote-card\n一段值得突出的引用 …\n:::\n"
+    },
+    {
+      "id": "recommend",
+      "category": "navigation",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "推荐阅读列表。",
+      "example": "::: recommend\n- [前作](url)\n- [续篇](url)\n:::\n"
+    },
+    {
+      "id": "section-title",
+      "category": "structure",
+      "kind": "variantized",
+      "variants": [
+        "bordered",
+        "cornered"
+      ],
+      "defaultVariant": "bordered",
+      "fenceLength": 3,
+      "description": "章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。",
+      "example": "::: section-title\n第一章 · 缘起\n:::\n"
+    },
+    {
+      "id": "see-also",
+      "category": "signature",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "相关阅读链接列表（academic-frontier / tech-explainer 的\"扩展阅读\"）。",
+      "example": "::: see-also 延伸阅读\n- [相关论文](url)\n:::\n"
+    },
+    {
+      "id": "steps",
+      "category": "content",
+      "kind": "variantized",
+      "variants": [
+        "number-circle",
+        "ribbon-chain",
+        "timeline-dot"
+      ],
+      "defaultVariant": "number-circle",
+      "fenceLength": 3,
+      "description": "编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。",
+      "example": "::: steps\n1. 初始化\n2. 构建\n3. 发布\n:::\n"
+    },
+    {
+      "id": "tip",
+      "category": "admonition",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "ticket-notch",
+        "card-shadow",
+        "minimal-underline",
+        "terminal",
+        "dashed-border",
+        "double-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "tip：小贴士／正向提示。",
+      "example": "::: tip 小贴士\n内容 …\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 admonition 骨架",
+          "enum": [
+            "accent-bar",
+            "pill-tag",
+            "ticket-notch",
+            "card-shadow",
+            "minimal-underline",
+            "terminal",
+            "dashed-border",
+            "double-border",
+            "top-bottom-rule",
+            "manpage-log",
+            "sidenote-latex",
+            "marginalia",
+            "ledger-cell",
+            "bubble-organic",
+            "magazine-pull",
+            "report-section"
+          ]
+        }
+      ],
+      "notes": "admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。"
+    },
+    {
+      "id": "warning",
+      "category": "admonition",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "ticket-notch",
+        "card-shadow",
+        "minimal-underline",
+        "terminal",
+        "dashed-border",
+        "double-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "warning：需要读者注意的提醒。",
+      "example": "::: warning 注意\n内容 …\n:::\n",
+      "notes": "admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。"
+    }
+  ],
+  "signatureContainerIds": [
+    "intro",
+    "author",
+    "cover",
+    "tip",
+    "warning",
+    "info",
+    "danger",
+    "note",
+    "quoteCard",
+    "highlight",
+    "compare",
+    "steps",
+    "sectionTitle",
+    "footerCTA",
+    "recommend",
+    "qrcode",
+    "mpvoice",
+    "mpvideo",
+    "abstract",
+    "algorithm",
+    "keyNumber",
+    "seeAlso",
+    "seal",
+    "prelude"
+  ],
+  "signatureContainerMarkdownNames": {
+    "intro": "intro",
+    "cover": "cover",
+    "author": "author",
+    "sectionTitle": "section-title",
+    "tip": "tip",
+    "warning": "warning",
+    "info": "info",
+    "danger": "danger",
+    "note": "note",
+    "quoteCard": "quote-card",
+    "highlight": "highlight",
+    "compare": "compare",
+    "steps": "steps",
+    "footerCTA": "footer-cta",
+    "recommend": "recommend",
+    "qrcode": "qrcode",
+    "mpvoice": "mpvoice",
+    "mpvideo": "mpvideo",
+    "abstract": "abstract",
+    "keyNumber": "key-number",
+    "seeAlso": "see-also"
+  },
+  "inlineExtensions": [
+    {
+      "syntax": "==mark==",
+      "description": "荧光笔高亮（markdown-it-mark）"
+    },
+    {
+      "syntax": "~~del~~",
+      "description": "GFM 删除线"
+    },
+    {
+      "syntax": "++ins++",
+      "description": "插入（markdown-it-ins）"
+    },
+    {
+      "syntax": "[.text.]",
+      "description": "中文着重号"
+    },
+    {
+      "syntax": "[~text~]",
+      "description": "波浪下划线"
+    }
+  ],
+  "hardRules": {
+    "minFontSize": 14,
+    "minStrokeWidth": 1,
+    "paletteHexPattern": "^#[0-9a-fA-F]{3,8}$",
+    "forbidFontFamily": true,
+    "forbidClass": true,
+    "forbidStyleTag": true,
+    "forbidPosition": true,
+    "forbidMediaQueries": true
+  },
+  "deprecations": [],
+  "personaSchemaUri": "../schema/persona-spec.schema.json",
+  "docs": {
+    "containerSyntax": "docs/container-syntax.md",
+    "skillReadme": "skills/wechat-typeset/SKILL.md",
+    "personas": "skills/wechat-typeset/references/personas.md",
+    "hardRules": "skills/wechat-typeset/references/hard-rules.md",
+    "api": "skills/wechat-typeset/references/api.md"
+  }
+}
