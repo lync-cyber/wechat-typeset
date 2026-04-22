@@ -134,6 +134,18 @@ const showOnboard = computed(() =>
   ui.rightSlot === null,
 )
 
+/**
+ * 移动端：任意抽屉 / 面板 / 浮层打开时挂 `.drawer-open` 到根元素，
+ * 配合 CSS `overflow: hidden` 阻止背景滚动（iOS Safari 橡皮筋会透过 fixed 抽屉）。
+ */
+const hasOpenDrawer = computed(
+  () =>
+    ui.leftSlot !== null ||
+    ui.rightSlot !== null ||
+    ui.commandOpen ||
+    ui.helpOpen,
+)
+
 // ==============================================
 // 观察器：mobileTab 切换关闭 drawer；baseThemeId 切换联动持久化 / 重置 custom / 样本跟随 / 草稿 themeId 回写
 // ==============================================
@@ -407,14 +419,24 @@ onMounted(() => {
   window.addEventListener('pagehide', flushDraftSave)
 })
 
+// 移动端抽屉/面板打开 → 锁 body 滚动；桌面上抽屉不占满视口，无需锁。
+watch(hasOpenDrawer, (open) => {
+  if (typeof document === 'undefined') return
+  const mobile = window.matchMedia('(max-width: 767px)').matches
+  document.body.classList.toggle('drawer-scroll-lock', open && mobile)
+})
+
 onBeforeUnmount(() => {
   window.removeEventListener('pagehide', flushDraftSave)
   flushDraftSave()
+  if (typeof document !== 'undefined') {
+    document.body.classList.remove('drawer-scroll-lock')
+  }
 })
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" :class="{ 'drawer-open': hasOpenDrawer }">
     <Toolbar
       ref="toolbarRef"
       :draft-title="currentDraftTitle"
@@ -600,6 +622,15 @@ onBeforeUnmount(() => {
 .mobile-tab.active {
   color: var(--accent);
   background: var(--accent-soft);
+}
+/* 按下视觉反馈：无障碍 + 让 iOS 用户确认点到了（无 tap-highlight 时靠这个） */
+.mobile-tab:active {
+  background: var(--surface);
+  transform: scale(0.97);
+}
+.mobile-tab.active:active {
+  background: var(--accent-soft);
+  filter: brightness(0.96);
 }
 .mobile-tab-copy {
   flex: 0 0 auto;

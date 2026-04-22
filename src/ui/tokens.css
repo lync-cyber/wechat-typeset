@@ -381,3 +381,10 @@
   font-feature-settings: "tnum", "lnum";
   font-variant-numeric: tabular-nums lining-nums;
 }
+
+/* 抽屉 / 面板打开时锁背景滚动（App.vue 根据视口宽度决定是否挂这个 class）。
+ * iOS Safari 的橡皮筋会穿透 fixed 抽屉导致背景跟着飘；overscroll-behavior 托底。 */
+body.drawer-scroll-lock {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}

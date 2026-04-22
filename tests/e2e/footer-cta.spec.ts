@@ -6,14 +6,23 @@
  */
 
 import { expect, test } from '@playwright/test'
+import { freshMobilePage } from './_helpers'
+
+test.beforeEach(async ({ page }) => {
+  await freshMobilePage(page)
+})
 
 async function setEditorContent(page: import('@playwright/test').Page, md: string) {
-  // CodeMirror contenteditable：用 evaluate 直接写入 view.state.doc
-  // 否则每次击键都触发 CM 的 input 事件，慢且不稳
+  // CodeMirror contenteditable：先全选清空
+  // keyboard.type 不把字符串里的 `\n` 翻译为 Enter，需手动按 Enter 分段
   await page.locator('.cm-content').click()
   await page.keyboard.press('ControlOrMeta+A')
   await page.keyboard.press('Delete')
-  await page.keyboard.type(md, { delay: 0 })
+  const lines = md.split('\n')
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i]) await page.keyboard.type(lines[i], { delay: 0 })
+    if (i < lines.length - 1) await page.keyboard.press('Enter')
+  }
 }
 
 test('footer-cta 带白名单 href：预览 iframe 里 <a> 含 data-wx-footer-cta 与正确 href', async ({ page }) => {
