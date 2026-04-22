@@ -10,6 +10,8 @@
  * 会静默迁移为一篇"未命名草稿"后删除旧 key。
  */
 
+import { genId as genKvId, safeRead, safeRemove, safeWrite } from './_kv'
+
 const LEGACY_KEY = 'wx-md:draft:single'
 const INDEX_KEY = 'wechat-typeset:drafts:index'
 const ACTIVE_KEY = 'wechat-typeset:drafts:active'
@@ -36,33 +38,7 @@ export interface SearchOptions {
   tags?: string[]
 }
 
-function safeRead(key: string): string | null {
-  try {
-    return localStorage.getItem(key)
-  } catch {
-    return null
-  }
-}
-
-function safeWrite(key: string, value: string): void {
-  try {
-    localStorage.setItem(key, value)
-  } catch {
-    // 配额超限忽略
-  }
-}
-
-function safeRemove(key: string): void {
-  try {
-    localStorage.removeItem(key)
-  } catch {
-    // ignore
-  }
-}
-
-function genId(): string {
-  return `d_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
-}
+const genId = () => genKvId('d')
 
 function readIndex(): DraftMeta[] {
   const raw = safeRead(INDEX_KEY)

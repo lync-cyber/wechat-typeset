@@ -93,6 +93,14 @@
 - Toolbar overflow「外链处理」切到「尾注」→ 复制后文末追加参考列表 + 正文出现 `[N]` 上角标
 - 草稿抽屉：含 tag 的草稿显示 chip；顶部标签条点击过滤；搜索框输入 `#vue` 正确生效；模拟填满 LS 到 80% 时出现黄色告警条
 
+## Stage 5 · 主题与代码健壮性 [部分完成]
+
+- [x] **#24** `variants/registry.ts` 8 kind 各抽 `_all.ts` 聚合器：52 行独立 import → 8 行 + 8 个小聚合文件；`collectDefs()` 从 45 行数组字面量 → 8 个 `...spread`。"新增 variant 三步"里只改 `_all.ts` 一处，不再污染 registry
+- [x] **#23** `src/storage/_kv.ts` 抽 `safeRead` / `safeWrite` / `safeRemove` / `genId(prefix)`：`drafts.ts` 去掉 27 行 + `userComponents.ts` 去掉 19 行，两处共享同一份配额异常处理
+- [ ] **#21 + #22 延后**：`elements` 跨主题的差异并非仅调色板映射 —— 9 套 spec 在 `font-weight` / `letter-spacing` / `border-bottom` 风格 / 内嵌 SVG 位置上各有作者 voice，抽 `defaultElements(palette, typography, spacing)` 后仍需 overrides 盖到 60-80 行／篇，压到 "40-60 行" 需激进参数化，风险大于收益。#22 依赖 #21，成对下沉：等 #22 真要动视觉主题编辑器时一并做
+- [ ] **#25 延后**：当前脚本数量 < 6，抽 `scripts/_io.ts` 的规模不划算
+
+验收：vue-tsc 静默通过；vitest 774/774；verify-sample-full 51/51。
+
 ## 后续阶段
-- Stage 5（机会主义）: #21 elements 差异化 / #22 可视化主题编辑 / #23 storage kv 抽取 / #24 variants _all.ts / #25 scripts writeOutput
-- Stage 6（延后）: #26-32，新增 #33 IndexedDB 后端换底（配合 `navigator.storage.persist()` 申请持久化存储）
+- Stage 6（延后）: #26-32，新增 #33 IndexedDB 后端换底（配合 `navigator.storage.persist()` 申请持久化存储）；#21/#22/#25 按需求触发时再动

@@ -12,31 +12,14 @@
  */
 
 import type { UserComponent, ComponentKind } from '../components-lib/types'
+import { genId as genKvId, safeRead, safeWrite } from './_kv'
 
 const STORAGE_KEY = 'wechat-typeset:user-components'
 
-function safeRead(): string | null {
-  try {
-    return localStorage.getItem(STORAGE_KEY)
-  } catch {
-    return null
-  }
-}
-
-function safeWrite(value: string): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, value)
-  } catch {
-    // 配额超限忽略
-  }
-}
-
-function genId(): string {
-  return `uc_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`
-}
+const genId = () => genKvId('uc')
 
 function readList(): UserComponent[] {
-  const raw = safeRead()
+  const raw = safeRead(STORAGE_KEY)
   if (!raw) return []
   try {
     const arr = JSON.parse(raw)
@@ -49,7 +32,7 @@ function readList(): UserComponent[] {
 }
 
 function writeList(list: UserComponent[]): void {
-  safeWrite(JSON.stringify(list))
+  safeWrite(STORAGE_KEY, JSON.stringify(list))
 }
 
 function isUserComponent(v: unknown): v is UserComponent {

@@ -3,8 +3,7 @@
  *
  * 新增 variant 三步：
  *   1. 在 `src/variants/<kind>/` 下新建 `<id>.ts`，default export 一个 VariantDef / CodeBlockDef。
- *   2. 在本文件下方"静态 import 收集"段追加 `import x from './<kind>/<id>'`，
- *      并把 x 塞进 `collectDefs()` 返回数组。
+ *   2. 在 `src/variants/<kind>/_all.ts` import 并追加到数组（每个 kind 一份聚合器）。
  *   3. 可选：若该 variant 要固定排序位置，往对应 kind 的 `*_ORDER` 常量里加 id。
  *
  * 聚合输出（供下游消费）：
@@ -103,110 +102,30 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 静态 import 收集（rationale 见文件头 docstring）。
+// 聚合器导入（每个 kind 一个 `_all.ts`；rationale 见文件头 docstring）。
 // ─────────────────────────────────────────────────────────────
 
 type AnyDef = VariantDef<unknown> | CodeBlockDef
 
-// admonition（16）
-import admonitionAccentBar from './admonition/accent-bar'
-import admonitionPillTag from './admonition/pill-tag'
-import admonitionTicketNotch from './admonition/ticket-notch'
-import admonitionCardShadow from './admonition/card-shadow'
-import admonitionMinimalUnderline from './admonition/minimal-underline'
-import admonitionTerminal from './admonition/terminal'
-import admonitionDashedBorder from './admonition/dashed-border'
-import admonitionDoubleBorder from './admonition/double-border'
-import admonitionTopBottomRule from './admonition/top-bottom-rule'
-import admonitionManpageLog from './admonition/manpage-log'
-import admonitionSidenoteLatex from './admonition/sidenote-latex'
-import admonitionMarginalia from './admonition/marginalia'
-import admonitionLedgerCell from './admonition/ledger-cell'
-import admonitionBubbleOrganic from './admonition/bubble-organic'
-import admonitionMagazinePull from './admonition/magazine-pull'
-import admonitionReportSection from './admonition/report-section'
-// quote（4）
-import quoteClassic from './quote/classic'
-import quoteMagazineDropcap from './quote/magazine-dropcap'
-import quoteColumnRule from './quote/column-rule'
-import quoteFrameBrackets from './quote/frame-brackets'
-// compare（3）
-import compareColumnCard from './compare/column-card'
-import compareStackedRow from './compare/stacked-row'
-import compareLedger from './compare/ledger'
-// steps（3）
-import stepsNumberCircle from './steps/number-circle'
-import stepsRibbonChain from './steps/ribbon-chain'
-import stepsTimelineDot from './steps/timeline-dot'
-// divider（5）
-import dividerWave from './divider/wave'
-import dividerDots from './divider/dots'
-import dividerFlower from './divider/flower'
-import dividerRule from './divider/rule'
-import dividerGlyph from './divider/glyph'
-// sectionTitle（2）
-import sectionTitleBordered from './section-title/bordered'
-import sectionTitleCornered from './section-title/cornered'
-// codeBlock（2）
-import codeBlockBare from './codeBlock/bare'
-import codeBlockHeaderBar from './codeBlock/header-bar'
-// free（9）— kind='none' 自由组件
-import freeIntro from './free/intro'
-import freeAuthor from './free/author'
-import freeCover from './free/cover'
-import freeHighlight from './free/highlight'
-import freeFooterCta from './free/footer-cta'
-import freeRecommend from './free/recommend'
-import freeQrcode from './free/qrcode'
-import freeMpvoice from './free/mpvoice'
-import freeMpvideo from './free/mpvideo'
+import admonitionAll from './admonition/_all'
+import quoteAll from './quote/_all'
+import compareAll from './compare/_all'
+import stepsAll from './steps/_all'
+import dividerAll from './divider/_all'
+import sectionTitleAll from './section-title/_all'
+import codeBlockAll from './codeBlock/_all'
+import freeAll from './free/_all'
 
 function collectDefs(): AnyDef[] {
   return [
-    admonitionAccentBar,
-    admonitionPillTag,
-    admonitionTicketNotch,
-    admonitionCardShadow,
-    admonitionMinimalUnderline,
-    admonitionTerminal,
-    admonitionDashedBorder,
-    admonitionDoubleBorder,
-    admonitionTopBottomRule,
-    admonitionManpageLog,
-    admonitionSidenoteLatex,
-    admonitionMarginalia,
-    admonitionLedgerCell,
-    admonitionBubbleOrganic,
-    admonitionMagazinePull,
-    admonitionReportSection,
-    quoteClassic,
-    quoteMagazineDropcap,
-    quoteColumnRule,
-    quoteFrameBrackets,
-    compareColumnCard,
-    compareStackedRow,
-    compareLedger,
-    stepsNumberCircle,
-    stepsRibbonChain,
-    stepsTimelineDot,
-    dividerWave,
-    dividerDots,
-    dividerFlower,
-    dividerRule,
-    dividerGlyph,
-    sectionTitleBordered,
-    sectionTitleCornered,
-    codeBlockBare,
-    codeBlockHeaderBar,
-    freeIntro,
-    freeAuthor,
-    freeCover,
-    freeHighlight,
-    freeFooterCta,
-    freeRecommend,
-    freeQrcode,
-    freeMpvoice,
-    freeMpvideo,
+    ...admonitionAll,
+    ...quoteAll,
+    ...compareAll,
+    ...stepsAll,
+    ...dividerAll,
+    ...sectionTitleAll,
+    ...codeBlockAll,
+    ...freeAll,
   ] as unknown as AnyDef[]
 }
 
