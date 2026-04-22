@@ -37,35 +37,41 @@
 
 ## 速查表
 
-22 个容器按用途分 6 组。带 ★ 是 spec 登记的**签名容器**（主题可在 `signatureContainers` 里声明）。
+<!-- generated:container-quick-ref:start -->
+
+共 **25** 个合法容器（其中 21 个参与主题 CSS 样式槽位）。带 ★ 是 spec 可登记的**签名容器**（主题可在 `signatureContainers` 里声明）。
 
 | 组 | 容器 | ★ | 一句话用途 |
 | --- | --- | :-: | --- |
-| 文章结构 | `intro` | ★ | 导语块（浅色背景 + 小字号） |
-| | `cover` | ★ | 封面卡（标题 + 图片 + 描述） |
-| | `author` | ★ | 作者栏（姓名 + role + 发布日期） |
-| | `section-title` | ★ | 章节大标题（带装饰 SVG） |
-| | `abstract` | ★ | 摘要 / TL;DR 段（学术家族常用） |
-| 提示 (admonition) | `tip` | ★ | 正向提示 |
-| | `warning` | ★ | 风险提示 |
-| | `info` | ★ | 补充说明 |
-| | `danger` | ★ | 严重警告 |
-| | `note` | ★ | 脚注 / 补注（第五态，中性） |
-| 金句与强调 | `quote-card` | ★ | 大字号金句卡，带装饰引号 |
-| | `highlight` | ★ | 整段高亮背景的重点段 |
-| | `key-number` | ★ | 数据卡（巨号数字 + 注释） |
-| 对比与列表 | `compare` | ★ | 对比容器（外层）—— 内嵌 `pros` / `cons` |
-| | `pros` | | `compare` 内的正面列 |
-| | `cons` | | `compare` 内的反面列 |
-| | `steps` | ★ | 步骤卡（有序列表 + 序号徽章） |
-| 装饰 | `divider` | | 分隔线（variant = wave / dots / flower / line / glyph） |
-| 文末引导 | `footer-cta` | ★ | 文末召唤卡（引导关注 / 阅读） |
-| | `recommend` | ★ | 推荐阅读列表 |
-| | `qrcode` | ★ | 二维码图片卡 |
-| | `see-also` | ★ | "相关阅读"链接条（学术 / 观察家族用） |
-| 媒体 | `mpvoice` | ★ | 微信语音占位（粘贴无法保留原件） |
-| | `mpvideo` | ★ | 腾讯视频 `qqvid=` 或微信视频占位 |
-| 兜底 | `free` | | 不施加主题样式的自由容器（escape hatch） |
+| 文章结构 | `intro` | ★ | 文首引子／导语卡。独立 bgSoft 底，区别于正文段落。 |
+|  | `cover` | ★ | 封面卡（封面图 + 题头 + 可选期号戳）。 |
+|  | `author` | ★ | 作者栏：头像 + 名字 + 日期／期号。 |
+|  | `section-title` | ★ | 章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。 |
+| 提示 (admonition) | `tip` | ★ | tip：小贴士／正向提示。 |
+|  | `warning` | ★ | warning：需要读者注意的提醒。 |
+|  | `info` | ★ | info：中性说明／补充信息。 |
+|  | `danger` | ★ | danger：高风险警告／错误示范。 |
+|  | `note` | ★ | note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。 |
+| 内容 | `quote-card` | ★ | 大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。 |
+|  | `highlight` | ★ | 高亮段落（bgMuted 底色块）。无 variant 切换。 |
+|  | `compare` | ★ | 双列对比（外层 4 个冒号，内层 pros/cons 用 3 个）。 |
+|  | `pros` |  | compare 的"正面"列（必须嵌在 :::: compare 内）。 |
+|  | `cons` |  | compare 的"反面"列（必须嵌在 :::: compare 内）。 |
+|  | `steps` | ★ | 编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。 |
+| 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph。 |
+|  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。 |
+|  | `recommend` | ★ | 推荐阅读列表。 |
+| 媒体 | `qrcode` | ★ | 二维码块（图 + 说明文案）。 |
+|  | `mpvoice` | ★ | 公众号语音卡（占位，粘贴后在公众号编辑器补真 mpvoice 节点）。 |
+|  | `mpvideo` | ★ | 公众号视频卡（占位，粘贴后在公众号编辑器补真 mpvideo 节点）。 |
+| 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |
+|  | `key-number` | ★ | 大数字 + 说明（研究报告／内参版面）。attrs.value 为数字，info 为 kicker。 |
+|  | `see-also` | ★ | 相关阅读链接列表（academic-frontier / tech-explainer 的"扩展阅读"）。 |
+| 兜底 | `free` |  | 兜底容器：渲染器刻意不施加主题样式，写不归类内容。 |
+
+> 源：`src/containers/vocabulary.ts` + `SUPPORTED_SIGNATURE_CONTAINERS`。本表由 `scripts/build-writer-docs.ts` 生成，请勿手改；新增容器先改 vocabulary，再跑 `npm run build:writer-docs`。
+
+<!-- generated:container-quick-ref:end -->
 
 > 非签名容器 `pros` / `cons` / `divider` / `free` 是**结构位**，不参与主题人格签名。
 > `signatureContainers` 的合法 id 清单：`getSupportedSignatureContainers()`。

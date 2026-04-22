@@ -1,19 +1,24 @@
 /**
- * 统一 Variant 注册表（聚合层）
+ * 统一 Variant 注册表（单一聚合层）
  *
- * 用 import.meta.glob 吃掉各 kind 子目录下的 variant 文件，
- * 排除 `_` 前缀私有文件与 `index.ts` 汇总文件。
- * 按 `def.meta.kind` 分桶、按 `meta.id` 索引，派生：
- *   - ADMONITION_VARIANTS / QUOTE_VARIANTS / ... 6 个 kind 的 Record（消费方：
- *     pipeline/containers/*.ts 按 variant id 分派 render）
- *   - CODE_BLOCK_VARIANTS（signature 异质，独立桶）
- *   - VARIANT_IDS 在 src/themes/types.ts 统一定义（带 satisfies 类型约束）；registry 不重复导出
- *   - BUILTIN_COMPONENTS（摊平所有 snippets；供组件库 UI）
+ * 新增 variant 三步：
+ *   1. 在 `src/variants/<kind>/` 下新建 `<id>.ts`，default export 一个 VariantDef / CodeBlockDef。
+ *   2. 在本文件下方"静态 import 收集"段追加 `import x from './<kind>/<id>'`，
+ *      并把 x 塞进 `collectDefs()` 返回数组。
+ *   3. 可选：若该 variant 要固定排序位置，往对应 kind 的 `*_ORDER` 常量里加 id。
  *
- * 顺序：`DISPLAY_ORDER` 决定 UI / snapshot 稳定排序，未列出的按 id 字典序追加。
+ * 聚合输出（供下游消费）：
+ *   - ADMONITION_VARIANTS / QUOTE_VARIANTS / COMPARE_VARIANTS / STEPS_VARIANTS /
+ *     DIVIDER_VARIANTS / SECTION_TITLE_VARIANTS —— `pipeline/containers/*.ts` 按 id 分派 render
+ *   - CODE_BLOCK_VARIANTS —— signature 异质，独立桶
+ *   - BUILTIN_COMPONENTS —— 摊平所有 free 容器的 snippets，供组件库 UI
+ *   - VARIANT_IDS 在 `src/themes/types.ts` 定义（satisfies 保持类型约束）；本文件不重复 export
  *
- * P0 阶段：本文件为空 shell，真正的 variant 文件在后续 P1/P2 中迁入；
- * 目前没有任何 variant 被新注册表消费——P3 才做生产切换。
+ * 顺序：各 kind 的 `*_ORDER` 常量决定 UI / snapshot 稳定排序，未列出的按 id 字典序追加。
+ *
+ * 为何用显式 import 而非 `import.meta.glob`：`scripts/verify-sample-full.ts` 通过 tsx
+ * 在 Node 下直接跑 pipeline，tsx 没有 Vite 的 glob 转换会 TypeError。显式 import 让本文件
+ * 在 Vite 和 Node 两套运行时都可用。
  */
 
 import type {
@@ -98,12 +103,7 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 静态 import 收集。
-//
-// 历史说明：初版用 `import.meta.glob` 自动发现，但 `scripts/verify-sample-full.ts`
-// 通过 tsx 直接在 Node 下执行 pipeline，tsx 没有 Vite 的 glob 转换，会 TypeError。
-// 为了让同一份 registry 在 Vite 和 Node 两套运行时都可用，改为显式 import。
-// 新增 variant = 在下方对应 kind 追加一行 import + 塞进数组，没有额外成本。
+// 静态 import 收集（rationale 见文件头 docstring）。
 // ─────────────────────────────────────────────────────────────
 
 type AnyDef = VariantDef<unknown> | CodeBlockDef

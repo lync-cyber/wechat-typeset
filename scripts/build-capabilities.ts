@@ -3,10 +3,15 @@
  * 生成 dist/api/capabilities.json —— 外部集成方（如 InkFlow）读取此文件
  * 来发现 wechat-typeset 当前支持的主题、容器、变体、硬约束。
  *
- * 契约版本 v2。相较 v1 变化：
+ * 契约版本 v2.1。
+ *
+ * 2.1（非破坏，向后兼容）：
+ *   - hardRules 的阈值常量由 validate.ts / rules.ts 真源派生（不再手抄）
+ *   - 新增 deprecations[]：未来废弃字段先登记在此，给下游窗口迁移
+ *
+ * 2.0 起：
  *   - personas[] 提供完整选型信号（audience / signatureContainers / variants）
  *   - containers[] 枚举所有合法 `:::` fence 名 + 每个容器支持的 variant id
- *   - hardRules 直接从 validate.ts 源里抽取（唯一事实来源）
  *   - inlineExtensions 列 == / ~~ / ++ / [. .] / [~ ~]
  *   - personaSchemaUri 指向 persona-spec.schema.json 的相对路径
  *
@@ -20,10 +25,36 @@ import { listPersonas } from '../src/public'
 import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/themes/types'
 import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
+import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../src/themes/_shared/spec/validate'
+import { FORBIDDEN_CSS_PROPS, HARD_REMOVE_TAGS } from '../src/pipeline/rules'
 import { CONTAINER_VOCABULARY } from '../src/containers/vocabulary'
 
+/**
+ * 下游集成约定：
+ *   - `schemaVersion` 遵循语义：major 变更 = 破坏性 → 下游必须改代码；
+ *     minor 变更 = 新增字段；patch 变更 = 非契约修正（如描述文字）
+ *   - 不兼容的移除走 `deprecations[]`：标 sinceVersion 与 replacement 至少保留一个 minor，
+ *     让下游有感知窗口。
+ *
+ * 发版 checklist（在 CHANGELOG 里记录）：
+ *   - 破坏 contract 的变更前，先把旧字段登记进 `deprecations[]`
+ *   - 移除 deprecated 字段必须提升 major
+ */
+type CapabilitiesSchemaVersion = '2.1'
+
+interface DeprecationNotice {
+  /** 受影响的字段或契约 id（dotted path，如 "hardRules.forbidClass"） */
+  id: string
+  /** 自哪个 schemaVersion 起标记 deprecated */
+  sinceVersion: CapabilitiesSchemaVersion
+  /** 替代方案（下游迁移指引） */
+  replacement: string
+  /** 计划哪个 schemaVersion 彻底移除（可选） */
+  removalPlannedIn?: string
+}
+
 interface CapabilitiesV2 {
-  schemaVersion: '2.0'
+  schemaVersion: CapabilitiesSchemaVersion
   tool: { name: string; version: string; repo?: string }
   generatedAt: string
   contract: {
@@ -77,6 +108,11 @@ interface CapabilitiesV2 {
     forbidPosition: boolean
     forbidMediaQueries: boolean
   }
+  /**
+   * 已登记的 deprecation 通道。下游适配时可检测 id 并准备迁移。
+   * 当前为空数组占位；首次破坏 contract 时把旧字段登记进来。
+   */
+  deprecations: readonly DeprecationNotice[]
   personaSchemaUri: string
   docs: Record<string, string>
 }
@@ -155,7 +191,7 @@ function build(): CapabilitiesV2 {
     palettePrimary: p.palette.primary,
   }))
   return {
-    schemaVersion: '2.0',
+    schemaVersion: '2.1',
     tool: {
       name: pkg.name,
       version: pkg.version,
@@ -186,15 +222,16 @@ function build(): CapabilitiesV2 {
       { syntax: '[~text~]', description: '波浪下划线' },
     ],
     hardRules: {
-      minFontSize: 14,
-      minStrokeWidth: 1,
-      paletteHexPattern: '^#[0-9a-fA-F]{3,8}$',
-      forbidFontFamily: true,
+      minFontSize: MIN_FONT_SIZE,
+      minStrokeWidth: MIN_STROKE_WIDTH,
+      paletteHexPattern: HEX_RE.source,
+      forbidFontFamily: FORBIDDEN_CSS_PROPS.includes('font-family'),
       forbidClass: true,
-      forbidStyleTag: true,
-      forbidPosition: true,
+      forbidStyleTag: HARD_REMOVE_TAGS.has('style'),
+      forbidPosition: FORBIDDEN_CSS_PROPS.includes('position'),
       forbidMediaQueries: true,
     },
+    deprecations: [],
     personaSchemaUri: '../schema/persona-spec.schema.json',
     docs: {
       containerSyntax: 'docs/container-syntax.md',

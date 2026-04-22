@@ -19,8 +19,8 @@
  *   2. 若 styleKey 非 null，同步在 themes/types.ts:ThemeContainers 里补字段
  *      + buildTheme.baseContainers() 里补默认值（可以是 `{}`）
  *   3. 在 pipeline/containers 里加 renderer，登记到 pipeline/containers/index.ts
- *   4. 若需要 signatureContainer 支持，补 SUPPORTED_SIGNATURE_CONTAINERS +
- *      SIGNATURE_CONTAINER_MARKDOWN_NAME
+ *   4. 若需要 signatureContainer 支持，只需补 SUPPORTED_SIGNATURE_CONTAINERS；
+ *      fence 名映射由本文件末尾 STYLE_KEY_TO_CONTAINER_NAME 自动派生
  *
  * 本文件不 import renderer 实现，避免循环依赖 —— renderer 在独立层消费本词汇表。
  */

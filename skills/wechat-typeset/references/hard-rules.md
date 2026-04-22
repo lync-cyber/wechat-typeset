@@ -79,7 +79,7 @@ footerCTA · recommend · qrcode · mpvoice · mpvideo
 abstract · algorithm · keyNumber · seeAlso · seal · prelude
 ```
 
-- **camelCase**，不是 kebab-case（注册表 kebab 名在 `SIGNATURE_CONTAINER_MARKDOWN_NAME` 翻译层）。
+- **camelCase**，不是 kebab-case（kebab 名由 `src/containers/vocabulary.ts` 的 `STYLE_KEY_TO_CONTAINER_NAME` 派生）。
 - 项目目前**没有** `algorithm` / `seal` / `prelude` 的 renderer——这些是为未来主题预留的合法 id，但现在没有主题声明它们。**新造主题时不要声明这三个**，要等未来补实现。
 - 添加新 id 需要同步改 `src/themes/_shared/spec/types.ts` 的 `SUPPORTED_SIGNATURE_CONTAINERS` 常量 + 加对应 renderer。
 

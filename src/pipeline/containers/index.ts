@@ -88,37 +88,11 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
 /**
  * spec.signatureContainers 用的 camelCase id 到 markdown fence 名（kebab）的映射。
  *
- * 为什么需要：ThemeContainers 的类型键沿用 JS 字段习惯（quoteCard / sectionTitle），
- * 而 markdown-it-container 按 `::: quote-card` 匹配 fence。这张表是两个世界的中介，
- * 也是 conformance 测试 "每个 signatureContainer 都有 renderer" 的底表。
- *
- * 新增 signatureContainer id：在此登记对应的 markdown 名（通常 kebab-case）；
- * 不登记 → conformance.spec.ts "每个 signatureContainer 有 renderer" 会失败。
+ * 历史上这里是一张手写映射；现从 vocabulary 的 STYLED_CONTAINERS 自动派生，
+ * 新增 styled 容器只需在 vocabulary.ts 追加一条 ContainerSpec 即可。
+ * 名称保留是为了不惊动 conformance.spec.ts 和外部集成（capabilities.json）。
  */
-export const SIGNATURE_CONTAINER_MARKDOWN_NAME: Readonly<Record<string, string>> = {
-  intro: 'intro',
-  author: 'author',
-  cover: 'cover',
-  tip: 'tip',
-  warning: 'warning',
-  info: 'info',
-  danger: 'danger',
-  note: 'note',
-  quoteCard: 'quote-card',
-  highlight: 'highlight',
-  compare: 'compare',
-  steps: 'steps',
-  sectionTitle: 'section-title',
-  footerCTA: 'footer-cta',
-  recommend: 'recommend',
-  qrcode: 'qrcode',
-  mpvoice: 'mpvoice',
-  mpvideo: 'mpvideo',
-  abstract: 'abstract',
-  keyNumber: 'key-number',
-  seeAlso: 'see-also',
-  // 保留占位未实现（尚无主题声明使用）：algorithm / seal / prelude
-}
+export { STYLE_KEY_TO_CONTAINER_NAME as SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../../containers/vocabulary'
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'
 export { parseInfo, escAttr, escText } from './types'
