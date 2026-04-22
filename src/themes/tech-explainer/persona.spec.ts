@@ -428,6 +428,8 @@ export const spec: PersonaSpec = {
     em: { 'font-style': 'italic', color: '#1a2233' },
 
     // 代码块（规范 §1.1 冷灰深底 + 冷浅灰字）
+    // box-shadow 用浅色 inset：深底上深 rgba 看不见，导致用户以为不能横滑；
+    // 改 rgba(255,255,255,0.18) 让右侧"渐变白雾"在深底可见，提示"还能往右滑"。
     pre: {
       'background-color': '#1e2533',
       color: '#e8ebf0',
@@ -440,7 +442,7 @@ export const spec: PersonaSpec = {
       'white-space': 'pre',
       'max-width': '100%',
       'box-sizing': 'border-box',
-      'box-shadow': 'inset -14px 0 10px -10px rgba(0,0,0,0.25)',
+      'box-shadow': 'inset -16px 0 12px -10px rgba(255,255,255,0.18)',
       'margin-top': '0',
       'margin-bottom': '20px',
       'font-size': '13px',
@@ -570,6 +572,16 @@ export const spec: PersonaSpec = {
       padding: '16px',
       'background-color': '#f3f5f8',
       'border-radius': '6px',
+    },
+    // note = MDN / Stripe Docs 的 "Note —" 内联 aside：
+    // 顶 1px border 短分隔 + 无背景无左条，靠 noteIcon + textMuted 标题承担语义
+    note: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #d9dee5',
+      padding: '10px 0 4px 0',
+      margin: '18px 0',
+      'border-radius': '0',
     },
   },
 

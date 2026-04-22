@@ -15,11 +15,33 @@
  *   这里走最简单的固定外框 + token 驱动颜色。
  */
 
+import type { CSSObject } from '../../themes/types'
 import type { ContainerRenderer } from './types'
 import { escText } from './types'
 
+/**
+ * 把 CSSObject 转成 inline style 字符串。
+ * 数字按 px 处理（与 themeCSS 同语义），空值剔除。
+ */
+function inline(obj: CSSObject | undefined): string {
+  if (!obj) return ''
+  const decls: string[] = []
+  for (const [k, raw] of Object.entries(obj)) {
+    if (raw === undefined || raw === null || raw === '') continue
+    const v = typeof raw === 'number' ? `${raw}px` : String(raw).trim()
+    if (!v) continue
+    decls.push(`${k.trim()}:${v}`)
+  }
+  return decls.join(';')
+}
+
 // ============================================================
 // note · 第五态
+//
+// 主题驱动：先读 ctx.containers.note，主题没声明（空对象）时回到"克制兜底"——
+// 顶端 1px 短分隔线 + textMuted 标题 + 缩进，无背景无左条，规避反复出现的
+// "border-left + bg-soft" AI slop 模板。主题需要更"框感"可在 spec.containers.note
+// 里自行声明（见 default 主题）。
 // ============================================================
 
 export const noteContainer: ContainerRenderer = {
@@ -27,18 +49,16 @@ export const noteContainer: ContainerRenderer = {
     const title = ctx.info.trim() || '补注'
     const icon = (ctx.assets.noteIcon as string | undefined) ?? ''
     const c = ctx.tokens.colors
-    const wrapperCSS = [
-      `border-left:3px solid ${c.textMuted}`,
-      `background-color:${c.bgSoft}`,
-      'padding:12px 14px',
-      'margin:16px 0',
-      'border-radius:4px',
-    ].join(';')
+    const themeStyle = inline(ctx.containers.note)
+    // 兜底：完全无装饰——只留呼吸 margin。主题想要"框感/左条"在 spec.containers.note
+    // 里自行声明；不在通用渲染器里塞默认背景或左条，避免反复出现的视觉同质化。
+    const fallback = 'margin:16px 0;padding:0'
+    const wrapperCSS = themeStyle || fallback
     const titleCSS = [
       `color:${c.textMuted}`,
-      'font-weight:700',
+      'font-weight:600',
       'font-size:13px',
-      'margin-bottom:6px',
+      'margin-bottom:4px',
       'letter-spacing:0.3px',
     ].join(';')
     return (

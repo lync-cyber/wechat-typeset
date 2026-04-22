@@ -445,6 +445,15 @@ export const spec: PersonaSpec = {
       border: '1px solid #d8d8d4',
       'border-radius': '6px',
     },
+    // 第五态 note：default 走"传统左条+浅底"作为最中立的兜底骨架——
+    // 其他主题各自在 spec 里覆写出自己的 voice（marginalia / 顶线 / 注释前缀等）
+    note: {
+      'background-color': '#f5f5f3',
+      'border-left': '3px solid #8a8f98',
+      padding: '12px 14px',
+      margin: '16px 0',
+      'border-radius': '4px',
+    },
   },
 
   // default 只用通用容器（不声明任何签名容器）

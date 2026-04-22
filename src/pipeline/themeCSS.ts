@@ -190,10 +190,13 @@ export function generateThemeCSS(theme: Theme): string {
       'compare.col li',
     ),
   )
+  // ul/ol 在窄栏里 padding-left 收到 12px——与列内 padding 8px 合计 20px：
+  // 既让 bullet 显示出来（list-style-position:outside 默认在 padding 区显示），
+  // 又避免叠加 24px 默认值导致 bullet 看上去"贴着栏中线"。
   chunks.push(
     rule(
       compareColDescendant('ul') + `, ${compareColDescendant('ol')}`,
-      { 'padding-left': '18px', 'margin-bottom': '8px' },
+      { 'padding-left': '12px', 'margin-bottom': '8px' },
       'compare.col ul',
     ),
   )

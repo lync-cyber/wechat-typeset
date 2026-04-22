@@ -231,6 +231,13 @@
   padding-bottom: 6px;
 }
 
+.markdown-body .container-note {
+  border-top: 1px solid #e0d1ba;
+  padding: 10px 0 4px 0;
+  margin: 18px 0;
+  border-radius: 0;
+}
+
 .markdown-body .container-quote-card {
   background-color: #fffaf1;
   padding: 22px 20px;
@@ -312,7 +319,7 @@
 }
 
 .markdown-body .container-pros ul, .markdown-body .container-cons ul, .markdown-body .container-pros ol, .markdown-body .container-cons ol {
-  padding-left: 18px;
+  padding-left: 12px;
   margin-bottom: 8px;
 }
 

@@ -55,11 +55,13 @@ export const footerCTAContainer: ContainerRenderer = {
       `\n`
     )
   },
-  // sealMark 可选注入（规范：literary-humanism §2 footerCTA "右下角一枚大钤印"）。
-  // 主题不提供时保持原行为；提供时在容器末尾追加一个右对齐的收束印。
+  // sealMark 可选注入（literary-humanism 等"稀缺色"主题专用）。
+  // 主题不提供时保持原行为；提供时在容器末尾追加一个**居中**的收束印——
+  // 朱砂作为文章 closure 的视觉焦点，居中比右下更稳：移动端窄屏右对齐易被
+  // 边距裁切；居中又恰好对齐 footer 内的标题/按钮居中节律。
   close: (ctx) => {
     const seal = ctx.assets.sealMark
-      ? `<section class="container-footer-cta__seal" style="text-align:right;margin-top:18px;line-height:0">${ctx.assets.sealMark}</section>\n`
+      ? `<section class="container-footer-cta__seal" style="text-align:center;margin-top:18px;line-height:0">${ctx.assets.sealMark}</section>\n`
       : ''
     return seal + '</section>\n'
   },

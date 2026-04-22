@@ -1,20 +1,20 @@
 # 极客夜行 · 工程随笔 Vol.03
 
-> 本篇用于在 tech-geek 主题下肉眼校验 **VT220 琥珀 + 墨炭暖底 + HN 橙脚注** 的深底气质。
+> 本篇用于在 tech-geek 主题下肉眼校验 **VT220 琥珀 + 夜读暖底** 的深底气质。
 >
-> 参照坐标：Plan 9 manpage · Phrack ASCII zine · ACM Queue · TAOCP 脚注 · Fabien Sanglard。
-> 气质关键词：**成年、克制、琥珀、脚注**。
+> 参照坐标：Plan 9 manpage · ACM Queue · TAOCP 脚注 · Fabien Sanglard。
+> 气质关键词：**成年、克制、琥珀**。
 
-::: cover 工程随笔 Vol.03 · On Writing Postmortems
+::: cover 工程随笔 Vol.03 · 写事故复盘
 ![封面占位](https://placehold.co/1200x630?text=tech-geek+cover)
 
 夜班工程师视角：凌晨三点对着终端写事故复盘，不是在炫酷，是在认真。
 :::
 
-::: author ¶ 某某 · 2026-04-20 · 阅读时长 12 分钟 · 字数 3400
+::: author 某某 · 2026-04-20 · 阅读时长 12 分钟 · 字数 3400
 :::
 
-::: intro ABSTRACT
+::: intro 题解
 本篇整理过去 18 个月里我在三家公司写 postmortem 的经验——从"一人一事故"的短条
 模板，到跨团队复盘的 RCA 文档格式，再到对外公开的 learning 文章。关注点始终
 只有一件事：**让下一个读到这份文档的工程师，能在 15 分钟内判断他该不该改行为**。
@@ -25,8 +25,8 @@
 
 ## 写 postmortem 的三条约束
 
-本章用三条约束锚定 postmortem 的边界。tech-geek 的 h2 走 `§` 前缀（manpage heading） +
-1.5px 字距 + `1px dashed border-bottom` —— 博客风下划线改成虚线的克制版。
+本章用三条约束锚定 postmortem 的边界。tech-geek 的 h2 走 1.5×14 琥珀竖条前缀 +
+1.5px 字距 + 1px dashed border-bottom —— 博客风下划线改成虚线的克制版。
 
 ### 约束一 · 时间轴必须精确到分钟
 
@@ -44,39 +44,39 @@
 后 owner 来说"这个做不成，理由是...."——那说明约束清晰、讨论有效。全部 100%
 执行的 action items 列表反而是 bad smell。
 
-::: tip // NOTE variant=dashed-border
+::: tip 附注
 这三条约束不是我发明的，是 Google / Amazon / Stripe 公开 postmortem 反推出的
-共同骨架。`dashed-border` 的"附注性"语义在这里正合——铅笔划边的补充说明。
+共同骨架。这里走 manpage-log 默认骨架——顶底分隔线 + 状态标签条，与正文同色族。
 :::
 
-::: warning // CAVEAT variant=accent-bar
+::: warning 注意陷阱
 **小团队慎用正式 postmortem 模板**。5 人以下团队写 9 页 RCA 文档是灾难——
 修复时间都不够，复盘写一下午。小团队的约束换成"事故本身长度 × 2 = 复盘文档
-长度上限"。2 小时事故，写 4 小时复盘即止；超过了就是`// PITFALL`。
+长度上限"。2 小时事故，写 4 小时复盘即止；超过了就是过度工程。
 :::
 
-::: info // REF §2.3.1 variant=double-border
-参考：Google SRE Book · Chapter 15 Postmortem Culture；以及 Stripe 工程 blog 的
-"Writing Great Design Docs"（2019）。`double-border` 的"交叉引用"语义——RFC / manpage
-常见的"参见他节"排版传统。
+::: info 参考
+Google SRE Book · Chapter 15 Postmortem Culture；以及 Stripe 工程 blog 的
+"Writing Great Design Docs"（2019）。本主题 manpage-log 的"参考"槽位由
+infoIcon 的细横线 + 冷蓝标题色承担，不再借助 ASCII 引用记号。
 :::
 
-::: danger // PITFALL variant=top-bottom-rule
-**最典型 PITFALL**：把 postmortem 写成"找谁背锅"。一旦文档里出现"人名 + 应当
-更谨慎"的句式，之后没人会写诚实的时间轴——大家都会自我审查。`top-bottom-rule`
-的上下双线像 errata 勘误条，把这种**稀缺的严重警告**夹起来。
+::: danger 严重警告
+**最典型 anti-pattern**：把 postmortem 写成"找谁背锅"。一旦文档里出现"人名 + 应当
+更谨慎"的句式，之后没人会写诚实的时间轴——大家都会自我审查。manpage-log 的
+陶土红方块图标把这类稀缺严重警告夹起来。
 :::
 
-::: note // NOTE on scope
+::: note 范围说明
 本篇只谈"对内 postmortem"；对外公开的 learning 文章（面向客户 / 监管）是另一套
-体裁——语气更克制，数据更少，结构更像新闻稿。note 在 tech-geek 里就是 manpage 里
-那种"aside"附注：不改变主叙事，只为专业读者留一条旁路。
+体裁——语气更克制，数据更少，结构更像新闻稿。note 在 tech-geek 里走"manpage aside"
+排版：左 1px dashed primary 竖线 + 透明底，与 admonition 的状态边框语言区分开。
 :::
 
 ::: divider variant=dots
 :::
 
-## Key Number · 三组关键数据
+## 关键数据 · 三组对照
 
 ::: highlight
 **14:03:21** · 告警触发时间
@@ -93,9 +93,9 @@
 ::: divider variant=flower
 :::
 
-## Pull Quote · TAOCP 脚注风
+## 引文 · 算法的终止性
 
-::: quote-card Knuth · TAOCP Vol. 1, §1.2.5 variant=frame-brackets
+::: quote-card Knuth · TAOCP Vol. 1
 An algorithm must **always terminate** after a finite number of steps. A procedure
 that lacks this feature but has all other characteristics of an algorithm may be
 called a computational method.
@@ -107,18 +107,18 @@ called a computational method.
 ::: divider variant=wave
 :::
 
-## Trade-off · 两种 RCA 文档格式
+## 取舍 · 两种 RCA 文档格式
 
 :::: compare
 
-::: pros + PRO 五段式模板
+::: pros 优势 · 五段式模板
 - 长度可控（每段 100 字上限）
 - 新人写第一份也不会跑偏
 - 好检索、好做 embedding
 - 劣势：模板压死"非典型事故"
 :::
 
-::: cons - CON 自由叙述
+::: cons 局限 · 自由叙述
 - 能承载复杂因果链
 - 老手写的质量上限高
 - 劣势：新人写起来像在写作文
@@ -130,22 +130,22 @@ called a computational method.
 **两种格式并存**，不是二选一——新事故用模板，复盘评审后允许作者把"模板装不下的
 复杂因果"另开一段自由叙述。这叫 `graceful degradation`。
 
-## Algorithm · 写 postmortem 的步骤
+## 步骤 · 写 postmortem 的方法
 
 ::: steps
-### [1] 拉 timeline
+### 拉 timeline
 先把监控 / log / Slack / tickets 四条线的时间戳合并成单一 timeline。精确到秒。
 
-### [2] 标因果链
+### 标因果链
 从 timeline 找"这一步**直接**导致下一步"的箭头。箭头数量应该 ≤ 事件数 - 1。
 
-### [3] 找 detection gap
-每个箭头问一次"这一步有没有可能被**更早**发现"。这就是 `WHY-DETECT`。
+### 找 detection gap
+每个箭头问一次"这一步有没有可能被**更早**发现"。这就是核心拷问。
 :::
 
 三步走；不加第 4 步的"action items"——那是评审会议的产物，不是作者个人产出。
 
-::: section-title APPENDIX A · 排版纪律 variant=cornered
+::: section-title 附录 · 排版纪律 variant=cornered
 :::
 
 本主题的排版纪律（tech-geek signature）：
@@ -189,7 +189,7 @@ def merge_timeline(sources: list[list[dict]]) -> list[dict]:
 ::: divider variant=dots
 :::
 
-## Attachment · 媒体嵌入件
+## 媒体嵌入
 
 ::: mpvideo
 <iframe class="video_iframe" data-vidtype="2" allowfullscreen="" frameborder="0" data-ratio="1.7647058823529411" data-w="480" data-src="https://v.qq.com/iframe/preview.html?vid=placeholder&width=500&height=375&auto=0" style="z-index:1;" width="500" height="375" data-vh="281.25" data-vw="500" src="https://v.qq.com/iframe/preview.html?vid=placeholder&width=500&height=375&auto=0"></iframe>
@@ -207,22 +207,22 @@ def merge_timeline(sources: list[list[dict]]) -> list[dict]:
 ::: divider variant=flower
 :::
 
-## References · 延伸阅读
+## 延伸阅读
 
 ::: recommend
-- [1] Google SRE Book · Chapter 15 Postmortem Culture
-- [2] Stripe Engineering · Writing Great Design Docs (2019)
-- [3] TAOCP Vol. 1, §1.2.5 · Algorithms vs Methods
+- Google SRE Book · Chapter 15 Postmortem Culture
+- Stripe Engineering · Writing Great Design Docs (2019)
+- TAOCP Vol. 1 · Algorithms vs Methods
 :::
 
 ::: qrcode 订阅「工程随笔」
 ![二维码占位](https://placehold.co/240x240?text=QR)
 :::
 
-::: footer-cta SEE ALSO
+::: footer-cta 邮件订阅
 - 相关工程随笔 Vol.02（编者按）
 - 本篇的数据与实验脚本（附录 B）
-- 下一期主题：*On Reading Production Code*
+- 下一期主题：*读生产环境代码的方法*
 
-¶ 某某 · 2026-04-20 · 若此文对你有用，请回信告诉我一件**你改了的行为**
+某某 · 2026-04-20 · 若此文对你有用，请回信告诉我一件**你改了的行为**
 :::

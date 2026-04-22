@@ -670,6 +670,16 @@ export const spec: PersonaSpec = {
       'background-color': 'transparent',
       'border-radius': '0',
     },
+    // note：marginalia 兄弟容器——无框无底，仅左 28px 缩进 + 标题 textMuted。
+    // 与 admonition 的【按】【疑】【注】【辨】保持视觉血统：宋版书"墨围、天头、地脚"
+    // 体系下的"按语"，不是西式 callout box。
+    note: {
+      __reset: true,
+      'background-color': 'transparent',
+      padding: '4px 0 4px 28px',
+      margin: '20px 0',
+      'border-radius': '0',
+    },
   },
 
   // literary 只用通用容器 + variant；暂不声明签名容器

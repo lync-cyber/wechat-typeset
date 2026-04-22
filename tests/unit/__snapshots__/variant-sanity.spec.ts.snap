@@ -82,19 +82,19 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:top-bottom-
 
 exports[`默认主题 · 每 variant 渲染片段快照 > compare:column-card 1`] = `
 "<section class="container-compare container-compare--column-card" style="display: table; width: 100%; table-layout: fixed; border-spacing: 4px 0; border-collapse: separate; margin: 16px 0;">
-<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 10px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
+<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
 <section class="container-pros__title" style="font-size:14px;font-weight:700;color:#1f8a4c;margin-bottom:8px;letter-spacing:0;line-height:1.4">正方</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > compare:ledger 1`] = `
 "<section class="container-compare container-compare--ledger" style="display: table; width: 100%; table-layout: fixed; border-spacing: 0; border-collapse: separate; margin: 16px 0; border: 1px solid #d8d8d4; border-radius: 6px;">
-<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 10px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
+<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
 <section class="container-pros__title" style="font-size:14px;font-weight:700;color:#1f8a4c;margin-bottom:8px;letter-spacing:0;line-height:1.4">正方</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > compare:stacked-row 1`] = `
 "<section class="container-compare container-compare--stacked-row" style="margin: 16px 0;">
-<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 10px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
+<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
 <section class="container-pros__title" style="font-size:14px;font-weight:700;color:#1f8a4c;margin-bottom:8px;letter-spacing:0;line-height:1.4">正方</section>"
 `;
 

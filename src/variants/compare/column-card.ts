@@ -9,7 +9,9 @@ import type { VariantDef, CompareRenderArgs } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
 
 const COL_FONT_SIZE = 13
-const COL_INNER_PAD = 10
+// 列内 padding 比正文窄一档：与 themeCSS 中 compare.col ul 的 padding-left 12 合计 20px，
+// 让窄栏里 bullet 大致落在 cell 左 1/8 处，视觉上不会"被挤到中间"。
+const COL_INNER_PAD = 8
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { soft } = mergeThumb(args ?? {})

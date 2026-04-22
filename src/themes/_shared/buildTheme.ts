@@ -289,7 +289,16 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     // 最小（多为空对象或仅 margin）——这些容器 renderer 本身在
     // pipeline/containers/signature.ts|media.ts 里用 token 直接绘外框，这里的 CSS
     // 槽位留给主题 voice 做微调（加边框色 / 改 padding 节奏）用。
-    note: {},
+    //
+    // note 兜底用"顶 1px border 短分隔"——避开"左条+浅底"AI slop 模板的同时，
+    // 给未自定义 note 的主题（academic / business / industry / life / people）一个
+    // 视觉收束的可读骨架，免得 note 段落在文中"裸奔"。主题想要框感/左条直接覆写。
+    note: {
+      'border-top': `1px solid ${tokens.colors.border}`,
+      padding: '10px 0 4px 0',
+      margin: '18px 0',
+      'border-radius': '0',
+    },
     mpvoice: { margin: '20px 0' },
     mpvideo: { margin: '20px 0' },
     abstract: { margin: '18px 0 24px' },
