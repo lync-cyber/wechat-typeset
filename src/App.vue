@@ -18,7 +18,13 @@ import type { Theme } from './themes/types'
 import { applyPalette } from './color/applyPalette'
 import { copyHtmlToClipboard } from './clipboard/copyHtml'
 import { exportHtml, exportImage, exportMd } from './clipboard/exportFile'
+import {
+  degradeOutlinks,
+  OUTLINK_STRATEGIES,
+  type OutlinkStrategy,
+} from './clipboard/outlinkDegrade'
 import { fixZhTypo, scanZhTypo } from './pipeline/zhTypo'
+import { buildShareUrl, parseShareHash, type SharePayload } from './share/shareLink'
 import { getSample, SAMPLE_BY_THEME } from './samples'
 import {
   createDraft,
@@ -34,6 +40,7 @@ import {
 
 const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
 const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
+const OUTLINK_STRATEGY_KEY = 'wechat-typeset:outlink-strategy'
 
 interface Seed { primary: string; secondary: string; accent: string; dark: boolean }
 
@@ -62,6 +69,34 @@ const ui = reactive({
 const onboardDismissed = ref<boolean>(
   typeof localStorage !== 'undefined' && localStorage.getItem(ONBOARD_STORAGE_KEY) === '1',
 )
+
+/**
+ * 站外链接降级策略。read 默认值 'keep' 保持历史行为，切换后落 localStorage 持久化。
+ * 为什么不做 reactive watch 自动回写：降级策略的变更点只有 toolbar 菜单里的单选组件，
+ * 改动可控，显式在 handler 里 setItem 更易追。
+ */
+const outlinkStrategy = ref<OutlinkStrategy>(readOutlinkStrategy())
+
+function readOutlinkStrategy(): OutlinkStrategy {
+  try {
+    const v = localStorage.getItem(OUTLINK_STRATEGY_KEY)
+    if (v && (OUTLINK_STRATEGIES as readonly string[]).includes(v)) {
+      return v as OutlinkStrategy
+    }
+  } catch {
+    // ignore
+  }
+  return 'keep'
+}
+
+function setOutlinkStrategy(v: OutlinkStrategy) {
+  outlinkStrategy.value = v
+  try {
+    localStorage.setItem(OUTLINK_STRATEGY_KEY, v)
+  } catch {
+    // 配额 / 隐私模式下静默忽略
+  }
+}
 
 const mobileTab = ref<'editor' | 'preview'>('editor')
 
@@ -255,11 +290,19 @@ const { rendered, flush } = useDebouncedRender(pipelineInput, { delayMs: 80 })
 // ==============================================
 async function handleCopy() {
   flush()
-  const html = rendered.value.html
+  const rawHtml = rendered.value.html
+  const { html, count } = degradeOutlinks(rawHtml, outlinkStrategy.value)
   const plain = md.value
   const result = await copyHtmlToClipboard(html, plain)
   if (result.ok) {
-    pingTransient(result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）')
+    const strategyNote =
+      count > 0 && outlinkStrategy.value === 'tail-list'
+        ? `（${count} 条外链已尾注）`
+        : count > 0 && outlinkStrategy.value === 'drop'
+        ? `（${count} 条外链已丢弃）`
+        : ''
+    const base = result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）'
+    pingTransient(base + strategyNote)
     persistentError.value = null
   } else {
     persistentError.value = `复制失败：${result.error ?? '未知错误'}（请换 Chrome/Safari 或关闭跨域 iframe）`
@@ -326,6 +369,70 @@ function handleFixZhTypo() {
   showUndo(`已修正 ${hits.length} 处中文排版`, () => {
     md.value = prev
   })
+}
+
+/**
+ * 复制分享链接 —— 把当前正文 + 主题 id 编码进 `#share=<payload>`，写入剪贴板。
+ * 解码侧在 onMounted 里走 `tryLoadShareFromHash()`，不会自动覆盖现有草稿，
+ * 只把内容"载入为新草稿"（用户可撤销），避免意外破坏本地工作。
+ */
+async function handleCopyShareLink() {
+  const payload: SharePayload = {
+    v: 1,
+    md: md.value,
+    themeId: baseThemeId.value,
+  }
+  const url = buildShareUrl(payload)
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url)
+      pingTransient('已复制分享链接')
+    } else {
+      // 极少数无 Clipboard API 场景：在地址栏提示 hash，用户可手动复制
+      location.hash = url.slice(url.indexOf('#'))
+      pingTransient('请从地址栏复制当前链接')
+    }
+  } catch {
+    persistentError.value = '分享链接复制失败：请手动复制地址栏 URL'
+  }
+}
+
+/**
+ * onMounted 时检查 hash：若为 `#share=…` 且解码成功，
+ * 把共享内容落成一篇新草稿（标题带 `[分享]` 前缀，便于用户识别来源）。
+ * 完成后清掉 hash，避免刷新时重复落草稿；失败或无 hash 时静默返回。
+ *
+ * 为什么不引入单独的"只读查看模式"：本 MVP 先做 encode + import 闭环，
+ * 双模式带来的 toolbar 禁用状态 / 草稿切换时的 viewer 状态残留等 UX
+ * 成本远高于收益——后续按需再加 `shareMode = 'viewer'` 分支。
+ */
+function tryLoadShareFromHash(): boolean {
+  if (typeof location === 'undefined') return false
+  const payload = parseShareHash(location.hash)
+  if (!payload) return false
+  const created = createDraft({
+    title: deriveShareDraftTitle(payload.md),
+    body: payload.md,
+    themeId: payload.themeId,
+  })
+  activeDraftId.value = created.id
+  setActiveDraftId(created.id)
+  md.value = created.body
+  baseThemeId.value = created.themeId
+  draftIndexTick.value += 1
+  try {
+    history.replaceState(null, '', location.pathname + location.search)
+  } catch {
+    location.hash = ''
+  }
+  pingTransient('已从分享链接载入新草稿', 2500)
+  return true
+}
+
+function deriveShareDraftTitle(body: string): string {
+  const line = body.split('\n').map((l) => l.trim()).find((l) => l.length > 0) ?? ''
+  const stripped = line.replace(/^#+\s*/, '').slice(0, 20)
+  return `[分享] ${stripped || '未命名'}`
 }
 
 function handleSelectDraft(id: string) {
@@ -490,6 +597,7 @@ const commands = computed<Command[]>(() => {
   list.push({ id: 'export-html', title: '导出 HTML', group: '导出', shortcut: `${modKey} ⇧ H`, run: doExportHtml })
   list.push({ id: 'export-md', title: '导出 Markdown', group: '导出', shortcut: `${modKey} ⇧ M`, run: doExportMd })
   list.push({ id: 'export-image', title: '导出长图', group: '导出', run: doExportImage })
+  list.push({ id: 'copy-share-link', title: '复制分享链接', group: '导出', run: handleCopyShareLink })
 
   themeList.forEach((t) => {
     list.push({
@@ -613,7 +721,11 @@ const showOnboard = computed(() =>
 onMounted(() => {
   const savedThemeId = localStorage.getItem(THEME_STORAGE_KEY)
   if (savedThemeId) baseThemeId.value = savedThemeId
-  initActiveDraft(baseThemeId.value)
+  // 分享链接优先于草稿：若 URL 里带有 `#share=`，把 payload 作为新草稿载入；
+  // 否则沿用正常的草稿恢复路径。
+  if (!tryLoadShareFromHash()) {
+    initActiveDraft(baseThemeId.value)
+  }
   window.addEventListener('keydown', onShortcut)
   window.addEventListener('pagehide', flushDraftSave)
 })
@@ -638,6 +750,7 @@ onBeforeUnmount(() => {
       :theme-id="baseThemeId"
       :has-custom-color="customTheme !== null"
       :drawer="drawerStates"
+      :outlink-strategy="outlinkStrategy"
       @update:theme-id="baseThemeId = $event"
       @copy="handleCopy"
       @clear="handleClear"
@@ -654,6 +767,8 @@ onBeforeUnmount(() => {
       @export-html="doExportHtml"
       @export-md="doExportMd"
       @export-image="doExportImage"
+      @copy-share-link="handleCopyShareLink"
+      @update-outlink-strategy="setOutlinkStrategy"
     />
     <main class="main" :data-mobile-tab="mobileTab">
       <DraftDrawer

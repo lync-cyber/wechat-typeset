@@ -2,6 +2,11 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import ThemePicker from './ThemePicker.vue'
 import { themeList } from '../themes'
+import {
+  OUTLINK_STRATEGIES,
+  OUTLINK_STRATEGY_LABEL,
+  type OutlinkStrategy,
+} from '../clipboard/outlinkDegrade'
 
 const props = defineProps<{
   draftTitle: string
@@ -13,6 +18,7 @@ const props = defineProps<{
   themeId: string
   hasCustomColor: boolean
   drawer: { drafts: boolean; components: boolean; customizer: boolean; checklist: boolean }
+  outlinkStrategy: OutlinkStrategy
 }>()
 
 const emit = defineEmits<{
@@ -25,6 +31,8 @@ const emit = defineEmits<{
   (e: 'exportHtml'): void
   (e: 'exportMd'): void
   (e: 'exportImage'): void
+  (e: 'copyShareLink'): void
+  (e: 'updateOutlinkStrategy', value: OutlinkStrategy): void
   (e: 'toggleDrafts'): void
   (e: 'toggleComponents'): void
   (e: 'toggleCustomizer'): void
@@ -208,6 +216,24 @@ defineExpose({
           <button class="menu-item" @click="emit('exportImage'); overflowOpen = false">
             <span>导出长图</span>
           </button>
+          <button class="menu-item" @click="emit('copyShareLink'); overflowOpen = false">
+            <span>复制分享链接</span>
+          </button>
+          <div class="menu-sep" />
+          <div class="menu-section">
+            <div class="menu-section-head">外链处理</div>
+            <div class="menu-segment" role="radiogroup" aria-label="外链处理">
+              <button
+                v-for="s in OUTLINK_STRATEGIES"
+                :key="s"
+                class="menu-segment-btn"
+                :class="{ active: props.outlinkStrategy === s }"
+                role="radio"
+                :aria-checked="props.outlinkStrategy === s"
+                @click="emit('updateOutlinkStrategy', s)"
+              >{{ OUTLINK_STRATEGY_LABEL[s] }}</button>
+            </div>
+          </div>
           <div class="menu-sep" />
           <button class="menu-item" @click="emit('openCommand'); overflowOpen = false">
             <span>命令面板</span><span class="menu-kbd">{{ modKey }}K</span>
@@ -532,6 +558,44 @@ defineExpose({
   letter-spacing: var(--ls-wide);
 }
 .menu-sep { height: 1px; background: var(--border); margin: var(--sp-2) 0; }
+
+.menu-section {
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+}
+.menu-section-head {
+  font-size: var(--fs-11);
+  color: var(--text-subtle);
+  letter-spacing: var(--ls-wide);
+  margin-bottom: var(--sp-2);
+  padding: 0 var(--sp-1);
+}
+.menu-segment {
+  display: inline-flex;
+  gap: 1px;
+  padding: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+}
+.menu-segment-btn {
+  flex: 1 1 auto;
+  min-width: 48px;
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-12);
+  font-family: var(--font-text);
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-1);
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.menu-segment-btn:hover { color: var(--text); }
+.menu-segment-btn.active {
+  background: var(--surface-raised);
+  color: var(--text);
+  box-shadow: var(--shadow-inset);
+}
 
 /* Error banner sits as a full-width sliver under the toolbar */
 .error-banner {

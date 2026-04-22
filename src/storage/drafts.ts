@@ -21,10 +21,19 @@ export interface DraftMeta {
   themeId: string
   updatedAt: number
   createdAt: number
+  /** 可选的标签集合（如 '技术', '随笔'）；无标签时留空数组或省略 */
+  tags?: string[]
 }
 
 export interface Draft extends DraftMeta {
   body: string
+}
+
+export interface SearchOptions {
+  /** 自由文本，扫标题+正文+标签；为空则忽略 */
+  query?: string
+  /** 所有给定标签必须都命中；为空则忽略 */
+  tags?: string[]
 }
 
 function safeRead(key: string): string | null {
@@ -129,18 +138,24 @@ export function readDraft(id: string): Draft | null {
   return { ...meta, body }
 }
 
-export function createDraft(initial?: { title?: string; themeId?: string; body?: string }): Draft {
+export function createDraft(initial?: {
+  title?: string
+  themeId?: string
+  body?: string
+  tags?: string[]
+}): Draft {
   migrateLegacy()
   const id = genId()
   const now = Date.now()
   const body = initial?.body ?? ''
-  // deriveTitle 可能返回空串，用 || 兜底到"未命名草稿"（空串是 falsy 但 ?? 不覆盖）
+  const tags = initial?.tags?.filter((t) => t.trim().length > 0)
   const meta: DraftMeta = {
     id,
     title: initial?.title || deriveTitle(body) || '未命名草稿',
     themeId: initial?.themeId ?? 'default',
     updatedAt: now,
     createdAt: now,
+    ...(tags && tags.length ? { tags } : {}),
   }
   const list = readIndex()
   list.unshift(meta)
@@ -160,6 +175,7 @@ export function updateDraft(id: string, patch: Partial<Omit<Draft, 'id' | 'creat
     ...prev,
     title: patch.title ?? prev.title,
     themeId: patch.themeId ?? prev.themeId,
+    tags: patch.tags ?? prev.tags,
     updatedAt: now,
   }
   list[idx] = next
@@ -175,6 +191,55 @@ export function updateDraft(id: string, patch: Partial<Omit<Draft, 'id' | 'creat
       }
     }
   }
+}
+
+/**
+ * 全文搜索 —— 扫 title + body + tags。
+ *
+ * query 解析：
+ *   - 空串或纯空白：不过滤文本
+ *   - 含 `#xxx` 形式的 token：从 query 里抽为 tag 过滤，剩余片段仍做全文匹配
+ *   - 其余：分词（按空白）后，每个词必须在 title/body/tags 的拼接串里出现
+ *
+ * 独立 tags 参数：作为显式过滤叠加在 query 解析出的 tags 之上（交集即可）。
+ *
+ * 为保持接口轻量，实现走"逐篇 read body"的朴素扫描——草稿数量级 ≤ 数百，
+ * 搜索是交互级（用户敲一个字符触发），单次扫描成本可忽略。
+ */
+export function searchDrafts(opts: SearchOptions = {}): DraftMeta[] {
+  const rawQuery = opts.query?.trim() ?? ''
+  const tokens = rawQuery ? rawQuery.split(/\s+/) : []
+  const tagsFromQuery = tokens.filter((t) => t.startsWith('#')).map((t) => t.slice(1).toLowerCase()).filter(Boolean)
+  const textTokens = tokens.filter((t) => !t.startsWith('#')).map((t) => t.toLowerCase()).filter(Boolean)
+  const explicitTags = (opts.tags ?? []).map((t) => t.toLowerCase()).filter(Boolean)
+  const requiredTags = Array.from(new Set([...tagsFromQuery, ...explicitTags]))
+
+  const all = listDrafts()
+  return all.filter((m) => {
+    if (requiredTags.length > 0) {
+      const myTags = (m.tags ?? []).map((t) => t.toLowerCase())
+      if (!requiredTags.every((t) => myTags.includes(t))) return false
+    }
+    if (textTokens.length === 0) return true
+    // 读一次 body；tokens 全部命中才算命中
+    const body = safeRead(`${BODY_PREFIX}${m.id}`) ?? ''
+    const hay = `${m.title}\n${body}\n${(m.tags ?? []).join(' ')}`.toLowerCase()
+    return textTokens.every((t) => hay.includes(t))
+  })
+}
+
+/**
+ * 所有草稿里出现过的标签集合（去重后字母序）。用于下拉建议或 tag 面板。
+ */
+export function listAllTags(): string[] {
+  const set = new Set<string>()
+  for (const m of readIndex()) {
+    for (const t of m.tags ?? []) {
+      const v = t.trim()
+      if (v) set.add(v)
+    }
+  }
+  return Array.from(set).sort((a, b) => a.localeCompare(b))
 }
 
 export function deleteDraft(id: string): void {
@@ -238,7 +303,10 @@ export function importDraftsJSONDetailed(json: string): ImportResult {
     const themeId = typeof raw.themeId === 'string' && raw.themeId ? raw.themeId : 'default'
     const updatedAt = typeof raw.updatedAt === 'number' ? raw.updatedAt : Date.now()
     const createdAt = typeof raw.createdAt === 'number' ? raw.createdAt : Date.now()
-    list.push({ id, title, themeId, updatedAt, createdAt })
+    const tags = Array.isArray(raw.tags)
+      ? raw.tags.filter((t): t is string => typeof t === 'string' && t.trim().length > 0)
+      : undefined
+    list.push({ id, title, themeId, updatedAt, createdAt, ...(tags && tags.length ? { tags } : {}) })
     safeWrite(`${BODY_PREFIX}${id}`, body)
     result.added += 1
   }

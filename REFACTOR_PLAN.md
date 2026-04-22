@@ -78,7 +78,21 @@
 - Preview 顶部出现 9 主题缩略条，hover 切换 / click 锁定
 - Toolbar 菜单出现"发文清单" → 右抽屉展开检查列表
 
+## Stage 4 · 内容 / 存储 / 导出 [已完成（含 #20 范围调整）]
+
+- [x] **#18** Markdown 原文导出：历史已落地——`exportFile.ts` 的 `exportMd()` 已被 `App.vue` / `Toolbar.vue` 用上（菜单项"导出 Markdown"，快捷键 `⌘⇧M`），本阶段只做确认
+- [x] **#19** 只读分享链接：新增 `src/share/shareLink.ts`（`encodeShare` / `decodeShare` / `buildShareUrl` / `parseShareHash`；base64url + JSON，暂不 gzip）；Toolbar 菜单 + Command palette 入口"复制分享链接"；`App.onMounted` 若检测到 `#share=...` 自动载入为新草稿（`[分享] 标题`），写入后 `history.replaceState` 清 hash
+- [x] **#17** 站外链接降级：新增 `src/clipboard/outlinkDegrade.ts`（`keep` / `tail-list` / `drop` 三策略 + 幂等；DOMParser 路径）；`handleCopy` 执行降级并拼 `（N 条外链已 xxx）`；Toolbar overflow 新增「外链处理」三段式开关；`wechat-typeset:outlink-strategy` localStorage 持久化
+- [x] **#20** （范围调整）tags / 全文搜索 / 配额告警：`drafts.ts` 扩 `tags?: string[]` + `searchDrafts({ query, tags })`（tokens 支持 `#xxx` 语法）+ `listAllTags`；新增 `src/storage/quota.ts` 走 `navigator.storage.estimate()`（不支持时 LS 估算）；`DraftDrawer` 新增 tag 过滤条 / 80% 警告条 / 字节化 footer；原 LS 持久化保留
+  - **IndexedDB 后端迁移延后到 Stage 6**：典型草稿 10-30KB，LS 5MB 理论容纳 ~150 篇，实际用户压力远低于此；IDB 换底带来 async API 级联、fake-indexeddb 开发依赖，收益不成正比。真有用户反馈触发 80% 告警再做底层切换（见 Stage 6 #33）
+
+验收：vue-tsc 静默通过；vitest 774/774（+43：15 shareLink + 12 outlinkDegrade + 11 drafts tag/search + 5 quota）；verify-sample-full 51/51。
+
+待手动 UI 验证：
+- Toolbar 菜单"复制分享链接" → 地址栏 hash 正确；换 tab 贴链接能重新落为新草稿
+- Toolbar overflow「外链处理」切到「尾注」→ 复制后文末追加参考列表 + 正文出现 `[N]` 上角标
+- 草稿抽屉：含 tag 的草稿显示 chip；顶部标签条点击过滤；搜索框输入 `#vue` 正确生效；模拟填满 LS 到 80% 时出现黄色告警条
+
 ## 后续阶段
-- Stage 4（1 Sprint）: #17 外链降级 / #18 MD 导出 / #19 分享链接 / #20 IndexedDB 迁移
 - Stage 5（机会主义）: #21 elements 差异化 / #22 可视化主题编辑 / #23 storage kv 抽取 / #24 variants _all.ts / #25 scripts writeOutput
-- Stage 6（延后）: #26-32
+- Stage 6（延后）: #26-32，新增 #33 IndexedDB 后端换底（配合 `navigator.storage.persist()` 申请持久化存储）

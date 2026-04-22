@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import {
   createDraft,
   exportDraftsJSON,
   importDraftsJSONDetailed,
+  listAllTags,
   listDrafts,
   readDraft,
+  searchDrafts,
   updateDraft,
   type DraftMeta,
 } from '../storage/drafts'
+import { formatBytes, getStorageStat, type StorageStat } from '../storage/quota'
 
 const props = defineProps<{ activeId: string | null }>()
 const emit = defineEmits<{
@@ -37,34 +40,49 @@ const drafts = computed<DraftMeta[]>(() => {
   return listDrafts()
 })
 
+/**
+ * 列表过滤走 storage.searchDrafts —— 扫标题 + 正文 + tag。
+ * query 里写 `#技术` 当 tag 过滤；叠加 tagFilter.value 的显式选择取交集。
+ */
+const tagFilter = ref<string | null>(null)
 const filtered = computed<DraftMeta[]>(() => {
-  const q = query.value.trim().toLowerCase()
-  if (!q) return drafts.value
-  return drafts.value.filter((d) => (d.title || '').toLowerCase().includes(q))
+  void refreshTick.value
+  const q = query.value.trim()
+  const tags = tagFilter.value ? [tagFilter.value] : undefined
+  if (!q && !tags) return drafts.value
+  return searchDrafts({ query: q, tags })
 })
 
-/** 粗略估算 localStorage 已用字节（wechat-typeset:* key）——UTF-16 近似双字节 */
-const storageUsed = computed(() => {
+const knownTags = computed<string[]>(() => {
   void refreshTick.value
-  try {
-    let total = 0
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i)
-      if (!k || !k.startsWith('wechat-typeset:')) continue
-      const v = localStorage.getItem(k) ?? ''
-      total += (k.length + v.length) * 2
-    }
-    return total
-  } catch {
-    return 0
-  }
+  return listAllTags()
 })
-const storagePct = computed(() => Math.min(100, Math.round((storageUsed.value / (5 * 1024 * 1024)) * 100)))
+
+/**
+ * 存储占用走 navigator.storage.estimate() 异步查；不可用时 fallback 到 LS 估算。
+ * 为什么挪到 ref：配额查询是 async，不能塞进 computed
+ */
+const storageStat = ref<StorageStat>({
+  supported: false,
+  used: 0,
+  quota: 5 * 1024 * 1024,
+  pct: 0,
+  warn: false,
+})
+async function refreshStorageStat() {
+  storageStat.value = await getStorageStat()
+}
+const storagePct = computed(() => Math.min(100, Math.round(storageStat.value.pct * 100)))
 
 function refresh() {
   refreshTick.value += 1
+  void refreshStorageStat()
   emit('refresh')
 }
+
+onMounted(() => {
+  void refreshStorageStat()
+})
 
 function fmt(ts: number): string {
   const d = new Date(ts)
@@ -118,6 +136,29 @@ function requestDelete(d: DraftMeta, ev: Event) {
   emit('requestDelete', d.id, d.title || '未命名草稿')
 }
 
+/**
+ * 编辑草稿 tag —— 走原生 prompt() 最省力：MVP 里用户不会频繁打 tag，
+ * 以后可改成 chip 编辑器。支持逗号 / 空格混合分隔，去重、去首尾空白。
+ */
+function editTags(d: DraftMeta, ev: Event) {
+  ev.stopPropagation()
+  const current = (d.tags ?? []).join(', ')
+  const next = typeof window !== 'undefined' ? window.prompt(`标签（用逗号或空格分隔，留空删除全部）`, current) : null
+  if (next === null) return // 用户取消
+  const list = Array.from(new Set(
+    next
+      .split(/[,，\s]+/g)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0),
+  ))
+  updateDraft(d.id, { tags: list })
+  refresh()
+}
+
+function toggleTagFilter(tag: string) {
+  tagFilter.value = tagFilter.value === tag ? null : tag
+}
+
 function download(filename: string, text: string, mime = 'application/json') {
   const blob = new Blob([text], { type: mime })
   const url = URL.createObjectURL(blob)
@@ -167,7 +208,7 @@ defineExpose({ refresh })
           v-model="query"
           class="search-input"
           type="search"
-          placeholder="搜索标题"
+          placeholder="搜索标题 / 正文 / #标签"
           aria-label="搜索草稿"
         />
       </div>
@@ -180,6 +221,24 @@ defineExpose({ refresh })
         <input type="file" accept="application/json" hidden @change="onImport" />
       </label>
       <span v-if="importFeedback" class="io-feedback">{{ importFeedback }}</span>
+    </div>
+
+    <div v-if="knownTags.length > 0" class="tagbar" aria-label="标签过滤">
+      <button
+        v-for="t in knownTags"
+        :key="t"
+        class="tag-pill"
+        :class="{ active: tagFilter === t }"
+        :aria-pressed="tagFilter === t"
+        @click="toggleTagFilter(t)"
+      >#{{ t }}</button>
+    </div>
+
+    <div v-if="storageStat.warn" class="quota-warn" role="status">
+      <span class="quota-warn-icon" aria-hidden="true">!</span>
+      <span class="quota-warn-text">
+        存储占用 {{ storagePct }}%，建议导出 JSON 并删除不再需要的草稿
+      </span>
     </div>
 
     <ul class="list">
@@ -209,6 +268,14 @@ defineExpose({ refresh })
             @dblclick.stop="startRename(d, $event)"
           >{{ d.title || '未命名' }}</div>
           <div class="summary">{{ bodySummary(d.id) }}</div>
+          <div v-if="d.tags && d.tags.length > 0" class="tags">
+            <span
+              v-for="t in d.tags"
+              :key="t"
+              class="tag-chip"
+              @click.stop="toggleTagFilter(t)"
+            >#{{ t }}</span>
+          </div>
           <div class="meta mono">
             <span class="meta-theme">{{ d.themeId }}</span>
             <span class="dot">·</span>
@@ -216,6 +283,7 @@ defineExpose({ refresh })
           </div>
         </div>
         <div class="item-actions">
+          <button class="icon-btn" title="编辑标签" @click="editTags(d, $event)">#</button>
           <button class="icon-btn" title="重命名" @click="startRename(d, $event)">✎</button>
           <button class="icon-btn danger" title="删除" @click="requestDelete(d, $event)">×</button>
         </div>
@@ -241,7 +309,10 @@ defineExpose({ refresh })
       <div class="cap-text">
         <span>{{ drafts.length }} 篇</span>
         <span class="dot">·</span>
-        <span>{{ storagePct }}% 本地存储（上限 ≈ 5MB）</span>
+        <span>
+          {{ storagePct }}% · {{ formatBytes(storageStat.used) }} / {{ formatBytes(storageStat.quota) }}
+          <span v-if="!storageStat.supported" class="dot" title="浏览器未暴露 storage.estimate API，此为 localStorage 估算值">估算</span>
+        </span>
       </div>
     </footer>
   </aside>
@@ -329,10 +400,72 @@ defineExpose({ refresh })
 }
 .btn-ghost:hover { background: var(--surface); }
 
+.tagbar {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.tag-pill {
+  padding: 2px 8px;
+  font-size: var(--fs-11);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--t-quick);
+  letter-spacing: var(--ls-wide);
+}
+.tag-pill:hover { color: var(--text); border-color: var(--accent); }
+.tag-pill.active {
+  color: var(--accent-on);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.quota-warn {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--warn-soft);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-11);
+  color: var(--warn);
+  line-height: var(--lh-tight);
+}
+.quota-warn-icon {
+  width: 16px; height: 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--amber-500);
+  color: white;
+  border-radius: 50%;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-11);
+  flex: 0 0 auto;
+}
+
 .list {
   list-style: none; margin: 0; padding: var(--sp-2) 0;
   overflow-y: auto; flex: 1 1 auto;
 }
+
+.tags {
+  display: flex; flex-wrap: wrap; gap: 3px;
+  margin-top: 3px;
+}
+.tag-chip {
+  font-size: var(--fs-11);
+  font-family: var(--font-mono);
+  color: var(--text-subtle);
+  background: var(--surface);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  letter-spacing: var(--ls-wide);
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.tag-chip:hover { color: var(--accent); background: var(--accent-soft); }
 .item {
   position: relative;
   display: flex; align-items: flex-start; gap: var(--sp-2);
