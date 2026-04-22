@@ -275,8 +275,20 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'footerCTA',
     category: 'navigation',
     fenceLength: 3,
-    description: '文末 CTA 块（关注、投喂、二维码收束）。',
-    example: '::: footer-cta\n欢迎关注 …\n:::\n',
+    attrs: [
+      { key: 'cta', description: '按钮文字（visual only）', example: '点此关注' },
+      {
+        key: 'href',
+        description:
+          '按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：' +
+          'https://mp.weixin.qq.com/s/*（同域文章）/ weixin://dl/*（小程序协议）/ ' +
+          'tel:* / mailto:* / 页内锚点 #*。非白名单 URL 会触发 diagnose warning。',
+        example: 'https://mp.weixin.qq.com/s/xxx',
+      },
+    ],
+    description: '文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。',
+    example:
+      '::: footer-cta 觉得有用？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/xxx\n如果这篇对你有启发，欢迎关注。\n:::\n',
   },
   {
     name: 'recommend',

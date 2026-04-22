@@ -1,6 +1,6 @@
 {
-  "name": "wx-md",
-  "version": "0.1.0",
+  "name": "wechat-typeset",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Browser-only Markdown editor for WeChat official-account articles: pluggable themes, 20+ container extensions, one-click rich-text copy.",

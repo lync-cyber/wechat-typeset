@@ -5,14 +5,10 @@
  *   - 主索引 (wechat-typeset:drafts:index)：Draft 元数据列表（id / title / themeId / updatedAt），单条 localStorage
  *   - 每篇正文 (wechat-typeset:drafts:body:<id>)：独立 key，避免一条记录超 5MB 限制
  *   - 当前活跃 id (wechat-typeset:drafts:active)
- *
- * 用户数据迁移：若发现 0.1 以前的遗留 key wx-md:draft:single，
- * 会静默迁移为一篇"未命名草稿"后删除旧 key。
  */
 
-import { genId as genKvId, safeRead, safeRemove, safeWrite } from './_kv'
+import { genId as genKvId, safeRead, safeReadJson, safeRemove, safeWrite, safeWriteJson } from './_kv'
 
-const LEGACY_KEY = 'wx-md:draft:single'
 const INDEX_KEY = 'wechat-typeset:drafts:index'
 const ACTIVE_KEY = 'wechat-typeset:drafts:active'
 const BODY_PREFIX = 'wechat-typeset:drafts:body:'
@@ -41,43 +37,12 @@ export interface SearchOptions {
 const genId = () => genKvId('d')
 
 function readIndex(): DraftMeta[] {
-  const raw = safeRead(INDEX_KEY)
-  if (!raw) return []
-  try {
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? (arr as DraftMeta[]) : []
-  } catch {
-    return []
-  }
+  const arr = safeReadJson<unknown>(INDEX_KEY, [])
+  return Array.isArray(arr) ? (arr as DraftMeta[]) : []
 }
 
 function writeIndex(list: DraftMeta[]): void {
-  safeWrite(INDEX_KEY, JSON.stringify(list))
-}
-
-/** 懒迁移：发现老 single key 就转成一篇新草稿 */
-function migrateLegacy(): void {
-  const legacy = safeRead(LEGACY_KEY)
-  if (legacy == null) return
-  const index = readIndex()
-  if (index.length > 0) {
-    // 已经有新结构，老 key 留着不动——但标记为已迁移避免重复创建
-    safeRemove(LEGACY_KEY)
-    return
-  }
-  const id = genId()
-  const now = Date.now()
-  const meta: DraftMeta = {
-    id,
-    title: deriveTitle(legacy) || '未命名草稿',
-    themeId: 'default',
-    updatedAt: now,
-    createdAt: now,
-  }
-  writeIndex([meta])
-  safeWrite(`${BODY_PREFIX}${id}`, legacy)
-  safeWrite(ACTIVE_KEY, id)
-  safeRemove(LEGACY_KEY)
+  safeWriteJson(INDEX_KEY, list)
 }
 
 /** 从 md 里抽一行作为标题（第一个 # 或前 20 字） */
@@ -92,13 +57,11 @@ export function deriveTitle(md: string): string {
 }
 
 export function listDrafts(): DraftMeta[] {
-  migrateLegacy()
   const list = readIndex()
   return [...list].sort((a, b) => b.updatedAt - a.updatedAt)
 }
 
 export function getActiveDraftId(): string | null {
-  migrateLegacy()
   return safeRead(ACTIVE_KEY)
 }
 
@@ -120,7 +83,6 @@ export function createDraft(initial?: {
   body?: string
   tags?: string[]
 }): Draft {
-  migrateLegacy()
   const id = genId()
   const now = Date.now()
   const body = initial?.body ?? ''

@@ -9,7 +9,7 @@
  */
 
 import type { ContainerRenderer } from './types'
-import { escText } from './types'
+import { escAttr, escText } from './types'
 
 // 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）
 function resolveIssueStampForFooter(
@@ -28,10 +28,18 @@ export const footerCTAContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim() || '关注我'
     const cta = ctx.attrs.cta ? escText(ctx.attrs.cta) : ''
-    const ctaEl = cta
-      ? `<section class="container-footer-cta__cta" style="text-align:center;margin-top:10px">` +
-        `<span style="display:inline-block;padding:6px 14px;border-radius:${ctx.tokens.radius.lg}px;background-color:${ctx.tokens.colors.primary};color:${ctx.tokens.colors.textInverse}">${cta}</span>` +
-        `</section>`
+    const href = ctx.attrs.href ?? ''
+    // 按钮胶囊样式（span / a 共用）；color + bg 走主题 primary。
+    // 有 href 时渲染为 <a>，打 data-wx-footer-cta 标记让 outlinkDegrade 绕过——
+    // footer-cta 是作者核心转化入口，不参与 keep/tail-list/drop 三策略。
+    const pill = `display:inline-block;padding:6px 14px;border-radius:${ctx.tokens.radius.lg}px;background-color:${ctx.tokens.colors.primary};color:${ctx.tokens.colors.textInverse};text-decoration:none`
+    const ctaInner = cta
+      ? href
+        ? `<a href="${escAttr(href)}" data-wx-footer-cta="" style="${pill}">${cta}</a>`
+        : `<span style="${pill}">${cta}</span>`
+      : ''
+    const ctaEl = ctaInner
+      ? `<section class="container-footer-cta__cta" style="text-align:center;margin-top:10px">${ctaInner}</section>`
       : ''
     const stamp = resolveIssueStampForFooter(ctx)
     const stampEl = stamp

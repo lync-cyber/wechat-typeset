@@ -2,7 +2,7 @@
 /**
  * 回归基准生成器
  *
- * 对每个内置主题渲染其 sample，落到 /tmp/wx-md-baseline/<themeId>.html
+ * 对每个内置主题渲染其 sample，落到 /tmp/wechat-typeset-baseline/<themeId>.html
  * 仅在重构期间使用：基线一次，重构后 diff。
  */
 

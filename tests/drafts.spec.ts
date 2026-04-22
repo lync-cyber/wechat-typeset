@@ -1,8 +1,7 @@
 /**
- * 多篇草稿 CRUD 测试（Step 8）
+ * 多篇草稿 CRUD 测试
  *
  * 覆盖：
- *  - 遗留 single key 自动迁移成一篇草稿
  *  - create / list / read / update / delete / active id
  *  - export/import JSON 往返
  *  - deriveTitle 从首个非空行（或首个 # 标题）抽取
@@ -39,28 +38,6 @@ describe('deriveTitle', () => {
   it('无标题时用首个非空行', () => {
     expect(deriveTitle('  \n\n 开场白 \n正文')).toBe('开场白')
     expect(deriveTitle('')).toBe('')
-  })
-})
-
-describe('遗留 single key 自动迁移', () => {
-  it('首次 listDrafts 把老 key 迁移成一篇', () => {
-    localStorage.setItem('wx-md:draft:single', '# 迁移\n这是老草稿')
-    const list = listDrafts()
-    expect(list).toHaveLength(1)
-    expect(list[0].title).toBe('迁移')
-    expect(getActiveDraftId()).toBe(list[0].id)
-    expect(readDraft(list[0].id)?.body).toBe('# 迁移\n这是老草稿')
-    // 老 key 已被清
-    expect(localStorage.getItem('wx-md:draft:single')).toBeNull()
-  })
-
-  it('已有新结构时老 key 不再覆盖，仅被清除', () => {
-    createDraft({ title: '已有', body: '已有正文' })
-    localStorage.setItem('wx-md:draft:single', '老货不要')
-    const list = listDrafts()
-    expect(list).toHaveLength(1)
-    expect(list[0].title).toBe('已有')
-    expect(localStorage.getItem('wx-md:draft:single')).toBeNull()
   })
 })
 

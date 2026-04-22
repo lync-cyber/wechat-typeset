@@ -12,27 +12,22 @@
  */
 
 import type { UserComponent, ComponentKind } from '../components-lib/types'
-import { genId as genKvId, safeRead, safeWrite } from './_kv'
+import { escapeXml } from '../pipeline/containers/types'
+import { genId as genKvId, safeReadJson, safeWriteJson } from './_kv'
 
 const STORAGE_KEY = 'wechat-typeset:user-components'
 
 const genId = () => genKvId('uc')
 
 function readList(): UserComponent[] {
-  const raw = safeRead(STORAGE_KEY)
-  if (!raw) return []
-  try {
-    const arr = JSON.parse(raw)
-    if (!Array.isArray(arr)) return []
-    // 旧数据（预 Wrap 版本）没有 source 字段——按位置补齐，避免读旧 localStorage 被过滤掉。
-    return arr.filter(isUserComponent).map((uc) => ({ ...uc, source: 'user' as const }))
-  } catch {
-    return []
-  }
+  const arr = safeReadJson<unknown>(STORAGE_KEY, [])
+  if (!Array.isArray(arr)) return []
+  // 旧数据（预 Wrap 版本）没有 source 字段——按位置补齐，避免读旧 localStorage 被过滤掉。
+  return arr.filter(isUserComponent).map((uc) => ({ ...uc, source: 'user' as const }))
 }
 
 function writeList(list: UserComponent[]): void {
-  safeWrite(STORAGE_KEY, JSON.stringify(list))
+  safeWriteJson(STORAGE_KEY, list)
 }
 
 function isUserComponent(v: unknown): v is UserComponent {
@@ -136,22 +131,4 @@ function defaultThumb(name: string): string {
     `<text x="37.5" y="48" text-anchor="middle" font-size="32" font-weight="700" fill="#6a737d">${escapeXml(ch)}</text>` +
     '</svg>'
   )
-}
-
-function escapeXml(s: string): string {
-  return s.replace(/[<>&"']/g, (c) => {
-    switch (c) {
-      case '<':
-        return '&lt;'
-      case '>':
-        return '&gt;'
-      case '&':
-        return '&amp;'
-      case '"':
-        return '&quot;'
-      case "'":
-        return '&apos;'
-    }
-    return c
-  })
 }

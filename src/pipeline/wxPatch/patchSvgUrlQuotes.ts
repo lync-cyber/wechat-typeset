@@ -15,7 +15,7 @@
  *   2. inline style 中的 url()
  */
 
-import { parseFragment, parseStyle, serializeFragment, stringifyStyle, walkElements } from './utils'
+import { parseStyle, patchSvgSubtree, stringifyStyle } from './utils'
 
 const URL_RE = /url\(\s*(['"])([^'"]*)\1\s*\)/g
 
@@ -24,26 +24,19 @@ function stripQuotesInUrl(s: string): string {
 }
 
 export function patchSvgUrlQuotes(html: string): string {
-  const { container } = parseFragment(html)
-
-  const svgs = container.querySelectorAll('svg')
-  svgs.forEach((svg) => {
-    walkElements(svg, (el) => {
-      // 所有属性值里的 url("")
-      for (let i = 0; i < el.attributes.length; i++) {
-        const attr = el.attributes[i]
-        if (!attr.value.includes('url(')) continue
-        const next = stripQuotesInUrl(attr.value)
-        if (next !== attr.value) el.setAttribute(attr.name, next)
-      }
-      // inline style
-      const style = el.getAttribute('style')
-      if (style && style.includes('url(')) {
-        const decls = parseStyle(style).map((d) => ({ ...d, value: stripQuotesInUrl(d.value) }))
-        el.setAttribute('style', stringifyStyle(decls))
-      }
-    })
+  return patchSvgSubtree(html, (el) => {
+    // 所有属性值里的 url("")
+    for (let i = 0; i < el.attributes.length; i++) {
+      const attr = el.attributes[i]
+      if (!attr.value.includes('url(')) continue
+      const next = stripQuotesInUrl(attr.value)
+      if (next !== attr.value) el.setAttribute(attr.name, next)
+    }
+    // inline style
+    const style = el.getAttribute('style')
+    if (style && style.includes('url(')) {
+      const decls = parseStyle(style).map((d) => ({ ...d, value: stripQuotesInUrl(d.value) }))
+      el.setAttribute('style', stringifyStyle(decls))
+    }
   })
-
-  return serializeFragment(container)
 }

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 tests/.baseline/
+scripts/.baseline/
 *.log
 .DS_Store
 .vscode/

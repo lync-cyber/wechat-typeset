@@ -11,6 +11,10 @@
  * 仅识别 `http(s)://` 开头的 href；`#anchor` / `mailto:` / `tel:` 不做处理。
  * 已剥完的文档再次送入 `degradeOutlinks` 会返回 `count: 0`（幂等）——
  * 这也让 `handleCopy` 重复点击时不会重复追加参考列表。
+ *
+ * **例外**：带 `data-wx-footer-cta` 标记的 `<a>` 不降级——footer-cta 是作者
+ * 核心转化入口（关注引导 / 阅读原文 / 小程序跳转），让它走 keep 语义。非白名单
+ * URL 的告警由 diagnose 的 `footer-cta-outlink` 规则在编辑期提示。
  */
 
 export type OutlinkStrategy = 'keep' | 'tail-list' | 'drop'
@@ -45,7 +49,7 @@ export function degradeOutlinks(html: string, strategy: OutlinkStrategy): Degrad
   const anchors = Array.from(body.querySelectorAll('a'))
   const externals = anchors
     .map((el) => ({ el, href: el.getAttribute('href') ?? '' }))
-    .filter(({ href }) => EXTERNAL_RE.test(href))
+    .filter(({ el, href }) => EXTERNAL_RE.test(href) && !el.hasAttribute('data-wx-footer-cta'))
 
   if (externals.length === 0) return { html, count: 0 }
 

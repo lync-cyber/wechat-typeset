@@ -1,5 +1,9 @@
 /**
- * specToTheme：PersonaSpec → Theme 的投影函数。
+ * specToTheme：PersonaSpec → Theme 的投影函数（spec 分支的包装器）。
+ *
+ * 分层定位：本文件是 `buildTheme` 工厂的**包装器之一**——负责把 PersonaSpec 翻译为
+ * BuildThemeOptions。另一包装器是 `src/color/applyPalette.ts`，走 palette delta 路径。
+ * 两者共享同一份 buildTheme（深合并 + DEFAULT_VARIANTS 兜底），接缝只在"输入域不同"。
  *
  * 这是 spec-first 架构的核心：一份 PersonaSpec 通过这条函数产出运行时 Theme，
  * gallery HTML 也从同一份 spec 派生，conformance 测试据此断言 specToTheme(spec) = Theme。

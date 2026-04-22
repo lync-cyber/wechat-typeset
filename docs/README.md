@@ -9,7 +9,8 @@
 | 文档 | 面向 | 回答什么 |
 | --- | --- | --- |
 | [../README.md](../README.md) | GitHub 访客 | 这个工具是什么，30 秒决策 |
-| [container-syntax.md](container-syntax.md) | 作者（写 Markdown） | 22 种容器的 fence 语法与键值对 |
+| [../docs/writer-contract.md](writer-contract.md) | 作者（写 Markdown） | 25 fence + 5 行内扩展的硬承诺、主题边界、契约演进 |
+| [container-syntax.md](container-syntax.md) | 作者（写 Markdown） | 25 种容器的 fence 语法与键值对 |
 
 ## 主题作者
 

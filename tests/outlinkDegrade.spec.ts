@@ -113,3 +113,32 @@ describe('degradeOutlinks · 空输入', () => {
     expect(r).toEqual({ html: '', count: 0 })
   })
 })
+
+describe('degradeOutlinks · footer-cta 例外', () => {
+  const footerHtml =
+    '<section class="container-footer-cta"><a href="https://example.com" data-wx-footer-cta="" style="color:#fff">阅读原篇</a></section>'
+
+  it('drop 策略不剥 footer-cta 的 <a>', () => {
+    const r = degradeOutlinks(footerHtml, 'drop')
+    expect(r.count).toBe(0)
+    expect(r.html).toContain('data-wx-footer-cta')
+    expect(r.html).toContain('href="https://example.com"')
+  })
+
+  it('tail-list 策略不尾注 footer-cta 的 <a>', () => {
+    const r = degradeOutlinks(footerHtml, 'tail-list')
+    expect(r.count).toBe(0)
+    expect(r.html).not.toContain('data-wx-outlink-list')
+    expect(r.html).toContain('href="https://example.com"')
+  })
+
+  it('footer-cta 与普通外链混合：只处理普通的，footer-cta 保真', () => {
+    const mixed =
+      '<p>正文 <a href="https://normal.com">普通</a></p>' + footerHtml
+    const r = degradeOutlinks(mixed, 'drop')
+    expect(r.count).toBe(1)
+    expect(r.html).not.toContain('https://normal.com')
+    expect(r.html).toContain('data-wx-footer-cta')
+    expect(r.html).toContain('href="https://example.com"')
+  })
+})

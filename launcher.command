@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wx-md launcher (macOS / Linux)
+# wechat-typeset launcher (macOS / Linux)
 # 首次运行：npm install && npm run build
 # 之后运行：node scripts/serve.mjs -> 127.0.0.1:7788 -> 自动开浏览器
 #
@@ -20,7 +20,7 @@ fi
 
 if [ ! -f "dist/index.html" ]; then
     echo
-    echo "[i] First run detected. Installing dependencies and building wx-md..."
+    echo "[i] First run detected. Installing dependencies and building wechat-typeset..."
     echo
     (npm install && npm run build) || {
         echo

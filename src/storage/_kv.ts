@@ -5,7 +5,8 @@
  * 规则：
  *   - 所有读写都包 try/catch：SSR、隐私模式、配额超限都不抛
  *   - genId 的 prefix 形如 `d` / `uc`，输出 `<prefix>_<time36>_<rnd6>` 字符串
- *   - 不做 schema 校验；调用方按自己的结构 JSON.parse / stringify
+ *   - safeReadJson / safeWriteJson 处理 JSON.parse 失败路径，内部按 fallback 返回
+ *     —— 调用方只传 key + fallback，不用再本地 try-catch
  */
 
 export function safeRead(key: string): string | null {
@@ -29,6 +30,30 @@ export function safeRemove(key: string): void {
     localStorage.removeItem(key)
   } catch {
     // ignore
+  }
+}
+
+/**
+ * 读 JSON：localStorage 空 / parse 失败 / 类型不符 都返回 fallback。
+ * 不做 schema 校验——调用方如果需要 filter 非法项（比如 userComponents），在返回值上再走一次即可。
+ */
+export function safeReadJson<T>(key: string, fallback: T): T {
+  const raw = safeRead(key)
+  if (raw == null) return fallback
+  try {
+    const parsed = JSON.parse(raw)
+    return parsed as T
+  } catch {
+    return fallback
+  }
+}
+
+/** 写 JSON：stringify 失败（循环引用等）则按 safeWrite 规则静默忽略 */
+export function safeWriteJson<T>(key: string, value: T): void {
+  try {
+    safeWrite(key, JSON.stringify(value))
+  } catch {
+    // stringify 抛出（极少，循环引用）—— 忽略
   }
 }
 

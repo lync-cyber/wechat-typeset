@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * wx-md 本地静态服务器
+ * wechat-typeset 本地静态服务器
  *
  * 服务 dist/ 到 http://127.0.0.1:7788
  * 127.0.0.1 被浏览器视为 secure context，Clipboard API 可用（file:// 不行）。
@@ -38,8 +38,8 @@ const MIME = {
 }
 
 if (!existsSync(DIST)) {
-  console.error(`[wx-md] dist 目录不存在：${DIST}`)
-  console.error('[wx-md] 请先运行：npm install && npm run build')
+  console.error(`[wechat-typeset] dist 目录不存在：${DIST}`)
+  console.error('[wechat-typeset] 请先运行：npm install && npm run build')
   process.exit(1)
 }
 
@@ -88,7 +88,7 @@ function maybeRebuild() {
     fileMtime(resolve(ROOT, 'tsconfig.json')),
   )
   if (srcMtime <= distMtime) return
-  console.log('[wx-md] 检测到源码更新，正在重建（npm run build）…')
+  console.log('[wechat-typeset] 检测到源码更新，正在重建（npm run build）…')
   // Windows 上 spawn .cmd/.bat 在 Node 18.20.2+ / 20.12.2+ / 21.7.3+
   // （CVE-2024-27980 补丁后）必须显式 shell: true，否则直接退出非零。
   // DEP0190: shell: true 时不能同时传 args 数组（会被拼接而非转义），
@@ -103,9 +103,9 @@ function maybeRebuild() {
     shell: isWin,
   })
   if (result.status !== 0) {
-    console.error('[wx-md] 重建失败。保留现有 dist/ 继续启动；手动修复后重启即可。')
+    console.error('[wechat-typeset] 重建失败。保留现有 dist/ 继续启动；手动修复后重启即可。')
   } else {
-    console.log('[wx-md] 重建完成。')
+    console.log('[wechat-typeset] 重建完成。')
   }
 }
 
@@ -158,8 +158,8 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, HOST, () => {
   const url = `http://${HOST}:${PORT}/`
-  console.log(`[wx-md] 已启动：${url}`)
-  console.log('[wx-md] 按 Ctrl+C 停止')
+  console.log(`[wechat-typeset] 已启动：${url}`)
+  console.log('[wechat-typeset] 按 Ctrl+C 停止')
   openBrowser(url)
 })
 
@@ -170,6 +170,6 @@ function openBrowser(url) {
     : platform === 'win32' ? `start "" "${url}"`
     : `xdg-open "${url}"`
   exec(cmd, (err) => {
-    if (err) console.log(`[wx-md] 自动打开浏览器失败，请手动访问：${url}`)
+    if (err) console.log(`[wechat-typeset] 自动打开浏览器失败，请手动访问：${url}`)
   })
 }

@@ -1,4 +1,4 @@
-# wx-md · 全量容器 & 变体演示
+# wechat-typeset · 全量容器 & 变体演示
 
 这篇 Markdown 覆盖全部 33 个 variant 与 14 个无 variant 容器（含第五态 note + 签名块 abstract / key-number / see-also + 兜底 free），用于：
 
@@ -11,7 +11,7 @@
 :::
 
 ::: cover 本期封面
-![封面占位](https://placehold.co/1200x630?text=wx-md)
+![封面占位](https://placehold.co/1200x630?text=wechat-typeset)
 
 > 一份给写作者的排版工具 —— 所见即所得，粘贴即保真。
 :::
@@ -247,7 +247,7 @@ export function hello(name: string): string {
 ## 签名容器 & 兜底 · abstract / key-number / see-also / note / free
 
 ::: abstract TL;DR
-本文梳理 wx-md 的 24+ 容器：覆盖五档提示（tip / warning / info / danger / note）、
+本文梳理 wechat-typeset 的 24+ 容器：覆盖五档提示（tip / warning / info / danger / note）、
 三种签名块（abstract / key-number / see-also）、全部 33 个 variant。新容器在这里一次过目。
 :::
 

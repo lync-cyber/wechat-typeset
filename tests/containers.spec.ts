@@ -149,6 +149,27 @@ describe('footer-cta / recommend / qrcode', () => {
     expect(out).toContain('点此关注')
   })
 
+  it('footer-cta 仅 cta 无 href：渲染为 <span>', () => {
+    const out = run('::: footer-cta 标题 cta=点此关注\n:::\n')
+    expect(out).toMatch(/<span[^>]*>点此关注<\/span>/)
+    expect(out).not.toMatch(/<a\s[^>]*>点此关注<\/a>/)
+  })
+
+  it('footer-cta cta + href：渲染为 <a> 带 data-wx-footer-cta 标记', () => {
+    const md =
+      '::: footer-cta 标题 cta=阅读原篇 href=https://mp.weixin.qq.com/s/abc\n:::\n'
+    const out = run(md)
+    expect(out).toMatch(
+      /<a[^>]*href="https:\/\/mp\.weixin\.qq\.com\/s\/abc"[^>]*data-wx-footer-cta="[^"]*"[^>]*>阅读原篇<\/a>/,
+    )
+  })
+
+  it('footer-cta href 值里的 & 做 HTML 属性转义', () => {
+    const md = '::: footer-cta cta=去 href="https://a.com?x=1&y=2"\n:::\n'
+    const out = run(md)
+    expect(out).toContain('href="https://a.com?x=1&amp;y=2"')
+  })
+
   it('recommend 块识别', () => {
     const out = run('::: recommend 推荐阅读\n- [A](http://a.com)\n:::\n')
     expect(out).toMatch(/class="container-recommend"/)

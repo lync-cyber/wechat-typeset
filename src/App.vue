@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Editor from './components/Editor.vue'
 import Preview from './components/Preview.vue'
 import ThemeStrip from './components/ThemeStrip.vue'
@@ -12,93 +12,43 @@ import CommandPalette, { type Command } from './components/CommandPalette.vue'
 import HelpPanel from './components/HelpPanel.vue'
 import OnboardingCard from './components/OnboardingCard.vue'
 import UndoToast from './components/UndoToast.vue'
+import type { ToolbarAction, ToolbarToggleTarget } from './components/toolbar-types'
 import { useDebouncedRender } from './composables/useDebouncedRender'
+import { useUiDrawers } from './composables/useUiDrawers'
+import { useDraftLifecycle } from './composables/useDraftLifecycle'
+import { useClipboardCopy } from './composables/useClipboardCopy'
+import { useExportActions } from './composables/useExportActions'
+import { useKeyboardShortcuts } from './composables/useKeyboardShortcuts'
 import { getTheme, themeList } from './themes'
 import type { Theme } from './themes/types'
 import { applyPalette } from './color/applyPalette'
-import { copyHtmlToClipboard } from './clipboard/copyHtml'
-import { exportHtml, exportImage, exportMd } from './clipboard/exportFile'
-import {
-  degradeOutlinks,
-  OUTLINK_STRATEGIES,
-  type OutlinkStrategy,
-} from './clipboard/outlinkDegrade'
 import { fixZhTypo, scanZhTypo } from './pipeline/zhTypo'
-import { buildShareUrl, parseShareHash, type SharePayload } from './share/shareLink'
 import { getSample, SAMPLE_BY_THEME } from './samples'
-import {
-  createDraft,
-  deleteDraft,
-  getActiveDraftId,
-  importDraftsJSONDetailed,
-  listDrafts,
-  readDraft,
-  setActiveDraftId,
-  updateDraft,
-  type Draft,
-} from './storage/drafts'
+import { createDraft, listDrafts, updateDraft } from './storage/drafts'
+import { safeRead, safeWrite } from './storage/_kv'
 
 const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
 const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
-const OUTLINK_STRATEGY_KEY = 'wechat-typeset:outlink-strategy'
 
 interface Seed { primary: string; secondary: string; accent: string; dark: boolean }
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
 const modKey = isMac ? '⌘' : 'Ctrl'
 
+// ==============================================
+// 核心响应式状态（跨 composable 共享）
+// ==============================================
 const md = ref<string>('')
-const activeDraftId = ref<string | null>(null)
 const baseThemeId = ref<string>('default')
 const hoverThemeId = ref<string | null>(null) // Preview 顶部缩略条的 hover 态，临时覆盖 activeTheme
 const customTheme = ref<Theme | null>(null)
 const lastSeed = ref<Seed | null>(null)
+const mobileTab = ref<'editor' | 'preview'>('editor')
 
 const editorRef = ref<InstanceType<typeof Editor> | null>(null)
 const previewRef = ref<InstanceType<typeof Preview> | null>(null)
 const toolbarRef = ref<InstanceType<typeof Toolbar> | null>(null)
 const paletteRef = ref<InstanceType<typeof ComponentPalette> | null>(null)
-
-const ui = reactive({
-  leftSlot: null as null | 'drafts',
-  rightSlot: null as null | 'components' | 'customizer' | 'checklist',
-  commandOpen: false,
-  helpOpen: false,
-})
-
-const onboardDismissed = ref<boolean>(
-  typeof localStorage !== 'undefined' && localStorage.getItem(ONBOARD_STORAGE_KEY) === '1',
-)
-
-/**
- * 站外链接降级策略。read 默认值 'keep' 保持历史行为，切换后落 localStorage 持久化。
- * 为什么不做 reactive watch 自动回写：降级策略的变更点只有 toolbar 菜单里的单选组件，
- * 改动可控，显式在 handler 里 setItem 更易追。
- */
-const outlinkStrategy = ref<OutlinkStrategy>(readOutlinkStrategy())
-
-function readOutlinkStrategy(): OutlinkStrategy {
-  try {
-    const v = localStorage.getItem(OUTLINK_STRATEGY_KEY)
-    if (v && (OUTLINK_STRATEGIES as readonly string[]).includes(v)) {
-      return v as OutlinkStrategy
-    }
-  } catch {
-    // ignore
-  }
-  return 'keep'
-}
-
-function setOutlinkStrategy(v: OutlinkStrategy) {
-  outlinkStrategy.value = v
-  try {
-    localStorage.setItem(OUTLINK_STRATEGY_KEY, v)
-  } catch {
-    // 配额 / 隐私模式下静默忽略
-  }
-}
-
-const mobileTab = ref<'editor' | 'preview'>('editor')
 
 /**
  * activeTheme 的三级优先级：
@@ -113,118 +63,84 @@ const activeTheme = computed<Theme>(() => {
   return customTheme.value ?? getTheme(baseThemeId.value)
 })
 
-const draftIndexTick = ref(0) // 强制重算草稿标题（重命名后）
-const currentDraftTitle = computed(() => {
-  void draftIndexTick.value
-  if (!activeDraftId.value) return ''
-  return listDrafts().find((d) => d.id === activeDraftId.value)?.title ?? ''
+// ==============================================
+// Composables
+// ==============================================
+const { ui, drawerStates, toggleLeft, toggleRight, closeAll } = useUiDrawers()
+
+const {
+  activeDraftId,
+  draftIndexTick,
+  displayedSavingLabel,
+  displayedSavingState,
+  currentDraftTitle,
+  undo,
+  initActiveDraft,
+  handleSave,
+  handleSelectDraft,
+  handleDeleteDraftRequest,
+  flushDraftSave,
+  pingTransient,
+  showUndo,
+  onUndo,
+  onUndoExpire,
+  fileStem,
+} = useDraftLifecycle({ md, baseThemeId, getSample })
+
+const pipelineInput = computed(() => ({ md: md.value, theme: activeTheme.value }))
+const { rendered, flush } = useDebouncedRender(pipelineInput, { delayMs: 80 })
+
+const {
+  outlinkStrategy,
+  setOutlinkStrategy,
+  persistentError,
+  handleCopy,
+  handleCopyShareLink,
+  tryLoadShareFromHash,
+} = useClipboardCopy({
+  md,
+  rendered,
+  flush,
+  baseThemeId,
+  activeDraftId,
+  draftIndexTick,
+  pingTransient,
 })
 
-const drawerStates = computed(() => ({
-  drafts: ui.leftSlot === 'drafts',
-  components: ui.rightSlot === 'components',
-  customizer: ui.rightSlot === 'customizer',
-  checklist: ui.rightSlot === 'checklist',
-}))
-
-function toggleLeft(slot: 'drafts') {
-  ui.leftSlot = ui.leftSlot === slot ? null : slot
-}
-function toggleRight(slot: 'components' | 'customizer' | 'checklist') {
-  ui.rightSlot = ui.rightSlot === slot ? null : slot
-}
+const { doExportHtml, doExportMd, doExportImage } = useExportActions({
+  md,
+  rendered,
+  flush,
+  activeTheme,
+  getPreviewBody: () => previewRef.value?.getIframe?.()?.contentDocument?.body ?? null,
+  fileStem: () => fileStem(),
+  pingTransient,
+  setPersistentError: (msg) => { persistentError.value = msg },
+})
 
 // ==============================================
-// 草稿初始化与持续保存
+// 引导层
 // ==============================================
-function initActiveDraft(preferredThemeId: string = 'default') {
-  const id = getActiveDraftId()
-  if (id) {
-    const existing = readDraft(id)
-    if (existing) {
-      activeDraftId.value = existing.id
-      md.value = existing.body
-      if (existing.themeId) baseThemeId.value = existing.themeId
-      return
-    }
-  }
-  const drafts = listDrafts()
-  if (drafts.length > 0) {
-    const first = drafts[0]
-    activeDraftId.value = first.id
-    setActiveDraftId(first.id)
-    const body = readDraft(first.id)?.body ?? ''
-    md.value = body
-    if (first.themeId) baseThemeId.value = first.themeId
-  } else {
-    const created = createDraft({
-      title: 'wechat-typeset 示例',
-      body: getSample(preferredThemeId),
-      themeId: preferredThemeId,
-    })
-    activeDraftId.value = created.id
-    md.value = created.body
-  }
+const onboardDismissed = ref<boolean>(safeRead(ONBOARD_STORAGE_KEY) === '1')
+function dismissOnboard() {
+  onboardDismissed.value = true
+  safeWrite(ONBOARD_STORAGE_KEY, '1')
 }
+const showOnboard = computed(() =>
+  !onboardDismissed.value &&
+  !ui.commandOpen &&
+  !ui.helpOpen &&
+  ui.leftSlot === null &&
+  ui.rightSlot === null,
+)
 
-const DRAFT_SAVE_DELAY = 400
-let draftSaveTimer: number | null = null
-let pendingDraftBody: string | null = null
-let savedFadeTimer: number | null = null
-
-const savingState = ref<'idle' | 'saving' | 'saved'>('idle')
-
-const transientStatus = ref<string>('')
-let transientTimer: number | null = null
-function pingTransient(msg: string, ms = 1500) {
-  transientStatus.value = msg
-  if (transientTimer !== null) window.clearTimeout(transientTimer)
-  transientTimer = window.setTimeout(() => (transientStatus.value = ''), ms)
-}
-
-const displayedSavingLabel = computed(() => {
-  if (transientStatus.value) return transientStatus.value
-  if (savingState.value === 'saving') return '保存中…'
-  if (savingState.value === 'saved') return '已保存'
-  return '　'
-})
-const displayedSavingState = computed<'idle' | 'saving' | 'saved'>(() => {
-  if (transientStatus.value) return 'saved'
-  return savingState.value
-})
-
-function flushDraftSave() {
-  if (draftSaveTimer !== null) {
-    window.clearTimeout(draftSaveTimer)
-    draftSaveTimer = null
-  }
-  if (pendingDraftBody !== null && activeDraftId.value) {
-    updateDraft(activeDraftId.value, { body: pendingDraftBody })
-    pendingDraftBody = null
-    draftIndexTick.value += 1
-    savingState.value = 'saved'
-    if (savedFadeTimer !== null) window.clearTimeout(savedFadeTimer)
-    savedFadeTimer = window.setTimeout(() => {
-      if (savingState.value === 'saved') savingState.value = 'idle'
-    }, 1800)
-  }
-}
-
-watch(md, (val) => {
-  if (!activeDraftId.value) return
-  pendingDraftBody = val
-  savingState.value = 'saving'
-  if (draftSaveTimer !== null) window.clearTimeout(draftSaveTimer)
-  draftSaveTimer = window.setTimeout(flushDraftSave, DRAFT_SAVE_DELAY)
-})
-
-watch(mobileTab, () => {
-  ui.leftSlot = null
-  ui.rightSlot = null
-})
+// ==============================================
+// 观察器：mobileTab 切换关闭 drawer；baseThemeId 切换联动持久化 / 重置 custom / 样本跟随 / 草稿 themeId 回写
+// ==============================================
+watch(mobileTab, () => { closeAll() })
 
 watch(baseThemeId, (val, prev) => {
-  localStorage.setItem(THEME_STORAGE_KEY, val)
+  safeWrite(THEME_STORAGE_KEY, val)
   if (customTheme.value && val !== prev) {
     const prevCustom = customTheme.value
     const prevSeed = lastSeed.value
@@ -264,65 +180,13 @@ watch(baseThemeId, (val, prev) => {
 })
 
 // ==============================================
-// 错误 banner + 撤销 toast
+// 本地动作（md 层）—— 依赖 draft.showUndo / pingTransient 做反馈
 // ==============================================
-const persistentError = ref<string | null>(null)
-const undo = ref<{ message: string; restore: () => void } | null>(null)
-function showUndo(message: string, restore: () => void) {
-  undo.value = { message, restore }
-}
-function onUndo() {
-  undo.value?.restore()
-  undo.value = null
-}
-function onUndoExpire() {
-  undo.value = null
-}
-
-// ==============================================
-// 渲染管线（不动）
-// ==============================================
-const pipelineInput = computed(() => ({ md: md.value, theme: activeTheme.value }))
-const { rendered, flush } = useDebouncedRender(pipelineInput, { delayMs: 80 })
-
-// ==============================================
-// 动作
-// ==============================================
-async function handleCopy() {
-  flush()
-  const rawHtml = rendered.value.html
-  const { html, count } = degradeOutlinks(rawHtml, outlinkStrategy.value)
-  const plain = md.value
-  const result = await copyHtmlToClipboard(html, plain)
-  if (result.ok) {
-    const strategyNote =
-      count > 0 && outlinkStrategy.value === 'tail-list'
-        ? `（${count} 条外链已尾注）`
-        : count > 0 && outlinkStrategy.value === 'drop'
-        ? `（${count} 条外链已丢弃）`
-        : ''
-    const base = result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）'
-    pingTransient(base + strategyNote)
-    persistentError.value = null
-  } else {
-    persistentError.value = `复制失败：${result.error ?? '未知错误'}（请换 Chrome/Safari 或关闭跨域 iframe）`
-  }
-}
-
-function handleSave() {
-  if (!activeDraftId.value) return
-  pendingDraftBody = md.value
-  flushDraftSave()
-  pingTransient('已保存')
-}
-
 function handleClear() {
   if (!md.value) return
   const prev = md.value
   md.value = ''
-  showUndo('已清空正文', () => {
-    md.value = prev
-  })
+  showUndo('已清空正文', () => { md.value = prev })
 }
 
 function handleLoadSample() {
@@ -331,9 +195,7 @@ function handleLoadSample() {
   const prev = md.value
   md.value = sample
   if (prev.trim()) {
-    showUndo('已载入示例，原正文可撤销', () => {
-      md.value = prev
-    })
+    showUndo('已载入示例，原正文可撤销', () => { md.value = prev })
   } else {
     pingTransient('已载入示例')
   }
@@ -364,117 +226,8 @@ function handleFixZhTypo() {
     pingTransient('中文排版已干净')
     return
   }
-  const fixed = fixZhTypo(prev)
-  md.value = fixed
-  showUndo(`已修正 ${hits.length} 处中文排版`, () => {
-    md.value = prev
-  })
-}
-
-/**
- * 复制分享链接 —— 把当前正文 + 主题 id 编码进 `#share=<payload>`，写入剪贴板。
- * 解码侧在 onMounted 里走 `tryLoadShareFromHash()`，不会自动覆盖现有草稿，
- * 只把内容"载入为新草稿"（用户可撤销），避免意外破坏本地工作。
- */
-async function handleCopyShareLink() {
-  const payload: SharePayload = {
-    v: 1,
-    md: md.value,
-    themeId: baseThemeId.value,
-  }
-  const url = buildShareUrl(payload)
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(url)
-      pingTransient('已复制分享链接')
-    } else {
-      // 极少数无 Clipboard API 场景：在地址栏提示 hash，用户可手动复制
-      location.hash = url.slice(url.indexOf('#'))
-      pingTransient('请从地址栏复制当前链接')
-    }
-  } catch {
-    persistentError.value = '分享链接复制失败：请手动复制地址栏 URL'
-  }
-}
-
-/**
- * onMounted 时检查 hash：若为 `#share=…` 且解码成功，
- * 把共享内容落成一篇新草稿（标题带 `[分享]` 前缀，便于用户识别来源）。
- * 完成后清掉 hash，避免刷新时重复落草稿；失败或无 hash 时静默返回。
- *
- * 为什么不引入单独的"只读查看模式"：本 MVP 先做 encode + import 闭环，
- * 双模式带来的 toolbar 禁用状态 / 草稿切换时的 viewer 状态残留等 UX
- * 成本远高于收益——后续按需再加 `shareMode = 'viewer'` 分支。
- */
-function tryLoadShareFromHash(): boolean {
-  if (typeof location === 'undefined') return false
-  const payload = parseShareHash(location.hash)
-  if (!payload) return false
-  const created = createDraft({
-    title: deriveShareDraftTitle(payload.md),
-    body: payload.md,
-    themeId: payload.themeId,
-  })
-  activeDraftId.value = created.id
-  setActiveDraftId(created.id)
-  md.value = created.body
-  baseThemeId.value = created.themeId
-  draftIndexTick.value += 1
-  try {
-    history.replaceState(null, '', location.pathname + location.search)
-  } catch {
-    location.hash = ''
-  }
-  pingTransient('已从分享链接载入新草稿', 2500)
-  return true
-}
-
-function deriveShareDraftTitle(body: string): string {
-  const line = body.split('\n').map((l) => l.trim()).find((l) => l.length > 0) ?? ''
-  const stripped = line.replace(/^#+\s*/, '').slice(0, 20)
-  return `[分享] ${stripped || '未命名'}`
-}
-
-function handleSelectDraft(id: string) {
-  if (id === activeDraftId.value) return
-  flushDraftSave()
-  const d = readDraft(id)
-  if (!d) return
-  activeDraftId.value = d.id
-  setActiveDraftId(d.id)
-  md.value = d.body
-  if (d.themeId) baseThemeId.value = d.themeId
-  draftIndexTick.value += 1
-}
-
-function handleDeleteDraftRequest(id: string, title: string) {
-  const full = readDraft(id)
-  if (!full) return
-  const wasActive = activeDraftId.value === id
-  deleteDraft(id)
-  if (wasActive) {
-    const next = listDrafts()[0]
-    if (next) {
-      const body = readDraft(next.id)?.body ?? ''
-      activeDraftId.value = next.id
-      setActiveDraftId(next.id)
-      md.value = body
-      if (next.themeId) baseThemeId.value = next.themeId
-    } else {
-      activeDraftId.value = null
-      md.value = ''
-    }
-  }
-  draftIndexTick.value += 1
-  showUndo(`已删除「${title}」`, () => {
-    const record: Draft = { ...full }
-    importDraftsJSONDetailed(JSON.stringify({ version: 1, drafts: [record] }))
-    activeDraftId.value = record.id
-    setActiveDraftId(record.id)
-    md.value = record.body
-    if (record.themeId) baseThemeId.value = record.themeId
-    draftIndexTick.value += 1
-  })
+  md.value = fixZhTypo(prev)
+  showUndo(`已修正 ${hits.length} 处中文排版`, () => { md.value = prev })
 }
 
 function handleApplyPalette(seed: Seed) {
@@ -516,42 +269,29 @@ function handleSaveSelection() {
   requestAnimationFrame(() => paletteRef.value?.openSaveDialog?.(text))
 }
 
-function fileStem(): string {
-  const t = (listDrafts().find((d) => d.id === activeDraftId.value)?.title ?? 'wechat-typeset-export').replace(
-    /[\\/:*?"<>|\s]+/g,
-    '-',
-  )
-  return t || 'wechat-typeset-export'
+// ==============================================
+// Toolbar 命令总线 dispatch
+// ==============================================
+function onToolbarToggle(target: ToolbarToggleTarget) {
+  if (target === 'drafts') toggleLeft('drafts')
+  else toggleRight(target)
 }
 
-function doExportHtml() {
-  flush()
-  const colors = activeTheme.value.tokens.colors
-  exportHtml(`${fileStem()}.html`, rendered.value.html, {
-    background: colors.bg,
-    color: colors.text,
-  })
-  pingTransient('已导出 HTML')
-}
-
-function doExportMd() {
-  exportMd(`${fileStem()}.md`, md.value)
-  pingTransient('已导出 Markdown')
-}
-
-async function doExportImage() {
-  pingTransient('长图渲染中…', 4000)
-  const iframe = previewRef.value?.getIframe?.() ?? null
-  const body = iframe?.contentDocument?.body
-  if (!body) {
-    persistentError.value = '长图导出失败：未找到预览节点'
-    return
+function onToolbarAction(cmd: ToolbarAction) {
+  switch (cmd) {
+    case 'copy': handleCopy(); return
+    case 'clear': handleClear(); return
+    case 'loadSample': handleLoadSample(); return
+    case 'saveSelection': handleSaveSelection(); return
+    case 'fixZhTypo': handleFixZhTypo(); return
+    case 'exportHtml': doExportHtml(); return
+    case 'exportMd': doExportMd(); return
+    case 'exportImage': doExportImage(); return
+    case 'copyShareLink': handleCopyShareLink(); return
+    case 'openCommand': ui.commandOpen = true; return
+    case 'openHelp': ui.helpOpen = true; return
+    case 'dismissError': persistentError.value = null; return
   }
-  const result = await exportImage(body, `${fileStem()}.png`, {
-    background: activeTheme.value.tokens.colors.bg,
-  })
-  if (result.ok) pingTransient('已导出长图')
-  else persistentError.value = `长图导出失败：${result.error ?? '未知错误'}`
 }
 
 // ==============================================
@@ -576,7 +316,7 @@ function onPreviewScroll(ratio: number) {
 }
 
 // ==============================================
-// 命令面板 + 快捷键
+// 命令面板清单
 // ==============================================
 const commands = computed<Command[]>(() => {
   void draftIndexTick.value
@@ -631,107 +371,43 @@ const commands = computed<Command[]>(() => {
   return list
 })
 
-function onShortcut(e: KeyboardEvent) {
-  const meta = e.ctrlKey || e.metaKey
-  const target = e.target as HTMLElement | null
-  const inEditable = !!target?.closest('input, textarea, [contenteditable="true"], .cm-editor')
-
-  // Meta-driven shortcuts
-  if (meta) {
-    const key = e.key.toLowerCase()
-    // ⌘K: open command palette (reassigned from copy)
-    if (key === 'k' && !e.shiftKey) {
-      e.preventDefault()
-      ui.commandOpen = true
-      return
-    }
-    // ⌘+Enter: copy
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleCopy()
-      return
-    }
-    // ⌘+S: save
-    if (key === 's' && !e.shiftKey) {
-      e.preventDefault()
-      handleSave()
-      return
-    }
-    // ⌘+Shift+C: customizer
-    if (key === 'c' && e.shiftKey) {
-      e.preventDefault()
-      toggleRight('customizer')
-      return
-    }
-    // ⌘+Shift+D: drafts
-    if (key === 'd' && e.shiftKey) {
-      e.preventDefault()
-      toggleLeft('drafts')
-      return
-    }
-    // ⌘+Shift+P: components
-    if (key === 'p' && e.shiftKey) {
-      e.preventDefault()
-      toggleRight('components')
-      return
-    }
-    if (key === 'h' && e.shiftKey) {
-      e.preventDefault()
-      doExportHtml()
-      return
-    }
-    if (key === 'm' && e.shiftKey) {
-      e.preventDefault()
-      doExportMd()
-      return
-    }
-  }
-  // ? key: help (only when not typing)
-  if (e.key === '?' && !inEditable) {
-    e.preventDefault()
-    ui.helpOpen = true
-    return
-  }
-  // Escape: close top-most overlay
-  if (e.key === 'Escape') {
-    if (ui.commandOpen) { ui.commandOpen = false; return }
-    if (ui.helpOpen) { ui.helpOpen = false; return }
-  }
-}
-
 // ==============================================
-// 引导层
+// 快捷键
 // ==============================================
-function dismissOnboard() {
-  onboardDismissed.value = true
-  try { localStorage.setItem(ONBOARD_STORAGE_KEY, '1') } catch { /* ignore */ }
-}
-
-const showOnboard = computed(() =>
-  !onboardDismissed.value &&
-  !ui.commandOpen &&
-  !ui.helpOpen &&
-  ui.leftSlot === null &&
-  ui.rightSlot === null,
-)
+useKeyboardShortcuts({
+  openCommand: () => { ui.commandOpen = true },
+  copy: handleCopy,
+  save: handleSave,
+  toggleCustomizer: () => toggleRight('customizer'),
+  toggleDrafts: () => toggleLeft('drafts'),
+  toggleComponents: () => toggleRight('components'),
+  exportHtml: doExportHtml,
+  exportMd: doExportMd,
+  openHelp: () => { ui.helpOpen = true },
+  closeCommand: () => { if (ui.commandOpen) { ui.commandOpen = false; return true } return false },
+  closeHelp: () => { if (ui.helpOpen) { ui.helpOpen = false; return true } return false },
+})
 
 // ==============================================
 // 生命周期
 // ==============================================
 onMounted(() => {
-  const savedThemeId = localStorage.getItem(THEME_STORAGE_KEY)
+  const savedThemeId = safeRead(THEME_STORAGE_KEY)
   if (savedThemeId) baseThemeId.value = savedThemeId
   // 分享链接优先于草稿：若 URL 里带有 `#share=`，把 payload 作为新草稿载入；
   // 否则沿用正常的草稿恢复路径。
-  if (!tryLoadShareFromHash()) {
+  const loaded = tryLoadShareFromHash((id, body, themeId) => {
+    activeDraftId.value = id
+    md.value = body
+    baseThemeId.value = themeId
+  })
+  if (!loaded) {
     initActiveDraft(baseThemeId.value)
   }
-  window.addEventListener('keydown', onShortcut)
   window.addEventListener('pagehide', flushDraftSave)
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', onShortcut)
   window.removeEventListener('pagehide', flushDraftSave)
   flushDraftSave()
 })
@@ -752,23 +428,9 @@ onBeforeUnmount(() => {
       :drawer="drawerStates"
       :outlink-strategy="outlinkStrategy"
       @update:theme-id="baseThemeId = $event"
-      @copy="handleCopy"
-      @clear="handleClear"
-      @load-sample="handleLoadSample"
-      @save-selection="handleSaveSelection"
-      @fix-zh-typo="handleFixZhTypo"
-      @toggle-drafts="toggleLeft('drafts')"
-      @toggle-components="toggleRight('components')"
-      @toggle-customizer="toggleRight('customizer')"
-      @toggle-checklist="toggleRight('checklist')"
-      @open-command="ui.commandOpen = true"
-      @open-help="ui.helpOpen = true"
-      @dismiss-error="persistentError = null"
-      @export-html="doExportHtml"
-      @export-md="doExportMd"
-      @export-image="doExportImage"
-      @copy-share-link="handleCopyShareLink"
-      @update-outlink-strategy="setOutlinkStrategy"
+      @update:outlink-strategy="setOutlinkStrategy"
+      @toggle="onToolbarToggle"
+      @action="onToolbarAction"
     />
     <main class="main" :data-mobile-tab="mobileTab">
       <DraftDrawer

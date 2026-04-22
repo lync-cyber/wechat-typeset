@@ -117,7 +117,6 @@ node serve.mjs            # 或双击 ./launcher.{bat,command}
 - [ ] 新建 / 切换 / 删除草稿正常
 - [ ] 刷新页面后自动打开最近使用的那篇
 - [ ] 导出 JSON → 清空 localStorage → 导入 JSON，条目全恢复
-- [ ] 旧版 `wx-md:draft:single` key 自动迁移为一篇
 
 ### 模板
 

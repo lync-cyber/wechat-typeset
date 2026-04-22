@@ -25,10 +25,17 @@ const footerCta: VariantDef = {
   snippets: [
     {
       presetId: 'free-footer-cta',
-      name: '文末 CTA',
-      description: '标题 + 描述 + 按钮胶囊',
+      name: '文末 CTA · 纯视觉',
+      description: '标题 + 描述 + 按钮胶囊（无跳转，适合配二维码使用）',
       markdown:
         '::: footer-cta 觉得有用？ cta=点此关注\n如果这篇对你有启发，欢迎关注。\n:::\n',
+    },
+    {
+      presetId: 'free-footer-cta-linked',
+      name: '文末 CTA · 阅读原篇',
+      description: '带同域文章链接（mp.weixin.qq.com/s/*），粘贴到公众号可点',
+      markdown:
+        '::: footer-cta 想看完整推演？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/REPLACE_ME\n上一期的深度分析，点击继续。\n:::\n',
     },
   ],
 }

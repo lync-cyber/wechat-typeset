@@ -2,7 +2,7 @@
 chcp 65001 >nul
 setlocal
 
-REM wx-md launcher (Windows)
+REM wechat-typeset launcher (Windows)
 REM 首次运行：npm install && npm run build
 REM 之后运行：node scripts\serve.mjs -> 127.0.0.1:7788 -> 自动开浏览器
 
@@ -19,7 +19,7 @@ if errorlevel 1 (
 
 if not exist "dist\index.html" (
     echo.
-    echo [i] First run detected. Installing dependencies and building wx-md...
+    echo [i] First run detected. Installing dependencies and building wechat-typeset...
     echo.
     call npm install
     if errorlevel 1 (

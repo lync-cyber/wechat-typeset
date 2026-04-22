@@ -7,6 +7,7 @@ import {
   OUTLINK_STRATEGY_LABEL,
   type OutlinkStrategy,
 } from '../clipboard/outlinkDegrade'
+import type { ToolbarAction, ToolbarToggleTarget } from './toolbar-types'
 
 const props = defineProps<{
   draftTitle: string
@@ -21,25 +22,17 @@ const props = defineProps<{
   outlinkStrategy: OutlinkStrategy
 }>()
 
+/**
+ * 命令总线：4 个事件覆盖原来 18 个 emit。
+ *   - update:themeId / update:outlinkStrategy —— 带载荷，沿用 Vue update:xxx 规约
+ *   - toggle —— 4 个抽屉切换合一，target 选择具体侧
+ *   - action —— 所有无载荷纯动作（copy / export / 中文修复 / 关闭错误条 等）
+ */
 const emit = defineEmits<{
   (e: 'update:themeId', value: string): void
-  (e: 'copy'): void
-  (e: 'clear'): void
-  (e: 'loadSample'): void
-  (e: 'saveSelection'): void
-  (e: 'fixZhTypo'): void
-  (e: 'exportHtml'): void
-  (e: 'exportMd'): void
-  (e: 'exportImage'): void
-  (e: 'copyShareLink'): void
-  (e: 'updateOutlinkStrategy', value: OutlinkStrategy): void
-  (e: 'toggleDrafts'): void
-  (e: 'toggleComponents'): void
-  (e: 'toggleCustomizer'): void
-  (e: 'toggleChecklist'): void
-  (e: 'openCommand'): void
-  (e: 'openHelp'): void
-  (e: 'dismissError'): void
+  (e: 'update:outlinkStrategy', value: OutlinkStrategy): void
+  (e: 'toggle', target: ToolbarToggleTarget): void
+  (e: 'action', cmd: ToolbarAction): void
 }>()
 
 const themeOpen = ref(false)
@@ -110,7 +103,7 @@ defineExpose({
         class="draft-switch"
         :class="{ active: props.drawer.drafts }"
         :title="`草稿列表  ${modKey}+Shift+D`"
-        @click="emit('toggleDrafts')"
+        @click="emit('toggle', 'drafts')"
       >
         <span class="draft-title">{{ props.draftTitle || '未命名草稿' }}</span>
         <span class="draft-mobile-hint">导入</span>
@@ -143,14 +136,14 @@ defineExpose({
         :class="{ active: props.drawer.components }"
         :title="`插入组件 / 主题模板  ${modKey}+Shift+P`"
         :aria-label="`插入组件 / 主题模板  ${modKey}+Shift+P`"
-        @click="emit('toggleComponents')"
+        @click="emit('toggle', 'components')"
       ><span class="btn-label">插入</span><span class="btn-glyph" aria-hidden="true">＋</span></button>
       <button
         class="btn btn-ghost btn-palette"
         :class="{ active: props.drawer.customizer }"
         :title="`自定义配色  ${modKey}+Shift+C`"
         :aria-label="`自定义配色  ${modKey}+Shift+C`"
-        @click="emit('toggleCustomizer')"
+        @click="emit('toggle', 'customizer')"
       ><span class="btn-label">配色</span><span class="btn-glyph" aria-hidden="true">◐</span></button>
     </div>
 
@@ -169,10 +162,10 @@ defineExpose({
         </span>
       </div>
 
-      <button class="btn btn-ghost icon btn-cmd" :title="`命令面板  ${modKey}+K`" @click="emit('openCommand')">
+      <button class="btn btn-ghost icon btn-cmd" :title="`命令面板  ${modKey}+K`" @click="emit('action', 'openCommand')">
         <span class="kbd">{{ modKey }}K</span>
       </button>
-      <button class="btn btn-ghost icon btn-help" title="快捷键与帮助  ?" @click="emit('openHelp')">
+      <button class="btn btn-ghost icon btn-help" title="快捷键与帮助  ?" @click="emit('action', 'openHelp')">
         ?
       </button>
 
@@ -184,39 +177,39 @@ defineExpose({
           @click="overflowOpen = !overflowOpen; themeOpen = false"
         >···</button>
         <div v-if="overflowOpen" class="popover popover-menu">
-          <button class="menu-item" @click="emit('toggleDrafts'); overflowOpen = false">
+          <button class="menu-item" @click="emit('toggle', 'drafts'); overflowOpen = false">
             <span>{{ props.drawer.drafts ? '关闭草稿列表' : '草稿列表' }}</span>
           </button>
-          <button class="menu-item" @click="emit('toggleComponents'); overflowOpen = false">
+          <button class="menu-item" @click="emit('toggle', 'components'); overflowOpen = false">
             <span>{{ props.drawer.components ? '关闭组件库' : '插入组件' }}</span>
           </button>
-          <button class="menu-item" @click="emit('toggleCustomizer'); overflowOpen = false">
+          <button class="menu-item" @click="emit('toggle', 'customizer'); overflowOpen = false">
             <span>{{ props.drawer.customizer ? '关闭自定义配色' : '自定义配色' }}</span>
           </button>
-          <button class="menu-item" @click="emit('toggleChecklist'); overflowOpen = false">
+          <button class="menu-item" @click="emit('toggle', 'checklist'); overflowOpen = false">
             <span>{{ props.drawer.checklist ? '关闭发文清单' : '发文清单' }}</span>
           </button>
           <div class="menu-sep" />
-          <button class="menu-item" @click="emit('saveSelection'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'saveSelection'); overflowOpen = false">
             <span>保存选区为组件</span>
           </button>
-          <button class="menu-item" @click="emit('loadSample'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'loadSample'); overflowOpen = false">
             <span>载入当前主题示例</span>
           </button>
-          <button class="menu-item" @click="emit('fixZhTypo'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'fixZhTypo'); overflowOpen = false">
             <span>一键修复中文排版</span>
           </button>
           <div class="menu-sep" />
-          <button class="menu-item" @click="emit('exportHtml'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'exportHtml'); overflowOpen = false">
             <span>导出 HTML</span><span class="menu-kbd">{{ modKey }}⇧H</span>
           </button>
-          <button class="menu-item" @click="emit('exportMd'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'exportMd'); overflowOpen = false">
             <span>导出 Markdown</span><span class="menu-kbd">{{ modKey }}⇧M</span>
           </button>
-          <button class="menu-item" @click="emit('exportImage'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'exportImage'); overflowOpen = false">
             <span>导出长图</span>
           </button>
-          <button class="menu-item" @click="emit('copyShareLink'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'copyShareLink'); overflowOpen = false">
             <span>复制分享链接</span>
           </button>
           <div class="menu-sep" />
@@ -230,25 +223,25 @@ defineExpose({
                 :class="{ active: props.outlinkStrategy === s }"
                 role="radio"
                 :aria-checked="props.outlinkStrategy === s"
-                @click="emit('updateOutlinkStrategy', s)"
+                @click="emit('update:outlinkStrategy', s)"
               >{{ OUTLINK_STRATEGY_LABEL[s] }}</button>
             </div>
           </div>
           <div class="menu-sep" />
-          <button class="menu-item" @click="emit('openCommand'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'openCommand'); overflowOpen = false">
             <span>命令面板</span><span class="menu-kbd">{{ modKey }}K</span>
           </button>
-          <button class="menu-item" @click="emit('openHelp'); overflowOpen = false">
+          <button class="menu-item" @click="emit('action', 'openHelp'); overflowOpen = false">
             <span>快捷键与帮助</span>
           </button>
           <div class="menu-sep" />
-          <button class="menu-item danger" @click="emit('clear'); overflowOpen = false">
+          <button class="menu-item danger" @click="emit('action', 'clear'); overflowOpen = false">
             <span>清空正文</span>
           </button>
         </div>
       </div>
 
-      <button class="btn btn-primary" :title="`复制到剪贴板  ${modKey}+Enter`" @click="emit('copy')">
+      <button class="btn btn-primary" :title="`复制到剪贴板  ${modKey}+Enter`" @click="emit('action', 'copy')">
         <span>一键复制</span>
       </button>
     </div>
@@ -257,7 +250,7 @@ defineExpose({
     <div v-if="props.error" class="error-banner" role="alert">
       <span class="error-icon">!</span>
       <span class="error-text">{{ props.error }}</span>
-      <button class="error-close" @click="emit('dismissError')">知道了</button>
+      <button class="error-close" @click="emit('action', 'dismissError')">知道了</button>
     </div>
   </header>
 </template>

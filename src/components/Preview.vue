@@ -118,10 +118,10 @@ function onIframeLoad() {
     </div>
     <iframe
       ref="iframeEl"
-      class="preview-frame wx-md-preview"
+      class="preview-frame wechat-typeset-preview"
       :srcdoc="srcdoc"
       sandbox="allow-same-origin"
-      title="wx-md 预览"
+      title="wechat-typeset 预览"
       @load="onIframeLoad"
     />
     <div

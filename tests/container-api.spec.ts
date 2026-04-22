@@ -179,7 +179,7 @@ describe('getContainerSnippet', () => {
   })
 
   it('再次传不同 variantId 会替换已有 variant=', () => {
-    const first = getContainerSnippet('tip', { variantId: 'terminal' })
+    getContainerSnippet('tip', { variantId: 'terminal' })
     const second = getContainerSnippet('tip', { variantId: 'pill-tag' })
     expect(second.split('\n')[0]).toContain('variant=pill-tag')
     expect(second.split('\n')[0]).not.toContain('terminal')

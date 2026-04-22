@@ -54,7 +54,24 @@ export type DiagnosticCode =
   | 'unclosed-fence'
   | 'yaml-style-attr'
   | 'list-too-deep'
+  | 'footer-cta-outlink'
   | ZhTypoCode
+
+/**
+ * footer-cta href 白名单：公众号正文里作者实测能跳得动的几类 URL。
+ *   - `https://mp.weixin.qq.com/s/*`  同账号或同域历史文章
+ *   - `weixin://dl/*`                 小程序协议（需公众号后台原生插卡，但 URL 本身合规）
+ *   - `tel:*` / `mailto:*`            移动端系统协议
+ *   - `#*`                            页内锚点
+ * 其它（含普通 https 外链）公众号会降级为灰色不可点，作者多半会被坑。
+ */
+const FOOTER_CTA_HREF_ALLOW: readonly RegExp[] = [
+  /^https:\/\/mp\.weixin\.qq\.com\/s\//i,
+  /^weixin:\/\/dl\//i,
+  /^tel:/i,
+  /^mailto:/i,
+  /^#/,
+]
 
 const VALID_CONTAINER_NAMES: ReadonlySet<string> = new Set(
   CONTAINER_VOCABULARY.map((s) => s.name),
@@ -231,6 +248,26 @@ export function diagnose(source: string): Diagnostic[] {
       })
     }
 
+    // ── 4.5 footer-cta href 白名单校验 ──────────
+    if (name === 'footer-cta') {
+      const hrefHit = pickHrefFromRest(rest)
+      if (hrefHit && !FOOTER_CTA_HREF_ALLOW.some((re) => re.test(hrefHit.value))) {
+        // 把相对定位转为 line 里 "href=" 首次出现处
+        const hrefCol = line.indexOf('href=', line.indexOf(name) + name.length)
+        const valueAbsStart = lineStart + hrefCol + 'href='.length
+        diagnostics.push({
+          from: valueAbsStart,
+          to: valueAbsStart + (hrefHit.rawLen ?? hrefHit.value.length),
+          severity: 'warning',
+          code: 'footer-cta-outlink',
+          message:
+            `footer-cta 的 "${hrefHit.value}" 在公众号正文里不可直接点击——` +
+            `建议改为 mp.weixin.qq.com/s/* 同域文章链 / weixin://dl/* 小程序协议 / tel: / mailto: / 页内锚点 #；` +
+            `或把该 URL 放到公众号后台"阅读原文"位置。`,
+        })
+      }
+    }
+
     // ── 5. YAML 风格 `key: v` 写在 open 行 ─────────
     // 只匹配**不在引号内**的冒号；简化起见，扫 rest 里首个 ` key: ` 式样（key 后紧跟冒号再跟空白）。
     const yamlHit = /(?:^|\s)([a-zA-Z_][\w-]*):[ \t]/.exec(rest)
@@ -301,6 +338,17 @@ function pickVariantFromRest(rest: string): VariantHit | null {
   const m = /(^|\s)variant=("([^"]*)"|'([^']*)'|(\S+))/.exec(rest)
   if (!m) return null
   return { value: m[3] ?? m[4] ?? m[5] ?? '' }
+}
+
+/**
+ * 提取 open 行 rest 中的 href 值 + 其在源中的字符长度（含引号，用于精确打点下划线）。
+ * 与 parseInfo 的正则对齐：裸值 / 双引号 / 单引号。
+ */
+function pickHrefFromRest(rest: string): { value: string; rawLen: number } | null {
+  const m = /(^|\s)href=("([^"]*)"|'([^']*)'|(\S+))/.exec(rest)
+  if (!m) return null
+  const value = m[3] ?? m[4] ?? m[5] ?? ''
+  return { value, rawLen: m[2].length }
 }
 
 /**

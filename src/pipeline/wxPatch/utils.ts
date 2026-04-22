@@ -92,3 +92,20 @@ export function isInSvg(el: Element): boolean {
   }
   return false
 }
+
+/**
+ * SVG 子树遍历的通用骨架：parse → 对每个 <svg>（含自身）深度访问 → serialize。
+ * 三个 SVG patch（ids / urlQuotes / whiteBg）共用这套流程，只差 visitor 逻辑。
+ * visitor 会被 svg 根节点触发一次，再被子节点依次触发。
+ */
+export function patchSvgSubtree(
+  html: string,
+  visitor: (el: Element) => void,
+): string {
+  const { container } = parseFragment(html)
+  const svgs = container.querySelectorAll('svg')
+  svgs.forEach((svg) => {
+    walkElements(svg, visitor)
+  })
+  return serializeFragment(container)
+}

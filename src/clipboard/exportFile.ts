@@ -34,8 +34,8 @@ export function exportHtml(filename: string, html: string, opts: ExportHtmlOptio
     `<title>${title}</title>` +
     `<style>body{margin:0;padding:24px 0;background:${bg};color:${fg};` +
     `font-family:"PingFang SC","Microsoft YaHei",sans-serif;}` +
-    `.wx-md-wrap{max-width:640px;margin:0 auto;padding:0 16px;}</style>` +
-    `</head><body><div class="wx-md-wrap">${html}</div></body></html>`
+    `.wechat-typeset-wrap{max-width:640px;margin:0 auto;padding:0 16px;}</style>` +
+    `</head><body><div class="wechat-typeset-wrap">${html}</div></body></html>`
   downloadBlob(filename, wrapped, 'text/html')
 }
 

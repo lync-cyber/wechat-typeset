@@ -19,6 +19,8 @@
 
 左侧写 Markdown，右侧是锁死在 375 px 的手机预览，实时同步。确认排版后点「一键复制」，回到公众号编辑器粘贴——样式以富文本写入，微信端所见即预览所见。草稿自动落在 `localStorage`，刷新或关掉标签页不丢。
 
+需要把草稿发给另一个人协作？Toolbar 菜单的「复制分享链接」把正文与主题打包进 URL hash（base64url 编码，无后端存储），收方打开即以只读草稿载入。
+
 ---
 
 ## 主题
@@ -119,7 +121,7 @@ npm run dev
 
 `skills/wechat-typeset/` 是一份可挂载到 Claude / 其它 Agent 的 skill 包，支持结构化生成主题、校验微信平台约束。参考文档在 [skills/wechat-typeset/references/](skills/wechat-typeset/references/)。
 
-项目技术栈：Vue 3 · TypeScript · Vite · markdown-it · CodeMirror 6 · juice。
+项目技术栈：Vue 3 · TypeScript · Vite · markdown-it · CodeMirror 6（含 autocomplete / lint）· turndown · juice。
 
 ---
 

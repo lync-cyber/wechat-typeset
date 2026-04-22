@@ -6,7 +6,7 @@
 :::
 
 ::: cover 封面
-![封面占位图](https://placehold.co/1200x630?text=wx-md)
+![封面占位图](https://placehold.co/1200x630?text=wechat-typeset)
 :::
 
 ::: author 编辑部 role=主笔

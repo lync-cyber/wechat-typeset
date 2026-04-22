@@ -108,6 +108,57 @@ describe('diagnose · unclosed-fence', () => {
   })
 })
 
+describe('diagnose · footer-cta-outlink', () => {
+  it('footer-cta 无 href 不报', () => {
+    const ds = diagnose('::: footer-cta 关注 cta=点此\n:::\n')
+    expect(ds.filter((d) => d.code === 'footer-cta-outlink')).toEqual([])
+  })
+
+  it('mp.weixin.qq.com/s/* 白名单通过', () => {
+    const md = '::: footer-cta cta=原篇 href=https://mp.weixin.qq.com/s/abc\n:::\n'
+    expect(diagnose(md).filter((d) => d.code === 'footer-cta-outlink')).toEqual([])
+  })
+
+  it('weixin://dl/* 小程序协议白名单通过', () => {
+    const md = '::: footer-cta cta=开 href=weixin://dl/business/?appid=x\n:::\n'
+    expect(diagnose(md).filter((d) => d.code === 'footer-cta-outlink')).toEqual([])
+  })
+
+  it('tel: / mailto: / 锚点 # 白名单通过', () => {
+    for (const u of ['tel:10086', 'mailto:a@b.com', '#section-1']) {
+      const md = `::: footer-cta cta=C href=${u}\n:::\n`
+      expect(diagnose(md).filter((d) => d.code === 'footer-cta-outlink')).toEqual([])
+    }
+  })
+
+  it('普通 https 外链报 warning', () => {
+    const md = '::: footer-cta cta=去 href=https://example.com/x\n:::\n'
+    const hit = diagnose(md).find((d) => d.code === 'footer-cta-outlink')
+    expect(hit).toBeTruthy()
+    expect(hit?.severity).toBe('warning')
+    expect(hit?.message).toContain('mp.weixin.qq.com')
+    expect(hit?.message).toContain('阅读原文')
+  })
+
+  it('http（非 https）也报 warning', () => {
+    const md = '::: footer-cta cta=去 href=http://example.com\n:::\n'
+    const hit = diagnose(md).find((d) => d.code === 'footer-cta-outlink')
+    expect(hit?.severity).toBe('warning')
+  })
+
+  it('带引号的非白名单 href 报 warning', () => {
+    const md = '::: footer-cta cta=去 href="https://example.com/?x=1&y=2"\n:::\n'
+    const hit = diagnose(md).find((d) => d.code === 'footer-cta-outlink')
+    expect(hit?.severity).toBe('warning')
+  })
+
+  it('非 footer-cta 容器的 href attr 不触发此规则', () => {
+    // author 有 role 属性但不支持 href；href 在其它容器上只是未消费的 attr
+    const md = '::: author 张三 href=https://bad.com\n:::\n'
+    expect(diagnose(md).filter((d) => d.code === 'footer-cta-outlink')).toEqual([])
+  })
+})
+
 describe('diagnose · yaml-style-attr', () => {
   it('open 行写 `key: v` 形式报 warning', () => {
     const ds = diagnose('::: key-number value: 42\n:::\n')

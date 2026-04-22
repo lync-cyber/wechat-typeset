@@ -1,6 +1,14 @@
 /**
  * 主题工厂：给 tokens 就能得到完整 Theme。
  *
+ * 分层定位（**故意保持两个包装器共用同一底层工厂**）：
+ *   - buildTheme（本文件）——底层：tokens + 补丁 → Theme。不感知 spec / palette 概念
+ *   - specToTheme（./spec/spec-to-theme.ts）——包装器 1：PersonaSpec → buildTheme args
+ *   - applyPalette（../../color/applyPalette.ts）——包装器 2：既有 Theme + 新 palette → buildTheme args
+ *   前者编译期从作者文件生成主题，后者运行时响应用户调色——两条路径共享同一份 mergeStyle
+ *   与 DEFAULT_VARIANTS 兜底逻辑。不要因为"specToTheme 是主要调用点"就把 buildTheme
+ *   内联进去，会把 applyPalette 的 delta 路径也搅进 spec 语义。
+ *
  * API 形态（Phase 0 扁平化后）：
  *   - elements / containers / inline / assets 四个**深合并**样式字段
  *   - pre / code / elementOverrides / elementPatches 等双模式字段已移除

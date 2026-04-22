@@ -79,3 +79,16 @@ export function escAttr(s: string): string {
 export function escText(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
+
+/**
+ * XML 超集：escAttr 的 4 字符 + `'` → `&apos;`。
+ * SVG/XML 文档内嵌字符串使用（比如 userComponents 的 thumbnailSvg）。
+ */
+export function escapeXml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}

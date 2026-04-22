@@ -14,7 +14,7 @@
  *   只在 svg 子树内生效——正文里的白色（如段落背景）不应被改。
  */
 
-import { parseFragment, parseStyle, serializeFragment, stringifyStyle, walkElements } from './utils'
+import { parseStyle, patchSvgSubtree, stringifyStyle } from './utils'
 import { NEAR_WHITE } from '../rules'
 
 const WHITE_VALUES = new Set(['#fff', '#ffffff', 'white'])
@@ -29,23 +29,16 @@ const COLOR_ATTRS = new Set(['fill', 'stroke', 'stop-color', 'flood-color', 'lig
 const COLOR_STYLE_PROPS = new Set(['fill', 'stroke', 'color', 'background', 'background-color', 'stop-color'])
 
 export function patchSvgWhiteBg(html: string): string {
-  const { container } = parseFragment(html)
-
-  const svgs = container.querySelectorAll('svg')
-  svgs.forEach((svg) => {
-    walkElements(svg, (el) => {
-      for (const name of Array.from(COLOR_ATTRS)) {
-        const v = el.getAttribute(name)
-        if (v && isWhite(v)) el.setAttribute(name, NEAR_WHITE)
-      }
-      const style = el.getAttribute('style')
-      if (!style) return
-      const decls = parseStyle(style).map((d) =>
-        COLOR_STYLE_PROPS.has(d.prop.toLowerCase()) && isWhite(d.value) ? { ...d, value: NEAR_WHITE } : d,
-      )
-      el.setAttribute('style', stringifyStyle(decls))
-    })
+  return patchSvgSubtree(html, (el) => {
+    for (const name of Array.from(COLOR_ATTRS)) {
+      const v = el.getAttribute(name)
+      if (v && isWhite(v)) el.setAttribute(name, NEAR_WHITE)
+    }
+    const style = el.getAttribute('style')
+    if (!style) return
+    const decls = parseStyle(style).map((d) =>
+      COLOR_STYLE_PROPS.has(d.prop.toLowerCase()) && isWhite(d.value) ? { ...d, value: NEAR_WHITE } : d,
+    )
+    el.setAttribute('style', stringifyStyle(decls))
   })
-
-  return serializeFragment(container)
 }
