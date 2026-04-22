@@ -59,7 +59,7 @@
 |  | `cons` |  | compare 的"反面"列（必须嵌在 :::: compare 内）。 |
 |  | `steps` | ★ | 编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。 |
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph。 |
-|  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。 |
+|  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。 |
 |  | `recommend` | ★ | 推荐阅读列表。 |
 | 媒体 | `qrcode` | ★ | 二维码块（图 + 说明文案）。 |
 |  | `mpvoice` | ★ | 公众号语音卡（占位，粘贴后在公众号编辑器补真 mpvoice 节点）。 |
