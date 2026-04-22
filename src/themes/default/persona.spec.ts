@@ -445,14 +445,14 @@ export const spec: PersonaSpec = {
       border: '1px solid #d8d8d4',
       'border-radius': '6px',
     },
-    // 第五态 note：default 走"传统左条+浅底"作为最中立的兜底骨架——
-    // 其他主题各自在 spec 里覆写出自己的 voice（marginalia / 顶线 / 注释前缀等）
+    // 第五态 note：刻意不走"左条 + 浅底"——顶端 1px 虚线 + 无底色的手写批注感，
+    // 低调补充而非视觉抢位。主题想要"框感/左条"可在自家 spec.containers.note 覆写。
     note: {
-      'background-color': '#f5f5f3',
-      'border-left': '3px solid #8a8f98',
-      padding: '12px 14px',
+      'background-color': 'transparent',
+      'border-top': '1px dashed #c8ccd4',
+      padding: '10px 2px 8px',
       margin: '16px 0',
-      'border-radius': '4px',
+      color: '#636870',
     },
   },
 
