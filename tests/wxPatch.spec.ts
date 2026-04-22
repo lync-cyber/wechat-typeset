@@ -34,6 +34,40 @@ describe('patchListWrap', () => {
     // 只应出现一次 data-wx-list-wrap
     expect(once.match(/data-wx-list-wrap/g)?.length).toBe(1)
   })
+
+  it('两级嵌套保持不变（仅 ≥ 3 层才扁平化）', () => {
+    const input = '<ul><li>L1<ul><li>L2</li></ul></li></ul>'
+    const out = patchListWrap(input)
+    // 内外两个 ul 都还在
+    expect(out.match(/<ul/g)?.length).toBe(2)
+    expect(out).not.toMatch(/data-wx-list-flatten/)
+  })
+
+  it('三级嵌套：第三层被扁平化为 <p data-wx-list-flatten>，带 · 前缀', () => {
+    const input = '<ul><li>L1<ul><li>L2<ul><li>L3a</li><li>L3b</li></ul></li></ul></li></ul>'
+    const out = patchListWrap(input)
+    // 顶层 & 二层 ul 保留；三层 ul 消失
+    expect(out.match(/<ul/g)?.length).toBe(2)
+    // 两个 L3 项转为段落
+    expect(out).toMatch(/<p data-wx-list-flatten="">· L3a<\/p>/)
+    expect(out).toMatch(/<p data-wx-list-flatten="">· L3b<\/p>/)
+  })
+
+  it('四级嵌套递归扁平化（第 3/4 层都变段落）', () => {
+    const input =
+      '<ul><li>L1<ul><li>L2<ul><li>L3<ul><li>L4</li></ul></li></ul></li></ul></li></ul>'
+    const out = patchListWrap(input)
+    expect(out.match(/<ul/g)?.length).toBe(2)
+    expect(out).toMatch(/<p data-wx-list-flatten="">· L3<\/p>/)
+    expect(out).toMatch(/<p data-wx-list-flatten="">· L4<\/p>/)
+  })
+
+  it('深层扁平化幂等：已扁平化的产物再跑一次不改动', () => {
+    const input = '<ul><li>L1<ul><li>L2<ul><li>L3</li></ul></li></ul></li></ul>'
+    const once = patchListWrap(input)
+    const twice = patchListWrap(once)
+    expect(twice).toBe(once)
+  })
 })
 
 describe('stripForbiddenAttrs', () => {

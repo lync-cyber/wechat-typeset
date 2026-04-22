@@ -51,6 +51,7 @@
     "@codemirror/state": "^6.5.0",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.34.1",
+    "@types/turndown": "^5.0.6",
     "codemirror": "^6.0.1",
     "highlight.js": "^11.10.0",
     "html2canvas": "^1.4.1",
@@ -61,6 +62,7 @@
     "markdown-it-ins": "^4.0.0",
     "markdown-it-mark": "^4.0.0",
     "markdown-it-task-lists": "^2.1.1",
+    "turndown": "^7.2.4",
     "vue": "^3.5.12"
   },
   "devDependencies": {

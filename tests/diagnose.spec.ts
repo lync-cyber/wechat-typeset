@@ -123,6 +123,42 @@ describe('diagnose · yaml-style-attr', () => {
   })
 })
 
+describe('diagnose · list-too-deep', () => {
+  it('两级嵌套不报（边界 —— 不应过度打扰作者）', () => {
+    const md = '- L1\n  - L2\n'
+    const ds = diagnose(md)
+    expect(ds.some((d) => d.code === 'list-too-deep')).toBe(false)
+  })
+
+  it('三级嵌套（4 空格缩进）报 warning', () => {
+    const md = '- L1\n  - L2\n    - L3\n'
+    const ds = diagnose(md)
+    const hit = ds.find((d) => d.code === 'list-too-deep')
+    expect(hit).toBeTruthy()
+    expect(hit?.severity).toBe('warning')
+    expect(hit?.message).toContain('扁平化')
+  })
+
+  it('tab 缩进也能识别（1 tab ≈ 4 spaces）', () => {
+    const md = '- L1\n\t- L2 inline tab\n'
+    const ds = diagnose(md)
+    expect(ds.some((d) => d.code === 'list-too-deep')).toBe(true)
+  })
+
+  it('有序列表同样触发', () => {
+    const md = '1. L1\n   1. L2\n      1. L3\n'
+    const ds = diagnose(md)
+    expect(ds.some((d) => d.code === 'list-too-deep')).toBe(true)
+  })
+
+  it('offset 覆盖列表标记本身（方便编辑器高亮）', () => {
+    const md = '- L1\n  - L2\n    - L3\n'
+    const ds = diagnose(md)
+    const hit = ds.find((d) => d.code === 'list-too-deep')!
+    expect(md.slice(hit.from, hit.to)).toBe('-')
+  })
+})
+
 describe('diagnose · offset 正确性', () => {
   it('from/to 覆盖名字本身，方便编辑器高亮', () => {
     const md = 'prefix\n\n::: badname\n:::\n'

@@ -19,8 +19,11 @@
  *   - 未闭合 fence
  *   - open 行写 YAML 风格 `key: v`（应为 key=v）
  *
- * Stage 2/3 会追加：列表嵌套 ≥ 3 层、SVG 纯白、中文排版规则组——
- * 都复用同一份 Diagnostic 输出格式。
+ * Stage 2 覆盖（追加）：
+ *   - 列表嵌套 ≥ 3 层（list-too-deep）——配合 wxPatch/patchListWrap 的扁平化兜底，
+ *     在编辑期提前告诉作者"这一行会在公众号里被改写为段落"。
+ *
+ * Stage 3 会追加：SVG 纯白、中文排版规则组——都复用同一份 Diagnostic 输出格式。
  */
 
 import { CONTAINER_VOCABULARY, lookupContainerSpec } from '../containers/vocabulary'
@@ -47,6 +50,7 @@ export type DiagnosticCode =
   | 'unknown-variant'
   | 'unclosed-fence'
   | 'yaml-style-attr'
+  | 'list-too-deep'
 
 const VALID_CONTAINER_NAMES: ReadonlySet<string> = new Set(
   CONTAINER_VOCABULARY.map((s) => s.name),
@@ -57,6 +61,9 @@ const VALID_CONTAINER_NAMES: ReadonlySet<string> = new Set(
 const OPEN_FENCE_RE = /^(:{3,})[ \t]*([A-Za-z][\w-]*)?[ \t]*(.*?)[ \t]*$/
 // 纯闭合 fence：仅 `:::`（可能跟空白）
 const CLOSE_FENCE_RE = /^(:{3,})[ \t]*$/
+// 列表项：可选前导空白 + 标记（-/*/+ 或 digits.）+ 至少一个空白
+// 捕获：group 1 = 前导空白，group 2 = 标记
+const LIST_LINE_RE = /^([ \t]*)([-*+]|\d+\.)\s/
 
 interface OpenFrame {
   line: number
@@ -89,6 +96,26 @@ export function diagnose(source: string): Diagnostic[] {
     const line = lines[lineIdx]
     const lineStart = lineOffsets[lineIdx]
     const lineEnd = lineStart + line.length
+
+    // ── 0. 列表嵌套过深（commonmark 默认 2 空格一级，≥ 4 空格 ≈ 第三层及更深）──
+    const listHit = LIST_LINE_RE.exec(line)
+    if (listHit) {
+      let indent = 0
+      for (const ch of listHit[1]) indent += ch === '\t' ? 4 : 1
+      if (indent >= 4) {
+        const markerStart = lineStart + listHit[1].length
+        const markerEnd = markerStart + listHit[2].length
+        diagnostics.push({
+          from: markerStart,
+          to: markerEnd,
+          severity: 'warning',
+          code: 'list-too-deep',
+          message:
+            `列表嵌套 ≥ 3 层——公众号渲染时会被扁平化为带"${'\u00b7'}"前缀的段落，` +
+            `建议改为两级以内。`,
+        })
+      }
+    }
 
     // 先判纯闭合（不含名字才算 close）
     const closeMatch = CLOSE_FENCE_RE.exec(line)

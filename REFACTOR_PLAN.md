@@ -49,8 +49,20 @@
 - 写错的容器 / variant 在编辑器左侧 gutter 显红波浪
 - HelpPanel 容器搜索 + 点击插入光标处
 
+## Stage 2 · 高频作者痛点 [已完成]
+
+- [x] **#12** `patchListWrap.ts` 扩展深层递归扁平化：depth ≥ 2 (即第三层) 的 `<ul>/<ol>` 被换成 `<p data-wx-list-flatten>· text</p>` 段落序列；`diagnose.ts` 增 `list-too-deep` 规则（列表行缩进 ≥ 4 空格或 1 tab 时 warning）
+- [x] **#11** 新增 `src/clipboard/pasteSanitize.ts`：turndown 驱动的 HTML → markdown 降级；剥 `<style>/<script>/<meta>/<link>` 和 Word 的 `<o:p>/<w:*>` XML；`shouldSanitize()` 过滤"平凡单 `<p>`"避免 CM 自复制被打扰；Editor.vue 接 paste handler
+- [x] **#10** 新增 `src/clipboard/imageIntake.ts`：`ImageProvider` 接口 + 内置 `base64Provider`（WebP 压缩，`>` 32KB 走 canvas.toDataURL('image/webp', 0.85)，失败回退原图 base64）；Editor.vue 接 paste/drop handler，插入"上传中"占位后异步替换
+
+验收：vue-tsc 静默通过；vitest 663/663（+32 新增：5 深层扁平化 + 5 list-too-deep + 15 pasteSanitize + 8 imageIntake）；verify-sample-full 51/51。
+
+待手动 UI 验证：
+- Word/浏览器粘贴：`<p style>`/`<span class>` 噪声被剥，段落和列表正确落地
+- 从剪贴板或磁盘拖入图片：占位提示 → 自动换成 `![name](data:image/webp;...)`
+- 编辑器里写 ≥ 三级嵌套列表：第三层起标记行显黄波浪
+
 ## 后续阶段
-- Stage 2（1-2 Sprint）: #10 图片入站 / #11 粘贴清洗 / #12 嵌套列表自愈
 - Stage 3（1 Sprint）: #13 中文排版 lint / #14 多主题并排 / #15 发文清单 / #16 透明度面板
 - Stage 4（1 Sprint）: #17 外链降级 / #18 MD 导出 / #19 分享链接 / #20 IndexedDB 迁移
 - Stage 5（机会主义）: #21 elements 差异化 / #22 可视化主题编辑 / #23 storage kv 抽取 / #24 variants _all.ts / #25 scripts writeOutput
