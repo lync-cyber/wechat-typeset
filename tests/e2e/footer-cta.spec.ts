@@ -13,16 +13,24 @@ test.beforeEach(async ({ page }) => {
 })
 
 async function setEditorContent(page: import('@playwright/test').Page, md: string) {
-  // CodeMirror contenteditable：先全选清空
-  // keyboard.type 不把字符串里的 `\n` 翻译为 Enter，需手动按 Enter 分段
-  await page.locator('.cm-content').click()
+  // CodeMirror contenteditable：先全选清空，再 dispatch paste 事件一次性灌入。
+  // 不走 keyboard.type —— 既避开 autocomplete/lint 对 Enter 的吃键，
+  // 也让换行被 CM 的 paste handler 正常拆成多行（type 不翻译 \n）。
+  const editor = page.locator('.cm-content')
+  await editor.click()
   await page.keyboard.press('ControlOrMeta+A')
   await page.keyboard.press('Delete')
-  const lines = md.split('\n')
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i]) await page.keyboard.type(lines[i], { delay: 0 })
-    if (i < lines.length - 1) await page.keyboard.press('Enter')
-  }
+  await editor.evaluate((el, text) => {
+    const dt = new DataTransfer()
+    dt.setData('text/plain', text)
+    el.dispatchEvent(
+      new ClipboardEvent('paste', {
+        clipboardData: dt,
+        bubbles: true,
+        cancelable: true,
+      }),
+    )
+  }, md)
 }
 
 test('footer-cta 带白名单 href：预览 iframe 里 <a> 含 data-wx-footer-cta 与正确 href', async ({ page }) => {
