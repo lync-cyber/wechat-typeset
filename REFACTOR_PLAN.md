@@ -62,8 +62,23 @@
 - 从剪贴板或磁盘拖入图片：占位提示 → 自动换成 `![name](data:image/webp;...)`
 - 编辑器里写 ≥ 三级嵌套列表：第三层起标记行显黄波浪
 
+## Stage 3 · 中文与发文完备性 [已完成]
+
+- [x] **#13** 新增 `src/pipeline/zhTypo.ts`：四条中文排版规则（ascii-spacing / halfwidth-punct / straight-quote / dash-ellipsis）+ 保护区（代码块 / URL / 链接 / HTML / 缩进代码）；diagnose.ts 桥接 4 条 `zh-*` info 级诊断；Toolbar 菜单增"一键修复中文排版" → App.handleFixZhTypo (UndoToast 支持撤销)
+- [x] **#16** 新增 `src/pipeline/wxPatch/inspect.ts`：扫描 juice 后 / wxPatch 前的 HTML 产出 PatchLog（9 条补丁类目的命中计数）；RenderOutput 增 `patchLog` 字段；Preview.vue 新增底部折叠"渲染透明度"面板
+- [x] **#14** 新增 `src/components/ThemeStrip.vue`：9 主题缩略卡（primary 色点 + 主题名 + lock-dot）；App.vue 新增 `hoverThemeId` 临时覆盖 activeTheme → 实现 hover 即时切换 / click 锁定
+- [x] **#15** 新增 `src/publish/checklist.ts`（纯函数）+ `PublishChecklist.vue`（右抽屉第三档）：7 条检查 —— 封面 / 摘要≤120 / 字数≥400 / 作者声明 / 外链数 / 内联图体积 / 封面比例提示；接 Toolbar 菜单 + CommandPalette
+
+验收：vue-tsc 静默通过；vitest 731/731（+68 新增：29 zhTypo + 5 diagnose 桥接 + 15 inspect + 19 checklist）；verify-sample-full 51/51。
+
+待手动 UI 验证：
+- 编辑器内写 `你好world，那时候...走了` 看是否出现 info 级中文排版诊断
+- 点击 Toolbar 菜单"一键修复中文排版" → 一次替换、UndoToast 可撤销
+- Preview 底部出现"渲染透明度 · N 处微信适配"折叠栏，展开后列表可见
+- Preview 顶部出现 9 主题缩略条，hover 切换 / click 锁定
+- Toolbar 菜单出现"发文清单" → 右抽屉展开检查列表
+
 ## 后续阶段
-- Stage 3（1 Sprint）: #13 中文排版 lint / #14 多主题并排 / #15 发文清单 / #16 透明度面板
 - Stage 4（1 Sprint）: #17 外链降级 / #18 MD 导出 / #19 分享链接 / #20 IndexedDB 迁移
 - Stage 5（机会主义）: #21 elements 差异化 / #22 可视化主题编辑 / #23 storage kv 抽取 / #24 variants _all.ts / #25 scripts writeOutput
 - Stage 6（延后）: #26-32

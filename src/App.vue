@@ -2,10 +2,12 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import Editor from './components/Editor.vue'
 import Preview from './components/Preview.vue'
+import ThemeStrip from './components/ThemeStrip.vue'
 import Toolbar from './components/Toolbar.vue'
 import DraftDrawer from './components/DraftDrawer.vue'
 import ColorCustomizer from './components/ColorCustomizer.vue'
 import ComponentPalette from './components/ComponentPalette.vue'
+import PublishChecklist from './components/PublishChecklist.vue'
 import CommandPalette, { type Command } from './components/CommandPalette.vue'
 import HelpPanel from './components/HelpPanel.vue'
 import OnboardingCard from './components/OnboardingCard.vue'
@@ -16,6 +18,7 @@ import type { Theme } from './themes/types'
 import { applyPalette } from './color/applyPalette'
 import { copyHtmlToClipboard } from './clipboard/copyHtml'
 import { exportHtml, exportImage, exportMd } from './clipboard/exportFile'
+import { fixZhTypo, scanZhTypo } from './pipeline/zhTypo'
 import { getSample, SAMPLE_BY_THEME } from './samples'
 import {
   createDraft,
@@ -40,6 +43,7 @@ const modKey = isMac ? '⌘' : 'Ctrl'
 const md = ref<string>('')
 const activeDraftId = ref<string | null>(null)
 const baseThemeId = ref<string>('default')
+const hoverThemeId = ref<string | null>(null) // Preview 顶部缩略条的 hover 态，临时覆盖 activeTheme
 const customTheme = ref<Theme | null>(null)
 const lastSeed = ref<Seed | null>(null)
 
@@ -50,7 +54,7 @@ const paletteRef = ref<InstanceType<typeof ComponentPalette> | null>(null)
 
 const ui = reactive({
   leftSlot: null as null | 'drafts',
-  rightSlot: null as null | 'components' | 'customizer',
+  rightSlot: null as null | 'components' | 'customizer' | 'checklist',
   commandOpen: false,
   helpOpen: false,
 })
@@ -61,7 +65,18 @@ const onboardDismissed = ref<boolean>(
 
 const mobileTab = ref<'editor' | 'preview'>('editor')
 
-const activeTheme = computed<Theme>(() => customTheme.value ?? getTheme(baseThemeId.value))
+/**
+ * activeTheme 的三级优先级：
+ *   hoverThemeId （ThemeStrip 临时 hover）> customTheme （配色自定义）> baseThemeId （锁定）
+ *
+ * hover 覆盖 custom：作者悬停另一主题时是想"看一眼同稿换主题什么样"，
+ * 不希望当前自定义配色残留在 hover 预览上；click 锁定后 hoverThemeId 清空，
+ * 重新回到 baseThemeId / custom 的正常路径。
+ */
+const activeTheme = computed<Theme>(() => {
+  if (hoverThemeId.value) return getTheme(hoverThemeId.value)
+  return customTheme.value ?? getTheme(baseThemeId.value)
+})
 
 const draftIndexTick = ref(0) // 强制重算草稿标题（重命名后）
 const currentDraftTitle = computed(() => {
@@ -74,12 +89,13 @@ const drawerStates = computed(() => ({
   drafts: ui.leftSlot === 'drafts',
   components: ui.rightSlot === 'components',
   customizer: ui.rightSlot === 'customizer',
+  checklist: ui.rightSlot === 'checklist',
 }))
 
 function toggleLeft(slot: 'drafts') {
   ui.leftSlot = ui.leftSlot === slot ? null : slot
 }
-function toggleRight(slot: 'components' | 'customizer') {
+function toggleRight(slot: 'components' | 'customizer' | 'checklist') {
   ui.rightSlot = ui.rightSlot === slot ? null : slot
 }
 
@@ -280,6 +296,38 @@ function handleLoadSample() {
   }
 }
 
+/**
+ * 从 Preview 顶部缩略条点击 → 锁定该主题；hover 态同步清空以免闪回。
+ * hoverThemeId 不持久化，只影响预览渲染；真正的锁定走 baseThemeId 原有通路
+ * （会触发示例随 theme 切换的 watch、持久化到 localStorage 等副作用）。
+ */
+function handleLockTheme(id: string) {
+  hoverThemeId.value = null
+  if (baseThemeId.value !== id) baseThemeId.value = id
+}
+
+/**
+ * 一键修复中文排版 —— 扫描并应用 zhTypo 四条规则。
+ * 无命中时用瞬时提示"本文已干净"；有命中时写回 md 并把"撤销"入口挂到 UndoToast。
+ */
+function handleFixZhTypo() {
+  const prev = md.value
+  if (!prev) {
+    pingTransient('正文为空')
+    return
+  }
+  const hits = scanZhTypo(prev)
+  if (hits.length === 0) {
+    pingTransient('中文排版已干净')
+    return
+  }
+  const fixed = fixZhTypo(prev)
+  md.value = fixed
+  showUndo(`已修正 ${hits.length} 处中文排版`, () => {
+    md.value = prev
+  })
+}
+
 function handleSelectDraft(id: string) {
   if (id === activeDraftId.value) return
   flushDraftSave()
@@ -431,10 +479,12 @@ const commands = computed<Command[]>(() => {
   list.push({ id: 'clear', title: '清空正文', group: '操作', run: handleClear })
   list.push({ id: 'load-sample', title: '载入当前主题示例', group: '操作', run: handleLoadSample })
   list.push({ id: 'save-selection', title: '保存选区为组件', group: '操作', run: handleSaveSelection })
+  list.push({ id: 'fix-zh-typo', title: '一键修复中文排版', group: '操作', run: handleFixZhTypo })
 
   list.push({ id: 'toggle-drafts', title: drawerStates.value.drafts ? '关闭草稿抽屉' : '打开草稿抽屉', group: '视图', shortcut: `${modKey} ⇧ D`, run: () => toggleLeft('drafts') })
   list.push({ id: 'toggle-components', title: drawerStates.value.components ? '关闭组件库' : '打开组件库', group: '视图', shortcut: `${modKey} ⇧ P`, run: () => toggleRight('components') })
   list.push({ id: 'toggle-customizer', title: drawerStates.value.customizer ? '关闭自定义配色' : '打开自定义配色', group: '视图', shortcut: `${modKey} ⇧ C`, run: () => toggleRight('customizer') })
+  list.push({ id: 'toggle-checklist', title: drawerStates.value.checklist ? '关闭发文清单' : '打开发文清单', group: '视图', run: () => toggleRight('checklist') })
   list.push({ id: 'open-help', title: '快捷键与帮助', group: '视图', shortcut: '?', run: () => (ui.helpOpen = true) })
 
   list.push({ id: 'export-html', title: '导出 HTML', group: '导出', shortcut: `${modKey} ⇧ H`, run: doExportHtml })
@@ -593,9 +643,11 @@ onBeforeUnmount(() => {
       @clear="handleClear"
       @load-sample="handleLoadSample"
       @save-selection="handleSaveSelection"
+      @fix-zh-typo="handleFixZhTypo"
       @toggle-drafts="toggleLeft('drafts')"
       @toggle-components="toggleRight('components')"
       @toggle-customizer="toggleRight('customizer')"
+      @toggle-checklist="toggleRight('checklist')"
       @open-command="ui.commandOpen = true"
       @open-help="ui.helpOpen = true"
       @dismiss-error="persistentError = null"
@@ -626,9 +678,17 @@ onBeforeUnmount(() => {
         />
       </section>
       <section class="pane pane-preview">
+        <ThemeStrip
+          :themes="themeList"
+          :active-id="baseThemeId"
+          :hover-id="hoverThemeId"
+          @hover="hoverThemeId = $event"
+          @select="handleLockTheme"
+        />
         <Preview
           ref="previewRef"
           :html="rendered.html"
+          :patch-log="rendered.patchLog"
           @scroll="onPreviewScroll"
         />
       </section>
@@ -644,6 +704,11 @@ onBeforeUnmount(() => {
         :has-custom-color="customTheme !== null"
         @apply="handleApplyPalette"
         @reset="handleResetPalette"
+        @close="ui.rightSlot = null"
+      />
+      <PublishChecklist
+        v-if="ui.rightSlot === 'checklist'"
+        :md="md"
         @close="ui.rightSlot = null"
       />
     </main>

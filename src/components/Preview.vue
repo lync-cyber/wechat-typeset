@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import type { PatchLog } from '../pipeline/wxPatch'
 
-const props = defineProps<{ html: string }>()
+const props = defineProps<{ html: string; patchLog?: PatchLog }>()
+const transparencyExpanded = ref(false)
 
 const emit = defineEmits<{
   (e: 'scroll', ratio: number): void
@@ -122,6 +124,29 @@ function onIframeLoad() {
       title="wx-md 预览"
       @load="onIframeLoad"
     />
+    <div
+      v-if="props.patchLog && props.patchLog.total > 0"
+      class="transparency-strip"
+      :class="{ expanded: transparencyExpanded }"
+    >
+      <button
+        class="transparency-toggle"
+        :aria-expanded="transparencyExpanded"
+        @click="transparencyExpanded = !transparencyExpanded"
+      >
+        <span class="tx-dot" />
+        <span class="tx-label">
+          渲染透明度 · 本次对 HTML 做了 <b>{{ props.patchLog.total }}</b> 处微信适配
+        </span>
+        <span class="tx-chev">{{ transparencyExpanded ? '▾' : '▸' }}</span>
+      </button>
+      <ul v-if="transparencyExpanded" class="transparency-list">
+        <li v-for="(entry, i) in props.patchLog.entries" :key="i">
+          <span class="tx-entry-label">{{ entry.label }}</span>
+          <span class="tx-entry-count">× {{ entry.count }}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -129,6 +154,8 @@ function onIframeLoad() {
 .preview-shell {
   width: 100%;
   height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background: var(--paper-300);
@@ -158,5 +185,60 @@ function onIframeLoad() {
   border: none;
   display: block;
   background: var(--paper-300);
+}
+
+/* 透明度面板：只在有 patch log 时显示，默认折叠为单行 */
+.transparency-strip {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  max-height: 220px;
+  overflow-y: auto;
+}
+.transparency-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fs-12);
+  color: var(--text-muted);
+  text-align: left;
+}
+.transparency-toggle:hover { background: var(--surface); }
+.tx-dot {
+  width: 6px; height: 6px; border-radius: var(--radius-pill);
+  background: var(--text-subtle);
+  flex: 0 0 auto;
+}
+.transparency-strip.expanded .tx-dot { background: var(--accent); }
+.tx-label { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tx-label b { color: var(--text); font-weight: var(--fw-medium); }
+.tx-chev { color: var(--text-subtle); font-size: 10px; flex: 0 0 auto; }
+.transparency-list {
+  list-style: none;
+  padding: 4px 12px 10px;
+  margin: 0;
+  font-size: var(--fs-12);
+  color: var(--text-muted);
+}
+.transparency-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.transparency-list li:last-child { border-bottom: none; }
+.tx-entry-label { flex: 1 1 auto; }
+.tx-entry-count {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-feature-settings: var(--font-feat-num);
+  color: var(--text);
 }
 </style>

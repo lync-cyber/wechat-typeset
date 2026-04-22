@@ -12,7 +12,7 @@ const props = defineProps<{
   error: string | null
   themeId: string
   hasCustomColor: boolean
-  drawer: { drafts: boolean; components: boolean; customizer: boolean }
+  drawer: { drafts: boolean; components: boolean; customizer: boolean; checklist: boolean }
 }>()
 
 const emit = defineEmits<{
@@ -21,12 +21,14 @@ const emit = defineEmits<{
   (e: 'clear'): void
   (e: 'loadSample'): void
   (e: 'saveSelection'): void
+  (e: 'fixZhTypo'): void
   (e: 'exportHtml'): void
   (e: 'exportMd'): void
   (e: 'exportImage'): void
   (e: 'toggleDrafts'): void
   (e: 'toggleComponents'): void
   (e: 'toggleCustomizer'): void
+  (e: 'toggleChecklist'): void
   (e: 'openCommand'): void
   (e: 'openHelp'): void
   (e: 'dismissError'): void
@@ -183,12 +185,18 @@ defineExpose({
           <button class="menu-item" @click="emit('toggleCustomizer'); overflowOpen = false">
             <span>{{ props.drawer.customizer ? '关闭自定义配色' : '自定义配色' }}</span>
           </button>
+          <button class="menu-item" @click="emit('toggleChecklist'); overflowOpen = false">
+            <span>{{ props.drawer.checklist ? '关闭发文清单' : '发文清单' }}</span>
+          </button>
           <div class="menu-sep" />
           <button class="menu-item" @click="emit('saveSelection'); overflowOpen = false">
             <span>保存选区为组件</span>
           </button>
           <button class="menu-item" @click="emit('loadSample'); overflowOpen = false">
             <span>载入当前主题示例</span>
+          </button>
+          <button class="menu-item" @click="emit('fixZhTypo'); overflowOpen = false">
+            <span>一键修复中文排版</span>
           </button>
           <div class="menu-sep" />
           <button class="menu-item" @click="emit('exportHtml'); overflowOpen = false">

@@ -24,7 +24,12 @@ export interface UseDebouncedRenderOptions {
   immediate?: boolean
 }
 
-const EMPTY_OUTPUT: RenderOutput = { html: '', wordCount: 0, readingTime: 1 }
+const EMPTY_OUTPUT: RenderOutput = {
+  html: '',
+  wordCount: 0,
+  readingTime: 1,
+  patchLog: { entries: [], total: 0 },
+}
 
 export function useDebouncedRender(
   source: Ref<RenderInput>,
@@ -46,6 +51,7 @@ export function useDebouncedRender(
         html: `<pre style="color:#c00;padding:16px;white-space:pre-wrap">渲染失败：${escapeHtml(String(err))}</pre>`,
         wordCount: 0,
         readingTime: 1,
+        patchLog: { entries: [], total: 0 },
       }
     }
   }

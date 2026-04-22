@@ -55,3 +55,4 @@ export {
   patchFlexToFallback,
   patchSvgWhiteBg,
 }
+export { inspectPatchTargets, type PatchLog, type PatchLogEntry } from './inspect'

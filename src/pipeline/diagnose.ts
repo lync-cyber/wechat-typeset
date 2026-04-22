@@ -23,11 +23,14 @@
  *   - 列表嵌套 ≥ 3 层（list-too-deep）——配合 wxPatch/patchListWrap 的扁平化兜底，
  *     在编辑期提前告诉作者"这一行会在公众号里被改写为段落"。
  *
- * Stage 3 会追加：SVG 纯白、中文排版规则组——都复用同一份 Diagnostic 输出格式。
+ * Stage 3 覆盖（追加）：
+ *   - 中文排版四类（zhTypo 模块）：中英空格 / 全半角 / 直引号 / 省略号破折号。
+ *     规则实现沉到 zhTypo.ts，diagnose 只做翻译层。
  */
 
 import { CONTAINER_VOCABULARY, lookupContainerSpec } from '../containers/vocabulary'
 import { VARIANT_IDS } from '../themes/types'
+import { scanZhTypo, type ZhTypoCode } from './zhTypo'
 
 export type DiagnosticSeverity = 'error' | 'warning' | 'info'
 
@@ -51,6 +54,7 @@ export type DiagnosticCode =
   | 'unclosed-fence'
   | 'yaml-style-attr'
   | 'list-too-deep'
+  | ZhTypoCode
 
 const VALID_CONTAINER_NAMES: ReadonlySet<string> = new Set(
   CONTAINER_VOCABULARY.map((s) => s.name),
@@ -261,7 +265,31 @@ export function diagnose(source: string): Diagnostic[] {
     })
   }
 
+  // ── 7. 中文排版四规则（zhTypo） ────────────────
+  for (const hit of scanZhTypo(source)) {
+    diagnostics.push({
+      from: hit.from,
+      to: hit.to,
+      severity: 'info', // 中文排版一律 info：不阻断作者发文，仅提示
+      code: hit.code,
+      message: ZH_TYPO_MESSAGE[hit.code](hit.original, hit.replacement),
+    })
+  }
+
   return diagnostics.sort((a, b) => a.from - b.from)
+}
+
+const ZH_TYPO_MESSAGE: Record<ZhTypoCode, (orig: string, rep: string) => string> = {
+  'zh-ascii-spacing': (orig) =>
+    `中英混排建议加空格："${orig}"——Toolbar"一键修复中文排版"可批量处理。`,
+  'zh-halfwidth-punct': (orig, rep) =>
+    `中文后请用全角标点："${orig}" → "${rep}"。`,
+  'zh-straight-quote': (orig, rep) =>
+    `含 CJK 引语建议用弯引号："${orig}" → "${rep}"。`,
+  'zh-dash-ellipsis': (orig, rep) =>
+    orig.startsWith('.')
+      ? `中文省略号建议用 …… 代替 ${orig.length} 个英文句点。`
+      : `中文破折号建议用 —— 代替两个半角连字符（${orig} → ${rep}）。`,
 }
 
 interface VariantHit {

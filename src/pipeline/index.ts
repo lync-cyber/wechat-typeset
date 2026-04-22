@@ -13,7 +13,7 @@ import { createMarkdown } from './markdown'
 import { generateThemeCSS } from './themeCSS'
 import { atomOneDarkCss, highlightCode } from './highlight'
 import { inlineHtml } from './juiceInline'
-import { applyWxPatches, type WxPatchOptions } from './wxPatch'
+import { applyWxPatches, inspectPatchTargets, type PatchLog, type WxPatchOptions } from './wxPatch'
 import { CODE_BLOCK_VARIANTS } from '../variants/registry'
 
 export interface RenderInput {
@@ -26,6 +26,11 @@ export interface RenderOutput {
   html: string
   wordCount: number
   readingTime: number
+  /**
+   * 本次渲染对 HTML 做的微信适配列表（patchListWrap / stripForbiddenAttrs / ...）。
+   * 供"渲染透明度面板"展示；作者据此知道我们改了什么、没改什么。
+   */
+  patchLog: PatchLog
 }
 
 const ROOT_CLASS = 'markdown-body'
@@ -92,12 +97,14 @@ export function render(input: RenderInput): RenderOutput {
   const inlined = inlineHtml(htmlWithStyle)
 
   // Step 3：DOM 后处理层，抹平公众号粘贴的诸多坑
+  // inspect 必须在 applyWxPatches 之前：patches 幂等，应用后计数会归零
+  const patchLog = inspectPatchTargets(inlined)
   const finalHtml = applyWxPatches(inlined, input.wxPatch)
 
   const wordCount = countWords(source)
   const readingTime = Math.max(1, Math.ceil(wordCount / 300))
 
-  return { html: finalHtml, wordCount, readingTime }
+  return { html: finalHtml, wordCount, readingTime, patchLog }
 }
 
 function countWords(s: string): number {

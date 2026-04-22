@@ -123,6 +123,35 @@ describe('diagnose · yaml-style-attr', () => {
   })
 })
 
+describe('diagnose · 中文排版规则（zhTypo 桥接）', () => {
+  it('中英混排缺空格报 info', () => {
+    const ds = diagnose('正文world 一段')
+    const hit = ds.find((d) => d.code === 'zh-ascii-spacing')
+    expect(hit).toBeTruthy()
+    expect(hit?.severity).toBe('info')
+  })
+
+  it('CJK 后的半角标点报 info', () => {
+    const ds = diagnose('是这样,那样.')
+    expect(ds.some((d) => d.code === 'zh-halfwidth-punct')).toBe(true)
+  })
+
+  it('含 CJK 的直引号报 info', () => {
+    const ds = diagnose('他说 "你好"')
+    expect(ds.some((d) => d.code === 'zh-straight-quote')).toBe(true)
+  })
+
+  it('CJK 旁的 ... 报 info', () => {
+    const ds = diagnose('然后...就走了')
+    expect(ds.some((d) => d.code === 'zh-dash-ellipsis')).toBe(true)
+  })
+
+  it('代码块内的半角噪声不报（保护区）', () => {
+    const ds = diagnose('```ts\nconst x = "你好,world"\n```')
+    expect(ds.filter((d) => d.code.startsWith('zh-'))).toHaveLength(0)
+  })
+})
+
 describe('diagnose · list-too-deep', () => {
   it('两级嵌套不报（边界 —— 不应过度打扰作者）', () => {
     const md = '- L1\n  - L2\n'
