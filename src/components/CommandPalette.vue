@@ -2,6 +2,13 @@
 /**
  * ⌘K 命令面板
  *
+ * R5B 重构：modal 外壳改走 PanelShell，列表过滤改走 useFilteredList。
+ *
+ * 为什么 input 没用 SearchBox：
+ *   CommandPalette 的 input 是"header 内嵌（透明 borderless + 旁列图标和提示）"形态——
+ *   与 SearchBox 提供的"独立带框搜索框"是两套视觉契约，强配会引入 :deep / class 覆盖竞速。
+ *   Header 区（图标 + input + 提示三栏）保留手写，承认这是命令面板的专有形态。
+ *
  * 单一通道，把所有 Toolbar 动作 + 草稿切换 + 主题切换汇聚到可搜索列表。
  * 命令在父组件登记一次，两处复用（面板 + 帮助）。
  *
@@ -10,6 +17,8 @@
  *   - 输入自动筛选（title / group / keywords）
  */
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import PanelShell from '../ui/primitives/PanelShell.vue'
+import { useFilteredList } from '../ui/composables/useFilteredList'
 
 export interface Command {
   id: string
@@ -28,18 +37,14 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-const query = ref('')
 const activeIdx = ref(0)
 const inputRef = ref<HTMLInputElement | null>(null)
 const listRef = ref<HTMLUListElement | null>(null)
 
-const filtered = computed<Command[]>(() => {
-  const q = query.value.trim().toLowerCase()
-  if (!q) return props.commands
-  return props.commands.filter((c) => {
-    const hay = `${c.title} ${c.group} ${c.keywords ?? ''} ${c.shortcut ?? ''}`.toLowerCase()
-    return hay.includes(q)
-  })
+const { query, filtered } = useFilteredList<Command>({
+  source: computed(() => props.commands),
+  predicate: (c, q) =>
+    `${c.title} ${c.group} ${c.keywords ?? ''} ${c.shortcut ?? ''}`.toLowerCase().includes(q),
 })
 
 watch(filtered, () => {
@@ -107,66 +112,53 @@ function indexOf(cmd: Command): number {
 </script>
 
 <template>
-  <div class="cmd-mask" @click.self="emit('close')">
-    <div class="cmd-panel" role="dialog" aria-label="命令面板" @keydown="onKey">
-      <div class="cmd-head">
-        <span class="cmd-icon">⌘</span>
-        <input
-          ref="inputRef"
-          v-model="query"
-          class="cmd-input"
-          type="text"
-          placeholder="搜索命令、草稿、主题…"
-          @keydown="onKey"
-        />
-        <span class="cmd-hint mono">↵ 执行 · Esc 关闭</span>
-      </div>
-      <ul ref="listRef" class="cmd-list">
-        <template v-for="[group, items] in grouped" :key="group">
-          <li class="cmd-group mono">{{ group }}</li>
-          <li
-            v-for="cmd in items"
-            :key="cmd.id"
-            class="cmd-item"
-            :class="{ active: indexOf(cmd) === activeIdx }"
-            :data-idx="indexOf(cmd)"
-            @mouseenter="activeIdx = indexOf(cmd)"
-            @click="run(cmd)"
-          >
-            <span class="cmd-title">{{ cmd.title }}</span>
-            <span v-if="cmd.shortcut" class="cmd-kbd">{{ cmd.shortcut }}</span>
-          </li>
-        </template>
-        <li v-if="filtered.length === 0" class="cmd-empty">没有匹配的命令</li>
-      </ul>
+  <PanelShell
+    aria-label="命令面板"
+    :max-width="620"
+    :max-height="64"
+    align="top"
+    :top-pad-vh="12"
+    @close="emit('close')"
+  >
+    <div class="cmd-head" @keydown="onKey">
+      <span class="cmd-icon">⌘</span>
+      <input
+        ref="inputRef"
+        v-model="query"
+        class="cmd-input"
+        type="text"
+        placeholder="搜索命令、草稿、主题…"
+        @keydown="onKey"
+      />
+      <span class="cmd-hint mono">↵ 执行 · Esc 关闭</span>
     </div>
-  </div>
+    <ul ref="listRef" class="cmd-list">
+      <template v-for="[group, items] in grouped" :key="group">
+        <li class="cmd-group mono">{{ group }}</li>
+        <li
+          v-for="cmd in items"
+          :key="cmd.id"
+          class="cmd-item"
+          :class="{ active: indexOf(cmd) === activeIdx }"
+          :data-idx="indexOf(cmd)"
+          @mouseenter="activeIdx = indexOf(cmd)"
+          @click="run(cmd)"
+        >
+          <span class="cmd-title">{{ cmd.title }}</span>
+          <span v-if="cmd.shortcut" class="cmd-kbd">{{ cmd.shortcut }}</span>
+        </li>
+      </template>
+      <li v-if="filtered.length === 0" class="cmd-empty">没有匹配的命令</li>
+    </ul>
+  </PanelShell>
 </template>
 
 <style scoped>
-.cmd-mask {
-  position: fixed; inset: 0;
-  background: rgba(14, 14, 10, 0.35);
-  display: flex; align-items: flex-start; justify-content: center;
-  padding-top: 12vh;
-  z-index: 100;
-}
-.cmd-panel {
-  width: min(620px, 92vw);
-  max-height: 64vh;
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-2);
-  box-shadow: var(--shadow-modal);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  font-family: var(--font-text);
-  color: var(--text);
-}
 .cmd-head {
   display: flex; align-items: center; gap: var(--sp-3);
   padding: var(--sp-3) var(--sp-5);
   border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
 }
 .cmd-icon {
   color: var(--accent);
@@ -184,8 +176,6 @@ function indexOf(cmd: Command): number {
 @media (max-width: 767px) {
   .cmd-input { font-size: 16px; height: 40px; }
   .cmd-item { padding: 12px var(--sp-5); min-height: 44px; }
-  .cmd-panel { max-height: 80vh; }
-  .cmd-mask { padding-top: 6vh; }
 }
 .cmd-input::placeholder { color: var(--text-subtle); }
 .cmd-hint {
