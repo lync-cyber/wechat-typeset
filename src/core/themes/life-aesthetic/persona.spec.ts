@@ -15,6 +15,9 @@ export const spec: PersonaSpec = {
   name: '慢生活',
   description: '暖米底 + 圆角柔和，写写饮食、旅行与长日',
   audience: '生活写作 / 非虚构随笔',
+  // applyPalette fallback：用户基于本主题自定义配色时，SVG assets 走 `soft` 工厂
+  // （圆角更柔和的图形语言）。spec-first 主路径不消费此字段。
+  svgVariant: 'soft',
 
   // ============================================================
   // 色板

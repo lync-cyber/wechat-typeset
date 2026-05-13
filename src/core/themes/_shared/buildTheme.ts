@@ -25,18 +25,19 @@
 import type {
   CSSObject,
   Decorations,
+  SvgVariant,
   Theme,
   ThemeAssets,
-  ThemeBehavior,
   ThemeContainers,
   ThemeElements,
   ThemeInline,
+  ThemeInnerStyles,
   ThemeTemplates,
   ThemeTokens,
   ThemeVariants,
 } from '../types'
 import { DEFAULT_VARIANTS } from '../types'
-import { buildAssets, type SvgVariant } from './svgAssets'
+import { buildAssets } from './svgAssets'
 
 /**
  * 单 key 样式补丁值：宽于 CSSObject 以容纳 `__reset: true` sentinel。
@@ -60,10 +61,21 @@ export interface BuildThemeOptions {
   preview?: string
   tokens: ThemeTokens
   /**
-   * 参数化 SVG 工厂变体。缺省 `geometric`。
-   * `assets` 字段（如提供）在工厂产物上做浅合并。
+   * 参数化 SVG 工厂变体。声明则触发 `buildAssets({tokens, variant})` 生成基线 assets,
+   * 再由 `assets` 字段（如提供）做浅合并。**用于 applyPalette 的 runtime 路径**。
+   *
+   * 与 `svgVariant` 的关系：
+   *   - `variant` 显式声明 = "调工厂生成 assets" + "写入 Theme.svgVariant" 双重副作用
+   *   - `svgVariant` 仅写入 Theme.svgVariant（metadata-only）；用于 spec-to-theme 路径,
+   *     该路径 assets 直接来自 motifs AST 渲染, 不需要触发工厂
+   *   - 两者并存且 `variant` 优先（同时透出到 Theme.svgVariant）
    */
   variant?: SvgVariant
+  /**
+   * 仅作为 Theme.svgVariant 的 metadata 透传, 不触发 buildAssets。spec-to-theme 在此
+   * 字段透传 spec.svgVariant；applyPalette 不读此字段（它显式传 variant）。
+   */
+  svgVariant?: SvgVariant
   /**
    * 元素级样式：属性级深合并到 baseElements(tokens) 之上。
    * `__reset: true` sentinel 可在某 key 上切换为整段替换。
@@ -72,6 +84,12 @@ export interface BuildThemeOptions {
   elements?: StylePatch<ThemeElements>
   /** 容器级样式（同 elements 语义） */
   containers?: StylePatch<ThemeContainers>
+  /**
+   * 容器内层元素样式（同 elements 语义）。承载 abstract kicker / key-number 数字 /
+   * see-also 标题等"renderer 内部子元素"样式槽位; renderer 通过 ctx.innerStyles 消费,
+   * 不进 themeCSS 生成器。
+   */
+  innerStyles?: StylePatch<ThemeInnerStyles>
   /** 内联级样式（同 elements 语义） */
   inline?: StylePatch<ThemeInline>
   /**
@@ -87,11 +105,8 @@ export interface BuildThemeOptions {
    */
   variants?: Partial<ThemeVariants>
   /**
-   * 渲染器级行为开关。仅保留无法用 decorations 声明的特例（people-story 的 introDropcap）。
-   */
-  behavior?: ThemeBehavior
-  /**
-   * 声明式装饰规则。绝大多数"主题专属视觉签名"走这里，不进 ThemeBehavior。
+   * 声明式装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉等）走这里——
+   * R8 后 `ThemeBehavior` 接口已删除, decorations 是唯一承载点。
    */
   decorations?: Decorations
 }
@@ -422,6 +437,51 @@ export function baseInline(tokens: ThemeTokens): ThemeInline {
 }
 
 /**
+ * 容器内层元素 inline-style 兜底。R8 把 signature renderer 内硬编码的子元素样式提到这里,
+ * 让主题作者可通过 spec.innerStyles 深合并接管（如把 keyNumber 数字字号从 32px 调到 28px）。
+ *
+ * 兜底值与 R8 前 signature.ts hardcoded 字面值字节等价——所有现有主题渲染输出不变,
+ * 仅扩展了"主题作者可调"的覆盖空间。
+ */
+export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
+  const c = tokens.colors
+  return {
+    abstractKicker: {
+      color: c.primary,
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '6px',
+    },
+    keyNumberValue: {
+      color: c.primary,
+      'font-size': '32px',
+      'font-weight': '700',
+      'line-height': '1.1',
+      'letter-spacing': '-0.5px',
+      'margin-bottom': '4px',
+    },
+    keyNumberKicker: {
+      color: c.textMuted,
+      'font-size': '12px',
+      'font-weight': '600',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    seeAlsoTitle: {
+      color: c.textMuted,
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+  }
+}
+
+/**
  * 属性级深合并：对 patch 里出现的每个 key，把其 CSSObject 属性叠到 base 同 key 上。
  *   - patch[key] 不存在：透传 base[key]
  *   - patch[key].__reset === true：剥离 __reset 后整段替换 base[key]
@@ -459,6 +519,7 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
   const elements = mergeStyle(baseElements(opts.tokens), opts.elements)
   const containers = mergeStyle(baseContainers(opts.tokens), opts.containers)
   const inline = mergeStyle(baseInline(opts.tokens), opts.inline)
+  const innerStyles = mergeStyle(baseInnerStyles(opts.tokens), opts.innerStyles)
   // 资产基线：仅当显式指定 variant 时才调用工厂；否则不引入工厂默认。
   //   这样 assets 里没列出的 key（如 default 故意不导出 quoteMark）不会被"工厂默认值偷偷补回来"。
   //   applyPalette 的 runtime 路径显式传 variant，走 factory + partial merge。
@@ -479,11 +540,18 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     tokens: opts.tokens,
     elements,
     containers,
+    innerStyles,
     assets,
     templates: opts.templates ?? {},
     inline,
     variants,
-    ...(opts.behavior ? { behavior: opts.behavior } : {}),
+    // Theme.svgVariant 透传：
+    //   - applyPalette 路径走 opts.variant（既触发工厂又写到 Theme）
+    //   - spec-to-theme 路径走 opts.svgVariant（仅写到 Theme,不触发工厂——assets 已由 motifs 渲染）
+    // 显式透传到 Theme.svgVariant —— 删除 applyPalette.BASE_VARIANT 查表的关键。
+    ...(opts.variant ?? opts.svgVariant
+      ? { svgVariant: opts.variant ?? opts.svgVariant }
+      : {}),
     ...(opts.decorations ? { decorations: opts.decorations } : {}),
   }
 }

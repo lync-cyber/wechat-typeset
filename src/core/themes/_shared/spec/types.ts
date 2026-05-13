@@ -12,10 +12,11 @@
 import type {
   CSSObject,
   Decorations,
-  ThemeBehavior,
+  SvgVariant,
   ThemeContainers,
   ThemeElements,
   ThemeInline,
+  ThemeInnerStyles,
   ThemeTemplates,
   ThemeVariants,
 } from '../../types'
@@ -334,12 +335,21 @@ export interface PersonaSpec {
   motifs: MotifSpec
   /** 骨架变体选择（ThemeVariants 同构） */
   variants: ThemeVariants
-  /** 渲染器行为开关（特例，仅 people-story 的 introDropcap） */
-  behavior?: ThemeBehavior
   /**
-   * 声明式装饰规则。是"主题专属视觉签名"的首选承载点——能用这里的声明数据表达
-   * 的（标题前缀编号 / kicker / 章节标记……）一律走这里，不要在 ThemeBehavior 加
-   * boolean flag、不要在 markdown.ts 加 if 分支。
+   * 参数化 SVG 资产工厂的形状变体。spec-first 主路径不消费此字段（assets 由 motifs
+   * 直接渲染）；它的唯一作用是给 applyPalette 在用户自定义配色路径上提供 fallback 工厂。
+   *
+   * 缺省时 applyPalette 回退到 `'geometric'`。
+   * 历史包袱：旧版用 applyPalette.BASE_VARIANT 手写主题 id → variant 查表实现同样的
+   * fallback；下沉到 spec 后,新增主题不再需要"还要去 applyPalette.ts 加一行"的同步成本。
+   */
+  svgVariant?: SvgVariant
+  /**
+   * 声明式装饰规则。所有"主题专属视觉签名"（标题前缀编号 / intro 首字下沉……）一律走这里,
+   * 共享层一次性实现"按声明执行"——不要在 markdown.ts 加 if 分支。
+   *
+   * 历史包袱：R8 前还有一个 `behavior?: ThemeBehavior` 字段承载 `introDropcap: boolean`,
+   * 已升为 `decorations.introDropcap`（可携带样式参数）。`ThemeBehavior` 接口完全删除。
    */
   decorations?: Decorations
   /**
@@ -353,12 +363,16 @@ export interface PersonaSpec {
    */
   templates?: Partial<ThemeTemplates>
   /**
-   * 元素/容器/内联的样式补丁（深合并；支持 `__reset: true` sentinel）。
+   * 元素/容器/内联/内层子元素的样式补丁（深合并；支持 `__reset: true` sentinel）。
    * 这是"主题作者 voice"无法从 palette/typography 派生的 CSS 细节承载点，
-   * 与 BuildThemeOptions.elements/containers/inline 一一对应。
+   * 与 BuildThemeOptions.elements/containers/inline/innerStyles 一一对应。
+   *
+   * innerStyles 用法：覆盖 signature 容器内层子元素的 inline style（如 key-number
+   * 数字字号、abstract kicker 颜色、see-also 标题字距）。详见 `ThemeInnerStyles` 注释。
    */
   elements?: StylePatch<ThemeElements>
   containers?: StylePatch<ThemeContainers>
+  innerStyles?: StylePatch<ThemeInnerStyles>
   inline?: StylePatch<ThemeInline>
   /** 元数据（LLM 不负责写，作者签名由此落） */
   meta: {

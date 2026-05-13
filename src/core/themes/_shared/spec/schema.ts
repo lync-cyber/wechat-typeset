@@ -397,22 +397,32 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
     },
     motifs: MOTIF_SPEC_SCHEMA,
     variants: VARIANTS_SCHEMA,
-    behavior: {
-      type: 'object',
+    svgVariant: {
+      enum: ['geometric', 'soft', 'serif', 'playful'],
       description:
-        '渲染器级行为开关。仅留给无法用 decorations 声明的真正特例（如 introDropcap 的标点/数字判定）。' +
-        '能用 decorations 表达的视觉签名不要在这里加 flag。',
-      properties: {
-        introDropcap: { type: 'boolean' },
-      },
-      additionalProperties: false,
+        '参数化 SVG 资产工厂的形状变体。仅在 applyPalette（用户自定义配色）路径作为 fallback 工厂；' +
+        'spec-first 主路径不消费此字段（assets 由 motifs AST 直接渲染）。缺省回退到 "geometric"。',
     },
     decorations: {
       type: 'object',
       description:
-        '声明式渲染层装饰规则。主题专属视觉签名（标题前缀编号 / kicker / 章节标记……）的首选承载点；' +
-        '共享层一次性实现"如何按声明执行"，避免每加一个特性都改 ThemeBehavior + schema + markdown.ts 三处。',
+        '声明式渲染层装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉……）的唯一承载点；' +
+        '共享层一次性实现"如何按声明执行"。R8 后 ThemeBehavior 接口已删除。',
       properties: {
+        introDropcap: {
+          type: 'object',
+          description:
+            'intro 首段首字下沉。声明则启用,样式参数由本结构提供;前导标点跳过 / 数字判定的扫描逻辑由 markdown.ts 共享层实现。',
+          required: ['color'],
+          properties: {
+            color: { enum: ['primary', 'secondary', 'accent', 'text', 'textMuted'] },
+            fontSize: { type: 'number' },
+            fontWeight: { enum: [400, 500, 600, 700] },
+            marginRight: { type: 'number' },
+            paddingTop: { type: 'number' },
+          },
+          additionalProperties: false,
+        },
         headingPrefix: {
           type: 'array',
           description: '标题前缀装饰规则数组。',
@@ -464,6 +474,7 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
     },
     elements: STYLE_PATCH_MAP,
     containers: STYLE_PATCH_MAP,
+    innerStyles: STYLE_PATCH_MAP,
     inline: STYLE_PATCH_MAP,
     meta: {
       type: 'object',

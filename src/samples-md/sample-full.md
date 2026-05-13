@@ -98,6 +98,10 @@
 这是 `report-section` 骨架 —— 顶 3px 底 1px + § 方角标签，研究报告条款感（industry-observer 专属签名）。
 :::
 
+::: info INFO variant=news-row
+这是 `news-row` 骨架 —— 左 3px 色条 + 实色徽章 + 紧凑单行,data-brief 家族签名。
+:::
+
 ---
 
 ## 引用卡 4 种 variant
@@ -156,6 +160,16 @@
 
 ::: cons 支出
 - 初始化主题需要调参
+:::
+
+::::
+
+:::: compare variant=data-card
+
+::: pros 纸 本 value="+37%" caption="深度理解得分"
+:::
+
+::: cons 屏 读 value="+210%" caption="跳读切换次数"
 :::
 
 ::::
@@ -259,6 +273,14 @@ export function hello(name: string): string {
 ::: note 第五态补注
 note 是"中性补注"——不抢色（走 textMuted），与 tip / warning / info / danger 四态形成互补。
 教程主题里最常见。
+:::
+
+::: note variant=box-callout 参考资料
+`box-callout` 骨架 —— 单色 1px 全边框 + textMuted 标题，"卡片感"批注。
+:::
+
+::: note variant=side-bar 旁注
+`side-bar` 骨架 —— 左 2px 实线 + 缩进，经典"标记此处有补充"批注式。
 :::
 
 ::: see-also 延伸阅读

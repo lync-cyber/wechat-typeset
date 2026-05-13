@@ -17,6 +17,7 @@ import type {
   ThemeAssets,
   ThemeContainers,
   ThemeInline,
+  ThemeInnerStyles,
   ThemeTokens,
   ThemeVariants,
 } from '../../themes/types'
@@ -25,6 +26,12 @@ export interface ContainerRenderContext {
   tokens: ThemeTokens
   assets: ThemeAssets
   containers: ThemeContainers
+  /**
+   * 容器内层元素样式槽位（abstract kicker / key-number 数字 / see-also 标题等）。
+   * renderer 在拼装 `<section style="...">` 时 inline 注入,不进 themeCSS 生成器。
+   * 详见 `ThemeInnerStyles` 注释。
+   */
+  innerStyles: ThemeInnerStyles
   inline: ThemeInline
   /**
    * v2 骨架选择。renderer 按 ctx.variants.{kind} 分派到 variants/{kind}/{id}.ts。

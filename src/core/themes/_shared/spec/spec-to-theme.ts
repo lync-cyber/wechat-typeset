@@ -92,10 +92,14 @@ export function specToTheme(spec: PersonaSpec): Theme {
     assets,
     elements: spec.elements,
     containers: spec.containers,
+    innerStyles: spec.innerStyles,
     inline: spec.inline,
     templates,
     variants: spec.variants,
-    behavior: spec.behavior,
+    // 注意：不能透传到 opts.variant —— 那会触发 buildAssets 工厂调用并覆盖 motifs
+    // 直接派生的 assets。走 svgVariant 字段（metadata-only）透传到 Theme.svgVariant
+    // 供 applyPalette 的 fallback 路径消费。
+    svgVariant: spec.svgVariant,
     decorations: spec.decorations,
   })
 }

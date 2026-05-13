@@ -14,6 +14,18 @@
 export type CSSObject = Record<string, string | number>
 export type SVGString = string
 
+/**
+ * 参数化 SVG 资产工厂的形状变体。控制 SVG 图形语言（sharp / soft / serif / playful），
+ * 不控制颜色——颜色随 tokens 自动流动。
+ *
+ * 为什么类型放在 types.ts 而非 _shared/svgAssets.ts：
+ *   _shared/svgAssets.ts 是渲染工厂的实现细节，但 SvgVariant 现在是 PersonaSpec 与
+ *   Theme 都要消费的"主题 voice 声明"——用于 applyPalette 的 fallback 路径，决定用户
+ *   自定义配色时用哪套工厂重新合成 assets。挪到 types.ts 后两端 import 不再交叉。
+ *   实现端（svgAssets.ts）改为 re-export 此类型。
+ */
+export type SvgVariant = 'geometric' | 'soft' | 'serif' | 'playful'
+
 /** 语义化状态色：提示容器与后续可能的徽章使用 */
 export interface StatusPair {
   accent: string
@@ -156,6 +168,36 @@ export interface ThemeContainers {
   methodology: CSSObject
   /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
   colophon: CSSObject
+}
+
+/**
+ * 容器内层元素样式槽位（inner-element inline styles）。
+ *
+ * 区别于 `ThemeContainers`（每个容器一个 wrapper-level CSSObject,生成 `.markdown-body
+ * .container-xxx` CSS 规则）：本接口承载的是容器**内部子元素**的 inline style 槽位,
+ * renderer 在拼装 `<section style="...">` 字符串时直接 inline 注入,不进 themeCSS 生成器。
+ *
+ * 为什么不进 ThemeContainers / vocabulary：
+ *   vocabulary 是"markdown fence 容器"的权威词汇表; 内层子元素既不是 markdown 容器,
+ *   也不需要全局 CSS 选择器规则（公众号粘贴后 .container-key-number__value 这类长
+ *   class 选择器很容易被剥）。inline style 是更稳的承载方式。
+ *
+ * 设计纪律（不要无限制扩展）：
+ *   仅当某容器内层子元素的样式真正需要被主题作者覆盖（如 key-number 的数字字号、
+ *   abstract 的 kicker 字距）才在此扩字段。"主题 voice 没有差异化诉求"的内层样式
+ *   继续硬编码在 renderer 即可——避免本接口膨胀成所有 inline style 的转运站。
+ *
+ * 现存条目：
+ *   - abstractKicker     文首 tl;dr 块的小标题色 / 字距 / 大写转换
+ *   - keyNumberValue     大数字本体（数字字号 / 颜色 / 字距）
+ *   - keyNumberKicker    大数字上方 kicker（小标题）
+ *   - seeAlsoTitle       延伸阅读列表的标题
+ */
+export interface ThemeInnerStyles {
+  abstractKicker: CSSObject
+  keyNumberValue: CSSObject
+  keyNumberKicker: CSSObject
+  seeAlsoTitle: CSSObject
 }
 
 export interface ThemeAssets {
@@ -439,31 +481,17 @@ export const VARIANT_IDS = {
 
 export type VariantKind = keyof ThemeVariants
 
-/**
- * 主题行为开关。**不是样式，不是 token，是 renderer 级别的结构改动**——
- * 保留给"无法用声明式 decorations 表达"的真正特例（目前唯一例子：introDropcap，
- * 需要扫前导标点 / 跳数字 / 拆首字符的复杂规则）。
- *
- * **新增 boolean flag 的门槛**（重要约束 / 反例参考）：
- *   - 历史上把 `h2RomanNumerals` / `h2DataBriefKicker` 写进这里是错的——它们
- *     是可声明的"标题前缀装饰"，已迁到 `PersonaSpec.decorations.headingPrefix`。
- *   - 加新 flag 前先问：能否用 `decorations.*` 这类声明数据表达？能则走声明式，
- *     避免共享类型 / schema / 管线代码随主题数量爆炸。
- *
- * 不声明 behavior 或字段为 false/undefined 时，pipeline 保持原行为。
- */
-export interface ThemeBehavior {
-  /** intro 首段首字下沉：渲染器把首个实字拆成 `<span class="intro-dropcap">X</span>` */
-  introDropcap?: boolean
-}
-
 // ============================================================
 // Decorations：声明式渲染层装饰规则
 //
 // 主题对"渲染层视觉签名"的需求绝大多数是**模式化**的（按 regex 切前缀、按出现
 // 顺序编号、给标题加色块……），共享层只需实现一次"如何根据声明执行"，主题在 spec
-// 里写一份纯数据声明即可——避免在 ThemeBehavior / schema / markdown.ts 三处各
-// 加一段 if 分支的爆炸式增长。
+// 里写一份纯数据声明即可——避免在 schema / markdown.ts 多处加一段 if 分支的
+// 爆炸式增长。
+//
+// 历史包袱：曾经的 `ThemeBehavior` 接口只承载 `introDropcap: boolean` 一个 flag,
+// R8 把它升为 `Decorations.introDropcap`（可携带样式参数）后, ThemeBehavior 完全删除。
+// 此后**任何新的主题专属视觉签名都必须通过 decorations 表达**, 共享层只需实现"按声明执行"。
 //
 // 字段命名约束：所有颜色用 token 名（`primary` / `accent` 等），不写 hex；换
 // palette 时自动跟随主题色。font-family 只允许 `monospace` —— 与项目"主题不
@@ -511,6 +539,34 @@ export interface HeadingPrefixDecoration {
   }
 }
 
+/**
+ * 首段首字下沉装饰：渲染器扫 `::: intro` 块的首段首字符,拆成
+ * `<span class="intro-dropcap">X</span>` + 余文。
+ *
+ * 为什么"扫前导标点 / 跳数字 / 拆首字符"逻辑无法纯声明：
+ *   - 前导标点跳过规则（中英标点 / 开引号 / 各式括号）是 unicode 类目级别的判定
+ *   - 阿拉伯数字不下沉是排版约定（数字下沉视觉很丑）
+ *   - 首字符拆出后需要"前缀部分 + dropcap span + 余文"三段重组,触及 markdown-it
+ *     的 Token 类内部细节
+ * 这些逻辑被收口在 `markdown.ts:applyIntroDropcap` 的统一实现里, 主题作者只声明
+ * "我要 dropcap, 用什么色 / 什么字号"。
+ *
+ * 历史包袱：R8 前是 `ThemeBehavior.introDropcap: boolean`，主题只能开关、不能调样式;
+ * 升 decoration 后,字号、字重、间距都可由 spec 控制, 与 headingPrefix 同构。
+ */
+export interface IntroDropcapDecoration {
+  /** dropcap 颜色（token 引用） */
+  color: PaletteColorKey
+  /** dropcap 字号 px；缺省 48 */
+  fontSize?: number
+  /** dropcap 字重；缺省 700 */
+  fontWeight?: 400 | 500 | 600 | 700
+  /** dropcap 与余文之间的右间距 px；缺省 8 */
+  marginRight?: number
+  /** dropcap 上内边距 px（与基线对齐微调）；缺省 4 */
+  paddingTop?: number
+}
+
 export interface Decorations {
   /**
    * 标题前缀装饰。同一 level 可有多条，按声明顺序依次应用——通常一个主题给定
@@ -518,6 +574,11 @@ export interface Decorations {
    * 但通常没必要）。
    */
   headingPrefix?: readonly HeadingPrefixDecoration[]
+  /**
+   * intro 首段首字下沉。声明则启用,样式参数由本结构提供。
+   * 历史上是 `ThemeBehavior.introDropcap: boolean`,R8 升 decoration 后可调样式。
+   */
+  introDropcap?: IntroDropcapDecoration
 }
 
 export interface Theme {
@@ -530,6 +591,11 @@ export interface Theme {
   tokens: ThemeTokens
   elements: ThemeElements
   containers: ThemeContainers
+  /**
+   * 容器内层元素样式槽位。renderer 通过 ContainerRenderContext.innerStyles 消费,
+   * 不进 themeCSS 生成器（inline-style only, 公众号粘贴稳定）。详见 `ThemeInnerStyles` 注释。
+   */
+  innerStyles: ThemeInnerStyles
   assets: ThemeAssets
   templates: ThemeTemplates
   inline: ThemeInline
@@ -539,14 +605,19 @@ export interface Theme {
    */
   variants: ThemeVariants
   /**
-   * 渲染器级行为开关。绝大多数主题不需要；保留给"无法用声明式 decorations 表达"
-   * 的真正特例（目前唯一例子：people-story 的 introDropcap）。
+   * 参数化 SVG 资产工厂的形状变体。仅在 applyPalette（用户自定义配色）路径消费——
+   * 此时 motifs AST 已固化在原主题上，重新生成 assets 时按此字段挑工厂。spec-first
+   * 主路径（specToTheme）不消费该字段，因为 assets 直接由 motifs 渲染。
+   *
+   * 缺省时 applyPalette 回退到 `'geometric'`。
    */
-  behavior?: ThemeBehavior
+  svgVariant?: SvgVariant
   /**
-   * 声明式装饰规则。优先于 behavior：能用 decorations 表达的视觉签名（标题前缀
-   * 编号 / kicker / 章节标记……）一律走这里，避免把"主题专属逻辑"散到 ThemeBehavior
-   * 和 markdown.ts 里。
+   * 声明式装饰规则。所有"主题专属视觉签名"（标题前缀编号 / kicker / 章节标记 /
+   * intro 首字下沉……）一律走这里, 共享层只实现一次"按声明执行"。
+   *
+   * 历史包袱：R8 前还有一个 `behavior?: ThemeBehavior` 字段承载 `introDropcap: boolean`,
+   * 已升为 `decorations.introDropcap`。`ThemeBehavior` 接口完全删除。
    */
   decorations?: Decorations
 }

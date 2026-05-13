@@ -51,7 +51,7 @@ export function themeToSpec(
     radius,
     motifs: overrides.motifs ?? ({} as MotifSpec),
     variants: theme.variants,
-    behavior: theme.behavior,
+    svgVariant: theme.svgVariant,
     decorations: theme.decorations,
     signatureContainers: overrides.signatureContainers as readonly SignatureContainerId[] | undefined,
     templates: theme.templates,

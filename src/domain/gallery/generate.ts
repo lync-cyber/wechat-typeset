@@ -138,12 +138,22 @@ function renderVariants(spec: PersonaSpec): string {
   return `<div class="section-label">Variants & Signature</div><div class="var-grid">${entries}</div>${sigBlock}`
 }
 
-function renderBehavior(spec: PersonaSpec): string {
-  if (!spec.behavior || Object.keys(spec.behavior).length === 0) return ''
-  const rows = Object.entries(spec.behavior)
-    .map(([k, v]) => `<div class="var-row"><b>${esc(k)}</b><code>${esc(String(v))}</code></div>`)
+/**
+ * 渲染 `spec.decorations`（声明式装饰规则）区块。
+ *
+ * R8 前是 `renderBehavior`,只渲染 `spec.behavior`（boolean flag 集合）；ThemeBehavior 接口
+ * 已被 Decorations 取代后, 重命名 + 改为渲染 spec.decorations。展示格式仍为 key→value 表格,
+ * 把对象 / 数组类型 JSON 序列化为单行。
+ */
+function renderDecorations(spec: PersonaSpec): string {
+  if (!spec.decorations || Object.keys(spec.decorations).length === 0) return ''
+  const rows = Object.entries(spec.decorations)
+    .map(
+      ([k, v]) =>
+        `<div class="var-row"><b>${esc(k)}</b><code>${esc(typeof v === 'object' ? JSON.stringify(v) : String(v))}</code></div>`,
+    )
     .join('')
-  return `<div class="section-label">Behavior · 渲染器行为</div><div class="var-grid">${rows}</div>`
+  return `<div class="section-label">Decorations · 声明式装饰</div><div class="var-grid">${rows}</div>`
 }
 
 function renderOwnerNotes(spec: PersonaSpec): string {
@@ -170,7 +180,7 @@ ${renderStatus(spec)}
 ${renderTypography(spec)}
 ${renderMotifs(spec)}
 ${renderVariants(spec)}
-${renderBehavior(spec)}
+${renderDecorations(spec)}
 ${renderOwnerNotes(spec)}
 </section>`
 }
