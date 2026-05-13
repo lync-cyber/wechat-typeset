@@ -51,6 +51,9 @@ const PACK_OF: Record<string, PackId> = {
   footnotes: 'data-brief',
   'cta-bar': 'data-brief',
   'qr-follow': 'data-brief',
+  'editor-note': 'data-brief',
+  methodology: 'data-brief',
+  colophon: 'data-brief',
 }
 
 function packOf(name: string): PackId {

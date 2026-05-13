@@ -50,7 +50,12 @@ function collectSvgs(t: Theme): string[] {
 describe.each(themes)('$name · 资产齐备', (t) => {
   it('资产都给值（default / literary-humanism 10 件：规范 §1.4 / §2.6 删 quoteMark；其他主题 11 件）', () => {
     const a = t.assets
-    expect(a.h2Prefix).toBeTypeOf('string')
+    // people-story 不导出 h2Prefix SVG：旧版用 behavior.h2RomanNumerals 走 heading_open
+    // 把它屏蔽，迁到 decorations.headingPrefix(autoNumber=roman) 后 SVG 仍然永不显示，
+    // 故 motif 通路里删掉了该 h2Prefix 声明。罗马数字由 decorations 单独承担。
+    if (t.id !== 'people-story') {
+      expect(a.h2Prefix).toBeTypeOf('string')
+    }
     expect(a.dividerWave).toBeTypeOf('string')
     expect(a.dividerDots).toBeTypeOf('string')
     expect(a.dividerFlower).toBeTypeOf('string')

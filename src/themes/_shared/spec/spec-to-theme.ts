@@ -96,5 +96,6 @@ export function specToTheme(spec: PersonaSpec): Theme {
     templates,
     variants: spec.variants,
     behavior: spec.behavior,
+    decorations: spec.decorations,
   })
 }

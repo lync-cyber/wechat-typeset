@@ -11,6 +11,7 @@
 
 import type {
   CSSObject,
+  Decorations,
   ThemeBehavior,
   ThemeContainers,
   ThemeElements,
@@ -291,6 +292,9 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'footnotes',
   'ctaBar',
   'qrFollow',
+  'editorNote',
+  'methodology',
+  'colophon',
 ] as const
 
 export type SignatureContainerId = (typeof SUPPORTED_SIGNATURE_CONTAINERS)[number]
@@ -323,8 +327,14 @@ export interface PersonaSpec {
   motifs: MotifSpec
   /** 骨架变体选择（ThemeVariants 同构） */
   variants: ThemeVariants
-  /** 渲染器行为开关（如 people-story 的 dropcap / 罗马数字） */
+  /** 渲染器行为开关（特例，仅 people-story 的 introDropcap） */
   behavior?: ThemeBehavior
+  /**
+   * 声明式装饰规则。是"主题专属视觉签名"的首选承载点——能用这里的声明数据表达
+   * 的（标题前缀编号 / kicker / 章节标记……）一律走这里，不要在 ThemeBehavior 加
+   * boolean flag、不要在 markdown.ts 加 if 分支。
+   */
+  decorations?: Decorations
   /**
    * 该主题必须具备的签名容器 id 清单；conformance 测试按此核对"声称 vs 实现"。
    * 不声明则默认空数组（只用通用容器）。

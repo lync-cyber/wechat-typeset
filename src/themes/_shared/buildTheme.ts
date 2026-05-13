@@ -24,6 +24,7 @@
 
 import type {
   CSSObject,
+  Decorations,
   Theme,
   ThemeAssets,
   ThemeBehavior,
@@ -86,9 +87,13 @@ export interface BuildThemeOptions {
    */
   variants?: Partial<ThemeVariants>
   /**
-   * 渲染器级行为开关。仅 people-story 家族使用（introDropcap + h2RomanNumerals）。
+   * 渲染器级行为开关。仅保留无法用 decorations 声明的特例（people-story 的 introDropcap）。
    */
   behavior?: ThemeBehavior
+  /**
+   * 声明式装饰规则。绝大多数"主题专属视觉签名"走这里，不进 ThemeBehavior。
+   */
+  decorations?: Decorations
 }
 
 export function baseElements(tokens: ThemeTokens): ThemeElements {
@@ -317,6 +322,12 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     footnotes: { margin: '14px 0' },
     ctaBar: { margin: '22px 0' },
     qrFollow: { margin: '22px 0' },
+    // editor-note / methodology / colophon：默认值刻意最小——三者 renderer 用 token
+    // 自己绘外框（在 pipeline/containers/databrief.ts），这里只留 margin 槽位给主题
+    // voice 微调。
+    editorNote: { margin: '22px 0' },
+    methodology: { margin: '16px 0' },
+    colophon: { margin: '20px 0 0' },
   }
 }
 
@@ -403,5 +414,6 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     inline,
     variants,
     ...(opts.behavior ? { behavior: opts.behavior } : {}),
+    ...(opts.decorations ? { decorations: opts.decorations } : {}),
   }
 }

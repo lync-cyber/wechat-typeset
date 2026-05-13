@@ -15,12 +15,12 @@ const BASE = process.env.VITE_BASE ?? '/'
  * samplesDevPlugin · dev 模式自动同步样本 → 浏览器
  *
  * 解决的问题：
- *   作者编辑 docs/samples/sample-*.md 后，浏览器侧仍展示旧 sample（localStorage 草稿
- *   缓存的就是旧版本）。原本要手动 `npm run build:samples` + 刷新页面 + 在 UI 上点
- *   "载入当前主题示例"才能看到新内容。
+ *   作者编辑 src/samples-md/sample-*.md 后，浏览器侧仍展示旧 sample（localStorage
+ *   草稿缓存的就是旧版本）。原本要手动 `npm run build:samples` + 刷新页面 + 在 UI
+ *   上点"载入当前主题示例"才能看到新内容。
  *
  * 这个插件把这条链路打通：
- *   ① 监听 docs/samples/sample-*.md 变更 → 自动 spawn `tsx scripts/build-samples.ts`
+ *   ① 监听 src/samples-md/sample-*.md 变更 → 自动 spawn `tsx scripts/build-samples.ts`
  *     重写 src/samples/generated.ts（其中含 SAMPLE_BUILD_ID 哈希）
  *   ② 监听 src/samples/generated.ts 自身的变更（hot update）→ 直接 send full-reload，
  *     让浏览器整页刷一次。整页刷期间 useDraftLifecycle.initActiveDraft 会比对
@@ -34,7 +34,7 @@ function samplesDevPlugin(): Plugin {
   let building = false
   let pending = false
   let server: ViteDevServer | undefined
-  const SAMPLE_MD_RE = /[\\/]docs[\\/]samples[\\/]sample-.+\.md$/i
+  const SAMPLE_MD_RE = /[\\/]src[\\/]samples-md[\\/]sample-.+\.md$/i
   const GENERATED_TS = resolve(__dirname, 'src', 'samples', 'generated.ts')
 
   function rebuild() {
@@ -86,7 +86,7 @@ function samplesDevPlugin(): Plugin {
       return undefined
     },
     buildStart() {
-      // 仅 dev 启动时做一次初始打包，避免 generated.ts 与 docs/samples 漂移
+      // 仅 dev 启动时做一次初始打包，避免 generated.ts 与 src/samples-md 漂移
       if (server && !building) rebuild()
     },
   }

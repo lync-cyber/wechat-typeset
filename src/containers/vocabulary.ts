@@ -529,6 +529,37 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       '二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。',
     example: '::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n',
   },
+  {
+    name: 'editor-note',
+    styleKey: 'editorNote',
+    category: 'signature',
+    fenceLength: 3,
+    description:
+      '编辑部注：主色左竖条 callout + kicker 小标题 + 正文。data-brief / industry-observer 等深度刊家族常用，区别于中性的 note。',
+    example: '::: editor-note 编 者 按\n慢读并非复古姿态，而是一种对自己时间主权的重新申明。\n:::\n',
+  },
+  {
+    name: 'methodology',
+    styleKey: 'methodology',
+    category: 'signature',
+    fenceLength: 3,
+    description:
+      '方法论小字注释：浅底 + 10px textMuted + 粗体标签头。调研类主题的脚注本，与中性 note 的区别在排印密度（更紧、更小、更"说明栏"）。',
+    example: '::: methodology 方法论\n本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者。\n:::\n',
+  },
+  {
+    name: 'colophon',
+    styleKey: 'colophon',
+    category: 'signature',
+    fenceLength: 3,
+    attrs: [
+      { key: 'next', description: '左栏：下期预告标题', example: '纸本之必要：论书脊与手指的记忆' },
+      { key: 'issue', description: '右栏：期号 / 卷期说明', example: '第 004 期 · 2026' },
+    ],
+    description:
+      '刊物收束栏：上分割线 + 左右双栏 monospace 元数据（下期预告 / 卷·期）。data-brief 等刊物化主题的"尾签名"。',
+    example: '::: colophon next="纸本之必要" issue="第 004 期 · 2026"\n:::\n',
+  },
 
   // ── free（1） ────────────────────────────────────────────
   {

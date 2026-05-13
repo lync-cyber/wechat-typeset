@@ -17,7 +17,7 @@
 import { describe, expect, it, beforeAll } from 'vitest'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { globSync } from 'node:fs'
+import { globSync, readFileSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
 
 import {
@@ -304,6 +304,79 @@ describe('E. Signature Container 注册表闭合性', () => {
   it('签名与第五态 renderer 都已注册（note / abstract / key-number / see-also）', () => {
     for (const name of ['note', 'abstract', 'key-number', 'see-also']) {
       expect(CONTAINER_REGISTRY[name], `renderer ${name}`).toBeTruthy()
+    }
+  })
+})
+
+// ============================================================
+// F. 写作契约 lint：samples 不得出现裸 inline HTML 装饰
+//
+// 设计原则：sample-*.md 是"作者侧示例"，必须只走容器 / markdown 表达视觉。
+// 内联 `<section style="…">` / `<span style="…">` 把主题色码硬编码进作者文本，
+// 违反"换主题不需要改稿"的基本承诺——历史上 sample-data-brief.md 曾踩过这条线
+// （编 者 按 / 方法论 / 下期·卷期 三处），现已抽象为 editor-note / methodology /
+// colophon 三个容器，本测试钉住这条边界，防止回潮。
+//
+// 允许的例外：mpvideo 占位 iframe（公众号视频接口的硬约束，本身就是占位 HTML）。
+// ============================================================
+
+describe('F. samples 不得内联裸 style 装饰', () => {
+  let SAMPLES: Array<{ file: string; content: string }> = []
+
+  beforeAll(() => {
+    const files = globSync('src/samples-md/sample-*.md', { cwd: process.cwd() })
+    SAMPLES = files.map((f) => {
+      const abs = resolve(process.cwd(), f)
+      return { file: basename(abs), content: readFileSync(abs, 'utf8') }
+    })
+  })
+
+  it('找到所有 sample-*.md', () => {
+    expect(SAMPLES.length).toBeGreaterThan(0)
+  })
+
+  it('每份 sample 都不出现 `<section style="…">` 装饰', () => {
+    for (const { file, content } of SAMPLES) {
+      // 收集所有违规位置（带行号），断言时一次性展示
+      const offenders: Array<{ line: number; text: string }> = []
+      content.split('\n').forEach((line, i) => {
+        if (/<section[^>]*\sstyle\s*=\s*["']/.test(line)) {
+          offenders.push({ line: i + 1, text: line.trim().slice(0, 100) })
+        }
+      })
+      expect(
+        offenders,
+        `${file} 出现 <section style=…>（内联 HTML 装饰违反写作契约）：\n` +
+          offenders.map((o) => `  L${o.line}: ${o.text}`).join('\n'),
+      ).toEqual([])
+    }
+  })
+
+  it('每份 sample 都不出现 `<span style="…">` 装饰', () => {
+    for (const { file, content } of SAMPLES) {
+      const offenders: Array<{ line: number; text: string }> = []
+      content.split('\n').forEach((line, i) => {
+        if (/<span[^>]*\sstyle\s*=\s*["']/.test(line)) {
+          offenders.push({ line: i + 1, text: line.trim().slice(0, 100) })
+        }
+      })
+      expect(
+        offenders,
+        `${file} 出现 <span style=…>（内联 HTML 装饰违反写作契约）：\n` +
+          offenders.map((o) => `  L${o.line}: ${o.text}`).join('\n'),
+      ).toEqual([])
+    }
+  })
+
+  it('mpvideo iframe 占位是允许例外（其他 iframe 仍禁止）', () => {
+    // 此测试是"白名单边界"声明：mpvideo 容器渲染时确实需要 iframe 占位；
+    // 它出现在 sample 里是合规的。若未来出现非 mpvideo 的 iframe，应触发审视。
+    for (const { file, content } of SAMPLES) {
+      const iframes = content.match(/<iframe[^>]*>/g) ?? []
+      for (const tag of iframes) {
+        const isMpvideo = /v\.qq\.com|mpvoice|mpvideo|class="video_iframe/.test(tag)
+        expect(isMpvideo, `${file} 出现非 mpvideo iframe：${tag.slice(0, 80)}`).toBe(true)
+      }
     }
   })
 })

@@ -357,6 +357,18 @@
   margin: 22px 0;
 }
 
+.markdown-body .container-editor-note {
+  margin: 22px 0;
+}
+
+.markdown-body .container-methodology {
+  margin: 16px 0;
+}
+
+.markdown-body .container-colophon {
+  margin: 20px 0 0;
+}
+
 .markdown-body .container-pros, .markdown-body .container-cons {
   letter-spacing: 0;
 }

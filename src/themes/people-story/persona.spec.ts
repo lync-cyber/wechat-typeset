@@ -71,14 +71,12 @@ export const spec: PersonaSpec = {
   // Motifs（规范 §1.3：巨号 serif 引号 + 瘦细 column rule + 罗马数字 + 肖像 silhouette）
   // ============================================================
   motifs: {
-    // h2Prefix：静态 3×13 primary 竖条（behavior.h2RomanNumerals 开启时不消费）
-    h2Prefix: {
-      viewBox: [0, 0, 3, 13],
-      width: 3,
-      height: 13,
-      inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 10 },
-      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 13, fill: '#1b2330' }],
-    },
+    // h2Prefix（旧 3×13 primary 竖条）此处不声明 ——
+    // 旧实现里 h2RomanNumerals 开启时 heading_open hook 优先返回罗马数字 span，
+    // h2Prefix SVG 永远不会注入；既然是死代码就一并清理。
+    // 现在的罗马数字走 decorations.headingPrefix autoNumber（inline 通路），
+    // 与 motif → h2Prefix（heading_open 通路）正交——若未来某主题想"罗马数字 + SVG 竖条"
+    // 共存，只需同时声明 motifs.h2Prefix + decorations.headingPrefix。
 
     // sectionCorner：肖像 silhouette —— 头（圆）+ 肩（梯形），border 色让它退后
     sectionCorner: {
@@ -252,9 +250,33 @@ export const spec: PersonaSpec = {
   // ============================================================
   behavior: {
     // 规范 §1.2：intro 首段首字拆为 <span class="intro-dropcap">X</span>
+    // 此处保留 boolean：dropcap 涉及前导标点跳过 / 数字判定，不可用 decorations 声明表达
     introDropcap: true,
-    // 规范 §1.3 ③ / §3.7：h2 自动注入 I/II/III 罗马数字前缀
-    h2RomanNumerals: true,
+  },
+
+  // ============================================================
+  // Decorations（规范 §1.3 ③ / §3.7：h2 自动罗马数字前缀）
+  //
+  // 历史：旧版用 behavior.h2RomanNumerals + markdown.ts 私有分支实现。迁到声明式
+  // decorations 后，渲染逻辑由 pipeline/markdown.ts 的 applyHeadingPrefixDecorations
+  // 统一执行，本 spec 只描述"长什么样"。
+  // ============================================================
+  decorations: {
+    headingPrefix: [
+      {
+        level: 2,
+        autoNumber: 'roman',
+        style: {
+          color: 'accent', // 铁锈色（与 quoteMark / sectionCorner 同色系）
+          fontWeight: 700,
+          fontSize: 16,
+          letterSpacing: 2,
+          marginRight: 10,
+          underline: true,
+          underlinePad: 2,
+        },
+      },
+    ],
   },
 
   // ============================================================

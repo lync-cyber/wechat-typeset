@@ -7563,12 +7563,95 @@
     },
     "behavior": {
       "type": "object",
+      "description": "渲染器级行为开关。仅留给无法用 decorations 声明的真正特例（如 introDropcap 的标点/数字判定）。能用 decorations 表达的视觉签名不要在这里加 flag。",
       "properties": {
         "introDropcap": {
           "type": "boolean"
-        },
-        "h2RomanNumerals": {
-          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "decorations": {
+      "type": "object",
+      "description": "声明式渲染层装饰规则。主题专属视觉签名（标题前缀编号 / kicker / 章节标记……）的首选承载点；共享层一次性实现\"如何按声明执行\"，避免每加一个特性都改 ThemeBehavior + schema + markdown.ts 三处。",
+      "properties": {
+        "headingPrefix": {
+          "type": "array",
+          "description": "标题前缀装饰规则数组。",
+          "items": {
+            "type": "object",
+            "required": [
+              "level",
+              "style"
+            ],
+            "properties": {
+              "level": {
+                "enum": [
+                  2,
+                  3
+                ]
+              },
+              "pattern": {
+                "type": "string",
+                "description": "文本前缀正则（与 autoNumber 二选一）；捕获组 1 是装饰文字，整个匹配从原文本剥掉。"
+              },
+              "autoNumber": {
+                "enum": [
+                  "roman",
+                  "arabic",
+                  "arabic-padded"
+                ],
+                "description": "按出现顺序自动生成编号（与 pattern 二选一）；per-render 重置、按 level 分桶。"
+              },
+              "style": {
+                "type": "object",
+                "required": [
+                  "color"
+                ],
+                "properties": {
+                  "color": {
+                    "enum": [
+                      "primary",
+                      "secondary",
+                      "accent",
+                      "text",
+                      "textMuted"
+                    ]
+                  },
+                  "fontFamily": {
+                    "enum": [
+                      "monospace"
+                    ]
+                  },
+                  "fontWeight": {
+                    "enum": [
+                      400,
+                      500,
+                      600,
+                      700
+                    ]
+                  },
+                  "fontSize": {
+                    "type": "number"
+                  },
+                  "letterSpacing": {
+                    "type": "number"
+                  },
+                  "marginRight": {
+                    "type": "number"
+                  },
+                  "underline": {
+                    "type": "boolean"
+                  },
+                  "underlinePad": {
+                    "type": "number"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
         }
       },
       "additionalProperties": false

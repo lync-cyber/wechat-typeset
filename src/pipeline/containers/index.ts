@@ -52,6 +52,9 @@ import {
   footnotesContainer,
   ctaBarContainer,
   qrFollowContainer,
+  editorNoteContainer,
+  methodologyContainer,
+  colophonContainer,
 } from './databrief'
 
 /**
@@ -110,6 +113,9 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   footnotes: footnotesContainer,
   'cta-bar': ctaBarContainer,
   'qr-follow': qrFollowContainer,
+  'editor-note': editorNoteContainer,
+  methodology: methodologyContainer,
+  colophon: colophonContainer,
 }
 
 /**

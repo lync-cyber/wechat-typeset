@@ -1,7 +1,7 @@
 /**
  * data-brief 家族容器渲染器（数据简报：晚点 / 财新数据 / Morning Brew 感）
  *
- * 7 个签名 + 3 个嵌套子项，覆盖 11-data-brief 设计稿专属版面动作：
+ * 10 个签名 + 3 个嵌套子项，覆盖 11-data-brief 设计稿专属版面动作：
  *   - masthead         刊头（刊名 + monospace 期号·日期）
  *   - section-tag      小栏目标签（黑底白字胶囊）
  *   - toc / toc-item   目录三栏（序号 · 标题 · 页码）
@@ -9,6 +9,9 @@
  *   - bar-chart / bar  横向条形图（div 宽度，无 SVG）
  *   - qa-block         读者问答（Q/A 头像方块）
  *   - footnotes        脚注块（上分割线 + 编号引用）
+ *   - editor-note      编辑部注 callout（主色左条 + kicker + 正文）
+ *   - methodology      方法论小字注释（浅底 + 粗体标签 + 10px 紧凑正文）
+ *   - colophon         刊物收束栏（上分割线 + "下期 / 卷·期"双栏 monospace）
  *
  * 设计纪律：
  *   1. **不依赖 flex 关键布局**——wxPatch 会把 display:flex → block。需要"行内贴边"
@@ -739,3 +742,122 @@ export const qrFollowContainer: ContainerRenderer = {
   close: '',
 }
 
+// ============================================================
+// editor-note · 编辑部注 callout
+//
+// 设计稿原型（sample-data-brief.md 旧版 inline `<section>` 三层嵌套）：
+//   主色左竖条 + kicker（标签头，info 文字）+ body（作者写的 markdown）。
+// 区别于通用 note：note 走 textMuted 中性色调，editor-note 是"被点名"
+// 的栏目编辑发声块，主色调介入。
+// ============================================================
+
+export const editorNoteContainer: ContainerRenderer = {
+  open: (ctx) => {
+    const kicker = ctx.info.trim() || '编 者 按'
+    const c = ctx.tokens.colors
+    const themeStyle = inline(ctx.containers.editorNote)
+    const fallback = [
+      `background-color:${c.bgSoft}`,
+      `border-left:3px solid ${c.primary}`,
+      'padding:14px 16px',
+      'margin:22px 0',
+    ].join(';')
+    const wrapperCSS = themeStyle || fallback
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:6px',
+    ].join(';')
+    return (
+      `<section class="container-editor-note" style="${wrapperCSS}">\n` +
+      `<section class="container-editor-note__kicker" style="${kickerCSS}">${escText(kicker)}</section>\n`
+    )
+  },
+  close: '</section>\n',
+}
+
+// ============================================================
+// methodology · 方法论小字注释
+//
+// 设计稿原型（旧版 inline `<section style="font-size:10px;color:#5a6068">`）：
+//   浅底 + 粗体标签头（info 文字）+ 紧凑小字正文。
+// 体感上是"图注 / 调研口径"的脚注栏——与 note 的差别：methodology 排印更
+// 紧密（10px、padding 10px 12px），note 是叙事性补注（13px、行距更松）。
+// ============================================================
+
+export const methodologyContainer: ContainerRenderer = {
+  open: (ctx) => {
+    const label = ctx.info.trim() || '方法论'
+    const c = ctx.tokens.colors
+    const themeStyle = inline(ctx.containers.methodology)
+    const fallback = [
+      `background-color:${c.bgSoft}`,
+      'padding:10px 12px',
+      'margin:16px 0',
+      'font-size:10px',
+      'line-height:1.7',
+      `color:${c.textMuted}`,
+    ].join(';')
+    const wrapperCSS = themeStyle || fallback
+    // 标签头与正文同行——renderer 在 open 末尾闭合 b 之前留一个空格，让正文紧贴在后面
+    const labelCSS = [
+      `color:${c.text}`,
+      'font-weight:700',
+      'margin-right:6px',
+    ].join(';')
+    return (
+      `<section class="container-methodology" style="${wrapperCSS}">` +
+      `<b class="container-methodology__label" style="${labelCSS}">${escText(label)}</b>`
+    )
+  },
+  close: '</section>\n',
+}
+
+// ============================================================
+// colophon · 刊物收束栏（"下期 / 卷·期"双栏）
+//
+// 设计稿原型（旧版 inline `<section style="display:table">` + 双 table-cell）：
+//   上分割线（1px 实线，比 footnotes 的 border 更重，标记"全文结束"）+
+//   左右两栏 monospace 元数据。kicker（小字大写）+ value（normal）双行。
+// body 内容忽略；左栏数据走 attrs.next，右栏走 attrs.issue。
+// ============================================================
+
+export const colophonContainer: ContainerRenderer = {
+  open: (ctx) => {
+    const c = ctx.tokens.colors
+    const nextLine = ctx.attrs.next ?? ''
+    const issueLine = ctx.attrs.issue ?? ''
+    const themeStyle = inline(ctx.containers.colophon)
+    const fallback = [
+      `border-top:1px solid ${c.text}`,
+      'margin-top:20px',
+      'padding-top:12px',
+    ].join(';')
+    const wrapperCSS =
+      `display:table;width:100%;table-layout:fixed;` +
+      `font-size:11px;line-height:1.6;color:${c.text};` +
+      `${themeStyle || fallback}`
+    const cellLeftCSS = 'display:table-cell;vertical-align:top'
+    const cellRightCSS = 'display:table-cell;vertical-align:top;text-align:right'
+    const kickerCSS = [
+      'display:block',
+      `color:${c.textMuted}`,
+      'font-size:10px',
+      'letter-spacing:0.1em',
+      'margin-bottom:3px',
+    ].join(';')
+    return (
+      `<section class="container-colophon" style="${wrapperCSS}">` +
+      `<span style="${cellLeftCSS}">` +
+      `<span style="${kickerCSS}">下 期</span>${escText(nextLine)}` +
+      `</span>` +
+      `<span style="${cellRightCSS}">` +
+      `<span style="${kickerCSS}">卷 · 期</span>${escText(issueLine)}` +
+      `</span>` +
+      `</section>\n`
+    )
+  },
+  close: '',
+}

@@ -150,6 +150,12 @@ export interface ThemeContainers {
   ctaBar: CSSObject
   /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
   qrFollow: CSSObject
+  /** 编辑部注 callout：主色左条 + kicker 小标题 + 正文（data-brief / industry-observer 等深度刊家族） */
+  editorNote: CSSObject
+  /** 方法论小字注释：浅底紧凑 + 粗体标签头 + 10px 小字（调研 / 数据栏目使用） */
+  methodology: CSSObject
+  /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
+  colophon: CSSObject
 }
 
 export interface ThemeAssets {
@@ -407,21 +413,83 @@ export type VariantKind = keyof ThemeVariants
 
 /**
  * 主题行为开关。**不是样式，不是 token，是 renderer 级别的结构改动**——
- * 某些主题（如 people-story 杂志特稿）需要的视觉签名必须由渲染管线参与生成：
- *   - introDropcap：intro 首段首字拆成 `<span class="intro-dropcap">X</span>`，
- *     使 CSS 能独立放大首字而不走 ::first-letter / float（公众号都不稳）。
- *   - h2RomanNumerals：h2 标题前自动注入罗马数字前缀（I / II / III ...），
- *     取代 theme.assets.h2Prefix 的 SVG 装饰；计数器 per-render 重置。
+ * 保留给"无法用声明式 decorations 表达"的真正特例（目前唯一例子：introDropcap，
+ * 需要扫前导标点 / 跳数字 / 拆首字符的复杂规则）。
+ *
+ * **新增 boolean flag 的门槛**（重要约束 / 反例参考）：
+ *   - 历史上把 `h2RomanNumerals` / `h2DataBriefKicker` 写进这里是错的——它们
+ *     是可声明的"标题前缀装饰"，已迁到 `PersonaSpec.decorations.headingPrefix`。
+ *   - 加新 flag 前先问：能否用 `decorations.*` 这类声明数据表达？能则走声明式，
+ *     避免共享类型 / schema / 管线代码随主题数量爆炸。
  *
  * 不声明 behavior 或字段为 false/undefined 时，pipeline 保持原行为。
- * 新增行为开关需遵守：**只在主题明确需要 renderer 参与时使用**；能用 token / CSS /
- * assets 解决的需求不引入 behavior 开关。
  */
 export interface ThemeBehavior {
   /** intro 首段首字下沉：渲染器把首个实字拆成 `<span class="intro-dropcap">X</span>` */
   introDropcap?: boolean
-  /** h2 自动编号：渲染器按 h2 顺序注入罗马数字前缀 span，取代 h2Prefix SVG 装饰位 */
-  h2RomanNumerals?: boolean
+}
+
+// ============================================================
+// Decorations：声明式渲染层装饰规则
+//
+// 主题对"渲染层视觉签名"的需求绝大多数是**模式化**的（按 regex 切前缀、按出现
+// 顺序编号、给标题加色块……），共享层只需实现一次"如何根据声明执行"，主题在 spec
+// 里写一份纯数据声明即可——避免在 ThemeBehavior / schema / markdown.ts 三处各
+// 加一段 if 分支的爆炸式增长。
+//
+// 字段命名约束：所有颜色用 token 名（`primary` / `accent` 等），不写 hex；换
+// palette 时自动跟随主题色。font-family 只允许 `monospace` —— 与项目"主题不
+// 声明字体"的统一纪律一致（正文交给系统字体；monospace 是数据 / 代码场景的例外）。
+// ============================================================
+
+/** 装饰里允许引用的色 token 键（必须是 ThemeTokens.colors 的合法 key） */
+export type PaletteColorKey =
+  | 'primary'
+  | 'secondary'
+  | 'accent'
+  | 'text'
+  | 'textMuted'
+
+export interface HeadingPrefixDecoration {
+  /** 适用的标题级别。h1 由作者写文章标题，不接入装饰；通常用 h2/h3。 */
+  level: 2 | 3
+  /**
+   * 文本前缀正则（与 autoNumber 二选一）。捕获组 1 是要被装饰的前缀文本；
+   * 整个匹配（含尾随空白）从原 inline 文本里被剥掉。
+   * 例：`'^(\\d{1,2}|[附终前补])(\\s+|$)'` 匹配 "01 标题" / "附 标题"。
+   */
+  pattern?: string
+  /**
+   * 自动按出现顺序生成编号（与 pattern 二选一）。计数器 per-render 重置、按 level
+   * 分桶。`roman` → I/II/III…；`arabic` → 1/2/3…；`arabic-padded` → 01/02/03…。
+   */
+  autoNumber?: 'roman' | 'arabic' | 'arabic-padded'
+  /** 装饰样式（声明式 token 引用）。 */
+  style: {
+    color: PaletteColorKey
+    /** 只允许 monospace（正文字体由系统决定）；缺省时继承标题字体 */
+    fontFamily?: 'monospace'
+    fontWeight?: 400 | 500 | 600 | 700
+    /** 字号 px；缺省时继承标题字号 */
+    fontSize?: number
+    /** 字距 px；缺省 0 */
+    letterSpacing?: number
+    /** 与后续标题文字的间距 px；缺省 8 */
+    marginRight?: number
+    /** 是否在装饰前缀下方画一道短下划线（颜色取自 color 字段） */
+    underline?: boolean
+    /** underline=true 时下划线相对基线的下沉距离 px；缺省 2 */
+    underlinePad?: number
+  }
+}
+
+export interface Decorations {
+  /**
+   * 标题前缀装饰。同一 level 可有多条，按声明顺序依次应用——通常一个主题给定
+   * level 只声明一条；多条的语义是"同时叠加"（autoNumber + pattern 可同时存在，
+   * 但通常没必要）。
+   */
+  headingPrefix?: readonly HeadingPrefixDecoration[]
 }
 
 export interface Theme {
@@ -443,10 +511,16 @@ export interface Theme {
    */
   variants: ThemeVariants
   /**
-   * 渲染器级行为开关。绝大多数主题不需要；只有需要 renderer 参与生成视觉签名
-   * 的主题（如 people-story 的 dropcap / 罗马数字）才声明。
+   * 渲染器级行为开关。绝大多数主题不需要；保留给"无法用声明式 decorations 表达"
+   * 的真正特例（目前唯一例子：people-story 的 introDropcap）。
    */
   behavior?: ThemeBehavior
+  /**
+   * 声明式装饰规则。优先于 behavior：能用 decorations 表达的视觉签名（标题前缀
+   * 编号 / kicker / 章节标记……）一律走这里，避免把"主题专属逻辑"散到 ThemeBehavior
+   * 和 markdown.ts 里。
+   */
+  decorations?: Decorations
 }
 
 export class ThemeAuthoringError extends Error {

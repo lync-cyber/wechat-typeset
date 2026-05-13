@@ -12,7 +12,8 @@
  *   2. primary = #1756d1 数据蓝（IBM Data 家族；不是 Bootstrap #007bff）
  *   3. 代码块黑底 #111418 + 浅字 #e5e7eb —— 与正文白底形成"终端 vs 报告"对照
  *
- * 签名容器 7 件：masthead / sectionTag / toc / kpiDashboard / barChart / qaBlock / footnotes
+ * 签名容器 10 件：masthead / sectionTag / toc / kpiDashboard / barChart / qaBlock /
+ *                  footnotes / editorNote / methodology / colophon
  * 这些 renderer 在 src/pipeline/containers/databrief.ts 实现。
  */
 
@@ -62,6 +63,27 @@ export const spec: PersonaSpec = {
   },
   spacing: { paragraph: 12, section: 28, listItem: 4, containerPadding: 14 },
   radius: { sm: 0, md: 0, lg: 0 }, // 全 0 —— radius ≥ 1 直接打回
+
+  // ============================================================
+  // Decorations：作者写 `## 01 标题` / `## 附 标题`，渲染层把前缀切成蓝色
+  // monospace span（声明式装饰；管线统一执行，参见 pipeline/markdown.ts 的
+  // applyHeadingPrefixDecorations）
+  // ============================================================
+  decorations: {
+    headingPrefix: [
+      {
+        level: 2,
+        // 1–2 位阿拉伯数字 或 单个中文标记字（"附"/"终"/"前"/"补"），后跟空白
+        pattern: '^(\\d{1,2}|[附终前补])(\\s+|$)',
+        style: {
+          color: 'primary',
+          fontFamily: 'monospace',
+          fontWeight: 700,
+          marginRight: 8,
+        },
+      },
+    ],
+  },
 
   // ============================================================
   // Motifs：极简，仅留 dividerFlower（两线 + 中央 6×6 蓝方块）+ 四态图标
@@ -200,6 +222,9 @@ export const spec: PersonaSpec = {
     'footnotes', // 脚注块
     'ctaBar', // 三栏 CTA（赞同/收藏/转发）
     'qrFollow', // 二维码订阅卡
+    'editorNote', // 编辑部注 callout（主色左条 + kicker）
+    'methodology', // 方法论小字注释（浅底紧凑 + 粗体标签）
+    'colophon', // 刊物收束栏（"下期 / 卷·期"双栏 monospace）
   ],
 
   // ============================================================
@@ -215,8 +240,9 @@ export const spec: PersonaSpec = {
       'line-height': '1.35',
       'letter-spacing': '-0.01em',
     },
-    // 章节标题：作者可在 ## 前手写 `<span style="color:#1756d1;margin-right:8px">01</span>`
-    // 实现蓝色序号；本元素仅约定字号 + 直角 + 无 border-bottom（区别于 default 主题的下划线）
+    // 章节标题：蓝色 monospace 序号由 spec.decorations.headingPrefix 声明（见上方），
+    // 管线统一执行 —— 作者只写 `## 01 章节名`，无需在文本里手写任何 HTML。
+    // 字号 + 直角 + 无 border-bottom（区别于 default 主题的下划线）。
     h2: {
       'font-size': '16px',
       'font-weight': '700',
@@ -367,10 +393,10 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
-    // note 在 data-brief 里映射为"灰底小字方法论说明"（设计稿 line 504-506）：
-    // 浅底 + 10px 紧凑字号 + textMuted + title 走 textMuted 小字。
-    // 注：「编 者 按」走另一种 callout 样式（蓝左条 + 蓝标题），由 sample 内联 <section>
-    // 直接写出——不在 note 容器里折射，因为两者标题字号 / 色相差异大且无变种约束。
+    // note 在 data-brief 里映射为"灰底小字补注"：浅底 + 10px 紧凑字号 + textMuted。
+    // 与 methodology 容器的区别：methodology 的标签头走粗体 textPrimary（"方法论"
+    // 之类的口径声明），note 整段走 textMuted，是更轻量的脚注气质。
+    // 「编 者 按」由 editorNote 容器承载（主色左条 + kicker，参见 containers.editorNote）。
     note: {
       __reset: true,
       'background-color': '#f5f7fa',
@@ -500,6 +526,36 @@ export const spec: PersonaSpec = {
       'border-left': '3px solid #1756d1',
       'border-radius': '0',
     },
+    // editor-note · 编辑部注：主色左竖条 + 浅底 + kicker（"编 者 按"）+ 正文
+    editorNote: {
+      __reset: true,
+      'background-color': '#f5f7fa',
+      'border-left': '3px solid #1756d1',
+      padding: '14px 16px',
+      margin: '22px 0',
+      'border-radius': '0',
+    },
+    // methodology · 方法论小字注释：浅底 + 10px textMuted + 行间 1.7
+    // 标签头走 textPrimary 粗体（在 renderer 里由 token 取色）
+    methodology: {
+      __reset: true,
+      'background-color': '#f5f7fa',
+      padding: '10px 12px',
+      margin: '16px 0',
+      'font-size': '10px',
+      'line-height': '1.7',
+      color: '#5a6068',
+      'border-radius': '0',
+    },
+    // colophon · 刊物收束栏："下期 / 卷·期"双栏，上分割线 1px 近黑（强分隔）
+    // renderer 自带 display:table，spec 这里仅承诺分隔线 + 间距
+    colophon: {
+      __reset: true,
+      'border-top': '1px solid #111418',
+      'margin-top': '20px',
+      'padding-top': '12px',
+      'border-radius': '0',
+    },
   },
 
   // ============================================================
@@ -533,7 +589,9 @@ export const spec: PersonaSpec = {
     createdAt: '2026-05-13',
     ownerNotes:
       '主题 11 数据简报 · 三条不可妥协：radius=0、primary #1756d1、代码黑底浅字。' +
-      '7 件 data-brief 家族签名容器 renderer 在 pipeline/containers/databrief.ts。',
+      '10 件 data-brief 家族签名容器 renderer 在 pipeline/containers/databrief.ts。' +
+      '蓝色 monospace 章节序号由 decorations.headingPrefix 声明、管线统一注入；' +
+      '作者侧不写任何内联 HTML——内联 HTML 退出写作契约保护。',
   },
 }
 

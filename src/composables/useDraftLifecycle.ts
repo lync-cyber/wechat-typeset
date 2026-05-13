@@ -30,7 +30,7 @@ const SAVED_FADE_MS = 1800
 /**
  * dev 重建检测：scripts/build-samples.ts 每次生成 generated.ts 时会写入
  * 当前样本内容的稳定哈希 SAMPLE_BUILD_ID。localStorage 里存一份上次见到的 id，
- * 不一致 = 样本源刚刚被更新（作者改了 docs/samples/*.md 或者新增容器/变体）。
+ * 不一致 = 样本源刚刚被更新（作者改了 src/samples-md/*.md 或者新增容器/变体）。
  *
  * 为什么只在 dev 触发：
  *   - 生产用户的草稿是真实创作内容，不应被任何"主题更新"破坏；

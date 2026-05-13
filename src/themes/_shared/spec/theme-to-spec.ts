@@ -52,6 +52,7 @@ export function themeToSpec(
     motifs: overrides.motifs ?? ({} as MotifSpec),
     variants: theme.variants,
     behavior: theme.behavior,
+    decorations: theme.decorations,
     signatureContainers: overrides.signatureContainers as readonly SignatureContainerId[] | undefined,
     templates: theme.templates,
     elements: Object.keys(elements).length ? (elements as PersonaSpec['elements']) : undefined,

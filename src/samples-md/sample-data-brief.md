@@ -46,7 +46,7 @@
 :::
 ::::
 
-## <span style="color:#1756d1;margin-right:8px;font-family:Menlo,monospace;font-weight:700">01</span>为什么我们失去了阅读的耐心
+## 01 为什么我们失去了阅读的耐心
 
 每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在**主动获取信息**，实际上是 *被信息反向喂养*。
 
@@ -69,7 +69,7 @@
 >
 > —— 博尔赫斯
 
-## <span style="color:#1756d1;margin-right:8px;font-family:Menlo,monospace;font-weight:700">02</span>慢读的三种练习
+## 02 慢读的三种练习
 
 ### 2.1&nbsp;&nbsp;纸质之必要
 
@@ -101,12 +101,11 @@ const reading = (book) =>
   book.read(slowly);
 ```
 
-<section style="margin:22px 0;padding:14px 16px;background:#f5f7fa;border-left:3px solid #1756d1">
-<section style="font-size:11px;font-weight:700;color:#1756d1;letter-spacing:0.1em;margin-bottom:6px">编 者 按</section>
-<section style="font-size:13px;line-height:1.7;color:#111418">慢读并非复古姿态，而是一种对自己时间主权的重新申明。</section>
-</section>
+::: editor-note 编 者 按
+慢读并非复古姿态，而是一种对自己时间主权的重新申明。
+:::
 
-## <span style="color:#1756d1;margin-right:8px;font-family:Menlo,monospace;font-weight:700">03</span>夜晚作为最后的阅读时区
+## 03 夜晚作为最后的阅读时区
 
 白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的**连续时间**。
 
@@ -119,7 +118,7 @@ const reading = (book) =>
 有。数据衡量的是习惯而非能力。从睡前 15 分钟开始，两周可回升至 22 分钟（样本内中位数）。
 :::
 
-**数据说明 · NOTES**
+## 附 数据说明 · NOTES
 
 ::: info INFO
 所有时长以分钟计，四舍五入。
@@ -130,7 +129,7 @@ const reading = (book) =>
 :::
 
 ::: warning WARN
-<18 岁样本量较小（n=87），结论仅供参考。
+小于 18 岁样本量较小（n=87），结论仅供参考。
 :::
 
 ::: danger STOP
@@ -143,14 +142,14 @@ const reading = (book) =>
 ::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据"
 :::
 
-<section style="background:#f5f7fa;padding:10px 12px;font-size:10px;line-height:1.7;color:#5a6068;margin:16px 0"><b style="color:#111418">方法论</b>&nbsp;&nbsp;本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者；"连续阅读"定义为不被通知或切屏中断、持续 5 分钟以上的阅读行为。</section>
+::: methodology 方法论
+本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者；"连续阅读"定义为不被通知或切屏中断、持续 5 分钟以上的阅读行为。
+:::
 
 ::: footnotes
 [1]&nbsp;&nbsp;数据覆盖 2010–2025，以两年为滑动窗口平滑处理。
 [2]&nbsp;&nbsp;"深度理解得分"取自阅读后 24h 回忆测试，满分 100。
 :::
 
-<section style="border-top:1px solid #111418;margin-top:20px;padding-top:12px;display:table;width:100%;table-layout:fixed;font-size:11px;line-height:1.6;color:#111418">
-<span style="display:table-cell;vertical-align:top"><span style="display:block;color:#5a6068;font-size:10px;letter-spacing:0.1em;margin-bottom:3px">下 期</span>纸本之必要：论书脊与手指的记忆</span>
-<span style="display:table-cell;vertical-align:top;text-align:right"><span style="display:block;color:#5a6068;font-size:10px;letter-spacing:0.1em;margin-bottom:3px">卷 · 期</span>第 004 期 &nbsp;·&nbsp; 2026</span>
-</section>
+::: colophon next="纸本之必要：论书脊与手指的记忆" issue="第 004 期 · 2026"
+:::
