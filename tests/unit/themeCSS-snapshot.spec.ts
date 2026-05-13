@@ -13,8 +13,8 @@
 
 import { describe, expect, it } from 'vitest'
 import { resolve } from 'node:path'
-import { generateThemeCSS } from '../../src/pipeline/themeCSS'
-import { themeList } from '../../src/themes'
+import { generateThemeCSS } from '../../src/core/pipeline/themeCSS'
+import { themeList } from '../../src/core/themes'
 
 // process.cwd() 在 vitest 里等于 app 根目录
 const SNAP_DIR = resolve(process.cwd(), 'tests/unit/__snapshots__/themeCSS')

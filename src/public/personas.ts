@@ -7,16 +7,16 @@
  * 但换回来的是"任何 JS 运行时都能用"。
  */
 
-import { spec as defaultSpec } from '../themes/default/persona.spec'
-import { spec as techGeekSpec } from '../themes/tech-geek/persona.spec'
-import { spec as techExplainerSpec } from '../themes/tech-explainer/persona.spec'
-import { spec as lifeAestheticSpec } from '../themes/life-aesthetic/persona.spec'
-import { spec as businessFinanceSpec } from '../themes/business-finance/persona.spec'
-import { spec as literaryHumanismSpec } from '../themes/literary-humanism/persona.spec'
-import { spec as industryObserverSpec } from '../themes/industry-observer/persona.spec'
-import { spec as peopleStorySpec } from '../themes/people-story/persona.spec'
-import { spec as academicFrontierSpec } from '../themes/academic-frontier/persona.spec'
-import type { PersonaSpec } from '../themes/_shared/spec'
+import { spec as defaultSpec } from '../core/themes/default/persona.spec'
+import { spec as techGeekSpec } from '../core/themes/tech-geek/persona.spec'
+import { spec as techExplainerSpec } from '../core/themes/tech-explainer/persona.spec'
+import { spec as lifeAestheticSpec } from '../core/themes/life-aesthetic/persona.spec'
+import { spec as businessFinanceSpec } from '../core/themes/business-finance/persona.spec'
+import { spec as literaryHumanismSpec } from '../core/themes/literary-humanism/persona.spec'
+import { spec as industryObserverSpec } from '../core/themes/industry-observer/persona.spec'
+import { spec as peopleStorySpec } from '../core/themes/people-story/persona.spec'
+import { spec as academicFrontierSpec } from '../core/themes/academic-frontier/persona.spec'
+import type { PersonaSpec } from '../core/themes/_shared/spec'
 
 /**
  * 展示顺序（与 src/themes/index.ts 的 DISPLAY_ORDER 一致）。

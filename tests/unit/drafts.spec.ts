@@ -20,7 +20,7 @@ import {
   readDraft,
   searchDrafts,
   updateDraft,
-} from '../../src/storage/drafts'
+} from '../../src/infra/storage/drafts'
 
 function resetStorage() {
   localStorage.clear()

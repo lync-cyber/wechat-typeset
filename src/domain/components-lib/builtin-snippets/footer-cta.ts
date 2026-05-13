@@ -1,0 +1,43 @@
+/**
+ * free · footer-cta（文末 CTA）：标题 + 描述 + 按钮胶囊。
+ */
+
+import type { VariantDef } from '../../../core/variants/_core'
+import { svg } from '../../../core/variants/_thumb'
+
+function thumb(): string {
+  return svg(
+    `<rect x="6" y="16" width="63" height="43" rx="4" fill="#f7f8fa"/>` +
+      `<rect x="20" y="24" width="34" height="3" fill="#1f2328"/>` +
+      `<rect x="20" y="32" width="34" height="2" fill="#c0c6cf"/>` +
+      `<rect x="26" y="42" width="22" height="10" rx="5" fill="#2d6fdd"/>`,
+  )
+}
+
+const footerCta: VariantDef = {
+  meta: {
+    id: 'footer-cta',
+    kind: 'none',
+    name: '文末 CTA',
+    description: '标题 + 描述 + 按钮胶囊',
+  },
+  thumbnail: thumb,
+  snippets: [
+    {
+      presetId: 'free-footer-cta',
+      name: '文末 CTA · 纯视觉',
+      description: '标题 + 描述 + 按钮胶囊（无跳转，适合配二维码使用）',
+      markdown:
+        '::: footer-cta 觉得有用？ cta=点此关注\n如果这篇对你有启发，欢迎关注。\n:::\n',
+    },
+    {
+      presetId: 'free-footer-cta-linked',
+      name: '文末 CTA · 阅读原篇',
+      description: '带同域文章链接（mp.weixin.qq.com/s/*），粘贴到公众号可点',
+      markdown:
+        '::: footer-cta 想看完整推演？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/REPLACE_ME\n上一期的深度分析，点击继续。\n:::\n',
+    },
+  ],
+}
+
+export default footerCta

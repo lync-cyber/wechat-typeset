@@ -35,8 +35,11 @@
 |  | `footnotes` | ★ | 脚注块：上分割线 + 小字编号引用。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。 |
 |  | `cta-bar` | ★ | CTA 三栏：左/右描边格 + 中实色格。data-brief 签名（赞同 / 收藏 / 转发）。body 忽略。 |
 |  | `qr-follow` | ★ | 二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。 |
+|  | `editor-note` | ★ | 编辑部注：主色左竖条 callout + kicker 小标题 + 正文。data-brief / industry-observer 等深度刊家族常用，区别于中性的 note。 |
+|  | `methodology` | ★ | 方法论小字注释：浅底 + 10px textMuted + 粗体标签头。调研类主题的脚注本，与中性 note 的区别在排印密度（更紧、更小、更"说明栏"）。 |
+|  | `colophon` | ★ | 刊物收束栏：上分割线 + 左右双栏 monospace 元数据（下期预告 / 卷·期）。data-brief 等刊物化主题的"尾签名"。 |
 
-> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary，需要划入扩展包再在 `scripts/build-writer-docs.ts:PACK_OF` 追加。
+> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
 
 <!-- generated:container-quick-ref:data-brief:end -->
 
@@ -183,7 +186,56 @@
 
 ---
 
+## 编辑部注 callout
+
+```
+::: editor-note 编 者 按
+慢读并非复古姿态，而是一种对自己时间主权的重新申明。
+:::
+```
+
+主色左竖条 + 浅底卡片 + kicker 小标题（info 文字）+ 正文。区别于通用 `note`：`note` 走中性 `textMuted` 调，`editor-note` 是栏目编辑发声块，主色介入。
+
+---
+
+## 方法论小字注释
+
+```
+::: methodology 方法论
+本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者。
+:::
+```
+
+浅底 + 10px `textMuted` + 粗体标签头（info 文字）。**与 `note` 的差别**：`methodology` 排印更紧密（10px、padding 10/12），用于"调研口径 / 数据说明"这类紧凑脚注；`note` 是叙事性补注，行距更松。
+
+---
+
+## 刊物收束栏（colophon）
+
+```
+::: colophon next="纸本之必要：论书脊与手指的记忆" issue="第 004 期 · 2026"
+:::
+```
+
+文末"下期预告 / 卷·期"双栏 monospace 元数据，上分割线 1px 近黑（强分隔，标记全文结束）。body 忽略；左右两栏分别走 `next` / `issue` 两个 attr。
+
+---
+
+## 章节蓝色 monospace 编号（无需手写 HTML）
+
+data-brief 主题在渲染层识别 `## 01 标题` / `## 12 标题` / `## 附 数据说明` 这类前缀模式，自动把数字（1–2 位）或单字标记（`附` / `终` / `前` / `补`）切成主色 monospace 小字 + 间距。作者写：
+
+```
+## 01 为什么我们失去了阅读的耐心
+## 02 慢读的三种练习
+## 附 数据说明 · NOTES
+```
+
+不写任何 `<span>` 标签。匹配不上的前缀（如 `## 一、 …` 或 `## 第一章`）保持原样不被改写。其它主题里语法仍合法，但不做这层装饰——这是 data-brief 主题的私有视觉签名（`theme.behavior.h2DataBriefKicker`）。
+
+---
+
 ## 完整示例
 
-可直接套用的端到端示范：[`docs/samples/sample-data-brief.md`](../../samples/sample-data-brief.md)。
+可直接套用的端到端示范：[`src/samples-md/sample-data-brief.md`](../../../src/samples-md/sample-data-brief.md)。
 肉眼校验 data-brief 主题下的版面气质——数据蓝 + 黑底代码 + 直角硬边 + 栏目化克制。

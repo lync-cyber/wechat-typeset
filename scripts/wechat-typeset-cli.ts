@@ -32,7 +32,7 @@ const dom = new JSDOM('', { url: 'http://localhost/' })
 ;(globalThis as unknown as { Node: unknown }).Node = dom.window.Node
 
 const { render, listPersonas, SpecValidationError } = await import('../src/public')
-const { CONTAINER_REGISTRY } = await import('../src/pipeline/containers')
+const { CONTAINER_REGISTRY } = await import('../src/core/pipeline/containers')
 
 interface FenceIssue {
   line: number

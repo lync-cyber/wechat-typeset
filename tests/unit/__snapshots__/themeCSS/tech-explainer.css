@@ -246,6 +246,8 @@
 }
 
 .markdown-body .container-masthead {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1a2233;
   margin: 0 0 20px 0;
 }
 
@@ -254,6 +256,8 @@
 }
 
 .markdown-body .container-toc {
+  background-color: #f3f5f8;
+  padding: 12px 14px;
   margin: 0 0 24px 0;
 }
 
@@ -292,6 +296,9 @@
 }
 
 .markdown-body .container-qa-block {
+  border-top: 1px solid #d9dee5;
+  border-bottom: 1px solid #d9dee5;
+  padding: 14px 0;
   margin: 22px 0;
 }
 
@@ -326,27 +333,51 @@
 }
 
 .markdown-body .container-abstract {
+  background-color: #f3f5f8;
+  border-left: 4px solid #0066cc;
+  padding: 14px 16px 14px 18px;
   margin: 18px 0 24px;
+  border-radius: 3px;
 }
 
 .markdown-body .container-key-number {
+  background-color: #f3f5f8;
+  padding: 16px 18px;
   margin: 18px 0;
+  border-radius: 6px;
+  border-top: 3px solid #0066cc;
 }
 
 .markdown-body .container-see-also {
+  background-color: #f3f5f8;
+  padding: 14px 16px;
   margin: 20px 0;
+  border-radius: 6px;
+  border-left: 3px solid #4a90e2;
 }
 
 .markdown-body .container-kpi-dashboard {
+  background-color: #f3f5f8;
+  border-top: 1px solid #1a2233;
+  border-bottom: 1px solid #1a2233;
+  padding: 18px 16px 16px;
   margin: 0 0 28px 0;
 }
 
 .markdown-body .container-bar-chart {
+  background-color: #f3f5f8;
+  border: 1px solid #d9dee5;
+  padding: 16px 14px;
   margin: 20px 0 24px;
 }
 
 .markdown-body .container-footnotes {
+  border-top: 1px solid #d9dee5;
+  padding-top: 8px;
   margin: 14px 0;
+  font-size: 10px;
+  line-height: 1.75;
+  color: #5c6778;
 }
 
 .markdown-body .container-cta-bar {
@@ -354,7 +385,35 @@
 }
 
 .markdown-body .container-qr-follow {
+  background-color: #f3f5f8;
+  border-left: 3px solid #0066cc;
+  padding: 14px;
   margin: 22px 0;
+}
+
+.markdown-body .container-editor-note {
+  border-left: 3px solid #0066cc;
+  background-color: #f3f5f8;
+  padding: 14px 16px 14px 18px;
+  margin: 22px 0;
+  border-radius: 3px;
+}
+
+.markdown-body .container-methodology {
+  background-color: #f3f5f8;
+  border: 1px solid #d9dee5;
+  padding: 10px 12px;
+  margin: 16px 0;
+  border-radius: 3px;
+  font-size: 10px;
+  line-height: 1.75;
+  color: #5c6778;
+}
+
+.markdown-body .container-colophon {
+  border-top: 1px solid #1a2233;
+  padding-top: 12px;
+  margin: 20px 0 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

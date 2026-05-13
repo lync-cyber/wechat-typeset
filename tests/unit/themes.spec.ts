@@ -9,10 +9,10 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { render } from '../../src/pipeline'
-import { defaultTheme } from '../../src/themes/default'
-import { generateThemeCSS } from '../../src/pipeline/themeCSS'
-import { ThemeAuthoringError, type Theme } from '../../src/themes/types'
+import { render } from '../../src/core/pipeline'
+import { defaultTheme } from '../../src/core/themes/default'
+import { generateThemeCSS } from '../../src/core/pipeline/themeCSS'
+import { ThemeAuthoringError, type Theme } from '../../src/core/themes/types'
 
 function run(md: string, theme: Theme = defaultTheme): string {
   return render({ md, theme }).html

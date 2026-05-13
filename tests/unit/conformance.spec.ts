@@ -17,7 +17,7 @@
 import { describe, expect, it, beforeAll } from 'vitest'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { globSync } from 'node:fs'
+import { globSync, readFileSync } from 'node:fs'
 import { basename, dirname } from 'node:path'
 
 import {
@@ -25,14 +25,16 @@ import {
   specToTheme,
   validateSpec,
   type PersonaSpec,
-} from '../../src/themes/_shared/spec'
-import { generateGallery } from '../../src/gallery/generate'
-import { themeList } from '../../src/themes'
-import { VARIANT_IDS, DEFAULT_VARIANTS } from '../../src/themes/types'
+} from '../../src/core/themes/_shared/spec'
+import { generateGallery } from '../../src/domain/gallery/generate'
+import { themeList } from '../../src/core/themes'
+import { VARIANT_IDS, DEFAULT_VARIANTS } from '../../src/core/themes/types'
 import {
   CONTAINER_REGISTRY,
   SIGNATURE_CONTAINER_MARKDOWN_NAME,
-} from '../../src/pipeline/containers'
+} from '../../src/core/pipeline/containers'
+import { STYLED_CONTAINERS } from '../../src/core/vocabulary'
+import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/core/themes/_shared/spec'
 
 // ============================================================
 // 加载器：9 份 persona.spec.ts → 按目录名排序
@@ -47,7 +49,7 @@ interface Loaded {
 let LOADED: Loaded[] = []
 
 beforeAll(async () => {
-  const paths = globSync('src/themes/*/persona.spec.ts', { cwd: process.cwd() })
+  const paths = globSync('src/core/themes/*/persona.spec.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
     .sort()
   for (const p of paths) {
@@ -304,6 +306,90 @@ describe('E. Signature Container 注册表闭合性', () => {
   it('签名与第五态 renderer 都已注册（note / abstract / key-number / see-also）', () => {
     for (const name of ['note', 'abstract', 'key-number', 'see-also']) {
       expect(CONTAINER_REGISTRY[name], `renderer ${name}`).toBeTruthy()
+    }
+  })
+
+  // R2：SUPPORTED_SIGNATURE_CONTAINERS 必须与 STYLED_CONTAINERS.map(s => s.styleKey)
+  // 集合相等。手写数组保留是为了类型字面量联合；这道断言守住二者不漂移。
+  it('SUPPORTED_SIGNATURE_CONTAINERS ≡ STYLED_CONTAINERS.styleKey 集合（SSoT 派生约束）', () => {
+    const fromVocab = new Set<string>(STYLED_CONTAINERS.map((s) => s.styleKey))
+    const fromArray = new Set<string>(SUPPORTED_SIGNATURE_CONTAINERS)
+    const missingInArray = [...fromVocab].filter((k) => !fromArray.has(k))
+    const orphanInArray = [...fromArray].filter((k) => !fromVocab.has(k))
+    expect(missingInArray, 'STYLED_CONTAINERS 中存在但 SUPPORTED_SIGNATURE_CONTAINERS 缺失').toEqual([])
+    expect(orphanInArray, 'SUPPORTED_SIGNATURE_CONTAINERS 中存在但 STYLED_CONTAINERS 缺失').toEqual([])
+  })
+})
+
+// ============================================================
+// F. 写作契约 lint：samples 不得出现裸 inline HTML 装饰
+//
+// 设计原则：sample-*.md 是"作者侧示例"，必须只走容器 / markdown 表达视觉。
+// 内联 `<section style="…">` / `<span style="…">` 把主题色码硬编码进作者文本，
+// 违反"换主题不需要改稿"的基本承诺——历史上 sample-data-brief.md 曾踩过这条线
+// （编 者 按 / 方法论 / 下期·卷期 三处），现已抽象为 editor-note / methodology /
+// colophon 三个容器，本测试钉住这条边界，防止回潮。
+//
+// 允许的例外：mpvideo 占位 iframe（公众号视频接口的硬约束，本身就是占位 HTML）。
+// ============================================================
+
+describe('F. samples 不得内联裸 style 装饰', () => {
+  let SAMPLES: Array<{ file: string; content: string }> = []
+
+  beforeAll(() => {
+    const files = globSync('src/samples-md/sample-*.md', { cwd: process.cwd() })
+    SAMPLES = files.map((f) => {
+      const abs = resolve(process.cwd(), f)
+      return { file: basename(abs), content: readFileSync(abs, 'utf8') }
+    })
+  })
+
+  it('找到所有 sample-*.md', () => {
+    expect(SAMPLES.length).toBeGreaterThan(0)
+  })
+
+  it('每份 sample 都不出现 `<section style="…">` 装饰', () => {
+    for (const { file, content } of SAMPLES) {
+      // 收集所有违规位置（带行号），断言时一次性展示
+      const offenders: Array<{ line: number; text: string }> = []
+      content.split('\n').forEach((line, i) => {
+        if (/<section[^>]*\sstyle\s*=\s*["']/.test(line)) {
+          offenders.push({ line: i + 1, text: line.trim().slice(0, 100) })
+        }
+      })
+      expect(
+        offenders,
+        `${file} 出现 <section style=…>（内联 HTML 装饰违反写作契约）：\n` +
+          offenders.map((o) => `  L${o.line}: ${o.text}`).join('\n'),
+      ).toEqual([])
+    }
+  })
+
+  it('每份 sample 都不出现 `<span style="…">` 装饰', () => {
+    for (const { file, content } of SAMPLES) {
+      const offenders: Array<{ line: number; text: string }> = []
+      content.split('\n').forEach((line, i) => {
+        if (/<span[^>]*\sstyle\s*=\s*["']/.test(line)) {
+          offenders.push({ line: i + 1, text: line.trim().slice(0, 100) })
+        }
+      })
+      expect(
+        offenders,
+        `${file} 出现 <span style=…>（内联 HTML 装饰违反写作契约）：\n` +
+          offenders.map((o) => `  L${o.line}: ${o.text}`).join('\n'),
+      ).toEqual([])
+    }
+  })
+
+  it('mpvideo iframe 占位是允许例外（其他 iframe 仍禁止）', () => {
+    // 此测试是"白名单边界"声明：mpvideo 容器渲染时确实需要 iframe 占位；
+    // 它出现在 sample 里是合规的。若未来出现非 mpvideo 的 iframe，应触发审视。
+    for (const { file, content } of SAMPLES) {
+      const iframes = content.match(/<iframe[^>]*>/g) ?? []
+      for (const tag of iframes) {
+        const isMpvideo = /v\.qq\.com|mpvoice|mpvideo|class="video_iframe/.test(tag)
+        expect(isMpvideo, `${file} 出现非 mpvideo iframe：${tag.slice(0, 80)}`).toBe(true)
+      }
     }
   })
 })

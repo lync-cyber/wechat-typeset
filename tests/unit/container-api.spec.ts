@@ -34,8 +34,8 @@ describe('getContainerVocabulary', () => {
     }
   })
 
-  it('包含 37 个容器（data-brief 家族 12 件已合入）', () => {
-    expect(getContainerVocabulary()).toHaveLength(37)
+  it('包含 40 个容器（data-brief 家族 12 件 + editor-note / methodology / colophon 三件）', () => {
+    expect(getContainerVocabulary()).toHaveLength(40)
   })
 
   it('包含预期的容器名', () => {
@@ -49,10 +49,11 @@ describe('getContainerVocabulary', () => {
       'footer-cta', 'recommend', 'qrcode', 'see-also',
       'mpvoice', 'mpvideo',
       'free',
-      // data-brief 家族（9 styled + 3 nested children）
+      // data-brief 家族（12 styled + 3 nested children = 15 件）
       'masthead', 'section-tag', 'toc', 'toc-item',
       'kpi-dashboard', 'kpi-item', 'bar-chart', 'bar',
       'qa-block', 'footnotes', 'cta-bar', 'qr-follow',
+      'editor-note', 'methodology', 'colophon',
     ]) {
       expect(names).toContain(name)
     }
@@ -116,8 +117,10 @@ describe('getVariantsForContainer', () => {
     }
   })
 
-  it('note 没有 variantKind（第五态固定骨架）', () => {
-    expect(getVariantsForContainer('note')).toHaveLength(0)
+  it('note 接入独立 NoteKind 变体类（R8）', () => {
+    const variants = getVariantsForContainer('note')
+    expect(variants.length).toBeGreaterThan(0)
+    expect(variants.every((v) => v.kind === 'note')).toBe(true)
   })
 
   it('quote-card 返回 quote kind 的 variants', () => {
@@ -143,10 +146,10 @@ describe('getVariantsForContainer', () => {
 })
 
 describe('getThemeDefaultVariants', () => {
-  it('返回 7 个 VariantDescriptor（7 个 variant slot）', () => {
+  it('返回 8 个 VariantDescriptor（admonition/quote/compare/steps/divider/sectionTitle/codeBlock/note）', () => {
     const persona = getPersona('default')
     const descriptors = getThemeDefaultVariants(persona.variants)
-    expect(descriptors).toHaveLength(7)
+    expect(descriptors).toHaveLength(8)
   })
 
   it('每个 descriptor 有 id / kind / name / description', () => {
