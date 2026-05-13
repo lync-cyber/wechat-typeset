@@ -16,11 +16,11 @@
  * 命名约定：只有"模板里直接用"的 ref / computed / handler 才在此 setup；任何能
  * 抽出去单独命名一个函数的都拒绝再写进 App.vue。
  */
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Editor from '../ui/components/Editor.vue'
 import Preview from '../ui/components/Preview.vue'
-import ThemeStrip from '../ui/components/ThemeStrip.vue'
 import Toolbar from '../ui/components/Toolbar.vue'
+import PaneSplitter from '../ui/components/PaneSplitter.vue'
 import DraftDrawer from '../ui/components/DraftDrawer.vue'
 import ColorCustomizer from '../ui/components/ColorCustomizer.vue'
 import ComponentPalette from '../ui/components/ComponentPalette.vue'
@@ -37,10 +37,10 @@ import { useDraftLifecycle } from '../ui/composables/useDraftLifecycle'
 import { useClipboardCopy } from '../ui/composables/useClipboardCopy'
 import { useExportActions } from '../ui/composables/useExportActions'
 import { useKeyboardShortcuts } from '../ui/composables/useKeyboardShortcuts'
-import { themeList } from '../core/themes'
 import { getSample } from '../domain/samples'
 import { safeRead, safeWrite } from '../infra/storage/_kv'
-import { md, baseThemeId, hoverThemeId, customTheme, mobileTab, activeTheme } from './state'
+import { md, baseThemeId, hoverThemeId, customTheme, mobileTab, activeTheme, editorWidth } from './state'
+import { uiThemeMode } from './uiTheme'
 import { useScrollSync } from './scrollSync'
 import { useThemeOrchestrator } from './themeOrchestrator'
 import { buildCommands } from './commands'
@@ -85,12 +85,36 @@ useThemeOrchestrator({ showUndo, activeDraftId, draftIndexTick })
 const { onEditorScroll, onPreviewScroll } = useScrollSync({ editorRef, previewRef })
 
 const {
-  handleClear, handleLoadSample, handleLockTheme, handleFixZhTypo,
+  handleClear, handleLoadSample, handleFixZhTypo,
   handleApplyPalette, handleResetPalette, handleInsertTemplate, handleSaveSelection,
 } = createAppActions({ showUndo, pingTransient, editorRef, paletteRef, ui })
 
 // mobileTab 切换关闭 drawer——避免横屏切到 preview 还有抽屉占着半屏
 watch(mobileTab, () => { closeAll() })
+
+// ==============================================
+// 桌面分隔条：viewport 追踪 + max 计算 + 越界 clamp
+// ==============================================
+// 预览栏锁 var(--preview-w) + var(--sp-7) = 375 + 32 = 407（WeChat 保真）；
+// 分隔条本身 6px；额外留 8px 防贴边。这些常数与 PaneSplitter.vue / 全局 CSS
+// 保持一致——改了别忘了同步。
+const PREVIEW_PANE_W = 407
+const SPLITTER_W = 6
+const EDITOR_MIN_W = 320
+const viewportW = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+function trackViewport() { viewportW.value = window.innerWidth }
+onMounted(() => window.addEventListener('resize', trackViewport))
+onBeforeUnmount(() => window.removeEventListener('resize', trackViewport))
+
+const editorMaxWidth = computed(() =>
+  Math.max(EDITOR_MIN_W, viewportW.value - PREVIEW_PANE_W - SPLITTER_W - 8),
+)
+// 视口缩小时若当前 editorWidth 已经放不下，回收到当前 max——避免预览栏被挤出去
+watch([viewportW, editorMaxWidth], () => {
+  if (editorWidth.value !== null && editorWidth.value > editorMaxWidth.value) {
+    editorWidth.value = editorMaxWidth.value
+  }
+})
 
 // ==============================================
 // 引导层（模板里 v-if 直接用，留在 App.vue）
@@ -172,8 +196,11 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
       :has-custom-color="customTheme !== null"
       :drawer="drawerStates"
       :outlink-strategy="outlinkStrategy"
+      :ui-theme="uiThemeMode"
       @update:theme-id="baseThemeId = $event"
       @update:outlink-strategy="setOutlinkStrategy"
+      @update:ui-theme="uiThemeMode = $event"
+      @hover-theme="hoverThemeId = $event"
       @toggle="onToolbarToggle"
       @action="onToolbarAction"
     />
@@ -190,7 +217,11 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
           @request-delete="handleDeleteDraftRequest"
         />
       </ErrorBoundary>
-      <section class="pane pane-editor">
+      <section
+        class="pane pane-editor"
+        :class="{ 'fixed-width': editorWidth !== null }"
+        :style="editorWidth !== null ? { '--editor-w': editorWidth + 'px' } : undefined"
+      >
         <Editor ref="editorRef" v-model="md" @scroll="onEditorScroll" />
         <OnboardingCard
           v-if="showOnboard"
@@ -200,14 +231,13 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
           @open-overflow="toolbarRef?.openOverflow(); dismissOnboard()"
         />
       </section>
+      <PaneSplitter
+        :width="editorWidth"
+        :min="EDITOR_MIN_W"
+        :max="editorMaxWidth"
+        @update:width="editorWidth = $event"
+      />
       <section class="pane pane-preview">
-        <ThemeStrip
-          :themes="themeList"
-          :active-id="baseThemeId"
-          :hover-id="hoverThemeId"
-          @hover="hoverThemeId = $event"
-          @select="handleLockTheme"
-        />
         <Preview
           ref="previewRef"
           :html="rendered.html"
@@ -300,6 +330,9 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
   flex: 1 1 auto;
   display: flex;
   min-height: 0;
+  /* 编辑栏 fixed-width 时 splitter 与 preview 之间的"空隙"会显出 .main 底色——
+   * 用与预览栏一致的纸面色，让间隙看起来像预览侧延伸出的版式留白。 */
+  background: var(--paper-300);
 }
 .pane {
   flex: 1 1 0;
@@ -308,12 +341,20 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
   flex-direction: column;
   position: relative;
 }
-.pane-editor {
-  border-right: 1px solid var(--border);
+/* 默认：编辑栏 flex 自适应填充。PaneSplitter 组件自身带 1px border-right 充当分割线，
+ * 编辑栏不再重复画。 */
+.pane-editor.fixed-width {
+  flex: 0 0 auto;
+  width: var(--editor-w);
 }
 .pane-preview {
   flex: 0 0 auto;
   width: calc(var(--preview-w) + var(--sp-7));
+  /* 编辑栏 fixed-width 时，flex 容器里剩余空间通过双 auto margin 均分到预览栏
+   * 左右，达成"始终居中"——编辑栏越窄，预览栏左右"纸面留白"越对称。
+   * 默认 flex:1 模式下编辑栏吃满剩余，没有自由空间可分，auto 不产生效果。 */
+  margin-left: auto;
+  margin-right: auto;
   background: var(--paper-300);
 }
 

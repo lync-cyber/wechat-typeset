@@ -251,7 +251,29 @@ function decorationCss(style: HeadingPrefixDecoration['style'], colors: ThemeTok
   return parts.join(';')
 }
 
-function formatAutoNumber(kind: 'roman' | 'arabic' | 'arabic-padded', n: number): string {
+/** autoNumber 计数器：一次 render 内累加，按 level 分桶；h3InH2 在每个新 h2 处归零。 */
+interface HeadingCounters {
+  h2: number
+  h3: number
+  h3InH2: number
+}
+
+type AutoNumberKind = NonNullable<HeadingPrefixDecoration['autoNumber']>
+
+function formatAutoNumber(
+  kind: AutoNumberKind,
+  counters: HeadingCounters,
+  level: 2 | 3,
+): string {
+  // 复合编号 `${h2}.${h3InH2}` —— 设计上只对 level 3 有意义；level 2 调用时
+  // h3InH2 还停留在上一段（或 0），输出会怪——主题作者请把复合格式留给 level 3。
+  if (kind === 'arabic-section') {
+    return `${counters.h2}.${counters.h3InH2}`
+  }
+  if (kind === 'arabic-section-padded') {
+    return `${String(counters.h2).padStart(2, '0')}.${counters.h3InH2}`
+  }
+  const n = level === 2 ? counters.h2 : counters.h3
   if (kind === 'roman') return toRoman(n)
   if (kind === 'arabic-padded') return String(n).padStart(2, '0')
   return String(n)
@@ -273,26 +295,36 @@ function applyHeadingPrefixDecorations(md: MarkdownIt, theme: Theme): void {
 
   md.core.ruler.push('wx_heading_prefix_decorations', (state) => {
     const tokens = state.tokens
-    // per-render 计数器，按 level 分桶（autoNumber 共享同一计数器）
-    const counters: Record<2 | 3, number> = { 2: 0, 3: 0 }
+    // per-render 计数器：h2/h3 各自一份 level-local 计数；h3InH2 是"当前 h2 段内
+    // 的 h3 序号"，遇到新 h2 时归零——用于复合编号 `${h2}.${h3InH2}`。
+    // 不论 decoration 是否声明 autoNumber，计数器都按 heading 出现顺序自然递增；
+    // 没声明 autoNumber 的 level 不会读到这些数，所以多算也不耗费什么。
+    const counters: HeadingCounters = { h2: 0, h3: 0, h3InH2: 0 }
 
     for (let i = 0; i < tokens.length; i++) {
       const tok = tokens[i]
       if (tok.type !== 'heading_open') continue
       const level: 2 | 3 | null = tok.tag === 'h2' ? 2 : tok.tag === 'h3' ? 3 : null
       if (level === null) continue
+
+      if (level === 2) {
+        counters.h2++
+        counters.h3InH2 = 0
+      } else {
+        counters.h3++
+        counters.h3InH2++
+      }
+
       const applicable = decosByLevel.get(level)
       if (!applicable || applicable.length === 0) continue
       const inlineTok = tokens[i + 1]
       if (!inlineTok || inlineTok.type !== 'inline' || !inlineTok.children) continue
 
-      counters[level]++
-
       // 按声明顺序依次应用每条 decoration；同 level 多条时累加注入（罕见但允许）
       // children 类型：markdown-it 的 Token[]；上面已断言非 null
       const children = inlineTok.children as InlineChild[]
       for (const d of applicable) {
-        applyOneHeadingDecoration(d, children, counters[level], colors)
+        applyOneHeadingDecoration(d, children, counters, level, colors)
       }
     }
   })
@@ -311,7 +343,8 @@ type InlineChild = { type: string; content: string; constructor: unknown }
 function applyOneHeadingDecoration(
   d: HeadingPrefixDecoration,
   children: InlineChild[],
-  index: number,
+  counters: HeadingCounters,
+  level: 2 | 3,
   colors: ThemeTokens['colors'],
 ): void {
   const css = decorationCss(d.style, colors)
@@ -324,7 +357,7 @@ function applyOneHeadingDecoration(
 
   if (d.autoNumber) {
     // autoNumber 不消费文本，直接在最前面插一个 html_inline
-    const text = formatAutoNumber(d.autoNumber, index)
+    const text = formatAutoNumber(d.autoNumber, counters, level)
     const span = new Token('html_inline', '', 0)
     span.content = `<span class="heading-prefix heading-prefix--autonumber" style="${css}">${text}</span>`
     children.splice(0, 0, span)

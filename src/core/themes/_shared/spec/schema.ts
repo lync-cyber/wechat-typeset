@@ -437,9 +437,18 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
                   '文本前缀正则（与 autoNumber 二选一）；捕获组 1 是装饰文字，整个匹配从原文本剥掉。',
               },
               autoNumber: {
-                enum: ['roman', 'arabic', 'arabic-padded'],
+                enum: [
+                  'roman',
+                  'arabic',
+                  'arabic-padded',
+                  'arabic-section',
+                  'arabic-section-padded',
+                ],
                 description:
-                  '按出现顺序自动生成编号（与 pattern 二选一）；per-render 重置、按 level 分桶。',
+                  '按出现顺序自动生成编号（与 pattern 二选一）；per-render 重置。'
+                  + ' roman/arabic/arabic-padded 是 level-local 单计数器；'
+                  + ' arabic-section / arabic-section-padded 是复合编号 `${h2}.${h3InH2}`，'
+                  + ' 主要用于 level 3 子节。',
               },
               style: {
                 type: 'object',

@@ -15,10 +15,12 @@
  * 清掉移动端 body class（避免热更替换 App 后样式残留）。
  */
 import { onBeforeUnmount, onMounted, watch, type Ref, type ComputedRef } from 'vue'
-import { baseThemeId, md } from './state'
-import { safeRead } from '../infra/storage/_kv'
+import { baseThemeId, editorWidth, md } from './state'
+import { safeRead, safeWrite } from '../infra/storage/_kv'
+import { useUiTheme } from './uiTheme'
 
 const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
+const EDITOR_WIDTH_STORAGE_KEY = 'wechat-typeset:editor-width'
 
 export interface BootstrapDeps {
   activeDraftId: Ref<string | null>
@@ -32,9 +34,22 @@ export interface BootstrapDeps {
 }
 
 export function useBootstrap(deps: BootstrapDeps) {
+  // UI 亮/暗模式：onMounted 之前先调用是因为 useUiTheme 内部已经做了 onMounted
+  // 时序的封装——它只是在调用处建立 watch；首次 applyToDom 也是在 setup 阶段
+  // 同步执行，能让首屏直接进对应模式而非闪一下 light。
+  useUiTheme()
+
   onMounted(() => {
     const savedThemeId = safeRead(THEME_STORAGE_KEY)
     if (savedThemeId) baseThemeId.value = savedThemeId
+
+    // 编辑栏宽度：仅在合法整数时恢复；解析失败 → 维持 null（默认 flex 行为）。
+    // 不在此处再 clamp 到当前视口——App.vue 的 max 会兜底裁剪。
+    const savedWidth = safeRead(EDITOR_WIDTH_STORAGE_KEY)
+    if (savedWidth) {
+      const parsed = Number.parseInt(savedWidth, 10)
+      if (Number.isFinite(parsed) && parsed > 0) editorWidth.value = parsed
+    }
     // 分享链接优先于草稿：若 URL 里带有 `#share=`，把 payload 作为新草稿载入；
     // 否则沿用正常的草稿恢复路径。
     const loaded = deps.tryLoadShareFromHash((id, body, themeId) => {
@@ -53,6 +68,13 @@ export function useBootstrap(deps: BootstrapDeps) {
     if (typeof document === 'undefined') return
     const mobile = window.matchMedia('(max-width: 767px)').matches
     document.body.classList.toggle('drawer-scroll-lock', open && mobile)
+  })
+
+  // 编辑栏宽度持久化：变化时写盘；置 null（恢复默认）时主动删除 key，
+  // 避免下次启动从空字符串恢复成 NaN。
+  watch(editorWidth, (val) => {
+    if (val == null) safeWrite(EDITOR_WIDTH_STORAGE_KEY, '')
+    else safeWrite(EDITOR_WIDTH_STORAGE_KEY, String(Math.round(val)))
   })
 
   onBeforeUnmount(() => {

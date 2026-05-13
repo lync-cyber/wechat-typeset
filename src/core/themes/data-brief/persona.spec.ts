@@ -65,16 +65,18 @@ export const spec: PersonaSpec = {
   radius: { sm: 0, md: 0, lg: 0 }, // 全 0 —— radius ≥ 1 直接打回
 
   // ============================================================
-  // Decorations：作者写 `## 01 标题` / `## 附 标题` / `### 2.1 子节`，
-  // 渲染层把前缀切成蓝色 monospace span（声明式装饰；管线统一执行，参见
-  // pipeline/markdown.ts 的 applyHeadingPrefixDecorations）
+  // Decorations：作者只写 `## 标题` / `### 子标题`，**不写**编号。
+  // 渲染层自动按出现顺序生成 "01/02/03" 和 "2.1/2.2" 蓝色 monospace 前缀。
+  //   - level 2 → arabic-padded（01, 02, 03…）
+  //   - level 3 → arabic-section（与父 h2 序号联动；如父是 02，第一节为 02.1）
+  // 想列"附录/方法论"这类非数字段时,用专用容器（::: methodology / ::: footnotes
+  // / ::: appendix）即可，不要写到 h2——h2 全部走 autoNumber 不留豁免位。
   // ============================================================
   decorations: {
     headingPrefix: [
       {
         level: 2,
-        // 1–2 位阿拉伯数字 或 单个中文标记字（"附"/"终"/"前"/"补"），后跟空白
-        pattern: '^(\\d{1,2}|[附终前补])(\\s+|$)',
+        autoNumber: 'arabic-padded',
         style: {
           color: 'primary',
           fontFamily: 'monospace',
@@ -84,9 +86,7 @@ export const spec: PersonaSpec = {
       },
       {
         level: 3,
-        // 子节编号：N.N 或 N.N.N，后跟空白。作者写 `### 2.1 标题` 即可，
-        // 无需手写 &nbsp; 模拟"编号 → 标题"间距。
-        pattern: '^(\\d+\\.\\d+(?:\\.\\d+)?)(\\s+|$)',
+        autoNumber: 'arabic-section',
         style: {
           color: 'primary',
           fontFamily: 'monospace',

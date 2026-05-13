@@ -157,7 +157,6 @@ Chrome DevTools 开 Device toolbar，选 iPhone SE (375×667)。或真机浏览�
 - [ ] `::: footer-cta cta=点此关注 href=https://mp.weixin.qq.com/s/xxx` 预览里按钮**可点**
 - [ ] footer-cta 按钮 tap target ≥ 44×44（DevTools 标尺 / Accessibility inspector 验证）
 - [ ] 所有 toolbar 图标按钮实际点击区域 ≥ 44×44（CSS 里定义 44×44）
-- [ ] ThemeStrip 横向滚动流畅（`-webkit-overflow-scrolling:touch`），无卡顿
 
 ### 输入 & 虚拟键盘
 

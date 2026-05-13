@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
-import { EditorState } from '@codemirror/state'
+import { Compartment, EditorState, type Extension } from '@codemirror/state'
 import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view'
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
@@ -8,6 +8,46 @@ import { oneDark } from '@codemirror/theme-one-dark'
 import { createContainerAutocomplete, createContainerLinter } from '../editor-extensions'
 import { sanitizePastedHtml, shouldSanitize } from '../../infra/clipboard/pasteSanitize'
 import { uploadImages, isImageFile } from '../../infra/clipboard/imageIntake'
+import { uiThemeMode } from '../../app/uiTheme'
+
+/**
+ * 编辑器 chrome 主题：以 CSS 变量驱动，自动跟随 [data-theme="dark"] 切换。
+ * 不在此处写死颜色，颜色定义在 tokens.css 的 --editor-* 段。CodeMirror 会把这段
+ * 转成 <style> 注入 ShadowDOM 之外的 head——CSS 变量随 :root / [data-theme]
+ * 级联，无需 reconfigure。
+ */
+const editorChromeTheme = EditorView.theme({
+  '&': {
+    backgroundColor: 'var(--editor-bg)',
+    color: 'var(--editor-text)',
+    height: '100%',
+    fontSize: '14px',
+  },
+  '.cm-scroller': { overflow: 'auto' },
+  '.cm-content': { caretColor: 'var(--accent)' },
+  '&.cm-focused .cm-cursor': { borderLeftColor: 'var(--accent)' },
+  '.cm-gutters': {
+    backgroundColor: 'var(--editor-surface)',
+    color: 'var(--editor-linenum)',
+    border: 'none',
+  },
+  '.cm-activeLine': { backgroundColor: 'var(--editor-active)' },
+  '.cm-activeLineGutter': { backgroundColor: 'transparent' },
+  '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
+    backgroundColor: 'var(--editor-selection)',
+  },
+})
+
+/**
+ * 语法染色 compartment —— UI 亮色时返回空，使用浏览器默认（黑字纸底）；
+ * UI 暗色时挂 oneDark 提供整套 CodeMirror 暗色 + Markdown 语法高亮。
+ * 两侧 chrome 还是同一个 editorChromeTheme 兜底，互相不打架（oneDark
+ * 给的颜色优先级更高，会覆盖 var()——这正是我们想要的）。
+ */
+const syntaxCompartment = new Compartment()
+function syntaxExtensionFor(mode: 'light' | 'dark'): Extension {
+  return mode === 'dark' ? oneDark : []
+}
 
 const props = defineProps<{ modelValue: string }>()
 const emit = defineEmits<{
@@ -213,7 +253,11 @@ function createView(doc: string) {
       history(),
       keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
       markdown(),
-      oneDark,
+      // 先放 chrome 兜底，再放 syntax compartment——compartment 内的 oneDark
+      // 在 dark 时会覆盖 chrome 颜色（顺序后定义优先）；light 时 compartment 为空,
+      // chrome 的 CSS 变量配色保持生效。
+      editorChromeTheme,
+      syntaxCompartment.of(syntaxExtensionFor(uiThemeMode.value)),
       createContainerAutocomplete(),
       createContainerLinter(),
       EditorView.lineWrapping,
@@ -226,10 +270,6 @@ function createView(doc: string) {
         scroll: onScroll,
         paste: (ev, v) => handlePaste(ev, v),
         drop: (ev, v) => handleDrop(ev, v),
-      }),
-      EditorView.theme({
-        '&': { height: '100%', fontSize: '14px' },
-        '.cm-scroller': { overflow: 'auto' },
       }),
     ],
   })
@@ -254,6 +294,12 @@ watch(
     }
   },
 )
+
+// UI 主题切换时 reconfigure syntax compartment——光标 / 选区 / 撤销栈 保留
+watch(uiThemeMode, (mode) => {
+  if (!view) return
+  view.dispatch({ effects: syntaxCompartment.reconfigure(syntaxExtensionFor(mode)) })
+})
 
 onBeforeUnmount(() => {
   if (typeof window !== 'undefined' && window.visualViewport) {

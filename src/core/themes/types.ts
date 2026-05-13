@@ -517,9 +517,21 @@ export interface HeadingPrefixDecoration {
   pattern?: string
   /**
    * 自动按出现顺序生成编号（与 pattern 二选一）。计数器 per-render 重置、按 level
-   * 分桶。`roman` → I/II/III…；`arabic` → 1/2/3…；`arabic-padded` → 01/02/03…。
+   * 分桶。
+   *   - `roman`                → I/II/III…
+   *   - `arabic`               → 1/2/3…
+   *   - `arabic-padded`        → 01/02/03…
+   *   - `arabic-section`       → `${h2}.${h3InH2}`（只对 level 3 有意义；每遇到
+   *                              新的 h2 时 h3InH2 重置回 1）
+   *   - `arabic-section-padded` → `01.1` / `01.2` …（h2 段号零填充两位）
+   * 复合编号在 level 2 上等价于 arabic（h3InH2 退化为 0），不建议在 level 2 使用。
    */
-  autoNumber?: 'roman' | 'arabic' | 'arabic-padded'
+  autoNumber?:
+    | 'roman'
+    | 'arabic'
+    | 'arabic-padded'
+    | 'arabic-section'
+    | 'arabic-section-padded'
   /** 装饰样式（声明式 token 引用）。 */
   style: {
     color: PaletteColorKey
