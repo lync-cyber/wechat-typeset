@@ -178,8 +178,8 @@ export function diagnose(source: string): Diagnostic[] {
         severity: 'error',
         code: 'unknown-container',
         message: suggestion
-          ? `未知容器 "${name}"——是否想写 "${suggestion}"？合法名见 docs/container-syntax.md 速查表。`
-          : `未知容器 "${name}"。合法 fence 名见 docs/container-syntax.md 速查表。`,
+          ? `未知容器 "${name}"——是否想写 "${suggestion}"？合法名见 docs/contract/base.md 速查表。`
+          : `未知容器 "${name}"。合法 fence 名见 docs/contract/base.md 速查表。`,
       })
       // 把错的 frame 也压栈，让后续 close 能配对——避免一个拼错名连锁误报
       stack.push({ line: lineIdx, colons, name, openStart: colonStart, openEnd: lineEnd })

@@ -304,6 +304,19 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     abstract: { margin: '18px 0 24px' },
     keyNumber: { margin: '18px 0' },
     seeAlso: { margin: '20px 0' },
+    // data-brief 家族：默认值刻意最小（多为空对象或仅 margin）——这些容器 renderer
+    // 在 pipeline/containers/databrief.ts 里用 token 直接绘外框，这里的 CSS 槽位留给
+    // 主题 voice 做微调（颜色 / 间距 / 分割线粗细）用。非 data-brief 主题不主动消费时，
+    // 也得到一个克制的可读骨架。
+    masthead: { margin: '0 0 20px 0' },
+    sectionTag: { margin: '0 0 14px 0' },
+    toc: { margin: '0 0 24px 0' },
+    kpiDashboard: { margin: '0 0 28px 0' },
+    barChart: { margin: '20px 0 24px' },
+    qaBlock: { margin: '22px 0' },
+    footnotes: { margin: '14px 0' },
+    ctaBar: { margin: '22px 0' },
+    qrFollow: { margin: '22px 0' },
   }
 }
 

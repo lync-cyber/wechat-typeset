@@ -39,6 +39,20 @@ import {
   keyNumberContainer,
   seeAlsoContainer,
 } from './signature'
+import {
+  mastheadContainer,
+  sectionTagContainer,
+  tocContainer,
+  tocItemContainer,
+  kpiDashboardContainer,
+  kpiItemContainer,
+  barChartContainer,
+  barContainer,
+  qaBlockContainer,
+  footnotesContainer,
+  ctaBarContainer,
+  qrFollowContainer,
+} from './databrief'
 
 /**
  * free · 自由容器（escape hatch）
@@ -83,6 +97,19 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   abstract: abstractContainer,
   'key-number': keyNumberContainer,
   'see-also': seeAlsoContainer,
+  // data-brief 家族（masthead / section-tag / toc / kpi-dashboard / bar-chart / qa-block / footnotes）
+  masthead: mastheadContainer,
+  'section-tag': sectionTagContainer,
+  toc: tocContainer,
+  'toc-item': tocItemContainer,
+  'kpi-dashboard': kpiDashboardContainer,
+  'kpi-item': kpiItemContainer,
+  'bar-chart': barChartContainer,
+  bar: barContainer,
+  'qa-block': qaBlockContainer,
+  footnotes: footnotesContainer,
+  'cta-bar': ctaBarContainer,
+  'qr-follow': qrFollowContainer,
 }
 
 /**

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题 05 · 学术期刊</title>
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --color-bg:        #fbfaf6;   /* 学术米白 */
+  --color-bg-outer:  #ece8dc;
+  --color-text:      #1f1f1f;
+  --color-accent:    #6b1d1d;   /* 学术暗红 */
+  --color-muted:     #6b6b6b;
+  --color-surface:   #f3f0e6;   /* 代码/信息卡底 */
+  --color-border:    #d0ccc0;
+  /* ── TYPOGRAPHY TOKENS ── */
+  --font-body:       'Songti SC', 'SimSun', 'STSong', serif;
+  --font-mono:       Menlo, Monaco, monospace;
+  --font-size-body:  14px;
+  --lh-body:         1.75;
+  /* ── SPACING TOKENS ── */
+  --spacing-block:   28px;
+  --spacing-section: 12px;
+}
+body{margin:0;background:#ece8dc;}
+</style>
+</head>
+<body>
+
+<!--
+  COMPONENT MANIFEST · 主题 05 学术期刊
+  ──────────────────────────────────────────────────
+  灵魂：双栏 A4 期刊 — 注脚是思想的容身之处，BibTeX 是记忆的协议
+  ──────────────────────────────────────────────────
+  ⓘ 关于"标题"：微信公众号平台会自动在正文上方渲染原生文章标题
+    （≈22px 加粗黑色 · 不可改样）+ 公众号名/作者/时间一行。
+    本主题输出从原生头部 *之下* 的正文区开始；cover-header 是
+    其下的"装饰性副刊头"，呼应正题强化主题灵魂，不再承担 <h1>
+    语义（实际渲染时会降级为 <div>，由 theme.coverHeader 控制）。
+
+  00. [platform-mock]   微信原生头部（仅设计稿参考，非主题输出）
+  01. masthead          刊头（期刊名 + 卷期 + 页码）
+  02. toc               目次（Contents · 学术目录）
+  03. cover-header      装饰性副刊头（不加粗正文风格 · ARTICLE 标签；非 H1）
+  04. byline            作者 + 机构 + 收稿日期
+  05. abstract-block    摘要框（ABSTRACT · 关键词）
+  06. section-heading   H2（罗马数字 · 不加粗）
+  07. body-para         正文段落（首行缩进 2em · 脚注上标）
+  08. figure            图表占位（学术图注格式）
+  09. sub-heading       H3（数字编号 · 斜体）
+  10. pull-quote        引用块（左缩进 · 斜体）
+  11. ordered-list      有序列表（括号数字）
+  12. unordered-list    无序列表（破折号）
+  13. inline-code       行内代码
+  14. code-block        代码块（BibTeX + 伪代码）
+  15. callout           信息卡（REMARK 风格）
+  16. divider           ∗ ∗ ∗ 分割线
+  17. end-marker        ∎ 结束符
+  18. footnotes         脚注（上标数字 + 注释）
+  19. references        参考文献（BibTeX 原始格式）
+  20. qa-block          Q&A 讨论
+  21. qr-follow         二维码订阅
+  22. cta-correspondence 来稿指引
+  23. footer            尾部（收稿日期 + 下期预告）
+-->
+
+<!-- ============================================
+     [PLATFORM MOCK] 微信公众号原生头部（仅设计稿参考，非主题输出）
+     用户粘贴 HTML 后，平台自动渲染：标题 / 公众号名 · 作者 · 时间
+     主题输出从其下方的正文区开始 —— 切勿在正文里再渲染 <h1> 主标题。
+     ============================================ -->
+<div style="width:375px; margin:24px auto 0; background:#fff; padding:18px 16px 14px; border:1px dashed #ccc; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
+  <div style="font-size:10px; color:#bbb; letter-spacing:0.06em; margin-bottom:10px;">▽ 微信公众号平台原生头部 · MOCK</div>
+  <div style="font-size:22px; font-weight:bold; line-height:1.35; color:#222; margin-bottom:10px;">在无人深夜，重新学习如何阅读一本书</div>
+  <div style="font-size:12px; color:#888; letter-spacing:0.02em;">
+    <span style="color:#576b95;">慢读简报</span>
+    <span style="margin:0 6px;">·</span>
+    <span>李翊云</span>
+    <span style="margin:0 6px;">·</span>
+    <span>2026-04-22</span>
+  </div>
+</div>
+
+<!-- 主题 05 · 学术期刊 -->
+<div style="width:375px; margin:0 auto 24px; background:#fbfaf6; padding:32px 28px; color:#1f1f1f; box-sizing:border-box; font-family:'Songti SC','SimSun','STSong',serif;">
+
+  <!-- ============================================
+       COMPONENT: masthead
+       用途: 期刊刊头（期刊名 · 卷期 · 页码）
+       在目标编辑器中对应: masthead
+       ============================================ -->
+  <div style="border-top:1px solid #1f1f1f; border-bottom:1px solid #1f1f1f; padding:8px 0; margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; font-size:10px; letter-spacing:0.05em; color:#1f1f1f;">
+      <div><i>Journal of Slow Reading Studies</i></div>
+      <div>Vol. 4, No. 3</div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:10px; letter-spacing:0.05em; color:#6b6b6b; margin-top:3px;">
+      <div>April 2026</div>
+      <div>pp. 41–58</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: toc
+       用途: 目次（Contents · 学术目录）
+       在目标编辑器中对应: toc
+       ============================================ -->
+  <div style="margin-bottom:28px;">
+    <div style="font-size:10px; letter-spacing:0.15em; color:#6b1d1d; margin-bottom:6px;">CONTENTS · 目次</div>
+    <div style="font-size:12px; line-height:1.85; color:#1f1f1f;">
+      <div style="display:flex; border-bottom:0.5px dotted #bfb8a8; padding:2px 0;"><span><i style="color:#6b1d1d;">Ⅰ.</i>&nbsp;&nbsp;为什么我们失去了阅读的耐心</span><span style="flex:1;"></span><span style="color:#6b6b6b;">p.42</span></div>
+      <div style="display:flex; border-bottom:0.5px dotted #bfb8a8; padding:2px 0;"><span><i style="color:#6b1d1d;">Ⅱ.</i>&nbsp;&nbsp;慢读的三种练习</span><span style="flex:1;"></span><span style="color:#6b6b6b;">p.48</span></div>
+      <div style="display:flex; border-bottom:0.5px dotted #bfb8a8; padding:2px 0;"><span><i style="color:#6b1d1d;">Ⅲ.</i>&nbsp;&nbsp;夜晚作为最后的阅读时区</span><span style="flex:1;"></span><span style="color:#6b6b6b;">p.54</span></div>
+      <div style="display:flex; padding:2px 0;"><span><i style="color:#6b1d1d;">App.</i>&nbsp;Q&A · Footnotes · References</span><span style="flex:1;"></span><span style="color:#6b6b6b;">p.56</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cover-header
+       用途: 装饰性副刊头（文章标题 · 不加粗 · 学术风 · ARTICLE 标签）
+             位于微信原生标题之下，呼应正题强化主题灵魂；
+             非 H1 语义（避免与平台原生标题冲突）。
+       在目标编辑器中对应: 自定义副刊头块（非标题块）
+       ============================================ -->
+  <div style="margin-bottom:24px;">
+    <div style="font-size:10px; letter-spacing:0.15em; color:#6b1d1d; margin-bottom:10px;">ARTICLE · 原创论文</div>
+    <div style="font-size:22px; font-weight:normal; line-height:1.45; margin:0 0 10px; letter-spacing:0.02em; color:#1f1f1f;">在无人深夜，重新学习如何阅读一本书<sup style="font-size:11px; color:#6b1d1d;">※</sup></div>
+    <div style="font-size:14px; font-style:italic; color:#1f1f1f; line-height:1.5; margin-bottom:14px;">——论慢读在算法时代的价值</div>
+
+    <!-- ============================================
+         COMPONENT: byline
+         用途: 作者 · 机构 · 收稿日期
+         在目标编辑器中对应: byline
+         ============================================ -->
+    <div style="font-size:11px; line-height:1.7; color:#1f1f1f;">
+      <b>李翊云</b><sup style="color:#6b1d1d;">1</sup><br>
+      <span style="color:#6b6b6b; font-style:italic;">Department of Literature, Eastern University</span><br>
+      <span style="color:#6b6b6b;">收稿日期：2026-04-22　修回日期：2026-04-28</span>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: abstract-block
+       用途: 摘要框（ABSTRACT · 摘要 · 关键词）
+       在目标编辑器中对应: callout (variant: abstract)
+       ============================================ -->
+  <div style="border:1px solid #d0ccc0; padding:12px 14px; margin-bottom:28px; background:#fbfaf6;">
+    <div style="font-size:10px; letter-spacing:0.2em; color:#6b1d1d; margin-bottom:8px;">ABSTRACT · 摘要</div>
+    <div style="font-size:12px; line-height:1.75; color:#1f1f1f; text-indent:2em;">
+      我们并非失去了阅读的能力，而是失去了为阅读腾出一整段连续时间的勇气。本文从媒介生态学与注意力经济两个视角，论证慢读作为一种抵抗实践的必要性。
+    </div>
+    <div style="font-size:10px; margin-top:10px; color:#6b6b6b; line-height:1.6;">
+      <b style="color:#1f1f1f;">关键词：</b>慢读；算法分发；注意力经济；媒介生态学；连续性时间
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: section-heading
+       用途: H2（罗马数字 · 斜体 · 不加粗）
+       在目标编辑器中对应: section-heading (h2)
+       ============================================ -->
+  <h2 style="font-size:16px; font-weight:normal; margin:28px 0 12px; color:#1f1f1f; letter-spacing:0.04em;">
+    <span style="color:#6b1d1d; font-style:italic; margin-right:8px;">Ⅰ.</span>为什么我们失去了阅读的耐心
+  </h2>
+
+  <!-- ============================================
+       COMPONENT: body-para
+       用途: 正文段落（首行缩进 2em · 脚注上标）
+       在目标编辑器中对应: body-para
+       ============================================ -->
+  <p style="font-size:14px; line-height:1.75; text-indent:2em; margin:0 0 12px; color:#1f1f1f;">
+    每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在<b>主动获取信息</b>，实际上是<i>被信息反向喂养</i><sup style="color:#6b1d1d; font-size:10px;">1</sup>。算法并不阅读，它只是分发。
+  </p>
+
+  <p style="font-size:14px; line-height:1.75; text-indent:2em; margin:0 0 12px; color:#1f1f1f;">
+    一本书要求你交出的是完整的自己——不是五分钟、不是通勤时间、也不是临睡前滑手机的余光。它要求你坐下来，进入一段由作者设计好节奏的时间<sup style="color:#6b1d1d; font-size:10px;">2</sup>。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: figure
+       用途: 图表占位（图版 + 学术图注格式）
+       在目标编辑器中对应: image
+       ============================================ -->
+  <div style="margin:20px 0;">
+    <div style="background:repeating-linear-gradient(0deg,#f0ede3,#f0ede3 4px,#fbfaf6 4px,#fbfaf6 8px); aspect-ratio:4/3; border:0.5px solid #1f1f1f; display:flex; align-items:center; justify-content:center; font-family:'Songti SC',serif; font-size:11px; color:#6b6b6b;">图版</div>
+    <div style="border-top:0.5px solid #1f1f1f; margin-top:8px; padding-top:6px; font-size:11px; line-height:1.6; color:#1f1f1f;">
+      <b>图 1.</b> 2010–2025 年受访者日均连续阅读时长变化（分钟）。<br>
+      <span style="color:#6b6b6b; font-style:italic;">数据来源：作者自行整理，n=1,024。</span>
+    </div>
+  </div>
+
+  <!-- section-heading H2 -->
+  <h2 style="font-size:16px; font-weight:normal; margin:28px 0 12px; color:#1f1f1f; letter-spacing:0.04em;">
+    <span style="color:#6b1d1d; font-style:italic; margin-right:8px;">Ⅱ.</span>慢读的三种练习
+  </h2>
+
+  <!-- ============================================
+       COMPONENT: sub-heading
+       用途: H3（数字编号 · 斜体正文）
+       在目标编辑器中对应: sub-heading (h3)
+       ============================================ -->
+  <h3 style="font-size:14px; font-weight:normal; font-style:italic; margin:16px 0 8px; color:#1f1f1f;">
+    2.1　纸质之必要
+  </h3>
+  <p style="font-size:14px; line-height:1.75; text-indent:2em; margin:0 0 12px;">
+    纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的锚定<sup style="color:#6b1d1d; font-size:10px;">†</sup>。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: pull-quote
+       用途: 引用块（左缩进 + 斜体 · 学术 blockquote）
+       在目标编辑器中对应: quote-card
+       ============================================ -->
+  <div style="margin:20px 0 20px 24px; padding-left:12px; border-left:2px solid #1f1f1f;">
+    <div style="font-size:13px; line-height:1.75; color:#1f1f1f; font-style:italic;">
+      凡我所是，皆因我读。
+    </div>
+    <div style="font-size:10px; color:#6b6b6b; margin-top:6px;">
+      — Borges, J. L. (1960). <i>Poema de los Dones</i>, 转引自 Manguel (1996: 17).
+    </div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:14px; font-weight:normal; font-style:italic; margin:16px 0 8px; color:#1f1f1f;">
+    2.2　每日有定数
+  </h3>
+
+  <!-- ============================================
+       COMPONENT: ordered-list
+       用途: 有序列表（括号数字 (1)(2)(3)）
+       在目标编辑器中对应: ordered-list
+       ============================================ -->
+  <div style="font-size:14px; line-height:2; margin:8px 0 12px 20px;">
+    <div><span style="color:#6b1d1d;">(1)</span>&nbsp;&nbsp;每日只读 20 页</div>
+    <div><span style="color:#6b1d1d;">(2)</span>&nbsp;&nbsp;读完合眼默想</div>
+    <div><span style="color:#6b1d1d;">(3)</span>&nbsp;&nbsp;纸质笔记本记录三句话</div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:14px; font-weight:normal; font-style:italic; margin:16px 0 8px; color:#1f1f1f;">
+    2.3　手的参与
+  </h3>
+
+  <!-- ============================================
+       COMPONENT: unordered-list
+       用途: 无序列表（破折号）
+       在目标编辑器中对应: unordered-list
+       ============================================ -->
+  <div style="font-size:14px; line-height:2; margin:8px 0 12px 20px;">
+    <div>— &nbsp;铅笔轻划，不用荧光笔</div>
+    <div>— &nbsp;书页一角折痕做记</div>
+    <div>— &nbsp;读完抄录一段于扉页</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: inline-code / code-block
+       用途: 行内代码 + 代码块（含 BibTeX 参考文献格式）
+       在目标编辑器中对应: inline-code / code-block
+       ============================================ -->
+  <p style="font-size:14px; line-height:1.75; text-indent:2em; margin:12px 0;">
+    若以形式化语言表达，慢读可记作 <span style="font-family:Menlo,monospace; font-size:12px;">read(book, slowly)</span>，即：
+  </p>
+
+  <div style="font-family:Menlo,Monaco,monospace; font-size:12px; line-height:1.75; background:#f3f0e6; padding:10px 12px; margin:12px 0 6px; color:#1f1f1f; border-left:2px solid #6b1d1d;">
+    const reading = (book) =&gt;<br>&nbsp;&nbsp;book.read(slowly);
+  </div>
+  <div style="font-size:10px; color:#6b6b6b; font-style:italic; margin-bottom:16px;">
+    代码 1. 慢读函数的伪代码表示。
+  </div>
+
+  <!-- ============================================
+       COMPONENT: callout
+       用途: 信息卡（REMARK 学术风格框注）
+       在目标编辑器中对应: callout
+       ============================================ -->
+  <div style="margin:24px 0; border:1px solid #1f1f1f; padding:14px 16px; background:#fbfaf6;">
+    <div style="font-size:10px; letter-spacing:0.15em; color:#6b1d1d; margin-bottom:6px;">REMARK</div>
+    <div style="font-size:12px; line-height:1.75; color:#1f1f1f;">
+      慢读并非复古姿态，而是一种对自己时间主权的重新申明。这一论点与 Crary (2013) <i>24/7: Late Capitalism and the Ends of Sleep</i> 之主张形成呼应。
+    </div>
+  </div>
+
+  <!-- section-heading H2 -->
+  <h2 style="font-size:16px; font-weight:normal; margin:28px 0 12px; color:#1f1f1f; letter-spacing:0.04em;">
+    <span style="color:#6b1d1d; font-style:italic; margin-right:8px;">Ⅲ.</span>夜晚作为最后的阅读时区
+  </h2>
+
+  <p style="font-size:14px; line-height:1.75; text-indent:2em; margin:0 0 12px;">
+    白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的<b>连续时间</b>。不必读完一章，能安静地读完一页，已是恩典<sup style="color:#6b1d1d; font-size:10px;">‡</sup>。
+  </p>
+
+  <p style="font-size:14px; line-height:1.75; text-indent:2em; margin:0 0 12px;">
+    延伸阅读请见 <a href="#" style="color:#6b1d1d; text-decoration:underline;">Manguel (1996)</a> 及 <a href="#" style="color:#6b1d1d; text-decoration:underline;">Birkerts (1994)</a> 相关章节。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: divider
+       用途: ∗ ∗ ∗ 学术分节符
+       在目标编辑器中对应: divider
+       ============================================ -->
+  <div style="text-align:center; margin:28px 0; color:#1f1f1f; font-size:14px; letter-spacing:1em;">∗ &nbsp; ∗ &nbsp; ∗</div>
+
+  <!-- ============================================
+       COMPONENT: end-marker
+       用途: ∎ 学术结束符
+       在目标编辑器中对应: divider (variant: end)
+       ============================================ -->
+  <div style="text-align:right; font-size:14px; color:#1f1f1f; margin:16px 0;">∎</div>
+
+  <!-- ============================================
+       COMPONENT: footnotes
+       用途: 脚注区（上标数字 + 注释行）
+       在目标编辑器中对应: footnote-group
+       ============================================ -->
+  <div style="border-top:0.5px solid #1f1f1f; margin-top:24px; padding-top:10px; font-size:10px; line-height:1.7; color:#1f1f1f;">
+    <div><sup style="color:#6b1d1d;">1</sup>&nbsp;Postman (1985), <i>Amusing Ourselves to Death</i>, ch. 3.</div>
+    <div><sup style="color:#6b1d1d;">2</sup>&nbsp;Birkerts (1994), <i>The Gutenberg Elegies</i>, p. 118.</div>
+    <div><sup style="color:#6b1d1d;">†</sup>&nbsp;作者注：此处"锚定"借用认知心理学术语。</div>
+    <div><sup style="color:#6b1d1d;">‡</sup>&nbsp;感谢匿名审稿人对此段的修改建议。</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: references
+       用途: 参考文献（张力点：BibTeX 原始格式）
+       在目标编辑器中对应: code-block (variant: bibtex)
+       ============================================ -->
+  <div style="margin-top:20px;">
+    <div style="font-size:11px; letter-spacing:0.1em; color:#6b1d1d; margin-bottom:8px;">REFERENCES · 参考文献</div>
+    <div style="font-family:Menlo,Monaco,monospace; font-size:10px; line-height:1.7; background:#f3f0e6; padding:12px; color:#1f1f1f;">
+@book{birkerts1994,<br>
+&nbsp;&nbsp;author = {Birkerts, Sven},<br>
+&nbsp;&nbsp;title = {The Gutenberg Elegies},<br>
+&nbsp;&nbsp;year = {1994},<br>
+&nbsp;&nbsp;publisher = {Faber &amp; Faber}<br>
+}<br>
+@book{crary2013,<br>
+&nbsp;&nbsp;author = {Crary, Jonathan},<br>
+&nbsp;&nbsp;title = {24/7},<br>
+&nbsp;&nbsp;year = {2013},<br>
+&nbsp;&nbsp;publisher = {Verso}<br>
+}
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qa-block
+       用途: Q&A 讨论（学术 Discussion 风）
+       在目标编辑器中对应: qa-block
+       ============================================ -->
+  <div style="margin-top:24px; border-top:0.5px solid #1f1f1f; padding-top:10px;">
+    <div style="font-size:10px; letter-spacing:0.15em; color:#6b1d1d; margin-bottom:8px;">Q&A · 讨论</div>
+    <div style="font-size:12px; line-height:1.75; color:#1f1f1f;">
+      <div style="margin-bottom:6px;"><b style="color:#6b1d1d;">Q.</b>&nbsp;&nbsp;若读者工作日无连续时间，是否不宜读书？</div>
+      <div><b>A.</b>&nbsp;&nbsp;不然。慢读所求非"连续之长"，而是"连续之真"；十五分钟之完整，胜过两小时之破碎。</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qr-follow
+       用途: 二维码订阅（学术期刊订阅框）
+       在目标编辑器中对应: qr-follow
+       ============================================ -->
+  <div style="margin-top:20px; border:0.5px solid #1f1f1f; padding:12px; display:flex; gap:12px; align-items:center; background:#f3f0e6;">
+    <svg viewBox="0 0 60 60" width="56" height="56" style="display:block; background:#fbfaf6; flex-shrink:0;">
+      <g fill="#1f1f1f"><rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="#fbfaf6"/><rect x="9" y="9" width="4" height="4"/><rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="#fbfaf6"/><rect x="47" y="9" width="4" height="4"/><rect x="3" y="41" width="16" height="16"/><rect x="6" y="44" width="10" height="10" fill="#fbfaf6"/><rect x="9" y="47" width="4" height="4"/><rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/><rect x="36" y="27" width="3" height="3"/><rect x="24" y="30" width="3" height="3"/><rect x="33" y="30" width="3" height="3"/><rect x="27" y="36" width="3" height="3"/><rect x="36" y="36" width="3" height="3"/><rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/><rect x="39" y="45" width="3" height="3"/><rect x="27" y="48" width="3" height="3"/></g>
+    </svg>
+    <div style="font-family:'Songti SC',serif;">
+      <div style="font-size:10px; color:#6b1d1d; letter-spacing:0.12em;">SUBSCRIBE · 订阅本刊</div>
+      <div style="font-size:13px; font-weight:bold; margin-top:3px;">J. Slow Reading Studies</div>
+      <div style="font-size:10px; color:#6b6b6b; font-style:italic; margin-top:3px; line-height:1.5;">ISSN 2728-0041 · 季刊</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cta-correspondence
+       用途: 来稿指引（学术 Correspondence 风）
+       在目标编辑器中对应: cta-bar (variant: correspondence)
+       ============================================ -->
+  <div style="margin-top:14px; font-size:11px; line-height:1.75; color:#1f1f1f;">
+    <b style="color:#6b1d1d;">Correspondence&nbsp;·&nbsp;</b>本文欢迎读者来函讨论；投稿请发送至 <span style="font-family:Menlo,monospace; font-size:10px; color:#6b1d1d;">editor@jsrs.org</span>，文末请注明"关于第 4 卷第 3 期"。
+  </div>
+
+  <!-- ============================================
+       COMPONENT: footer
+       用途: 尾部（收稿修回日期 + 下期预告）
+       在目标编辑器中对应: footer
+       ============================================ -->
+  <div style="border-top:1px solid #1f1f1f; margin-top:20px; padding-top:10px; font-size:10px; line-height:1.7; color:#6b6b6b; font-style:italic;">
+    <div>Received: 2026-04-22 · Revised: 2026-04-28 · Accepted: 2026-05-02</div>
+    <div style="margin-top:4px;">Next issue: 纸本之必要：论书脊与手指的记忆 (Vol. 4, No. 4)</div>
+  </div>
+
+</div>
+
+</body>
+</html>

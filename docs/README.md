@@ -9,8 +9,12 @@
 | 文档 | 面向 | 回答什么 |
 | --- | --- | --- |
 | [../README.md](../README.md) | GitHub 访客 | 这个工具是什么，30 秒决策 |
-| [../docs/writer-contract.md](writer-contract.md) | 作者（写 Markdown） | 25 fence + 5 行内扩展的硬承诺、主题边界、契约演进 |
-| [container-syntax.md](container-syntax.md) | 作者（写 Markdown） | 25 种容器的 fence 语法与键值对 |
+| [contract/README.md](contract/README.md) | 作者（写 Markdown） | 写作契约总纲：三层模型、子文档导航、阅读路线 |
+| [contract/syntax.md](contract/syntax.md) | 作者（写 Markdown） | 容器 fence 通用语法、5 个行内扩展、常见错误 |
+| [contract/base.md](contract/base.md) | 作者（写 Markdown） | 基础契约的 23 个通用容器，含速查表与分组示例 |
+| [contract/packs/data-brief.md](contract/packs/data-brief.md) | 写数据简报 / 栏目化深度文的作者 | data-brief 扩展包的 12 个签名容器 |
+| [contract/custom.md](contract/custom.md) | fork / 集成方 | 在本地追加私有容器的四步流程 |
+| [contract/platform.md](contract/platform.md) | 任何发文的人 | 公众号外链白名单、footer-cta href、契约演进规则 |
 
 ## 主题作者
 

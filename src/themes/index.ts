@@ -21,6 +21,7 @@ const DISPLAY_ORDER: readonly string[] = [
   'tech-explainer',
   'life-aesthetic',
   'business-finance',
+  'data-brief',
   'literary-humanism',
   'industry-observer',
   'people-story',

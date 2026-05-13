@@ -281,6 +281,16 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'seeAlso',
   'seal',
   'prelude',
+  // data-brief 家族（数据简报：晚点 / 财新数据 / Morning Brew）
+  'masthead',
+  'sectionTag',
+  'toc',
+  'kpiDashboard',
+  'barChart',
+  'qaBlock',
+  'footnotes',
+  'ctaBar',
+  'qrFollow',
 ] as const
 
 export type SignatureContainerId = (typeof SUPPORTED_SIGNATURE_CONTAINERS)[number]

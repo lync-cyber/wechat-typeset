@@ -241,6 +241,18 @@
   padding-bottom: 8px;
 }
 
+.markdown-body .container-masthead {
+  margin: 0 0 20px 0;
+}
+
+.markdown-body .container-section-tag {
+  margin: 0 0 14px 0;
+}
+
+.markdown-body .container-toc {
+  margin: 0 0 24px 0;
+}
+
 .markdown-body .container-note {
   border-top: 1px solid #e0d6c0;
   padding: 10px 0 4px 0;
@@ -269,6 +281,10 @@
 
 .markdown-body .container-steps {
   margin: 24px 0;
+}
+
+.markdown-body .container-qa-block {
+  margin: 22px 0;
 }
 
 .markdown-body .container-footer-cta {
@@ -312,6 +328,26 @@
 
 .markdown-body .container-see-also {
   margin: 20px 0;
+}
+
+.markdown-body .container-kpi-dashboard {
+  margin: 0 0 28px 0;
+}
+
+.markdown-body .container-bar-chart {
+  margin: 20px 0 24px;
+}
+
+.markdown-body .container-footnotes {
+  margin: 14px 0;
+}
+
+.markdown-body .container-cta-bar {
+  margin: 22px 0;
+}
+
+.markdown-body .container-qr-follow {
+  margin: 22px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {

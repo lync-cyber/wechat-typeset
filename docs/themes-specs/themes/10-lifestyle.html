@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题 10 · MUJI BOOKS 周末特集</title>
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --color-bg:          #efece4;   /* 冷米 · 亚麻布底 */
+  --color-bg-outer:    #e6e3dc;   /* 外层背景 */
+  --color-text:        #2a2e33;   /* 主文字深灰黑 */
+  --color-accent:      #1c3e66;   /* 靛蓝（MUJI 签名色） */
+  --color-muted:       #6a6760;   /* 辅助文字 */
+  --color-neutral:     #9b978c;   /* 页码、虚线 */
+  --color-surface:     #e4dfd1;   /* 卡片底面 */
+  --color-border:      #c9c2ad;   /* 分割线 */
+
+  /* ── TYPOGRAPHY TOKENS ── */
+  --font-body:         -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  --font-display:      Georgia, serif;   /* 裙注 i. ii. 大字意大利体 */
+  --font-serif:        'Songti SC', serif;   /* 引用宋体 */
+  --font-size-body:    15px;
+  --lh-body:           1.95;
+  --spacing-block:     32px;
+  --spacing-section:   14px;
+}
+body{margin:0;background:#e6e3dc;}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     COMPONENT MANIFEST · 主题 10 MUJI BOOKS 周末特集
+     灵魂：被周六清晨自然光晒到的一方亚麻布上，一册薄书
+     ============================================================
+     ⓘ 关于"标题"：微信公众号平台会自动在正文上方渲染原生文章标题
+       （≈22px 加粗黑色 · 不可改样）+ 公众号名/作者/时间一行。
+       本主题输出从原生头部 *之下* 的正文区开始；cover-header 是
+       其下的"装饰性副刊头"，呼应正题强化主题灵魂，不再承担 <h1>
+       语义（实际渲染时会降级为 <div>，由 theme.coverHeader 控制）。
+
+     00. [platform-mock]    微信原生头部（仅设计稿参考，非主题输出）
+     01. brand-stripe       靛蓝签名窄条（MUJI 标识色带）
+     02. toc                目录（杂志目次风）
+     03. byline-vertical    垂直署名条（撰文/摄影/出版）
+     04. cover-image        封面主图（亚麻纹理 SVG）
+     05. cover-header       装饰性副刊头（图下 COVER STORY 标签 + 正题；非 H1）
+     06. intro-para         导语（首字下沉 float）
+     07. section-heading    章节标题（靛蓝方块编号 + H2）
+     08. body-para          正文段落
+     09. image-grid         多图并排（三格等宽 SVG）
+     10. qa-block           读者来信 Q&A
+     11. sub-heading        H3 子标题（靛蓝点缀）
+     12. pull-quote         引用块（无竖线，大字宋体）
+     13. ordered-list       有序列表（汉字一二三编号）
+     14. nested-list        嵌套子列表（二级缩进）
+     15. checklist          清单（手绘方框勾选）
+     16. marginalia         编者四则（Kinfolk 式 i.ii.iii.iv. 裙注）
+     17. editor-note        编后信息卡
+     18. divider-ornament   靛蓝细点分割线
+     19. cta-bar            互动区（点赞/在看/转发）
+     20. qr-follow          二维码关注区
+     21. footer             尾部（下期预告）
+     ============================================================ -->
+
+<!-- ============================================
+     [PLATFORM MOCK] 微信公众号原生头部（仅设计稿参考，非主题输出）
+     用户粘贴 HTML 后，平台自动渲染：标题 / 公众号名 · 作者 · 时间
+     主题输出从其下方的正文区开始 —— 切勿在正文里再渲染 <h1> 主标题。
+     ============================================ -->
+<div style="width:375px; margin:24px auto 0; background:#fff; padding:18px 16px 14px; border:1px dashed #ccc; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
+  <div style="font-size:10px; color:#bbb; letter-spacing:0.06em; margin-bottom:10px;">▽ 微信公众号平台原生头部 · MOCK</div>
+  <div style="font-size:22px; font-weight:bold; line-height:1.35; color:#222; margin-bottom:10px;">在无人深夜，重新学习如何阅读一本书</div>
+  <div style="font-size:12px; color:#888; letter-spacing:0.02em;">
+    <span style="color:#576b95;">慢读简报</span>
+    <span style="margin:0 6px;">·</span>
+    <span>李翊云</span>
+    <span style="margin:0 6px;">·</span>
+    <span>2026-04-22</span>
+  </div>
+</div>
+
+<!-- 主题 10 · MUJI BOOKS 周末特集 · 冷米 + 靛蓝窄条 -->
+<!-- 灵魂陈述：被周六清晨自然光晒到的一方亚麻布上，一册薄书 -->
+<div style="width:375px; margin:0 auto 24px; background:#efece4; padding:0 0 28px; color:#2a2e33; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;">
+
+  <!-- ============================================
+       COMPONENT: brand-stripe
+       用途: MUJI 靛蓝签名窄条，刊名 + 期号
+       在目标编辑器中对应: masthead / brand-bar
+       ============================================ -->
+  <div style="height:28px; background:#1c3e66; display:flex; align-items:center; padding:0 22px; justify-content:space-between;">
+    <div style="color:#efece4; font-size:10px; letter-spacing:0.35em;">WEEKEND BOOKS</div>
+    <div style="color:#efece4; font-size:10px; letter-spacing:0.25em;">NO.18</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: toc
+       用途: 目录（杂志目次惯例，放最前）
+       在目标编辑器中对应: toc
+       ============================================ -->
+  <div style="padding:22px 22px 14px;">
+    <div style="font-size:10px; letter-spacing:0.25em; color:#1c3e66; margin-bottom:10px;">目 次 &nbsp;/&nbsp; INDEX</div>
+    <div style="font-size:12px; line-height:2; color:#2a2e33;">
+      <div style="display:flex; justify-content:space-between; border-bottom:1px dotted #9b978c;"><span>01　为什么我们失去了阅读的耐心</span><span style="color:#9b978c;">04</span></div>
+      <div style="display:flex; justify-content:space-between; border-bottom:1px dotted #9b978c;"><span>02　慢读的三种练习</span><span style="color:#9b978c;">08</span></div>
+      <div style="display:flex; justify-content:space-between; border-bottom:1px dotted #9b978c;"><span>03　夜晚作为最后的阅读时区</span><span style="color:#9b978c;">14</span></div>
+      <div style="display:flex; justify-content:space-between;"><span>编后 &nbsp;/&nbsp; 来信 &nbsp;/&nbsp; 下期预告</span><span style="color:#9b978c;">18</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: byline-vertical
+       用途: 垂直署名条（撰文/摄影/出版，非横排三段）
+       在目标编辑器中对应: byline
+       ============================================ -->
+  <div style="padding:0 22px 20px; font-size:10px; letter-spacing:0.2em; color:#6a6760; line-height:2;">
+    <div><span style="color:#1c3e66;">撰文</span>&nbsp;&nbsp;李翊云</div>
+    <div><span style="color:#1c3e66;">摄影</span>&nbsp;&nbsp;自然光</div>
+    <div><span style="color:#1c3e66;">出版</span>&nbsp;&nbsp;二〇二六·四</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cover-image
+       用途: 封面主图（亚麻纹理 SVG + 书册插图）
+       在目标编辑器中对应: image-with-caption
+       ============================================ -->
+  <div style="padding:0 22px; margin-bottom:24px;">
+    <svg viewBox="0 0 331 240" width="331" height="240" style="display:block;">
+      <defs>
+        <pattern id="linen10" width="4" height="4" patternUnits="userSpaceOnUse">
+          <rect width="4" height="4" fill="#d9d3c2"/>
+          <path d="M0 0L4 4M0 4L4 0" stroke="#c9c2ad" stroke-width="0.3"/>
+        </pattern>
+      </defs>
+      <rect width="331" height="240" fill="url(#linen10)"/>
+      <rect x="118" y="60" width="95" height="130" fill="#efece4" stroke="#2a2e33" stroke-width="0.6"/>
+      <rect x="118" y="60" width="95" height="14" fill="#1c3e66"/>
+      <text x="165.5" y="160" text-anchor="middle" font-family="PingFang SC,serif" font-size="11" fill="#2a2e33" letter-spacing="2">慢读手册</text>
+      <text x="290" y="225" text-anchor="end" font-family="PingFang SC" font-size="8" fill="#6a6760" letter-spacing="1.5">SAT 07:40 · 自然光</text>
+    </svg>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cover-header
+       用途: 装饰性副刊头（封面图下，不叠压图上；COVER STORY 标签 + 正题）
+             位于微信原生标题之下，呼应正题强化主题灵魂；
+             非 H1 语义（避免与平台原生标题冲突）。
+       在目标编辑器中对应: 自定义副刊头块（非标题块）
+       ============================================ -->
+  <div style="padding:0 22px; margin-bottom:28px;">
+    <div style="font-size:10px; letter-spacing:0.25em; color:#1c3e66; margin-bottom:10px;">COVER STORY</div>
+    <div style="font-size:28px; font-weight:300; line-height:1.35; margin:0 0 8px; color:#2a2e33; letter-spacing:0.02em;">在无人深夜，<br>重新学习如何阅读一本书</div>
+    <div style="font-size:13px; color:#6a6760; line-height:1.6;">论慢读在算法时代的价值</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: intro-para
+       用途: 导语（首字下沉 float，无居中大字装饰）
+       在目标编辑器中对应: drop-cap / intro-para
+       ============================================ -->
+  <div style="padding:0 22px; margin-bottom:32px;">
+    <p style="font-size:15px; line-height:1.95; color:#2a2e33; margin:0; letter-spacing:0.02em;">
+      <span style="float:left; font-size:40px; line-height:0.95; padding:4px 8px 0 0; color:#1c3e66; font-weight:300;">我</span>们并非失去了阅读的能力，而是失去了为阅读腾出一整段连续时间的勇气——这是一份写给周六清晨的短文。
+    </p>
+    <div style="clear:both;"></div>
+  </div>
+
+  <div style="padding:0 22px;">
+
+    <!-- ============================================
+         COMPONENT: section-heading
+         用途: 章节标题（靛蓝方块序号 + H2 细字）
+         在目标编辑器中对应: section-heading
+         ============================================ -->
+    <div style="margin:32px 0 14px; display:flex; align-items:baseline; gap:12px;">
+      <div style="width:22px; height:22px; background:#1c3e66; color:#efece4; font-size:11px; text-align:center; line-height:22px; letter-spacing:0;">01</div>
+      <h2 style="font-size:18px; font-weight:400; line-height:1.4; color:#2a2e33; margin:0; letter-spacing:0.02em;">为什么我们失去了阅读的耐心</h2>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: body-para
+         用途: 正文段落（细字宽行距，highlight + em 点缀）
+         在目标编辑器中对应: body-para
+         ============================================ -->
+    <p style="font-size:15px; line-height:1.95; color:#2a2e33; margin:0 0 12px; letter-spacing:0.02em;">
+      每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在<b style="background:#e4dfd1; padding:0 3px;">主动获取信息</b>，实际上是<i>被信息反向喂养</i>。
+    </p>
+
+    <p style="font-size:15px; line-height:1.95; color:#2a2e33; margin:0 0 12px; letter-spacing:0.02em;">
+      一本书要求你交出的是完整的自己——不是五分钟，不是通勤时间，也不是临睡前滑手机的余光。
+    </p>
+
+    <!-- ============================================
+         COMPONENT: image-grid
+         用途: 多图并排（三格等宽 SVG，时序叙事感）
+         在目标编辑器中对应: image-grid
+         ============================================ -->
+    <div style="display:flex; gap:6px; margin:24px 0;">
+      <div style="flex:1;">
+        <svg viewBox="0 0 110 140" width="100%" height="140" style="display:block;">
+          <rect width="110" height="140" fill="#d9d3c2"/>
+          <rect x="8" y="24" width="94" height="92" fill="#efece4" stroke="#2a2e33" stroke-width="0.5"/>
+          <line x1="55" y1="24" x2="55" y2="116" stroke="#2a2e33" stroke-width="0.3"/>
+        </svg>
+        <div style="font-size:9px; letter-spacing:0.15em; color:#6a6760; margin-top:4px;">07:40 翻开</div>
+      </div>
+      <div style="flex:1;">
+        <svg viewBox="0 0 110 140" width="100%" height="140" style="display:block;">
+          <rect width="110" height="140" fill="#d9d3c2"/>
+          <rect x="20" y="46" width="70" height="50" fill="#1c3e66"/>
+          <rect x="22" y="96" width="66" height="2" fill="#efece4"/>
+        </svg>
+        <div style="font-size:9px; letter-spacing:0.15em; color:#6a6760; margin-top:4px;">08:20 茶</div>
+      </div>
+      <div style="flex:1;">
+        <svg viewBox="0 0 110 140" width="100%" height="140" style="display:block;">
+          <rect width="110" height="140" fill="#d9d3c2"/>
+          <circle cx="55" cy="70" r="28" fill="none" stroke="#2a2e33" stroke-width="0.6"/>
+          <line x1="55" y1="70" x2="55" y2="50" stroke="#2a2e33" stroke-width="0.6"/>
+          <line x1="55" y1="70" x2="71" y2="70" stroke="#1c3e66" stroke-width="0.6"/>
+        </svg>
+        <div style="font-size:9px; letter-spacing:0.15em; color:#6a6760; margin-top:4px;">09:15 合</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: qa-block
+         用途: 读者来信 Q&A（Q 靛蓝 / A 灰，浅底卡片）
+         在目标编辑器中对应: qa-block
+         ============================================ -->
+    <div style="margin:24px 0; padding:16px 16px 14px; background:#e4dfd1;">
+      <div style="font-size:10px; letter-spacing:0.25em; color:#1c3e66; margin-bottom:10px;">读 · 者 · 来 · 信</div>
+      <div style="font-size:13px; line-height:1.7; color:#2a2e33;">
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+          <div style="font-weight:700; color:#1c3e66; flex-shrink:0;">Q</div>
+          <div>周末只有两小时，能读完一本书吗？</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div style="font-weight:700; color:#9b978c; flex-shrink:0;">A</div>
+          <div>不能。能读完的不是书，是书的大意。两小时只够与一个章节<b>相处</b>——这已经足够多。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: section-heading
+         用途: 第二章节标题
+         在目标编辑器中对应: section-heading
+         ============================================ -->
+    <div style="margin:32px 0 14px; display:flex; align-items:baseline; gap:12px;">
+      <div style="width:22px; height:22px; background:#1c3e66; color:#efece4; font-size:11px; text-align:center; line-height:22px;">02</div>
+      <h2 style="font-size:18px; font-weight:400; line-height:1.4; color:#2a2e33; margin:0; letter-spacing:0.02em;">慢读的三种练习</h2>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: sub-heading
+         用途: H3 子标题（靛蓝点缀 · 细字间距）
+         在目标编辑器中对应: sub-heading
+         ============================================ -->
+    <h3 style="font-size:13px; font-weight:500; color:#1c3e66; margin:16px 0 6px; letter-spacing:0.05em;">其一 · 纸质之必要</h3>
+    <p style="font-size:15px; line-height:1.95; color:#2a2e33; margin:0 0 12px; letter-spacing:0.02em;">
+      纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的锚定。
+    </p>
+
+    <!-- ============================================
+         COMPONENT: pull-quote
+         用途: 引用块（无竖线，大字宋体，BORGES 出处标注）
+         在目标编辑器中对应: pull-quote
+         ============================================ -->
+    <div style="margin:28px 0; padding:0 14px;">
+      <div style="font-family:'Songti SC',serif; font-size:20px; line-height:1.55; color:#2a2e33; letter-spacing:0.04em;">
+        凡我所是，皆因我读。
+      </div>
+      <div style="font-size:10px; color:#1c3e66; margin-top:10px; letter-spacing:0.25em;">
+        BORGES &nbsp;·&nbsp; 1960
+      </div>
+    </div>
+
+    <h3 style="font-size:13px; font-weight:500; color:#1c3e66; margin:18px 0 6px; letter-spacing:0.05em;">其二 · 每日有定数</h3>
+
+    <!-- ============================================
+         COMPONENT: ordered-list
+         用途: 有序列表（汉字一二三编号，靛蓝色）
+         在目标编辑器中对应: ordered-list
+         ============================================ -->
+    <!-- ============================================
+         COMPONENT: nested-list
+         用途: 嵌套子列表（二级缩进灰色小字）
+         在目标编辑器中对应: nested-list
+         ============================================ -->
+    <div style="font-size:14.5px; line-height:2.0; color:#2a2e33; margin:6px 0 14px; letter-spacing:0.02em;">
+      <div><span style="color:#1c3e66; margin-right:10px;">一</span>每日只读 20 页</div>
+      <div><span style="color:#1c3e66; margin-right:10px;">二</span>读完合眼默想</div>
+      <div style="margin-left:28px; font-size:13px; color:#6a6760; line-height:1.8;">
+        <div>— 记住一个词</div>
+        <div>— 记住一处停顿</div>
+      </div>
+      <div><span style="color:#1c3e66; margin-right:10px;">三</span>纸质笔记本记录三句话</div>
+    </div>
+
+    <h3 style="font-size:13px; font-weight:500; color:#1c3e66; margin:18px 0 6px; letter-spacing:0.05em;">其三 · 手的参与（清单勾选）</h3>
+
+    <!-- ============================================
+         COMPONENT: checklist
+         用途: 清单（手绘方框 + 靛蓝勾选）
+         在目标编辑器中对应: checklist
+         ============================================ -->
+    <div style="font-size:14.5px; line-height:2; color:#2a2e33; margin:6px 0 14px;">
+      <div style="display:flex; gap:10px; align-items:center;"><span style="display:inline-block; width:12px; height:12px; border:1px solid #1c3e66; position:relative;"><span style="position:absolute; left:2px; top:-2px; color:#1c3e66; font-size:12px; line-height:1;">✓</span></span>铅笔轻划，不用荧光笔</div>
+      <div style="display:flex; gap:10px; align-items:center;"><span style="display:inline-block; width:12px; height:12px; border:1px solid #1c3e66; position:relative;"><span style="position:absolute; left:2px; top:-2px; color:#1c3e66; font-size:12px; line-height:1;">✓</span></span>书页一角折痕做记</div>
+      <div style="display:flex; gap:10px; align-items:center;"><span style="display:inline-block; width:12px; height:12px; border:1px solid #1c3e66;"></span>读完抄录一段于扉页</div>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: marginalia
+         用途: 编者四则（Kinfolk/Monocle 式 i.ii.iii.iv. 裙注排版）
+                大号斜体数字 + 小字注解，双栏 grid，无色块
+         在目标编辑器中对应: marginalia / editorial-notes
+         ============================================ -->
+    <div style="margin:30px 0 14px; padding-bottom:8px; border-bottom:0.5px solid #2a2e33; display:flex; justify-content:space-between; align-items:baseline;">
+      <div style="font-family:Georgia,serif; font-style:italic; font-size:18px; color:#2a2e33;">Four things to keep in mind</div>
+      <div style="font-size:9px; letter-spacing:0.25em; color:#9b978c;">— 编者四则</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:46px 1fr; column-gap:16px; row-gap:20px; margin:0 0 24px;">
+      <div style="font-family:Georgia,serif; font-size:30px; font-style:italic; color:#1c3e66; line-height:1; letter-spacing:-0.02em;">i.</div>
+      <div>
+        <div style="font-family:Georgia,serif; font-style:italic; font-size:14px; color:#2a2e33; margin-bottom:3px;">On light.</div>
+        <div style="font-size:12px; line-height:1.75; color:#4a4e55;">深夜读书时，光源宜置书后侧 45° — 眼下的书页亮，书外的世界暗。</div>
+      </div>
+
+      <div style="font-family:Georgia,serif; font-size:30px; font-style:italic; color:#1c3e66; line-height:1; letter-spacing:-0.02em;">ii.</div>
+      <div>
+        <div style="font-family:Georgia,serif; font-style:italic; font-size:14px; color:#2a2e33; margin-bottom:3px;">On drink.</div>
+        <div style="font-size:12px; line-height:1.75; color:#4a4e55;">温水一杯即可。茶会醒脑，咖啡会断节奏，酒会让字散。</div>
+      </div>
+
+      <div style="font-family:Georgia,serif; font-size:30px; font-style:italic; color:#1c3e66; line-height:1; letter-spacing:-0.02em;">iii.</div>
+      <div>
+        <div style="font-family:Georgia,serif; font-style:italic; font-size:14px; color:#2a2e33; margin-bottom:3px;">On devices.</div>
+        <div style="font-size:12px; line-height:1.75; color:#4a4e55;">手机应在另一个房间充电，而非床头——距离是纪律的物理形式。</div>
+      </div>
+
+      <div style="font-family:Georgia,serif; font-size:30px; font-style:italic; color:#1c3e66; line-height:1; letter-spacing:-0.02em;">iv.</div>
+      <div>
+        <div style="font-family:Georgia,serif; font-style:italic; font-size:14px; color:#2a2e33; margin-bottom:3px;">On sequence.</div>
+        <div style="font-size:12px; line-height:1.75; color:#4a4e55;">不要在刷完短视频之后立刻翻书。大脑需要二十分钟，让字重新变回字。</div>
+      </div>
+    </div>
+
+    <!-- 代码块去掉（生活方式主题不配） -->
+
+    <!-- ============================================
+         COMPONENT: editor-note
+         用途: 编后信息卡（浅底，编者按语）
+         在目标编辑器中对应: callout / editor-note
+         ============================================ -->
+    <div style="margin:24px 0; padding:16px 18px; background:#e4dfd1;">
+      <div style="font-size:10px; letter-spacing:0.25em; color:#1c3e66; margin-bottom:8px;">编 后 · EDITOR'S NOTE</div>
+      <div style="font-size:13px; line-height:1.85; color:#2a2e33; letter-spacing:0.02em;">
+        慢读并非复古姿态，而是一种对自己时间主权的重新申明。
+      </div>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: section-heading
+         用途: 第三章节标题
+         在目标编辑器中对应: section-heading
+         ============================================ -->
+    <div style="margin:32px 0 14px; display:flex; align-items:baseline; gap:12px;">
+      <div style="width:22px; height:22px; background:#1c3e66; color:#efece4; font-size:11px; text-align:center; line-height:22px;">03</div>
+      <h2 style="font-size:18px; font-weight:400; line-height:1.4; color:#2a2e33; margin:0;">夜晚作为最后的阅读时区</h2>
+    </div>
+
+    <p style="font-size:15px; line-height:1.95; color:#2a2e33; margin:0 0 12px; letter-spacing:0.02em;">
+      白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的<b>连续时间</b>。
+    </p>
+
+    <p style="font-size:15px; line-height:1.95; color:#2a2e33; margin:0 0 12px; letter-spacing:0.02em;">
+      不必读完一章，能安静地读完一页，已是恩典。
+    </p>
+
+    <!-- ============================================
+         COMPONENT: divider-ornament
+         用途: 靛蓝细点分割线（· · ·，章节过渡）
+         在目标编辑器中对应: divider-ornament
+         ============================================ -->
+    <div style="text-align:center; margin:32px 0 20px; color:#1c3e66; letter-spacing:1em; font-size:10px;">·&nbsp;·&nbsp;·</div>
+
+    <!-- ============================================
+         COMPONENT: cta-bar
+         用途: 互动区（靛蓝底，点赞/在看/转发三栏）
+         在目标编辑器中对应: cta-bar
+         ============================================ -->
+    <div style="margin:24px 0; padding:18px 14px; background:#1c3e66; color:#efece4;">
+      <div style="font-size:10px; letter-spacing:0.3em; margin-bottom:12px; text-align:center;">如 果 喜 欢</div>
+      <div style="display:flex; gap:10px; font-size:11px; letter-spacing:0.05em; justify-content:center;">
+        <div style="flex:1; text-align:center; padding:8px 0; border:1px solid #efece4;">❤ 点赞</div>
+        <div style="flex:1; text-align:center; padding:8px 0; border:1px solid #efece4;">◎ 在看</div>
+        <div style="flex:1; text-align:center; padding:8px 0; border:1px solid #efece4;">→ 转发</div>
+      </div>
+      <div style="font-size:10px; text-align:center; margin-top:12px; letter-spacing:0.15em; color:#c0cbd8;">点"在看"，把这个周末推给一位朋友</div>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: qr-follow
+         用途: 二维码关注区（亚麻底，扫码关注公众号）
+         在目标编辑器中对应: qr-follow
+         ============================================ -->
+    <div style="margin:20px 0; padding:16px; background:#e4dfd1; display:flex; gap:14px; align-items:center;">
+      <svg viewBox="0 0 60 60" width="60" height="60" style="display:block; background:#efece4; flex-shrink:0;">
+        <g fill="#1c3e66">
+          <rect x="3" y="3" width="16" height="16"/>
+          <rect x="6" y="6" width="10" height="10" fill="#efece4"/>
+          <rect x="9" y="9" width="4" height="4"/>
+          <rect x="41" y="3" width="16" height="16"/>
+          <rect x="44" y="6" width="10" height="10" fill="#efece4"/>
+          <rect x="47" y="9" width="4" height="4"/>
+          <rect x="3" y="41" width="16" height="16"/>
+          <rect x="6" y="44" width="10" height="10" fill="#efece4"/>
+          <rect x="9" y="47" width="4" height="4"/>
+          <rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/>
+          <rect x="36" y="27" width="3" height="3"/><rect x="24" y="30" width="3" height="3"/>
+          <rect x="33" y="30" width="3" height="3"/><rect x="39" y="33" width="3" height="3"/>
+          <rect x="27" y="36" width="3" height="3"/><rect x="36" y="36" width="3" height="3"/>
+          <rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/>
+          <rect x="33" y="42" width="3" height="3"/><rect x="39" y="45" width="3" height="3"/>
+          <rect x="27" y="48" width="3" height="3"/><rect x="42" y="51" width="3" height="3"/>
+        </g>
+      </svg>
+      <div>
+        <div style="font-size:10px; letter-spacing:0.2em; color:#1c3e66; margin-bottom:4px;">长按关注</div>
+        <div style="font-size:14px; color:#2a2e33; margin-bottom:4px;">周末书房</div>
+        <div style="font-size:11px; color:#6a6760; line-height:1.6;">每周六清晨，一册薄书、一盏茶。</div>
+      </div>
+    </div>
+
+    <!-- ============================================
+         COMPONENT: footer
+         用途: 尾部（下期预告 + 期号版权）
+         在目标编辑器中对应: footer
+         ============================================ -->
+    <div style="margin-top:28px; padding-top:12px; border-top:1px solid #c9c2ad; font-size:10px; line-height:1.9; color:#6a6760; letter-spacing:0.15em;">
+      <div><span style="color:#1c3e66;">下 期</span>&nbsp;&nbsp;纸本之必要：论书脊与手指的记忆</div>
+      <div style="margin-top:4px;">NO.19 &nbsp;·&nbsp; 五月刊 &nbsp;·&nbsp; 周末书房 © 2026</div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

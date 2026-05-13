@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题 02 · Neue Grafik 04 · 1958 苏黎世对开页</title>
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --color-bg: #ffffff;
+  --color-text: #000000;
+  --color-accent: #e30613;   /* 国际红：期号横幅、标签、章节号 */
+  --color-surface: #f0f0f0;  /* 浅灰：图表背景、栏位底色 */
+  --color-muted: #888888;    /* 中灰：辅助文字、章节页码 */
+
+  /* ── TYPOGRAPHY TOKENS ── */
+  --font-body: -apple-system,BlinkMacSystemFont,'Helvetica Neue','PingFang SC','Helvetica',sans-serif;
+  --font-mono: Menlo,Monaco,monospace;
+  --font-size-body: 13px;
+  --font-size-label: 9px;
+  --lh-body: 1.6;
+
+  /* ── SPACING TOKENS ── */
+  --spacing-h: 16px;
+  --spacing-block: 12px;
+  --spacing-section: 32px;
+
+  /* ── LAYOUT TOKENS ── */
+  --col-ratio-narrow: 4;   /* 1/3 窄栏 */
+  --col-ratio-wide: 8;     /* 2/3 宽栏（Josef Müller-Brockmann 铁律）*/
+}
+body{margin:0;background:#cfcfcf;}
+</style>
+</head>
+<body>
+
+<!--
+  COMPONENT MANIFEST · 主题 02 Neue Grafik 1958 苏黎世对开页
+  ─────────────────────────────────────────────────────────
+  灵魂：Josef Müller-Brockmann 在 Neue Grafik 04 内页上画红铅笔辅助线时的那支笔尖
+  12栏铁律 · 1:2 窄/宽分栏 · 真·数据图 · 无衬线理性主义
+
+  ⓘ 关于"标题"：微信公众号平台会自动在正文上方渲染原生文章标题
+    （≈22px 加粗黑色 · 不可改样）+ 公众号名/作者/时间一行。
+    本主题输出从原生头部 *之下* 的正文区开始；cover-header 是
+    其下的"装饰性副刊头"，呼应正题强化主题灵魂，不再承担 <h1>
+    语义（实际渲染时会降级为 <div>，由 theme.coverHeader 控制）。
+
+  00. [platform-mock]   微信原生头部（仅设计稿参考，非主题输出）
+  01. issue-banner      巨型期号横幅（全幅红底白字 · Nº04）
+  02. col-label         栏位说明（COL 1–4 / COL 5–12）
+  03. toc               目录（双栏压满 · INDEX/目次）
+  04. cover-header      装饰性副刊头（跨栏大字 · 红点结尾；非 H1）
+  05. byline            署名（三栏分隔 · AUTHOR/EDITOR/SET）
+  06. intro-para        导语大字（红■领头）
+  07. drop-cap          首字下沉（W · 红色）
+  08. section-heading   H2（红色数字方块 + 标题文字）
+  09. body-para         正文段落（含荧光高亮 + 着重号）
+  10. data-chart        信息图（FIG.01 按年龄条形图 · 真数据）
+  11. image-grid        多图并排（三等分 · 黑白红组合）
+  12. h3-heading        H3（2.1 / 2.2 / 2.3 节号）
+  13. ordered-list      有序列表（嵌套 · 01/02/03 红色等宽字）
+  14. checklist         清单勾选（红✓ / 空框）
+  15. multi-callout     四色 callout（INFO/TIP/WARN/STOP 横排标签）
+  16. inline-code       行内代码（黑边框等宽）
+  17. code-block        代码块（黑底白字 · // READING.JS 注释头）
+  18. qa-block          读者 Q&A（Q黑底 / A红底 · 粗体字母）
+  19. editor-note       编者按（黑底白字标题栏）
+  20. footnotes         脚注（NOTES · 等宽字体）
+  21. signoff           大红方块结束符（右对齐）
+  22. cta-bar           互动区（IF YOU LIKED THIS · 网格三栏）
+  23. qr-follow         二维码关注区（SUBSCRIBE）
+  24. footer            尾部（NEXT · VOL 三行信息）
+-->
+
+<!-- ============================================
+     [PLATFORM MOCK] 微信公众号原生头部（仅设计稿参考，非主题输出）
+     用户粘贴 HTML 后，平台自动渲染：标题 / 公众号名 · 作者 · 时间
+     主题输出从其下方的正文区开始 —— 切勿在正文里再渲染 <h1> 主标题。
+     ============================================ -->
+<div style="width:375px; margin:24px auto 0; background:#fff; padding:18px 16px 14px; border:1px dashed #ccc; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
+  <div style="font-size:10px; color:#bbb; letter-spacing:0.06em; margin-bottom:10px;">▽ 微信公众号平台原生头部 · MOCK</div>
+  <div style="font-size:22px; font-weight:bold; line-height:1.35; color:#222; margin-bottom:10px;">在无人深夜，重新学习如何阅读一本书</div>
+  <div style="font-size:12px; color:#888; letter-spacing:0.02em;">
+    <span style="color:#576b95;">慢读简报</span>
+    <span style="margin:0 6px;">·</span>
+    <span>李翊云</span>
+    <span style="margin:0 6px;">·</span>
+    <span>2026-04-22</span>
+  </div>
+</div>
+
+<!-- 主题 02 · 1958 苏黎世编辑部的对开页 —— 红号角 + 12栏铁律 + 信息图密度 -->
+<!-- 灵魂：Josef Müller-Brockmann 在 Neue Grafik 04 内页上画红色铅笔辅助线时的那支铅笔尖 -->
+<div style="width:375px; margin:0 auto 24px; background:#ffffff; padding:0 0 28px; color:#000000; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','PingFang SC','Helvetica',sans-serif;">
+
+  <!-- ============================================
+       COMPONENT: issue-banner
+       用途: 巨型期号横幅（全幅红 · Nº + 大号数字 · 右侧元信息）
+       在目标编辑器中对应: 刊头/期号块
+       ============================================ -->
+  <div style="background:#e30613; color:#fff; padding:18px 16px 16px; display:flex; justify-content:space-between; align-items:flex-end;">
+    <div>
+      <div style="font-size:9px; letter-spacing:0.3em; margin-bottom:4px; opacity:0.85;">NEUE LESE &nbsp; GRAFIK</div>
+      <div style="font-size:56px; font-weight:700; line-height:0.85; letter-spacing:-0.04em;">N<span style="display:inline-block;">º</span>04</div>
+    </div>
+    <div style="text-align:right; font-size:9px; line-height:1.6; letter-spacing:0.1em;">
+      <div>VOL.IV</div>
+      <div>2026—04—22</div>
+      <div>CHF 14.—</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: col-label
+       用途: 栏位说明（12栏网格 · 1/3:2/3 比例标注）
+       在目标编辑器中对应: 版面辅助标注
+       ============================================ -->
+  <div style="display:flex; font-size:8.5px; letter-spacing:0.25em; color:#000; border-bottom:1px solid #000;">
+    <div style="flex:4; padding:4px 16px; border-right:1px solid #000;">COL 1–4</div>
+    <div style="flex:8; padding:4px 16px;">COL 5–12</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: toc
+       用途: 目录（双栏压满 · INDEX标签 / 带页码）
+       在目标编辑器中对应: 目录块
+       ============================================ -->
+  <div style="display:flex; font-size:11px; border-bottom:2px solid #000;">
+    <div style="flex:4; padding:12px 14px; border-right:1px solid #000;">
+      <div style="font-size:9px; letter-spacing:0.2em; color:#e30613; margin-bottom:8px;">INDEX</div>
+      <div style="font-size:9px; color:#000; line-height:1.7;">目次排布采用12栏<br>1/3 : 2/3 比例</div>
+    </div>
+    <div style="flex:8; padding:12px 14px; font-size:11px; line-height:1.9; color:#000;">
+      <div style="display:flex; justify-content:space-between; border-bottom:0.5px solid #999;"><span><b style="color:#e30613;">01</b> &nbsp;&nbsp;失去耐心的结构</span><span>04</span></div>
+      <div style="display:flex; justify-content:space-between; border-bottom:0.5px solid #999;"><span><b style="color:#e30613;">02</b> &nbsp;&nbsp;慢读三练习</span><span>08</span></div>
+      <div style="display:flex; justify-content:space-between; border-bottom:0.5px solid #999;"><span><b style="color:#e30613;">03</b> &nbsp;&nbsp;夜晚作为阅读时区</span><span>14</span></div>
+      <div style="display:flex; justify-content:space-between;"><span><b style="color:#e30613;">附</b> &nbsp;&nbsp;Q&A · 方法论注</span><span>18</span></div>
+    </div>
+  </div>
+
+  <div style="padding:22px 16px 0;">
+
+  <!-- ============================================
+       COMPONENT: cover-header
+       用途: 装饰性副刊头（跨栏大字 · ESSAY标签 · 红点结尾）
+             位于微信原生标题之下，呼应正题强化主题灵魂；
+             非 H1 语义（避免与平台原生标题冲突）。
+       在目标编辑器中对应: 自定义副刊头块（非标题块）
+       ============================================ -->
+  <div style="border-top:6px solid #000; padding-top:12px;">
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
+      <div style="background:#e30613; color:#fff; font-size:10px; font-weight:700; padding:3px 8px; line-height:1; letter-spacing:0.05em;">ESSAY · 01</div>
+      <div style="flex:1; height:1px; background:#000;"></div>
+      <div style="font-size:9px; letter-spacing:0.2em;">PP.04–19</div>
+    </div>
+    <div style="font-size:32px; font-weight:700; line-height:1.08; margin:0 0 12px; letter-spacing:-0.03em;">
+      在无人深夜，<br>重新学习<br>如何阅读一本书<span style="color:#e30613;">.</span>
+    </div>
+    <div style="font-size:13px; font-weight:500; line-height:1.4; color:#000; margin-bottom:14px;">论慢读在算法时代的价值</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: byline
+       用途: 署名（三栏分隔 · AUTHOR/EDITOR/SET）
+       在目标编辑器中对应: 作者信息块
+       ============================================ -->
+  <div style="display:flex; border-top:1px solid #000; border-bottom:1px solid #000; margin-bottom:28px;">
+    <div style="flex:4; padding:8px 12px 8px 0; border-right:1px solid #000;">
+      <div style="font-size:9px; letter-spacing:0.15em; color:#888;">AUTHOR</div>
+      <div style="font-size:12px; font-weight:700;">李翊云</div>
+    </div>
+    <div style="flex:4; padding:8px 12px; border-right:1px solid #000;">
+      <div style="font-size:9px; letter-spacing:0.15em; color:#888;">EDITOR</div>
+      <div style="font-size:12px; font-weight:700;">沈 帆</div>
+    </div>
+    <div style="flex:4; padding:8px 0 8px 12px;">
+      <div style="font-size:9px; letter-spacing:0.15em; color:#888;">SET</div>
+      <div style="font-size:12px; font-weight:700; font-family:Menlo,monospace;">04·2026</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: intro-para
+       用途: 导语大字（红■领头 · 半粗体）
+       在目标编辑器中对应: 导语块
+       ============================================ -->
+  <div style="font-size:18px; font-weight:500; line-height:1.4; color:#000; margin-bottom:18px; letter-spacing:-0.01em;">
+    <span style="color:#e30613; font-weight:700;">■</span>&nbsp;&nbsp;我们并非失去了阅读的能力，而是失去了为阅读腾出一整段连续时间的勇气。
+  </div>
+
+  <!-- ============================================
+       COMPONENT: drop-cap
+       用途: 首字下沉（W · 红色 · float left）
+       在目标编辑器中对应: 首字下沉
+       ============================================ -->
+  <p style="font-size:13px; line-height:1.6; color:#000; margin:0 0 12px;">
+    <span style="float:left; font-size:44px; line-height:0.9; padding:3px 6px 0 0; color:#e30613; font-weight:700; font-family:'Helvetica Neue',Helvetica;">W</span>e did not lose the ability to read. 我们失去的是——为阅读腾出一整段连续时间的勇气。
+    <span style="clear:both; display:block;"></span>
+  </p>
+
+  <!-- ============================================
+       COMPONENT: section-heading
+       用途: H2（红色数字方块 + 标题文字 + 黑色细分隔线）
+       在目标编辑器中对应: 二级标题组件
+       ============================================ -->
+  <div style="margin:32px 0 10px; display:flex; gap:10px; align-items:flex-start;">
+    <div style="background:#e30613; color:#fff; font-size:13px; font-weight:700; padding:2px 8px; line-height:1.2;">01</div>
+    <div style="font-size:16px; font-weight:700; line-height:1.2; color:#000; letter-spacing:-0.01em;">为什么我们失去了阅读的耐心</div>
+  </div>
+  <div style="border-top:1px solid #000; margin-bottom:12px;"></div>
+
+  <!-- ============================================
+       COMPONENT: body-para
+       用途: 正文段落（含黄色高亮 + 着重号 + 脚注上标）
+       在目标编辑器中对应: 正文段落
+       ============================================ -->
+  <p style="font-size:13px; line-height:1.6; color:#000; margin:0 0 12px;">每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在<b style="background:#ffeb3c; padding:0 2px;">主动获取信息</b>，实际上是<i>被信息反向喂养</i>。</p>
+
+  <p style="font-size:13px; line-height:1.6; color:#000; margin:0 0 12px;">算法并不阅读，它只是分发。一本书要求你交出的是完整的自己——<span style="text-emphasis:dot; text-emphasis-color:#e30613; -webkit-text-emphasis:dot; -webkit-text-emphasis-color:#e30613;">完整的自己</span>。<sup style="color:#e30613; font-size:9px;">[1]</sup></p>
+
+  <!-- ============================================
+       COMPONENT: data-chart
+       用途: 信息图（FIG.01 按年龄条形图 · 真·数据）
+       在目标编辑器中对应: 数据图表组件
+       ============================================ -->
+  <div style="border:1px solid #000; margin:20px 0;">
+    <div style="background:#000; color:#fff; padding:5px 10px; font-size:9px; letter-spacing:0.15em; display:flex; justify-content:space-between;">
+      <span>FIG.01 &nbsp; 按年龄 · 日均连续阅读</span>
+      <span style="color:#e30613;">n=1024</span>
+    </div>
+    <div style="padding:12px 12px 14px; font-family:Menlo,monospace; font-size:10px;">
+      <div style="display:flex; align-items:center; margin-bottom:4px;">
+        <div style="width:38px;">60+</div>
+        <div style="flex:1; height:10px; background:#f0f0f0; position:relative;"><div style="background:#000; height:10px; width:84%;"></div></div>
+        <div style="width:36px; text-align:right;">42′</div>
+      </div>
+      <div style="display:flex; align-items:center; margin-bottom:4px;">
+        <div style="width:38px;">45–59</div>
+        <div style="flex:1; height:10px; background:#f0f0f0; position:relative;"><div style="background:#000; height:10px; width:58%;"></div></div>
+        <div style="width:36px; text-align:right;">29′</div>
+      </div>
+      <div style="display:flex; align-items:center; margin-bottom:4px;">
+        <div style="width:38px;">30–44</div>
+        <div style="flex:1; height:10px; background:#f0f0f0; position:relative;"><div style="background:#000; height:10px; width:34%;"></div></div>
+        <div style="width:36px; text-align:right;">17′</div>
+      </div>
+      <div style="display:flex; align-items:center; margin-bottom:4px;">
+        <div style="width:38px;">18–29</div>
+        <div style="flex:1; height:10px; background:#f0f0f0; position:relative;"><div style="background:#000; height:10px; width:16%;"></div></div>
+        <div style="width:36px; text-align:right;">8′</div>
+      </div>
+      <div style="display:flex; align-items:center;">
+        <div style="width:38px;">&lt;18</div>
+        <div style="flex:1; height:10px; background:#f0f0f0; position:relative;"><div style="background:#e30613; height:10px; width:10%;"></div></div>
+        <div style="width:36px; text-align:right;">5′</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: image-grid
+       用途: 多图并排（三等分 · 正方/横幅/圆 · 黑白红组合）
+       在目标编辑器中对应: 图片网格组件
+       ============================================ -->
+  <div style="display:flex; gap:4px; margin:20px 0;">
+    <div style="flex:1;">
+      <svg viewBox="0 0 100 100" width="100%" height="auto" style="display:block; background:#000;">
+        <rect x="20" y="20" width="60" height="60" fill="#fff"/>
+      </svg>
+      <div style="font-size:8.5px; letter-spacing:0.1em; margin-top:3px; border-top:1px solid #000; padding-top:2px;">1/3　正方</div>
+    </div>
+    <div style="flex:1;">
+      <svg viewBox="0 0 100 100" width="100%" height="auto" style="display:block; background:#000;">
+        <rect x="0" y="25" width="100" height="50" fill="#e30613"/>
+      </svg>
+      <div style="font-size:8.5px; letter-spacing:0.1em; margin-top:3px; border-top:1px solid #000; padding-top:2px;">1/3　横幅</div>
+    </div>
+    <div style="flex:1;">
+      <svg viewBox="0 0 100 100" width="100%" height="auto" style="display:block; background:#fff; border:1px solid #000;">
+        <circle cx="50" cy="50" r="30" fill="#000"/>
+      </svg>
+      <div style="font-size:8.5px; letter-spacing:0.1em; margin-top:3px; border-top:1px solid #000; padding-top:2px;">1/3　圆</div>
+    </div>
+  </div>
+
+  <div style="margin:32px 0 10px; display:flex; gap:10px; align-items:flex-start;">
+    <div style="background:#e30613; color:#fff; font-size:13px; font-weight:700; padding:2px 8px; line-height:1.2;">02</div>
+    <div style="font-size:16px; font-weight:700; line-height:1.2; color:#000; letter-spacing:-0.01em;">慢读的三种练习</div>
+  </div>
+  <div style="border-top:1px solid #000; margin-bottom:12px;"></div>
+
+  <!-- ============================================
+       COMPONENT: h3-heading
+       用途: H3 节号（2.1 / 2.2 / 2.3）
+       在目标编辑器中对应: 三级标题
+       ============================================ -->
+  <div style="font-size:12px; font-weight:700; color:#000; margin:14px 0 6px; letter-spacing:0;">2.1 &nbsp; 纸质之必要</div>
+  <p style="font-size:13px; line-height:1.6; color:#000; margin:0 0 12px;">纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的锚定。</p>
+
+  <!-- ============================================
+       COMPONENT: pull-quote
+       用途: 引用（栏偏移 · 12px 红左边框 · 署名动作）
+       在目标编辑器中对应: 大字引用组件
+       ============================================ -->
+  <div style="display:flex; margin:26px 0;">
+    <div style="flex:3;"></div>
+    <div style="flex:9; padding-left:14px; border-left:12px solid #e30613;">
+      <div style="font-size:18px; font-weight:500; line-height:1.35; color:#000; letter-spacing:-0.02em;">
+        凡我所是，<br>皆因我读。
+      </div>
+      <div style="font-size:9px; color:#000; margin-top:10px; letter-spacing:0.2em;">— J. L. BORGES &nbsp;·&nbsp; 1960</div>
+    </div>
+  </div>
+
+  <div style="font-size:12px; font-weight:700; color:#000; margin:14px 0 6px;">2.2 &nbsp; 每日有定数</div>
+
+  <!-- ============================================
+       COMPONENT: ordered-list
+       用途: 有序列表（嵌套 · 01/02/03 红色等宽字 · 子项 — 缩进）
+       在目标编辑器中对应: 有序列表组件
+       ============================================ -->
+  <div style="margin:6px 0 14px;">
+    <div style="display:flex; gap:10px; padding:5px 0; border-bottom:0.5px solid #ccc;">
+      <div style="color:#e30613; font-size:13px; font-weight:700; min-width:22px; font-family:Menlo,monospace;">01</div>
+      <div style="flex:1; font-size:13px; line-height:1.55;">每日只读 20 页</div>
+    </div>
+    <div style="display:flex; gap:10px; padding:5px 0; border-bottom:0.5px solid #ccc;">
+      <div style="color:#e30613; font-size:13px; font-weight:700; min-width:22px; font-family:Menlo,monospace;">02</div>
+      <div style="flex:1;">
+        <div style="font-size:13px; line-height:1.55;">读完合眼默想</div>
+        <div style="margin-top:4px; font-size:11px; color:#666; line-height:1.6;">
+          <div style="display:flex; gap:6px;"><span style="color:#e30613;">—</span>记住一个词</div>
+          <div style="display:flex; gap:6px;"><span style="color:#e30613;">—</span>记住一处停顿</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; padding:5px 0; border-bottom:0.5px solid #ccc;">
+      <div style="color:#e30613; font-size:13px; font-weight:700; min-width:22px; font-family:Menlo,monospace;">03</div>
+      <div style="flex:1; font-size:13px; line-height:1.55;">纸质笔记本记录三句话</div>
+    </div>
+  </div>
+
+  <div style="font-size:12px; font-weight:700; color:#000; margin:16px 0 6px;">2.3 &nbsp; 手的参与</div>
+
+  <!-- ============================================
+       COMPONENT: checklist
+       用途: 清单勾选（红✓已完成 / 黑边框未完成）
+       在目标编辑器中对应: 勾选清单组件
+       ============================================ -->
+  <div style="margin:0 0 14px;">
+    <div style="display:flex; gap:10px; align-items:center; padding:3px 0;">
+      <span style="display:inline-block; width:12px; height:12px; background:#e30613; position:relative; flex-shrink:0;"><span style="position:absolute; color:#fff; font-size:11px; line-height:12px; left:2px;">✓</span></span>
+      <span style="font-size:13px;">铅笔轻划，不用荧光笔</span>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; padding:3px 0;">
+      <span style="display:inline-block; width:12px; height:12px; background:#e30613; position:relative; flex-shrink:0;"><span style="position:absolute; color:#fff; font-size:11px; line-height:12px; left:2px;">✓</span></span>
+      <span style="font-size:13px;">书页一角折痕做记</span>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; padding:3px 0;">
+      <span style="display:inline-block; width:12px; height:12px; border:1px solid #000; flex-shrink:0;"></span>
+      <span style="font-size:13px;">读完抄录一段于扉页</span>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: multi-callout
+       用途: 四色 callout（INFO/TIP/WARN/STOP · 横排色块标签）
+       在目标编辑器中对应: 多色 callout 组
+       D-010: 词表=保留 `INFO / TIP / WARN / STOP` —— Swiss design dictionary
+              (功能性 admonition 的母本，并非 mkdocs 复制粘贴);
+              视觉壳=保留 grid + hairline + 红 #e30613。
+       ============================================ -->
+  <div style="margin:24px 0;">
+    <div style="display:flex; border-bottom:1px solid #000;">
+      <div style="background:#000; color:#fff; font-size:9px; font-weight:700; padding:4px 8px; letter-spacing:0.15em;">INFO</div>
+      <div style="flex:1; padding:4px 10px; font-size:12px; border-left:1px solid #000;">深夜读书请保持光源在书后侧 45°。</div>
+    </div>
+    <div style="display:flex; border-bottom:1px solid #000;">
+      <div style="background:#2e7d32; color:#fff; font-size:9px; font-weight:700; padding:4px 8px; letter-spacing:0.15em;">TIP&nbsp;</div>
+      <div style="flex:1; padding:4px 10px; font-size:12px; border-left:1px solid #000;">配温水一盏。茶易醒脑，咖啡断连续。</div>
+    </div>
+    <div style="display:flex; border-bottom:1px solid #000;">
+      <div style="background:#f9a825; color:#000; font-size:9px; font-weight:700; padding:4px 8px; letter-spacing:0.15em;">WARN</div>
+      <div style="flex:1; padding:4px 10px; font-size:12px; border-left:1px solid #000;">手机应在另一房间充电，非床头。</div>
+    </div>
+    <div style="display:flex;">
+      <div style="background:#e30613; color:#fff; font-size:9px; font-weight:700; padding:4px 8px; letter-spacing:0.15em;">STOP</div>
+      <div style="flex:1; padding:4px 10px; font-size:12px; border-left:1px solid #000;">勿在短视频毕后方翻书。</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: inline-code / code-block
+       用途: 行内代码（黑边框）+ 代码块（黑底白字 · // 注释头）
+       在目标编辑器中对应: 代码组件
+       ============================================ -->
+  <p style="font-size:13px; line-height:1.6; margin:14px 0;">
+    以一行函数表达：<span style="font-family:Menlo,monospace; font-size:12px; border:1px solid #000; padding:0 4px;">read(book, slowly)</span>
+  </p>
+  <div style="font-family:Menlo,Monaco,monospace; font-size:11px; line-height:1.7; background:#000; color:#fff; padding:12px 14px; margin:12px 0 18px;">
+    <div style="color:#e30613; font-size:9px; letter-spacing:0.1em; margin-bottom:6px;">// READING.JS</div>
+    const reading = (book) =&gt;<br>&nbsp;&nbsp;book.read(slowly);
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qa-block
+       用途: 读者 Q&A（Q 黑底 / A 红底 · 粗体字母 · 三线边框）
+       在目标编辑器中对应: 问答块组件
+       ============================================ -->
+  <div style="margin:26px 0; border-top:3px solid #000; border-bottom:3px solid #000; padding:14px 0;">
+    <div style="font-size:10px; letter-spacing:0.3em; color:#e30613; margin-bottom:10px;">READER Q&A</div>
+    <div style="display:flex; gap:10px; margin-bottom:10px;">
+      <div style="background:#000; color:#fff; font-weight:700; font-size:11px; padding:2px 6px; line-height:1.3; height:fit-content;">Q</div>
+      <div style="flex:1; font-size:13px; line-height:1.6;">周末仅余两小时，能读完一本书吗？</div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <div style="background:#e30613; color:#fff; font-weight:700; font-size:11px; padding:2px 6px; line-height:1.3; height:fit-content;">A</div>
+      <div style="flex:1; font-size:13px; line-height:1.6;">不能。能读完的不是书，是书的大意。两小时只够与一章<b>相处</b>——已足矣。</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: editor-note
+       用途: 编者按（黑底白字标题栏 · 正文底色）
+       在目标编辑器中对应: 编者按组件
+       ============================================ -->
+  <div style="margin:22px 0; border:1px solid #000;">
+    <div style="background:#000; color:#fff; padding:5px 10px; font-size:10px; font-weight:700; letter-spacing:0.15em;">
+      <span style="color:#e30613;">▮</span>&nbsp;&nbsp;编者按 · 01
+    </div>
+    <div style="padding:12px; font-size:12px; line-height:1.55;">慢读并非复古姿态，而是一种对自己时间主权的重新申明。</div>
+  </div>
+
+  <div style="margin:32px 0 10px; display:flex; gap:10px; align-items:flex-start;">
+    <div style="background:#e30613; color:#fff; font-size:13px; font-weight:700; padding:2px 8px; line-height:1.2;">03</div>
+    <div style="font-size:16px; font-weight:700; line-height:1.2; color:#000;">夜晚作为最后的阅读时区</div>
+  </div>
+  <div style="border-top:1px solid #000; margin-bottom:12px;"></div>
+
+  <p style="font-size:13px; line-height:1.6; color:#000; margin:0 0 12px;">白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的<b>连续时间</b>。</p>
+
+  <p style="font-size:13px; line-height:1.6; color:#000; margin:0 0 12px;">读者若有心，不妨<a href="#" style="color:#e30613; text-decoration:none; border-bottom:1px solid #e30613;">分享你今夜读的那一页</a>。</p>
+
+  <!-- ============================================
+       COMPONENT: footnotes
+       用途: 脚注（NOTES · 等宽字体 · 红色标签）
+       在目标编辑器中对应: 脚注组件
+       ============================================ -->
+  <div style="margin:24px 0; padding-top:10px; border-top:1px solid #000;">
+    <div style="font-size:9px; letter-spacing:0.2em; color:#e30613; margin-bottom:6px;">NOTES</div>
+    <div style="font-size:10px; line-height:1.7; color:#333; font-family:Menlo,monospace;">
+      [1]&nbsp;&nbsp;出自帕慕克《别样的色彩》，略有改动。
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: signoff
+       用途: 大红方块结束符（右对齐）
+       在目标编辑器中对应: 文末结束符
+       ============================================ -->
+  <div style="display:flex; justify-content:flex-end; margin:32px 0 20px;">
+    <div style="width:20px; height:20px; background:#e30613;"></div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cta-bar
+       用途: 互动区（IF YOU LIKED THIS · 网格三栏按钮）
+       在目标编辑器中对应: CTA 互动组件
+       ============================================ -->
+  <div style="border:2px solid #000; margin:24px 0;">
+    <div style="background:#000; color:#fff; padding:5px 10px; font-size:10px; letter-spacing:0.2em;">IF YOU LIKED THIS</div>
+    <div style="display:flex;">
+      <div style="flex:1; text-align:center; padding:12px 0; border-right:1px solid #000; font-size:11px; letter-spacing:0.1em;">❤&nbsp;&nbsp;LIKE</div>
+      <div style="flex:1; text-align:center; padding:12px 0; border-right:1px solid #000; font-size:11px; letter-spacing:0.1em; background:#e30613; color:#fff;">◎&nbsp;&nbsp;SEEN</div>
+      <div style="flex:1; text-align:center; padding:12px 0; font-size:11px; letter-spacing:0.1em;">→&nbsp;&nbsp;SHARE</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qr-follow
+       用途: 二维码关注区（SUBSCRIBE · 刊名 · 出版周期）
+       在目标编辑器中对应: 二维码关注组件
+       ============================================ -->
+  <div style="display:flex; border:1px solid #000; margin:20px 0;">
+    <div style="padding:12px; border-right:1px solid #000; background:#fff;">
+      <svg viewBox="0 0 60 60" width="64" height="64" style="display:block;">
+        <rect width="60" height="60" fill="#fff"/>
+        <g fill="#000">
+          <rect x="3" y="3" width="16" height="16"/>
+          <rect x="6" y="6" width="10" height="10" fill="#fff"/>
+          <rect x="9" y="9" width="4" height="4"/>
+          <rect x="41" y="3" width="16" height="16"/>
+          <rect x="44" y="6" width="10" height="10" fill="#fff"/>
+          <rect x="47" y="9" width="4" height="4"/>
+          <rect x="3" y="41" width="16" height="16"/>
+          <rect x="6" y="44" width="10" height="10" fill="#fff"/>
+          <rect x="9" y="47" width="4" height="4"/>
+          <rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/>
+          <rect x="36" y="27" width="3" height="3"/><rect x="24" y="30" width="3" height="3"/>
+          <rect x="33" y="30" width="3" height="3"/><rect x="39" y="33" width="3" height="3"/>
+          <rect x="27" y="36" width="3" height="3"/><rect x="36" y="36" width="3" height="3"/>
+          <rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/>
+          <rect x="33" y="42" width="3" height="3"/><rect x="39" y="45" width="3" height="3"/>
+          <rect x="27" y="48" width="3" height="3"/><rect x="42" y="51" width="3" height="3"/>
+        </g>
+      </svg>
+    </div>
+    <div style="flex:1; padding:10px 14px; display:flex; flex-direction:column; justify-content:center;">
+      <div style="font-size:9px; letter-spacing:0.2em; color:#e30613; margin-bottom:4px;">SUBSCRIBE</div>
+      <div style="font-size:14px; font-weight:700;">NEUE LESE GRAFIK</div>
+      <div style="font-size:10px; color:#666; margin-top:4px; line-height:1.5;">每双周四出版 · 栏位制设计评论</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: footer
+       用途: 尾部（NEXT下期预告 · VOL/年份/城市）
+       在目标编辑器中对应: 页脚组件
+       ============================================ -->
+  <div style="border-top:3px solid #000; margin-top:24px; padding-top:10px; display:flex; font-size:9px; letter-spacing:0.1em; line-height:1.6;">
+    <div style="flex:6;"><span style="color:#888;">NEXT&nbsp;·&nbsp;</span>纸本之必要：论书脊与手指的记忆</div>
+    <div style="flex:6; text-align:right;"><span style="color:#888;">VOL&nbsp;·&nbsp;</span>N<span>º</span>04 / 2026 / ZÜRICH</div>
+  </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

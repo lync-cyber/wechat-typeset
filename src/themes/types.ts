@@ -131,6 +131,25 @@ export interface ThemeContainers {
   keyNumber: CSSObject
   /** 相关阅读（signature 容器） */
   seeAlso: CSSObject
+  // ── data-brief 家族（数据简报）签名容器 ──────────────────
+  /** 刊头（刊名 + 期号·日期，下划线分隔） */
+  masthead: CSSObject
+  /** 小栏目标签（黑底白字胶囊） */
+  sectionTag: CSSObject
+  /** 目录三栏 grid（序号 · 标题 · 页码） */
+  toc: CSSObject
+  /** KPI 仪表盘外壳（三指标 + sparkline + 源标注） */
+  kpiDashboard: CSSObject
+  /** 条形图外壳（横向 div 柱） */
+  barChart: CSSObject
+  /** 读者问答（Q/A 头像方块） */
+  qaBlock: CSSObject
+  /** 脚注块（上分割线 + 编号引用） */
+  footnotes: CSSObject
+  /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
+  ctaBar: CSSObject
+  /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
+  qrFollow: CSSObject
 }
 
 export interface ThemeAssets {
@@ -247,6 +266,8 @@ export type AdmonitionVariantId =
   | 'magazine-pull'
   // 报告条款：顶 3px 底 1px + § 方角标签，研究报告条款感（industry-observer 专属）
   | 'report-section'
+  // 数据简报单行：左 3px 色条 + 实色徽章 + 紧凑单行正文（data-brief 专属）
+  | 'news-row'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -265,6 +286,8 @@ export type CompareVariantId =
   | 'stacked-row'
   // 账本双色列：一列绿底一列红底，ledger 风
   | 'ledger'
+  // 数据卡：顶 3px 主色/danger 色条 + bgSoft 底 + 大号 monospace 数字（data-brief 专属）
+  | 'data-card'
 
 export type StepsVariantId =
   // 编号圆圈徽章（当前默认行为）
@@ -344,6 +367,7 @@ export const VARIANT_IDS = {
     'bubble-organic',
     'magazine-pull',
     'report-section',
+    'news-row',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
@@ -355,6 +379,7 @@ export const VARIANT_IDS = {
     'column-card',
     'stacked-row',
     'ledger',
+    'data-card',
   ] as const satisfies readonly CompareVariantId[],
   steps: [
     'number-circle',

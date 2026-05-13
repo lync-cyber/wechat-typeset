@@ -36,7 +36,7 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 
 ## 不可破坏的硬约束
 
-- **作者契约**：[docs/writer-contract.md](docs/writer-contract.md) 声明的 25 容器 fence + 5 行内扩展是作者 API 的全集。**新主题不得扩展 fence 词汇**——新视觉一律走 variant 注册，在 `src/variants/<kind>/` 下新建 id。扩展 `src/containers/vocabulary.ts` 属于破坏作者契约的变更，需走主版本升级。
+- **写作契约**：[docs/contract/](docs/contract/) 声明的容器 fence + 5 行内扩展是作者 API 的全集，分基础契约 / 扩展包 / 自定义扩展三层。**新主题不得扩展 fence 词汇**——新视觉一律走 variant 注册，在 `src/variants/<kind>/` 下新建 id。扩展 `src/containers/vocabulary.ts` 属于破坏作者契约的变更，需走主版本升级（自定义扩展流程见 [contract/custom.md](docs/contract/custom.md)）。
 - **微信粘贴兼容性**：`src/pipeline/rules.ts` 列出了所有平台约束（禁用 CSS / 标签 / 属性 / iframe 白名单）。主题作者触碰其中任一条会在构建期 `throw ThemeAuthoringError`。
 - **预览=剪贴板**：左侧预览与复制出去的 HTML 必须是同一份——不要引入"预览看起来好、粘贴后塌"的分支逻辑。
 - **本地 only**：不加登录 / 不加后端 / 不加配额。草稿必须 100% 在 `localStorage` 里。
@@ -44,8 +44,7 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 
 ## 文档索引
 
-- [作者契约](docs/writer-contract.md)
-- [容器扩展语法](docs/container-syntax.md)
+- [写作契约（入口）](docs/contract/README.md) · [基础契约](docs/contract/base.md) · [data-brief 扩展包](docs/contract/packs/data-brief.md) · [自定义扩展](docs/contract/custom.md) · [平台现实与契约演进](docs/contract/platform.md)
 - [第三方主题开发指南](docs/theme-authoring.md)
 - [手动验收清单](docs/release-checklist.md)
 

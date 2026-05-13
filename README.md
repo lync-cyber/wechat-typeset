@@ -11,16 +11,7 @@
 
 **[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** — 无需安装，浏览器打开即用。
 
-> 国内访问不畅、或在微信内被拦？任选一个可达镜像，四个入口同源同步。
-
-| 入口 | 地址 | 适用 |
-|---|---|---|
-| GitHub Pages（主） | https://lync-cyber.github.io/wechat-typeset | 海外默认 |
-| Cloudflare Pages | https://wechat-typeset.pages.dev | 国内多数可达 |
-| Netlify | https://wechat-typeset.netlify.app | 国内备用 |
-| **jsDelivr CDN**（微信内推荐） | https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@jsdelivr-cdn/index.html | 国内 / 微信内最稳 |
-
-> [作者契约](docs/writer-contract.md)：25 容器 fence + 5 行内扩展 = 全部作者 API。主题间切换不塌版，复制到公众号不丢样。
+> [写作契约](docs/contract/README.md)：基础契约（通用容器 + 行内扩展）+ 扩展包（按需领域容器）+ 自定义扩展，三层覆盖全部作者 API。主题间切换不塌版，复制到公众号不丢样。
 
 ---
 
@@ -95,7 +86,7 @@
 ::::
 ```
 
-完整清单（作者卡、封面、分割线、推荐卡、二维码……）见 [docs/container-syntax.md](docs/container-syntax.md)。
+完整清单（作者卡、封面、分割线、推荐卡、二维码……）见 [docs/contract/base.md](docs/contract/base.md)；数据简报家族（KPI 仪表盘、目录、条形图、脚注……）见 [docs/contract/packs/data-brief.md](docs/contract/packs/data-brief.md)。
 
 ---
 

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>11 主题 · 设计规范说明</title>
+<style>
+  :root {
+    --bg: #1a1a1a;
+    --card: #232323;
+    --ink: #e8e8e8;
+    --dim: #888;
+    --line: #3a3a3a;
+    --mono: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.7; }
+
+  .wrap { max-width:980px; margin:0 auto; padding:48px 32px 80px; }
+
+  .page-head { border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:40px; }
+  .page-head h1 { font-size:28px; font-weight:600; letter-spacing:0.02em; margin:0 0 10px; }
+  .page-head p { margin:0; color:var(--dim); font-size:13px; line-height:1.75; max-width:720px; }
+  .page-head .meta { display:flex; gap:24px; margin-top:16px; font-family:var(--mono); font-size:11px; color:var(--dim); letter-spacing:0.1em; }
+
+  .toc { margin-bottom:48px; padding:18px 20px; background:var(--card); border-left:2px solid #d97a3c; }
+  .toc-title { font-family:var(--mono); font-size:10px; letter-spacing:0.2em; color:#d97a3c; margin-bottom:10px; }
+  .toc-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:6px 24px; font-size:13px; }
+  .toc a { color:var(--ink); text-decoration:none; display:flex; gap:10px; padding:3px 0; }
+  .toc a:hover { color:#d97a3c; }
+  .toc .num { font-family:var(--mono); color:var(--dim); font-size:11px; min-width:24px; }
+
+  .card { background:var(--card); margin-bottom:28px; border-left:3px solid var(--accent, #d97a3c); scroll-margin-top:24px; }
+  .card-head { padding:18px 22px 14px; border-bottom:1px dashed var(--line); display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .card-head .num { font-family:var(--mono); font-size:12px; color:var(--dim); letter-spacing:0.15em; }
+  .card-head .name { font-size:17px; font-weight:600; letter-spacing:0.02em; }
+  .card-head .accent-chip { display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10px; color:var(--dim); margin-left:auto; }
+  .card-head .swatch { width:12px; height:12px; border:1px solid #555; }
+
+  .card-body { padding:16px 22px 20px; }
+  .spec-row { display:grid; grid-template-columns:100px 1fr; gap:10px 18px; padding:6px 0; font-size:13px; line-height:1.7; border-bottom:1px dotted #333; }
+  .spec-row:last-child { border-bottom:0; }
+  .spec-row .k { font-family:var(--mono); font-size:10px; color:var(--dim); letter-spacing:0.1em; padding-top:4px; text-transform:uppercase; }
+  .spec-row .v { color:var(--ink); }
+  .spec-row code { font-family:var(--mono); font-size:12px; background:#111; color:#d97a3c; padding:1px 5px; }
+
+  .tension { margin-top:10px; padding:12px 14px; background:#181818; border-top:1px solid var(--line); }
+  .tension-label { font-family:var(--mono); font-size:10px; color:#ebff00; letter-spacing:0.2em; margin-bottom:6px; }
+  .tension-text { font-size:13px; line-height:1.7; font-style:italic; color:#d4d4d4; }
+
+  .links { padding:14px 22px 18px; font-family:var(--mono); font-size:11px; color:var(--dim); letter-spacing:0.08em; display:flex; gap:20px; }
+  .links a { color:#d97a3c; text-decoration:none; border-bottom:1px dotted #d97a3c; padding-bottom:1px; }
+  .links a:hover { color:#ebff00; border-color:#ebff00; }
+
+  .intro-section { margin:48px 0 32px; padding:24px; background:#111; border:1px solid var(--line); }
+  .intro-section h2 { margin:0 0 14px; font-size:16px; font-weight:600; color:#d97a3c; letter-spacing:0.05em; }
+  .intro-section p { margin:0 0 10px; font-size:13px; line-height:1.85; color:#c0c0c0; }
+  .intro-section p:last-child { margin-bottom:0; }
+
+  .footer { margin-top:60px; padding-top:24px; border-top:1px solid var(--line); font-family:var(--mono); font-size:11px; color:var(--dim); letter-spacing:0.08em; }
+
+  @media (max-width: 640px) {
+    .wrap { padding:28px 18px 40px; }
+    .toc-grid { grid-template-columns:1fr; }
+    .spec-row { grid-template-columns:1fr; gap:2px; }
+    .spec-row .k { padding-top:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <h1>11 主题 · 设计规范说明</h1>
+    <p>面向同一篇文章 ——《在无人深夜，重新学习如何阅读一本书》—— 的 11 种微信公众号排版方案。每种方案基于一组明确的视觉 DNA、色板与字体节奏，并包含一处故意的"张力点"（signature gesture）作为破局手法。本说明从各主题页面抽出，便于对照与评审。</p>
+    <div class="meta">
+      <span>THEMES · 11</span>
+      <span>UPDATED · 2026.04</span>
+      <span>WIDTH · 375px mobile</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">// CONTENTS · 主题索引</div>
+    <div class="toc-grid">
+      <a href="#t01"><span class="num">01</span>民国铅字书影</a>
+      <a href="#t02"><span class="num">02</span>瑞士编辑部·红号角</a>
+      <a href="#t03"><span class="num">03</span>港式号外·套色未对齐</a>
+      <a href="#t04"><span class="num">04</span>日式 Mook·POPEYE</a>
+      <a href="#t05"><span class="num">05</span>学术期刊·Cambridge</a>
+      <a href="#t06"><span class="num">06</span>1986 读书杂志</a>
+      <a href="#t07"><span class="num">07</span>粗野主义·荧光黄</a>
+      <a href="#t08"><span class="num">08</span>TAOCP·精装书勘误条</a>
+      <a href="#t09"><span class="num">09</span>深夜电台·黑胶</a>
+      <a href="#t10"><span class="num">10</span>MUJI·生活方式</a>
+      <a href="#t11"><span class="num">11</span>数据简报·晚点</a>
+    </div>
+  </div>
+
+  <div class="intro-section">
+    <h2>阅读说明</h2>
+    <p>每张规范卡含七栏：<b>视觉 DNA</b>（参考原型）、<b>色板</b>（主/辅/强调的十六进制值）、<b>字体</b>（正文与特殊用途字体栈）、<b>字号节奏</b>（H1–注释的相对差）、<b>行距 / 字距</b>、<b>装饰出处</b>（特殊符号的来源及意义）、<b>张力点</b>（每个主题一处刻意破局的手法，避免千篇一律）。</p>
+    <p>"张力点"是判断一个版式是否"有灵魂"的关键——它是一笔可以被模仿、但不会被算法生成的手势。</p>
+  </div>
+
+  <!-- ============ 01 ============ -->
+  <div class="card" id="t01" style="--accent:#8b2e1f;">
+    <div class="card-head">
+      <span class="num">01</span>
+      <span class="name">民国铅字书影</span>
+      <span class="accent-chip"><span class="swatch" style="background:#1a1a1a;"></span><span class="swatch" style="background:#f4ede0;"></span><span class="swatch" style="background:#8b2e1f;"></span>#1a1a1a / #f4ede0 / #8b2e1f</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">开明书店 1935 版《边城》／鲁迅《呐喊》北新书局版／钱君匋《宇宙风》封面</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#1a1a1a</code> · 辅 <code>#f4ede0</code>（旧纸）· 强调 <code>#8b2e1f</code>（朱砂印章）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">"Songti SC", "SimSun", "STSong", serif</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 26px · H2 18px · H3 15px · 正文 15px · 注释 12px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.9 · 字距 0.04em</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">═ 双线＝开明书店版心边框｜❋ ＝鲁迅"迅翁"印结束符｜「」＝铅字排印引号</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">横排正文中间插入小五号仿宋夹注一行，仿民国书籍脚注上移。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/01-republican-era.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 02 ============ -->
+  <div class="card" id="t02" style="--accent:#e62828;">
+    <div class="card-head">
+      <span class="num">02</span>
+      <span class="name">1958 苏黎世编辑部 · 红号角</span>
+      <span class="accent-chip"><span class="swatch" style="background:#ffffff; border-color:#888;"></span><span class="swatch" style="background:#000;"></span><span class="swatch" style="background:#e62828;"></span>#ffffff / #000000 / #e62828</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">Josef Müller-Brockmann《Neue Grafik》04 内页／Emil Ruder《Typography》／Max Bill 瑞士铁路时刻表</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#000000</code> · 辅 <code>#ffffff</code> · 强调 <code>#e62828</code>（红号角，只标节号与栏目）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'Helvetica Neue', 'Helvetica', 'PingFang SC', sans-serif</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 32px · H2 15px · H3 12px · 正文 12px · 图注 10px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.45（偏紧，瑞士学派）· 字距 0em · 严格 12 栏基线网格</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">红色铅笔辅助线＝Brockmann 草稿｜条形图＝信息图密度｜左对齐不分散＝瑞士铁律</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">右上角一小块红色正文条，不居中、不对称，是对"严格栅格"本身的一记轻微反叛——Brockmann 的铅笔尖。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/02-swiss-grid.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 03 ============ -->
+  <div class="card" id="t03" style="--accent:#2b6e7a;">
+    <div class="card-head">
+      <span class="num">03</span>
+      <span class="name">港式号外 · 套色未对齐</span>
+      <span class="accent-chip"><span class="swatch" style="background:#3a2817;"></span><span class="swatch" style="background:#c9a961;"></span><span class="swatch" style="background:#2b6e7a;"></span>#3a2817 / #c9a961 / #2b6e7a</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">1980s《号外》杂志早期／陈幼坚商务印书馆香港版／王无邪《平面设计基础》</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#3a2817</code>（深褐）· 辅 <code>#c9a961</code>（旧报纸氧化黄）· 强调 <code>#2b6e7a</code>（套色未对齐青）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'Songti SC', 'SimSun', serif · 仿宋 'FangSong' 用于图注</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 30px · H2 17px · H3 14px · 正文 14px · 注释 11px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.85 · 标题字距 −0.05em（收紧头重脚轻）· 图注字距 0.3em</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">＊＝旧版港报分节｜○一 ○二＝港版书序号｜青色 1px 错位＝印刷套色未对准</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">正文中插入歪斜 −3° 的楷体引言块，仿剪报贴上去。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/03-hk-retro.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 04 ============ -->
+  <div class="card" id="t04" style="--accent:#e85a3c;">
+    <div class="card-head">
+      <span class="num">04</span>
+      <span class="name">日式 Mook · POPEYE / BRUTUS</span>
+      <span class="accent-chip"><span class="swatch" style="background:#2d3a4a;"></span><span class="swatch" style="background:#faf6ef;"></span><span class="swatch" style="background:#e85a3c;"></span>#2d3a4a / #faf6ef / #e85a3c</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">POPEYE City Guide／BRUTUS Casa／平野敬子 Magazine House 版式</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#2d3a4a</code>（深灰蓝）· 辅 <code>#faf6ef</code>（奶白纸感）· 强调 <code>#e85a3c</code>（橘红·栏目编号）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">-apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 22px · H2 14px · H3 12px · 正文 13px · 注释 10px（标题反而偏小）</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 2.0 · 段距 1.6em（段距比段本身还松）· 字距 0.02em</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">❶❷❸＝Magazine House 实心圈号｜留白＝版心仅占 70%</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">"01" 用 56px Helvetica 放左上，紧挨的中文标题反而是 14px 小字——尺寸失衡造节奏。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/04-japanese-mook.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 05 ============ -->
+  <div class="card" id="t05" style="--accent:#6b1d1d;">
+    <div class="card-head">
+      <span class="num">05</span>
+      <span class="name">学术期刊 · Cambridge 红</span>
+      <span class="accent-chip"><span class="swatch" style="background:#1f1f1f;"></span><span class="swatch" style="background:#fbfaf6;"></span><span class="swatch" style="background:#6b1d1d;"></span>#1f1f1f / #fbfaf6 / #6b1d1d</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">Journal of Asian Studies／Princeton Univ. Press 专著内页／《历史研究》1985+ 版式／Tufte《Visual Display》</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#1f1f1f</code>（墨）· 辅 <code>#fbfaf6</code>（学报纸）· 强调 <code>#6b1d1d</code>（Cambridge 学报深红）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'Songti SC', 'SimSun', serif · 脚注 / 参考文献 Menlo</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 22px · H2 16px · H3 14px · 正文 14px · 脚注 11px · 上标 10px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.75 · 字距 0.02em（衬线不宜放字距）</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">† ‡＝真实脚注符号（学报惯例）｜Ⅰ Ⅱ Ⅲ＝章节罗马数字｜上标 1 2＝引注</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">参考文献块用 Menlo 等宽排 BibTeX 原始格式，仿"学者书桌上半完工手稿"。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/05-academic.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 06 ============ -->
+  <div class="card" id="t06" style="--accent:#7a2b18;">
+    <div class="card-head">
+      <span class="num">06</span>
+      <span class="name">1986 读书杂志 · 煤油灯校样</span>
+      <span class="accent-chip"><span class="swatch" style="background:#f5f1e8;"></span><span class="swatch" style="background:#222;"></span><span class="swatch" style="background:#7a2b18;"></span>#f5f1e8 / #222 / #7a2b18</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">1986《读书》月刊 · 三联书店 / 人文社专著内页 / 排字工校样 / 煤油灯下的未干红墨水批注</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#222</code>（铅字墨）· 辅 <code>#f5f1e8</code>（旧纸）· 强调 <code>#7a2b18</code>（批注红·排字工校样笔）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'Songti SC', 'SimSun', 'STSong', serif · 部分图注 SimSun</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 24px · H2 16px · H3 14px · 正文 14px · 脚注/批注 11px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.85 · 字距 0.03em · 段首缩进 2em（中文排印惯例）</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">朱红手写体批注＝排字工校样笔｜横线分栏＝《读书》栏目｜页码右下＝1980s 期刊样式</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">页面中一行"排字工粘错了一颗铅条"——正文内一个字故意向上错位 2px，像真的印歪了。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/06-dushu.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 07 ============ -->
+  <div class="card" id="t07" style="--accent:#ebff00;">
+    <div class="card-head">
+      <span class="num">07</span>
+      <span class="name">粗野主义 · 荧光黄</span>
+      <span class="accent-chip"><span class="swatch" style="background:#0a0a0a;"></span><span class="swatch" style="background:#f0f0f0;"></span><span class="swatch" style="background:#ebff00;"></span>#0a0a0a / #f0f0f0 / #ebff00</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">Wolfgang Weingart 晚期排版／《032c》早期版式／Experimental Jetset</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#0a0a0a</code> · 辅 <code>#f0f0f0</code> · 强调 <code>#ebff00</code>（荧光黄，做文字底色不做字色）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">Menlo, Monaco, Consolas, 'Courier New', monospace（中文等宽回退 PingFang SC）</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 36px · H2 16px · H3 13px · 正文 13px · 注释 11px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.5 · 字距 0em</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">— 破折号列表＝终端语法｜荧光黄＝马克笔高亮｜文字出血＝Weingart 版面</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">整篇黑底白字中，唯独一段引文反色（白底黑字），像贴纸贴上去。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/07-brutalist.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 08 ============ -->
+  <div class="card" id="t08" style="--accent:#2d5016;">
+    <div class="card-head">
+      <span class="num">08</span>
+      <span class="name">TAOCP · 精装书勘误条</span>
+      <span class="accent-chip"><span class="swatch" style="background:#f5f2ea;"></span><span class="swatch" style="background:#0f0f0f;"></span><span class="swatch" style="background:#2d5016;"></span>#f5f2ea / #0f0f0f / #2d5016</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">Knuth《TAOCP》精装本内页／Addison-Wesley 计算机专著／贴在书上的绿磷屏勘误条</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#0f0f0f</code>（墨）· 辅 <code>#f5f2ea</code>（精装书纸）· 强调 <code>#2d5016</code>（CRT 绿磷屏）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'Iowan Old Style', Georgia, 'Songti SC', serif（正文）· Menlo（代码/勘误条/页眉数据）</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 28px · H2 19px · H3 14px · 正文 15px · 脚注 10.5px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.75 · 字距 −0.005em · 首字下沉 52px（W 字母衬线）</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">§ ¶＝学术专著章节符｜// 注释＝源代码风｜<code>errata slip</code>＝书后附的勘误卡片</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">一张贴歪 −0.6° 的绿磷屏勘误条贴在正文上，阴影偏 2 / 3 px——CRT 终端闯入精装书。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/08-tech-stripe.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 09 ============ -->
+  <div class="card" id="t09" style="--accent:#d97a3c;">
+    <div class="card-head">
+      <span class="num">09</span>
+      <span class="name">深夜电台 · 黑胶</span>
+      <span class="accent-chip"><span class="swatch" style="background:#0e1a2b;"></span><span class="swatch" style="background:#d9c9a8;"></span><span class="swatch" style="background:#d97a3c;"></span>#0e1a2b / #d9c9a8 / #d97a3c</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">Aperture 夜间号／Peter Saville × Factory Records 内页／《STUDIO VOICE》深夜文化特辑</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#0e1a2b</code>（深墨蓝）· 辅 <code>#d9c9a8</code>（夜灯旧纸）· 强调 <code>#d97a3c</code>（唱针橙）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'Songti SC' 正文／-apple-system 编号／Menlo 时码</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 24px · H2 14px · H3 12px · 正文 14px · 注释 11px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 2.1 · 字距 0.05em · 段首不缩进，段间空一行（电台换气记号）</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">同心圆黑胶唱片纹理（唯一出现处）｜静音槽多横线｜side A / B＝唱片 AB 面</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">文末"━━━ side B end"长横＝唱片结束时的静音槽。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/09-late-night-vinyl.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 10 ============ -->
+  <div class="card" id="t10" style="--accent:#2a3a6e;">
+    <div class="card-head">
+      <span class="num">10</span>
+      <span class="name">MUJI · 生活方式周末特集</span>
+      <span class="accent-chip"><span class="swatch" style="background:#efece4;"></span><span class="swatch" style="background:#2a2e33;"></span><span class="swatch" style="background:#2a3a6e;"></span>#efece4 / #2a2e33 / #2a3a6e</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">MUJI BOOKS 周末特集／《ku:nel》／《&Premium》／原研哉白房间</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#2a2e33</code>（近黑）· 辅 <code>#efece4</code>（亚麻冷米）· 强调 <code>#2a3a6e</code>（靛蓝窄条）· 点 <code>#8a9276</code>（苔绿 chip）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">-apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif（偏细）</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 22px · H2 14px · H3 12px · 正文 13.5px · 图注 10.5px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.95 · 字距 0.03em · 段距慷慨 1.5em</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">靛蓝细窄条＝MUJI 分节｜■ 方块＝栏目编号｜清单勾选＝生活 checklist</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">"周六清晨 07:12"起的逐时清单（hours log），把一篇议论文伪装成一天的生活日记。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/10-lifestyle.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ============ 11 ============ -->
+  <div class="card" id="t11" style="--accent:#1756d1;">
+    <div class="card-head">
+      <span class="num">11</span>
+      <span class="name">数据简报 · 晚点 LatePost</span>
+      <span class="accent-chip"><span class="swatch" style="background:#111418;"></span><span class="swatch" style="background:#ffffff; border-color:#888;"></span><span class="swatch" style="background:#1756d1;"></span>#111418 / #ffffff / #1756d1</span>
+    </div>
+    <div class="card-body">
+      <div class="spec-row"><div class="k">视觉 DNA</div><div class="v">晚点 LatePost／机器之心 SOTA 周报／Morning Brew／The Pudding 数据叙事</div></div>
+      <div class="spec-row"><div class="k">色板</div><div class="v">主 <code>#111418</code>（近黑）· 辅 <code>#ffffff</code> · 强调 <code>#1756d1</code>（简报蓝，链接 / 数字）· 次 <code>#f5f7fa</code>（数据卡灰底）</div></div>
+      <div class="spec-row"><div class="k">字体</div><div class="v">'PingFang SC', 'Helvetica Neue', sans-serif · Menlo 用于数字</div></div>
+      <div class="spec-row"><div class="k">字号节奏</div><div class="v">H1 22px · 大数字 38px · H2 16px · H3 13px · 正文 14px · 图注 11px</div></div>
+      <div class="spec-row"><div class="k">行距 / 字距</div><div class="v">正文 1.65 · 数字 tnum 等宽</div></div>
+      <div class="spec-row"><div class="k">装饰出处</div><div class="v">左竖色条＝晚点要点条｜大数字＋单位下沉＝Bloomberg 数据条｜条形图＝原生 div 宽度</div></div>
+      <div class="tension">
+        <div class="tension-label">// 张力点 · SIGNATURE GESTURE</div>
+        <div class="tension-text">开篇"三个数字"KPI 条 + 正文内嵌条形图，数据即内容。</div>
+      </div>
+    </div>
+    <div class="links"><a href="themes/11-data-brief.html" target="_blank">打开主题 ↗</a></div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────────────────
+       D-010 · Callout 词表对照表（2026-05-11）
+       11 款主题里曾经有 6 款（02/04/07/08/09/11）的提示栏四联都用同一套
+       `INFO / TIP / WARN / STOP` —— 这是 mkdocs / GitHub Admonitions /
+       Docusaurus 的复制粘贴，并非主题语境本身的母语。D-010 决策将词表本地化
+       到各主题语境（视觉壳本身保持不动）。下表是各主题 4 个 callout 槽位
+       (note / tip / warning / danger) 实际渲染出来的标签。
+       ──────────────────────────────────────────────────────────────────── -->
+  <div class="spec-card" style="grid-column:1/-1; margin-top:36px;">
+    <div class="spec-id">D-010</div>
+    <h2 class="spec-name">Callout 词表对照表</h2>
+    <div class="spec-row"><div class="k">问题</div><div class="v">11 款主题里有 6 款的提示栏四联（note/tip/warning/danger）原本用同一套 `INFO / TIP / WARN / STOP` —— 视觉壳已差异化，词表却 mode-collapse 到 mkdocs 母版，并排时无法区分主题语境。</div></div>
+    <div class="spec-row"><div class="k">对策</div><div class="v">词表本地化到各主题语境；视觉壳本身在本决策范围内保持不动。02 swiss-grid（Swiss design dictionary）与 11 data-brief（数据新闻惯例）显式豁免，保留功能性词表。</div></div>
+    <div style="margin-top:14px; overflow-x:auto;">
+      <table style="border-collapse:collapse; font-size:11px; width:100%; font-family:'Songti SC',serif;">
+        <thead>
+          <tr style="border-bottom:1.5px solid #1f1f1f;">
+            <th style="text-align:left; padding:6px 10px;">#</th>
+            <th style="text-align:left; padding:6px 10px;">主题</th>
+            <th style="text-align:left; padding:6px 10px;">note</th>
+            <th style="text-align:left; padding:6px 10px;">tip</th>
+            <th style="text-align:left; padding:6px 10px;">warning</th>
+            <th style="text-align:left; padding:6px 10px;">danger</th>
+            <th style="text-align:left; padding:6px 10px;">词表语境</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">01</td><td style="padding:5px 10px;">民国</td><td style="padding:5px 10px;">〔按〕</td><td style="padding:5px 10px;">〔附〕</td><td style="padding:5px 10px;">〔戒〕</td><td style="padding:5px 10px;">〔忌〕</td><td style="padding:5px 10px;">民国铅排 · 按语 / 附言 / 戒规 / 忌讳</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">02</td><td style="padding:5px 10px;">swiss-grid</td><td style="padding:5px 10px;">INFO</td><td style="padding:5px 10px;">TIP</td><td style="padding:5px 10px;">WARN</td><td style="padding:5px 10px;">STOP</td><td style="padding:5px 10px; color:#888;">Swiss design dictionary（保留）</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">03</td><td style="padding:5px 10px;">hk-retro</td><td style="padding:5px 10px;" colspan="4">仅单 callout · 編者按（letterpress 黑底金字）</td><td style="padding:5px 10px;">香港怀旧铅排</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">04</td><td style="padding:5px 10px;">japanese-mook</td><td style="padding:5px 10px;">編</td><td style="padding:5px 10px;">参</td><td style="padding:5px 10px;">注</td><td style="padding:5px 10px;">禁</td><td style="padding:5px 10px;">日本 mook 编集附注 · 单字方块徽章</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">05</td><td style="padding:5px 10px;">academic</td><td style="padding:5px 10px;" colspan="4">仅单 callout · REMARK（LaTeX remark 惯例）</td><td style="padding:5px 10px;">LaTeX 论文</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">06</td><td style="padding:5px 10px;">dushu</td><td style="padding:5px 10px;" colspan="4">仅单 callout · 编者按（三联读书风）</td><td style="padding:5px 10px;">90 年代读书月刊</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">07</td><td style="padding:5px 10px;">brutalist</td><td style="padding:5px 10px;">NOTE</td><td style="padding:5px 10px;">TIP</td><td style="padding:5px 10px;">WARN</td><td style="padding:5px 10px;">HALT</td><td style="padding:5px 10px;">汇编 / 终端 [ASCII] 风</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">08</td><td style="padding:5px 10px;">tech-stripe</td><td style="padding:5px 10px;">NOTE</td><td style="padding:5px 10px;">TIP</td><td style="padding:5px 10px;">CAUTION</td><td style="padding:5px 10px;">HALT</td><td style="padding:5px 10px;">TAOCP 勘误条 + OSHA / CRT 终端</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">09</td><td style="padding:5px 10px;">vinyl</td><td style="padding:5px 10px;">cue</td><td style="padding:5px 10px;">b-side</td><td style="padding:5px 10px;">static</td><td style="padding:5px 10px;">off-air</td><td style="padding:5px 10px;">深夜电台广播术语</td></tr>
+          <tr style="border-bottom:0.5px solid #ccc;"><td style="padding:5px 10px;">10</td><td style="padding:5px 10px;">lifestyle</td><td style="padding:5px 10px;" colspan="4">无 callout 四联 · 用 i./ii./iii. marginalia + 编后替代</td><td style="padding:5px 10px;">Kinfolk / Monocle 边注</td></tr>
+          <tr><td style="padding:5px 10px;">11</td><td style="padding:5px 10px;">data-brief</td><td style="padding:5px 10px;">编 者 按</td><td style="padding:5px 10px;">TIP</td><td style="padding:5px 10px;">WARN</td><td style="padding:5px 10px;">STOP</td><td style="padding:5px 10px; color:#888;">数据新闻惯例（保留）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="spec-row" style="margin-top:14px;"><div class="k">参考</div><div class="v"><a href="../dev/decisions.md" style="color:#d97a3c;">../dev/decisions.md · D-010</a></div></div>
+  </div>
+
+  <div class="footer">
+    SLOW-READING&nbsp;·&nbsp;11 themes · design specs · 2026.04<br>
+    <a href="index.html" style="color:#d97a3c; text-decoration:none;">← 返回 11 主题总览</a>
+  </div>
+
+</div>
+
+</body>
+</html>

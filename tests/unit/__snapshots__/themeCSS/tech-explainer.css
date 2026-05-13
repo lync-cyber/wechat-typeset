@@ -245,6 +245,18 @@
   border-bottom: 1px solid #d9dee5;
 }
 
+.markdown-body .container-masthead {
+  margin: 0 0 20px 0;
+}
+
+.markdown-body .container-section-tag {
+  margin: 0 0 14px 0;
+}
+
+.markdown-body .container-toc {
+  margin: 0 0 24px 0;
+}
+
 .markdown-body .container-note {
   background-color: transparent;
   border-top: 1px solid #d9dee5;
@@ -277,6 +289,10 @@
   margin: 20px 0;
   border-left: 1px solid #d9dee5;
   padding-left: 24px;
+}
+
+.markdown-body .container-qa-block {
+  margin: 22px 0;
 }
 
 .markdown-body .container-footer-cta {
@@ -319,6 +335,26 @@
 
 .markdown-body .container-see-also {
   margin: 20px 0;
+}
+
+.markdown-body .container-kpi-dashboard {
+  margin: 0 0 28px 0;
+}
+
+.markdown-body .container-bar-chart {
+  margin: 20px 0 24px;
+}
+
+.markdown-body .container-footnotes {
+  margin: 14px 0;
+}
+
+.markdown-body .container-cta-bar {
+  margin: 22px 0;
+}
+
+.markdown-body .container-qr-follow {
+  margin: 22px 0;
 }
 
 .markdown-body .container-pros, .markdown-body .container-cons {
