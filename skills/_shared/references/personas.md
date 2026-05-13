@@ -1,4 +1,8 @@
-# 9 套内置 Persona 速查
+# 9 套内置 Persona 速查（共享 reference）
+
+> author-persona / annotate-markdown 两个 skill 通过 `../_shared/references/personas.md` 相对路径共同引用本文件，零副本零同步。改本文件 = 两个 skill 同时生效。
+>
+> 权威依据：`src/core/themes/<id>/persona.spec.ts`（每个主题的 `name` / `description` / `audience` / `palette` / `variants` / `signatureContainers` 字段）+ `src/public/personas.ts` 的导出顺序。
 
 选型时先读 **受众** 和 **视觉签名**（variants），再对比 **signature 容器** 看是否满足内容需要。id 只是索引，不要按字面猜（`tech-geek` 和 `tech-explainer` 都属技术题材，但气质截然不同）。
 
@@ -7,12 +11,12 @@
 | id | 中文名 | 受众 | admonition | quote | steps | divider | codeBlock | signatureContainers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `default` | 默认主题 | 通用（全题材公平阅读） | `accent-bar` | `classic` | `number-circle` | `rule` | `bare` | —— |
-| `tech-geek` | 极客夜行 | 技术布道 / 工程随笔 / 架构评论（manpage / RFC / TAOCP 脚注风） | `dashed-border` | `frame-brackets` | `number-circle` | `wave` | `bare` | —— |
+| `tech-geek` | 极客夜行 | 技术布道 / 工程随笔 / 架构评论 | `dashed-border` | `frame-brackets` | `number-circle` | `wave` | `bare` | —— |
 | `tech-explainer` | 文档白昼 | 技术布道 / 产品文档 / 教程 | `accent-bar` | `column-rule` | `number-circle` | `rule` | **`header-bar`** | `note`、`seeAlso` |
 | `life-aesthetic` | 慢生活 | 生活写作 / 非虚构随笔 | `accent-bar` | `classic` | `number-circle` | `rule` | `bare` | —— |
-| `business-finance` | 硬核财经 | 财经内参 / 研究所 newsletter（FT 中文、财新周刊、Bloomberg Terminal、HBR） | `accent-bar` | `frame-brackets` | `timeline-dot` | `wave` | `bare` | `abstract`、`keyNumber` |
+| `business-finance` | 硬核财经 | 财经内参 / 研究所 newsletter | `accent-bar` | `frame-brackets` | `timeline-dot` | `wave` | `bare` | `abstract`、`keyNumber` |
 | `literary-humanism` | 人文札记 | 人文非虚构（散文 / 书评 / 长评 / 札记） | `minimal-underline` | `magazine-dropcap` | `timeline-dot` | `flower` | `bare` | —— |
-| `industry-observer` | 行业观察 | 内参 newsletter / 行业周报 / analyst essay 读者 | `pill-tag` | `column-rule` | `timeline-dot` | `glyph` | `bare` | `cover`、`author`、`footerCTA`、`abstract`、`keyNumber`、`seeAlso` |
+| `industry-observer` | 行业观察 | 内参 newsletter / 行业周报 / analyst essay | `pill-tag` | `column-rule` | `timeline-dot` | `glyph` | `bare` | `cover`、`author`、`footerCTA`、`abstract`、`keyNumber`、`seeAlso` |
 | `people-story` | 人物特稿 | 人物特稿 / 人文非虚构 / 杂志 Profile | `minimal-underline` | `magazine-dropcap` | `timeline-dot` | `rule` | `bare` | —— |
 | `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `accent-bar` | `frame-brackets` | `timeline-dot` | `rule` | `bare` | `abstract`、`seeAlso` |
 
@@ -72,7 +76,7 @@
 
 **什么时候选**：文学评论、书评、长篇散文、译序、思想笔记。文风偏引述 / 题辞 / 脚注。
 
-**视觉签名**：`minimal-underline` admonition（最轻的一档，铅笔划）、`magazine-dropcap` quote（首字下沉题辞感）、`flower` divider（云头花饰）、`timeline-dot` steps（卷一 / 卷二 / 卷三）。
+**视觉签名**：`minimal-underline` admonition、`magazine-dropcap` quote、`flower` divider、`timeline-dot` steps。
 
 **选它的信号**：「散文」「书评」「文学」「札记」「人文」「古典」「宋椠」。
 
@@ -82,13 +86,13 @@
 
 **什么时候选**：行业周报、analyst essay、公司业务拆解、趋势观察。newsletter 调性，期号 / 日期 / 刊物类型在封面 + 作者栏 + CTA 三个位置保持视觉一致。
 
-**视觉签名**：`pill-tag` admonition（顶部胶囊悬挂）、`column-rule` quote（左右双竖线夹住段落）、`glyph` divider（中央菱形 ◆）、`cornered` sectionTitle（左上 3×3 accent 方块）。
+**视觉签名**：`pill-tag` admonition、`column-rule` quote、`glyph` divider（中央菱形 ◆）、`cornered` sectionTitle。
 
 **独有能力**：主题自带 `issueStamp` 模板 motif——支持在 markdown 容器里写 `issue=023 date=2025-04-20 kind=周刊`，渲染时会在封面 / 作者栏 / CTA 三处自动贴上期号印章 SVG。
 
-**signature 容器最丰富**（6 个）：`cover` + `author` + `footerCTA` + `abstract` + `keyNumber` + `seeAlso`。拿 `seeAlso` 做「相关阅读」、`keyNumber` 做「核心数据」、`abstract` 做「tl;dr」。
+**signature 容器最丰富**（6 个）：`cover` + `author` + `footerCTA` + `abstract` + `keyNumber` + `seeAlso`。
 
-**选它的信号**：「周报」「newsletter」「行业观察」「analyst」「Stratechery」「Ben Thompson」「每周一推」「业务拆解」。
+**选它的信号**：「周报」「newsletter」「行业观察」「analyst」「Stratechery」「业务拆解」。
 
 ### people-story · 人物特稿
 
@@ -96,19 +100,19 @@
 
 **什么时候选**：人物特稿、深度专访、口述史、杂志 profile。文风叙事 / 人物引语 / 场景白描。
 
-**视觉签名**：`minimal-underline` admonition（采访手记感）、`magazine-dropcap` quote（巨号 serif 引号 + 金句 + byline）、`cornered` sectionTitle（左上肖像 silhouette）。
+**视觉签名**：`minimal-underline` admonition、`magazine-dropcap` quote（巨号 serif 引号 + 金句 + byline）、`cornered` sectionTitle。
 
-**独有能力**：声明了 `behavior.introDropcap: true`——intro 首段首字自动拆成放大 span（杂志 profile 的 dropcap 签名）；`behavior.h2RomanNumerals: true`——h2 自动编号 I / II / III（取代 SVG h2Prefix 位置）。
+**独有能力**：声明了 `behavior.introDropcap: true`；`behavior.h2RomanNumerals: true`——h2 自动编号 I / II / III。
 
-**选它的信号**：「特稿」「人物」「采访」「口述史」「profile」「《人物》杂志」「New Yorker」「纽约客」。
+**选它的信号**：「特稿」「人物」「采访」「口述史」「profile」「《人物》杂志」「New Yorker」。
 
 ### academic-frontier · 学术前沿
 
-**定位**：Nature / arXiv / LaTeX article 家族，研究者写给同行评审的严谨陈述。
+**定位**：Nature / arXiv / LaTeX article 家族。
 
 **什么时候选**：论文科普、方法学解读、研究综述、学术 newsletter。文风严谨、公式 / 引用 / 脚注多。
 
-**视觉签名**：`frame-brackets` quote（论文引文的四角框）、`timeline-dot` steps（方法步骤时间轴）、`rule` divider（最枯的一道线）。`abstract` + `seeAlso` 两件套对应「摘要」和「参考文献 / 扩展阅读」。
+**视觉签名**：`frame-brackets` quote、`timeline-dot` steps、`rule` divider。`abstract` + `seeAlso` 两件套对应「摘要」和「参考文献 / 扩展阅读」。
 
 **选它的信号**：「学术」「论文」「arXiv」「Nature」「研究综述」「同行评审」「方法学」「LaTeX」。
 
@@ -133,4 +137,4 @@
 其他 / 不确定                          → default
 ```
 
-不够匹配时永远回退 `default`——它是设计上唯一完全中立的。**不要**把 `life-aesthetic` 当作「default 的暖色版」使用，它的 palette 和 spacing 都是为生活文特化的。
+不够匹配时永远回退 `default`——它是设计上唯一完全中立的。**不要**把 `life-aesthetic` 当作「default 的暖色版」使用。

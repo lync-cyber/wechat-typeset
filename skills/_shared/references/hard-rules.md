@@ -1,4 +1,8 @@
-# 硬约束完整清单
+# 硬约束完整清单（共享 reference）
+
+> 三个 skill（author-persona / annotate-markdown / export-richtext）通过 `../_shared/references/hard-rules.md` 相对路径共同引用本文件，零副本零同步。改本文件 = 三个 skill 同时生效。
+>
+> 权威依据来源：`src/core/themes/_shared/spec/validate.ts`（`HEX_RE`、`MIN_FONT_SIZE`、`MIN_STROKE_WIDTH`、`ALLOWED_FONT_FAMILIES`、`SUPPORTED_SIGNATURE_CONTAINERS`、`VARIANT_IDS`）+ `src/core/pipeline/rules.ts`（`FORBIDDEN_CSS_PROPS`、`HARD_REMOVE_TAGS`）+ `src/core/pipeline/wxPatch.ts`（运行时改写）。
 
 这些规则都由 `validatePersona`、`themeCSS` 生成器、或 `wxPatch` 管线在渲染前/时强制执行。每一条规则背后都对应微信公众号平台的一个具体现象——不是洁癖，是事故。
 
@@ -46,7 +50,7 @@
 
 | 规则 | 触发路径 | 为什么 |
 | --- | --- | --- |
-| `id` 必须 kebab-case（`^[a-z][a-z0-9-]*$`） | `validatePersona` | 和目录名绑定（`src/themes/<id>/persona.spec.ts`），也是 `render({ persona: id })` 的查找键。 |
+| `id` 必须 kebab-case（`^[a-z][a-z0-9-]*$`） | `validatePersona` | 和目录名绑定（`src/core/themes/<id>/persona.spec.ts`），也是 `render({ persona: id })` 的查找键。 |
 | `id` 等于其 `persona.spec.ts` 所在目录名 | conformance 测试 | 目录名 ≠ id 会让 `themeList` 错位。 |
 | `name` / `description` / `audience` 非空 | `validatePersona` | LLM 选型主要靠这三项；空字符串会让 `listPersonas()` 的推荐阶段退化成「按 id 猜」。 |
 | `meta.createdAt` 必填 | `validatePersona` | 用于 gallery 里按时间排序，也方便版本管理。 |
@@ -69,37 +73,42 @@
 
 ## 签名容器白名单
 
-`spec.signatureContainers` 只能取以下 24 个 id 之一：
+`spec.signatureContainers` 只能取以下 id 之一（权威清单见 `src/core/themes/_shared/spec/types.ts` 的 `SUPPORTED_SIGNATURE_CONTAINERS` 常量；改清单需走仓库 PR）：
 
 ```
 intro · author · cover
 tip · warning · info · danger · note
 quoteCard · highlight · compare · steps · sectionTitle
 footerCTA · recommend · qrcode · mpvoice · mpvideo
-abstract · algorithm · keyNumber · seeAlso · seal · prelude
+abstract · keyNumber · seeAlso
+masthead · sectionTag · toc · kpiDashboard · barChart · qaBlock
+footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 ```
 
-- **camelCase**，不是 kebab-case（kebab 名由 `src/containers/vocabulary.ts` 的 `STYLE_KEY_TO_CONTAINER_NAME` 派生）。
-- 项目目前**没有** `algorithm` / `seal` / `prelude` 的 renderer——这些是为未来主题预留的合法 id，但现在没有主题声明它们。**新造主题时不要声明这三个**，要等未来补实现。
-- 添加新 id 需要同步改 `src/themes/_shared/spec/types.ts` 的 `SUPPORTED_SIGNATURE_CONTAINERS` 常量 + 加对应 renderer。
+- **camelCase**，不是 kebab-case（kebab 名由 `STYLE_KEY_TO_CONTAINER_NAME` 派生）。
+- 新造主题时只声明该主题确实渲染的容器；未声明 ≠ 不能写，只是没人格签名。
+- 添加新 id 需要同步改 `SUPPORTED_SIGNATURE_CONTAINERS` 常量 + 加对应 renderer。
 
 ## Variants 合法性
 
-`variants` 7 个字段各有固定 id 清单：
+`variants` 7 个字段各有固定 id 清单（权威源：`src/core/themes/types.ts` 的 `VARIANT_IDS` 常量）：
 
 ```ts
 admonition:   accent-bar | pill-tag | ticket-notch | card-shadow |
               minimal-underline | terminal | dashed-border |
-              double-border | top-bottom-rule
+              double-border | top-bottom-rule | manpage-log |
+              ribbon-tab | leather-card | parchment-margin |
+              bubble-organic | scroll-band | report-section
 quote:        classic | magazine-dropcap | column-rule | frame-brackets
-compare:      column-card | stacked-row | ledger
+compare:      column-card | stacked-row | ledger | data-card
 steps:        number-circle | ribbon-chain | timeline-dot
 divider:      wave | dots | flower | rule | glyph
 sectionTitle: bordered | cornered
 codeBlock:    bare | header-bar
+note:         minimal | margin-bracket | ledger-row
 ```
 
-任何其他字符串（典型的 LLM 幻觉：`'glow'` / `'modern'` / `'flat'`）都会在 `validatePersona` 抛错。LLM 生成 variant id 前先 `getVariantIds()` 拿真实白名单。
+任何其他字符串（典型的 LLM 幻觉：`'glow'` / `'modern'` / `'flat'`）都会在 `validatePersona` 抛错。LLM 生成 variant id 前先 `getVariantIds()` 拿真实白名单——**不要凭记忆写**。
 
 ## WxPatch 自动修复
 
@@ -117,3 +126,15 @@ codeBlock:    bare | header-bar
 | `patchSvgWhiteBg` | SVG 内 `fill="#fff"`/`#ffffff` → `#fefefe`（默认启用，`render({ wxPatch: { svgWhiteBg: false } })` 可关）。 |
 
 幂等——同一段 HTML 走两次 WxPatch 结果不变。
+
+## 调用方信号速查（给 LLM 重试逻辑）
+
+| 现象 | 推断 | 修复路径 |
+| --- | --- | --- |
+| `SpecValidationError` | spec 校验失败 | 拿 `e.result.errors` 数组，按 `path` 逐条修；典型路径见上表 |
+| `palette.*` 报错 | hex 非法 / 11 键缺一 | 用 `#[0-9a-f]{3,8}` 形式，补齐 11 键 |
+| `motifs.*.primitives[N].fontSize` | < 14 | 放大到 ≥ 14 |
+| `motifs.*.primitives[N].strokeWidth` | < 1 | 放粗到 ≥ 1 |
+| `signatureContainers[N]` | id 不在白名单 | 删除该 id 或用 `getSupportedSignatureContainers()` 重选 |
+| `variants.<kind>` | id 不在白名单 | 用 `getVariantIds().<kind>` 重选 |
+| 粘贴后 SVG 发灰 / 不见 | `#ffffff` 没换 `#fefefe` | 默认 wxPatch 已处理；本地预览看到的可能与公众号粘贴效果略异 |
