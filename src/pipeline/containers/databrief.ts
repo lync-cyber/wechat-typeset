@@ -25,26 +25,16 @@
  *      渲染纪律决定，不参与主题 voice 微调，避免 ThemeContainers 类型膨胀。
  */
 
-import type { CSSObject } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './types'
+import { inlineCss as inline } from './_shared/cssInline'
 
 // ============================================================
 // 公共工具
 // ============================================================
-
-/** CSSObject → inline style 字符串（与 signature.ts 内同名工具语义一致；本地副本避免跨文件依赖）。 */
-function inline(obj: CSSObject | undefined): string {
-  if (!obj) return ''
-  const decls: string[] = []
-  for (const [k, raw] of Object.entries(obj)) {
-    if (raw === undefined || raw === null || raw === '') continue
-    const v = typeof raw === 'number' ? `${raw}px` : String(raw).trim()
-    if (!v) continue
-    decls.push(`${k.trim()}:${v}`)
-  }
-  return decls.join(';')
-}
+//
+// inlineCss 已抽到 _shared/cssInline.ts（R2）。本文件内仍以 `inline` 局部别名引用，
+// 减少 diff 噪声 —— 14 处调用点无需逐一改名。
 
 /**
  * 解析 series="2,4,5,6,8,9,10,11" → [2,4,5,6,8,9,10,11]。

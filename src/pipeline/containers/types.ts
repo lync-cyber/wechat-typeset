@@ -66,29 +66,7 @@ export function parseInfo(raw: string): ParsedInfo {
   return { title, attrs }
 }
 
-/** HTML 属性值转义 */
-export function escAttr(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-
-/** HTML 文本转义（不处理引号，留给属性值专用函数） */
-export function escText(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
-
-/**
- * XML 超集：escAttr 的 4 字符 + `'` → `&apos;`。
- * SVG/XML 文档内嵌字符串使用（比如 userComponents 的 thumbnailSvg）。
- */
-export function escapeXml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-}
+// 转义原语实现在 _shared/escape.ts；此处 re-export 是为了不破坏既有 20+ 处
+// `import { escText } from './types'` / `from '../../pipeline/containers/types'` 的消费者。
+// 新代码直接 import from './_shared/escape'。
+export { escAttr, escText, escapeXml } from './_shared/escape'

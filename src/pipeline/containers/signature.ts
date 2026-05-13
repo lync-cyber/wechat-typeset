@@ -16,25 +16,11 @@
  * renderer 在 pipeline/containers/note.ts。
  */
 
-import type { CSSObject } from '../../themes/types'
 import type { ContainerRenderer } from './types'
 import { escText } from './types'
+import { inlineCss as inline } from './_shared/cssInline'
 
-/**
- * 把 CSSObject 转成 inline style 字符串。
- * 数字按 px 处理（与 themeCSS 同语义），空值剔除。
- */
-function inline(obj: CSSObject | undefined): string {
-  if (!obj) return ''
-  const decls: string[] = []
-  for (const [k, raw] of Object.entries(obj)) {
-    if (raw === undefined || raw === null || raw === '') continue
-    const v = typeof raw === 'number' ? `${raw}px` : String(raw).trim()
-    if (!v) continue
-    decls.push(`${k.trim()}:${v}`)
-  }
-  return decls.join(';')
-}
+// inlineCss 已抽到 _shared/cssInline.ts（R2）。本文件 3 处调用沿用 `inline` 局部别名。
 
 // ============================================================
 // abstract · 文首 tl;dr
