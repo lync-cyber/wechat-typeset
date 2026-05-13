@@ -1,0 +1,50 @@
+{
+  "$comment": "分隔线 5 种典型 motif AST。每条对应一个 variants.divider id（wave / dots / flower / rule / glyph）。viewBox 都是扁长的 [0 0 200 12 或 16]，让水平延展不变形。",
+  "wave": {
+    "$desc": "波浪（business-finance / tech-geek 家族 K 线感 / §——§ 横线感）",
+    "viewBox": [0, 0, 200, 12],
+    "primitives": [
+      { "type": "path",
+        "d": "M0 6 Q 25 0 50 6 T 100 6 T 150 6 T 200 6",
+        "stroke": "PRIMARY", "strokeWidth": 1.5, "fill": "none",
+        "strokeLinecap": "round" }
+    ]
+  },
+  "dots": {
+    "$desc": "三点居中（任何主题安全回退）",
+    "viewBox": [0, 0, 200, 12],
+    "primitives": [
+      { "type": "circle", "cx": 90,  "cy": 6, "r": 1.5, "fill": "PRIMARY" },
+      { "type": "circle", "cx": 100, "cy": 6, "r": 1.5, "fill": "PRIMARY" },
+      { "type": "circle", "cx": 110, "cy": 6, "r": 1.5, "fill": "PRIMARY" }
+    ]
+  },
+  "flower": {
+    "$desc": "云头花饰（literary-humanism 家族，宋椠风）",
+    "viewBox": [0, 0, 200, 16],
+    "primitives": [
+      { "type": "line",  "x1": 10,  "y1": 8, "x2": 80, "y2": 8, "stroke": "PRIMARY", "strokeWidth": 1 },
+      { "type": "path",
+        "d": "M 100 4 Q 95 8 100 12 Q 105 8 100 4 Z",
+        "fill": "PRIMARY", "stroke": "PRIMARY", "strokeWidth": 1 },
+      { "type": "line",  "x1": 120, "y1": 8, "x2": 190, "y2": 8, "stroke": "PRIMARY", "strokeWidth": 1 }
+    ]
+  },
+  "rule": {
+    "$desc": "最枯的一道线（academic-frontier / tech-explainer 用）",
+    "viewBox": [0, 0, 200, 6],
+    "primitives": [
+      { "type": "line", "x1": 0, "y1": 3, "x2": 200, "y2": 3,
+        "stroke": "BORDER", "strokeWidth": 1 }
+    ]
+  },
+  "glyph": {
+    "$desc": "中央菱形（industry-observer 用，期刊感）",
+    "viewBox": [0, 0, 200, 16],
+    "primitives": [
+      { "type": "line", "x1": 10,  "y1": 8, "x2": 85,  "y2": 8, "stroke": "PRIMARY", "strokeWidth": 1 },
+      { "type": "path", "d": "M 100 4 L 108 8 L 100 12 L 92 8 Z", "fill": "PRIMARY" },
+      { "type": "line", "x1": 115, "y1": 8, "x2": 190, "y2": 8, "stroke": "PRIMARY", "strokeWidth": 1 }
+    ]
+  }
+}

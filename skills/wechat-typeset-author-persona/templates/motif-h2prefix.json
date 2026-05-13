@@ -1,0 +1,47 @@
+{
+  "$comment": "h2 标题前缀 4 种典型 motif AST。直接拷 primitives，把 fill / stroke 改成本主题色即可。viewBox 都是 20×20，inlineStyle 都是 inline-block + middle + marginRight 6。",
+  "twoBars": {
+    "$desc": "横向色条 + 圆点（default 家族用，简洁中立）",
+    "viewBox": [0, 0, 20, 20],
+    "width": 20, "height": 20,
+    "inlineStyle": { "display": "inline-block", "verticalAlign": "middle", "marginRight": 6 },
+    "primitives": [
+      { "type": "rect", "x": 2, "y": 8, "w": 14, "h": 4, "fill": "PRIMARY", "rx": 1 },
+      { "type": "circle", "cx": 18, "cy": 10, "r": 2, "fill": "PRIMARY" }
+    ]
+  },
+  "sectionGlyph": {
+    "$desc": "§ 字符 + 下划线（tech-geek 用，manpage 印刷感）",
+    "viewBox": [0, 0, 20, 20],
+    "width": 20, "height": 20,
+    "inlineStyle": { "display": "inline-block", "verticalAlign": "middle", "marginRight": 6 },
+    "primitives": [
+      { "type": "text", "x": 10, "y": 13, "content": "§", "fontSize": 16,
+        "fontFamily": "serif", "fontWeight": 700,
+        "fill": "PRIMARY", "textAnchor": "middle", "dominantBaseline": "central" },
+      { "type": "rect", "x": 4, "y": 17, "w": 12, "h": 2, "fill": "PRIMARY" }
+    ]
+  },
+  "diamond": {
+    "$desc": "菱形（industry-observer 家族 glyph divider 同色，章节感）",
+    "viewBox": [0, 0, 20, 20],
+    "width": 20, "height": 20,
+    "inlineStyle": { "display": "inline-block", "verticalAlign": "middle", "marginRight": 6 },
+    "primitives": [
+      { "type": "path", "d": "M10 3 L 17 10 L 10 17 L 3 10 Z", "fill": "PRIMARY" }
+    ]
+  },
+  "flower": {
+    "$desc": "圆心+四瓣（life-aesthetic / literary-humanism 家族，柔和）",
+    "viewBox": [0, 0, 20, 20],
+    "width": 20, "height": 20,
+    "inlineStyle": { "display": "inline-block", "verticalAlign": "middle", "marginRight": 6 },
+    "primitives": [
+      { "type": "circle", "cx": 10, "cy": 10, "r": 2, "fill": "PRIMARY" },
+      { "type": "circle", "cx": 10, "cy": 4,  "r": 2, "fill": "PRIMARY", "opacity": 0.7 },
+      { "type": "circle", "cx": 10, "cy": 16, "r": 2, "fill": "PRIMARY", "opacity": 0.7 },
+      { "type": "circle", "cx": 4,  "cy": 10, "r": 2, "fill": "PRIMARY", "opacity": 0.7 },
+      { "type": "circle", "cx": 16, "cy": 10, "r": 2, "fill": "PRIMARY", "opacity": 0.7 }
+    ]
+  }
+}

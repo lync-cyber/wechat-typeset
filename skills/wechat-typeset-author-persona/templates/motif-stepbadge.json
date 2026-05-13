@@ -1,0 +1,44 @@
+{
+  "$comment": "步骤徽章模板。带 {N} 占位符，渲染时按步骤序号填 1/2/3。3 种典型骨架：实心圆 / 描边圆 / 方框。",
+  "filledCircle": {
+    "$desc": "实心圆 + 反色文字（default / industry-observer 家族）",
+    "viewBox": [0, 0, 24, 24],
+    "width": 24, "height": 24,
+    "placeholders": ["N"],
+    "primitives": [
+      { "type": "circle", "cx": 12, "cy": 12, "r": 11, "fill": "PRIMARY" },
+      { "type": "text",
+        "x": 12, "y": 12, "content": "{N}", "fontSize": 14,
+        "fill": "INVERSE", "fontWeight": 700,
+        "textAnchor": "middle", "dominantBaseline": "central" }
+    ]
+  },
+  "outlinedCircle": {
+    "$desc": "描边圆 + 主色文字（academic-frontier / business-finance 用）",
+    "viewBox": [0, 0, 24, 24],
+    "width": 24, "height": 24,
+    "placeholders": ["N"],
+    "primitives": [
+      { "type": "circle", "cx": 12, "cy": 12, "r": 10, "fill": "none",
+        "stroke": "PRIMARY", "strokeWidth": 1.5 },
+      { "type": "text",
+        "x": 12, "y": 12, "content": "{N}", "fontSize": 14,
+        "fill": "PRIMARY", "fontWeight": 700,
+        "textAnchor": "middle", "dominantBaseline": "central" }
+    ]
+  },
+  "ribbonTab": {
+    "$desc": "矩形 ribbon（life-aesthetic 的 ribbon-chain 用）",
+    "viewBox": [0, 0, 28, 24],
+    "width": 28, "height": 24,
+    "placeholders": ["N"],
+    "primitives": [
+      { "type": "rect", "x": 1, "y": 4, "w": 22, "h": 16, "fill": "PRIMARY", "rx": 2 },
+      { "type": "path", "d": "M23 4 L 27 12 L 23 20 Z", "fill": "PRIMARY" },
+      { "type": "text",
+        "x": 12, "y": 12, "content": "{N}", "fontSize": 14,
+        "fill": "INVERSE", "fontWeight": 700,
+        "textAnchor": "middle", "dominantBaseline": "central" }
+    ]
+  }
+}

@@ -1,4 +1,8 @@
-# Motif AST 参考
+# Motif AST 参考（共享 reference）
+
+> author-persona 和 annotate-markdown 两个 skill 通过 `../_shared/references/motif-ast.md` 相对路径共同引用本文件，零副本零同步。改本文件 = 两个 skill 同时生效。
+>
+> 权威依据：`src/core/themes/_shared/spec/types.ts`（`MotifShape` / `MotifTemplate` / `MotifPrimitive` 类型）+ `src/core/themes/_shared/spec/render-motif.ts`（运行时投影）。
 
 Motif = 嵌入主题的装饰性 SVG（标题前缀、分隔线、提示图标、步骤徽章、卷尾印章……）。**不以字符串形式存在**——而是 JSON AST，由 `shapeToSvg` / `renderMotifTemplate` 在运行时投射为 SVG 字符串。
 
@@ -9,11 +13,6 @@ Motif = 嵌入主题的装饰性 SVG（标题前缀、分隔线、提示图标�
 - [MotifShape vs MotifTemplate](#motifshape-vs-motiftemplate)
 - [`<svg>` 包装字段](#svg-包装字段)
 - [基元（MotifPrimitive）](#基元motifprimitive)
-  - [rect / circle / ellipse](#rect--circle--ellipse)
-  - [path](#path)
-  - [line](#line)
-  - [text](#text)
-  - [group](#group)
 - [模板占位符](#模板占位符)
 - [完整示例](#完整示例)
 
@@ -24,18 +23,16 @@ Motif = 嵌入主题的装饰性 SVG（标题前缀、分隔线、提示图标�
 两种顶层结构，差别只在**是否接受占位符**：
 
 ```ts
-// 静态 motif：h2Prefix / dividerWave / tipIcon 等
 interface MotifShape {
   viewBox: [number, number, number, number]
-  width?: number       // <svg width="...">，省略则按 viewBox 推断
+  width?: number
   height?: number
   inlineStyle?: SvgInlineStyle
   primitives: MotifPrimitive[]
 }
 
-// 参数化 motif：stepBadge / issueStamp 等
-interface MotifTemplate extends Omit<MotifShape, never> {
-  placeholders: readonly string[]   // 必须声明所有 {name} 占位符
+interface MotifTemplate extends MotifShape {
+  placeholders: readonly string[]
 }
 ```
 
@@ -49,16 +46,16 @@ interface MotifTemplate extends Omit<MotifShape, never> {
 interface SvgInlineStyle {
   display?: 'inline-block' | 'block' | 'inline'
   verticalAlign?: 'baseline' | 'middle' | 'top' | 'bottom'
-  marginRight?: number   // px
-  marginLeft?: number    // px
+  marginRight?: number
+  marginLeft?: number
 }
 ```
 
 典型用法：
 
-- **prefix 图标**（`h2Prefix` / `tipIcon`）：`{ display: 'inline-block', verticalAlign: 'middle', marginRight: 6 }`，贴在标题 / 段落前头。
-- **块级装饰**（`dividerWave`）：`inlineStyle` 整块不要（默认块级渲染）。
-- **容器徽章**（`stepBadge`）：`{ display: 'inline-block', verticalAlign: 'middle', marginRight: 8 }`。
+- **prefix 图标**（`h2Prefix` / `tipIcon`）：`{ display: 'inline-block', verticalAlign: 'middle', marginRight: 6 }`
+- **块级装饰**（`dividerWave`）：`inlineStyle` 整块不要（默认块级渲染）
+- **容器徽章**（`stepBadge`）：`{ display: 'inline-block', verticalAlign: 'middle', marginRight: 8 }`
 
 ## 基元（MotifPrimitive）
 
@@ -67,17 +64,12 @@ interface SvgInlineStyle {
 ### rect / circle / ellipse
 
 ```ts
-// rect
 { type: 'rect', x, y, w, h, fill?, stroke?, strokeWidth?, rx?, ry?, opacity? }
-
-// circle
 { type: 'circle', cx, cy, r, fill?, stroke?, strokeWidth?, opacity? }
-
-// ellipse
 { type: 'ellipse', cx, cy, rx, ry, fill?, stroke?, strokeWidth?, opacity? }
 ```
 
-- `fill` 不写默认为 `'none'`——所以要画实心形状必须显式写 `fill`。
+- `fill` 不写默认为 `'none'`——要画实心形状必须显式写 `fill`。
 - `strokeWidth` 写了但 `< 1` 会被校验器拒。
 
 ### path
@@ -91,7 +83,7 @@ interface SvgInlineStyle {
   opacity? }
 ```
 
-`d` 原样嵌入，不做解析。复杂曲线用 path，但能 rect / circle 表达的简单形状别绕 path——后者维护成本高。
+`d` 原样嵌入，不做解析。复杂曲线用 path，但能 rect / circle 表达的简单形状别绕 path。
 
 ### line
 
@@ -125,7 +117,7 @@ interface SvgInlineStyle {
 { type: 'group', transform, children: MotifPrimitive[], opacity? }
 ```
 
-`transform` 是原始 SVG 字符串（`translate(10 20) rotate(45)` / `scale(0.8)`）——保留字符串而非结构化分解，因为 SVG transform 的组合语义比字段组合精确。
+`transform` 是原始 SVG 字符串（`translate(10 20) rotate(45)` / `scale(0.8)`）。
 
 `children` 可以继续嵌套 group，占位符替换会递归进去。
 
@@ -147,15 +139,13 @@ const stepBadge: MotifTemplate = {
   ],
 }
 
-// 运行时调用
 renderMotifWithValues(stepBadge, { N: 3 })
-// → text 的 content 变成 '3'，其他原样
 ```
 
 **校验器会追查**：
 
 - `primitives` 里出现的 `{X}` 如果不在 `placeholders` 里声明，抛 error。
-- `placeholders` 里声明了但 primitives 里没用到，警告（不是 error，方便外部做 stepBadge 这类「预留 N 槽位」的模板）。
+- `placeholders` 里声明了但 primitives 里没用到，警告（不是 error）。
 
 **没被替换的占位符**不会抛错，原样保留（`{name}` 字面字符在 SVG 里会被 viewer 当普通文本渲染）——方便调试。
 
