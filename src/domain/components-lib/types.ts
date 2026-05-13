@@ -15,7 +15,7 @@
  * "删除/编辑"这类用户组件专属动作通过 `entry.source === 'user'` 收敛类型。
  */
 
-import type { VariantKind } from '../../themes/types'
+import type { VariantKind } from '../../core/themes/types'
 
 export type ComponentKind = VariantKind | 'none'
 

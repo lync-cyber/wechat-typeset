@@ -9,7 +9,7 @@
 
 import { describe, it, expect } from 'vitest'
 import { mount } from '../helpers/mount'
-import Preview from '../../src/components/Preview.vue'
+import Preview from '../../src/ui/components/Preview.vue'
 
 const SAMPLE = '<section class="markdown-body"><h1 style="color:red">Hello</h1><p style="margin:0">text</p></section>'
 

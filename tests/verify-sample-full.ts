@@ -30,9 +30,9 @@ const dom = new JSDOM('', { url: 'http://localhost/' })
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ;(globalThis as any).Node = dom.window.Node
 
-const { render } = await import('../src/pipeline')
-import { defaultTheme } from '../src/themes/default'
-import { VARIANT_IDS } from '../src/themes/types'
+const { render } = await import('../src/core/pipeline')
+import { defaultTheme } from '../src/core/themes/default'
+import { VARIANT_IDS } from '../src/core/themes/types'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
 const SAMPLE = resolve(HERE, '../src/samples-md/sample-full.md')

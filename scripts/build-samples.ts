@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * 样稿生成器：src/samples-md/sample-{themeId}.md → src/samples/generated.ts
+ * 样稿生成器：src/samples-md/sample-{themeId}.md → src/domain/samples/_generated.ts
  *
  * 历史：src/samples/*.ts 与 sample-*.md 曾是两套独立硬编码，随容器增删必须双写、
  * 容易漂移。现在 src/samples-md/ 是权威单一来源（曾在 docs/samples，2026-05 迁入
  * src 树以匹配"主题示例属于源码而非文档"的定位），本脚本把所有 sample-*.md
- * 打包到一个 generated.ts 里，让 src/samples/index.ts 直接消费静态字符串字典；
- * Vite / tsx / Node 三种运行时都无差别。
+ * 打包到一个 _generated.ts 里（R6 改名加下划线前缀，明示构建产物），让
+ * src/domain/samples/index.ts 直接消费静态字符串字典；Vite / tsx / Node 三种运行时都无差别。
  *
  * 映射规则：
  *   src/samples-md/sample-{themeId}.md  →  SAMPLE_BY_THEME[themeId]
@@ -27,7 +27,7 @@ import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 
 const SAMPLES_DIR = resolve(process.cwd(), 'src/samples-md')
-const OUT = resolve(process.cwd(), 'src/samples/generated.ts')
+const OUT = resolve(process.cwd(), 'src/domain/samples/_generated.ts')
 
 const FILE_RE = /^sample-(.+)\.md$/
 const FULL_SAMPLE_THEMEID = 'full' // sample-full.md 是专用 fixture，不是主题样本

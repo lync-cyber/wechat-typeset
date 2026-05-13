@@ -27,8 +27,8 @@ import {
   QUOTE_VARIANTS,
   SECTION_TITLE_VARIANTS,
   STEPS_VARIANTS,
-} from '../../variants/registry'
-import type { VariantKind, ThemeVariants } from '../../themes/types'
+} from '../variants/registry'
+import type { VariantKind, ThemeVariants } from '../themes/types'
 
 // ============================================================
 // 1. 词汇表查询

@@ -14,8 +14,8 @@
  *   - Motif 工具：getMotifSpec / renderMotif / renderMotifWithValues
  */
 
-import type { Theme, ThemeVariants } from '../themes/types'
-import { VARIANT_IDS } from '../themes/types'
+import type { Theme, ThemeVariants } from '../core/themes/types'
+import { VARIANT_IDS } from '../core/themes/types'
 import type {
   JSONSchema7,
   MotifShape,
@@ -25,7 +25,7 @@ import type {
   PersonaSpec,
   SignatureContainerId,
   SpecValidationResult,
-} from '../themes/_shared/spec'
+} from '../core/themes/_shared/spec'
 import {
   PERSONA_SPEC_SCHEMA,
   SUPPORTED_SIGNATURE_CONTAINERS,
@@ -33,9 +33,9 @@ import {
   shapeToSvg,
   specToTheme,
   validateSpec,
-} from '../themes/_shared/spec'
-import { render as pipelineRender, type RenderOutput } from '../pipeline'
-import type { WxPatchOptions } from '../pipeline/wxPatch'
+} from '../core/themes/_shared/spec'
+import { render as pipelineRender, type RenderOutput } from '../core/pipeline'
+import type { WxPatchOptions } from '../core/pipeline/wxPatch'
 import { PERSONA_REGISTRY, PERSONA_SPECS } from './personas'
 import {
   getContainerVocabulary as _getContainerVocabulary,
@@ -154,7 +154,7 @@ export function getVariantsForContainer(containerName: string): VariantDescripto
  * 典型用法：先 getPersona(id) 拿 PersonaSpec，再把 spec.variants 传进来。
  */
 export function getThemeDefaultVariants(
-  variants: import('../themes/types').ThemeVariants,
+  variants: import('../core/themes/types').ThemeVariants,
 ): VariantDescriptor[] {
   return _getThemeDefaultVariants(variants)
 }

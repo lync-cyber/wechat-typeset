@@ -27,7 +27,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { containersInPack, type ContainerPack } from '../src/core/vocabulary/vocabulary'
-import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
+import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
 
 interface PackTarget {
   /** 文档绝对路径（resolve 自 cwd） */

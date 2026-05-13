@@ -2,8 +2,8 @@
  * free · footer-cta（文末 CTA）：标题 + 描述 + 按钮胶囊。
  */
 
-import type { VariantDef } from '../../../variants/_core'
-import { svg } from '../../../variants/_thumb'
+import type { VariantDef } from '../../../core/variants/_core'
+import { svg } from '../../../core/variants/_thumb'
 
 function thumb(): string {
   return svg(

@@ -6,7 +6,7 @@
 
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import { PERSONA_SPEC_SCHEMA } from '../src/themes/_shared/spec/schema'
+import { PERSONA_SPEC_SCHEMA } from '../src/core/themes/_shared/spec/schema'
 
 const OUT = resolve(process.cwd(), 'dist/schema/persona-spec.schema.json')
 mkdirSync(dirname(OUT), { recursive: true })

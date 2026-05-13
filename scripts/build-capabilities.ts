@@ -22,11 +22,11 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
 import { listPersonas } from '../src/public'
-import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/themes/types'
-import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/pipeline/containers'
-import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
-import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../src/themes/_shared/spec/validate'
-import { FORBIDDEN_CSS_PROPS, HARD_REMOVE_TAGS } from '../src/pipeline/rules'
+import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/core/themes/types'
+import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/core/pipeline/containers'
+import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
+import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../src/core/themes/_shared/spec/validate'
+import { FORBIDDEN_CSS_PROPS, HARD_REMOVE_TAGS } from '../src/core/pipeline/rules'
 import { CONTAINER_VOCABULARY, packOf } from '../src/core/vocabulary/vocabulary'
 
 /**

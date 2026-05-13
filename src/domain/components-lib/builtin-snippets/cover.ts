@@ -3,8 +3,8 @@
  * 缩略图复用 intro 的 SVG，视觉上等价。
  */
 
-import type { VariantDef } from '../../../variants/_core'
-import { svg } from '../../../variants/_thumb'
+import type { VariantDef } from '../../../core/variants/_core'
+import { svg } from '../../../core/variants/_thumb'
 
 function thumb(): string {
   return svg(

@@ -24,9 +24,9 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT = process.env.WX_MD_BASELINE_DIR || resolve(HERE, '.baseline')
 mkdirSync(OUT, { recursive: true })
 
-const { render } = await import('../src/pipeline/index.ts')
-const { themeRegistry } = await import('../src/themes/index.ts')
-const { getSample } = await import('../src/samples/index.ts')
+const { render } = await import('../src/core/pipeline/index.ts')
+const { themeRegistry } = await import('../src/core/themes/index.ts')
+const { getSample } = await import('../src/domain/samples/index.ts')
 
 const ids = Object.keys(themeRegistry)
 for (const id of ids) {

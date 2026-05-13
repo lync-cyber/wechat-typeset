@@ -21,8 +21,8 @@ const BASE = process.env.VITE_BASE ?? '/'
  *
  * 这个插件把这条链路打通：
  *   ① 监听 src/samples-md/sample-*.md 变更 → 自动 spawn `tsx scripts/build-samples.ts`
- *     重写 src/samples/generated.ts（其中含 SAMPLE_BUILD_ID 哈希）
- *   ② 监听 src/samples/generated.ts 自身的变更（hot update）→ 直接 send full-reload，
+ *     重写 src/domain/samples/_generated.ts（其中含 SAMPLE_BUILD_ID 哈希）
+ *   ② 监听 src/domain/samples/_generated.ts 自身的变更（hot update）→ 直接 send full-reload，
  *     让浏览器整页刷一次。整页刷期间 useDraftLifecycle.initActiveDraft 会比对
  *     localStorage 里存的 SAMPLE_BUILD_ID 与刚加载的新 id，不一致即把活跃草稿
  *     正文重置为该草稿对应主题的最新 sample 内容。
@@ -35,7 +35,7 @@ function samplesDevPlugin(): Plugin {
   let pending = false
   let server: ViteDevServer | undefined
   const SAMPLE_MD_RE = /[\\/]src[\\/]samples-md[\\/]sample-.+\.md$/i
-  const GENERATED_TS = resolve(__dirname, 'src', 'samples', 'generated.ts')
+  const GENERATED_TS = resolve(__dirname, 'src', 'domain', 'samples', '_generated.ts')
 
   function rebuild() {
     if (building) {
@@ -86,7 +86,7 @@ function samplesDevPlugin(): Plugin {
       return undefined
     },
     buildStart() {
-      // 仅 dev 启动时做一次初始打包，避免 generated.ts 与 src/samples-md 漂移
+      // 仅 dev 启动时做一次初始打包，避免 _generated.ts 与 src/samples-md 漂移
       if (server && !building) rebuild()
     },
   }

@@ -25,16 +25,16 @@ import {
   specToTheme,
   validateSpec,
   type PersonaSpec,
-} from '../../src/themes/_shared/spec'
-import { generateGallery } from '../../src/gallery/generate'
-import { themeList } from '../../src/themes'
-import { VARIANT_IDS, DEFAULT_VARIANTS } from '../../src/themes/types'
+} from '../../src/core/themes/_shared/spec'
+import { generateGallery } from '../../src/domain/gallery/generate'
+import { themeList } from '../../src/core/themes'
+import { VARIANT_IDS, DEFAULT_VARIANTS } from '../../src/core/themes/types'
 import {
   CONTAINER_REGISTRY,
   SIGNATURE_CONTAINER_MARKDOWN_NAME,
-} from '../../src/pipeline/containers'
+} from '../../src/core/pipeline/containers'
 import { STYLED_CONTAINERS } from '../../src/core/vocabulary'
-import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/themes/_shared/spec'
+import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/core/themes/_shared/spec'
 
 // ============================================================
 // 加载器：9 份 persona.spec.ts → 按目录名排序
@@ -49,7 +49,7 @@ interface Loaded {
 let LOADED: Loaded[] = []
 
 beforeAll(async () => {
-  const paths = globSync('src/themes/*/persona.spec.ts', { cwd: process.cwd() })
+  const paths = globSync('src/core/themes/*/persona.spec.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
     .sort()
   for (const p of paths) {

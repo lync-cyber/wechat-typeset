@@ -2,8 +2,8 @@
  * free · mpvideo（腾讯视频占位）。直接渲染 v.qq.com iframe。
  */
 
-import type { VariantDef } from '../../../variants/_core'
-import { svg } from '../../../variants/_thumb'
+import type { VariantDef } from '../../../core/variants/_core'
+import { svg } from '../../../core/variants/_thumb'
 
 function thumb(): string {
   return svg(
