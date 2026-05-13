@@ -29,6 +29,7 @@ import CommandPalette from '../ui/components/CommandPalette.vue'
 import HelpPanel from '../ui/components/HelpPanel.vue'
 import OnboardingCard from '../ui/components/OnboardingCard.vue'
 import UndoToast from '../ui/components/UndoToast.vue'
+import ErrorBoundary from '../ui/primitives/ErrorBoundary.vue'
 import type { ToolbarAction, ToolbarToggleTarget } from '../ui/components/toolbar-types'
 import { useDebouncedRender } from '../ui/composables/useDebouncedRender'
 import { useUiDrawers } from '../ui/composables/useUiDrawers'
@@ -177,13 +178,18 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
       @action="onToolbarAction"
     />
     <main class="main" :data-mobile-tab="mobileTab">
-      <DraftDrawer
+      <ErrorBoundary
         v-if="ui.leftSlot === 'drafts'"
-        :active-id="activeDraftId"
-        @select="handleSelectDraft"
+        fallback-title="草稿列表加载失败"
         @close="ui.leftSlot = null"
-        @request-delete="handleDeleteDraftRequest"
-      />
+      >
+        <DraftDrawer
+          :active-id="activeDraftId"
+          @select="handleSelectDraft"
+          @close="ui.leftSlot = null"
+          @request-delete="handleDeleteDraftRequest"
+        />
+      </ErrorBoundary>
       <section class="pane pane-editor">
         <Editor ref="editorRef" v-model="md" @scroll="onEditorScroll" />
         <OnboardingCard
@@ -209,30 +215,57 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
           @scroll="onPreviewScroll"
         />
       </section>
-      <ComponentPalette
+      <ErrorBoundary
         v-if="ui.rightSlot === 'components'"
-        ref="paletteRef"
-        :theme="activeTheme"
-        @insert="handleInsertTemplate"
+        fallback-title="组件库加载失败"
         @close="ui.rightSlot = null"
-      />
-      <ColorCustomizer
-        v-if="ui.rightSlot === 'customizer'"
-        :has-custom-color="customTheme !== null"
-        @apply="handleApplyPalette"
-        @reset="handleResetPalette"
+      >
+        <ComponentPalette
+          ref="paletteRef"
+          :theme="activeTheme"
+          @insert="handleInsertTemplate"
+          @close="ui.rightSlot = null"
+        />
+      </ErrorBoundary>
+      <ErrorBoundary
+        v-else-if="ui.rightSlot === 'customizer'"
+        fallback-title="配色面板渲染失败"
         @close="ui.rightSlot = null"
-      />
-      <PublishChecklist v-if="ui.rightSlot === 'checklist'" :md="md" @close="ui.rightSlot = null" />
+      >
+        <ColorCustomizer
+          :has-custom-color="customTheme !== null"
+          @apply="handleApplyPalette"
+          @reset="handleResetPalette"
+          @close="ui.rightSlot = null"
+        />
+      </ErrorBoundary>
+      <ErrorBoundary
+        v-else-if="ui.rightSlot === 'checklist'"
+        fallback-title="发文清单渲染失败"
+        @close="ui.rightSlot = null"
+      >
+        <PublishChecklist :md="md" @close="ui.rightSlot = null" />
+      </ErrorBoundary>
     </main>
 
-    <CommandPalette v-if="ui.commandOpen" :commands="commands" @close="ui.commandOpen = false" />
-    <HelpPanel
+    <ErrorBoundary
+      v-if="ui.commandOpen"
+      fallback-title="命令面板渲染失败"
+      @close="ui.commandOpen = false"
+    >
+      <CommandPalette :commands="commands" @close="ui.commandOpen = false" />
+    </ErrorBoundary>
+    <ErrorBoundary
       v-if="ui.helpOpen"
-      :commands="commands"
+      fallback-title="帮助面板渲染失败"
       @close="ui.helpOpen = false"
-      @insert="handleInsertTemplate"
-    />
+    >
+      <HelpPanel
+        :commands="commands"
+        @close="ui.helpOpen = false"
+        @insert="handleInsertTemplate"
+      />
+    </ErrorBoundary>
     <UndoToast v-if="undo" :message="undo.message" @undo="onUndo" @expire="onUndoExpire" />
 
     <!-- Mobile backdrop: tap outside an open drawer to dismiss (mobile only via CSS) -->
