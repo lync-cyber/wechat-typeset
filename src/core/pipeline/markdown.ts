@@ -86,6 +86,7 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
             tokens: theme.tokens,
             assets: theme.assets,
             containers: theme.containers,
+            innerStyles: theme.innerStyles,
             inline: theme.inline,
             variants: theme.variants,
             info: title,
@@ -125,14 +126,21 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
   //   - 跳过前导空白 / 中英文标点 / 开引号 / 各式括号
   //   - 若首个实字是阿拉伯数字 —— 不下沉（规范明言：数字下沉很丑）
   //   - 若找不到首段或首段无 inline text 子节点 —— 静默不动
-  if (theme.behavior?.introDropcap) {
-    // 规范（people-story §1.2）：48px / 700 / accent / inline-block / line-height 1 /
-    //   margin 0 8px 0 0 / padding-top 4px. 靠 inline-block 放大而非 float.
-    const dropcapAccent = theme.tokens.colors.accent
+  //
+  // R8：从 theme.behavior.introDropcap 升级为 theme.decorations.introDropcap,
+  //   样式由 decoration 字段（color/fontSize/fontWeight/marginRight/paddingTop）构造,
+  //   主题作者可调字号 / 颜色。`ThemeBehavior` 接口完全删除。
+  const dropcap = theme.decorations?.introDropcap
+  if (dropcap) {
+    const dropcapColor = theme.tokens.colors[dropcap.color]
+    const fontSize = dropcap.fontSize ?? 48
+    const fontWeight = dropcap.fontWeight ?? 700
+    const marginRight = dropcap.marginRight ?? 8
+    const paddingTop = dropcap.paddingTop ?? 4
     const dropcapStyle =
-      `display:inline-block;font-size:48px;font-weight:700;` +
-      `color:${dropcapAccent};line-height:1;margin:0 8px 0 0;` +
-      `padding-top:4px;vertical-align:baseline`
+      `display:inline-block;font-size:${fontSize}px;font-weight:${fontWeight};` +
+      `color:${dropcapColor};line-height:1;margin:0 ${marginRight}px 0 0;` +
+      `padding-top:${paddingTop}px;vertical-align:baseline`
     md.core.ruler.push('wx_intro_dropcap', (state) => {
       const tokens = state.tokens
       for (let i = 0; i < tokens.length; i++) {
@@ -354,6 +362,7 @@ function emptyCtx(theme: Theme): ContainerRenderContext {
     tokens: theme.tokens,
     assets: theme.assets,
     containers: theme.containers,
+    innerStyles: theme.innerStyles,
     inline: theme.inline,
     variants: theme.variants,
     info: '',

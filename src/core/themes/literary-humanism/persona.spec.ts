@@ -24,6 +24,9 @@ export const spec: PersonaSpec = {
   name: '人文札记',
   description: '宋椠古籍 + 克制留白，给散文、书评、长评留足呼吸',
   audience: '人文非虚构（散文 / 书评 / 长评 / 札记）',
+  // applyPalette fallback：用户基于本主题自定义配色时，SVG assets 走 `serif` 工厂
+  // （书卷式双竖条等"古籍"形状语言）。spec-first 主路径不消费此字段。
+  svgVariant: 'serif',
 
   // ============================================================
   // 色板（规范 §1.1 色彩表）

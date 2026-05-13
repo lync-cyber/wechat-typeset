@@ -6,7 +6,7 @@
  *
  * 三条签名动作（规范 §结语）：
  *   1. primary #1b2330 深墨靛 + accent #8a3f2b 深铁锈 + bg #f2efe7 冷米（三锚点不许动）
- *   2. Drop cap：intro 首段首字 48px / 700 / accent / inline-block（behavior.introDropcap）
+ *   2. Drop cap：intro 首段首字 48px / 700 / accent / inline-block（decorations.introDropcap）
  *   3. quoteCard = 巨号 serif 引号 SVG + 25px 金句 + byline attribution
  *
  * accent 稀缺纪律：每篇最多三处 —— drop cap + pull-quote 引号 + 罗马数字.
@@ -247,22 +247,23 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
-  // Behavior（规范 §结语 4 件事中的 2/3 条）
-  // ============================================================
-  behavior: {
-    // 规范 §1.2：intro 首段首字拆为 <span class="intro-dropcap">X</span>
-    // 此处保留 boolean：dropcap 涉及前导标点跳过 / 数字判定，不可用 decorations 声明表达
-    introDropcap: true,
-  },
-
-  // ============================================================
-  // Decorations（规范 §1.3 ③ / §3.7：h2 自动罗马数字前缀）
+  // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）
   //
-  // 历史：旧版用 behavior.h2RomanNumerals + markdown.ts 私有分支实现。迁到声明式
-  // decorations 后，渲染逻辑由 pipeline/markdown.ts 的 applyHeadingPrefixDecorations
-  // 统一执行，本 spec 只描述"长什么样"。
+  // 历史：旧版用 behavior.h2RomanNumerals + behavior.introDropcap + markdown.ts 私有分支实现。
+  // 迁到声明式 decorations 后，渲染逻辑由 pipeline/markdown.ts 统一执行（applyHeadingPrefixDecorations
+  // / applyIntroDropcap），本 spec 只描述"长什么样"。`ThemeBehavior` 接口 R8 后已删除。
   // ============================================================
   decorations: {
+    // 规范 §1.2：intro 首段首字 48px / 700 / accent / inline-block。
+    // 前导标点跳过 / 数字判定的扫描逻辑无法声明式表达, 由 markdown.ts 共享层实现；
+    // 主题只声明色 / 字号 / 字重等样式参数。
+    introDropcap: {
+      color: 'accent', // 铁锈色
+      fontSize: 48,
+      fontWeight: 700,
+      marginRight: 8,
+      paddingTop: 4,
+    },
     headingPrefix: [
       {
         level: 2,

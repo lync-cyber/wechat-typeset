@@ -14,8 +14,7 @@
  */
 
 import { baseContainers, baseElements, baseInline, buildTheme } from '../themes/_shared/buildTheme'
-import type { SvgVariant } from '../themes/_shared/svgAssets'
-import type { CSSObject, Theme, ThemeTokens } from '../themes/types'
+import type { CSSObject, SvgVariant, Theme, ThemeTokens } from '../themes/types'
 import { derivePalette, type PaletteSeed } from './generator'
 
 export interface ApplyPaletteOptions {
@@ -25,16 +24,15 @@ export interface ApplyPaletteOptions {
   id?: string
   /** 自定义显示名 */
   name?: string
-  /** SVG 变体覆盖；默认沿用基主题变体的反查结果（无法反查时 geometric） */
+  /**
+   * SVG 形状变体覆盖。缺省时读 `base.svgVariant`（由 spec.svgVariant 下沉而来）；
+   * 都缺则回退到 `'geometric'`。
+   *
+   * 历史包袱：旧版在本文件维护 `BASE_VARIANT: Record<themeId, SvgVariant>` 手写表,
+   * 新增主题要"额外去 applyPalette.ts 加一行",违反"主题只动新目录"的承诺。R8 后
+   * 该 hint 已下沉到 spec 层（PersonaSpec.svgVariant → Theme.svgVariant）, 本表被删除。
+   */
   variant?: SvgVariant
-}
-
-const BASE_VARIANT: Record<string, SvgVariant> = {
-  default: 'geometric',
-  'tech-geek': 'geometric',
-  'life-aesthetic': 'soft',
-  'business-finance': 'geometric',
-  'literary-humanism': 'serif',
 }
 
 type CSSMap = Record<string, CSSObject>
@@ -46,7 +44,7 @@ export function applyPalette(opts: ApplyPaletteOptions): Theme {
     ...base.tokens,
     colors: newColors,
   }
-  const variant: SvgVariant = opts.variant ?? BASE_VARIANT[base.id] ?? 'geometric'
+  const variant: SvgVariant = opts.variant ?? base.svgVariant ?? 'geometric'
 
   // 重建基主题的"默认基线"——这是 buildTheme 在 apply 前会产生的那份干净起点。
   // base.elements/containers/inline 与这份基线的差值才是"主题作者真正的定制"。

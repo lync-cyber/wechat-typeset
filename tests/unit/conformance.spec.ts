@@ -144,13 +144,22 @@ describe('A. spec → Theme 投影保真', () => {
     }
   })
 
-  it('spec.behavior 原样转发到 theme.behavior', () => {
+  // R8: ThemeBehavior 接口已删除。所有"主题专属视觉签名"由 spec.decorations 承载。
+  // 此处校验 Theme 实例上既无 behavior 字段、亦无旧 behavior 透传残留。
+  it('Theme 无 behavior 字段（R8 后 ThemeBehavior 接口已删除）', () => {
     for (const { spec, dir } of eachSpec()) {
       const theme = specToTheme(spec)
-      if (spec.behavior) {
-        expect(theme.behavior, dir).toStrictEqual(spec.behavior)
+      expect((theme as { behavior?: unknown }).behavior, dir).toBeUndefined()
+    }
+  })
+
+  it('spec.decorations 原样转发到 theme.decorations', () => {
+    for (const { spec, dir } of eachSpec()) {
+      const theme = specToTheme(spec)
+      if (spec.decorations) {
+        expect(theme.decorations, dir).toStrictEqual(spec.decorations)
       } else {
-        expect(theme.behavior, dir).toBeUndefined()
+        expect(theme.decorations, dir).toBeUndefined()
       }
     }
   })

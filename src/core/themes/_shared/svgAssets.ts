@@ -6,12 +6,15 @@
  * 色彩则随 tokens 自动流动，避免在每个主题里手写一遍相同的 SVG 字符串。
  */
 
-import type { ThemeAssets, ThemeTokens } from '../types'
+import type { SvgVariant, ThemeAssets, ThemeTokens } from '../types'
 
 const strip = (s: string) => s.replace(/\s+/g, ' ').trim()
 
-/** 主题级视觉变体 —— 控制 SVG 形状风格，不控制颜色 */
-export type SvgVariant = 'geometric' | 'soft' | 'serif' | 'playful'
+/**
+ * SvgVariant 类型权威定义在 ../types.ts（PersonaSpec / Theme 都要消费）。
+ * 此处 re-export 让既有 `import { SvgVariant } from './_shared/svgAssets'` 不被破坏。
+ */
+export type { SvgVariant }
 
 interface BuildOptions {
   tokens: ThemeTokens
