@@ -238,6 +238,7 @@ export const spec: PersonaSpec = {
     divider: 'wave', // manpage-rule（§ ——— §）
     sectionTitle: 'cornered', // § heading prefix
     codeBlock: 'bare', // code 与正文同色系，无需 header-bar
+    note: 'side-bar', // // NOTE 风：左侧标线 + 缩进
   },
 
   // ============================================================

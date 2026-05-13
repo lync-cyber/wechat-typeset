@@ -23,6 +23,7 @@ import {
   CODE_BLOCK_VARIANTS,
   COMPARE_VARIANTS,
   DIVIDER_VARIANTS,
+  NOTE_VARIANTS,
   QUOTE_VARIANTS,
   SECTION_TITLE_VARIANTS,
   STEPS_VARIANTS,
@@ -60,14 +61,16 @@ export interface VariantDescriptor {
 }
 
 function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescriptor | undefined {
-  const table: Record<VariantKind | 'codeBlock', Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>> = {
-    admonition: ADMONITION_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
-    quote: QUOTE_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
-    compare: COMPARE_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
-    steps: STEPS_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
-    divider: DIVIDER_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
-    sectionTitle: SECTION_TITLE_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
-    codeBlock: CODE_BLOCK_VARIANTS as unknown as Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>,
+  type MetaTable = Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>
+  const table: Record<VariantKind | 'codeBlock', MetaTable> = {
+    admonition: ADMONITION_VARIANTS as unknown as MetaTable,
+    quote: QUOTE_VARIANTS as unknown as MetaTable,
+    compare: COMPARE_VARIANTS as unknown as MetaTable,
+    steps: STEPS_VARIANTS as unknown as MetaTable,
+    divider: DIVIDER_VARIANTS as unknown as MetaTable,
+    sectionTitle: SECTION_TITLE_VARIANTS as unknown as MetaTable,
+    codeBlock: CODE_BLOCK_VARIANTS as unknown as MetaTable,
+    note: NOTE_VARIANTS as unknown as MetaTable,
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
@@ -100,6 +103,7 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     divider: DIVIDER_VARIANTS,
     sectionTitle: SECTION_TITLE_VARIANTS,
     codeBlock: CODE_BLOCK_VARIANTS,
+    note: NOTE_VARIANTS,
   }
   return Object.keys(table[kind] ?? {})
 }
@@ -126,6 +130,7 @@ export function getThemeDefaultVariants(variants: ThemeVariants): VariantDescrip
     'divider',
     'sectionTitle',
     'codeBlock',
+    'note',
   ]
   const out: VariantDescriptor[] = []
   for (const kind of kinds) {

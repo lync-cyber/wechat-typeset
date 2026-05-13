@@ -39,7 +39,7 @@
 |  | `methodology` | ★ | 方法论小字注释：浅底 + 10px textMuted + 粗体标签头。调研类主题的脚注本，与中性 note 的区别在排印密度（更紧、更小、更"说明栏"）。 |
 |  | `colophon` | ★ | 刊物收束栏：上分割线 + 左右双栏 monospace 元数据（下期预告 / 卷·期）。data-brief 等刊物化主题的"尾签名"。 |
 
-> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary，需要划入扩展包再在 `scripts/build-writer-docs.ts:PACK_OF` 追加。
+> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
 
 <!-- generated:container-quick-ref:data-brief:end -->
 

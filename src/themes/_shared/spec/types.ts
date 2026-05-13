@@ -251,10 +251,20 @@ export interface MotifSpec {
 /**
  * 项目已登记的"签名容器"。每个主题在 PersonaSpec.signatureContainers 里列出
  * 该主题必须具备（渲染层有对应实现）的容器 id。conformance 测试会校验：
- * 每个 signatureContainer 都在渲染注册表里有实现，或通过 free 组件 /
- * admonition variant / template 承载。
+ * 每个 signatureContainer 都在渲染注册表里有实现。
  *
- * 超出此清单的 id 判作 spec 错误；添加新容器需同步扩展这里。
+ * 设计纪律（R2）：本数组的成员**必须**与 `STYLED_CONTAINERS.map(s => s.styleKey)`
+ * 集合相等。手写在这里是为了保留 `as const` 的字面量字符串联合类型；
+ * conformance.spec.ts 里有一道 set-equality 断言守住二者不漂移。
+ *
+ * 新增 styled 容器流程：
+ *   1. vocabulary.ts 里追加 ContainerSpec（styleKey 非 null）
+ *   2. 本数组同步追加同名 styleKey
+ *   3. buildTheme.baseContainers + ThemeContainers 类型字段一致
+ *
+ * 历史包袱：algorithm / seal / prelude 三个占位 id 已于 R1 删除——它们
+ * 没有 vocabulary 条目、没有 renderer，留在这里只会让 validateSpec 通过却在
+ * conformance 期失败。需要类似容器时按上面三步正式登记。
  */
 export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'intro',
@@ -275,13 +285,10 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'qrcode',
   'mpvoice',
   'mpvideo',
-  // 签名容器扩展（abstract / keyNumber / seeAlso 已实现；algorithm / seal 保留占位）
+  // 跨主题通用签名（abstract / keyNumber / seeAlso）
   'abstract',
-  'algorithm',
   'keyNumber',
   'seeAlso',
-  'seal',
-  'prelude',
   // data-brief 家族（数据简报：晚点 / 财新数据 / Morning Brew）
   'masthead',
   'sectionTag',

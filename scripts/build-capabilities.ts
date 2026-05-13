@@ -27,7 +27,7 @@ import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
 import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../src/themes/_shared/spec/validate'
 import { FORBIDDEN_CSS_PROPS, HARD_REMOVE_TAGS } from '../src/pipeline/rules'
-import { CONTAINER_VOCABULARY } from '../src/containers/vocabulary'
+import { CONTAINER_VOCABULARY, packOf } from '../src/containers/vocabulary'
 
 /**
  * 下游集成约定：
@@ -76,12 +76,14 @@ interface CapabilitiesV2 {
   containers: Array<{
     id: string
     category: string
+    /** 所属契约扩展包（缺省 = base）。下游可按此过滤"我只关心 base 容器"。 */
+    pack: 'base' | 'data-brief'
     /**
      * kind 是对 category 的"渲染行为"维度归纳：
      *   variantized - 有 variant slot，可通过 variant=xxx 切骨架
      *   admonition  - tip/warning/info/danger 四态；共享 admonition variant 清单
      *   nested      - pros/cons，必须嵌在父容器内
-     *   fixed       - 固定骨架但有主题化 CSS 槽位（highlight / footer-cta / recommend / note 等）
+     *   fixed       - 固定骨架但有主题化 CSS 槽位（highlight / footer-cta / recommend 等）
      *   free        - 兜底 escape hatch（只有 `free`）
      */
     kind: 'variantized' | 'admonition' | 'nested' | 'fixed' | 'free'
@@ -124,7 +126,8 @@ function pkgJson(): { name: string; version: string; homepage?: string } {
 
 function buildContainers(): CapabilitiesV2['containers'] {
   // 单一真相：直接迭代 CONTAINER_VOCABULARY；新增容器只需在 vocabulary 登记。
-  const admonitions = new Set(['tip', 'warning', 'info', 'danger', 'note'])
+  // R8 之后 note 不再属于 admonition variant 池——它走独立的 variantKind='note'。
+  const admonitions = new Set(['tip', 'warning', 'info', 'danger'])
   const result: CapabilitiesV2['containers'] = []
 
   for (const spec of CONTAINER_VOCABULARY) {
@@ -146,7 +149,7 @@ function buildContainers(): CapabilitiesV2['containers'] {
     } else if (isFree) {
       kind = 'free'
     } else {
-      // 其他都是"固定骨架 + 主题化 CSS"：highlight / footer-cta / recommend / note /
+      // 其他都是"固定骨架 + 主题化 CSS"：highlight / footer-cta / recommend /
       // qrcode / mpvoice / mpvideo / abstract / key-number / see-also
       kind = 'fixed'
     }
@@ -154,17 +157,20 @@ function buildContainers(): CapabilitiesV2['containers'] {
     const notes = isNested
       ? `必须嵌在 ${spec.parent} 内（外层 ::::，内层 :::）`
       : isAdmonition
-        ? 'admonition 五态（tip/warning/info/danger/note）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。note 不参与 variant 切换。'
-        : isFree
-          ? '兜底 escape hatch：无主题样式，按作者内容原样透传。'
-          : undefined
+        ? 'admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。'
+        : spec.name === 'note'
+          ? '第五态补注：独立 variantKind=note，中性骨架；可通过 variant=xxx 切骨架，色彩走 textMuted 不抢色。'
+          : isFree
+            ? '兜底 escape hatch：无主题样式，按作者内容原样透传。'
+            : undefined
 
     result.push({
       id: spec.name,
       category: spec.category,
+      pack: packOf(spec),
       kind,
-      variants: spec.name === 'note' ? undefined : variants,
-      defaultVariant: spec.name === 'note' ? undefined : defaultVariant,
+      variants,
+      defaultVariant,
       children: spec.children,
       parent: spec.parent,
       fenceLength: spec.fenceLength,

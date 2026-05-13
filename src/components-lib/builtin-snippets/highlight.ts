@@ -2,8 +2,8 @@
  * free · highlight（重点高亮块）：整段荧光底色。
  */
 
-import type { VariantDef } from '../_core'
-import { svg } from '../_thumb'
+import type { VariantDef } from '../../variants/_core'
+import { svg } from '../../variants/_thumb'
 
 function thumb(): string {
   return svg(

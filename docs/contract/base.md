@@ -41,7 +41,7 @@
 |  | `see-also` | ★ | 相关阅读链接列表（academic-frontier / tech-explainer 的"扩展阅读"）。 |
 | 兜底 | `free` |  | 兜底容器：渲染器刻意不施加主题样式，写不归类内容。 |
 
-> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary，需要划入扩展包再在 `scripts/build-writer-docs.ts:PACK_OF` 追加。
+> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
 
 <!-- generated:container-quick-ref:base:end -->
 

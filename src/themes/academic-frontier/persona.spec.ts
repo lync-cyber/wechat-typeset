@@ -244,6 +244,7 @@ export const spec: PersonaSpec = {
     divider: 'rule',
     sectionTitle: 'bordered',
     codeBlock: 'bare',
+    note: 'box-callout', // 学术风：1px 边框包裹的 "Remark" 框，与 sidenote-latex 同语调
   },
 
   // ============================================================

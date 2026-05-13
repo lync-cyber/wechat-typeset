@@ -426,6 +426,8 @@ export const spec: PersonaSpec = {
     sectionTitle: 'cornered',
     // 规范 §1.1 code 安静处理：bare 不用 header-bar
     codeBlock: 'bare',
+    // 书页批注：minimal-callout 的无框短线最贴近宋版书"按"语调
+    note: 'minimal-callout',
   },
 
   // ============================================================

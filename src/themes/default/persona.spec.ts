@@ -224,6 +224,7 @@ export const spec: PersonaSpec = {
     divider: 'rule', // 单根 border 色细线
     sectionTitle: 'bordered', // 底部 2px primary 下划线
     codeBlock: 'bare', // 拒绝 header-bar（那是 tech-explainer 签名）
+    note: 'minimal-callout', // 顶端 1px 短分隔线 + textMuted 标题（保留迁移前视觉）
   },
 
   // ============================================================

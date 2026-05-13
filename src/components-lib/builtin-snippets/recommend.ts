@@ -2,8 +2,8 @@
  * free · recommend（推荐阅读）：列表形式的相关链接。
  */
 
-import type { VariantDef } from '../_core'
-import { svg } from '../_thumb'
+import type { VariantDef } from '../../variants/_core'
+import { svg } from '../../variants/_thumb'
 
 function thumb(): string {
   return svg(

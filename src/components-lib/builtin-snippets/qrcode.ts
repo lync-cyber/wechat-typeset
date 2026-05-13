@@ -2,8 +2,8 @@
  * free · qrcode（二维码卡）：说明文字 + 一张二维码图。
  */
 
-import type { VariantDef } from '../_core'
-import { svg } from '../_thumb'
+import type { VariantDef } from '../../variants/_core'
+import { svg } from '../../variants/_thumb'
 
 function thumb(): string {
   return svg(

@@ -117,8 +117,10 @@ describe('getVariantsForContainer', () => {
     }
   })
 
-  it('note 没有 variantKind（第五态固定骨架）', () => {
-    expect(getVariantsForContainer('note')).toHaveLength(0)
+  it('note 接入独立 NoteKind 变体类（R8）', () => {
+    const variants = getVariantsForContainer('note')
+    expect(variants.length).toBeGreaterThan(0)
+    expect(variants.every((v) => v.kind === 'note')).toBe(true)
   })
 
   it('quote-card 返回 quote kind 的 variants', () => {
@@ -144,10 +146,10 @@ describe('getVariantsForContainer', () => {
 })
 
 describe('getThemeDefaultVariants', () => {
-  it('返回 7 个 VariantDescriptor（7 个 variant slot）', () => {
+  it('返回 8 个 VariantDescriptor（admonition/quote/compare/steps/divider/sectionTitle/codeBlock/note）', () => {
     const persona = getPersona('default')
     const descriptors = getThemeDefaultVariants(persona.variants)
-    expect(descriptors).toHaveLength(7)
+    expect(descriptors).toHaveLength(8)
   })
 
   it('每个 descriptor 有 id / kind / name / description', () => {

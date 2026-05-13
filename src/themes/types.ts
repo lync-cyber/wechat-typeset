@@ -316,6 +316,26 @@ export type SectionTitleVariantId =
   // 左上角装饰 SVG（当前 assets.sectionCorner 对应）
   | 'cornered'
 
+/**
+ * Note 第五态独立 variant 类（R8）。
+ *
+ * 设计动机：原来 note 与 tip/warning/info/danger 同名 category=admonition 但**不参与**
+ * admonition variant 系统——容器同名共类却不共骨架，是"分类对外不一致"的契约破洞。
+ * 现把 note 独立成 variantKind='note'，与 admonition 4 态视觉解耦：
+ *   - admonition 4 态共享一个 admonition 池，骨架强调"四色差异"
+ *   - note 单独一个池，骨架强调"中性补注、低调、不抢色"（textMuted + 可选 noteIcon）
+ *
+ * 命名空间故意分离：避免 17 个 admonition variant 都要补一个"5th 中性回退分支"，
+ * 也让 note 池可独立演进（增 LaTeX-旁注、CJK 书签式批注等"非情绪"骨架）。
+ */
+export type NoteVariantId =
+  // 极简：顶端 1px 短分隔线 + textMuted 标题（当前 signature.ts 兜底，移植为默认）
+  | 'minimal-callout'
+  // 边框 + 角标：单色 1px 全边框 + 左上角小图标，更"卡片感"
+  | 'box-callout'
+  // 左 2px 实线 + 缩进：经典"标记此处有补充"批注式
+  | 'side-bar'
+
 export type CodeBlockVariantId =
   // 裸 <pre><code>（默认，与 v1 行为等价）
   | 'bare'
@@ -335,10 +355,12 @@ export interface ThemeVariants {
   divider: DividerVariantId
   sectionTitle: SectionTitleVariantId
   codeBlock: CodeBlockVariantId
+  /** R8：note 第五态独立变体类，与 admonition 4 态解耦。 */
+  note: NoteVariantId
 }
 
 /**
- * 主题不声明时的回退。对齐 v1 各渲染器的当前视觉，保证现有 5 套主题零改动兼容。
+ * 主题不声明时的回退。对齐 v1 各渲染器的当前视觉，保证现有主题零改动兼容。
  * buildTheme 会在 opts.variants 未提供时注入此常量。
  */
 export const DEFAULT_VARIANTS: ThemeVariants = {
@@ -349,6 +371,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   divider: 'rule',
   sectionTitle: 'bordered',
   codeBlock: 'bare',
+  note: 'minimal-callout',
 }
 
 /**
@@ -407,6 +430,11 @@ export const VARIANT_IDS = {
     'bare',
     'header-bar',
   ] as const satisfies readonly CodeBlockVariantId[],
+  note: [
+    'minimal-callout',
+    'box-callout',
+    'side-bar',
+  ] as const satisfies readonly NoteVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

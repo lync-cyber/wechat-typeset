@@ -34,6 +34,7 @@ export const COMPONENT_TABS: ReadonlyArray<{
   { kind: 'steps', label: '步骤' },
   { kind: 'divider', label: '分隔' },
   { kind: 'sectionTitle', label: '章节' },
+  { kind: 'note', label: '补注' },
   { kind: 'none', label: '其它' },
   { kind: 'user', label: '我的组件' },
 ]

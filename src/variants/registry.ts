@@ -32,6 +32,7 @@ import type {
   AdmonitionVariantId,
   CompareVariantId,
   DividerVariantId,
+  NoteVariantId,
   QuoteVariantId,
   SectionTitleVariantId,
   StepsVariantId,
@@ -79,7 +80,11 @@ const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeli
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph']
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
-const FREE_ORDER: readonly string[] = [
+const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
+// R6：原 FREE_ORDER —— 这里实际上是 components-lib 的 builtin-snippets 顺序，
+// kind: 'none'（自由组件 snippet 源，不是容器骨架变体）。保留 'none' 桶以兼容
+// 现有 ComponentPalette 抽屉布局。
+const BUILTIN_SNIPPET_ORDER: readonly string[] = [
   'intro',
   'author',
   'cover',
@@ -99,7 +104,8 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
   divider: DIVIDER_ORDER,
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
-  none: FREE_ORDER,
+  note: NOTE_ORDER,
+  none: BUILTIN_SNIPPET_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -115,7 +121,11 @@ import stepsAll from './steps/_all'
 import dividerAll from './divider/_all'
 import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
-import freeAll from './free/_all'
+import noteAll from './note/_all'
+// R6：原 `./free/_all` 已搬到 components-lib（不是真正的容器骨架变体，
+// 是给组件库 UI 用的 snippet 源）。这里仅 import 以让 BUILTIN_COMPONENTS
+// 兼容旧 ComponentPalette 抽屉布局；新增 snippet 源去 components-lib 改。
+import freeAll from '../components-lib/builtin-snippets/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -126,6 +136,7 @@ function collectDefs(): AnyDef[] {
     ...dividerAll,
     ...sectionTitleAll,
     ...codeBlockAll,
+    ...noteAll,
     ...freeAll,
   ] as unknown as AnyDef[]
 }
@@ -176,6 +187,7 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
   ALL_DEFS,
   'sectionTitle',
 )
+export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }
@@ -230,6 +242,7 @@ function buildBuiltinComponents(): BuiltinEntry[] {
     'steps',
     'divider',
     'sectionTitle',
+    'note',
     'none',
   ]
   for (const k of kinds) {

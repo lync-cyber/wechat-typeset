@@ -49,6 +49,7 @@ const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
     // codeBlock 是主题级 variant（每个代码块共享同一骨架），不进组件抽屉；
     // 保留空桶满足 Record 完备性，永远不填充。
     codeBlock: [],
+    note: [],
     none: [],
   }
   for (const c of BUILTIN_COMPONENTS) bucket[c.kind].push(c)

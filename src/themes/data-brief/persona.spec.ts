@@ -204,6 +204,7 @@ export const spec: PersonaSpec = {
     divider: 'flower', // 用本主题自定义 dividerFlower 的"两线 + 蓝方块"
     sectionTitle: 'bordered',
     codeBlock: 'bare', // pre 元素直接走主题 voice（黑底）
+    note: 'side-bar', // 左 2px 中性线 + 缩进，与简报"直角硬边"语言一致
   },
 
   // ============================================================

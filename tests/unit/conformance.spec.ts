@@ -33,6 +33,8 @@ import {
   CONTAINER_REGISTRY,
   SIGNATURE_CONTAINER_MARKDOWN_NAME,
 } from '../../src/pipeline/containers'
+import { STYLED_CONTAINERS } from '../../src/containers'
+import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/themes/_shared/spec'
 
 // ============================================================
 // 加载器：9 份 persona.spec.ts → 按目录名排序
@@ -305,6 +307,17 @@ describe('E. Signature Container 注册表闭合性', () => {
     for (const name of ['note', 'abstract', 'key-number', 'see-also']) {
       expect(CONTAINER_REGISTRY[name], `renderer ${name}`).toBeTruthy()
     }
+  })
+
+  // R2：SUPPORTED_SIGNATURE_CONTAINERS 必须与 STYLED_CONTAINERS.map(s => s.styleKey)
+  // 集合相等。手写数组保留是为了类型字面量联合；这道断言守住二者不漂移。
+  it('SUPPORTED_SIGNATURE_CONTAINERS ≡ STYLED_CONTAINERS.styleKey 集合（SSoT 派生约束）', () => {
+    const fromVocab = new Set<string>(STYLED_CONTAINERS.map((s) => s.styleKey))
+    const fromArray = new Set<string>(SUPPORTED_SIGNATURE_CONTAINERS)
+    const missingInArray = [...fromVocab].filter((k) => !fromArray.has(k))
+    const orphanInArray = [...fromArray].filter((k) => !fromVocab.has(k))
+    expect(missingInArray, 'STYLED_CONTAINERS 中存在但 SUPPORTED_SIGNATURE_CONTAINERS 缺失').toEqual([])
+    expect(orphanInArray, 'SUPPORTED_SIGNATURE_CONTAINERS 中存在但 STYLED_CONTAINERS 缺失').toEqual([])
   })
 })
 
