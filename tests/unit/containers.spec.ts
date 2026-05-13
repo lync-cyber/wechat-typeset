@@ -219,9 +219,10 @@ describe('info / attrs 解析', () => {
 })
 
 describe('signature containers（note / abstract / key-number / see-also）', () => {
-  it('note：第五态 fence + 默认标题"补注"', () => {
+  it('note：第五态 fence + 默认标题"补注" + variant 类后缀', () => {
     const out = run('::: note\n正文\n:::\n')
-    expect(out).toMatch(/class="container-note"/)
+    // R8：note 接入 NoteKind 独立变体类，class 含 container-note + variant 后缀
+    expect(out).toMatch(/class="container-note container-note--/)
     expect(out).toContain('补注')
     expect(out).toContain('正文')
   })

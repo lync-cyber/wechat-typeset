@@ -314,6 +314,7 @@ export const spec: PersonaSpec = {
     divider: 'rule', // §2.17 极简 1px 实线
     sectionTitle: 'bordered', // §2.4 short-bar-heading
     codeBlock: 'header-bar', // §1.2 signature：顶部语言标签带 + copy icon
+    note: 'box-callout', // 文档式"附注框"，与 accent-bar admonition 互补不抢色
   },
 
   // ============================================================

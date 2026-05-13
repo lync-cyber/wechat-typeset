@@ -15,8 +15,11 @@ export {
   STYLE_KEY_TO_CONTAINER_NAME,
   STYLED_CONTAINERS,
   lookupContainerSpec,
+  packOf,
+  containersInPack,
   type ContainerSpec,
   type ContainerCategory,
+  type ContainerPack,
   type AttrSpec,
 } from './vocabulary'
 

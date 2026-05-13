@@ -7490,7 +7490,8 @@
         "steps",
         "divider",
         "sectionTitle",
-        "codeBlock"
+        "codeBlock",
+        "note"
       ],
       "properties": {
         "admonition": {
@@ -7556,6 +7557,13 @@
           "enum": [
             "bare",
             "header-bar"
+          ]
+        },
+        "note": {
+          "enum": [
+            "minimal-callout",
+            "box-callout",
+            "side-bar"
           ]
         }
       },

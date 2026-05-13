@@ -33,8 +33,8 @@ import {
   qrcodeContainer,
 } from './footer'
 import { mpvoiceContainer, mpvideoContainer } from './media'
+import { noteContainer } from './note'
 import {
-  noteContainer,
   abstractContainer,
   keyNumberContainer,
   seeAlsoContainer,

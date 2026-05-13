@@ -4,8 +4,8 @@
  * kind='none' 自由组件。render 由 containers/media.ts 路由。
  */
 
-import type { VariantDef } from '../_core'
-import { svg } from '../_thumb'
+import type { VariantDef } from '../../variants/_core'
+import { svg } from '../../variants/_thumb'
 
 function thumb(): string {
   return svg(

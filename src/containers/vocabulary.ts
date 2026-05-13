@@ -26,6 +26,7 @@
  */
 
 import type { VariantKind } from '../themes/types'
+import { VARIANT_IDS } from '../themes/types'
 
 // ============================================================
 // 类型定义
@@ -42,6 +43,18 @@ export type ContainerCategory =
   | 'media' // 媒体：qrcode / mpvoice / mpvideo
   | 'signature' // 签名块：abstract / key-number / see-also
   | 'free' // 兜底 escape hatch：free
+
+/**
+ * 契约扩展包（pack）。决定容器属于"基础契约"还是某个领域扩展包。
+ * 同一容器只能属于一个 pack；pack 是契约文档分组手段，也是 capabilities.json
+ * 与 build-writer-docs 的派生输入。
+ *
+ * 新增 pack 流程：
+ *   1. 在本 union 追加 pack id
+ *   2. 在 scripts/build-writer-docs.ts:PACK_TARGETS 追加文档目标
+ *   3. 在目标文档里放置 `<!-- generated:container-quick-ref:<pack>:start/end -->` 标记对
+ */
+export type ContainerPack = 'base' | 'data-brief'
 
 /**
  * open 行允许声明的 `key=value` attr。attrs 是**额外**语义，不是 variant 切换。
@@ -66,6 +79,12 @@ export interface ContainerSpec {
    */
   styleKey: string | null
   category: ContainerCategory
+  /**
+   * 所属契约扩展包。缺省（未声明）= 'base'。
+   * 设计为可选：base 容器**不需要**显式标注 pack，减少日常新增 base 容器的样板；
+   * 仅扩展包（如 'data-brief'）成员需要主动声明。
+   */
+  pack?: ContainerPack
   /** 绑定的 variant slot；无 variantKind = 固定骨架，渲染器不读 theme.variants。 */
   variantKind?: VariantKind
   /** 是否可嵌套（pros/cons 嵌在 compare 内） */
@@ -136,6 +155,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'masthead',
     styleKey: 'masthead',
     category: 'structure',
+    pack: 'data-brief',
     fenceLength: 3,
     attrs: [
       { key: 'issue', description: '期号（monospace 右对齐）', example: '004' },
@@ -149,6 +169,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'section-tag',
     styleKey: 'sectionTag',
     category: 'structure',
+    pack: 'data-brief',
     fenceLength: 3,
     description: '小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。',
     example: '::: section-tag\n深度\n:::\n',
@@ -157,6 +178,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'toc',
     styleKey: 'toc',
     category: 'structure',
+    pack: 'data-brief',
     fenceLength: 4,
     children: ['toc-item'],
     description:
@@ -168,6 +190,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'toc-item',
     styleKey: null,
     category: 'structure',
+    pack: 'data-brief',
     parent: 'toc',
     fenceLength: 3,
     attrs: [
@@ -189,25 +212,9 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       {
         key: 'variant',
         description: '覆盖主题默认的 admonition 骨架',
-        enum: [
-          'accent-bar',
-          'pill-tag',
-          'ticket-notch',
-          'card-shadow',
-          'minimal-underline',
-          'terminal',
-          'dashed-border',
-          'double-border',
-          'top-bottom-rule',
-          'manpage-log',
-          'sidenote-latex',
-          'marginalia',
-          'ledger-cell',
-          'bubble-organic',
-          'magazine-pull',
-          'report-section',
-          'news-row',
-        ],
+        // R7：enum 从 VARIANT_IDS 派生——新增 admonition variant 改 _all.ts 即可，
+        // 无需同步动这里。
+        enum: VARIANT_IDS.admonition,
       },
     ],
     description: 'tip：小贴士／正向提示。',
@@ -244,7 +251,16 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'note',
     styleKey: 'note',
     category: 'admonition',
+    variantKind: 'note',
     fenceLength: 3,
+    attrs: [
+      {
+        key: 'variant',
+        description: '覆盖主题默认的 note 骨架（中性补注池，色彩走 textMuted 不抢色）',
+        // R7：从 VARIANT_IDS.note 派生
+        enum: VARIANT_IDS.note,
+      },
+    ],
     description: 'note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。',
     example: '::: note 补注\n内容 …\n:::\n',
   },
@@ -309,6 +325,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'qa-block',
     styleKey: 'qaBlock',
     category: 'content',
+    pack: 'data-brief',
     fenceLength: 3,
     attrs: [
       {
@@ -428,6 +445,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'kpi-dashboard',
     styleKey: 'kpiDashboard',
     category: 'signature',
+    pack: 'data-brief',
     fenceLength: 4,
     children: ['kpi-item'],
     attrs: [
@@ -443,6 +461,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'kpi-item',
     styleKey: null,
     category: 'signature',
+    pack: 'data-brief',
     parent: 'kpi-dashboard',
     fenceLength: 3,
     attrs: [
@@ -467,6 +486,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'bar-chart',
     styleKey: 'barChart',
     category: 'signature',
+    pack: 'data-brief',
     fenceLength: 4,
     children: ['bar'],
     attrs: [
@@ -481,6 +501,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'bar',
     styleKey: null,
     category: 'signature',
+    pack: 'data-brief',
     parent: 'bar-chart',
     fenceLength: 3,
     attrs: [
@@ -496,6 +517,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'footnotes',
     styleKey: 'footnotes',
     category: 'signature',
+    pack: 'data-brief',
     fenceLength: 3,
     description:
       '脚注块：上分割线 + 小字编号引用。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。',
@@ -505,6 +527,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'cta-bar',
     styleKey: 'ctaBar',
     category: 'signature',
+    pack: 'data-brief',
     fenceLength: 3,
     attrs: [
       { key: 'like', description: '左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
@@ -519,6 +542,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'qr-follow',
     styleKey: 'qrFollow',
     category: 'signature',
+    pack: 'data-brief',
     fenceLength: 3,
     attrs: [
       { key: 'kicker', description: '左上小字 kicker（默认 SUBSCRIBE）', example: 'SUBSCRIBE' },
@@ -577,3 +601,17 @@ export const CONTAINER_NAME_TO_STYLE_KEY: Readonly<Record<string, string>> = Obj
 export const STYLE_KEY_TO_CONTAINER_NAME: Readonly<Record<string, string>> = Object.fromEntries(
   STYLED_CONTAINERS.map((s) => [s.styleKey, s.name]),
 )
+
+/**
+ * 取容器所属 pack。缺省（spec.pack 未声明）= 'base'。
+ * 这是 pack 字段对外消费的唯一入口——build-writer-docs / capabilities.json /
+ * 文档生成器都从这里读，避免重复内嵌 'pack === undefined ? base' 三元判断。
+ */
+export function packOf(spec: ContainerSpec): ContainerPack {
+  return spec.pack ?? 'base'
+}
+
+/** 某 pack 包含的所有容器 spec。 */
+export function containersInPack(pack: ContainerPack): ContainerSpec[] {
+  return CONTAINER_VOCABULARY.filter((s) => packOf(s) === pack)
+}

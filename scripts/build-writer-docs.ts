@@ -6,7 +6,7 @@
  * 作者按表写 fence，新增容器时表必须同步更新。手写容易漂移。
  *
  * 工作方式：
- *   - 容器按本文件内的 PACK_OF[name] 分入 base / data-brief 两个包
+ *   - 容器按 vocabulary 的 `spec.pack` 字段分组（缺省 = 'base'）
  *   - 各包的速查表分别写进对应文档的 `<!-- generated:container-quick-ref:<pack>:start/end -->` 标记之间
  *     - base       → docs/contract/base.md
  *     - data-brief → docs/contract/packs/data-brief.md
@@ -17,45 +17,17 @@
  *   tsx scripts/build-writer-docs.ts --check  # CI 模式：差异即 exit 1
  *
  * 新增 pack：
- *   1. 在 PACK_OF 里给新 pack 的容器登记 packId
- *   2. 在 PACK_TARGETS 里登记 packId → 目标文档路径
- *   3. 目标文档里手工放置 `<!-- generated:container-quick-ref:<packId>:start/end -->` 标记对
+ *   1. 在 `src/containers/vocabulary.ts` 的 ContainerPack union 追加 pack id
+ *   2. 给该 pack 的每个容器 spec 标 `pack: '<id>'`
+ *   3. 在 PACK_TARGETS 里登记 packId → 目标文档路径
+ *   4. 目标文档里手工放置 `<!-- generated:container-quick-ref:<packId>:start/end -->` 标记对
  */
 
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { CONTAINER_VOCABULARY } from '../src/containers/vocabulary'
+import { containersInPack, type ContainerPack } from '../src/containers/vocabulary'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
-
-// ─────────────────────────────────────────────────────────────
-// Pack 归属：哪个容器属于"基础契约"，哪个属于"扩展契约"。
-//
-// 规则：未在 PACK_OF 中显式列出的容器，默认归入 'base'。
-// 新增 data-brief（或其他领域）专属容器时，在这里登记即可。
-// ─────────────────────────────────────────────────────────────
-
-type PackId = 'base' | 'data-brief'
-
-const PACK_OF: Record<string, PackId> = {
-  // data-brief 家族：刊物气质 + 数据可视化
-  masthead: 'data-brief',
-  'section-tag': 'data-brief',
-  toc: 'data-brief',
-  'toc-item': 'data-brief',
-  'kpi-dashboard': 'data-brief',
-  'kpi-item': 'data-brief',
-  'bar-chart': 'data-brief',
-  bar: 'data-brief',
-  'qa-block': 'data-brief',
-  footnotes: 'data-brief',
-  'cta-bar': 'data-brief',
-  'qr-follow': 'data-brief',
-}
-
-function packOf(name: string): PackId {
-  return PACK_OF[name] ?? 'base'
-}
 
 interface PackTarget {
   /** 文档绝对路径（resolve 自 cwd） */
@@ -64,7 +36,7 @@ interface PackTarget {
   intro: string
 }
 
-const PACK_TARGETS: Record<PackId, PackTarget> = {
+const PACK_TARGETS: Record<ContainerPack, PackTarget> = {
   base: {
     docPath: resolve(process.cwd(), 'docs/contract/base.md'),
     intro: '所有主题都覆盖渲染；写作者无需关心当前主题是谁。带 ★ 是可登记的**签名容器**。',
@@ -97,9 +69,9 @@ const CATEGORY_ORDER = [
   'free',
 ] as const
 
-function renderPackTable(packId: PackId): string {
+function renderPackTable(packId: ContainerPack): string {
   const signatureSet = new Set<string>(SUPPORTED_SIGNATURE_CONTAINERS)
-  const specs = CONTAINER_VOCABULARY.filter((s) => packOf(s.name) === packId)
+  const specs = containersInPack(packId)
   if (specs.length === 0) return ''
 
   const target = PACK_TARGETS[packId]
@@ -109,7 +81,7 @@ function renderPackTable(packId: PackId): string {
   lines.push('| 类 | 容器 | ★ | 一句话用途 |')
   lines.push('| --- | --- | :-: | --- |')
 
-  const byCategory = new Map<string, typeof CONTAINER_VOCABULARY[number][]>()
+  const byCategory = new Map<string, typeof specs>()
   for (const spec of specs) {
     const list = byCategory.get(spec.category) ?? []
     list.push(spec)
@@ -133,7 +105,7 @@ function renderPackTable(packId: PackId): string {
   lines.push('')
   lines.push(
     `> 由 \`npm run build:writer-docs\` 从 \`src/containers/vocabulary.ts\` 生成，请勿手改。` +
-      `新增容器先改 vocabulary，需要划入扩展包再在 \`scripts/build-writer-docs.ts:PACK_OF\` 追加。`,
+      `新增容器先改 vocabulary（含 \`pack\` 字段），需要划入扩展包就声明 \`pack: '<id>'\`。`,
   )
 
   return lines.join('\n')
@@ -141,7 +113,7 @@ function renderPackTable(packId: PackId): string {
 
 function splice(
   source: string,
-  packId: PackId,
+  packId: ContainerPack,
   generated: string,
   docPath: string,
 ): string {
@@ -165,7 +137,7 @@ function main() {
   let allUpToDate = true
   const drifted: string[] = []
 
-  for (const packId of Object.keys(PACK_TARGETS) as PackId[]) {
+  for (const packId of Object.keys(PACK_TARGETS) as ContainerPack[]) {
     const target = PACK_TARGETS[packId]
     const current = readFileSync(target.docPath, 'utf8')
     const next = splice(current, packId, renderPackTable(packId), target.docPath)

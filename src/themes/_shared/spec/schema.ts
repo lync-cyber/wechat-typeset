@@ -36,6 +36,8 @@ export type JSONSchema7 = {
   anyOf?: JSONSchema7[]
 }
 
+import { VARIANT_IDS } from '../../types'
+
 const HEX_PATTERN = '^#[0-9a-fA-F]{3,8}$'
 
 const PALETTE_SCHEMA: JSONSchema7 = {
@@ -277,46 +279,17 @@ const MOTIF_SPEC_SCHEMA: JSONSchema7 = {
   additionalProperties: false,
 }
 
+// R7：variants schema 直接派生自 VARIANT_IDS（themes/types.ts 的权威 satisfies 守护），
+// 新增 variant 改 variants/<kind>/_all.ts 与 VARIANT_IDS 即可，本 schema 自动跟进。
 const VARIANTS_SCHEMA: JSONSchema7 = {
   type: 'object',
-  required: [
-    'admonition',
-    'quote',
-    'compare',
-    'steps',
-    'divider',
-    'sectionTitle',
-    'codeBlock',
-  ],
-  properties: {
-    admonition: {
-      enum: [
-        'accent-bar',
-        'pill-tag',
-        'ticket-notch',
-        'card-shadow',
-        'minimal-underline',
-        'terminal',
-        'dashed-border',
-        'double-border',
-        'top-bottom-rule',
-        'manpage-log',
-        'sidenote-latex',
-        'marginalia',
-        'ledger-cell',
-        'bubble-organic',
-        'magazine-pull',
-        'report-section',
-        'news-row',
-      ],
-    },
-    quote: { enum: ['classic', 'magazine-dropcap', 'column-rule', 'frame-brackets'] },
-    compare: { enum: ['column-card', 'stacked-row', 'ledger', 'data-card'] },
-    steps: { enum: ['number-circle', 'ribbon-chain', 'timeline-dot'] },
-    divider: { enum: ['wave', 'dots', 'flower', 'rule', 'glyph'] },
-    sectionTitle: { enum: ['bordered', 'cornered'] },
-    codeBlock: { enum: ['bare', 'header-bar'] },
-  },
+  required: Object.keys(VARIANT_IDS),
+  properties: Object.fromEntries(
+    Object.entries(VARIANT_IDS).map(([kind, ids]) => [
+      kind,
+      { enum: [...ids] as unknown[] } as JSONSchema7,
+    ]),
+  ),
   additionalProperties: false,
 }
 

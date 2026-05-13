@@ -285,38 +285,89 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'border-radius': '6px',
     },
     qrcode: { margin: '20px 0', padding: '14px 16px' },
-    // 第五态 note + 签名块 abstract / key-number / see-also + media 占位。默认值刻意
-    // 最小（多为空对象或仅 margin）——这些容器 renderer 本身在
-    // pipeline/containers/signature.ts|media.ts 里用 token 直接绘外框，这里的 CSS
-    // 槽位留给主题 voice 做微调（加边框色 / 改 padding 节奏）用。
-    //
-    // note 兜底用"顶 1px border 短分隔"——避开"左条+浅底"AI slop 模板的同时，
-    // 给未自定义 note 的主题（academic / business / industry / life / people）一个
-    // 视觉收束的可读骨架，免得 note 段落在文中"裸奔"。主题想要框感/左条直接覆写。
-    note: {
-      'border-top': `1px solid ${tokens.colors.border}`,
-      padding: '10px 0 4px 0',
-      margin: '18px 0',
-      'border-radius': '0',
-    },
+    // R8：note 走独立 variantKind='note'；wrapper CSS 由 variants/note/<id>.ts
+    // 提供（minimal-callout 即原本的"顶端短线 + textMuted"骨架）。这里只留 margin
+    // 兜底，主题 voice 可在 spec.containers.note 里追加 border / padding 等。
+    note: { margin: '16px 0' },
     mpvoice: { margin: '20px 0' },
     mpvideo: { margin: '20px 0' },
-    abstract: { margin: '18px 0 24px' },
-    keyNumber: { margin: '18px 0' },
-    seeAlso: { margin: '20px 0' },
-    // data-brief 家族：默认值刻意最小（多为空对象或仅 margin）——这些容器 renderer
-    // 在 pipeline/containers/databrief.ts 里用 token 直接绘外框，这里的 CSS 槽位留给
-    // 主题 voice 做微调（颜色 / 间距 / 分割线粗细）用。非 data-brief 主题不主动消费时，
-    // 也得到一个克制的可读骨架。
-    masthead: { margin: '0 0 20px 0' },
+    // R3 + R4：abstract / keyNumber / seeAlso 的 wrapper CSS 兜底从 renderer 下沉到这里。
+    // 渲染器只读 ctx.containers.<x>，不再 substring 检测、不再硬涂底色——主题 voice 通过
+    // spec.containers 深合并接管即可。
+    abstract: {
+      'background-color': tokens.colors.bgSoft,
+      'border-left': `4px solid ${tokens.colors.primary}`,
+      padding: '14px 16px 14px 18px',
+      margin: '18px 0 24px',
+      'border-radius': `${tokens.radius.sm}px`,
+    },
+    keyNumber: {
+      'background-color': tokens.colors.bgSoft,
+      padding: '16px 18px',
+      margin: '18px 0',
+      'border-radius': `${tokens.radius.md}px`,
+      'border-top': `3px solid ${tokens.colors.primary}`,
+    },
+    seeAlso: {
+      'background-color': tokens.colors.bgSoft,
+      padding: '14px 16px',
+      margin: '20px 0',
+      'border-radius': `${tokens.radius.md}px`,
+      'border-left': `3px solid ${tokens.colors.secondary}`,
+    },
+    // R4：data-brief 家族 wrapper CSS 兜底从 renderer 下沉到这里。
+    // 非 data-brief 主题不主动声明时，得到 token 驱动的中性兜底（bgSoft / border 色），
+    // 不再继承 renderer 里的"数据简报几何审美"——遵守 packs/data-brief.md 的可移植性承诺。
+    //
+    // 注意：display:grid / display:flex 不能进 ThemeContainers 槽位——themeCSS guard 会
+    // 拒绝（公众号粘贴后剥成空值，子项孤样式必塌）。结构性布局（grid / table）由 renderer
+    // 在 inline style 里合成；ThemeContainers 只承载 padding / border / bg / margin 这类
+    // "装饰位"——主题 voice 可深合并覆盖。
+    masthead: {
+      'padding-bottom': '10px',
+      'border-bottom': `1px solid ${tokens.colors.text}`,
+      margin: '0 0 20px 0',
+    },
     sectionTag: { margin: '0 0 14px 0' },
-    toc: { margin: '0 0 24px 0' },
-    kpiDashboard: { margin: '0 0 28px 0' },
-    barChart: { margin: '20px 0 24px' },
-    qaBlock: { margin: '22px 0' },
-    footnotes: { margin: '14px 0' },
+    toc: {
+      'background-color': tokens.colors.bgSoft,
+      padding: '12px 14px',
+      margin: '0 0 24px 0',
+    },
+    kpiDashboard: {
+      'background-color': tokens.colors.bgSoft,
+      'border-top': `1px solid ${tokens.colors.text}`,
+      'border-bottom': `1px solid ${tokens.colors.text}`,
+      padding: '18px 16px 16px',
+      margin: '0 0 28px 0',
+    },
+    barChart: {
+      'background-color': tokens.colors.bgSoft,
+      border: `1px solid ${tokens.colors.border}`,
+      padding: '16px 14px',
+      margin: '20px 0 24px',
+    },
+    qaBlock: {
+      'border-top': `1px solid ${tokens.colors.border}`,
+      'border-bottom': `1px solid ${tokens.colors.border}`,
+      padding: '14px 0',
+      margin: '22px 0',
+    },
+    footnotes: {
+      'border-top': `1px solid ${tokens.colors.border}`,
+      'padding-top': '8px',
+      margin: '14px 0',
+      'font-size': '10px',
+      'line-height': '1.75',
+      color: tokens.colors.textMuted,
+    },
     ctaBar: { margin: '22px 0' },
-    qrFollow: { margin: '22px 0' },
+    qrFollow: {
+      'background-color': tokens.colors.bgSoft,
+      'border-left': `3px solid ${tokens.colors.primary}`,
+      padding: '14px',
+      margin: '22px 0',
+    },
   }
 }
 

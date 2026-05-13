@@ -2,8 +2,8 @@
  * free · mpvoice（音频占位）。<mpvoice> 无法粘贴，此为占位。
  */
 
-import type { VariantDef } from '../_core'
-import { svg } from '../_thumb'
+import type { VariantDef } from '../../variants/_core'
+import { svg } from '../../variants/_thumb'
 
 function thumb(): string {
   return svg(

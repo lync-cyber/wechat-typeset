@@ -249,6 +249,8 @@
 }
 
 .markdown-body .container-masthead {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #16181d;
   margin: 0 0 20px 0;
 }
 
@@ -257,14 +259,13 @@
 }
 
 .markdown-body .container-toc {
+  background-color: #f6f6f4;
+  padding: 12px 14px;
   margin: 0 0 24px 0;
 }
 
 .markdown-body .container-note {
-  border-top: 1px solid #d8d8d4;
-  padding: 10px 0 4px 0;
-  margin: 18px 0;
-  border-radius: 0;
+  margin: 16px 0;
 }
 
 .markdown-body .container-quote-card {
@@ -292,6 +293,9 @@
 }
 
 .markdown-body .container-qa-block {
+  border-top: 1px solid #d8d8d4;
+  border-bottom: 1px solid #d8d8d4;
+  padding: 14px 0;
   margin: 22px 0;
 }
 
@@ -328,27 +332,51 @@
 }
 
 .markdown-body .container-abstract {
+  background-color: #f6f6f4;
+  border-left: 4px solid #1e2c4a;
+  padding: 14px 16px 14px 18px;
   margin: 18px 0 24px;
+  border-radius: 2px;
 }
 
 .markdown-body .container-key-number {
+  background-color: #f6f6f4;
+  padding: 16px 18px;
   margin: 18px 0;
+  border-radius: 2px;
+  border-top: 3px solid #1e2c4a;
 }
 
 .markdown-body .container-see-also {
+  background-color: #f6f6f4;
+  padding: 14px 16px;
   margin: 20px 0;
+  border-radius: 2px;
+  border-left: 3px solid #4a5670;
 }
 
 .markdown-body .container-kpi-dashboard {
+  background-color: #f6f6f4;
+  border-top: 1px solid #16181d;
+  border-bottom: 1px solid #16181d;
+  padding: 18px 16px 16px;
   margin: 0 0 28px 0;
 }
 
 .markdown-body .container-bar-chart {
+  background-color: #f6f6f4;
+  border: 1px solid #d8d8d4;
+  padding: 16px 14px;
   margin: 20px 0 24px;
 }
 
 .markdown-body .container-footnotes {
+  border-top: 1px solid #d8d8d4;
+  padding-top: 8px;
   margin: 14px 0;
+  font-size: 10px;
+  line-height: 1.75;
+  color: #5a5d64;
 }
 
 .markdown-body .container-cta-bar {
@@ -356,6 +384,9 @@
 }
 
 .markdown-body .container-qr-follow {
+  background-color: #f6f6f4;
+  border-left: 3px solid #1e2c4a;
+  padding: 14px;
   margin: 22px 0;
 }
 

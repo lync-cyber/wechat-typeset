@@ -99,19 +99,12 @@ export const mastheadContainer: ContainerRenderer = {
     const issue = ctx.attrs.issue ?? ''
     const date = ctx.attrs.date ?? ''
     const c = ctx.tokens.colors
-    // 主题 voice：margin / 下划线粗细 / padding 从 ctx.containers.masthead 取（spec 可覆盖）
-    const themeStyle = inline(ctx.containers.masthead)
-    const fallback = [
-      'display:grid',
-      'grid-template-columns:1fr auto',
-      'align-items:baseline',
-      'padding-bottom:10px',
-      `border-bottom:1px solid ${c.text}`,
-      'margin:0 0 20px 0',
-    ].join(';')
-    const wrapperCSS = themeStyle
-      ? `display:grid;grid-template-columns:1fr auto;align-items:baseline;${themeStyle}`
-      : fallback
+    // R4：装饰位（padding / border / bg / margin）由 ctx.containers.masthead 决定。
+    // 结构性 display:grid 是本容器的视觉契约（左 1fr 右 auto），由 renderer 强制——
+    // 不进 ThemeContainers 槽位（themeCSS guard 会拒绝 display:grid）。
+    const wrapperCSS =
+      `display:grid;grid-template-columns:1fr auto;align-items:baseline;` +
+      inline(ctx.containers.masthead)
     const nameCSS = [
       `color:${c.text}`,
       'font-size:13px',
@@ -148,9 +141,8 @@ export const sectionTagContainer: ContainerRenderer = {
   open: (ctx) => {
     const label = ctx.info.trim() || '标签'
     const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.sectionTag)
-    // 标签本体走 inline-block 胶囊；外壳 section 仅承载 margin（主题 voice 在此覆盖）
-    const wrapperCSS = themeStyle || 'margin:0 0 14px 0'
+    // R4：外壳 section 仅承载 margin；标签本体走 inline-block 胶囊。
+    const wrapperCSS = inline(ctx.containers.sectionTag)
     const pillCSS = [
       'display:inline-block',
       `background-color:${c.text}`,
@@ -176,13 +168,8 @@ export const tocContainer: ContainerRenderer = {
   open: (ctx) => {
     const kicker = ctx.info.trim() || '目录 · CONTENTS'
     const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.toc)
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      'padding:12px 14px',
-      'margin:0 0 24px 0',
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
+    // R4：wrapper 完全由 ctx.containers.toc 决定。
+    const wrapperCSS = inline(ctx.containers.toc)
     const kickerCSS = [
       `color:${c.primary}`,
       'font-size:10px',
@@ -264,15 +251,8 @@ export const kpiDashboardContainer: ContainerRenderer = {
     const source = ctx.attrs.source ?? ''
     KPI_DASHBOARD_STACK.push({ source, itemCount: 0 })
     const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.kpiDashboard)
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      `border-top:1px solid ${c.text}`,
-      `border-bottom:1px solid ${c.text}`,
-      'padding:18px 22px 16px',
-      'margin:0 -22px 28px',
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
+    // R4：wrapper 完全由 ctx.containers.kpiDashboard 决定。
+    const wrapperCSS = inline(ctx.containers.kpiDashboard)
     const headerCSS = [
       'display:grid',
       'grid-template-columns:1fr auto',
@@ -452,14 +432,8 @@ export const barChartContainer: ContainerRenderer = {
     const title = ctx.info.trim() || ''
     const subtitle = ctx.attrs.subtitle ?? ''
     const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.barChart)
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      `border:1px solid ${c.border}`,
-      'padding:16px 14px',
-      'margin:20px 0 24px',
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
+    // R4：wrapper 完全由 ctx.containers.barChart 决定。
+    const wrapperCSS = inline(ctx.containers.barChart)
     const titleCSS = ['font-size:12px', 'font-weight:700', `color:${c.text}`, 'margin-bottom:4px'].join(';')
     const subtitleCSS = ['font-size:10px', `color:${c.textMuted}`, 'margin-bottom:14px'].join(';')
     const titleEl = title
@@ -516,14 +490,8 @@ export const qaBlockContainer: ContainerRenderer = {
     const kicker = ctx.info.trim() || '读者问答 · Q&A'
     const q = ctx.attrs.q ?? ''
     const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.qaBlock)
-    const fallback = [
-      `border-top:1px solid ${c.border}`,
-      `border-bottom:1px solid ${c.border}`,
-      'padding:14px 0',
-      'margin:22px 0',
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
+    // R4：wrapper 完全由 ctx.containers.qaBlock 决定。
+    const wrapperCSS = inline(ctx.containers.qaBlock)
     const kickerCSS = [
       'font-size:11px',
       'font-weight:700',
@@ -584,17 +552,9 @@ export const qaBlockContainer: ContainerRenderer = {
 
 export const footnotesContainer: ContainerRenderer = {
   open: (ctx) => {
-    const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.footnotes)
-    const fallback = [
-      `border-top:1px solid ${c.border}`,
-      'padding-top:8px',
-      'margin:14px 0',
-      'font-size:10px',
-      'line-height:1.75',
-      `color:${c.textMuted}`,
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
+    // R4：wrapper 完全由 ctx.containers.footnotes 决定（含小字号 / muted 色由
+    // baseContainers 提供，主题可在 spec.containers.footnotes 覆盖）。
+    const wrapperCSS = inline(ctx.containers.footnotes)
     return `<section class="container-footnotes" style="${wrapperCSS}">\n`
   },
   close: '</section>\n',
@@ -617,11 +577,11 @@ export const ctaBarContainer: ContainerRenderer = {
     const like = ctx.attrs.like ?? '♡ 赞同'
     const star = ctx.attrs.star ?? '★ 收藏'
     const share = ctx.attrs.share ?? '↗ 转发'
-    const themeStyle = inline(ctx.containers.ctaBar)
-    const fallback = 'margin:22px 0'
+    // R4：wrapper margin / 主题装饰由 ctx.containers.ctaBar 决定；display:table 等
+    // 排版骨架由 renderer 强制保证（不可主题化——是 ctaBar 的视觉契约本身）。
     const wrapperCSS =
       `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate;` +
-      `${themeStyle || fallback}`
+      inline(ctx.containers.ctaBar)
     const outlineCell = [
       'display:table-cell',
       'padding:10px 0',
@@ -673,16 +633,11 @@ export const qrFollowContainer: ContainerRenderer = {
     const title = ctx.info.trim() || '订阅本刊'
     const desc = ctx.attrs.desc ?? ''
     const qrUrl = ctx.attrs.qr ?? ''
-    const themeStyle = inline(ctx.containers.qrFollow)
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      `border-left:3px solid ${c.primary}`,
-      'padding:14px',
-      'margin:22px 0',
-    ].join(';')
+    // R4：wrapper 装饰由 ctx.containers.qrFollow 决定；display:table 排版骨架由
+    // renderer 保证（"左 QR 右文字"是本容器的视觉契约）。
     const wrapperCSS =
       `display:table;width:100%;table-layout:auto;border-collapse:separate;` +
-      `${themeStyle || fallback}`
+      inline(ctx.containers.qrFollow)
     // 左格：QR
     const qrCellCSS = 'display:table-cell;vertical-align:middle;width:60px;padding-right:14px'
     const qrImgCSS = 'display:block;width:60px;height:60px;background-color:#fff'

@@ -245,6 +245,7 @@ export const spec: PersonaSpec = {
     divider: 'rule', // 最枯的 1px 横线
     sectionTitle: 'cornered', // 左上肖像 silhouette
     codeBlock: 'bare', // 拒绝 header-bar（那是 tech-explainer）
+    note: 'minimal-callout', // 与 magazine-pull 的"细线 + 空气感"语言一致
   },
 
   // ============================================================

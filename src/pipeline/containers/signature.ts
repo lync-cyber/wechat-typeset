@@ -1,18 +1,19 @@
 /**
- * 签名容器渲染器
+ * 签名容器渲染器（abstract / key-number / see-also）
  *
- * 补齐 SUPPORTED_SIGNATURE_CONTAINERS 里有条目但注册表缺实现的容器：
- *   - note：第五态提示。视觉逻辑与 tip/info/warning/danger 同骨架，但颜色走 textMuted
- *           （不抢色），图标用 motifs.noteIcon。容器层不依赖 status 四态 palette。
- *   - abstract：文章头部 tl;dr 摘要块。bgSoft 底 + 左竖条 + 小字号 kicker "Abstract / 摘要"。
+ * 三个"带内容结构约定"的签名容器：
+ *   - abstract：文章头部 tl;dr 摘要块。kicker（"Abstract / 摘要"）+ body markdown。
  *   - key-number：大字号数字 + 说明。attrs.value 放数字本体，info 放 kicker，body 放详解。
  *                 business-finance / industry-observer 的数据栏专用。
  *   - see-also：相关阅读链接列表。academic-frontier / tech-explainer 的"参考 / 扩展阅读"专用。
  *
  * 为什么不接 admonition 的 variant 分派：
- *   这四个是"带内容结构约定"的容器（abstract 有 kicker、key-number 有 value 显示层级），
+ *   这三个容器**有内容结构约定**（abstract 有 kicker、key-number 有 value 显示层级），
  *   而 admonition variants 是"同内容不同骨架"的皮肤；硬塞进去会把 variant 模块污染成模板引擎。
- *   这里走最简单的固定外框 + token 驱动颜色。
+ *   这里走"读 ctx.containers.<x> 主题 CSS 槽位 + token 驱动内部小元素 inline style"模式。
+ *
+ * 第五态 note 不在本文件——它已通过 variantKind:'note' 接入独立变体系统，
+ * renderer 在 pipeline/containers/note.ts。
  */
 
 import type { CSSObject } from '../../themes/types'
@@ -36,67 +37,17 @@ function inline(obj: CSSObject | undefined): string {
 }
 
 // ============================================================
-// note · 第五态
-//
-// 主题驱动：先读 ctx.containers.note，主题没声明（空对象）时回到"克制兜底"——
-// 顶端 1px 短分隔线 + textMuted 标题 + 缩进，无背景无左条，规避反复出现的
-// "border-left + bg-soft" AI slop 模板。主题需要更"框感"可在 spec.containers.note
-// 里自行声明（见 default 主题）。
-// ============================================================
-
-export const noteContainer: ContainerRenderer = {
-  open: (ctx) => {
-    const title = ctx.info.trim() || '补注'
-    const icon = (ctx.assets.noteIcon as string | undefined) ?? ''
-    const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.note)
-    // 兜底：完全无装饰——只留呼吸 margin。主题想要"框感/左条"在 spec.containers.note
-    // 里自行声明；不在通用渲染器里塞默认背景或左条，避免反复出现的视觉同质化。
-    const fallback = 'margin:16px 0;padding:0'
-    const wrapperCSS = themeStyle || fallback
-    const titleCSS = [
-      `color:${c.textMuted}`,
-      'font-weight:600',
-      'font-size:13px',
-      'margin-bottom:4px',
-      'letter-spacing:0.3px',
-    ].join(';')
-    return (
-      `<section class="container-note" style="${wrapperCSS}">\n` +
-      `<section class="container-note__title" style="${titleCSS}">${icon}${escText(title)}</section>\n`
-    )
-  },
-  close: '</section>\n',
-}
-
-// ============================================================
 // abstract · 文首 tl;dr
+//
+// R3+R4：wrapper CSS 完全由 ctx.containers.abstract（baseContainers 兜底 + spec.containers
+// 深合并）决定；renderer 只负责结构（section + kicker）+ 内部小元素 inline style。
 // ============================================================
 
 export const abstractContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim() || '摘要'
     const c = ctx.tokens.colors
-    // 主题 voice：先读 ctx.containers.abstract（spec.containers.abstract 投影），
-    // 主题没声明（或仅写了 margin 默认）时回到经典"bgSoft + 左竖条"骨架。
-    // 与 note 容器同模式（参见上方），避免主题作者 __reset 后渲染器仍硬涂底色。
-    const themeStyle = inline(ctx.containers.abstract)
-    // 兜底键集合：判断主题是否真的"接管"了视觉——靠 background-color / border-left
-    // 是否被显式覆盖。仅 margin 这一类轻量声明仍走兜底（其本身不构成视觉签名）。
-    const hasThemeShell =
-      themeStyle.includes('background-color') ||
-      themeStyle.includes('border-left') ||
-      themeStyle.includes('border-top') ||
-      themeStyle.includes('border:') ||
-      themeStyle.includes('padding')
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      `border-left:4px solid ${c.primary}`,
-      'padding:14px 16px 14px 18px',
-      'margin:18px 0 24px',
-      'border-radius:4px',
-    ].join(';')
-    const wrapperCSS = hasThemeShell ? themeStyle : fallback
+    const wrapperCSS = inline(ctx.containers.abstract)
     const kickerCSS = [
       `color:${c.primary}`,
       'font-size:11px',
@@ -115,6 +66,9 @@ export const abstractContainer: ContainerRenderer = {
 
 // ============================================================
 // key-number · 大数字 + 说明
+//
+// R3：从 baseContainers.keyNumber 读 wrapper CSS——主题 voice 通过 spec.containers.keyNumber
+// 深合并接管。renderer 不再硬涂底色。
 // ============================================================
 
 export const keyNumberContainer: ContainerRenderer = {
@@ -122,13 +76,7 @@ export const keyNumberContainer: ContainerRenderer = {
     const kicker = ctx.info.trim()
     const value = ctx.attrs.value ?? '0'
     const c = ctx.tokens.colors
-    const wrapperCSS = [
-      `background-color:${c.bgSoft}`,
-      'padding:16px 18px',
-      'margin:18px 0',
-      'border-radius:6px',
-      `border-top:3px solid ${c.primary}`,
-    ].join(';')
+    const wrapperCSS = inline(ctx.containers.keyNumber)
     const valueCSS = [
       `color:${c.primary}`,
       'font-size:32px',
@@ -159,19 +107,16 @@ export const keyNumberContainer: ContainerRenderer = {
 
 // ============================================================
 // see-also · 相关阅读
+//
+// R3：从 baseContainers.seeAlso 读 wrapper CSS——主题 voice 通过 spec.containers.seeAlso
+// 深合并接管。renderer 不再硬涂底色。
 // ============================================================
 
 export const seeAlsoContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim() || '延伸阅读'
     const c = ctx.tokens.colors
-    const wrapperCSS = [
-      `background-color:${c.bgSoft}`,
-      'padding:14px 16px',
-      'margin:20px 0',
-      'border-radius:6px',
-      `border-left:3px solid ${c.secondary}`,
-    ].join(';')
+    const wrapperCSS = inline(ctx.containers.seeAlso)
     const titleCSS = [
       `color:${c.textMuted}`,
       'font-size:11px',

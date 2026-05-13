@@ -294,6 +294,7 @@ export const spec: PersonaSpec = {
     divider: 'wave', // K 线瑰宝
     sectionTitle: 'cornered', // 左上 L 形角标
     codeBlock: 'bare', // 安静处理
+    note: 'box-callout', // 1px 边框的"附注"块，与 ledger-cell 硬边框语言一致
   },
 
   // ============================================================
