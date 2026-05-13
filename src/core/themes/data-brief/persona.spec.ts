@@ -65,9 +65,9 @@ export const spec: PersonaSpec = {
   radius: { sm: 0, md: 0, lg: 0 }, // 全 0 —— radius ≥ 1 直接打回
 
   // ============================================================
-  // Decorations：作者写 `## 01 标题` / `## 附 标题`，渲染层把前缀切成蓝色
-  // monospace span（声明式装饰；管线统一执行，参见 pipeline/markdown.ts 的
-  // applyHeadingPrefixDecorations）
+  // Decorations：作者写 `## 01 标题` / `## 附 标题` / `### 2.1 子节`，
+  // 渲染层把前缀切成蓝色 monospace span（声明式装饰；管线统一执行，参见
+  // pipeline/markdown.ts 的 applyHeadingPrefixDecorations）
   // ============================================================
   decorations: {
     headingPrefix: [
@@ -75,6 +75,18 @@ export const spec: PersonaSpec = {
         level: 2,
         // 1–2 位阿拉伯数字 或 单个中文标记字（"附"/"终"/"前"/"补"），后跟空白
         pattern: '^(\\d{1,2}|[附终前补])(\\s+|$)',
+        style: {
+          color: 'primary',
+          fontFamily: 'monospace',
+          fontWeight: 700,
+          marginRight: 8,
+        },
+      },
+      {
+        level: 3,
+        // 子节编号：N.N 或 N.N.N，后跟空白。作者写 `### 2.1 标题` 即可，
+        // 无需手写 &nbsp; 模拟"编号 → 标题"间距。
+        pattern: '^(\\d+\\.\\d+(?:\\.\\d+)?)(\\s+|$)',
         style: {
           color: 'primary',
           fontFamily: 'monospace',
@@ -573,11 +585,11 @@ export const spec: PersonaSpec = {
 # 在无人深夜，重新学习如何阅读一本书
 `,
     authorBar: `::: author
-撰文 **李翊云** &nbsp;&nbsp; 编辑 **沈帆**
+撰文 **李翊云**　编辑 **沈帆**
 :::
 `,
     footerCTA: `::: footer-cta
-♡ 赞同 &nbsp;·&nbsp; ★ 收藏 &nbsp;·&nbsp; ↗ 转发
+♡ 赞同　·　★ 收藏　·　↗ 转发
 :::
 `,
     tip: `::: tip 要点
