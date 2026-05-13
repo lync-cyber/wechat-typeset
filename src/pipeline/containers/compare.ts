@@ -1,8 +1,10 @@
 /**
  * compare / pros / cons 容器
  *
- * v2 变更：wrapper 与列都走 variant registry。三个容器（compare / pros / cons）
- * 通过 slot 参数共享同一套 variant 模块：
+ * R3 重构：pros / cons 走 makeVariantContainer 工厂（slot 通过 args 注入）；
+ * compareContainer 保留手写——它只是 wrapper + 关闭，套用工厂反而徒增配置噪声。
+ *
+ * wrapper 与列共用同一套 variant 模块，通过 slot 参数分派：
  *   - compare → slot:'wrapper' → 外壳样式
  *   - pros    → slot:'pros'    → 左/上列样式
  *   - cons    → slot:'cons'    → 右/下列样式
@@ -16,7 +18,9 @@
 
 import type { CompareVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
+import type { CompareRenderArgs } from '../../variants/_core'
 import { COMPARE_VARIANTS } from '../../variants/registry'
+import { makeVariantContainer } from './_shared/makeVariantContainer'
 
 function resolveVariantId(ctx: ContainerRenderContext): CompareVariantId {
   const override = ctx.attrs.variant
@@ -36,27 +40,18 @@ export const compareContainer: ContainerRenderer = {
 }
 
 function makeColumn(slot: 'pros' | 'cons', defaultTitle: string): ContainerRenderer {
-  return {
-    open: (ctx) => {
-      const id = resolveVariantId(ctx)
-      const result = COMPARE_VARIANTS[id].render(ctx, { slot })
-      const title = ctx.info.trim() || defaultTitle
-      const parts: string[] = []
-      parts.push(`<section class="container-${slot} container-${slot}--${id}" style="${result.wrapperCSS}">`)
-      if (result.svgSlot) parts.push(result.svgSlot)
-      if (result.titleCSS !== '') {
-        const titleStyle = result.titleCSS ?? 'font-weight:700;margin-bottom:6px'
-        parts.push(`<section class="container-${slot}__title" style="${titleStyle}">${escapeInner(title)}</section>`)
-      }
-      return parts.join('\n') + '\n'
+  return makeVariantContainer<CompareRenderArgs>({
+    name: slot,
+    themeSlot: 'compare',
+    table: COMPARE_VARIANTS,
+    fallbackId: 'column-card',
+    args: () => ({ slot }),
+    title: {
+      defaultText: defaultTitle,
+      defaultCSS: 'font-weight:700;margin-bottom:6px',
     },
-    close: '</section>\n',
-  }
+  })
 }
 
 export const prosContainer = makeColumn('pros', '优点')
 export const consContainer = makeColumn('cons', '缺点')
-
-function escapeInner(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
