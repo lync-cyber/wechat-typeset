@@ -45,13 +45,24 @@
 
 ## variant 覆盖
 
-主题在 spec 里为每个类目（admonition / quote / compare / steps / divider / sectionTitle / codeBlock）挑了**默认骨架**。如果某一处想要不同骨架，可在 fence 的 attrs 里覆盖：
+主题在 spec 里为每个类目（admonition / quote / compare / steps / divider / sectionTitle / note / codeBlock）挑了**默认骨架**。如果某一处想要不同骨架，可在 fence 的 attrs 里覆盖。两种语法形式：
+
+**容器 fence**（admonition / quote / compare / steps / divider / sectionTitle / note）写在 open 行的 attrs 里：
 
 ```
 ::: tip variant=pill-tag 重要
 这一处我就是要 pill tag 的视觉
 :::
 ```
+
+**代码块 fence**（codeBlock）写在 ` ``` ` 之后的 info 行末尾，与语言 token 用空格分隔：
+
+````
+```typescript variant=header-bar
+interface User { id: string; name: string }
+const u: User = { id: 'u1', name: 'Ada' }
+```
+````
 
 合法 variant id 列表由 `getVariantIds()` 公共 API 返回。常用值：
 
@@ -63,8 +74,12 @@
 | `steps` | `number-circle` · `ribbon-chain` · `timeline-dot` |
 | `divider` | `wave` · `dots` · `flower` · `rule` · `glyph` |
 | `sectionTitle` | `bordered` · `cornered` |
+| `note` | `minimal-callout` · `box-callout` · `side-bar` |
+| `codeBlock` | `bare` · `header-bar` |
 
-> 不在合法 id 列表内的 variant 值会被静默忽略，回退到主题默认骨架。
+> **渲染**：不在合法 id 列表内的 variant 值会被静默忽略，回退到主题默认骨架——换主题不塌版。
+>
+> **保存为「我的组件」**：含 `variant=野id` 的片段在保存时会被组件库拒绝，并列出未注册的 `<container> → <id>`。不影响渲染，只影响能否落库。
 
 ---
 

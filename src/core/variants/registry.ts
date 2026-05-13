@@ -1,19 +1,22 @@
 /**
- * 统一 Variant 注册表（单一聚合层）
+ * 统一 Variant 注册表（运行时 render 派发层）
  *
  * 新增 variant 三步：
- *   1. 在 `src/variants/<kind>/` 下新建 `<id>.ts`，default export 一个 VariantDef / CodeBlockDef。
- *   2. 在 `src/variants/<kind>/_all.ts` import 并追加到数组（每个 kind 一份聚合器）。
- *   3. 可选：若该 variant 要固定排序位置，往对应 kind 的 `*_ORDER` 常量里加 id。
+ *   1. 在 `src/core/variants/<kind>/` 下新建 `<id>.ts`，default export 一个 VariantDef / CodeBlockDef。
+ *   2. 在 `src/core/variants/<kind>/_all.ts` import 并追加到数组（每个 kind 一份聚合器）。
+ *   3. 把新 id 加入 `src/core/themes/types.ts` 的 `VARIANT_IDS[<kind>]`（`satisfies` 保证类型对齐）。
  *
  * 聚合输出（供下游消费）：
  *   - ADMONITION_VARIANTS / QUOTE_VARIANTS / COMPARE_VARIANTS / STEPS_VARIANTS /
- *     DIVIDER_VARIANTS / SECTION_TITLE_VARIANTS —— `pipeline/containers/*.ts` 按 id 分派 render
+ *     DIVIDER_VARIANTS / SECTION_TITLE_VARIANTS / NOTE_VARIANTS —— `pipeline/containers/*.ts` 按 id 分派 render
  *   - CODE_BLOCK_VARIANTS —— signature 异质，独立桶
- *   - BUILTIN_COMPONENTS —— 摊平所有 free 容器的 snippets，供组件库 UI
- *   - VARIANT_IDS 在 `src/themes/types.ts` 定义（satisfies 保持类型约束）；本文件不重复 export
+ *   - ALL_VARIANT_DEFS —— 全部 def 的扁平数组，供 domain/components-lib 派生 BUILTIN_COMPONENTS
  *
- * 顺序：各 kind 的 `*_ORDER` 常量决定 UI / snapshot 稳定排序，未列出的按 id 字典序追加。
+ * P0 重构：BUILTIN_COMPONENTS / BuiltinEntry / 面板顺序常量搬到
+ * `src/domain/components-lib/sources/builtin-source.ts`——
+ * core 只暴露 def 集合，UI 资产由 domain 层派生。
+ *
+ * 顺序：各 kind 的 `*_ORDER` 常量决定运行时表的稳定迭代顺序（影响快照），未列出的按 id 字典序追加。
  *
  * 为何用显式 import 而非 `import.meta.glob`：`scripts/verify-sample-full.ts` 通过 tsx
  * 在 Node 下直接跑 pipeline，tsx 没有 Vite 的 glob 转换会 TypeError。显式 import 让本文件
@@ -81,20 +84,10 @@ const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'gly
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
-// R6：原 FREE_ORDER —— 这里实际上是 components-lib 的 builtin-snippets 顺序，
-// kind: 'none'（自由组件 snippet 源，不是容器骨架变体）。保留 'none' 桶以兼容
-// 现有 ComponentPalette 抽屉布局。
-const BUILTIN_SNIPPET_ORDER: readonly string[] = [
-  'intro',
-  'author',
-  'cover',
-  'highlight',
-  'footer-cta',
-  'recommend',
-  'qrcode',
-  'mpvoice',
-  'mpvideo',
-]
+// kind:'none' 是 components-lib/builtin-snippets 的自由组件（非容器骨架变体）。
+// 这里只用做 ALL_VARIANT_DEFS 的占位收集，不进任何 *_VARIANTS render 表；
+// 面板展示顺序由 domain/components-lib/sources/builtin-source.ts 维护。
+const NONE_ORDER: readonly string[] = []
 
 const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -105,14 +98,19 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
-  none: BUILTIN_SNIPPET_ORDER,
+  none: NONE_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
 // 聚合器导入（每个 kind 一个 `_all.ts`；rationale 见文件头 docstring）。
 // ─────────────────────────────────────────────────────────────
 
-type AnyDef = VariantDef<unknown> | CodeBlockDef
+/**
+ * 任意 variant def 的并集类型。导出供 domain/components-lib 派生面板资产时使用。
+ * core 内部消费者用更精确的 VariantDef<Args> / CodeBlockDef。
+ */
+export type AnyVariantDef = VariantDef<unknown> | CodeBlockDef
+type AnyDef = AnyVariantDef
 
 import admonitionAll from './admonition/_all'
 import quoteAll from './quote/_all'
@@ -122,9 +120,9 @@ import dividerAll from './divider/_all'
 import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
-// R6：原 `./free/_all` 已搬到 components-lib（不是真正的容器骨架变体，
-// 是给组件库 UI 用的 snippet 源）。这里仅 import 以让 BUILTIN_COMPONENTS
-// 兼容旧 ComponentPalette 抽屉布局；新增 snippet 源去 components-lib 改。
+// kind:'none' 的自由组件 snippet 源（不是容器骨架变体，无 render）；
+// 跟 variant defs 一起收进 ALL_VARIANT_DEFS，供 domain 层派生面板条目。
+// 新增 snippet 源在 components-lib/builtin-snippets/_all.ts 追加。
 import freeAll from '../../domain/components-lib/builtin-snippets/_all'
 
 function collectDefs(): AnyDef[] {
@@ -159,6 +157,15 @@ function orderedByKind(defs: AnyDef[], kind: VariantKind | 'none'): AnyDef[] {
 }
 
 const ALL_DEFS = collectDefs()
+
+/**
+ * 全部 variant def 的扁平只读视图。
+ *
+ * domain/components-lib/sources/builtin-source.ts 用它派生面板 ComponentEntry[]；
+ * 反向 sanity 测试也用它扫描"实现进来但未在 VARIANT_IDS 声明"的漏网 variant。
+ * core 内部仍走 *_VARIANTS Record 表，不直接迭代 ALL_VARIANT_DEFS。
+ */
+export const ALL_VARIANT_DEFS: ReadonlyArray<AnyVariantDef> = ALL_DEFS
 
 // ─────────────────────────────────────────────────────────────
 // 按 kind 派生运行时注册表（消费方：pipeline/containers/*.ts）。
@@ -200,57 +207,6 @@ export const CODE_BLOCK_VARIANTS: Record<string, CodeBlockDef> = (() => {
 
 // VARIANT_IDS 权威定义在 src/themes/types.ts（带 satisfies 类型约束）。
 // registry.ts 不重复导出——消费方统一从 types.ts 导入。
-
-// ─────────────────────────────────────────────────────────────
-// BUILTIN_COMPONENTS：摊平所有 snippet → ComponentEntry
-// 供 components-lib/registry 消费。
-// ─────────────────────────────────────────────────────────────
-
-export interface BuiltinEntry {
-  source: 'builtin'
-  id: string
-  name: string
-  description: string
-  kind: VariantKind | 'none'
-  variantId?: string
-  themeCompat?: readonly string[]
-  markdownSnippet: string
-  thumbnailSvg: string
-}
-
-function toEntry(def: AnyDef, s: (typeof def.snippets)[number]): BuiltinEntry {
-  const thumb = def.thumbnail ? def.thumbnail(s.thumbArgs) : ''
-  return {
-    source: 'builtin',
-    id: s.presetId,
-    name: s.name,
-    description: s.description,
-    kind: def.meta.kind,
-    variantId: def.meta.id,
-    themeCompat: s.themeCompat ?? def.meta.themeCompat,
-    markdownSnippet: s.markdown,
-    thumbnailSvg: thumb,
-  }
-}
-
-function buildBuiltinComponents(): BuiltinEntry[] {
-  const out: BuiltinEntry[] = []
-  const kinds: Array<VariantKind | 'none'> = [
-    'admonition',
-    'quote',
-    'compare',
-    'steps',
-    'divider',
-    'sectionTitle',
-    'note',
-    'none',
-  ]
-  for (const k of kinds) {
-    for (const def of orderedByKind(ALL_DEFS, k)) {
-      for (const s of def.snippets) out.push(toEntry(def, s))
-    }
-  }
-  return out
-}
-
-export const BUILTIN_COMPONENTS: BuiltinEntry[] = buildBuiltinComponents()
+//
+// P0 重构：BUILTIN_COMPONENTS / BuiltinEntry / toEntry / buildBuiltinComponents
+// 已移到 src/domain/components-lib/sources/builtin-source.ts —— core 不再持有 UI 资产派生逻辑。

@@ -15,6 +15,7 @@ import { atomOneDarkCss, highlightCode } from './highlight'
 import { inlineHtml } from './juiceInline'
 import { applyWxPatches, inspectPatchTargets, type PatchLog, type WxPatchOptions } from './wxPatch'
 import { CODE_BLOCK_VARIANTS } from '../variants/registry'
+import { parseInfo } from './containers'
 
 export interface RenderInput {
   md: string
@@ -65,9 +66,16 @@ function getMarkdown(theme: Theme): MarkdownIt {
   md.renderer.rules.fence = (tokens, idx) => {
     const token = tokens[idx]
     const info = token.info ? token.info.trim() : ''
-    const lang = info.split(/\s+/)[0] ?? ''
+    // 复用 parseInfo（与 :::容器 的 attrs 解析同一套）：title = 抠掉 key=value 后剩余文本，
+    // 第一个 whitespace token 即语言。attrs.variant 是 P0 引入的"按 fence 覆盖 codeBlock 骨架"开关。
+    const { title, attrs } = parseInfo(info)
+    const lang = title.split(/\s+/)[0] ?? ''
     const { html, language } = highlightCode(token.content, lang)
-    const variant = CODE_BLOCK_VARIANTS[theme.variants.codeBlock] ?? CODE_BLOCK_VARIANTS.bare
+    const themeDefault = theme.variants.codeBlock
+    const override = attrs.variant
+    const chosen =
+      override && override in CODE_BLOCK_VARIANTS ? override : themeDefault
+    const variant = CODE_BLOCK_VARIANTS[chosen] ?? CODE_BLOCK_VARIANTS.bare
     return variant.render(theme, { language, codeInnerHtml: html }) + '\n'
   }
   mdCache.set(theme.id, md)
