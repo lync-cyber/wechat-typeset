@@ -1,0 +1,9 @@
+# Netlify 通过控制台一键连接仓库后自动读取此文件。
+# Cloudflare Pages 使用 vite preset，不依赖本文件。
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"

@@ -111,6 +111,18 @@ npm run dev
 
 ---
 
+## 镜像部署
+
+四个入口同构于 main 分支，差别只在部署目标：
+
+- **GitHub Pages** — `.github/workflows/deploy-pages.yml`，`VITE_BASE=/wechat-typeset/`
+- **jsDelivr CDN** — `.github/workflows/deploy-jsdelivr.yml` 把产物推到 `jsdelivr-cdn` 分支；jsDelivr 自动从该 ref 分发，`VITE_BASE` 为绝对 URL；floating branch 缓存 12 h，workflow 末端 purge `index.html` 触发立即刷新
+- **Cloudflare Pages / Netlify** — 在各自控制台一键连接仓库即可：CF 选 framework preset `Vite`（无需额外配置）；Netlify 自动读取仓库根的 `netlify.toml`
+
+想自建镜像？把 `dist/` 上传任意静态主机。`VITE_BASE` 默认 `/`，部署到子路径时设为 `/subpath/`，部署到异域 CDN 时设为完整绝对 URL。
+
+---
+
 ## 参与贡献
 
 提 issue / PR 前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。新增主题流程见 [docs/theme-authoring.md](docs/theme-authoring.md)。
