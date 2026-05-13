@@ -12,6 +12,7 @@ import {
   type DraftMeta,
 } from '../storage/drafts'
 import { formatBytes, getStorageStat, type StorageStat } from '../storage/quota'
+import PanelHeader from '../ui/primitives/PanelHeader.vue'
 
 const props = defineProps<{ activeId: string | null }>()
 const emit = defineEmits<{
@@ -195,10 +196,7 @@ defineExpose({ refresh })
 
 <template>
   <aside class="drawer" aria-label="草稿列表">
-    <header class="drawer-head">
-      <h3 class="tx-section">草稿</h3>
-      <button class="btn-text" @click="emit('close')" aria-label="关闭抽屉">关闭</button>
-    </header>
+    <PanelHeader title="草稿" size="sm" @close="emit('close')" />
 
     <div class="head-tools">
       <button class="btn btn-primary" @click="newDraft">+ 新建</button>
@@ -329,19 +327,6 @@ defineExpose({ refresh })
   font-size: var(--fs-13);
   color: var(--text);
 }
-.drawer-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--sp-4) var(--sp-5);
-  border-bottom: 1px solid var(--border);
-}
-.drawer-head h3 { margin: 0; font-size: var(--fs-14); font-weight: var(--fw-semibold); }
-
-.btn-text {
-  background: none; border: none; cursor: pointer;
-  color: var(--text-muted); font-size: var(--fs-12);
-}
-.btn-text:hover { color: var(--text); }
-
 .head-tools {
   display: flex; gap: var(--sp-3);
   padding: var(--sp-3) var(--sp-4);
@@ -565,8 +550,7 @@ defineExpose({ refresh })
 
 /* ---- 移动端适配 ---- */
 @media (max-width: 767px) {
-  /* 关闭按钮和操作按钮达到 44px 触摸目标 */
-  .btn-text { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }
+  /* 关闭按钮触摸目标走 PanelHeader 内的 .panel-header__close（44px 由该原语自身保证） */
   .icon-btn { width: 40px; height: 40px; font-size: var(--fs-15); }
   .btn { height: 40px; padding: 0 var(--sp-4); font-size: 16px; }
   .search-input { height: 40px; font-size: 16px; }

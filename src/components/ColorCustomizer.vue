@@ -12,6 +12,7 @@
 import { onBeforeUnmount, reactive, watch } from 'vue'
 import { palettePresets } from '../color/palettes'
 import { checkContrast, derivePalette, seedFromPrimary } from '../color/generator'
+import PanelHeader from '../ui/primitives/PanelHeader.vue'
 
 interface Seed {
   primary: string
@@ -81,10 +82,7 @@ function resetToTheme() {
 
 <template>
   <div class="panel">
-    <header class="panel-head">
-      <h3 class="tx-section">自定义配色</h3>
-      <button class="btn-text" @click="emit('close')">关闭</button>
-    </header>
+    <PanelHeader title="自定义配色" size="sm" @close="emit('close')" />
 
     <div class="hint mono">
       <span>改动即刻应用；切主题会重置。</span>
@@ -169,18 +167,6 @@ function resetToTheme() {
   color: var(--text);
   border-left: 1px solid var(--border);
 }
-.panel-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--sp-4) var(--sp-5);
-  border-bottom: 1px solid var(--border);
-}
-.panel-head h3 { margin: 0; font-size: var(--fs-14); font-weight: var(--fw-semibold); }
-.btn-text {
-  background: none; border: none; cursor: pointer;
-  color: var(--text-muted); font-size: var(--fs-12);
-}
-.btn-text:hover { color: var(--text); }
-
 .hint {
   padding: var(--sp-2) var(--sp-5);
   color: var(--text-subtle);
@@ -276,7 +262,7 @@ function resetToTheme() {
 /* ---- 移动端适配 ---- */
 @media (max-width: 767px) {
   .panel { width: 100%; border-left: none; }
-  .btn-text { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }
+  /* close 按钮 44px 触摸目标已由 PanelHeader 移动端样式承担，此处不再重复 */
   /* 预设网格更宽松 —— 窄屏单列 */
   .preset-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));

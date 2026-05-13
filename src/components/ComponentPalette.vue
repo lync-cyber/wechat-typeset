@@ -21,6 +21,7 @@ import {
   listUserComponents,
 } from '../storage/userComponents'
 import type { Theme } from '../themes/types'
+import PanelHeader from '../ui/primitives/PanelHeader.vue'
 
 const props = defineProps<{ theme: Theme }>()
 const emit = defineEmits<{
@@ -165,10 +166,7 @@ defineExpose({ openSaveDialog })
 
 <template>
   <aside class="palette" aria-label="组件库">
-    <header class="palette-head">
-      <h3 class="tx-section">插入</h3>
-      <button class="btn-text" @click="emit('close')">关闭</button>
-    </header>
+    <PanelHeader title="插入" size="sm" @close="emit('close')" />
 
     <nav class="tabs" role="tablist">
       <button
@@ -266,18 +264,6 @@ defineExpose({ openSaveDialog })
   font-size: var(--fs-13);
   color: var(--text);
 }
-.palette-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: var(--sp-4) var(--sp-5);
-  border-bottom: 1px solid var(--border);
-}
-.palette-head h3 { margin: 0; font-size: var(--fs-14); font-weight: var(--fw-semibold); }
-.btn-text {
-  background: none; border: none; cursor: pointer;
-  color: var(--text-muted); font-size: var(--fs-12);
-}
-.btn-text:hover { color: var(--text); }
-
 .tabs {
   display: flex; flex-wrap: wrap; gap: 4px;
   padding: var(--sp-3) var(--sp-4);

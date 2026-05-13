@@ -19,12 +19,21 @@
  *   - meta：标题与关闭按钮之间的中段（如 DraftDrawer 的草稿计数 / quota 指示）
  *   - actions：关闭按钮之外的额外动作按钮（如 ComponentPalette 的"保存选区"）
  */
-defineProps<{
-  /** 标题文字；与 default slot 互斥（slot 优先） */
-  title?: string
-  /** 无障碍标签：当 title 缺省时给 dialog 上层提供 aria 用 */
-  ariaLabel?: string
-}>()
+withDefaults(
+  defineProps<{
+    /** 标题文字；与 default slot 互斥（slot 优先） */
+    title?: string
+    /** 无障碍标签：当 title 缺省时给 dialog 上层提供 aria 用 */
+    ariaLabel?: string
+    /**
+     * 标题字号变体。modal 形态（HelpPanel / CommandPalette）用 'md' = 15px；
+     * 侧面板（DraftDrawer / ColorCustomizer / PublishChecklist / ComponentPalette）
+     * 历史上用 14px——差 1px 是空间紧度区别（侧栏窄，14px 更协调）。
+     */
+    size?: 'sm' | 'md'
+  }>(),
+  { size: 'md' },
+)
 
 const emit = defineEmits<{
   (e: 'close'): void
@@ -32,7 +41,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <header class="panel-header" :aria-label="ariaLabel">
+  <header class="panel-header" :class="`panel-header--${size}`" :aria-label="ariaLabel">
     <slot>
       <h3 class="panel-header__title tx-section">{{ title }}</h3>
     </slot>
@@ -58,9 +67,10 @@ const emit = defineEmits<{
 }
 .panel-header__title {
   margin: 0;
-  font-size: var(--fs-15);
   font-weight: var(--fw-semibold);
 }
+.panel-header--md .panel-header__title { font-size: var(--fs-15); }
+.panel-header--sm .panel-header__title { font-size: var(--fs-14); }
 .panel-header__meta {
   flex: 1 1 auto;
   min-width: 0;
@@ -86,5 +96,16 @@ const emit = defineEmits<{
 }
 .panel-header__close:hover {
   color: var(--text);
+}
+
+@media (max-width: 767px) {
+  /* 移动端关闭按钮达到 44px 触摸目标——侧面板（DraftDrawer 等）无 mask 可点，
+     必须保证 close 按钮够大；modal 形态有 mask 兜底但同样不亏。 */
+  .panel-header__close {
+    min-height: 44px;
+    padding: 0 var(--sp-3);
+    display: inline-flex;
+    align-items: center;
+  }
 }
 </style>

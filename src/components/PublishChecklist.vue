@@ -14,6 +14,7 @@
  */
 import { computed } from 'vue'
 import { buildChecklist, type ChecklistItem } from '../publish/checklist'
+import PanelHeader from '../ui/primitives/PanelHeader.vue'
 
 const props = defineProps<{ md: string }>()
 const emit = defineEmits<{
@@ -32,10 +33,7 @@ const STATUS_DOT: Record<ChecklistItem['status'], string> = {
 
 <template>
   <div class="panel">
-    <header class="panel-head">
-      <h3>发文前清单</h3>
-      <button class="btn-text" @click="emit('close')">关闭</button>
-    </header>
+    <PanelHeader title="发文前清单" size="sm" @close="emit('close')" />
     <div class="hint">静态分析 · 封面 / 摘要 / 原创 / 外链 / 体积</div>
 
     <div class="panel-section summary">
@@ -81,27 +79,6 @@ const STATUS_DOT: Record<ChecklistItem['status'], string> = {
   color: var(--text);
   border-left: 1px solid var(--border);
 }
-.panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--sp-4) var(--sp-5);
-  border-bottom: 1px solid var(--border);
-}
-.panel-head h3 {
-  margin: 0;
-  font-size: var(--fs-14);
-  font-weight: var(--fw-semibold);
-}
-.btn-text {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-muted);
-  font-size: var(--fs-12);
-}
-.btn-text:hover { color: var(--text); }
-
 .hint {
   padding: var(--sp-2) var(--sp-5);
   color: var(--text-subtle);
