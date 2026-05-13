@@ -14,7 +14,6 @@
  */
 
 import type MarkdownIt from 'markdown-it'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type State = any
 
 const EMPHASIS_OPEN = '[.'

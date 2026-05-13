@@ -12,7 +12,6 @@
  */
 
 import MarkdownIt from 'markdown-it'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import markdownItContainer from 'markdown-it-container'
 import markdownItMark from 'markdown-it-mark'
 import markdownItIns from 'markdown-it-ins'
@@ -67,7 +66,6 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
   md.use(markdownItTaskLists, { enabled: true, label: true })
 
   for (const [name, renderer] of Object.entries(CONTAINER_REGISTRY)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(md as any).use(markdownItContainer, name, {
       validate(params: string): boolean {
         // params 为 `name rest...`，name 区分大小写

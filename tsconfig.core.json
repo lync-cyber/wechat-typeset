@@ -1,0 +1,15 @@
+{
+  "//": "tsconfig.core.json —— core/ 独立类型校验，禁止 vite/vitest 类型渗入。详见 eslint.config.js 顶部说明。",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [],
+    "noEmit": true
+  },
+  "include": ["src/core/**/*.ts", "src/shims-vue.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/core/**/*.spec.ts",
+    "src/core/**/*.test.ts"
+  ]
+}
