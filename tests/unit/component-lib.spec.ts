@@ -23,11 +23,10 @@ import {
 } from '../../src/infra/storage/userComponents'
 
 describe('BUILTIN_COMPONENTS', () => {
-  it('每个 variant 都有至少一条预设覆盖', () => {
+  it('每个 variant 都有至少一条预设覆盖（P0 后含 codeBlock）', () => {
+    // P0：闭合 codeBlock 注册逃生口——所有 VARIANT_IDS 内的 id 都必须在 BUILTIN_COMPONENTS
+    // 里有 ≥1 条 snippet，作者能从面板单独插入（codeBlock 通过 fence info 的 variant= 覆盖）。
     for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
-      // codeBlock 是主题级 variant（每个代码块共用同一骨架，由主题决定），
-      // 不是"可插入的组件单元"——用户只写 fence，不选骨架；跳过预设覆盖检查。
-      if (kind === 'codeBlock') continue
       for (const id of ids) {
         const found = findPresetByVariant(kind as keyof typeof VARIANT_IDS, id)
         expect(found, `${kind}:${id} 缺预设`).toBeTruthy()
@@ -50,12 +49,21 @@ describe('BUILTIN_COMPONENTS', () => {
   it('markdownSnippet 能被 pipeline 正确渲染', () => {
     for (const c of BUILTIN_COMPONENTS) {
       const { html } = render({ md: c.markdownSnippet, theme: defaultTheme })
-      // 至少有一个 container-XXX class（自由组件 mpvideo-qq 例外：直接 iframe 不走 container）
+      // 自由组件 mpvideo-qq：直接 iframe 不走 container
       if (c.id === 'free-mpvideo-qq') {
         expect(html).toMatch(/<iframe/)
-      } else {
-        expect(html, `${c.id} 渲染缺容器`).toMatch(/class="container-/)
+        continue
       }
+      // codeBlock snippets（P0 引入）：渲染产出 <pre><code>；header-bar 额外有 wx-code-block wrapper
+      if (c.kind === 'codeBlock') {
+        expect(html, `${c.id} 缺 <pre><code>`).toMatch(/<pre[^>]*>[\s\S]*<code[^>]*>/)
+        if (c.variantId === 'header-bar') {
+          expect(html, `${c.id} 缺 header-bar wrapper`).toMatch(/wx-code-block--header-bar/)
+        }
+        continue
+      }
+      // 其余容器：产出 container-XXX class
+      expect(html, `${c.id} 渲染缺容器`).toMatch(/class="container-/)
     }
   })
 })

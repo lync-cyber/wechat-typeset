@@ -3,7 +3,7 @@
 [← 回 README](README.md)
 
 写作者通常用不到本文档——基础契约 + 现有扩展包足以覆盖公众号 95% 的版面需求。
-当你做集成 / fork、需要加私有容器时（如内刊专用 `editorial-note`、播客 `episode-card`、电商 `sku-row`），按本文档走。
+当你做集成 / fork、需要加私有容器或新增 variant 骨架时（如内刊专用 `editorial-note`、播客 `episode-card`、电商 `sku-row`，或给现有 `admonition` 池加一种 `corporate-stamp` 骨架），按本文档走。
 
 ## 何时该加自定义容器（决策清单）
 
@@ -18,6 +18,8 @@
 ---
 
 ## 自定义容器的四步流程
+
+新增 variant 骨架（不是容器、只是给已有池加新视觉）走的是 [另一份流程](#自定义-variant-骨架)。
 
 ### 1. 在词汇表登记
 
@@ -77,6 +79,89 @@ export const episodeCardContainer: ContainerRenderer = {
 | 仅供单个集成方使用 | 不要进 vocabulary，走 fork 私有维护 |
 
 > 同一容器**只能属于一个 pack**。pack 是文档分组手段，不是运行时加载边界——所有 vocabulary 里的容器都会被注册到 markdown-it。
+
+---
+
+## 自定义 variant 骨架
+
+不是新加容器，而是给某个**已有 variant 池**（admonition / quote / compare / steps / divider / sectionTitle / note / codeBlock）加一种新骨架，按下面三步：
+
+### 1. 实现 variant 文件
+
+在 `src/core/variants/<kind>/` 目录下新建 `<id>.ts`，default export 一个 `VariantDef`（codeBlock 是 `CodeBlockDef`）：
+
+```ts
+import type { VariantDef, AdmonitionRenderArgs } from '../_core'
+import { svg } from '../_thumb'
+
+const myStamp: VariantDef<AdmonitionRenderArgs> = {
+  meta: { id: 'corporate-stamp', kind: 'admonition', name: '公司印章', description: '...' },
+  thumbnail: () => svg(`<rect .../>`),
+  snippets: [{
+    presetId: 'ad-tip-corporate-stamp',
+    name: '公司印章 Tip',
+    description: '...',
+    admonitionKind: 'tip',
+    markdown: '::: tip variant=corporate-stamp\n...\n:::\n',
+  }],
+  render: (ctx, { kind }) => ({ wrapperCSS: '...', /* ... */ }),
+}
+export default myStamp
+```
+
+### 2. 进聚合器 `_all.ts`
+
+在 `src/core/variants/<kind>/_all.ts` import 并追加到数组，让 `ALL_VARIANT_DEFS` 收得到。
+
+### 3. 登记到 `VARIANT_IDS`
+
+在 [`src/core/themes/types.ts`](../../src/core/themes/types.ts) 的 `VARIANT_IDS[<kind>]` 数组末尾加 id，同步把对应 union 类型（`AdmonitionVariantId` / `QuoteVariantId` / ...）也加上：
+
+```ts
+export type AdmonitionVariantId =
+  | 'accent-bar'
+  | 'pill-tag'
+  // ...
+  | 'corporate-stamp'
+
+export const VARIANT_IDS = {
+  admonition: [
+    'accent-bar',
+    // ...
+    'corporate-stamp',
+  ] as const satisfies readonly AdmonitionVariantId[],
+  // ...
+}
+```
+
+主题在 PersonaSpec 里选用时与其他 id 同写法，TS 编译器按 union 类型校验：
+
+```ts
+export const spec: PersonaSpec = {
+  variants: { admonition: 'corporate-stamp', /* ... */ },
+}
+```
+
+### 不进 `VARIANT_IDS` 的后果
+
+| 机制 | 后果 |
+| --- | --- |
+| 组件库面板 | snippet 不出现在抽屉或 Studio 里——作者无入口插入 |
+| 用户保存校验 | 含 `variant=<id>` 的片段被判为"未注册 variant"，不能保存为「我的组件」 |
+| 反向 sanity 守卫 | 单测失败——实现进了 `ALL_VARIANT_DEFS` 但 `VARIANT_IDS` 没同步 |
+
+`_all.ts` 决定渲染器认不认；`VARIANT_IDS` 决定面板和保存路径认不认。两边必须对齐。
+
+### 契约保护范围
+
+进了 `VARIANT_IDS` 的 variant 由 `variant-sanity.spec.ts` 在所有内置主题 × 全部 variant 矩阵下跑渲染，验证：
+
+- 渲染零抛错
+- 产物不含被微信剥离的 CSS（`position:` / `@media` / `:hover` 等）
+- 内嵌 SVG 不带 `id=` / `url('...')`
+- juice 后 `<style>` 全部内联
+
+外部 fork 里只在私有 `_all.ts` 注册、未进 `VARIANT_IDS` 的 variant 不在保护范围。
 
 ---
 

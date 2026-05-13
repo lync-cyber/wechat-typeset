@@ -19,6 +19,20 @@
 
 import type { CodeBlockDef } from '../_core'
 import type { Theme } from '../../themes/types'
+import { svg } from '../_thumb'
+
+function thumb(): string {
+  return svg(
+    `<rect x="6" y="14" width="63" height="47" rx="3" fill="#fff" stroke="#d0d4da"/>` +
+      `<rect x="6" y="14" width="63" height="10" rx="3" fill="#f5f5f3"/>` +
+      `<rect x="6" y="22" width="63" height="2" fill="#d0d4da"/>` +
+      `<rect x="12" y="17" width="26" height="3.5" rx="1" fill="#6a737d"/>` +
+      `<rect x="12" y="30" width="38" height="2" fill="#c678dd"/>` +
+      `<rect x="12" y="38" width="48" height="2" fill="#abb2bf"/>` +
+      `<rect x="12" y="46" width="32" height="2" fill="#98c379"/>` +
+      `<rect x="12" y="54" width="22" height="2" fill="#56b6c2"/>`,
+  )
+}
 
 const LANG_LABEL: Record<string, string> = {
   javascript: 'JAVASCRIPT',
@@ -76,7 +90,19 @@ const headerBar: CodeBlockDef = {
     name: '带头部代码块',
     description: '顶栏显示语言 + copy 图标',
   },
-  snippets: [],
+  thumbnail: thumb,
+  snippets: [
+    {
+      presetId: 'cb-header-bar',
+      name: '带头部代码块',
+      description: '顶栏显示语言名，Stripe Docs / MDN 家族',
+      markdown:
+        '```typescript variant=header-bar\n' +
+        'interface User { id: string; name: string }\n' +
+        'const u: User = { id: \'u1\', name: \'Ada\' }\n' +
+        '```\n',
+    },
+  ],
   render: (theme, { language, codeInnerHtml }) => {
     const label = labelFor(language)
     const { wrapper, header, lang, copy } = styles(theme)
