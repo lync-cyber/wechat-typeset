@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import {
-  createDraft,
-  exportDraftsJSON,
-  importDraftsJSONDetailed,
-  listAllTags,
-  listDrafts,
-  readDraft,
-  searchDrafts,
-  updateDraft,
-  type DraftMeta,
-} from '../../infra/storage/drafts'
-import { formatBytes, getStorageStat, type StorageStat } from '../../infra/storage/quota'
+/**
+ * 草稿抽屉：列出 / 搜索 / 重命名 / 删除 / 导入导出
+ *
+ * R6 之后所有 localStorage CRUD 都走 useDraftManager（domain/drafts），本 SFC
+ * 只负责 UI 状态（重命名输入、tag 过滤、import feedback）+ 模板。
+ */
+import { computed, nextTick, ref, watch } from 'vue'
+import { type DraftMeta } from '../../infra/storage/drafts'
+import { useDraftManager } from '../../domain/drafts/useDraftManager'
 import PanelHeader from '../primitives/PanelHeader.vue'
 
 const props = defineProps<{ activeId: string | null }>()
@@ -22,68 +18,39 @@ const emit = defineEmits<{
   (e: 'refresh'): void
 }>()
 
-const refreshTick = ref(0)
+const mgr = useDraftManager()
+// 模板里直接消费的派生 —— 解构 ComputedRef / Ref 保持响应性
+const drafts = mgr.drafts
+const knownTags = mgr.knownTags
+const storageStat = mgr.storageStat
+const storagePct = mgr.storagePct
+const formatBytes = mgr.formatBytes
+
 const query = ref('')
 const renamingId = ref<string | null>(null)
 const renameValue = ref('')
 const renameInputRef = ref<HTMLInputElement | null>(null)
 const importFeedback = ref<string | null>(null)
+const tagFilter = ref<string | null>(null)
 
-watch(
-  () => props.activeId,
-  () => {
-    refreshTick.value += 1
-  },
-)
-
-const drafts = computed<DraftMeta[]>(() => {
-  void refreshTick.value
-  return listDrafts()
-})
+// 切换活动草稿时（外部主动 mutate 走 useDraftLifecycle）让本组件重读列表
+watch(() => props.activeId, () => mgr.refresh())
 
 /**
- * 列表过滤走 storage.searchDrafts —— 扫标题 + 正文 + tag。
+ * 列表过滤走 mgr.search —— 扫标题 + 正文 + tag。
  * query 里写 `#技术` 当 tag 过滤；叠加 tagFilter.value 的显式选择取交集。
  */
-const tagFilter = ref<string | null>(null)
 const filtered = computed<DraftMeta[]>(() => {
-  void refreshTick.value
   const q = query.value.trim()
   const tags = tagFilter.value ? [tagFilter.value] : undefined
-  if (!q && !tags) return drafts.value
-  return searchDrafts({ query: q, tags })
+  if (!q && !tags) return mgr.drafts.value
+  return mgr.search({ query: q, tags })
 })
-
-const knownTags = computed<string[]>(() => {
-  void refreshTick.value
-  return listAllTags()
-})
-
-/**
- * 存储占用走 navigator.storage.estimate() 异步查；不可用时 fallback 到 LS 估算。
- * 为什么挪到 ref：配额查询是 async，不能塞进 computed
- */
-const storageStat = ref<StorageStat>({
-  supported: false,
-  used: 0,
-  quota: 5 * 1024 * 1024,
-  pct: 0,
-  warn: false,
-})
-async function refreshStorageStat() {
-  storageStat.value = await getStorageStat()
-}
-const storagePct = computed(() => Math.min(100, Math.round(storageStat.value.pct * 100)))
 
 function refresh() {
-  refreshTick.value += 1
-  void refreshStorageStat()
+  mgr.refresh()
   emit('refresh')
 }
-
-onMounted(() => {
-  void refreshStorageStat()
-})
 
 function fmt(ts: number): string {
   const d = new Date(ts)
@@ -98,7 +65,7 @@ function fmt(ts: number): string {
 }
 
 function bodySummary(id: string): string {
-  const body = readDraft(id)?.body ?? ''
+  const body = mgr.read(id)?.body ?? ''
   const first = body
     .split('\n')
     .map((l) => l.replace(/^#+\s*/, '').replace(/^\s*[-*>:]+\s*/, '').trim())
@@ -108,8 +75,7 @@ function bodySummary(id: string): string {
 }
 
 function newDraft() {
-  const created = createDraft({ title: '新草稿', body: '# 新草稿\n' })
-  refresh()
+  const created = mgr.create({ title: '新草稿', body: '# 新草稿\n' })
   emit('select', created.id)
 }
 
@@ -123,9 +89,8 @@ function startRename(d: DraftMeta, ev: Event) {
 function commitRename() {
   if (!renamingId.value) return
   const title = renameValue.value.trim() || '未命名草稿'
-  updateDraft(renamingId.value, { title })
+  mgr.update(renamingId.value, { title })
   renamingId.value = null
-  refresh()
 }
 
 function cancelRename() {
@@ -152,8 +117,7 @@ function editTags(d: DraftMeta, ev: Event) {
       .map((t) => t.trim())
       .filter((t) => t.length > 0),
   ))
-  updateDraft(d.id, { tags: list })
-  refresh()
+  mgr.update(d.id, { tags: list })
 }
 
 function toggleTagFilter(tag: string) {
@@ -173,7 +137,7 @@ function download(filename: string, text: string, mime = 'application/json') {
 }
 
 function exportAll() {
-  download(`wechat-typeset-drafts-${Date.now()}.json`, exportDraftsJSON())
+  download(`wechat-typeset-drafts-${Date.now()}.json`, mgr.exportJSON())
 }
 
 function onImport(ev: Event) {
@@ -182,9 +146,8 @@ function onImport(ev: Event) {
   if (!file) return
   const reader = new FileReader()
   reader.onload = () => {
-    const r = importDraftsJSONDetailed(String(reader.result ?? ''))
+    const r = mgr.importJSON(String(reader.result ?? ''))
     importFeedback.value = `导入 ${r.added} 篇（跳过 ${r.skipped}，非法 ${r.invalid}）`
-    refresh()
     input.value = ''
     setTimeout(() => (importFeedback.value = null), 3200)
   }

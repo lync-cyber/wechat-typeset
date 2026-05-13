@@ -15,11 +15,7 @@ import {
   type ComponentEntry,
   type ComponentKind,
 } from '../../domain/components-lib'
-import {
-  createUserComponent,
-  deleteUserComponent,
-  listUserComponents,
-} from '../../infra/storage/userComponents'
+import { useUserComponents } from '../../domain/components-lib/useUserComponents'
 import type { Theme } from '../../core/themes/types'
 import PanelHeader from '../primitives/PanelHeader.vue'
 
@@ -32,12 +28,8 @@ const emit = defineEmits<{
 type TabKind = 'template' | ComponentKind | 'user'
 
 const activeTab = ref<TabKind>('template')
-const refreshTick = ref(0)
-
-const userComponents = computed<ComponentEntry[]>(() => {
-  void refreshTick.value
-  return listUserComponents()
-})
+const userMgr = useUserComponents()
+const userComponents = userMgr.list
 
 const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
   const bucket: Record<ComponentKind, ComponentEntry[]> = {
@@ -107,8 +99,7 @@ function clickEntry(entry: ComponentEntry) {
 
 function removeUser(id: string, ev: Event) {
   ev.stopPropagation()
-  deleteUserComponent(id)
-  refreshTick.value += 1
+  userMgr.remove(id)
 }
 
 // ---------- 保存选区为组件 ----------
@@ -144,7 +135,7 @@ function confirmSave() {
     save.error = '组件名不能为空'
     return
   }
-  createUserComponent({
+  userMgr.create({
     name,
     description: save.description,
     markdownSnippet: ensureTrailingNewline(save.source),
@@ -153,7 +144,6 @@ function confirmSave() {
   })
   save.open = false
   save.error = ''
-  refreshTick.value += 1
   activeTab.value = 'user'
 }
 
