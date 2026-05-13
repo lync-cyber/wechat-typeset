@@ -13,7 +13,6 @@ import type { Ref } from 'vue'
 import {
   baseThemeId,
   customTheme,
-  hoverThemeId,
   lastSeed,
   md,
   type Seed,
@@ -57,16 +56,6 @@ export function createAppActions(deps: ActionDeps) {
     } else {
       pingTransient('已载入示例')
     }
-  }
-
-  /**
-   * 从 Preview 顶部缩略条点击 → 锁定该主题；hover 态同步清空以免闪回。
-   * hoverThemeId 不持久化，只影响预览渲染；真正的锁定走 baseThemeId 原有通路
-   * （会触发示例随 theme 切换的 watch、持久化到 localStorage 等副作用）。
-   */
-  function handleLockTheme(id: string) {
-    hoverThemeId.value = null
-    if (baseThemeId.value !== id) baseThemeId.value = id
   }
 
   /**
@@ -130,7 +119,6 @@ export function createAppActions(deps: ActionDeps) {
   return {
     handleClear,
     handleLoadSample,
-    handleLockTheme,
     handleFixZhTypo,
     handleApplyPalette,
     handleResetPalette,

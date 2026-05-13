@@ -10,7 +10,7 @@
  *
  * 谁可以写 / 读：
  *   - md / baseThemeId / mobileTab：所有 composable + App.vue 都可读写
- *   - hoverThemeId：ThemeStrip 写、activeTheme 读
+ *   - hoverThemeId：ThemePicker 写、activeTheme 读
  *   - customTheme / lastSeed：ColorCustomizer 流写、activeTheme 读
  *   - activeTheme：派生只读 computed，永远不要直接赋值
  *
@@ -35,7 +35,8 @@ export const md = ref<string>('')
 export const baseThemeId = ref<string>('default')
 
 /**
- * Preview 顶部缩略条的 hover 态，临时覆盖 activeTheme；点击锁定后清空。
+ * Toolbar 主题选择 popover 内 hover 卡片的临时态，临时覆盖 activeTheme；
+ * popover 关闭或点击锁定后清空。
  *
  * 不持久化——只在内存中。语义上是"瞬时窥探"，与 baseThemeId / customTheme 互斥。
  */
@@ -51,8 +52,18 @@ export const lastSeed = ref<Seed | null>(null)
 export const mobileTab = ref<'editor' | 'preview'>('editor')
 
 /**
+ * 编辑栏显式像素宽度（仅桌面端有意义）。
+ *
+ *   - null   = 默认行为，编辑栏 flex:1 1 auto 自适应填充
+ *   - number = 用户通过 PaneSplitter 拖出的固定宽度；预览栏靠 margin-left:auto 贴右
+ *
+ * 持久化在 bootstrap.ts 里做（与 baseThemeId 同样路径）；移动端 CSS 直接忽略。
+ */
+export const editorWidth = ref<number | null>(null)
+
+/**
  * activeTheme 的三级优先级：
- *   hoverThemeId （ThemeStrip 临时 hover）> customTheme （配色自定义）> baseThemeId （锁定）
+ *   hoverThemeId （ThemePicker 临时 hover）> customTheme （配色自定义）> baseThemeId （锁定）
  *
  * hover 覆盖 custom：作者悬停另一主题时是想"看一眼同稿换主题什么样"，
  * 不希望当前自定义配色残留在 hover 预览上；click 锁定后 hoverThemeId 清空，

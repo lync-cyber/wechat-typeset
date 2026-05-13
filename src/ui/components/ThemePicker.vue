@@ -4,12 +4,19 @@
  *
  * 2 × N 小预览卡：显示主题名 + primary/secondary/accent 三色条 + 小标题示意。
  * 不再是 <select>，切换前用户就能看到色彩差异。
+ *
+ * Hover 临时预览：mouseenter → emit('hover', id)；mouseleave → emit('hover', null)。
+ * App.vue 把这个事件接到 state.hoverThemeId，activeTheme 派生时优先级高于 customTheme。
+ * 移动端没有 hover 事件，自然降级到 click 锁定路径，不需额外处理。
  */
 import { computed } from 'vue'
 import { themeList } from '../../core/themes'
 
 const props = defineProps<{ modelValue: string }>()
-const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+  (e: 'hover', id: string | null): void
+}>()
 
 const options = computed(() =>
   themeList.map((t) => ({
@@ -27,10 +34,16 @@ const options = computed(() =>
 function pick(id: string) {
   if (id !== props.modelValue) emit('update:modelValue', id)
 }
+function onEnter(id: string) {
+  emit('hover', id)
+}
+function onLeave() {
+  emit('hover', null)
+}
 </script>
 
 <template>
-  <div class="theme-grid">
+  <div class="theme-grid" @mouseleave="onLeave">
     <button
       v-for="o in options"
       :key="o.id"
@@ -38,6 +51,9 @@ function pick(id: string) {
       :class="{ active: o.id === props.modelValue }"
       :title="o.description"
       @click="pick(o.id)"
+      @mouseenter="onEnter(o.id)"
+      @focus="onEnter(o.id)"
+      @blur="onLeave"
     >
       <span class="preview" :style="{ background: o.bg, color: o.text }">
         <span class="preview-title" :style="{ color: o.primary }">标题</span>
@@ -61,6 +77,10 @@ function pick(id: string) {
   grid-template-columns: repeat(2, 1fr);
   gap: var(--sp-3);
   padding: var(--sp-2);
+}
+/* 窄屏（移动端 popover 全屏化后）切换为单列，否则两列每张卡过窄 */
+@media (max-width: 480px) {
+  .theme-grid { grid-template-columns: 1fr; }
 }
 .theme-card {
   display: flex; flex-direction: column;

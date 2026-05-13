@@ -7,6 +7,7 @@ import {
   OUTLINK_STRATEGY_LABEL,
   type OutlinkStrategy,
 } from '../../infra/clipboard/outlinkDegrade'
+import type { UiThemeMode } from '../../app/uiTheme'
 import type { ToolbarAction, ToolbarToggleTarget } from './toolbar-types'
 
 const props = defineProps<{
@@ -20,6 +21,7 @@ const props = defineProps<{
   hasCustomColor: boolean
   drawer: { drafts: boolean; components: boolean; customizer: boolean; checklist: boolean }
   outlinkStrategy: OutlinkStrategy
+  uiTheme: UiThemeMode
 }>()
 
 /**
@@ -31,8 +33,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:themeId', value: string): void
   (e: 'update:outlinkStrategy', value: OutlinkStrategy): void
+  (e: 'update:uiTheme', value: UiThemeMode): void
   (e: 'toggle', target: ToolbarToggleTarget): void
   (e: 'action', cmd: ToolbarAction): void
+  (e: 'hoverTheme', id: string | null): void
 }>()
 
 const themeOpen = ref(false)
@@ -44,8 +48,17 @@ const currentThemeName = computed(
 
 function selectTheme(id: string) {
   emit('update:themeId', id)
+  emit('hoverTheme', null)
   themeOpen.value = false
 }
+/**
+ * popover 关闭时主动清 hover，避免预览停留在临时主题上——
+ * 用户点页面其他地方关闭 popover 也会先触发 closePopovers，但 watcher
+ * 写在这里更直接。
+ */
+watch(themeOpen, (open) => {
+  if (!open) emit('hoverTheme', null)
+})
 
 function closePopovers(ev: MouseEvent) {
   const target = ev.target as HTMLElement | null
@@ -128,6 +141,7 @@ defineExpose({
           <ThemePicker
             :model-value="props.themeId"
             @update:model-value="selectTheme"
+            @hover="emit('hoverTheme', $event)"
           />
         </div>
       </div>
@@ -167,6 +181,15 @@ defineExpose({
       </button>
       <button class="btn btn-ghost icon btn-help" title="快捷键与帮助  ?" @click="emit('action', 'openHelp')">
         ?
+      </button>
+      <button
+        class="btn btn-ghost icon btn-ui-theme"
+        :class="{ 'is-dark': props.uiTheme === 'dark' }"
+        :title="props.uiTheme === 'dark' ? '切换到亮色界面' : '切换到暗色界面'"
+        :aria-label="props.uiTheme === 'dark' ? '切换到亮色界面' : '切换到暗色界面'"
+        @click="emit('update:uiTheme', props.uiTheme === 'dark' ? 'light' : 'dark')"
+      >
+        <span class="btn-ui-theme-label">{{ props.uiTheme === 'dark' ? '暗' : '亮' }}</span>
       </button>
 
       <div class="pop-wrap" data-popover-root>
@@ -365,6 +388,19 @@ defineExpose({
 .dot-mark {
   width: 8px; height: 8px; border-radius: var(--radius-pill);
   background: var(--accent); display: inline-block;
+}
+
+/* UI 亮/暗切换按钮 —— 与 btn-cmd/btn-help 同形态（ghost icon）；
+ * 移动端 .zone-right .btn.icon 规则会自动放大到 44x44，不需要单独处理。 */
+.btn-ui-theme .btn-ui-theme-label {
+  font-family: var(--font-text);
+  font-size: var(--fs-13);
+  font-weight: var(--fw-medium);
+  color: var(--text);
+  letter-spacing: var(--ls-tight);
+}
+.btn-ui-theme.is-dark .btn-ui-theme-label {
+  color: var(--accent);
 }
 .custom-chip {
   font-size: var(--fs-11);
