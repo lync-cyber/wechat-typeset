@@ -21,9 +21,40 @@ import {
   updateDraft,
   type Draft,
 } from '../storage/drafts'
+import { SAMPLE_BUILD_ID } from '../samples'
+import { safeRead, safeWrite } from '../storage/_kv'
 
 const DRAFT_SAVE_DELAY = 400
 const SAVED_FADE_MS = 1800
+
+/**
+ * dev 重建检测：scripts/build-samples.ts 每次生成 generated.ts 时会写入
+ * 当前样本内容的稳定哈希 SAMPLE_BUILD_ID。localStorage 里存一份上次见到的 id，
+ * 不一致 = 样本源刚刚被更新（作者改了 docs/samples/*.md 或者新增容器/变体）。
+ *
+ * 为什么只在 dev 触发：
+ *   - 生产用户的草稿是真实创作内容，不应被任何"主题更新"破坏；
+ *   - dev 模式的草稿基本是"主题/容器联调用的示例"，重建后想看新版本 —— 频繁
+ *     手动按"载入当前主题示例"很烦，自动刷新更符合直觉。
+ *   - 副作用：dev 模式重建一次会一次性刷掉**活跃**草稿正文。其他非活跃草稿不动。
+ */
+const DEV_SAMPLE_VERSION_KEY = 'wechat-typeset:dev:sampleBuildId'
+
+function isDevEnv(): boolean {
+  // import.meta.env.DEV 由 Vite 注入；vitest / 测试环境视为非 dev 以避免污染断言
+  return typeof import.meta !== 'undefined' && Boolean(import.meta.env?.DEV)
+}
+
+/** 比对存储指纹与当前指纹；若变化则更新存储并返回 true，否则 false。 */
+function consumeDevSampleRebuildSignal(): boolean {
+  if (!isDevEnv()) return false
+  const stored = safeRead(DEV_SAMPLE_VERSION_KEY)
+  if (stored === SAMPLE_BUILD_ID) return false
+  safeWrite(DEV_SAMPLE_VERSION_KEY, SAMPLE_BUILD_ID)
+  // 首次启动（stored === null）也算重建：把刚生成的 id 写入，但不强制刷新草稿
+  // （首次启动可能就是真实的用户首次进入，无草稿可刷）
+  return stored !== null
+}
 
 export interface DraftLifecycleDeps {
   md: Ref<string>
@@ -112,12 +143,30 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
   })
 
   function initActiveDraft(preferredThemeId: string = 'default') {
+    // 先消费一次"样本重建"信号：第一次进入时只是落 id 占位，从第二次开始凡是
+    // SAMPLE_BUILD_ID 与上次落的不同，就把活跃草稿正文重置为该草稿对应主题的
+    // 最新 sample 内容。详见 consumeDevSampleRebuildSignal 注释。
+    const sampleRebuilt = consumeDevSampleRebuildSignal()
+
     const id = getActiveDraftId()
     if (id) {
       const existing = readDraft(id)
       if (existing) {
         activeDraftId.value = existing.id
-        deps.md.value = existing.body
+        const themeForBody = existing.themeId || preferredThemeId
+        if (sampleRebuilt) {
+          const fresh = deps.getSample(themeForBody)
+          deps.md.value = fresh
+          updateDraft(existing.id, { body: fresh })
+          // 用 info 级别打印，作者一眼能在 dev console 看到"为什么草稿被刷"
+          // eslint-disable-next-line no-console
+          console.info(
+            `[dev] 检测到样本重建（SAMPLE_BUILD_ID=${SAMPLE_BUILD_ID}）；` +
+              `活跃草稿正文已重置为 sample-${themeForBody}.md`,
+          )
+        } else {
+          deps.md.value = existing.body
+        }
         if (existing.themeId) deps.baseThemeId.value = existing.themeId
         return
       }
@@ -127,8 +176,19 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
       const first = drafts[0]
       activeDraftId.value = first.id
       setActiveDraftId(first.id)
-      const body = readDraft(first.id)?.body ?? ''
-      deps.md.value = body
+      const themeForBody = first.themeId || preferredThemeId
+      if (sampleRebuilt) {
+        const fresh = deps.getSample(themeForBody)
+        deps.md.value = fresh
+        updateDraft(first.id, { body: fresh })
+        // eslint-disable-next-line no-console
+        console.info(
+          `[dev] 检测到样本重建（SAMPLE_BUILD_ID=${SAMPLE_BUILD_ID}）；` +
+            `活跃草稿正文已重置为 sample-${themeForBody}.md`,
+        )
+      } else {
+        deps.md.value = readDraft(first.id)?.body ?? ''
+      }
       if (first.themeId) deps.baseThemeId.value = first.themeId
     } else {
       const created = createDraft({

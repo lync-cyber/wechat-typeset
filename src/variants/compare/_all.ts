@@ -8,5 +8,6 @@
 import columnCard from './column-card'
 import stackedRow from './stacked-row'
 import ledger from './ledger'
+import dataCard from './data-card'
 
-export default [columnCard, stackedRow, ledger]
+export default [columnCard, stackedRow, ledger, dataCard]

@@ -24,6 +24,7 @@ import ledgerCell from './ledger-cell'
 import bubbleOrganic from './bubble-organic'
 import magazinePull from './magazine-pull'
 import reportSection from './report-section'
+import newsRow from './news-row'
 
 export default [
   accentBar,
@@ -42,4 +43,5 @@ export default [
   bubbleOrganic,
   magazinePull,
   reportSection,
+  newsRow,
 ]

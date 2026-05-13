@@ -77,13 +77,26 @@ export const abstractContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim() || '摘要'
     const c = ctx.tokens.colors
-    const wrapperCSS = [
+    // 主题 voice：先读 ctx.containers.abstract（spec.containers.abstract 投影），
+    // 主题没声明（或仅写了 margin 默认）时回到经典"bgSoft + 左竖条"骨架。
+    // 与 note 容器同模式（参见上方），避免主题作者 __reset 后渲染器仍硬涂底色。
+    const themeStyle = inline(ctx.containers.abstract)
+    // 兜底键集合：判断主题是否真的"接管"了视觉——靠 background-color / border-left
+    // 是否被显式覆盖。仅 margin 这一类轻量声明仍走兜底（其本身不构成视觉签名）。
+    const hasThemeShell =
+      themeStyle.includes('background-color') ||
+      themeStyle.includes('border-left') ||
+      themeStyle.includes('border-top') ||
+      themeStyle.includes('border:') ||
+      themeStyle.includes('padding')
+    const fallback = [
       `background-color:${c.bgSoft}`,
       `border-left:4px solid ${c.primary}`,
       'padding:14px 16px 14px 18px',
       'margin:18px 0 24px',
       'border-radius:4px',
     ].join(';')
+    const wrapperCSS = hasThemeShell ? themeStyle : fallback
     const kickerCSS = [
       `color:${c.primary}`,
       'font-size:11px',

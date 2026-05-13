@@ -7510,7 +7510,8 @@
             "ledger-cell",
             "bubble-organic",
             "magazine-pull",
-            "report-section"
+            "report-section",
+            "news-row"
           ]
         },
         "quote": {
@@ -7525,7 +7526,8 @@
           "enum": [
             "column-card",
             "stacked-row",
-            "ledger"
+            "ledger",
+            "data-card"
           ]
         },
         "steps": {

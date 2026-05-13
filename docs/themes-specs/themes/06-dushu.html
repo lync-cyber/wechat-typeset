@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题 06 · 八十年代《读书》三联</title>
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --color-bg:        #f5f1e8;   /* 发黄旧纸 */
+  --color-bg-outer:  #e8e2d0;
+  --color-text:      #222;
+  --color-accent:    #7a4a2b;   /* 砖红棕（红墨水） */
+  --color-muted:     #555;
+  --color-dim:       #777;
+  --color-surface:   #efeadc;   /* 目录底/编者按底 */
+  /* ── TYPOGRAPHY TOKENS ── */
+  --font-body:       'Songti SC', 'SimSun', 'STSong', serif;
+  --font-display:    'Kaiti SC', KaiTi, cursive;  /* 引文/楷书 */
+  --font-mono:       Menlo, monospace;
+  --font-size-body:  15px;
+  --lh-body:         1.95;
+  /* ── SPACING TOKENS ── */
+  --spacing-block:   26px;
+  --spacing-section: 12px;
+}
+body{margin:0;background:#e8e2d0;}
+</style>
+</head>
+<body>
+
+<!--
+  COMPONENT MANIFEST · 主题 06 八十年代《读书》三联
+  ──────────────────────────────────────────────────
+  灵魂：煤油灯下校样上未干的红墨水 + 排字工粘错的铅条
+  ──────────────────────────────────────────────────
+  ⓘ 关于"标题"：微信公众号平台会自动在正文上方渲染原生文章标题
+    （≈22px 加粗黑色 · 不可改样）+ 公众号名/作者/时间一行。
+    本主题输出从原生头部 *之下* 的正文区开始；cover-header 是
+    其下的"装饰性副刊头"，呼应正题强化主题灵魂，不再承担 <h1>
+    语义（实际渲染时会降级为 <div>，由 theme.coverHeader 控制）。
+
+  00. [platform-mock]   微信原生头部（仅设计稿参考，非主题输出）
+  01. masthead          书口页眉（眉题 · 二行）
+  02. toc               本期要目（细框底色目录）
+  03. cover-header      装饰性副刊头（宋体加粗 · 无装饰；非 H1）
+  04. byline            撰者 + 阅者 + 日期
+  05. divider-rule      横线分割
+  06. drop-cap          首字下沉（宋体砖红大字）
+  07. section-heading   H2（〇一 圆圈数字 + 下横线）
+  08. body-para         正文（着重号 · 波浪底线变体）
+  09. figure-main       图版（SVG 细框 + 编号图注）
+  10. figure-grid       多图并排（三帧书影）
+  11. sub-heading       H3（中文括号序号）
+  12. pull-quote        引文（楷体上下线）
+  13. ordered-list      有序列表（一二三 中文数字）
+  14. nested-list       嵌套列表（甲乙 层级）
+  15. unordered-list    无序清单（· 点号）
+  16. checklist         清单勾选（√ 方框）
+  17. reader-letters    读者来信（来函 + 附答 · 竖线）
+  18. inline-code       行内代码
+  19. code-block        代码块（细框底色）
+  20. qa-block          读者来信问答（问/答 大字）
+  21. editor-note       编者按（楷体底色框）
+  22. footnotes         脚注（〔1〕中文脚注格式）
+  23. divider-ornament  ※ ※ ※ 分节符
+  24. end-marker        （完）结束符
+  25. cta-bar           互动区（以《读书》语体）
+  26. qr-follow         二维码关注（藏书票框）
+  27. footer            尾部（下期预告 + 地址）
+-->
+
+<!-- ============================================
+     [PLATFORM MOCK] 微信公众号原生头部（仅设计稿参考，非主题输出）
+     用户粘贴 HTML 后，平台自动渲染：标题 / 公众号名 · 作者 · 时间
+     主题输出从其下方的正文区开始 —— 切勿在正文里再渲染 <h1> 主标题。
+     ============================================ -->
+<div style="width:375px; margin:24px auto 0; background:#fff; padding:18px 16px 14px; border:1px dashed #ccc; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
+  <div style="font-size:10px; color:#bbb; letter-spacing:0.06em; margin-bottom:10px;">▽ 微信公众号平台原生头部 · MOCK</div>
+  <div style="font-size:22px; font-weight:bold; line-height:1.35; color:#222; margin-bottom:10px;">在无人深夜，重新学习如何阅读一本书</div>
+  <div style="font-size:12px; color:#888; letter-spacing:0.02em;">
+    <span style="color:#576b95;">慢读简报</span>
+    <span style="margin:0 6px;">·</span>
+    <span>李翊云</span>
+    <span style="margin:0 6px;">·</span>
+    <span>2026-04-22</span>
+  </div>
+</div>
+
+<!-- 主题 06 · 一九八六年四月夜的编辑部 · 煤油灯下的校样 -->
+<!-- 灵魂：煤油灯下校样上未干的红墨水 + 排字工粘错的铅条 -->
+<div style="width:375px; margin:0 auto 24px; background:#f5f1e8; color:#222; box-sizing:border-box; font-family:'Songti SC','SimSun','STSong',serif;">
+
+  <!-- ============================================
+       COMPONENT: masthead
+       用途: 书口页眉（眉题 · 栏目 · 二行）
+       在目标编辑器中对应: masthead
+       ============================================ -->
+  <div style="padding:10px 20px 6px; border-bottom:0.5px solid #222; display:flex; justify-content:space-between; font-family:'Songti SC',serif; font-size:10px; color:#222; letter-spacing:0.3em;">
+    <span>读　书</span>
+    <span>一九八六·第四期</span>
+  </div>
+  <div style="padding:3px 20px 8px; border-bottom:1.5px solid #222; display:flex; justify-content:space-between; font-family:'Songti SC',serif; font-size:10px; color:#7a4a2b; letter-spacing:0.15em;">
+    <span>专　栏</span>
+    <span>慢读偶记　·　一</span>
+  </div>
+
+  <div style="padding:24px 26px 30px;">
+
+  <!-- ============================================
+       COMPONENT: toc
+       用途: 本期要目（细框 + 砖红棕标题）
+       在目标编辑器中对应: toc
+       ============================================ -->
+  <div style="padding:12px 14px; border:0.5px solid #222; background:#efeadc; margin-bottom:26px;">
+    <div style="font-size:11px; color:#7a4a2b; letter-spacing:0.4em; text-align:center; margin-bottom:10px; border-bottom:0.5px dotted #7a4a2b; padding-bottom:6px;">本 期 要 目</div>
+    <div style="font-size:12px; line-height:2; color:#222;">
+      <div><span style="color:#7a4a2b;">〇一</span>　为什么我们失去了阅读的耐心<span style="float:right; color:#777;">四</span></div>
+      <div><span style="color:#7a4a2b;">〇二</span>　慢读的三种练习<span style="float:right; color:#777;">八</span></div>
+      <div><span style="color:#7a4a2b;">〇三</span>　夜晚作为最后的阅读时区<span style="float:right; color:#777;">一四</span></div>
+      <div><span style="color:#7a4a2b;">附　</span>　读者问答·编者按·来信<span style="float:right; color:#777;">一八</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cover-header
+       用途: 装饰性副刊头（宋体加粗 · 无额外装饰）
+             位于微信原生标题之下，呼应正题强化主题灵魂；
+             非 H1 语义（避免与平台原生标题冲突）。
+       在目标编辑器中对应: 自定义副刊头块（非标题块）
+       ============================================ -->
+  <div style="font-size:26px; font-weight:bold; line-height:1.4; margin:0 0 8px; color:#222; letter-spacing:0.04em;">在无人深夜，<br>重新学习如何阅读一本书</div>
+  <div style="font-size:14px; color:#555; line-height:1.6; margin-bottom:10px; font-family:'Kaiti SC',KaiTi,cursive;">——论慢读在算法时代的价值</div>
+
+  <!-- ============================================
+       COMPONENT: byline
+       用途: 撰者 · 阅者 · 日期地址
+       在目标编辑器中对应: byline
+       ============================================ -->
+  <div style="font-size:11px; color:#222; line-height:1.8; margin-bottom:6px;">
+    <b style="color:#7a4a2b;">李翊云</b>　撰　　<span style="color:#555;">沈昌文　阅</span>
+  </div>
+  <div style="font-size:11px; color:#777; line-height:1.7;">二〇二六年四月二十二日　北京　东城</div>
+
+  <!-- ============================================
+       COMPONENT: divider-rule
+       用途: 横线分割（正文起始标记）
+       在目标编辑器中对应: divider
+       ============================================ -->
+  <div style="border-top:0.5px solid #222; margin:18px 0 22px;"></div>
+
+  <!-- ============================================
+       COMPONENT: drop-cap
+       用途: 首字下沉（宋体砖红大字 · 浮入正文）
+       在目标编辑器中对应: drop-cap (hook)
+       ============================================ -->
+  <p style="font-size:16px; line-height:1.95; color:#222; margin:0 0 22px; letter-spacing:0.03em;">
+    <span style="float:left; font-family:'Songti SC',serif; font-size:44px; line-height:0.9; padding:6px 8px 0 0; color:#7a4a2b; font-weight:bold;">我</span>们并非失去了阅读的能力，而是失去了为阅读腾出一整段连续时间的勇气。这是一篇写给自己也写给朋友的短文；尚不成熟，请诸君一哂。
+    <span style="clear:both; display:block;"></span>
+  </p>
+
+  <!-- ============================================
+       COMPONENT: section-heading
+       用途: H2（〇一 圆圈数字 + 下横线）
+       在目标编辑器中对应: section-heading (h2)
+       ============================================ -->
+  <h2 style="font-size:17px; font-weight:bold; margin:26px 0 12px; color:#222; letter-spacing:0.05em; border-bottom:0.5px solid #222; padding-bottom:6px;">
+    <span style="color:#7a4a2b;">〇一</span>　为什么我们失去了阅读的耐心
+  </h2>
+
+  <!-- ============================================
+       COMPONENT: body-para
+       用途: 正文（着重号 · 波浪底线 · 首行缩进变体）
+       在目标编辑器中对应: body-para
+       ============================================ -->
+  <p style="font-size:15px; line-height:1.95; color:#222; margin:0 0 12px; text-indent:2em; letter-spacing:0.03em;">
+    每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在<b style="background:linear-gradient(to top,#e8c89b 40%,transparent 40%);">主动获取信息</b>，实际上是<span style="position:relative; display:inline-block;">被信息反向喂养<span style="position:absolute; left:0; right:0; bottom:-2px; height:0; border-bottom:0.5px dotted #7a4a2b;"></span></span>。算法并不阅读，它只是分发。
+  </p>
+
+  <p style="font-size:15px; line-height:1.95; color:#222; margin:0 0 12px; text-indent:2em; letter-spacing:0.03em;">
+    一本书要求你交出的是<span style="text-emphasis:dot; text-emphasis-color:#7a4a2b; -webkit-text-emphasis:dot; -webkit-text-emphasis-color:#7a4a2b;"><b>完整的自己</b></span>——不是五分钟，不是通勤时间，也不是临睡前滑手机的余光。<sup style="color:#7a4a2b; font-size:10px;">〔1〕</sup>
+  </p>
+
+  <!-- ============================================
+       COMPONENT: figure-main
+       用途: 图版（SVG 细框 + 编号图注）
+       在目标编辑器中对应: image
+       ============================================ -->
+  <div style="margin:22px 0;">
+    <div style="border:0.5px solid #222; padding:4px;">
+      <svg viewBox="0 0 300 200" width="100%" height="auto" style="display:block;">
+        <defs>
+          <pattern id="grain6" width="3" height="3" patternUnits="userSpaceOnUse">
+            <rect width="3" height="3" fill="#e0d9c5"/>
+            <rect x="0" y="0" width="1" height="1" fill="#d4ccb5"/>
+          </pattern>
+        </defs>
+        <rect width="300" height="200" fill="url(#grain6)"/>
+        <g stroke="#222" stroke-width="0.5" fill="none">
+          <rect x="60" y="40" width="180" height="120"/>
+          <line x1="60" y1="70" x2="240" y2="70"/>
+          <line x1="90" y1="40" x2="90" y2="160"/>
+        </g>
+        <text x="150" y="108" text-anchor="middle" font-family="SimSun,serif" font-size="13" fill="#7a4a2b" letter-spacing="2">〔此处宜配书影〕</text>
+      </svg>
+    </div>
+    <div style="font-size:11px; color:#555; text-align:center; margin-top:8px; letter-spacing:0.08em;">
+      <b style="color:#7a4a2b;">图版一</b>　八十年代后海一带旧书店内景
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: figure-grid
+       用途: 多图并排（三帧书影）
+       在目标编辑器中对应: image-grid
+       ============================================ -->
+  <div style="display:flex; gap:6px; margin:22px 0;">
+    <div style="flex:1; border:0.5px solid #222; padding:3px; text-align:center;">
+      <div style="background:#e0d9c5; aspect-ratio:3/4; font-family:SimSun,serif; font-size:10px; color:#7a4a2b; display:flex; align-items:center; justify-content:center;">图二</div>
+    </div>
+    <div style="flex:1; border:0.5px solid #222; padding:3px; text-align:center;">
+      <div style="background:#e0d9c5; aspect-ratio:3/4; font-family:SimSun,serif; font-size:10px; color:#7a4a2b; display:flex; align-items:center; justify-content:center;">图三</div>
+    </div>
+    <div style="flex:1; border:0.5px solid #222; padding:3px; text-align:center;">
+      <div style="background:#e0d9c5; aspect-ratio:3/4; font-family:SimSun,serif; font-size:10px; color:#7a4a2b; display:flex; align-items:center; justify-content:center;">图四</div>
+    </div>
+  </div>
+  <div style="font-size:10px; color:#555; text-align:center; margin:-14px 0 18px; letter-spacing:0.06em;">图二至图四　三联书店 1986 年版《傅雷家书》书影三帧</div>
+
+  <!-- section-heading H2 -->
+  <h2 style="font-size:17px; font-weight:bold; margin:26px 0 12px; color:#222; letter-spacing:0.05em; border-bottom:0.5px solid #222; padding-bottom:6px;">
+    <span style="color:#7a4a2b;">〇二</span>　慢读的三种练习
+  </h2>
+
+  <!-- ============================================
+       COMPONENT: sub-heading
+       用途: H3（中文括号序号）
+       在目标编辑器中对应: sub-heading (h3)
+       ============================================ -->
+  <h3 style="font-size:14px; font-weight:bold; margin:14px 0 6px; color:#222;">（一）纸质之必要</h3>
+  <p style="font-size:15px; line-height:1.95; color:#222; margin:0 0 12px; text-indent:2em;">
+    纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的锚定。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: pull-quote
+       用途: 引文（楷体大字 · 上下细线）
+       在目标编辑器中对应: quote-card
+       ============================================ -->
+  <div style="margin:22px 0; padding:14px 0; border-top:0.5px solid #222; border-bottom:0.5px solid #222;">
+    <div style="font-family:'Kaiti SC','STKaiti',KaiTi,cursive; font-size:18px; line-height:1.9; color:#222; text-indent:2em; letter-spacing:0.06em;">
+      凡我所是，皆因我读。
+    </div>
+    <div style="font-family:'Kaiti SC',KaiTi,cursive; font-size:12px; color:#7a4a2b; text-align:right; margin-top:8px;">
+      ——博尔赫斯　著　王永年　译
+    </div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:14px; font-weight:bold; margin:14px 0 6px; color:#222;">（二）每日有定数</h3>
+
+  <!-- ============================================
+       COMPONENT: ordered-list
+       用途: 有序列表（一二三 中文数字）
+       在目标编辑器中对应: ordered-list
+       ============================================ -->
+  <div style="font-size:15px; line-height:2; color:#222; margin:6px 0 12px 14px;">
+    <div>一．每日只读二十页</div>
+    <div>二．读完合眼默想</div>
+
+    <!-- ============================================
+         COMPONENT: nested-list
+         用途: 嵌套列表（甲乙 层级）
+         在目标编辑器中对应: ordered-list (nested)
+         ============================================ -->
+    <div style="margin-left:22px; font-family:'Kaiti SC',KaiTi,cursive; font-size:13.5px; color:#555; line-height:1.9;">
+      <div>甲·记住一个词</div>
+      <div>乙·记住一处停顿</div>
+    </div>
+    <div>三．纸质笔记本记下三句话</div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:14px; font-weight:bold; margin:14px 0 6px; color:#222;">（三）手的参与</h3>
+
+  <!-- ============================================
+       COMPONENT: unordered-list
+       用途: 无序清单（· 点号）
+       在目标编辑器中对应: unordered-list
+       ============================================ -->
+  <div style="font-size:15px; line-height:2; color:#222; margin:6px 0 12px 14px;">
+    <div>·　铅笔轻划，不用荧光笔</div>
+    <div>·　书页一角折痕做记</div>
+    <div>·　读完抄录一段于扉页</div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:14px; font-weight:bold; margin:18px 0 6px; color:#222;">（附）今夜自检</h3>
+
+  <!-- ============================================
+       COMPONENT: checklist
+       用途: 清单勾选（√ 方框）
+       在目标编辑器中对应: checklist
+       ============================================ -->
+  <div style="font-size:14px; line-height:2; color:#222; margin:6px 0 14px 14px;">
+    <div><span style="display:inline-block; width:12px; height:12px; border:0.5px solid #222; margin-right:8px; vertical-align:middle; text-align:center; line-height:12px; color:#7a4a2b; font-size:11px;">√</span>已把手机放在另一个房间</div>
+    <div><span style="display:inline-block; width:12px; height:12px; border:0.5px solid #222; margin-right:8px; vertical-align:middle; text-align:center; line-height:12px; color:#7a4a2b; font-size:11px;">√</span>已备一支削尖的铅笔</div>
+    <div><span style="display:inline-block; width:12px; height:12px; border:0.5px solid #222; margin-right:8px; vertical-align:middle;"></span>已决心只读二十页即止</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: reader-letters
+       用途: 读者来信（来函 + 附答 · 左竖线 · 《读书》惯例）
+       在目标编辑器中对应: qa-block (variant: letters)
+       ============================================ -->
+  <div style="margin:26px 0 12px; padding-top:10px; border-top:2px solid #222; border-bottom:0.5px solid #222; padding-bottom:4px; display:flex; justify-content:space-between; align-items:baseline;">
+    <span style="font-family:'Kaiti SC',KaiTi,cursive; font-size:15px; font-weight:bold; color:#222; letter-spacing:0.1em;">读 · 者 · 来 · 信</span>
+    <span style="font-family:'Kaiti SC',cursive; font-size:11px; color:#7a4a2b;">本期摘四则</span>
+  </div>
+
+  <div style="margin:10px 0 14px; padding-left:14px; border-left:2px solid #7a4a2b;">
+    <div style="font-size:13px; line-height:1.9; color:#222; text-indent:0;">
+      <span style="font-family:'Kaiti SC',cursive; font-weight:bold; color:#7a4a2b; margin-right:6px;">来函　南京 · 沈君问：</span>夜读时灯光应取何向？
+    </div>
+    <div style="font-size:13px; line-height:1.9; color:#444; margin-top:4px;">
+      <span style="font-family:'Kaiti SC',cursive; color:#222; margin-right:6px;">附　答：</span>光源宜置书后侧四十五度，避免眩目。
+    </div>
+  </div>
+  <div style="margin:0 0 14px; padding-left:14px; border-left:2px solid #7a4a2b;">
+    <div style="font-size:13px; line-height:1.9; color:#222;">
+      <span style="font-family:'Kaiti SC',cursive; font-weight:bold; color:#7a4a2b; margin-right:6px;">来函　成都 · 读者问：</span>夜读佐何饮为宜？
+    </div>
+    <div style="font-size:13px; line-height:1.9; color:#444; margin-top:4px;">
+      <span style="font-family:'Kaiti SC',cursive; color:#222; margin-right:6px;">附　答：</span>温水一盏为上。茶易醒脑，咖啡则断连续。
+    </div>
+  </div>
+  <div style="margin:0 0 14px; padding-left:14px; border-left:2px solid #7a4a2b;">
+    <div style="font-size:13px; line-height:1.9; color:#222;">
+      <span style="font-family:'Kaiti SC',cursive; font-weight:bold; color:#7a4a2b; margin-right:6px;">来函　北京 · 李君问：</span>手机置于床头，终难自禁，如之奈何？
+    </div>
+    <div style="font-size:13px; line-height:1.9; color:#444; margin-top:4px;">
+      <span style="font-family:'Kaiti SC',cursive; color:#222; margin-right:6px;">附　答：</span>不在别屋充电，终无他法。
+    </div>
+  </div>
+  <div style="margin:0 0 22px; padding-left:14px; border-left:2px solid #7a4a2b;">
+    <div style="font-size:13px; line-height:1.9; color:#222;">
+      <span style="font-family:'Kaiti SC',cursive; font-weight:bold; color:#7a4a2b; margin-right:6px;">来函　上海 · 匿名问：</span>刷完短视频再翻书，可否？
+    </div>
+    <div style="font-size:13px; line-height:1.9; color:#444; margin-top:4px;">
+      <span style="font-family:'Kaiti SC',cursive; color:#222; margin-right:6px;">附　答：</span>大脑已进快动作之场，徐徐字行为难再入。宜隔半时再读。
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: inline-code / code-block
+       用途: 行内代码 + 代码块（细框底色）
+       在目标编辑器中对应: inline-code / code-block
+       ============================================ -->
+  <p style="font-size:15px; line-height:1.95; color:#222; margin:14px 0; text-indent:2em;">
+    近人喜以程序比拟读书之法，略云 <span style="font-family:Menlo,monospace; font-size:13px; color:#7a4a2b;">book.read(slowly)</span>，详见下：
+  </p>
+  <div style="font-family:Menlo,Monaco,monospace; font-size:12px; line-height:1.85; background:#efeadc; padding:10px 12px; margin:12px 0 16px; color:#222; border:0.5px solid #222;">
+    const reading = (book) =&gt;<br>&nbsp;&nbsp;book.read(slowly);
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qa-block
+       用途: 读者来信问答（问/答 大字 · 着重号）
+       在目标编辑器中对应: qa-block
+       ============================================ -->
+  <div style="margin:26px 0; border-top:0.5px solid #222; border-bottom:0.5px solid #222; padding:14px 0;">
+    <div style="text-align:center; font-size:12px; color:#7a4a2b; letter-spacing:0.5em; margin-bottom:14px;">读 者 来 信</div>
+    <div style="font-size:14px; line-height:1.95;">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <div style="font-family:'Kaiti SC',cursive; font-weight:bold; color:#7a4a2b; flex-shrink:0; font-size:15px;">问</div>
+        <div>周末仅余两小时，能读完一册否？</div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <div style="font-family:'Kaiti SC',cursive; font-weight:bold; color:#555; flex-shrink:0; font-size:15px;">答</div>
+        <div>不能。能读完的不是书，是书的大意。两小时只够与一章<span style="text-emphasis:dot; text-emphasis-color:#7a4a2b; -webkit-text-emphasis:dot; -webkit-text-emphasis-color:#7a4a2b;">相处</span>——已足矣。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: editor-note
+       用途: 编者按（楷体 · 底色框 · 虚线边）
+       在目标编辑器中对应: callout (variant: editor-note)
+       ============================================ -->
+  <div style="margin:22px 0; padding:14px 16px; background:#efeadc; border:0.5px solid #7a4a2b;">
+    <div style="font-family:'Kaiti SC',cursive; font-size:13px; color:#7a4a2b; letter-spacing:0.15em; margin-bottom:6px;">【编者按】</div>
+    <div style="font-size:13px; line-height:1.85; color:#222;">
+      慢读并非复古姿态，而是一种对自己时间主权的重新申明。——沈
+    </div>
+  </div>
+
+  <!-- section-heading H2 -->
+  <h2 style="font-size:17px; font-weight:bold; margin:26px 0 12px; color:#222; letter-spacing:0.05em; border-bottom:0.5px solid #222; padding-bottom:6px;">
+    <span style="color:#7a4a2b;">〇三</span>　夜晚作为最后的阅读时区
+  </h2>
+
+  <p style="font-size:15px; line-height:1.95; color:#222; margin:0 0 12px; text-indent:2em;">
+    白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的<b>连续时间</b>。不必读完一章，能安静地读完一页，已是恩典。
+  </p>
+
+  <p style="font-size:15px; line-height:1.95; color:#222; margin:0 0 12px; text-indent:2em;">
+    读者若有心，不妨<a href="#" style="color:#7a4a2b; text-decoration:underline;">来信分享</a>今夜读的那一页。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: footnotes
+       用途: 脚注（〔1〕中文脚注格式）
+       在目标编辑器中对应: footnote-group
+       ============================================ -->
+  <div style="margin:22px 0 14px; border-top:0.5px solid #7a4a2b; padding-top:10px;">
+    <div style="font-size:10px; color:#7a4a2b; letter-spacing:0.3em; margin-bottom:6px;">注</div>
+    <div style="font-size:11px; line-height:1.8; color:#555;">
+      <div>〔1〕本句借自帕慕克《别样的色彩》，略有改动。</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: divider-ornament
+       用途: ※ ※ ※ 分节符
+       在目标编辑器中对应: divider
+       ============================================ -->
+  <div style="text-align:center; margin:28px 0; color:#7a4a2b; font-size:13px; letter-spacing:0.8em;">※　※　※</div>
+
+  <!-- ============================================
+       COMPONENT: end-marker
+       用途: （完）结束符
+       在目标编辑器中对应: divider (variant: end)
+       ============================================ -->
+  <div style="text-align:right; font-size:13px; color:#555; margin:14px 0; font-family:'Kaiti SC',cursive;">
+    （完）
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cta-bar
+       用途: 互动区（以《读书》语体 · 虚线框）
+       在目标编辑器中对应: cta-bar
+       ============================================ -->
+  <div style="margin:24px 0; padding:14px 16px; border:0.5px dashed #7a4a2b;">
+    <div style="font-family:'Kaiti SC',cursive; font-size:13px; color:#7a4a2b; letter-spacing:0.2em; text-align:center; margin-bottom:10px;">读 者 可 有 三 事 以 资 声 援</div>
+    <div style="display:flex; gap:8px; font-size:12px;">
+      <div style="flex:1; text-align:center; padding:8px 0; border:0.5px solid #222;">击赏</div>
+      <div style="flex:1; text-align:center; padding:8px 0; border:0.5px solid #222;">在看</div>
+      <div style="flex:1; text-align:center; padding:8px 0; border:0.5px solid #222;">转达</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qr-follow
+       用途: 二维码关注（藏书票框 · 旧式风格）
+       在目标编辑器中对应: qr-follow
+       ============================================ -->
+  <div style="margin:20px 0; padding:14px; border:0.5px solid #222; display:flex; gap:14px; align-items:center; background:#efeadc;">
+    <svg viewBox="0 0 60 60" width="60" height="60" style="display:block; background:#f5f1e8; flex-shrink:0; border:0.5px solid #222;">
+      <g fill="#222">
+        <rect x="3" y="3" width="16" height="16"/>
+        <rect x="6" y="6" width="10" height="10" fill="#f5f1e8"/>
+        <rect x="9" y="9" width="4" height="4"/>
+        <rect x="41" y="3" width="16" height="16"/>
+        <rect x="44" y="6" width="10" height="10" fill="#f5f1e8"/>
+        <rect x="47" y="9" width="4" height="4"/>
+        <rect x="3" y="41" width="16" height="16"/>
+        <rect x="6" y="44" width="10" height="10" fill="#f5f1e8"/>
+        <rect x="9" y="47" width="4" height="4"/>
+        <rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/>
+        <rect x="36" y="27" width="3" height="3"/><rect x="24" y="30" width="3" height="3"/>
+        <rect x="33" y="30" width="3" height="3"/><rect x="39" y="33" width="3" height="3"/>
+        <rect x="27" y="36" width="3" height="3"/><rect x="36" y="36" width="3" height="3"/>
+        <rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/>
+        <rect x="33" y="42" width="3" height="3"/><rect x="39" y="45" width="3" height="3"/>
+        <rect x="27" y="48" width="3" height="3"/><rect x="42" y="51" width="3" height="3"/>
+      </g>
+    </svg>
+    <div>
+      <div style="font-family:'Kaiti SC',cursive; font-size:12px; color:#7a4a2b; margin-bottom:4px; letter-spacing:0.2em;">长按可识 · 是以订</div>
+      <div style="font-size:15px; font-weight:bold; color:#222; margin-bottom:4px;">慢读偶记</div>
+      <div style="font-size:11px; color:#555; line-height:1.6;">每周四夜出版，不贩焦虑，不卖干货。</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: footer
+       用途: 尾部（下期预告 + 出版地址）
+       在目标编辑器中对应: footer
+       ============================================ -->
+  <div style="border-top:1.5px solid #222; margin-top:24px; padding-top:10px; font-size:11px; line-height:1.8; color:#222;">
+    <div><b style="color:#7a4a2b;">下期预告：</b>《纸本之必要——论书脊与手指的记忆》</div>
+    <div style="color:#555; margin-top:3px; font-family:'Kaiti SC',cursive;">本刊每周四夜出版　欢迎读者来信　北京市东城区美术馆东街 22 号</div>
+  </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题 09 · 深夜电台黑胶</title>
+<style>
+:root {
+  /* ── COLOR TOKENS ── */
+  --color-bg:        #0e1a2b;   /* 深夜蓝黑 */
+  --color-bg-outer:  #060d18;
+  --color-text:      #d9c9a8;   /* 暖米白字 */
+  --color-accent:    #d97a3c;   /* 橙（唱针暖光） */
+  --color-muted:     #a89070;   /* 老金辅助 */
+  --color-surface:   #14263d;   /* 深蓝信息卡底 */
+  /* ── TYPOGRAPHY TOKENS ── */
+  --font-body:       'Songti SC', 'SimSun', serif;
+  --font-display:    'Kaiti SC', 'STKaiti', KaiTi, cursive;
+  --font-mono:       Menlo, monospace;
+  --font-size-body:  14px;
+  --lh-body:         2.1;
+  /* ── SPACING TOKENS ── */
+  --spacing-block:   28px;
+  --spacing-section: 16px;
+}
+body{margin:0;background:#060d18;}
+</style>
+</head>
+<body>
+
+<!--
+  COMPONENT MANIFEST · 主题 09 深夜电台黑胶
+  ──────────────────────────────────────────────────
+  灵魂：03:41 AM — 黑胶落针声后，声音和文字都变慢了
+  ──────────────────────────────────────────────────
+  ⓘ 关于"标题"：微信公众号平台会自动在正文上方渲染原生文章标题
+    （≈22px 加粗黑色 · 不可改样）+ 公众号名/作者/时间一行。
+    本主题输出从原生头部 *之下* 的正文区开始；cover-header 是
+    其下的"装饰性副刊头"，呼应正题强化主题灵魂，不再承担 <h1>
+    语义（实际渲染时会降级为 <div>，由 theme.coverHeader 控制）。
+
+  00. [platform-mock]   微信原生头部（仅设计稿参考，非主题输出）
+  01. masthead          刊头（电台编号 · on air · 时刻）
+  02. tracklist         节目单（A/B 面唱片感）
+  03. cover-header      装饰性副刊头（side A 标签 + 正题；非 H1）
+  04. byline            主播信息（等宽元数据）
+  05. intro-para        导语（左橙竖线）
+  06. section-heading   H2（橙色数字）
+  07. body-para         正文段落
+  08. vinyl-image       黑胶唱片图（SVG 同心圆）
+  09. sub-heading       H3（橙色）
+  10. pull-quote        引用块（楷体暖卡 · 上下橙线）
+  11. ordered-list      有序列表（中文 一二三）
+  12. unordered-list    无序列表（· 点号）
+  13. inline-code       行内代码（橙色等宽）
+  14. code-block        代码块（黑底橙框）
+  15. callout           播后札记（深蓝信息卡）
+  16. qa-block          听众连线（call-in 电台风）
+  17. multi-callout     深夜须知（info/tip/warn/stop 彩色标签）
+  18. cta-bar           互动条（三栏 · 橙色填充中栏）
+  19. qr-follow         二维码（tune-in 牌 · 橙框）
+  20. footnotes         脚注（配乐信息）
+  21. divider-ornament  · · · 圆点分割
+  22. side-b-end        Side B 静音槽（三横线）
+  23. footer            尾部（等宽 · 下期预告）
+-->
+
+<!-- ============================================
+     [PLATFORM MOCK] 微信公众号原生头部（仅设计稿参考，非主题输出）
+     用户粘贴 HTML 后，平台自动渲染：标题 / 公众号名 · 作者 · 时间
+     主题输出从其下方的正文区开始 —— 切勿在正文里再渲染 <h1> 主标题。
+     ============================================ -->
+<div style="width:375px; margin:24px auto 0; background:#fff; padding:18px 16px 14px; border:1px dashed #ccc; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;">
+  <div style="font-size:10px; color:#bbb; letter-spacing:0.06em; margin-bottom:10px;">▽ 微信公众号平台原生头部 · MOCK</div>
+  <div style="font-size:22px; font-weight:bold; line-height:1.35; color:#222; margin-bottom:10px;">在无人深夜，重新学习如何阅读一本书</div>
+  <div style="font-size:12px; color:#888; letter-spacing:0.02em;">
+    <span style="color:#576b95;">慢读简报</span>
+    <span style="margin:0 6px;">·</span>
+    <span>李翊云</span>
+    <span style="margin:0 6px;">·</span>
+    <span>2026-04-22</span>
+  </div>
+</div>
+
+<!-- 主题 09 · 深夜电台 · 黑胶播客感 -->
+<div style="width:375px; margin:0 auto 24px; background:#0e1a2b; padding:34px 26px; color:#d9c9a8; box-sizing:border-box; font-family:'Songti SC','SimSun',serif;">
+
+  <!-- ============================================
+       COMPONENT: masthead
+       用途: 刊头（电台编号 · on air · 时刻）
+       在目标编辑器中对应: masthead
+       ============================================ -->
+  <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid #d9c9a8; margin-bottom:22px; font-family:Menlo,monospace; font-size:10px; letter-spacing:0.15em; color:#a89070;">
+    <span>夜读电台 · EP.04</span>
+    <span style="color:#d97a3c;">on air</span>
+    <span>03:41</span>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: tracklist
+       用途: 节目单（张力点：A/B 面唱片曲目感）
+       在目标编辑器中对应: toc
+       ============================================ -->
+  <div style="margin-bottom:28px;">
+    <div style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.25em; margin-bottom:10px;">—&nbsp;tracklist&nbsp;·&nbsp;节目单&nbsp;—</div>
+    <div style="font-family:'Songti SC',serif; font-size:13px; line-height:2.1; color:#d9c9a8; letter-spacing:0.03em;">
+      <div style="display:flex; gap:12px;"><span style="font-family:Menlo,monospace; color:#d97a3c;">A1</span><span>为什么我们失去了阅读的耐心</span><span style="flex:1;"></span><span style="font-family:Menlo,monospace; color:#a89070; font-size:11px;">06:12</span></div>
+      <div style="display:flex; gap:12px;"><span style="font-family:Menlo,monospace; color:#d97a3c;">A2</span><span>慢读的三种练习</span><span style="flex:1;"></span><span style="font-family:Menlo,monospace; color:#a89070; font-size:11px;">11:48</span></div>
+      <div style="display:flex; gap:12px;"><span style="font-family:Menlo,monospace; color:#d97a3c;">B1</span><span>夜晚作为最后的阅读时区</span><span style="flex:1;"></span><span style="font-family:Menlo,monospace; color:#a89070; font-size:11px;">07:55</span></div>
+      <div style="display:flex; gap:12px;"><span style="font-family:Menlo,monospace; color:#a89070;">B2</span><span style="color:#a89070;">听众来信 · 片尾彩蛋</span><span style="flex:1;"></span><span style="font-family:Menlo,monospace; color:#a89070; font-size:11px;">03:20</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cover-header
+       用途: 装饰性副刊头（side A 标签 + 正题 + 副题）
+             位于微信原生标题之下，呼应正题强化主题灵魂；
+             非 H1 语义（避免与平台原生标题冲突）。
+       在目标编辑器中对应: 自定义副刊头块（非标题块）
+       ============================================ -->
+  <div style="margin-bottom:28px;">
+    <div style="font-family:Menlo,monospace; font-size:11px; letter-spacing:0.3em; color:#d97a3c; margin-bottom:14px;">━━ side a ━━</div>
+    <div style="font-size:24px; font-weight:normal; line-height:1.55; margin:0 0 10px; color:#d9c9a8; letter-spacing:0.04em;">在无人深夜，<br>重新学习如何阅读一本书</div>
+    <div style="font-size:13px; color:#a89070; line-height:1.6; margin-bottom:16px; font-style:italic;">论慢读在算法时代的价值</div>
+
+    <!-- ============================================
+         COMPONENT: byline
+         用途: 主播 · 录音日期（等宽元数据）
+         在目标编辑器中对应: byline
+         ============================================ -->
+    <div style="font-family:Menlo,monospace; font-size:11px; color:#a89070; line-height:1.8;">
+      <div>主播&nbsp;&nbsp;·&nbsp;&nbsp;李翊云</div>
+      <div>录音&nbsp;&nbsp;·&nbsp;&nbsp;2026.04.22 · 03:41</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: intro-para
+       用途: 导语（左橙竖线 · 段间空行）
+       在目标编辑器中对应: intro-para
+       ============================================ -->
+  <div style="font-size:15px; line-height:2.1; color:#d9c9a8; margin-bottom:30px; letter-spacing:0.05em; padding-left:14px; border-left:1px solid #d97a3c;">
+    我们并非失去了阅读的能力，而是失去了为阅读腾出一整段连续时间的勇气。<br><br>
+    这期节目，我想慢慢说。
+  </div>
+
+  <!-- ============================================
+       COMPONENT: section-heading
+       用途: H2（橙色数字前缀）
+       在目标编辑器中对应: section-heading (h2)
+       ============================================ -->
+  <h2 style="font-size:14px; font-weight:normal; margin:28px 0 14px; color:#d9c9a8; letter-spacing:0.1em;">
+    <span style="color:#d97a3c; margin-right:10px;">01</span>为什么我们失去了阅读的耐心
+  </h2>
+
+  <!-- ============================================
+       COMPONENT: body-para
+       用途: 正文段落（橙粗体 · 斜体弱强调）
+       在目标编辑器中对应: body-para
+       ============================================ -->
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在<b style="color:#d97a3c;">主动获取信息</b>，实际上是<i>被信息反向喂养</i>。
+  </p>
+
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    算法并不阅读。它只是分发。
+  </p>
+
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    一本书要求你交出的是完整的自己——不是五分钟、不是通勤时间、也不是临睡前滑手机的余光。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: vinyl-image
+       用途: 张力点——黑胶唱片（SVG 同心圆 · 橙色标签）
+       在目标编辑器中对应: image
+       ============================================ -->
+  <div style="margin:24px 0;">
+    <div style="background:repeating-radial-gradient(circle,#14263d 0 1px,#0e1a2b 1px 3px); aspect-ratio:1/1; border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; border:1px solid #d97a3c;">
+      <div style="width:24%; height:24%; background:#d97a3c; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:Menlo,monospace; font-size:9px; color:#0e1a2b; letter-spacing:0.1em;">SIDE A</div>
+    </div>
+    <div style="font-family:Menlo,monospace; font-size:11px; color:#a89070; text-align:center; margin-top:10px; letter-spacing:0.1em;">
+      EP.04 · 33⅓ rpm
+    </div>
+  </div>
+
+  <!-- section-heading H2 -->
+  <h2 style="font-size:14px; font-weight:normal; margin:28px 0 14px; color:#d9c9a8; letter-spacing:0.1em;">
+    <span style="color:#d97a3c; margin-right:10px;">02</span>慢读的三种练习
+  </h2>
+
+  <!-- ============================================
+       COMPONENT: sub-heading
+       用途: H3（橙色小字）
+       在目标编辑器中对应: sub-heading (h3)
+       ============================================ -->
+  <h3 style="font-size:13px; color:#d97a3c; margin:16px 0 8px; letter-spacing:0.05em;">
+    2.1&nbsp;&nbsp;纸质之必要
+  </h3>
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的锚定。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: pull-quote
+       用途: 引用块（楷体暖卡 · 上下橙线）
+       在目标编辑器中对应: quote-card
+       ============================================ -->
+  <div style="margin:24px 0; padding:18px 20px; background:#14263d; border-top:1px solid #d97a3c; border-bottom:1px solid #d97a3c;">
+    <div style="font-family:'Kaiti SC','STKaiti',KaiTi,cursive; font-size:18px; line-height:1.85; color:#d9c9a8; letter-spacing:0.08em;">「凡我所是，皆因我读。」</div>
+    <div style="font-family:Menlo,monospace; font-size:11px; color:#d97a3c; margin-top:10px; letter-spacing:0.15em; text-align:right;">
+      —— borges · 1960
+    </div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:13px; color:#d97a3c; margin:16px 0 8px; letter-spacing:0.05em;">
+    2.2&nbsp;&nbsp;每日有定数
+  </h3>
+
+  <!-- ============================================
+       COMPONENT: ordered-list
+       用途: 有序列表（中文 一二三 橙色前缀）
+       在目标编辑器中对应: ordered-list
+       ============================================ -->
+  <div style="font-size:14px; line-height:2.2; color:#d9c9a8; margin:8px 0 14px; letter-spacing:0.04em;">
+    <div><span style="color:#d97a3c;">一</span>&nbsp;&nbsp;每日只读 20 页</div>
+    <div><span style="color:#d97a3c;">二</span>&nbsp;&nbsp;读完合眼默想</div>
+    <div><span style="color:#d97a3c;">三</span>&nbsp;&nbsp;纸质笔记本记录三句话</div>
+  </div>
+
+  <!-- sub-heading H3 -->
+  <h3 style="font-size:13px; color:#d97a3c; margin:16px 0 8px; letter-spacing:0.05em;">
+    2.3&nbsp;&nbsp;手的参与
+  </h3>
+
+  <!-- ============================================
+       COMPONENT: unordered-list
+       用途: 无序列表（· 橙点前缀）
+       在目标编辑器中对应: unordered-list
+       ============================================ -->
+  <div style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:8px 0 14px; letter-spacing:0.04em;">
+    <div><span style="color:#d97a3c;">·</span>&nbsp;&nbsp;铅笔轻划，不用荧光笔</div>
+    <div><span style="color:#d97a3c;">·</span>&nbsp;&nbsp;书页一角折痕做记</div>
+    <div><span style="color:#d97a3c;">·</span>&nbsp;&nbsp;读完抄录一段于扉页</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: inline-code / code-block
+       用途: 行内代码（橙色等宽）+ 代码块（黑底橙框）
+       在目标编辑器中对应: inline-code / code-block
+       ============================================ -->
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:16px 0; letter-spacing:0.04em;">
+    节目里我开玩笑说，可以写成一行代码：<span style="font-family:Menlo,monospace; font-size:12px; color:#d97a3c;">book.read(slowly)</span>。
+  </p>
+
+  <div style="font-family:Menlo,monospace; font-size:12px; line-height:1.9; background:#060d18; padding:14px 16px; margin:16px 0; color:#d9c9a8; border:1px solid #d97a3c;">
+    <div style="color:#d97a3c; font-size:10px; letter-spacing:0.15em; margin-bottom:8px;">reading.js</div>
+    const reading = (book) =&gt;<br>&nbsp;&nbsp;book.read(slowly);
+  </div>
+
+  <!-- ============================================
+       COMPONENT: callout
+       用途: 播后札记（深蓝信息卡）
+       在目标编辑器中对应: callout
+       ============================================ -->
+  <div style="margin:24px 0; padding:14px 16px; background:#14263d;">
+    <div style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.2em; margin-bottom:8px;">播 · 后 · 札记</div>
+    <div style="font-size:13px; line-height:1.9; color:#d9c9a8; letter-spacing:0.04em;">
+      慢读并非复古姿态，而是一种对自己时间主权的重新申明。
+    </div>
+  </div>
+
+  <!-- section-heading H2 -->
+  <h2 style="font-size:14px; font-weight:normal; margin:28px 0 14px; color:#d9c9a8; letter-spacing:0.1em;">
+    <span style="color:#d97a3c; margin-right:10px;">03</span>夜晚作为最后的阅读时区
+  </h2>
+
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    白日属于他人。
+  </p>
+
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的<b style="color:#d97a3c;">连续时间</b>。
+  </p>
+
+  <p style="font-size:14px; line-height:2.1; color:#d9c9a8; margin:0 0 16px; letter-spacing:0.04em;">
+    节目到这里差不多了。若你愿意，<a href="#" style="color:#d97a3c; text-decoration:underline; text-decoration-style:dotted;">留言告诉我你今夜读的那一页</a>。
+  </p>
+
+  <!-- ============================================
+       COMPONENT: qa-block
+       用途: 听众连线（call-in 电台风格）
+       在目标编辑器中对应: qa-block
+       ============================================ -->
+  <div style="margin:28px 0; padding:16px 18px; background:#14263d; border-left:2px solid #d97a3c;">
+    <div style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.2em; margin-bottom:12px;">听 · 众 · 连 · 线</div>
+    <div style="font-family:'Songti SC',serif; font-size:13px; line-height:1.95; color:#d9c9a8; letter-spacing:0.03em;">
+      <div style="margin-bottom:10px;"><span style="color:#d97a3c; font-family:Menlo,monospace;">call·in&nbsp;&nbsp;&gt;</span>&nbsp;&nbsp;主播，周末只剩两小时，能读完一本书吗？</div>
+      <div><span style="color:#a89070; font-family:Menlo,monospace;">on·air&nbsp;&nbsp;&gt;</span>&nbsp;&nbsp;不能。能读完的是书的大意，不是书。两小时，与一章相处就够。</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: multi-callout
+       用途: 深夜须知（cue/b-side/static/off-air 电台广播术语标签）
+       在目标编辑器中对应: callout (variant: info/tip/warn/danger)
+       D-010: 词表=`cue / b-side / static / off-air` —— 电台广播母语:
+              cue（提示音/info） · b-side（B 面推荐/tip） · static（静电干扰/warn）
+              · off-air（停播/danger）。完全脱离 mkdocs 词表，对位深夜电台主题语境;
+              视觉壳=保留 mono lowercase 纯文字 + 色字标签 + 无 box 无 bar。
+       ============================================ -->
+  <div style="margin:26px 0;">
+    <div style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.2em; margin-bottom:12px;">深 · 夜 · 须 · 知</div>
+    <div style="margin-bottom:6px; display:flex; gap:10px; font-family:'Songti SC',serif; font-size:13px; line-height:1.7; color:#d9c9a8;"><span style="font-family:Menlo,monospace; font-size:10px; color:#4a90c0; letter-spacing:0.1em; min-width:56px; padding-top:2px;">cue</span><div>光源须在书后侧四十五度。</div></div>
+    <div style="margin-bottom:6px; display:flex; gap:10px; font-family:'Songti SC',serif; font-size:13px; line-height:1.7; color:#d9c9a8;"><span style="font-family:Menlo,monospace; font-size:10px; color:#7fb069; letter-spacing:0.1em; min-width:56px; padding-top:2px;">b-side</span><div>配温水一盏。</div></div>
+    <div style="margin-bottom:6px; display:flex; gap:10px; font-family:'Songti SC',serif; font-size:13px; line-height:1.7; color:#d9c9a8;"><span style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.1em; min-width:56px; padding-top:2px;">static</span><div>手机应在别屋充电。</div></div>
+    <div style="display:flex; gap:10px; font-family:'Songti SC',serif; font-size:13px; line-height:1.7; color:#d9c9a8;"><span style="font-family:Menlo,monospace; font-size:10px; color:#c44848; letter-spacing:0.1em; min-width:56px; padding-top:2px;">off-air</span><div>忌在短片毕后翻书。</div></div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: cta-bar
+       用途: 互动条（三栏 · 橙色填充中栏）
+       在目标编辑器中对应: cta-bar
+       ============================================ -->
+  <div style="margin:26px 0; display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
+    <div style="padding:10px 0; text-align:center; background:#14263d; font-family:'Songti SC',serif; font-size:12px; color:#d9c9a8; letter-spacing:0.15em;">♡&nbsp;喜欢</div>
+    <div style="padding:10px 0; text-align:center; background:#d97a3c; font-family:'Songti SC',serif; font-size:12px; color:#0e1a2b; letter-spacing:0.15em;">★&nbsp;收藏</div>
+    <div style="padding:10px 0; text-align:center; background:#14263d; font-family:'Songti SC',serif; font-size:12px; color:#d9c9a8; letter-spacing:0.15em;">↗&nbsp;分享</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: qr-follow
+       用途: 二维码（tune-in 牌 · 橙框）
+       在目标编辑器中对应: qr-follow
+       ============================================ -->
+  <div style="margin:26px 0; padding:14px; border:1px solid #d97a3c; background:#14263d; display:flex; gap:14px; align-items:center;">
+    <svg viewBox="0 0 60 60" width="60" height="60" style="display:block; background:#0e1a2b; border:1px solid #d97a3c; flex-shrink:0;">
+      <g fill="#d9c9a8"><rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="#0e1a2b"/><rect x="9" y="9" width="4" height="4"/><rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="#0e1a2b"/><rect x="47" y="9" width="4" height="4"/><rect x="3" y="41" width="16" height="16"/><rect x="6" y="44" width="10" height="10" fill="#0e1a2b"/><rect x="9" y="47" width="4" height="4"/><rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/><rect x="36" y="27" width="3" height="3"/><rect x="24" y="30" width="3" height="3"/><rect x="33" y="30" width="3" height="3"/><rect x="27" y="36" width="3" height="3"/><rect x="36" y="36" width="3" height="3"/><rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/><rect x="39" y="45" width="3" height="3"/><rect x="27" y="48" width="3" height="3"/></g>
+    </svg>
+    <div>
+      <div style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.2em; margin-bottom:4px;">tune · in</div>
+      <div style="font-family:'Songti SC',serif; font-size:14px; color:#d9c9a8; letter-spacing:0.05em;">夜读电台</div>
+      <div style="font-family:Menlo,monospace; font-size:10px; color:#a89070; margin-top:4px; letter-spacing:0.08em;">每周四 · 03:41 AM</div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: footnotes
+       用途: 脚注（配乐信息 · 虚线分隔）
+       在目标编辑器中对应: footnote-group
+       ============================================ -->
+  <div style="margin:20px 0; border-top:1px dashed #a89070; padding-top:10px; font-family:Menlo,monospace; font-size:10px; color:#a89070; line-height:1.85; letter-spacing:0.03em;">
+    <div>※&nbsp;&nbsp;本期配乐：Nils Frahm — <i>Says</i>（fade in / fade out）</div>
+    <div>※&nbsp;&nbsp;片头音效取自 1976 年 SONY 黑胶放映机</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: divider-ornament
+       用途: · · · 圆点分割
+       在目标编辑器中对应: divider
+       ============================================ -->
+  <div style="text-align:center; margin:28px 0 20px; color:#d97a3c; letter-spacing:0.6em;">·&nbsp;&nbsp;·&nbsp;&nbsp;·</div>
+
+  <!-- ============================================
+       COMPONENT: side-b-end
+       用途: Side B 静音槽（张力点：三横线 + 标注）
+       在目标编辑器中对应: divider (variant: side-b)
+       ============================================ -->
+  <div style="margin:28px 0 16px;">
+    <div style="font-family:Menlo,monospace; font-size:10px; color:#d97a3c; letter-spacing:0.3em; margin-bottom:10px;">━━ side b ━━</div>
+    <div style="height:1px; background:#d9c9a8; margin-bottom:4px;"></div>
+    <div style="height:1px; background:#d9c9a8; margin-bottom:4px;"></div>
+    <div style="height:1px; background:#d9c9a8; margin-bottom:10px;"></div>
+    <div style="font-family:Menlo,monospace; font-size:10px; color:#a89070; letter-spacing:0.2em; text-align:right;">side b end</div>
+  </div>
+
+  <!-- ============================================
+       COMPONENT: footer
+       用途: 尾部（等宽 · 下期预告 · 电台标识）
+       在目标编辑器中对应: footer
+       ============================================ -->
+  <div style="border-top:1px solid #d9c9a8; margin-top:24px; padding-top:12px; font-family:Menlo,monospace; font-size:11px; line-height:1.85; color:#a89070; letter-spacing:0.05em;">
+    <div><span style="color:#d97a3c;">下期&nbsp;&nbsp;·</span>&nbsp;&nbsp;纸本之必要：论书脊与手指的记忆</div>
+    <div style="color:#4a6080;">————— 夜读电台 —————</div>
+  </div>
+
+</div>
+
+</body>
+</html>

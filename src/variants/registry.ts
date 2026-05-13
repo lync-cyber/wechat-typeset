@@ -66,6 +66,7 @@ const ADMONITION_ORDER: readonly string[] = [
   'bubble-organic',
   'magazine-pull',
   'report-section',
+  'news-row',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
@@ -73,7 +74,7 @@ const QUOTE_ORDER: readonly string[] = [
   'column-rule',
   'frame-brackets',
 ]
-const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger']
+const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
 const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeline-dot']
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph']
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']

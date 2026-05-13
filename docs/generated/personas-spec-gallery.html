@@ -74,12 +74,12 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 <div class="page">
   <header class="masthead">
     <h1>Personas Spec Gallery</h1>
-    <p class="sub">从 9 份 persona.spec.ts 派生。改 spec → 跑 <code>pnpm gen:gallery</code> → commit。drift 由 tests/gallery-generator.spec.ts 把守。</p>
+    <p class="sub">从 10 份 persona.spec.ts 派生。改 spec → 跑 <code>pnpm gen:gallery</code> → commit。drift 由 tests/gallery-generator.spec.ts 把守。</p>
   </header>
 
 <section class="persona-card" data-persona="academic-frontier" style="--p-bg:#fefefe;--p-bg-soft:#f6f6f4;--p-bg-muted:#ececea;--p-text:#16181d;--p-text-muted:#5a5d64;--p-text-inverse:#fefefe;--p-primary:#1e2c4a;--p-secondary:#4a5670;--p-accent:#8a2a2a;--p-border:#d8d8d4;--p-code:#1a1a1a">
 <div class="card-head">
-  <div class="card-idx mono">01 / 09</div>
+  <div class="card-idx mono">01 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">学术前沿</div>
     <code class="card-slug">academic-frontier</code>
@@ -98,7 +98,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="business-finance" style="--p-bg:#fefefe;--p-bg-soft:#f3f1ec;--p-bg-muted:#e6e2d8;--p-text:#0f141b;--p-text-muted:#56606e;--p-text-inverse:#fefefe;--p-primary:#2a1a14;--p-secondary:#0e3654;--p-accent:#b8821f;--p-border:#d0cec8;--p-code:#0e3654">
 <div class="card-head">
-  <div class="card-idx mono">02 / 09</div>
+  <div class="card-idx mono">02 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">硬核财经</div>
     <code class="card-slug">business-finance</code>
@@ -115,9 +115,28 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 <div class="section-label">Owner Notes</div><p class="owner-notes">Phase 2 PR 6 migrated. 唯一视觉偏离：dividerWave 基线 stroke-width 0.8 → 1.0（平台光栅化与 validator MIN_STROKE_WIDTH 纪律）。</p>
 </section>
 
+<section class="persona-card" data-persona="data-brief" style="--p-bg:#ffffff;--p-bg-soft:#f5f7fa;--p-bg-muted:#eef0f2;--p-text:#111418;--p-text-muted:#5a6068;--p-text-inverse:#fefefe;--p-primary:#1756d1;--p-secondary:#111418;--p-accent:#1756d1;--p-border:#e5e7eb;--p-code:#1756d1">
+<div class="card-head">
+  <div class="card-idx mono">03 / 10</div>
+  <div class="card-title-row">
+    <div class="card-zh">数据简报</div>
+    <code class="card-slug">data-brief</code>
+  </div>
+  <p class="card-description">数据蓝 + 黑底代码 + 直角硬边：晚点 / 财新数据 / Morning Brew 感</p>
+  <div class="card-audience"><span class="kicker">Audience</span>数据 newsletter / 数据简报 / 行业图表周刊</div>
+</div>
+<div class="section-label">Palette · 色板（11 键）</div><div class="swatch-grid"><div class="swatch"><div class="swatch-chip" style="background:#1756d1;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>primary</b><span>#1756d1</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#111418;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>secondary</b><span>#111418</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#1756d1;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>accent</b><span>#1756d1</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#ffffff;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>bg</b><span>#ffffff</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#f5f7fa;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>bgSoft</b><span>#f5f7fa</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#eef0f2;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>bgMuted</b><span>#eef0f2</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#111418;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>text</b><span>#111418</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#5a6068;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>textMuted</b><span>#5a6068</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#fefefe;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>textInverse</b><span>#fefefe</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#e5e7eb;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>border</b><span>#e5e7eb</span></div></div><div class="swatch"><div class="swatch-chip" style="background:#1756d1;border:1px solid rgba(0,0,0,.08)"></div><div class="swatch-meta"><b>code</b><span>#1756d1</span></div></div></div>
+<div class="section-label">Status · 语义四态</div><div class="sem-grid"><div class="sem-pair"><div class="sem-side" style="background:#1e9c5a;color:#fefefe"><b>tip</b><span>#1e9c5a</span></div><div class="sem-side" style="background:#dff1e6;color:#1e9c5a"><b>soft</b><span>#dff1e6</span></div></div><div class="sem-pair"><div class="sem-side" style="background:#1756d1;color:#fefefe"><b>info</b><span>#1756d1</span></div><div class="sem-side" style="background:#dfe9fa;color:#1756d1"><b>soft</b><span>#dfe9fa</span></div></div><div class="sem-pair"><div class="sem-side" style="background:#e09030;color:#fefefe"><b>warning</b><span>#e09030</span></div><div class="sem-side" style="background:#faecd9;color:#e09030"><b>soft</b><span>#faecd9</span></div></div><div class="sem-pair"><div class="sem-side" style="background:#d4381f;color:#fefefe"><b>danger</b><span>#d4381f</span></div><div class="sem-side" style="background:#fbdcd6;color:#d4381f"><b>soft</b><span>#fbdcd6</span></div></div></div>
+<div class="section-label">Typography · 字体节奏</div><div class="type-stack"><div class="ts-row"><div class="ts-sample" style="font-size:22px;font-weight:700;letter-spacing:0.3px;line-height:1.45;color:#111418">一份被认真排过的稿子</div><div class="ts-meta mono">h1 · 22 / 700 / ls-0.3</div></div><div class="ts-row"><div class="ts-sample" style="font-size:16px;font-weight:700;letter-spacing:0.3px;line-height:1.45;color:#111418">章节标题示样</div><div class="ts-meta mono">h2 · 16 / 700</div></div><div class="ts-row"><div class="ts-sample" style="font-size:13px;font-weight:700;letter-spacing:0.3px;line-height:1.45;color:#111418">小节标题</div><div class="ts-meta mono">h3 · 13 / 700</div></div><div class="ts-row"><div class="ts-sample" style="font-size:14px;font-weight:400;letter-spacing:0.3px;line-height:1.7;color:#111418">正文行高 1.7，字距 0.3px。段间 12px margin。这段文字的排版节奏来自 spec.typography + spec.spacing。</div><div class="ts-meta mono">p · 14 / 400 / lh-1.7</div></div><div class="ts-row"><div class="ts-sample" style="font-size:16px;font-weight:500;letter-spacing:0.3px;line-height:1.7;color:#111418;padding-left:14px;border-left:3px solid #1756d1">引用样式——从 spec.palette.primary 取左边色条。</div><div class="ts-meta mono">pull-quote · 16 / 500</div></div></div>
+<div class="section-label">Motifs · 签名母题（7 件）</div><div class="motif-grid"><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 240 8" width="220" height="8" xmlns="http://www.w3.org/2000/svg"> <line x1="0" y1="4" x2="110" y2="4" stroke="#e5e7eb" stroke-width="1"/> <rect x="117" y="1" width="6" height="6" fill="#1756d1"/> <line x1="130" y1="4" x2="240" y2="4" stroke="#e5e7eb" stroke-width="1"/> </svg></div><div class="motif-label mono">dividerFlower</div></div><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 240 8" width="220" height="8" xmlns="http://www.w3.org/2000/svg"> <rect x="108" y="2" width="4" height="4" fill="#1756d1"/> <rect x="118" y="2" width="4" height="4" fill="#1756d1"/> <rect x="128" y="2" width="4" height="4" fill="#1756d1"/> </svg></div><div class="motif-label mono">dividerDots</div></div><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:6px"> <rect x="1" y="1" width="14" height="14" fill="none" stroke="#1e9c5a" stroke-width="1.5"/> <path d="M4,8 L7,11 L12,5" fill="none" stroke="#1e9c5a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/> </svg></div><div class="motif-label mono">tipIcon</div></div><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:6px"> <rect x="1" y="1" width="14" height="14" fill="none" stroke="#e09030" stroke-width="1.5"/> <rect x="7" y="3" width="2" height="7" fill="#e09030"/> <rect x="7" y="11" width="2" height="2" fill="#e09030"/> </svg></div><div class="motif-label mono">warningIcon</div></div><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:6px"> <rect x="1" y="1" width="14" height="14" fill="none" stroke="#1756d1" stroke-width="1.5"/> <rect x="7" y="3" width="2" height="2" fill="#1756d1"/> <rect x="7" y="6" width="2" height="7" fill="#1756d1"/> </svg></div><div class="motif-label mono">infoIcon</div></div><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:6px"> <rect x="1" y="1" width="14" height="14" fill="none" stroke="#d4381f" stroke-width="1.5"/> <path d="M4,4 L12,12 M12,4 L4,12" fill="none" stroke="#d4381f" stroke-width="1.8" stroke-linecap="round"/> </svg></div><div class="motif-label mono">dangerIcon</div></div><div class="motif-tile"><div class="motif-svg-box"><svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:8px"> <rect x="0" y="0" width="24" height="24" fill="#1756d1"/> <text x="12" y="17" font-size="14" font-weight="700" fill="#fefefe" text-anchor="middle">1</text> </svg></div><div class="motif-label mono">stepBadge(1)</div></div></div>
+<div class="section-label">Variants & Signature</div><div class="var-grid"><div class="var-row"><b>admonition</b><code>news-row</code></div><div class="var-row"><b>quote</b><code>classic</code></div><div class="var-row"><b>compare</b><code>data-card</code></div><div class="var-row"><b>steps</b><code>number-circle</code></div><div class="var-row"><b>divider</b><code>flower</code></div><div class="var-row"><b>sectionTitle</b><code>bordered</code></div><div class="var-row"><b>codeBlock</b><code>bare</code></div></div><div class="section-sub">Signature Containers</div><div class="sig-row"><code class="sig-chip">abstract</code><code class="sig-chip">masthead</code><code class="sig-chip">sectionTag</code><code class="sig-chip">toc</code><code class="sig-chip">kpiDashboard</code><code class="sig-chip">barChart</code><code class="sig-chip">qaBlock</code><code class="sig-chip">footnotes</code><code class="sig-chip">ctaBar</code><code class="sig-chip">qrFollow</code></div>
+
+<div class="section-label">Owner Notes</div><p class="owner-notes">主题 11 数据简报 · 三条不可妥协：radius=0、primary #1756d1、代码黑底浅字。7 件 data-brief 家族签名容器 renderer 在 pipeline/containers/databrief.ts。</p>
+</section>
+
 <section class="persona-card" data-persona="default" style="--p-bg:#fdfdfc;--p-bg-soft:#f5f5f3;--p-bg-muted:#eceae4;--p-text:#1c1f24;--p-text-muted:#636870;--p-text-inverse:#fefefe;--p-primary:#2558b0;--p-secondary:#8a8f98;--p-accent:#2558b0;--p-border:#d8d8d4;--p-code:#1c1f24">
 <div class="card-head">
-  <div class="card-idx mono">03 / 09</div>
+  <div class="card-idx mono">04 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">默认主题</div>
     <code class="card-slug">default</code>
@@ -136,7 +155,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="industry-observer" style="--p-bg:#fbf8f1;--p-bg-soft:#f5efe1;--p-bg-muted:#ece3cf;--p-text:#1a2332;--p-text-muted:#5a6778;--p-text-inverse:#fefefe;--p-primary:#24364f;--p-secondary:#3d5063;--p-accent:#b86f2a;--p-border:#e0d6c0;--p-code:#24364f">
 <div class="card-head">
-  <div class="card-idx mono">04 / 09</div>
+  <div class="card-idx mono">05 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">行业观察</div>
     <code class="card-slug">industry-observer</code>
@@ -155,7 +174,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="life-aesthetic" style="--p-bg:#faf6f0;--p-bg-soft:#f2ead8;--p-bg-muted:#eadfc7;--p-text:#3a2d20;--p-text-muted:#7a6a58;--p-text-inverse:#faf6f0;--p-primary:#d98141;--p-secondary:#b96234;--p-accent:#efb758;--p-border:#e0d1ba;--p-code:#b96234">
 <div class="card-head">
-  <div class="card-idx mono">05 / 09</div>
+  <div class="card-idx mono">06 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">慢生活</div>
     <code class="card-slug">life-aesthetic</code>
@@ -174,7 +193,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="literary-humanism" style="--p-bg:#f4efe3;--p-bg-soft:#ece5d1;--p-bg-muted:#ddd3bb;--p-text:#1f1b14;--p-text-muted:#6b5f4a;--p-text-inverse:#fefefe;--p-primary:#5a4a3a;--p-secondary:#3d4a3d;--p-accent:#9a3b2e;--p-border:#cfc3a8;--p-code:#6b5f4a">
 <div class="card-head">
-  <div class="card-idx mono">06 / 09</div>
+  <div class="card-idx mono">07 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">人文札记</div>
     <code class="card-slug">literary-humanism</code>
@@ -193,7 +212,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="people-story" style="--p-bg:#f2efe7;--p-bg-soft:#e9e5db;--p-bg-muted:#dcd7c9;--p-text:#17171a;--p-text-muted:#5d5d63;--p-text-inverse:#f2efe7;--p-primary:#1b2330;--p-secondary:#4a5260;--p-accent:#8a3f2b;--p-border:#c8c2b3;--p-code:#5d5d63">
 <div class="card-head">
-  <div class="card-idx mono">07 / 09</div>
+  <div class="card-idx mono">08 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">人物特稿</div>
     <code class="card-slug">people-story</code>
@@ -212,7 +231,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="tech-explainer" style="--p-bg:#fafbfc;--p-bg-soft:#f3f5f8;--p-bg-muted:#e8ecf1;--p-text:#1a2233;--p-text-muted:#5c6778;--p-text-inverse:#fefefe;--p-primary:#0066cc;--p-secondary:#4a90e2;--p-accent:#f59e0b;--p-border:#d9dee5;--p-code:#0066cc">
 <div class="card-head">
-  <div class="card-idx mono">08 / 09</div>
+  <div class="card-idx mono">09 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">文档白昼</div>
     <code class="card-slug">tech-explainer</code>
@@ -231,7 +250,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 
 <section class="persona-card" data-persona="tech-geek" style="--p-bg:#262019;--p-bg-soft:#2f2920;--p-bg-muted:#3a3328;--p-text:#ebdfca;--p-text-muted:#9a8f7e;--p-text-inverse:#262019;--p-primary:#c89759;--p-secondary:#8a7a54;--p-accent:#e06a28;--p-border:#4a4034;--p-code:#c89759">
 <div class="card-head">
-  <div class="card-idx mono">09 / 09</div>
+  <div class="card-idx mono">10 / 10</div>
   <div class="card-title-row">
     <div class="card-zh">极客夜行</div>
     <code class="card-slug">tech-geek</code>

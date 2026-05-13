@@ -13,9 +13,9 @@
  * `npm run build:samples` 即可。
  */
 
-import { SAMPLE_BY_THEME, FULL_SAMPLE } from './generated'
+import { SAMPLE_BY_THEME, FULL_SAMPLE, SAMPLE_BUILD_ID } from './generated'
 
-export { SAMPLE_BY_THEME, FULL_SAMPLE }
+export { SAMPLE_BY_THEME, FULL_SAMPLE, SAMPLE_BUILD_ID }
 
 /** 主题 id → sample markdown；未知 id 回退到 default。 */
 export function getSample(themeId: string): string {

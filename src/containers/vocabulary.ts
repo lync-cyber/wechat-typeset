@@ -89,7 +89,7 @@ export interface ContainerSpec {
 // ============================================================
 
 const VOCAB_ENTRIES: ContainerSpec[] = [
-  // ── structure（4） ────────────────────────────────────────
+  // ── structure（4 + 4 data-brief 家族） ───────────────────
   {
     name: 'intro',
     styleKey: 'intro',
@@ -132,6 +132,51 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     description: '章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。',
     example: '::: section-title\n第一章 · 缘起\n:::\n',
   },
+  {
+    name: 'masthead',
+    styleKey: 'masthead',
+    category: 'structure',
+    fenceLength: 3,
+    attrs: [
+      { key: 'issue', description: '期号（monospace 右对齐）', example: '004' },
+      { key: 'date', description: '日期（monospace 右对齐）', example: '2026.04.22' },
+    ],
+    description:
+      '刊头：刊名（info）左对齐 + 期号·日期 monospace 右对齐 + 下划线。data-brief 家族签名。',
+    example: '::: masthead 慢读简报 issue="004" date="2026.04.22"\n:::\n',
+  },
+  {
+    name: 'section-tag',
+    styleKey: 'sectionTag',
+    category: 'structure',
+    fenceLength: 3,
+    description: '小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。',
+    example: '::: section-tag\n深度\n:::\n',
+  },
+  {
+    name: 'toc',
+    styleKey: 'toc',
+    category: 'structure',
+    fenceLength: 4,
+    children: ['toc-item'],
+    description:
+      '目录三栏（序号·标题·页码）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker（如 "目录 · CONTENTS"）。',
+    example:
+      ':::: toc 目录 · CONTENTS\n::: toc-item no="01" page="p.04" 为什么我们失去了阅读的耐心\n:::\n::::\n',
+  },
+  {
+    name: 'toc-item',
+    styleKey: null,
+    category: 'structure',
+    parent: 'toc',
+    fenceLength: 3,
+    attrs: [
+      { key: 'no', description: '序号（monospace 主色）', example: '01' },
+      { key: 'page', description: '页码（monospace 灰）', example: 'p.04' },
+    ],
+    description: 'toc 内单条；info 为条目标题。body 内容会被忽略。',
+    example: '::: toc-item no="01" page="p.04" 为什么我们失去了阅读的耐心\n:::\n',
+  },
 
   // ── admonition（5） ───────────────────────────────────────
   {
@@ -161,6 +206,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
           'bubble-organic',
           'magazine-pull',
           'report-section',
+          'news-row',
         ],
       },
     ],
@@ -258,6 +304,23 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: '编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。',
     example: '::: steps\n1. 初始化\n2. 构建\n3. 发布\n:::\n',
+  },
+  {
+    name: 'qa-block',
+    styleKey: 'qaBlock',
+    category: 'content',
+    fenceLength: 3,
+    attrs: [
+      {
+        key: 'q',
+        description: '问题文本（visual: 主色 Q 方块头像 + 单行）',
+        example: '数据显示 30 岁以下日均连读仅 8 分钟，还有救吗？',
+      },
+    ],
+    description:
+      '读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 "读者问答 · Q&A"）。',
+    example:
+      '::: qa-block 读者问答 · Q&A q="数据显示 30 岁以下日均连读仅 8 分钟，还有救吗？"\n有。数据衡量的是习惯而非能力，从睡前 15 分钟开始即可。\n:::\n',
   },
 
   // ── navigation（3） ──────────────────────────────────────
@@ -360,6 +423,111 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: '相关阅读链接列表（academic-frontier / tech-explainer 的"扩展阅读"）。',
     example: '::: see-also 延伸阅读\n- [相关论文](url)\n:::\n',
+  },
+  {
+    name: 'kpi-dashboard',
+    styleKey: 'kpiDashboard',
+    category: 'signature',
+    fenceLength: 4,
+    children: ['kpi-item'],
+    attrs: [
+      { key: 'period', description: '统计区间/口径', example: '2024 / YoY' },
+      { key: 'source', description: '数据来源（页脚 monospace 小字）', example: 'n=1,432' },
+    ],
+    description:
+      'KPI 仪表盘：三指标 grid + sparkline。外层用 4 个冒号，内部用 kpi-item。info 为标题（如 "KEY METRICS · 三项关键指标"）。',
+    example:
+      ':::: kpi-dashboard KEY METRICS · 三项关键指标 period="2024 / YoY" source="n=1,432"\n::: kpi-item label="01 · MIN/DAY" caption="日均连读时长" value="12" unit="分钟" delta="-68%" trend="down" series="2,4,5,6,8,9,10,11" foot="\'15 38分 → \'24 12分"\n:::\n::::\n',
+  },
+  {
+    name: 'kpi-item',
+    styleKey: null,
+    category: 'signature',
+    parent: 'kpi-dashboard',
+    fenceLength: 3,
+    attrs: [
+      { key: 'label', description: '指标编号/口径（monospace）', example: '01 · MIN/DAY' },
+      { key: 'caption', description: '指标中文说明', example: '日均连读时长' },
+      { key: 'value', description: '数字本体（大字号）', example: '12' },
+      { key: 'unit', description: '单位（如 分钟 / 次 / 本）', example: '分钟' },
+      { key: 'delta', description: '同比标签（前缀决定颜色，- 红 + 红 ± 灰）', example: '-68%' },
+      { key: 'trend', description: 'sparkline 颜色方向', enum: ['up', 'down', 'flat'] },
+      {
+        key: 'series',
+        description: 'sparkline 折线数据（逗号分隔 0–13 整数，左右端点对齐）',
+        example: '2,4,5,6,8,9,10,11',
+      },
+      { key: 'foot', description: '期端对比小字（monospace 双端）', example: "'15 38分 → '24 12分" },
+    ],
+    description: 'kpi-dashboard 内单指标。一切以 attrs 驱动，body 内容被忽略。',
+    example:
+      '::: kpi-item label="01·MIN/DAY" value="12" unit="分钟" delta="-68%" trend="down" series="2,4,5,6,8,9,10,11"\n:::\n',
+  },
+  {
+    name: 'bar-chart',
+    styleKey: 'barChart',
+    category: 'signature',
+    fenceLength: 4,
+    children: ['bar'],
+    attrs: [
+      { key: 'subtitle', description: '副标题（单位/样本说明）', example: '单位：分钟 · n=1,024' },
+    ],
+    description:
+      '横向条形图（纯 div 宽度，无 SVG）。外层用 4 个冒号，内部用 bar 条目。info 为图表标题。',
+    example:
+      ':::: bar-chart 每日连续阅读时长 · 按年龄分布 subtitle="单位：分钟"\n::: bar label="60+" pct="84" value="42 分"\n:::\n::::\n',
+  },
+  {
+    name: 'bar',
+    styleKey: null,
+    category: 'signature',
+    parent: 'bar-chart',
+    fenceLength: 3,
+    attrs: [
+      { key: 'label', description: '类目标签', example: '60+' },
+      { key: 'pct', description: '柱宽百分比（0–100 整数）', example: '84' },
+      { key: 'value', description: '数值显示（右对齐）', example: '42 分' },
+      { key: 'tone', description: '色调；warn 转 danger 红', enum: ['normal', 'warn'] },
+    ],
+    description: 'bar-chart 内单条；attrs.label/pct/value 必填，tone 决定柱色（normal 走主色）。',
+    example: '::: bar label="60+" pct="84" value="42 分"\n:::\n',
+  },
+  {
+    name: 'footnotes',
+    styleKey: 'footnotes',
+    category: 'signature',
+    fenceLength: 3,
+    description:
+      '脚注块：上分割线 + 小字编号引用。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。',
+    example: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
+  },
+  {
+    name: 'cta-bar',
+    styleKey: 'ctaBar',
+    category: 'signature',
+    fenceLength: 3,
+    attrs: [
+      { key: 'like', description: '左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
+      { key: 'star', description: '中格文字（实色，默认 ★ 收藏）', example: '★ 收藏' },
+      { key: 'share', description: '右格文字（默认 ↗ 转发）', example: '↗ 转发' },
+    ],
+    description:
+      'CTA 三栏：左/右描边格 + 中实色格。data-brief 签名（赞同 / 收藏 / 转发）。body 忽略。',
+    example: '::: cta-bar\n:::\n',
+  },
+  {
+    name: 'qr-follow',
+    styleKey: 'qrFollow',
+    category: 'signature',
+    fenceLength: 3,
+    attrs: [
+      { key: 'kicker', description: '左上小字 kicker（默认 SUBSCRIBE）', example: 'SUBSCRIBE' },
+      { key: 'desc', description: '副标题（小字说明）', example: '每周四，一封邮件，一组数据' },
+      { key: 'qr', description: 'QR 图地址（缺省时画占位 SVG）', example: 'https://…/qr.png' },
+    ],
+    description:
+      '二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。',
+    example: '::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n',
   },
 
   // ── free（1） ────────────────────────────────────────────

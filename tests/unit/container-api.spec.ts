@@ -34,8 +34,8 @@ describe('getContainerVocabulary', () => {
     }
   })
 
-  it('包含 25 个容器', () => {
-    expect(getContainerVocabulary()).toHaveLength(25)
+  it('包含 37 个容器（data-brief 家族 12 件已合入）', () => {
+    expect(getContainerVocabulary()).toHaveLength(37)
   })
 
   it('包含预期的容器名', () => {
@@ -49,6 +49,10 @@ describe('getContainerVocabulary', () => {
       'footer-cta', 'recommend', 'qrcode', 'see-also',
       'mpvoice', 'mpvideo',
       'free',
+      // data-brief 家族（9 styled + 3 nested children）
+      'masthead', 'section-tag', 'toc', 'toc-item',
+      'kpi-dashboard', 'kpi-item', 'bar-chart', 'bar',
+      'qa-block', 'footnotes', 'cta-bar', 'qr-follow',
     ]) {
       expect(names).toContain(name)
     }

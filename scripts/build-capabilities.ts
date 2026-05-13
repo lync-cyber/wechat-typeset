@@ -234,7 +234,9 @@ function build(): CapabilitiesV2 {
     deprecations: [],
     personaSchemaUri: '../schema/persona-spec.schema.json',
     docs: {
-      containerSyntax: 'docs/container-syntax.md',
+      writerContract: 'docs/contract/README.md',
+      containerSyntax: 'docs/contract/base.md',
+      containerPackDataBrief: 'docs/contract/packs/data-brief.md',
       skillReadme: 'skills/wechat-typeset/SKILL.md',
       personas: 'skills/wechat-typeset/references/personas.md',
       hardRules: 'skills/wechat-typeset/references/hard-rules.md',

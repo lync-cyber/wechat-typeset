@@ -4,7 +4,7 @@
  *
  * 数据源：
  *   - Command 列表（快捷键）由 App.vue 传入
- *   - 容器速查直接读 CONTAINER_VOCABULARY（与 docs/container-syntax.md 同源）
+ *   - 容器速查直接读 CONTAINER_VOCABULARY（与 docs/contract/base.md + docs/contract/packs/ 同源）
  * 作者看见的每条容器都能点击插入编辑器——不需要手抄 fence 到粘贴板。
  */
 import { computed, ref } from 'vue'

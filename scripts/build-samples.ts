@@ -21,6 +21,7 @@
  * 运行：`npm run build:samples`（也会串进 build 链）
  */
 
+import { createHash } from 'node:crypto'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 
@@ -60,6 +61,16 @@ function buildOutput(): string {
     )
   }
 
+  // SAMPLE_BUILD_ID：所有样本内容的稳定哈希。
+  //   - 输入只依赖 entries / fullSample，与时间无关 —— 相同样本永远是同一个 id（git 可复现）
+  //   - 长度 12 字节 hex 足够区分（碰撞概率 1e-14）
+  //   - 用途：dev 模式 useDraftLifecycle 在 init 期间对照 localStorage 存的上次值，
+  //     不一致即视为"样本已更新"，把活跃草稿正文重置为当前主题最新 sample。
+  const fingerprint = createHash('sha1')
+  for (const [id, content] of entries) fingerprint.update(`${id}:${content}\n`)
+  fingerprint.update(`full:${fullSample}\n`)
+  const buildId = fingerprint.digest('hex').slice(0, 12)
+
   const lines: string[] = []
   lines.push(`/* eslint-disable */`)
   lines.push(`// @generated — 由 scripts/build-samples.ts 从 docs/samples/sample-*.md 生成。`)
@@ -75,6 +86,9 @@ function buildOutput(): string {
   lines.push(`/** 全量容器回归 fixture（对应 docs/samples/sample-full.md）；`)
   lines.push(` *  tests/verify-sample-full.ts 与 scripts/wechat-typeset-cli.ts 消费。 */`)
   lines.push(`export const FULL_SAMPLE: string = ${JSON.stringify(fullSample)}`)
+  lines.push(``)
+  lines.push(`/** 样本指纹（sha1 截断 12 字）。dev 模式检测样本重建用，详见 useDraftLifecycle。 */`)
+  lines.push(`export const SAMPLE_BUILD_ID: string = ${JSON.stringify(buildId)}`)
   lines.push(``)
   return lines.join('\n')
 }

@@ -158,13 +158,13 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 33 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
+  it('6 kind × 35 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      admonition: 16,
+      admonition: 17, // +1: news-row (data-brief 家族)
       quote: 4,
-      compare: 3,
+      compare: 4, // +1: data-card (data-brief 家族)
       steps: 3,
       divider: 5,
       sectionTitle: 2,
@@ -175,13 +175,14 @@ describe('枚举完整性', () => {
     expect([...VARIANT_IDS.codeBlock]).toEqual(['bare', 'header-bar'])
   })
 
-  it('9 套主题都进入矩阵', () => {
+  it('10 套主题都进入矩阵（含 data-brief）', () => {
     expect(themeList.map((t) => t.id)).toEqual([
       'default',
       'tech-geek',
       'tech-explainer',
       'life-aesthetic',
       'business-finance',
+      'data-brief',
       'literary-humanism',
       'industry-observer',
       'people-story',
