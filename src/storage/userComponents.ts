@@ -11,7 +11,7 @@
  *   - 长按/右键 → 删除
  */
 
-import type { UserComponent, ComponentKind } from '../components-lib/types'
+import type { UserComponent, ComponentKind } from '../domain/components-lib/types'
 import { escapeXml } from '../pipeline/containers/types'
 import { genId as genKvId, safeReadJson, safeWriteJson } from './_kv'
 

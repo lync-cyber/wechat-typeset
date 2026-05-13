@@ -13,7 +13,7 @@ import {
   FORBIDDEN_DISPLAY_VALUES,
   FORBIDDEN_VALUE_PATTERNS,
 } from './rules'
-import { STYLED_CONTAINERS } from '../containers/vocabulary'
+import { STYLED_CONTAINERS } from '../core/vocabulary/vocabulary'
 
 const ROOT_CLASS = 'markdown-body'
 

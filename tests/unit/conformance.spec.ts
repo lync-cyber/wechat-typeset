@@ -33,7 +33,7 @@ import {
   CONTAINER_REGISTRY,
   SIGNATURE_CONTAINER_MARKDOWN_NAME,
 } from '../../src/pipeline/containers'
-import { STYLED_CONTAINERS } from '../../src/containers'
+import { STYLED_CONTAINERS } from '../../src/core/vocabulary'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/themes/_shared/spec'
 
 // ============================================================

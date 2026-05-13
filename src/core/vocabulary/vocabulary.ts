@@ -25,8 +25,8 @@
  * 本文件不 import renderer 实现，避免循环依赖 —— renderer 在独立层消费本词汇表。
  */
 
-import type { VariantKind } from '../themes/types'
-import { VARIANT_IDS } from '../themes/types'
+import type { VariantKind } from '../../themes/types'
+import { VARIANT_IDS } from '../../themes/types'
 
 // ============================================================
 // 类型定义

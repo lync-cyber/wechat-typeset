@@ -5,8 +5,8 @@
  * 按容器 name 路由，不走 variants.kind 分派。
  */
 
-import type { VariantDef } from '../../variants/_core'
-import { svg } from '../../variants/_thumb'
+import type { VariantDef } from '../../../variants/_core'
+import { svg } from '../../../variants/_thumb'
 
 function thumb(): string {
   return svg(

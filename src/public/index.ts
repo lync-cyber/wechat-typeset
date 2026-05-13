@@ -49,7 +49,7 @@ import {
   type AttrSpec,
   type VariantDescriptor,
   type SnippetOptions,
-} from '../containers'
+} from '../core/vocabulary'
 
 // ============================================================
 // 只读元信息

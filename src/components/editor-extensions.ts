@@ -20,7 +20,7 @@ import {
 import { linter, type Diagnostic as CMDiagnostic } from '@codemirror/lint'
 import type { Extension } from '@codemirror/state'
 
-import { CONTAINER_VOCABULARY } from '../containers/vocabulary'
+import { CONTAINER_VOCABULARY } from '../core/vocabulary/vocabulary'
 import { VARIANT_IDS, type VariantKind } from '../themes/types'
 import { diagnose, type Diagnostic as WtDiagnostic } from '../pipeline/diagnose'
 

@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { BUILTIN_COMPONENTS, findPresetByVariant } from '../../src/components-lib'
+import { BUILTIN_COMPONENTS, findPresetByVariant } from '../../src/domain/components-lib'
 import { VARIANT_IDS } from '../../src/themes/types'
 import { render } from '../../src/pipeline'
 import { defaultTheme } from '../../src/themes/default'

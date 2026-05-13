@@ -26,7 +26,7 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { containersInPack, type ContainerPack } from '../src/containers/vocabulary'
+import { containersInPack, type ContainerPack } from '../src/core/vocabulary/vocabulary'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
 
 interface PackTarget {

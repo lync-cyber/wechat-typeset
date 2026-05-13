@@ -27,7 +27,7 @@ import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/themes/_shared/spec'
 import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../src/themes/_shared/spec/validate'
 import { FORBIDDEN_CSS_PROPS, HARD_REMOVE_TAGS } from '../src/pipeline/rules'
-import { CONTAINER_VOCABULARY, packOf } from '../src/containers/vocabulary'
+import { CONTAINER_VOCABULARY, packOf } from '../src/core/vocabulary/vocabulary'
 
 /**
  * 下游集成约定：

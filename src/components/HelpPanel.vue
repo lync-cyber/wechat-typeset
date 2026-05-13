@@ -9,7 +9,7 @@
  */
 import { computed, ref } from 'vue'
 import type { Command } from './CommandPalette.vue'
-import { CONTAINER_VOCABULARY } from '../containers/vocabulary'
+import { CONTAINER_VOCABULARY } from '../core/vocabulary/vocabulary'
 
 type ContainerSpec = (typeof CONTAINER_VOCABULARY)[number]
 

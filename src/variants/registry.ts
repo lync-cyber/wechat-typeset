@@ -125,7 +125,7 @@ import noteAll from './note/_all'
 // R6：原 `./free/_all` 已搬到 components-lib（不是真正的容器骨架变体，
 // 是给组件库 UI 用的 snippet 源）。这里仅 import 以让 BUILTIN_COMPONENTS
 // 兼容旧 ComponentPalette 抽屉布局；新增 snippet 源去 components-lib 改。
-import freeAll from '../components-lib/builtin-snippets/_all'
+import freeAll from '../domain/components-lib/builtin-snippets/_all'
 
 function collectDefs(): AnyDef[] {
   return [

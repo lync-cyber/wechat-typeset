@@ -125,7 +125,7 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
  * 新增 styled 容器只需在 vocabulary.ts 追加一条 ContainerSpec 即可。
  * 名称保留是为了不惊动 conformance.spec.ts 和外部集成（capabilities.json）。
  */
-export { STYLE_KEY_TO_CONTAINER_NAME as SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../../containers/vocabulary'
+export { STYLE_KEY_TO_CONTAINER_NAME as SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../../core/vocabulary/vocabulary'
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'
 export { parseInfo, escAttr, escText } from './types'

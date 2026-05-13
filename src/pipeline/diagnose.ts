@@ -28,7 +28,7 @@
  *     规则实现沉到 zhTypo.ts，diagnose 只做翻译层。
  */
 
-import { CONTAINER_VOCABULARY, lookupContainerSpec } from '../containers/vocabulary'
+import { CONTAINER_VOCABULARY, lookupContainerSpec } from '../core/vocabulary/vocabulary'
 import { VARIANT_IDS } from '../themes/types'
 import { scanZhTypo, type ZhTypoCode } from './zhTypo'
 

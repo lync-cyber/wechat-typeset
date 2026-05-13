@@ -8,8 +8,8 @@
  */
 
 import type { ComponentEntry, ComponentKind } from './types'
-import type { VariantKind } from '../themes/types'
-import { BUILTIN_COMPONENTS as VARIANT_ENTRIES } from '../variants/registry'
+import type { VariantKind } from '../../themes/types'
+import { BUILTIN_COMPONENTS as VARIANT_ENTRIES } from '../../variants/registry'
 
 export const BUILTIN_COMPONENTS: ComponentEntry[] = VARIANT_ENTRIES.map((e) => ({
   source: 'builtin',

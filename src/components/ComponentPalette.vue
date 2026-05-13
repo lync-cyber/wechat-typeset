@@ -14,7 +14,7 @@ import {
   COMPONENT_TABS,
   type ComponentEntry,
   type ComponentKind,
-} from '../components-lib'
+} from '../domain/components-lib'
 import {
   createUserComponent,
   deleteUserComponent,
