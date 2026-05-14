@@ -8,6 +8,8 @@
  * 2.3（非破坏，向后兼容）：
  *   - 新增 selfUri / versionedSelfUri：jsDelivr 上的 canonical CDN URL，让下游
  *     在拿到 JSON 内容时也知道自己来自哪里
+ *   - 新增 coverUriPattern / coverUriPatternVersioned：og:image / 公众号封面占位
+ *     SVG 资源路径模板，下游凭 `{personaId}` 占位算具体 URL
  *
  * 2.2（非破坏，向后兼容）：
  *   - 新增 platforms[]：暴露已注册发布平台 adapter 与契约成熟度
@@ -131,6 +133,17 @@ interface CapabilitiesV2 {
   selfUri: string
   versionedSelfUri: string
   /**
+   * 封面占位 SVG 资源路径模板（与 selfUri 同 CDN，相同 ref 策略）。
+   *
+   *   coverUriPattern          @main 跟前沿
+   *   coverUriPatternVersioned @v{version} 钉版本
+   *
+   * 下游消费方用 `pattern.replace('{personaId}', id)` 算具体资源 URL。
+   * 自 schemaVersion 2.3 起新增（与 selfUri 同批）。
+   */
+  coverUriPattern: string
+  coverUriPatternVersioned: string
+  /**
    * 已注册的发布平台 adapter 摘要。
    *
    *   - id        与 render(input.platform) 接受的字符串一致
@@ -196,17 +209,27 @@ function parseGithubSlug(pkg: ReturnType<typeof pkgJson>): { owner: string; repo
 }
 
 const CAPABILITIES_REL_PATH = 'dist/api/capabilities.json'
+const COVERS_REL_DIR = 'dist/api/covers'
 
-function buildSelfUris(pkg: ReturnType<typeof pkgJson>): { selfUri: string; versionedSelfUri: string } {
+interface SelfUriBundle {
+  selfUri: string
+  versionedSelfUri: string
+  coverUriPattern: string
+  coverUriPatternVersioned: string
+}
+
+function buildSelfUris(pkg: ReturnType<typeof pkgJson>): SelfUriBundle {
   const slug = parseGithubSlug(pkg)
   if (!slug) {
     // 非 GitHub 部署：留空串而非编造一个不可达 URL；下游应据此回退到自己已知的来源
-    return { selfUri: '', versionedSelfUri: '' }
+    return { selfUri: '', versionedSelfUri: '', coverUriPattern: '', coverUriPatternVersioned: '' }
   }
   const base = `https://cdn.jsdelivr.net/gh/${slug.owner}/${slug.repo}`
   return {
     selfUri: `${base}@main/${CAPABILITIES_REL_PATH}`,
     versionedSelfUri: `${base}@v${pkg.version}/${CAPABILITIES_REL_PATH}`,
+    coverUriPattern: `${base}@main/${COVERS_REL_DIR}/{personaId}.svg`,
+    coverUriPatternVersioned: `${base}@v${pkg.version}/${COVERS_REL_DIR}/{personaId}.svg`,
   }
 }
 
@@ -287,7 +310,7 @@ function build(): CapabilitiesV2 {
     name: p.name,
     status: p.status,
   }))
-  const { selfUri, versionedSelfUri } = buildSelfUris(pkg)
+  const { selfUri, versionedSelfUri, coverUriPattern, coverUriPatternVersioned } = buildSelfUris(pkg)
   return {
     schemaVersion: '2.3',
     tool: {
@@ -332,6 +355,8 @@ function build(): CapabilitiesV2 {
     platforms,
     selfUri,
     versionedSelfUri,
+    coverUriPattern,
+    coverUriPatternVersioned,
     deprecations: [
       {
         // 字段命名误导：实际覆盖所有 styled 容器（intro / cover / author / ...），
