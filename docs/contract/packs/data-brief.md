@@ -23,7 +23,7 @@
 
 | 类 | 容器 | ★ | 一句话用途 |
 | --- | --- | :-: | --- |
-| 结构 | `masthead` | ★ | 刊头：刊名（info）左对齐 + 期号·日期 monospace 右对齐 + 下划线。data-brief 家族签名。 |
+| 结构 | `masthead` | ★ | 刊头：默认两栏（刊名左 + 期号·日期 monospace 右）；声明 attrs.kicker 切三栏 ribbon。 |
 |  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。 |
 |  | `toc` | ★ | 目录三栏（序号·标题·页码）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker（如 "目录 · CONTENTS"）。 |
 |  | `toc-item` |  | toc 内单条；info 为条目标题。body 内容会被忽略。 |

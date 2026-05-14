@@ -126,6 +126,10 @@
 你再不来，我要下雪了。
 :::
 
+::: quote-card BORGES, J.L. variant=tilted-sticker
+"凡我所是，皆因我读。"
+:::
+
 ---
 
 ## 对比卡 3 种 variant

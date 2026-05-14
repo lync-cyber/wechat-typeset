@@ -499,9 +499,12 @@ export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
       'margin-bottom': '8px',
     },
     // editor-note kicker 兜底：与 databrief/editorial.ts 旧版硬编码字节等价（primary 色
-    // 小字 + 粗体 + 0.1em letter-spacing + 下间距）。
-    // swiss-grid 主题深合并覆盖为"display:block + 黑底白字 + 负 margin 撑到 wrapper 边缘"，
-    // 实现 1958 Neue Grafik 编者按的全幅黑色 header-bar 形态。
+    // 小字 + 粗体 + 0.1em letter-spacing + 下间距）。R4 后由 ctx.innerStyles.editorNoteKicker
+    // 承接,主题作者可深合并覆盖：
+    //   - swiss-grid: "display:block + 黑底白字 + 负 margin 撑到 wrapper 边缘"——
+    //     1958 Neue Grafik 编者按的全幅黑色 header-bar 形态
+    //   - brutalist: 把 editor-note 整块涂 primary（荧光黄）后,kicker 覆盖为 textInverse
+    //     反色,避免 kicker 与 bg 同色不可见
     editorNoteKicker: {
       color: c.primary,
       'font-size': '11px',
