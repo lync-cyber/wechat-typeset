@@ -256,3 +256,72 @@ describe('signature containers（note / abstract / key-number / see-also）', ()
     expect(out).toMatch(/<a[^>]*href="https:\/\/example\.com\/a"/)
   })
 })
+
+describe('footnotes 条目切分（[N] 行 → 独立 <p>）', () => {
+  // 报刊脚注 baseContainers.footnotes 已带 padding-left:1.6em + text-indent:-1.6em
+  // 的 hanging indent；hanging indent 是块级属性，必须每条 `[N] …` 各自一段才生效。
+  // wx_footnotes_entry_split 把作者没留空行写的 `[1]\n[2]\n[3]…` 序列切成多 <p>。
+  it('多条 [N] 连写被切成独立 <p>', () => {
+    const out = run(
+      '::: footnotes\n' +
+      '[1]　覆盖 2010–2025，两年滑动窗口。\n' +
+      '[2]　深度理解得分取自 24h 回忆测试。\n' +
+      '[3]　n=1,024。\n' +
+      ':::\n',
+    )
+    expect(out).toMatch(/class="container-footnotes"/)
+    // 三个 <p> 各自承载一条
+    const ps = out.match(/<p[\s>]/g) ?? []
+    expect(ps.length).toBeGreaterThanOrEqual(3)
+    expect(out).toContain('[1]')
+    expect(out).toContain('[2]')
+    expect(out).toContain('[3]')
+    // 切分点的 softbreak 应被吃掉,不会再有 `[2]` 紧跟 `\n[1]` 这种残留
+    expect(out).not.toMatch(/\[1\][^<]*\n[\s]*\[2\]/)
+  })
+
+  it('单条目（无可切分点）保持单 <p>，不强行新增段落', () => {
+    const out = run(
+      '::: footnotes\n' +
+      '[1]　仅一条脚注内容。\n' +
+      ':::\n',
+    )
+    expect(out).toMatch(/class="container-footnotes"/)
+    const ps = out.match(/<p[\s>]/g) ?? []
+    expect(ps.length).toBe(1)
+  })
+
+  it('非 [N] 起始（如 ※ 引用）不被切分（editorial-mook 风）', () => {
+    const out = run(
+      '::: footnotes\n' +
+      '※　本文引述參見 帕慕克《別樣的色彩》。\n' +
+      ':::\n',
+    )
+    const ps = out.match(/<p[\s>]/g) ?? []
+    expect(ps.length).toBe(1)
+    expect(out).toContain('※')
+  })
+
+  it('容器外的 [N] 软换行不受影响', () => {
+    // 正文里 `[1]…\n[2]…` 应保留为单段（仅 footnotes 容器内才切）
+    const out = run('[1]　甲文。\n[2]　乙文。\n')
+    const ps = out.match(/<p[\s>]/g) ?? []
+    expect(ps.length).toBe(1)
+  })
+})
+
+describe('refs 容器 kicker（info-driven）', () => {
+  it('info 非空时渲染 kicker，使用 primary 色 + letter-spacing', () => {
+    const out = run('::: refs 参 考 文 献\n[1] 来源 A · [2] 来源 B\n:::\n')
+    expect(out).toMatch(/class="container-refs"/)
+    expect(out).toMatch(/class="container-refs__kicker"/)
+    expect(out).toContain('参 考 文 献')
+    expect(out).toMatch(/container-refs__kicker[^>]*letter-spacing/)
+  })
+
+  it('info 缺省时不渲染 kicker（向后兼容）', () => {
+    const out = run('::: refs\n[1] 来源 A · [2] 来源 B\n:::\n')
+    expect(out).toMatch(/class="container-refs"/)
+    expect(out).not.toMatch(/class="container-refs__kicker"/)
+  })
+})
