@@ -1,10 +1,16 @@
 /**
  * Preview iframe srcdoc 契约
  *
+ * - srcdoc 是**常量壳**：含空的 `.phone-viewport` 占位，但不嵌入 props.html
+ *   （props.html 走 innerHTML 注入路径，避免 srcdoc 变更触发 iframe 重建、
+ *    导致编辑时 scrollTop 归零、scroll listener 失效、闪屏）
  * - srcdoc 注入的 CSS 选择器必须**不**匹配 .markdown-body 或其子元素
  * - viewport meta 锁 375px
  * - .phone-viewport 固定 width:375px
- * - iframe 内容区的 HTML 与剪贴板 HTML 一字不差（保真）
+ * - sandbox 不含 allow-scripts
+ *
+ * 端到端"保真"（iframe 内容 === 剪贴板 HTML）由 playwright e2e 覆盖
+ * （tests/e2e/*），jsdom 不解析 srcdoc，单测层无法做这一步。
  */
 
 import { describe, it, expect } from 'vitest'
@@ -14,12 +20,16 @@ import Preview from '../../src/ui/components/Preview.vue'
 const SAMPLE = '<section class="markdown-body"><h1 style="color:red">Hello</h1><p style="margin:0">text</p></section>'
 
 describe('Preview iframe srcdoc', () => {
-  it('保真不变量：传入的 html 在 srcdoc 里一字不差', async () => {
+  it('srcdoc 是常量壳：含空 .phone-viewport 占位，不嵌入 props.html', async () => {
     const { root, unmount } = await mount(Preview, { html: SAMPLE })
     const iframe = root.querySelector('iframe') as HTMLIFrameElement
     expect(iframe).toBeTruthy()
     const srcdoc = iframe.getAttribute('srcdoc') ?? ''
-    expect(srcdoc).toContain(SAMPLE)
+    // 必须含有空占位（注入点）
+    expect(srcdoc).toMatch(/<div class="phone-viewport"><\/div>/)
+    // 不得包含 props.html 内容——否则每次 props.html 变更都会重建 iframe
+    expect(srcdoc).not.toContain(SAMPLE)
+    expect(srcdoc).not.toContain('<h1')
     unmount()
   })
 
