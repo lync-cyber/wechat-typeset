@@ -12,6 +12,7 @@ import type { SectionTitleVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './types'
 import { SECTION_TITLE_VARIANTS } from '../../variants/registry'
+import { resolveVariantId } from './_shared/resolveVariant'
 
 export const introContainer: ContainerRenderer = {
   open: (ctx) => {
@@ -73,18 +74,15 @@ export const authorContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
-function resolveSectionTitleVariantId(ctx: ContainerRenderContext): SectionTitleVariantId {
-  const override = ctx.attrs.variant
-  if (override && override in SECTION_TITLE_VARIANTS) {
-    return override as SectionTitleVariantId
-  }
-  return ctx.variants.sectionTitle ?? 'bordered'
-}
-
 export const sectionTitleContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim()
-    const id = resolveSectionTitleVariantId(ctx)
+    const id = resolveVariantId<SectionTitleVariantId>(
+      ctx,
+      'sectionTitle',
+      SECTION_TITLE_VARIANTS,
+      'bordered',
+    )
     const result = SECTION_TITLE_VARIANTS[id].render(ctx)
     const parts: string[] = []
     parts.push(`<section class="container-section-title container-section-title--${id}" style="${result.wrapperCSS}">`)

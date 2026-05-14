@@ -15,7 +15,7 @@ import {
   patchSvgIds,
   patchFlexToFallback,
   patchSvgWhiteBg,
-} from '../../src/core/pipeline/wxPatch'
+} from '../../src/core/pipeline/platforms/wechat'
 
 describe('patchListWrap', () => {
   it('ul/ol 被包一层 section，并带上 data-wx-list-wrap', () => {

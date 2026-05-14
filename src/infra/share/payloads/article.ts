@@ -23,6 +23,7 @@ import {
   type BuildShareUrlOptions,
   type ShareCodec,
 } from '../codec'
+import { isRecord } from '../_utils'
 
 const ARTICLE_VERSION = 1
 const ARTICLE_PREFIX = 'share='
@@ -36,10 +37,6 @@ export interface SharePayloadArticle {
   themeId: string
   /** 编码时被剥离的内联图数量；接收侧据此提示读者。可选——历史链接无此字段 */
   strippedImages?: number
-}
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null && !Array.isArray(v)
 }
 
 /**

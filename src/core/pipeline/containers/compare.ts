@@ -17,22 +17,15 @@
  */
 
 import type { CompareVariantId } from '../../themes/types'
-import type { ContainerRenderer, ContainerRenderContext } from './types'
+import type { ContainerRenderer } from './types'
 import type { CompareRenderArgs } from '../../variants/_core'
 import { COMPARE_VARIANTS } from '../../variants/registry'
 import { makeVariantContainer } from './_shared/makeVariantContainer'
-
-function resolveVariantId(ctx: ContainerRenderContext): CompareVariantId {
-  const override = ctx.attrs.variant
-  if (override && override in COMPARE_VARIANTS) {
-    return override as CompareVariantId
-  }
-  return ctx.variants.compare ?? 'column-card'
-}
+import { resolveVariantId } from './_shared/resolveVariant'
 
 export const compareContainer: ContainerRenderer = {
   open: (ctx) => {
-    const id = resolveVariantId(ctx)
+    const id = resolveVariantId<CompareVariantId>(ctx, 'compare', COMPARE_VARIANTS, 'column-card')
     const result = COMPARE_VARIANTS[id].render(ctx, { slot: 'wrapper' })
     return `<section class="container-compare container-compare--${id}" style="${result.wrapperCSS}">\n`
   },

@@ -19,6 +19,7 @@ import type { PatchLog } from './platforms/types'
 import { DEFAULT_PLATFORM_ID, getPlatform } from './platforms/registry'
 import { CODE_BLOCK_VARIANTS } from '../variants/registry'
 import { parseInfo } from './containers'
+import { ROOT_CLASS } from './constants'
 
 export interface RenderInput {
   md: string
@@ -45,8 +46,6 @@ export interface RenderOutput {
    */
   patchLog: PatchLog
 }
-
-const ROOT_CLASS = 'markdown-body'
 
 /**
  * 按 theme.id 缓存 MarkdownIt 实例。

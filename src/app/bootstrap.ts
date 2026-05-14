@@ -17,14 +17,12 @@
 import { onBeforeUnmount, onMounted, watch, type Ref, type ComputedRef } from 'vue'
 import { baseThemeId, editorWidth, md } from './state'
 import { safeRead, safeWrite } from '../infra/storage/_kv'
+import { THEME_STORAGE_KEY, EDITOR_WIDTH_STORAGE_KEY } from '../infra/storage/storageKeys'
 import { useUiTheme } from './uiTheme'
 import {
   peekComponentShareHash,
   tryImportComponentFromHash,
 } from '../infra/share/payloads/componentImport'
-
-const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
-const EDITOR_WIDTH_STORAGE_KEY = 'wechat-typeset:editor-width'
 
 export interface BootstrapDeps {
   activeDraftId: Ref<string | null>

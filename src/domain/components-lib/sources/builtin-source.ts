@@ -1,9 +1,13 @@
 /**
- * Builtin 组件源 —— 把 core/variants 的 def.snippets 摊平为面板可消费的 ComponentEntry[]。
+ * Builtin 组件源 —— 把容器 variant 的 def.snippets + 自由组件 snippet
+ * 摊平为面板可消费的 ComponentEntry[]。
  *
  * P0 重构（R8 后）把这部分从 `core/variants/registry.ts` 搬过来：
  *   - core 只负责"variant 定义 + 运行时 render 派发表"
  *   - 面板/snippet 顺序、kebab presetId、ComponentEntry 形态等"展示资产"归 domain
+ *
+ * R7-A 重构：自由组件源（freeAll）改在本文件 import，与 ALL_VARIANT_DEFS 合并为
+ * ALL_DEFS_FOR_PANEL。core/variants/registry 不再反向 import domain 资产。
  *
  * 新增 builtin snippet 源（kind:'none' 的自由组件）：到 `../builtin-snippets/_all.ts` 追加。
  * 调整 snippet 在 UI 的展示顺序：改本文件的 ORDER_BY_KIND。
@@ -11,7 +15,17 @@
 
 import type { AnyVariantDef } from '../../../core/variants/registry'
 import { ALL_VARIANT_DEFS } from '../../../core/variants/registry'
+import freeAll from '../builtin-snippets/_all'
 import type { BuiltinEntry, ComponentKind } from '../types'
+
+/**
+ * 面板派生用的"全部 def 视图"：core 容器 variants + domain 自由组件 snippet。
+ * 与 ALL_VARIANT_DEFS（仅 core）区分；后者只供反向 sanity 守卫使用。
+ */
+const ALL_DEFS_FOR_PANEL: ReadonlyArray<AnyVariantDef> = [
+  ...ALL_VARIANT_DEFS,
+  ...(freeAll as unknown as AnyVariantDef[]),
+]
 
 // ─────────────────────────────────────────────────────────────
 // 展示顺序（snippet 在面板 tab 内的左→右顺序）
@@ -75,7 +89,7 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
 }
 
 function orderedDefsByKind(kind: ComponentKind): AnyVariantDef[] {
-  const bucket = ALL_VARIANT_DEFS.filter((d) => d.meta.kind === kind)
+  const bucket = ALL_DEFS_FOR_PANEL.filter((d) => d.meta.kind === kind)
   const byId = new Map(bucket.map((d) => [d.meta.id, d]))
   const order = ORDER_BY_KIND[kind]
   const ordered: AnyVariantDef[] = []

@@ -20,14 +20,14 @@ import { CONTAINER_NAMES } from '../../src/core/vocabulary/vocabulary'
 import { themeList } from '../../src/core/themes'
 
 describe('反向注册:实现 → 声明', () => {
-  it('每个 ALL_VARIANT_DEFS 条目的 (kind, id) 都在 VARIANT_IDS 内(kind=none 例外)', () => {
+  it('每个 ALL_VARIANT_DEFS 条目的 (kind, id) 都在 VARIANT_IDS 内', () => {
+    // R7-A 后:ALL_VARIANT_DEFS 已不含 kind='none' 的自由组件,无需例外分支。
+    // 自由组件守卫由 component-lib.spec.ts 的 BUILTIN_COMPONENTS 测试承担。
     const orphans: Array<{ kind: string; id: string }> = []
     for (const def of ALL_VARIANT_DEFS) {
       const kind = def.meta.kind
-      // kind:'none' 是自由组件(非 variant),不进 VARIANT_IDS
-      if (kind === 'none') continue
-      const declared = VARIANT_IDS[kind as VariantKind] as readonly string[]
-      if (!declared.includes(def.meta.id)) {
+      const declared = VARIANT_IDS[kind as VariantKind] as readonly string[] | undefined
+      if (!declared || !declared.includes(def.meta.id)) {
         orphans.push({ kind, id: def.meta.id })
       }
     }

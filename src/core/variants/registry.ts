@@ -10,11 +10,13 @@
  *   - ADMONITION_VARIANTS / QUOTE_VARIANTS / COMPARE_VARIANTS / STEPS_VARIANTS /
  *     DIVIDER_VARIANTS / SECTION_TITLE_VARIANTS / NOTE_VARIANTS —— `pipeline/containers/*.ts` 按 id 分派 render
  *   - CODE_BLOCK_VARIANTS —— signature 异质，独立桶
- *   - ALL_VARIANT_DEFS —— 全部 def 的扁平数组，供 domain/components-lib 派生 BUILTIN_COMPONENTS
+ *   - ALL_VARIANT_DEFS —— 全部容器骨架 variant def 的扁平数组（**不含** kind='none' 的
+ *     自由组件 snippet）；自由组件 snippet 的源在 domain 层 builtin-source.ts 自行合并。
  *
- * P0 重构：BUILTIN_COMPONENTS / BuiltinEntry / 面板顺序常量搬到
- * `src/domain/components-lib/sources/builtin-source.ts`——
- * core 只暴露 def 集合，UI 资产由 domain 层派生。
+ * R7-A 重构：删除对 `domain/components-lib/builtin-snippets` 的反向 import——
+ * core 不再感知 domain 层的 free snippet 资产。BUILTIN_COMPONENTS / BuiltinEntry /
+ * 面板顺序常量在 `src/domain/components-lib/sources/builtin-source.ts` 维护，
+ * 该文件自己合并 ALL_VARIANT_DEFS + freeAll 后派生面板条目。
  *
  * 顺序：各 kind 的 `*_ORDER` 常量决定运行时表的稳定迭代顺序（影响快照），未列出的按 id 字典序追加。
  *
@@ -85,12 +87,8 @@ const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'gly
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
-// kind:'none' 是 components-lib/builtin-snippets 的自由组件（非容器骨架变体）。
-// 这里只用做 ALL_VARIANT_DEFS 的占位收集，不进任何 *_VARIANTS render 表；
-// 面板展示顺序由 domain/components-lib/sources/builtin-source.ts 维护。
-const NONE_ORDER: readonly string[] = []
 
-const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
+const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
   quote: QUOTE_ORDER,
   compare: COMPARE_ORDER,
@@ -99,7 +97,6 @@ const ORDER_BY_KIND: Record<VariantKind | 'none', readonly string[]> = {
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
-  none: NONE_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -121,10 +118,6 @@ import dividerAll from './divider/_all'
 import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
-// kind:'none' 的自由组件 snippet 源（不是容器骨架变体，无 render）；
-// 跟 variant defs 一起收进 ALL_VARIANT_DEFS，供 domain 层派生面板条目。
-// 新增 snippet 源在 components-lib/builtin-snippets/_all.ts 追加。
-import freeAll from '../../domain/components-lib/builtin-snippets/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -136,11 +129,10 @@ function collectDefs(): AnyDef[] {
     ...sectionTitleAll,
     ...codeBlockAll,
     ...noteAll,
-    ...freeAll,
   ] as unknown as AnyDef[]
 }
 
-function orderedByKind(defs: AnyDef[], kind: VariantKind | 'none'): AnyDef[] {
+function orderedByKind(defs: AnyDef[], kind: VariantKind): AnyDef[] {
   const bucket = defs.filter((d) => d.meta.kind === kind)
   const byId = new Map(bucket.map((d) => [d.meta.id, d]))
   const order = ORDER_BY_KIND[kind]
@@ -160,10 +152,12 @@ function orderedByKind(defs: AnyDef[], kind: VariantKind | 'none'): AnyDef[] {
 const ALL_DEFS = collectDefs()
 
 /**
- * 全部 variant def 的扁平只读视图。
+ * 全部容器骨架 variant def 的扁平只读视图。
  *
- * domain/components-lib/sources/builtin-source.ts 用它派生面板 ComponentEntry[]；
- * 反向 sanity 测试也用它扫描"实现进来但未在 VARIANT_IDS 声明"的漏网 variant。
+ * **不含** kind='none' 的自由组件 snippet——free 资产由 domain 层
+ * builtin-source.ts 自己 import freeAll 后与本数组合并。
+ *
+ * 反向 sanity 测试用它扫描"实现进来但未在 VARIANT_IDS 声明"的漏网 variant。
  * core 内部仍走 *_VARIANTS Record 表，不直接迭代 ALL_VARIANT_DEFS。
  */
 export const ALL_VARIANT_DEFS: ReadonlyArray<AnyVariantDef> = ALL_DEFS

@@ -17,10 +17,9 @@
 import { watch, type Ref } from 'vue'
 import { baseThemeId, customTheme, lastSeed, md } from './state'
 import { safeWrite } from '../infra/storage/_kv'
+import { THEME_STORAGE_KEY } from '../infra/storage/storageKeys'
 import { SAMPLE_BY_THEME, getSample } from '../domain/samples'
 import { updateDraft } from '../infra/storage/drafts'
-
-const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
 
 function persistThemeId(val: string) {
   safeWrite(THEME_STORAGE_KEY, val)

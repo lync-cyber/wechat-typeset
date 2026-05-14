@@ -14,8 +14,7 @@ import {
   FORBIDDEN_VALUE_PATTERNS,
 } from './rules'
 import { STYLED_CONTAINERS } from '../vocabulary/vocabulary'
-
-const ROOT_CLASS = 'markdown-body'
+import { ROOT_CLASS } from './constants'
 
 type Selector = string
 
