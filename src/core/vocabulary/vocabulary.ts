@@ -385,8 +385,28 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'qrcode',
     category: 'media',
     fenceLength: 3,
-    description: '二维码块（图 + 说明文案）。',
-    example: '::: qrcode\n![](qr.png)\n扫码关注\n:::\n',
+    attrs: [
+      {
+        key: 'text',
+        description:
+          '内置 QR 编码器的目标文本（URL / 任意字符串）。提供时容器内联生成 SVG，' +
+          '主色 fg 取主题 text，bg 取主题 bg；不提供则正文图片或说明文字作为占位。',
+        example: 'https://mp.weixin.qq.com/s/xxx',
+      },
+      {
+        key: 'ecc',
+        description: '纠错等级（L/M/Q/H）。默认 M（约 15% 容错；扫码可靠性与码大小折中）',
+        enum: ['L', 'M', 'Q', 'H'],
+      },
+      {
+        key: 'size',
+        description: 'SVG 像素尺寸（width=height）。未提供则按 viewBox + CSS 缩放。',
+        example: '160',
+      },
+    ],
+    description:
+      '二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。',
+    example: '::: qrcode text="https://mp.weixin.qq.com/s/xxx"\n扫码关注\n:::\n',
   },
   {
     name: 'mpvoice',
