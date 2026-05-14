@@ -690,7 +690,7 @@ VOL.IV · 2026—04—22 · CHF 14.—
 # 在无人深夜，重新学习如何阅读一本书
 `,
     authorBar: `::: author
-撰文 **李翊云**　·　编辑 **沈帆**　·　SET **04·2026**
+撰文 **顾留白**　·　编辑 **徐稍后读**　·　SET **04·2026**
 :::
 `,
     footerCTA: `::: cta-bar like="♡  LIKE" star="◎  SEEN" share="→  SHARE"

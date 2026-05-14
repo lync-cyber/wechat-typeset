@@ -586,7 +586,7 @@ export const spec: PersonaSpec = {
 # 在无人深夜，重新学习如何阅读一本书
 `,
     authorBar: `::: author
-撰文 **李翊云**　编辑 **沈帆**
+撰文 **罗向量**　编辑 **陈栈桥**
 :::
 `,
     footerCTA: `::: footer-cta
