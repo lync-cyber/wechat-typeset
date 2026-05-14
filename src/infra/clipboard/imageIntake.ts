@@ -187,8 +187,42 @@ export interface UploadImagesOptions extends ImageUploadOptions {
   totalBudgetBytes?: number
 }
 
+// ============================================================
+// 模块级 provider 单例（fork 注入点）
+// ============================================================
+
+/**
+ * 当前注册的 provider。模块级单例，初始值是 base64Provider。
+ *
+ * fork / 私有部署在启动早期（建议 main.ts 顶部、createApp() 之前）调用
+ * `setImageProvider(...)` 把自家上传后端塞进来。主仓所有图片上传调用方都
+ * 经由 `uploadImages(...)` 而它会读取这个单例——一处注入，全应用生效。
+ */
+let currentProvider: ImageProvider = base64Provider
+
+/**
+ * 替换当前 provider。返回值为上一个 provider，方便测试或临时切换后还原。
+ *
+ * 不持久化到 storage：provider 在代码层注入，避免把后端密钥拉进 localStorage；
+ * 切换 provider 是部署级决策，不是用户偏好。
+ */
+export function setImageProvider(p: ImageProvider): ImageProvider {
+  const prev = currentProvider
+  currentProvider = p
+  return prev
+}
+
+/** 当前 provider 的只读引用；UI 想显示"当前用什么后端"时读 .name。 */
+export function getImageProvider(): ImageProvider {
+  return currentProvider
+}
+
 /**
  * 把 File 数组走 provider 上传，产出一串可直接插入编辑器的 markdown `![alt](src)`。
+ *
+ * provider 缺省时使用 `getImageProvider()`（默认 base64Provider，fork 可在启动期
+ * 用 setImageProvider 覆盖）。显式传入仍然支持——测试需要 mock provider、或同一
+ * 进程内对不同上传源做差异化处理时用。
  *
  * 逐个串行上传：保留文件顺序；单个失败不阻断余下项，只在结果里留一行注释。
  * 返回一个多行字符串，行间用 `\n\n` 分隔（markdown 段落间距）。
@@ -198,7 +232,7 @@ export interface UploadImagesOptions extends ImageUploadOptions {
  */
 export async function uploadImages(
   files: readonly File[],
-  provider: ImageProvider = base64Provider,
+  provider: ImageProvider = currentProvider,
   opts?: UploadImagesOptions,
 ): Promise<string> {
   const totalBudget = opts?.totalBudgetBytes ?? DEFAULT_TOTAL_BUDGET_BYTES

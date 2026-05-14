@@ -6,10 +6,13 @@
  * 因此所有涉及 DOM 绘图的 case 走 mockProvider 绕过。
  */
 
-import { describe, it, expect } from 'vitest'
+import { afterEach, describe, it, expect } from 'vitest'
 import {
   uploadImages,
   isImageFile,
+  setImageProvider,
+  getImageProvider,
+  base64Provider,
   type ImageProvider,
   DEFAULT_TARGET_BYTES,
   DEFAULT_TOTAL_BUDGET_BYTES,
@@ -178,5 +181,50 @@ describe('uploadImages · 总量闸门', () => {
   it('默认值常量合理：单图 200KB / 总量 4MB', () => {
     expect(DEFAULT_TARGET_BYTES).toBe(200_000)
     expect(DEFAULT_TOTAL_BUDGET_BYTES).toBe(4_000_000)
+  })
+})
+
+describe('setImageProvider · 模块级注入点', () => {
+  afterEach(() => {
+    // 还原为默认，避免污染相邻测试
+    setImageProvider(base64Provider)
+  })
+
+  it('默认 provider 是 base64Provider', () => {
+    expect(getImageProvider()).toBe(base64Provider)
+    expect(getImageProvider().name).toBe('base64')
+  })
+
+  it('setImageProvider 返回上一个 provider（便于还原）', () => {
+    const fork: ImageProvider = { name: 'fork', async upload(f) { return `cdn:${f.name}` } }
+    const prev = setImageProvider(fork)
+    expect(prev).toBe(base64Provider)
+    expect(getImageProvider()).toBe(fork)
+    const back = setImageProvider(prev)
+    expect(back).toBe(fork)
+  })
+
+  it('uploadImages 不传 provider 时走当前单例', async () => {
+    const trace: string[] = []
+    const fork: ImageProvider = {
+      name: 'trace',
+      async upload(f) {
+        trace.push(f.name)
+        return `cdn:${f.name}`
+      },
+    }
+    setImageProvider(fork)
+    const md = await uploadImages([makeFile('a.png', 'image/png')])
+    expect(trace).toEqual(['a.png'])
+    expect(md).toContain('![a](cdn:a.png)')
+  })
+
+  it('uploadImages 显式传 provider 时优先于单例', async () => {
+    const fork: ImageProvider = { name: 'fork', async upload() { return 'cdn:fork' } }
+    const explicit: ImageProvider = { name: 'explicit', async upload() { return 'cdn:explicit' } }
+    setImageProvider(fork)
+    const md = await uploadImages([makeFile('a.png', 'image/png')], explicit)
+    expect(md).toContain('cdn:explicit')
+    expect(md).not.toContain('cdn:fork')
   })
 })
