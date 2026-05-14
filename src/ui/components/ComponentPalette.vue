@@ -28,6 +28,16 @@ import {
 import { useUserComponents } from '../../domain/components-lib/useUserComponents'
 import type { Theme } from '../../core/themes/types'
 import { BUILTIN_COMPONENTS } from '../../domain/components-lib/registry'
+import {
+  exportUserComponentsJSON,
+  importUserComponentsJSON,
+} from '../../infra/storage/userComponents.transfer'
+import { downloadBlob } from '../../infra/exporters/exportFile'
+import { buildUrl } from '../../infra/share/codec'
+import {
+  componentCodec,
+  wrapComponentSnapshot,
+} from '../../infra/share/payloads/component'
 import PanelHeader from '../primitives/PanelHeader.vue'
 import ComponentGrid, { type GridAction } from './ComponentGrid.vue'
 import SaveSelectionDialog from './SaveSelectionDialog.vue'
@@ -78,10 +88,22 @@ const currentList = computed<ComponentEntry[]>(() => {
 })
 
 const gridActions = computed<GridAction[]>(() => {
-  if (activeTab.value === 'user') return ['edit', 'delete']
+  if (activeTab.value === 'user') return ['edit', 'share', 'delete']
   // builtin / theme template:派生入口
   return ['derive']
 })
+
+// 短暂状态提示（导出 / 导入 / 分享 链接复制完毕）
+const transientStatus = ref<string>('')
+let statusTimer: number | null = null
+function pingStatus(msg: string, ms = 2000) {
+  transientStatus.value = msg
+  if (statusTimer != null) window.clearTimeout(statusTimer)
+  statusTimer = window.setTimeout(() => {
+    transientStatus.value = ''
+    statusTimer = null
+  }, ms)
+}
 
 function onCellSelect(entry: ComponentEntry) {
   emit('insert', entry.markdownSnippet)
@@ -102,6 +124,68 @@ function onCellAction(payload: { kind: GridAction; entry: ComponentEntry }) {
   if (kind === 'derive') {
     studioInit.value = { mode: 'derive', source: entry }
     mode.value = 'studio'
+    return
+  }
+  if (kind === 'share') {
+    void shareEntry(entry)
+  }
+}
+
+async function shareEntry(entry: ComponentEntry) {
+  const wrapped = wrapComponentSnapshot({
+    id: entry.id,
+    name: entry.name,
+    description: entry.description,
+    kind: entry.kind,
+    variantId: entry.variantId,
+    markdownSnippet: entry.markdownSnippet,
+    thumbnailSvg: entry.thumbnailSvg,
+  })
+  const url = buildUrl(componentCodec, wrapped)
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url)
+      pingStatus('已复制分享链接')
+    } else {
+      // 降级：直接把 hash 写到当前地址（用户从地址栏复制）
+      location.hash = url.slice(url.indexOf('#'))
+      pingStatus('请从地址栏复制当前链接', 3000)
+    }
+  } catch {
+    pingStatus('分享失败：剪贴板权限不足', 3000)
+  }
+}
+
+// 导出 / 导入
+function exportAll() {
+  const json = exportUserComponentsJSON()
+  const filename = `wechat-typeset-components-${new Date().toISOString().slice(0, 10)}.json`
+  downloadBlob(filename, json, 'application/json')
+  pingStatus('已导出组件库 JSON')
+}
+
+const importInputRef = ref<HTMLInputElement | null>(null)
+function pickImport() {
+  importInputRef.value?.click()
+}
+
+async function onImportFile(ev: Event) {
+  const input = ev.target as HTMLInputElement
+  const file = input.files?.[0]
+  // 选完文件先重置 value，让同名文件再次选时能触发 change
+  input.value = ''
+  if (!file) return
+  try {
+    const text = await file.text()
+    const added = importUserComponentsJSON(text)
+    if (added > 0) {
+      userMgr.refresh()
+      pingStatus(`已导入 ${added} 个组件`)
+    } else {
+      pingStatus('未导入：文件为空或重复', 2500)
+    }
+  } catch {
+    pingStatus('导入失败：文件读取错误', 2500)
   }
 }
 
@@ -224,6 +308,19 @@ defineExpose({ openSaveDialog })
         </button>
       </nav>
 
+      <div v-if="activeTab === 'user'" class="user-toolbar">
+        <button class="tool-btn" title="导出我的组件为 JSON" @click="exportAll">↓ 导出</button>
+        <button class="tool-btn" title="从 JSON 文件导入组件" @click="pickImport">↑ 导入</button>
+        <input
+          ref="importInputRef"
+          type="file"
+          accept="application/json,.json"
+          class="hidden-input"
+          @change="onImportFile"
+        />
+        <span v-if="transientStatus" class="tool-status">{{ transientStatus }}</span>
+      </div>
+
       <div class="body">
         <div v-if="currentList.length === 0" class="empty">
           <template v-if="activeTab === 'template'">
@@ -327,6 +424,34 @@ defineExpose({ openSaveDialog })
 }
 .empty-title { color: var(--text); font-weight: var(--fw-medium); margin-bottom: 4px; }
 .empty-hint { color: var(--text-muted); }
+
+.user-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.tool-btn {
+  font: inherit;
+  font-size: var(--fs-12);
+  height: 22px;
+  padding: 0 var(--sp-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  color: var(--text);
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.tool-btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.tool-status {
+  margin-left: auto;
+  font-size: var(--fs-11);
+  color: var(--text-muted);
+}
+.hidden-input { display: none; }
 
 @media (max-width: 767px) {
   .head-action { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }

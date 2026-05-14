@@ -13,7 +13,7 @@
  */
 import type { ComponentEntry } from '../../domain/components-lib'
 
-export type GridAction = 'delete' | 'edit' | 'derive'
+export type GridAction = 'delete' | 'edit' | 'derive' | 'share'
 
 defineProps<{
   entries: ReadonlyArray<ComponentEntry>
@@ -53,11 +53,12 @@ function triggerAction(kind: GridAction, entry: ComponentEntry, ev: Event) {
           :key="kind"
           class="cell-action"
           :class="`cell-action--${kind}`"
-          :title="kind === 'delete' ? '删除' : kind === 'edit' ? '编辑' : '派生为我的组件'"
+          :title="kind === 'delete' ? '删除' : kind === 'edit' ? '编辑' : kind === 'share' ? '复制分享链接' : '派生为我的组件'"
           @click="triggerAction(kind, entry, $event)"
         >
           <template v-if="kind === 'delete'">×</template>
           <template v-else-if="kind === 'edit'">✎</template>
+          <template v-else-if="kind === 'share'">↗</template>
           <template v-else>+</template>
         </button>
       </span>
@@ -115,6 +116,7 @@ function triggerAction(kind: GridAction, entry: ComponentEntry, ev: Event) {
 .cell-action--delete { background: var(--danger); }
 .cell-action--edit   { background: var(--text-muted); }
 .cell-action--derive { background: var(--accent); }
+.cell-action--share  { background: var(--text-muted); }
 
 @media (max-width: 767px) {
   .cell-action { width: 28px; height: 28px; font-size: var(--fs-15); }
