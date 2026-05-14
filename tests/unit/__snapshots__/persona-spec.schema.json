@@ -7512,7 +7512,8 @@
             "bubble-organic",
             "magazine-pull",
             "report-section",
-            "news-row"
+            "news-row",
+            "mook-tag"
           ]
         },
         "quote": {
@@ -7644,9 +7645,10 @@
                   "arabic",
                   "arabic-padded",
                   "arabic-section",
-                  "arabic-section-padded"
+                  "arabic-section-padded",
+                  "circled"
                 ],
-                "description": "按出现顺序自动生成编号（与 pattern 二选一）；per-render 重置。 roman/arabic/arabic-padded 是 level-local 单计数器； arabic-section / arabic-section-padded 是复合编号 `${h2}.${h3InH2}`， 主要用于 level 3 子节。"
+                "description": "按出现顺序自动生成编号（与 pattern 二选一）；per-render 重置。 roman/arabic/arabic-padded 是 level-local 单计数器； arabic-section / arabic-section-padded 是复合编号 `${h2}.${h3InH2}`， 主要用于 level 3 子节。 circled → ❶/❷/❸…⓴（>20 退化 (N)），mook / 杂志感章节签名常用。"
               },
               "style": {
                 "type": "object",
@@ -7690,6 +7692,21 @@
                   },
                   "underlinePad": {
                     "type": "number"
+                  },
+                  "display": {
+                    "enum": [
+                      "inline",
+                      "block"
+                    ],
+                    "description": "装饰 span 显示模式。 inline（默认）→ display:inline-block,编号与标题同行； block → display:block,编号自成 kicker 行,标题文字换行落于下行。"
+                  },
+                  "marginBottom": {
+                    "type": "number",
+                    "description": "display='block' 时编号与下方标题文字的间距 px,缺省 6。"
+                  },
+                  "suffix": {
+                    "type": "string",
+                    "description": "编号后追加的字面量。占位符: {n} → autoNumber 输出值(如 \"❶\" / \"1\")； {cn} → 中文数字 一/二/三…二十(>20 退化阿拉伯数字)。 典型: \"  第{cn}章\" 与 autoNumber:\"circled\" 组合产出 \"❶  第一章\"。"
                   }
                 },
                 "additionalProperties": false

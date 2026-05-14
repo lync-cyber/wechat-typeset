@@ -25,6 +25,7 @@ import bubbleOrganic from './bubble-organic'
 import magazinePull from './magazine-pull'
 import reportSection from './report-section'
 import newsRow from './news-row'
+import mookTag from './mook-tag'
 
 export default [
   accentBar,
@@ -44,4 +45,5 @@ export default [
   magazinePull,
   reportSection,
   newsRow,
+  mookTag,
 ]

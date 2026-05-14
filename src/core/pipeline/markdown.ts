@@ -238,12 +238,19 @@ function resolveColor(key: HeadingPrefixDecoration['style']['color'], colors: Th
 
 function decorationCss(style: HeadingPrefixDecoration['style'], colors: ThemeTokens['colors']): string {
   const color = resolveColor(style.color, colors)
-  const parts: string[] = ['display:inline-block', `color:${color}`]
+  // display='block' → kicker 自成一行,marginBottom 提供与下方标题文字的垂直间距；
+  // display='inline'(默认) → 与现状一致,marginRight 控制横向间距。
+  const isBlock = style.display === 'block'
+  const parts: string[] = [`display:${isBlock ? 'block' : 'inline-block'}`, `color:${color}`]
   if (style.fontFamily === 'monospace') parts.push('font-family:Menlo,Monaco,monospace')
   if (style.fontWeight) parts.push(`font-weight:${style.fontWeight}`)
   if (style.fontSize) parts.push(`font-size:${style.fontSize}px`)
   if (style.letterSpacing) parts.push(`letter-spacing:${style.letterSpacing}px`)
-  parts.push(`margin-right:${style.marginRight ?? 8}px`)
+  if (isBlock) {
+    parts.push(`margin-bottom:${style.marginBottom ?? 6}px`)
+  } else {
+    parts.push(`margin-right:${style.marginRight ?? 8}px`)
+  }
   if (style.underline) {
     parts.push(`border-bottom:1px solid ${color}`)
     parts.push(`padding-bottom:${style.underlinePad ?? 2}px`)
@@ -259,6 +266,24 @@ interface HeadingCounters {
 }
 
 type AutoNumberKind = NonNullable<HeadingPrefixDecoration['autoNumber']>
+
+/**
+ * Unicode 圆圈数字 1–20。>20 退化为 `(N)` 字符串，避免主题作者意外触发缺字 tofu。
+ * 来源：U+2776–U+277F（黑圈反白 1–10）+ U+24EB–U+24F4（黑圈反白 11–20）。
+ *
+ * 为什么不用 U+2460–U+2473（白圈黑字 ①②③）：mook / POPEYE 设计稿用的是实心圆背景版本
+ * （❶❷❸），与"米卡纸底 + 朱橙 accent"的视觉签名一致；白圈版在暖底上对比不足。
+ */
+const CIRCLED_NUMERALS: readonly string[] = [
+  '❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿',
+  '⓫', '⓬', '⓭', '⓮', '⓯', '⓰', '⓱', '⓲', '⓳', '⓴',
+]
+
+/** 中文小写数字 1–20。>20 退化为阿拉伯数字。用于 suffix `{cn}` 占位符。 */
+const CHINESE_NUMERALS: readonly string[] = [
+  '一', '二', '三', '四', '五', '六', '七', '八', '九', '十',
+  '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+]
 
 function formatAutoNumber(
   kind: AutoNumberKind,
@@ -276,7 +301,18 @@ function formatAutoNumber(
   const n = level === 2 ? counters.h2 : counters.h3
   if (kind === 'roman') return toRoman(n)
   if (kind === 'arabic-padded') return String(n).padStart(2, '0')
+  if (kind === 'circled') return CIRCLED_NUMERALS[n - 1] ?? `(${n})`
   return String(n)
+}
+
+/**
+ * suffix 占位符替换：`{n}` → autoNumber 输出本身，`{cn}` → 中文数字。
+ * 占位符未匹配时原样保留；未来扩占位符（如 `{N}` 大写罗马）只需在此追加分支。
+ */
+function substituteSuffix(suffix: string, formattedN: string, rawIndex: number): string {
+  return suffix
+    .replace(/\{cn\}/g, CHINESE_NUMERALS[rawIndex - 1] ?? String(rawIndex))
+    .replace(/\{n\}/g, formattedN)
 }
 
 function applyHeadingPrefixDecorations(md: MarkdownIt, theme: Theme): void {
@@ -358,8 +394,13 @@ function applyOneHeadingDecoration(
   if (d.autoNumber) {
     // autoNumber 不消费文本，直接在最前面插一个 html_inline
     const text = formatAutoNumber(d.autoNumber, counters, level)
+    // suffix 取本级 raw 计数（h2 用 h2 计数,h3 用 h3 计数）做 {cn} 等占位替换。
+    // 这里 rawIndex 与 formatAutoNumber 内部读的 n 同源（除复合编号外）；
+    // 复合编号场景下 suffix `{cn}` 退化为本级 raw 计数,语义清晰。
+    const rawIndex = level === 2 ? counters.h2 : counters.h3
+    const suffix = d.style.suffix ? substituteSuffix(d.style.suffix, text, rawIndex) : ''
     const span = new Token('html_inline', '', 0)
-    span.content = `<span class="heading-prefix heading-prefix--autonumber" style="${css}">${text}</span>`
+    span.content = `<span class="heading-prefix heading-prefix--autonumber" style="${css}">${text}${suffix}</span>`
     children.splice(0, 0, span)
     return
   }

@@ -23,6 +23,7 @@ import { literaryHumanismTheme } from './literary-humanism'
 import { industryObserverTheme } from './industry-observer'
 import { peopleStoryTheme } from './people-story'
 import { academicFrontierTheme } from './academic-frontier'
+import { editorialMookTheme } from './editorial-mook'
 
 /**
  * 主题展示顺序。与 import 顺序解耦：改这里不影响 import 列表，反之亦然。
@@ -39,6 +40,7 @@ const DISPLAY_ORDER: readonly string[] = [
   'industry-observer',
   'people-story',
   'academic-frontier',
+  'editorial-mook',
 ]
 
 const ALL_THEMES: Theme[] = [
@@ -52,6 +54,7 @@ const ALL_THEMES: Theme[] = [
   industryObserverTheme,
   peopleStoryTheme,
   academicFrontierTheme,
+  editorialMookTheme,
 ]
 
 function collect(): Record<string, Theme> {

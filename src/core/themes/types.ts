@@ -318,6 +318,9 @@ export type AdmonitionVariantId =
   | 'report-section'
   // 数据简报单行：左 3px 色条 + 实色徽章 + 紧凑单行正文（data-brief 专属）
   | 'news-row'
+  // 编集附注 単字：参 / 編 / 注 / 禁 单字 CJK 标签 + 米卡纸底 + 主色左条
+  // （editorial-mook 专属；POPEYE / BRUTUS 系编集所附注的母语形态）
+  | 'mook-tag'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -441,6 +444,7 @@ export const VARIANT_IDS = {
     'magazine-pull',
     'report-section',
     'news-row',
+    'mook-tag',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
@@ -526,6 +530,8 @@ export interface HeadingPrefixDecoration {
    *   - `arabic-section`       → `${h2}.${h3InH2}`（只对 level 3 有意义；每遇到
    *                              新的 h2 时 h3InH2 重置回 1）
    *   - `arabic-section-padded` → `01.1` / `01.2` …（h2 段号零填充两位）
+   *   - `circled`              → ❶/❷/❸…⓴（Unicode 圆圈数字 1–20；>20 退化为
+   *                              `(N)` 字符回退）。mook / 杂志感的章节签名常用此种。
    * 复合编号在 level 2 上等价于 arabic（h3InH2 退化为 0），不建议在 level 2 使用。
    */
   autoNumber?:
@@ -534,6 +540,7 @@ export interface HeadingPrefixDecoration {
     | 'arabic-padded'
     | 'arabic-section'
     | 'arabic-section-padded'
+    | 'circled'
   /** 装饰样式（声明式 token 引用）。 */
   style: {
     color: PaletteColorKey
@@ -544,12 +551,35 @@ export interface HeadingPrefixDecoration {
     fontSize?: number
     /** 字距 px；缺省 0 */
     letterSpacing?: number
-    /** 与后续标题文字的间距 px；缺省 8 */
+    /** 与后续标题文字的间距 px；缺省 8（仅 display='inline' 生效） */
     marginRight?: number
     /** 是否在装饰前缀下方画一道短下划线（颜色取自 color 字段） */
     underline?: boolean
     /** underline=true 时下划线相对基线的下沉距离 px；缺省 2 */
     underlinePad?: number
+    /**
+     * 装饰 span 的显示模式：
+     *   - `'inline'`（默认）→ `display:inline-block`，编号与标题文字同一行
+     *   - `'block'`         → `display:block`，编号自成一行变成"kicker"，标题文字换行落到
+     *                          下一行（mook / POPEYE / BRUTUS 系刊物风：`❶ 第一章` 上行
+     *                          + 章节标题在下行）
+     * 默认 'inline'，保持现有主题（data-brief / people-story）渲染一致。
+     */
+    display?: 'inline' | 'block'
+    /**
+     * `display='block'` 时编号 span 与下方标题文字的间距 px；缺省 6。
+     * `display='inline'` 时忽略本字段（横向间距走 marginRight）。
+     */
+    marginBottom?: number
+    /**
+     * 装饰文字后缀（仅 autoNumber 生效；pattern 模式忽略）。
+     * 支持两种占位符替换：
+     *   - `{n}`  → autoNumber 输出值原样（如 'circled' 时是 "❶"、'arabic' 时是 "1"）
+     *   - `{cn}` → 中文小写数字 一/二/三…二十（>20 退化为阿拉伯数字字符串）
+     * 典型用法：`'  第{cn}章'` 与 `autoNumber:'circled'` 搭配,产出"❶  第一章"kicker。
+     * 缺省 = 不追加后缀。
+     */
+    suffix?: string
   }
 }
 

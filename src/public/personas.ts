@@ -18,6 +18,7 @@ import { spec as literaryHumanismSpec } from '../core/themes/literary-humanism/p
 import { spec as industryObserverSpec } from '../core/themes/industry-observer/persona.spec'
 import { spec as peopleStorySpec } from '../core/themes/people-story/persona.spec'
 import { spec as academicFrontierSpec } from '../core/themes/academic-frontier/persona.spec'
+import { spec as editorialMookSpec } from '../core/themes/editorial-mook/persona.spec'
 import type { PersonaSpec } from '../core/themes/_shared/spec'
 
 /**
@@ -35,6 +36,7 @@ export const PERSONA_SPECS: readonly PersonaSpec[] = [
   industryObserverSpec,
   peopleStorySpec,
   academicFrontierSpec,
+  editorialMookSpec,
 ]
 
 export const PERSONA_REGISTRY: Readonly<Record<string, PersonaSpec>> = Object.freeze(

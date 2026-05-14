@@ -71,6 +71,7 @@ const ADMONITION_ORDER: readonly string[] = [
   'magazine-pull',
   'report-section',
   'news-row',
+  'mook-tag',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
