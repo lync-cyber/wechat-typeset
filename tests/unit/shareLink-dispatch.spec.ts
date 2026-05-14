@@ -90,8 +90,8 @@ describe('wrapComponentSnapshot · 丢弃非契约字段', () => {
     } as unknown as typeof sampleSnapshot
     const wrapped = wrapComponentSnapshot(dirty)
     expect(wrapped.component).toEqual(sampleSnapshot)
-    expect((wrapped.component as Record<string, unknown>).__secretToken).toBeUndefined()
-    expect((wrapped.component as Record<string, unknown>).createdAt).toBeUndefined()
+    expect((wrapped.component as unknown as Record<string, unknown>).__secretToken).toBeUndefined()
+    expect((wrapped.component as unknown as Record<string, unknown>).createdAt).toBeUndefined()
   })
 
   it('variantId 可选；undefined 保留为 undefined', () => {
