@@ -17,6 +17,7 @@ import type {
   ThemeElements,
   ThemeInline,
   ThemeInnerStyles,
+  ThemeKickers,
   ThemeTemplates,
   ThemeVariants,
 } from '../../types'
@@ -346,6 +347,17 @@ export interface PersonaSpec {
   motifs: MotifSpec
   /** 骨架变体选择（ThemeVariants 同构） */
   variants: ThemeVariants
+  /**
+   * Renderer 默认 kicker 文案的主题级覆盖（Partial<ThemeKickers>）。
+   *
+   * R10 引入：把 renderer 里硬编码的可见文案（"读者问答 · Q&A" / "编 者 按" /
+   * "SUBSCRIBE" / "下 期" 等）的主题级母语化通道。声明的 key 会覆盖
+   * DEFAULT_KICKERS 同名 key，作者侧 markdown 不写 info 即可拿到主题母语 kicker。
+   *
+   * 作者随时可单稿覆盖：`::: qa-block 这次特别 kicker q="..."` 仍走 info 优先。
+   * 详见 `ThemeKickers` 注释（src/core/themes/types.ts）。
+   */
+  kickers?: Partial<ThemeKickers>
   /**
    * 参数化 SVG 资产工厂的形状变体。spec-first 主路径不消费此字段（assets 由 motifs
    * 直接渲染）；它的唯一作用是给 applyPalette 在用户自定义配色路径上提供 fallback 工厂。

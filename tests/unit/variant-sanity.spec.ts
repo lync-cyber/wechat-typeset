@@ -190,6 +190,7 @@ describe('枚举完整性', () => {
       'editorial-mook',
       'swiss-grid',
       'brutalist',
+      'late-night-vinyl',
     ])
   })
 })

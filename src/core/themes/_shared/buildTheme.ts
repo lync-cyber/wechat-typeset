@@ -32,11 +32,12 @@ import type {
   ThemeElements,
   ThemeInline,
   ThemeInnerStyles,
+  ThemeKickers,
   ThemeTemplates,
   ThemeTokens,
   ThemeVariants,
 } from '../types'
-import { DEFAULT_VARIANTS } from '../types'
+import { DEFAULT_KICKERS, DEFAULT_VARIANTS } from '../types'
 import { buildAssets } from './svgAssets'
 
 /**
@@ -104,6 +105,11 @@ export interface BuildThemeOptions {
    * Partial 支持"只换一项骨架" —— 比如某主题想 admonition 走 terminal、其余默认。
    */
   variants?: Partial<ThemeVariants>
+  /**
+   * Renderer 默认 kicker 文案的主题级覆盖。未声明时用 DEFAULT_KICKERS。
+   * Partial 支持"只换一项" —— 比如某主题只想覆盖 qaBlock kicker、其余保持默认。
+   */
+  kickers?: Partial<ThemeKickers>
   /**
    * 声明式装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉等）走这里——
    * R8 后 `ThemeBehavior` 接口已删除, decorations 是唯一承载点。
@@ -565,6 +571,7 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     assets = (opts.assets ?? {}) as ThemeAssets
   }
   const variants: ThemeVariants = { ...DEFAULT_VARIANTS, ...(opts.variants ?? {}) }
+  const kickers: ThemeKickers = { ...DEFAULT_KICKERS, ...(opts.kickers ?? {}) }
   return {
     id: opts.id,
     name: opts.name,
@@ -579,6 +586,7 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     templates: opts.templates ?? {},
     inline,
     variants,
+    kickers,
     // Theme.svgVariant 透传：
     //   - applyPalette 路径走 opts.variant（既触发工厂又写到 Theme）
     //   - spec-to-theme 路径走 opts.svgVariant（仅写到 Theme,不触发工厂——assets 已由 motifs 渲染）
