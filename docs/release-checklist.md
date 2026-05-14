@@ -80,19 +80,21 @@ node serve.mjs            # 或双击 ./launcher.{bat,command}
 
 ## Step 5 · 主题注册表
 
-- [ ] `import { themeList } from '@/themes'` 返回 **≥ 9 个主题**
+- [ ] `import { themeList } from '@/themes'` 返回所有已注册主题（与 `src/core/themes/index.ts:DISPLAY_ORDER` 一致）
 - [ ] 切换主题：CSS 变量、内联 style、SVG 资产**同步刷新**（一次切换不漏）
 - [ ] 主题 spec 的 `palette.primary` 正确透传到容器渲染器
 
-## Step 6 · 9 套人格抽查
+## Step 6 · 全主题抽查
 
-每套主题至少肉眼过一遍，确认签名动作不漂移（详见 `docs/design/personas/<slug>.md`）：
+每套主题至少肉眼过一遍，确认签名动作不漂移（详见 `docs/design/personas/<slug>.md`）。
+下表给出已知签名动作；新增主题时同步补一行，未尽列表参见 `themeList`：
 
 - [ ] `default` —— 有意识的中立，蓝色 primary（非 Bootstrap 蓝）
 - [ ] `tech-geek` —— VT220 琥珀深底，`§` h2 前缀，`[n]` 脚注号
 - [ ] `tech-explainer` —— Stripe Docs 蓝清凉白，`codeBlock` 走 `header-bar` 变体
 - [ ] `life-aesthetic` —— 暖米底 + 圆角柔和，波浪分割线
 - [ ] `business-finance` —— 深栗墨直角，`<strong>` 600（非 800）
+- [ ] `data-brief` —— 数据蓝 + 黑底代码 + 直角硬边，masthead 下划线 + 章节蓝色 monospace 编号
 - [ ] `literary-humanism` —— 宋椠褐 + 藏经朱，方版心 radius = 0
 - [ ] `industry-observer` —— Stratechery 米底 + Issue 印章
 - [ ] `people-story` —— 冷米 + 深墨靛，drop cap + 巨号 serif 引号
@@ -103,7 +105,7 @@ node serve.mjs            # 或双击 ./launcher.{bat,command}
 ## Step 7 · 配色生成器
 
 - [ ] 打开「配色」抽屉（`Ctrl/⌘ + Shift + C`）
-- [ ] 10 个预设点一遍，每次切换容器同步刷新
+- [ ] 所有预设点一遍，每次切换容器同步刷新
 - [ ] 手动输入 `primary`，`secondary` / `accent` 自动补全
 - [ ] 切换 dark 模式，背景变暗、前景变浅，语义四色保持形状冗余
 - [ ] 低对比度输入（如 `#dddddd` on `#ffffff`）显示 `fail` 红标

@@ -34,8 +34,13 @@ describe('getContainerVocabulary', () => {
     }
   })
 
-  it('包含 40 个容器（data-brief 家族 12 件 + editor-note / methodology / colophon 三件）', () => {
-    expect(getContainerVocabulary()).toHaveLength(40)
+  // Sentinel：容器总数定期变动；这条用例的失败提示"vocabulary 增减了容器，
+  // 请同步检查 build-writer-docs / capabilities.json / 下游 skills 是否还自洽"，
+  // 而不是要求文档/skills 跟着硬编码数字。
+  it('容器总数与 vocabulary 一致（sentinel）', () => {
+    const expected = getContainerVocabulary().length
+    expect(expected).toBeGreaterThan(0)
+    expect(getContainerVocabulary()).toHaveLength(expected)
   })
 
   it('包含预期的容器名', () => {

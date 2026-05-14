@@ -1,4 +1,4 @@
-# 9 套内置 Persona 速查（共享 reference）
+# 内置 Persona 速查（共享 reference）
 
 > author-persona / annotate-markdown 两个 skill 通过 `../_shared/references/personas.md` 相对路径共同引用本文件，零副本零同步。改本文件 = 两个 skill 同时生效。
 >

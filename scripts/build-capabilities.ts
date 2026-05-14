@@ -237,7 +237,17 @@ function build(): CapabilitiesV2 {
       forbidPosition: FORBIDDEN_CSS_PROPS.includes('position'),
       forbidMediaQueries: true,
     },
-    deprecations: [],
+    deprecations: [
+      {
+        // 字段命名误导：实际覆盖所有 styled 容器（intro / cover / author / ...），
+        // 而非仅 signature 容器。下游已可从 containers[].id 直接读到 markdown fence 名，
+        // 无需中间 camelCase→kebab 映射；保留字段仅为 v2.x 兼容。
+        id: 'signatureContainerMarkdownNames',
+        sinceVersion: '2.1',
+        replacement: '改用 containers[].id 作为 markdown fence 名权威源；signatureContainerIds 仅给"是否签名"分类信号。',
+        removalPlannedIn: '3.0',
+      },
+    ],
     personaSchemaUri: '../schema/persona-spec.schema.json',
     docs: {
       writerContract: 'docs/contract/README.md',

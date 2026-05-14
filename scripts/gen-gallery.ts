@@ -2,7 +2,7 @@
 /**
  * 生成 docs/generated/personas-spec-gallery.html。
  *
- * 读取 src/core/themes/*\/persona.spec.ts 里的 9 份 spec，按目录名排序后投射为单文件 HTML。
+ * 读取 src/core/themes/*\/persona.spec.ts 里的全部 spec，按目录名排序后投射为单文件 HTML。
  * 输出路径固定，drift 检查在 tests/gallery-generator.spec.ts 用 toMatchFileSnapshot。
  */
 

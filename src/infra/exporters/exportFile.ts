@@ -1,9 +1,10 @@
 /**
- * 导出工具（Step 8）
+ * 三导出：HTML / Markdown / 长图
  *
- * - exportHtml: 下载 .html 文件（内含完整 inline 样式 + 主题背景 wrapper）
- * - exportMd: 下载 .md 文件（容器源文本原样）
- * - exportImage: 懒加载 html2canvas 把目标节点截成 long-image
+ * - exportHtml: 下载 .html 文件（内含 inline 样式 + 主题背景 wrapper）
+ * - exportMd:   下载 .md 文件（容器源文本原样，不再二次序列化）
+ * - exportImage: 懒加载 html2canvas 截目标节点为 PNG 长图，背景色优先取 hint，
+ *   其次 getComputedStyle，最终回退 #ffffff
  */
 
 export function downloadBlob(filename: string, text: string, mime: string): void {

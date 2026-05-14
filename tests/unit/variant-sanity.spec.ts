@@ -175,7 +175,7 @@ describe('枚举完整性', () => {
     expect([...VARIANT_IDS.codeBlock]).toEqual(['bare', 'header-bar'])
   })
 
-  it('10 套主题都进入矩阵（含 data-brief）', () => {
+  it('全部已注册主题都进入矩阵', () => {
     expect(themeList.map((t) => t.id)).toEqual([
       'default',
       'tech-geek',

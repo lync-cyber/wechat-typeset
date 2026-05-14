@@ -13,7 +13,7 @@ description: 将原始 Markdown 改写成满足 wechat-typeset 写作契约的 M
 
 - 用户给一段 / 一篇 markdown，**没**用 `:::` 容器，希望"加排版块"或"按公众号格式"改写
 - 用户问"这段写成 tip 还是 highlight"、"这种内容用哪个容器"
-- 用户说"挑一套合适的 persona"——先用 `recommend-persona.ts`，复用现有 9 套不够再转 `wechat-typeset-author-persona`
+- 用户说"挑一套合适的 persona"——先用 `recommend-persona.ts`，复用内置主题不够再转 `wechat-typeset-author-persona`
 - 用户已经写完文章，要在公众号发，但还在普通 markdown 状态
 
 不要用本 skill：
@@ -196,19 +196,19 @@ issues 全部修完再交付——**不要把 lint 失败的 md 交给 export-ri
 | 模板 | 用途 |
 | --- | --- |
 | `templates/article-skeleton.md` | intro / cover / author / section-title / body / footer-cta 全骨架 |
-| `templates/snippets/` | 25 个容器的最小 example（由 build 脚本从 vocabulary.ts 派生） |
+| `templates/snippets/` | 各容器的最小 example（由 build 脚本从 vocabulary.ts 派生） |
 
 ## 相关参考
 
 共享 references（三个 skill 共用同一份权威源，通过相对路径软链）：
 
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
-- [../_shared/references/personas.md](../_shared/references/personas.md) · 9 套内置 persona 速查
+- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单（用于排查 lint 失败原因）
 - [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md) · Motif AST 完整字段（少数情况 annotator 会接触）
 
 独家 references（本 skill 专属）：
 
 - [references/annotation-recipes.md](references/annotation-recipes.md) · 10 个典型段落 → 推荐容器的对照例子
-- [references/inline-extensions.md](references/inline-extensions.md) · 5 个行内扩展的判定规则
+- [references/inline-extensions.md](references/inline-extensions.md) · 行内扩展的判定规则
 - [references/persona-selection.md](references/persona-selection.md) · persona 选型决策树详细版

@@ -1,12 +1,14 @@
 /**
- * 剪贴板写入（Step 1 版：execCommand 降级占位）
+ * 剪贴板写入：富文本（text/html）+ 纯文本（text/plain）双写
  *
- * Step 8 将完整实现：
- *   - Clipboard API：同时写 text/html 和 text/plain
- *   - Safari 兼容：同步路径内构造 ClipboardItem，Blob 作为 Promise 传入
- *   - 非 secure context / 权限被拒 → 自动降级 execCommand
- *
- * Step 1 只保证：点击复制能把富文本写入剪贴板（尽力而为）。
+ * 路径：
+ *   1. Clipboard API（首选）—— 仅在 secure context + ClipboardItem 可用时尝试。
+ *      Safari 要求 ClipboardItem 的 value 是 Blob 或 Promise<Blob>，且必须处在
+ *      用户手势同步栈顶——传 `Promise.resolve(blob)` 让 Safari 把异步 Blob 准备
+ *      视为合法手势内写入，而非"越过手势窗口"。
+ *   2. execCommand('copy') 降级 —— 非 secure context / 权限被拒 / API 抛错时走
+ *      隐藏 contenteditable 节点 + Selection 路径。这条路径在没有 HTTPS 的本地
+ *      file:// 与公司内网 http 部署里仍是唯一可用方案。
  */
 
 export interface CopyResult {

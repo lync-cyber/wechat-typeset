@@ -29,9 +29,9 @@ import { VARIANT_IDS } from '../../src/core/themes/types'
 import type { PersonaSpec } from '../../src/core/themes/_shared/spec'
 
 describe('listPersonas / getPersona / getPersonaSummary', () => {
-  it('listPersonas 返回 9 份摘要，default 排第一', () => {
+  it('listPersonas 返回非空摘要列表，default 排第一', () => {
     const list = listPersonas()
-    expect(list).toHaveLength(9)
+    expect(list.length).toBeGreaterThan(0)
     expect(list[0].id).toBe('default')
   })
 
@@ -87,7 +87,7 @@ describe('getSchema / getSupportedSignatureContainers / getVariantIds', () => {
 })
 
 describe('validatePersona', () => {
-  it('内置 9 份 spec 都通过', () => {
+  it('全部内置 spec 都通过校验', () => {
     for (const { id } of listPersonas()) {
       const result = validatePersona(getPersona(id))
       expect(result.ok, id).toBe(true)

@@ -1,10 +1,11 @@
 /**
  * 渲染管线主入口
  *
- * pipeline(md, theme, codeTheme) -> html
+ * 流水线：markdown-it（容器 + 行内扩展）→ themeCSS 注入 → highlight 替换 fence
+ * → juice 内联 style → wxPatch DOM 后处理 → 最终 HTML。
  *
- * Step 1 实现：markdown-it → themeCSS → highlight → juice → 最终 HTML
- * Step 3 起：juice 之后插入 wxPatch DOM 后处理层；Step 4 接入容器渲染器。
+ * inspectPatchTargets 必须在 applyWxPatches 之前调用：patches 幂等，应用一次后
+ * 计数会归零，会让"渲染透明度面板"看不到改动列表。
  */
 
 import type MarkdownIt from 'markdown-it'
@@ -104,8 +105,7 @@ export function render(input: RenderInput): RenderOutput {
 
   const inlined = inlineHtml(htmlWithStyle)
 
-  // Step 3：DOM 后处理层，抹平公众号粘贴的诸多坑
-  // inspect 必须在 applyWxPatches 之前：patches 幂等，应用后计数会归零
+  // wxPatch 后处理层；inspect 必须在 applyWxPatches 之前——见模块头注释
   const patchLog = inspectPatchTargets(inlined)
   const finalHtml = applyWxPatches(inlined, input.wxPatch)
 

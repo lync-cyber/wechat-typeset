@@ -1,7 +1,7 @@
 # Persona Cookbook · 4 套常见话题的 spec 骨架
 
 > 不是给"复用"用——这些骨架是**起点**，LLM 应该在上面调 palette、motif、variants 直到满足用户具体需求。
-> 想直接复用 9 套内置主题，参考 [../references/personas.md](../references/personas.md)。
+> 想直接复用内置主题，参考 [../references/personas.md](../references/personas.md)。
 
 ## 1. 夜行技术（dark · 暗琥珀字 + 墨炭暖底）
 

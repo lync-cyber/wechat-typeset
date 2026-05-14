@@ -1,6 +1,6 @@
 ---
 name: wechat-typeset-export-richtext
-description: 将满足 wechat-typeset 写作契约的 Markdown 渲染并导出为可直接粘贴到微信公众号编辑器的富文本 HTML。内置 9 套 persona 即选即用，也支持自定义 PersonaSpec。当用户说"渲染出来""导出公众号""一键复制""生成最终 HTML""给我成品""粘到公众号""跑 wxPatch""比较几套主题哪个更好"时使用。渲染管线自动处理微信硬约束（剥 font-family / 替换 SVG #fff → #fefefe / flex 降级 block 等），写作者无需手工修。
+description: 将满足 wechat-typeset 写作契约的 Markdown 渲染并导出为可直接粘贴到微信公众号编辑器的富文本 HTML。内置多套 persona 即选即用，也支持自定义 PersonaSpec。当用户说"渲染出来""导出公众号""一键复制""生成最终 HTML""给我成品""粘到公众号""跑 wxPatch""比较几套主题哪个更好"时使用。渲染管线自动处理微信硬约束（剥 font-family / 替换 SVG #fff → #fefefe / flex 降级 block 等），写作者无需手工修。
 ---
 
 # wechat-typeset · 渲染导出
@@ -79,7 +79,7 @@ tsx skills/wechat-typeset-export-richtext/scripts/render-gallery.ts \
 - 用户写完一篇文章，不知道哪套 persona 更合气质
 - 给客户提交 3 套备选
 
-不指定 `--personas` 时默认渲染全 9 套。
+不指定 `--personas` 时默认渲染全部已注册主题。
 
 ### Step 4 · 复制到公众号
 

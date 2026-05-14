@@ -29,7 +29,7 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 ## 提 PR 前的自检清单
 
 - [ ] `npm run build` 无报错（含 `vue-tsc --noEmit`）
-- [ ] `npm test` 全绿（vitest + sample-full 端到端 34/34）
+- [ ] `npm test` 全绿（vitest + sample-full 端到端）
 - [ ] 提交信息用 Conventional Commits（`feat: ...` / `fix: ...` / `refactor: ...` / `docs: ...`）
 - [ ] 不引入任何新网络请求（analytics / 远程字体 / 远程模板一律禁止）
 - [ ] 不引入新依赖，除非能用等量代码替换掉更重的现有依赖
@@ -41,6 +41,19 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 - **预览=剪贴板**：左侧预览与复制出去的 HTML 必须是同一份——不要引入"预览看起来好、粘贴后塌"的分支逻辑。
 - **本地 only**：不加登录 / 不加后端 / 不加配额。草稿必须 100% 在 `localStorage` 里。
 - **启动路径**：`127.0.0.1` 和 `localhost` 必须走通（secure context 约束）；`file://` 协议可以放弃。
+
+## 已知未完成模块（欢迎认领）
+
+下列坑位是项目内部已识别但尚未投入的工作。外部贡献者可领其一开 PR——开始前请先建 issue 对齐方案，避免与维护者并行做同一件事。
+
+- **`src/core/pipeline/highlight.ts` · 主题感知代码块配色**
+  当前 fence 代码块的高亮 CSS 固定为 Atom One Dark。期望：让代码块配色跟随当前主题的 `codeBlock` variant（例如 `header-bar` 走文档蓝、`bare` 走主题中性色），与主题 palette 联动。约束：粘贴到公众号后仍需通过 `wxPatch` 校验（不引入 `font-family` / `position` 等被禁用属性）。
+
+- **`src/core/pipeline/highlight.ts` · 按需动态 import 更多语言**
+  当前在模块顶层注册了少量常用语言（详见文件 `hljs.registerLanguage` 列表）。期望：未声明 lang 的 fence 走 `escapeHtml`，但当 fence info 声明已知语言时按需 `import('highlight.js/lib/languages/xxx')`。约束：保持 SSR / Node 端 e2e（`tests/verify-sample-full.ts`）可跑——不要把 import 放在模块顶层。
+
+- **`src/infra/exporters/exportFile.ts` · 长图导出体验**
+  `exportImage` 当前的稳定项是单页 PNG。已知问题：超长正文在 iOS Safari 上 html2canvas 输出会因 canvas 高度上限被截断。期望：检测节点高度超 16384px 时切分多段导出，或在 UI 上提前提示作者。约束：保持懒加载（`await import('html2canvas')`）以免主 bundle 膨胀。
 
 ## 文档索引
 

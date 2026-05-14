@@ -21,7 +21,7 @@ interface PersonaSpec {
   signatureContainers: readonly SignatureContainerId[]   // 承诺渲染的签名容器
   // 可选：
   elements?: ThemeElements    // h1-h6 / p / a / ul / ol / code / blockquote 等基础元素样式补丁
-  containers?: ThemeContainers // 25 个容器的样式补丁（每键 CSSObject 或 StylePatch）
+  containers?: ThemeContainers // 各容器的样式补丁（每键 CSSObject 或 StylePatch；键集见 vocabulary.ts 的 STYLED_CONTAINERS）
   inline?: ThemeInline        // mark / del / ins / 着重点 / 波浪 行内样式补丁
   innerStyles?: ThemeInnerStyles
   templates?: ThemeTemplates  // commonTemplates 覆盖（advanced）

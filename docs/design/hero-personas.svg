@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="wechat-typeset 九套主题人格色板总览">
-  <title>wechat-typeset · 9 Theme Personas</title>
-  <desc>每张小卡片是一套主题的缩影：主色 / 背景 / 正文 / 提示块 / 强调色。九张并排展示每套人格的视觉差异。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="wechat-typeset 主题人格色板总览">
+  <title>wechat-typeset · Theme Personas</title>
+  <desc>每张小卡片是一套主题的缩影：主色 / 背景 / 正文 / 提示块 / 强调色。并排展示各套人格的视觉差异。</desc>
 
   <!-- Backdrop -->
   <rect x="0" y="0" width="1200" height="360" fill="#fdfcf8"/>
 
   <!-- Title -->
-  <text x="600" y="36" text-anchor="middle" font-family="Georgia, 'Noto Serif SC', serif" font-size="20" fill="#2c2a22" font-weight="600">wechat-typeset · 九套主题人格</text>
+  <text x="600" y="36" text-anchor="middle" font-family="Georgia, 'Noto Serif SC', serif" font-size="20" fill="#2c2a22" font-weight="600">wechat-typeset · 主题人格</text>
   <text x="600" y="58" text-anchor="middle" font-family="-apple-system, 'PingFang SC', sans-serif" font-size="12" fill="#636870">每套人格自带一整组色板、字距、motif——切换主题不是换色，是换一种读者关系</text>
 
   <!-- ============ Card 1 · default ============ -->

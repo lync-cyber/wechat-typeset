@@ -132,6 +132,24 @@ function splice(
   return `${before}\n\n${generated}\n\n${after}`
 }
 
+/**
+ * 比较与写入的行尾归一化：
+ *
+ * 仓库以 LF 提交，但 Windows 检出（autocrlf=true）会把工作区的换行写成 CRLF。
+ * 脚本 lines.join('\n') 永远是 LF，朴素字符串相等会让 Windows 开发者本地永久报漂移，
+ * 即使内容完全一致。CI（Linux）则不会触发——这种"本地伪阳性"是最容易被开发者
+ * 学会忽略的告警，从而真正的漂移也会被一起忽略，所以必须修。
+ *
+ * 策略：比较时把双方都归一化为 LF；写入时复用源文件原始换行风格（CRLF/LF）。
+ */
+function detectEol(source: string): '\r\n' | '\n' {
+  return source.includes('\r\n') ? '\r\n' : '\n'
+}
+
+function normalizeEol(source: string): string {
+  return source.replace(/\r\n/g, '\n')
+}
+
 function main() {
   const isCheck = process.argv.includes('--check')
   let allUpToDate = true
@@ -142,7 +160,7 @@ function main() {
     const current = readFileSync(target.docPath, 'utf8')
     const next = splice(current, packId, renderPackTable(packId), target.docPath)
 
-    if (current === next) continue
+    if (normalizeEol(current) === normalizeEol(next)) continue
     allUpToDate = false
 
     if (isCheck) {
@@ -150,7 +168,9 @@ function main() {
       continue
     }
 
-    writeFileSync(target.docPath, next, 'utf8')
+    const eol = detectEol(current)
+    const out = eol === '\r\n' ? next.replace(/\r?\n/g, '\r\n') : next
+    writeFileSync(target.docPath, out, 'utf8')
     process.stdout.write(`[build-writer-docs] ${target.docPath} updated ✓\n`)
   }
 

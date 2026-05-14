@@ -6,7 +6,7 @@
 [![node](https://img.shields.io/badge/node-%3E%3D24-2a1a14.svg)](package.json)
 
 <p align="center">
-  <img src="docs/design/hero-personas.svg" alt="wechat-typeset 九套主题预览：从极客夜行到慢生活，每套主题自带配色、字距与装饰风格" width="100%"/>
+  <img src="docs/design/hero-personas.svg" alt="wechat-typeset 主题预览：从极客夜行到慢生活，每套主题自带配色、字距与装饰风格" width="100%"/>
 </p>
 
 **[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** — 无需安装，浏览器打开即用。
@@ -34,6 +34,7 @@
 | **文档白昼** | 清爽白底·等宽 | 教程、产品说明、手把手跟做 |
 | **慢生活** | 暖米·圆角·叶片装饰 | 饮食、旅行、生活记录 |
 | **硬核财经** | 深栗墨·内参蓝·直角 | 行业分析、财经报道 |
+| **数据简报** | 数据蓝·黑底代码·直角 | 数据 newsletter、季度复盘、刊物化深度文 |
 | **人文札记** | 古籍朱红·方版心 | 散文、书评、长评 |
 | **行业观察** | 米底·Issue 印章 | 行业周刊、观点文章 |
 | **人物特稿** | 冷米·深墨靛·巨号引号 | 人物故事、深度报道 |

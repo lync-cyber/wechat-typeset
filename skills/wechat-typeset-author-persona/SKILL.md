@@ -14,7 +14,7 @@ description: 设计并创建 wechat-typeset 的组件样式——色板、字号
 - 用户描述视觉气质（"暖米底圆角"、"VT220 琥珀字"、"杂志感首字下沉"、"newsletter 期号印章"）
 - 用户要从现有主题派生（"在 default 基础上换主色"、"tech-explainer 但代码块要更花"）
 - 用户要造装饰元素（h2 前缀图标、分隔线 motif、步骤徽章、印章）
-- 用户问"应该选哪套主题"——先用 [`scripts/recommend-from-prompt.ts`](scripts/recommend-from-prompt.ts) 看是否能复用内置 9 套，**不能复用再造新的**
+- 用户问"应该选哪套主题"——先用 [`scripts/recommend-from-prompt.ts`](scripts/recommend-from-prompt.ts) 看是否能复用内置主题，**不能复用再造新的**
 
 不要用本 skill：
 
@@ -50,7 +50,7 @@ Task Progress:
 
 1. **强匹配**（受众 + 视觉参照都对上）→ 直接 `wechat-typeset-export-richtext` 用内置 id，本 skill 退出
 2. **改色板/换骨架就够**（受众对、palette 不对）→ 走 [派生现有主题](#派生现有主题) 路径
-3. **气质全新**（参照锚点和现有 9 套都拉不上）→ 走 [全新造主题](#全新造主题) 路径
+3. **气质全新**（参照锚点和现有内置主题都拉不上）→ 走 [全新造主题](#全新造主题) 路径
 
 ### Step 3 · 生成 spec JSON
 
@@ -181,7 +181,7 @@ LLM 经常凭设计稿习惯写 `fontSize: 12` 或 `strokeWidth: 0.5`——硬�
 
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束完整清单
 - [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md) · Motif AST 完整字段
-- [../_shared/references/personas.md](../_shared/references/personas.md) · 9 套内置 persona 速查
+- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查
 
 独家 references（本 skill 专属）：
 
