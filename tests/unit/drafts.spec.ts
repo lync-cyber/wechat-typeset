@@ -7,11 +7,12 @@
  *  - deriveTitle 从首个非空行（或首个 # 标题）抽取
  */
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   createDraft,
   deleteDraft,
   deriveTitle,
+  DRAFT_STORAGE_PREFIX,
   exportDraftsJSON,
   getActiveDraftId,
   importDraftsJSON,
@@ -111,6 +112,49 @@ describe('tags · 持久化与往返', () => {
     createDraft({ title: '1', body: 'x', tags: ['vue', 'alpha'] })
     createDraft({ title: '2', body: 'x', tags: ['vue', 'beta'] })
     expect(listAllTags()).toEqual(['alpha', 'beta', 'vue'])
+  })
+})
+
+describe('updateDraft 失败感知（R7-B）', () => {
+  it('成功时返回 true', () => {
+    const d = createDraft({ title: 'A', body: 'x' })
+    expect(updateDraft(d.id, { body: 'y' })).toBe(true)
+  })
+
+  it('id 不存在时返回 false', () => {
+    expect(updateDraft('d_nonexistent', { body: 'y' })).toBe(false)
+  })
+
+  it('quota 失败时返回 false（写 body 路径）', () => {
+    const d = createDraft({ title: 'A', body: 'x' })
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const realSet = localStorage.setItem.bind(localStorage)
+    // 只对 body key 抛 quota；index key 仍允许写，模拟"index 已写、body 没空间"边界
+    vi.spyOn(localStorage, 'setItem').mockImplementation((k: string, v: string) => {
+      if (k.startsWith(`${DRAFT_STORAGE_PREFIX}body:`)) {
+        const err = new Error('QuotaExceededError') as Error & { name: string }
+        err.name = 'QuotaExceededError'
+        throw err
+      }
+      return realSet(k, v)
+    })
+    expect(updateDraft(d.id, { body: 'y'.repeat(100) })).toBe(false)
+    vi.restoreAllMocks()
+  })
+})
+
+describe('DRAFT_STORAGE_PREFIX 暴露（跨 tab 同步用）', () => {
+  it('index / active / body key 都以 DRAFT_STORAGE_PREFIX 起头', () => {
+    const d = createDraft({ title: 'A', body: 'x' })
+    const keys: string[] = []
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i)
+      if (k) keys.push(k)
+    }
+    const draftKeys = keys.filter((k) => k.startsWith(DRAFT_STORAGE_PREFIX))
+    // 至少包含 index + active + body:<id>
+    expect(draftKeys.length).toBeGreaterThanOrEqual(3)
+    expect(draftKeys).toContain(`${DRAFT_STORAGE_PREFIX}body:${d.id}`)
   })
 })
 

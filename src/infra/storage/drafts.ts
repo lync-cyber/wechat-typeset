@@ -13,6 +13,12 @@ const INDEX_KEY = 'wechat-typeset:drafts:index'
 const ACTIVE_KEY = 'wechat-typeset:drafts:active'
 const BODY_PREFIX = 'wechat-typeset:drafts:body:'
 
+/**
+ * 所有草稿相关 storage key 的共同前缀（含 index / active / body:*）。
+ * 给 ui 层做跨 tab 同步——监听 storage event 时按此前缀过滤，触发 draftIndexTick++。
+ */
+export const DRAFT_STORAGE_PREFIX = 'wechat-typeset:drafts:'
+
 export interface DraftMeta {
   id: string
   title: string
@@ -41,8 +47,8 @@ function readIndex(): DraftMeta[] {
   return Array.isArray(arr) ? (arr as DraftMeta[]) : []
 }
 
-function writeIndex(list: DraftMeta[]): void {
-  safeWriteJson(INDEX_KEY, list)
+function writeIndex(list: DraftMeta[]): boolean {
+  return safeWriteJson(INDEX_KEY, list)
 }
 
 /** 从 md 里抽一行作为标题（第一个 # 或前 20 字） */
@@ -103,10 +109,18 @@ export function createDraft(initial?: {
   return { ...meta, body }
 }
 
-export function updateDraft(id: string, patch: Partial<Omit<Draft, 'id' | 'createdAt'>>): void {
+/**
+ * 返回 true=全部写入成功，false=任一 setItem 失败（quota / 隐私模式）。
+ * 调用方据此决定是否给用户反馈"草稿写盘失败 · 存储已满"。
+ *
+ * 失败语义：返回 false 时元数据可能已写但正文没写（或反之），状态不一致；
+ * 但下次成功的 updateDraft 会覆盖回正确状态。在 quota 满载场景下不存在"原子回滚"
+ * 的可能（都没空间写新值，rollback 也没空间写旧值），所以接受这种弱一致性。
+ */
+export function updateDraft(id: string, patch: Partial<Omit<Draft, 'id' | 'createdAt'>>): boolean {
   const list = readIndex()
   const idx = list.findIndex((m) => m.id === id)
-  if (idx === -1) return
+  if (idx === -1) return false
   const now = Date.now()
   const prev = list[idx]
   const next: DraftMeta = {
@@ -117,18 +131,19 @@ export function updateDraft(id: string, patch: Partial<Omit<Draft, 'id' | 'creat
     updatedAt: now,
   }
   list[idx] = next
-  writeIndex(list)
+  let ok = writeIndex(list)
   if (typeof patch.body === 'string') {
-    safeWrite(`${BODY_PREFIX}${id}`, patch.body)
+    ok = safeWrite(`${BODY_PREFIX}${id}`, patch.body) && ok
     // 未显式指定 title 时用正文第一行刷新
     if (!patch.title) {
       const fresh = deriveTitle(patch.body)
       if (fresh) {
         list[idx] = { ...next, title: fresh }
-        writeIndex(list)
+        ok = writeIndex(list) && ok
       }
     }
   }
+  return ok
 }
 
 /**

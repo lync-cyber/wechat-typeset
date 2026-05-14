@@ -89,6 +89,11 @@ export function useBootstrap(deps: BootstrapDeps) {
 
     // 文章分享链：若 URL 里带有 `#share=`，把 payload 作为新草稿载入；
     // 否则沿用正常的草稿恢复路径。
+    //
+    // 载入分享前先 flush 一次：HMR / 重 mount 路径下，pendingDraftBody 可能仍指向上一段
+    // 编辑内容。tryLoadShareFromHash 会立即切 activeDraftId，若不先 flush，pending body
+    // 会随后续触发被错误写入新 activeDraftId，把分享内容覆盖回去。
+    deps.flushDraftSave()
     const loaded = deps.tryLoadShareFromHash((id, body, themeId) => {
       deps.activeDraftId.value = id
       md.value = body

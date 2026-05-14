@@ -14,7 +14,7 @@ const props = defineProps<{
   draftTitle: string
   wordCount: number
   readingTime: number
-  savingState: 'idle' | 'saving' | 'saved'
+  savingState: 'idle' | 'saving' | 'saved' | 'error'
   savingLabel: string
   error: string | null
   themeId: string
@@ -548,6 +548,8 @@ defineExpose({
 }
 .saving.saving .saving-dot { background: var(--amber-500); }
 .saving.saved .saving-dot { background: var(--success); }
+.saving.error .saving-dot { background: var(--danger); }
+.saving.error .saving-text { color: var(--danger); font-weight: var(--fw-medium); }
 .saving.idle .saving-text { color: transparent; }
 
 .pop-wrap { position: relative; }
