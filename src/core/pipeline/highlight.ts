@@ -1,8 +1,12 @@
 /**
- * highlight.js 集成（Step 1 最小版）
+ * highlight.js 集成
  *
- * 只内置常用 5 种语言：ts/js/python/bash/json；其余语言 Step 8 再按需动态 import。
- * 代码主题 CSS 直接内嵌，已剔除 font-family。
+ * 模块顶层注册少量常用语言（见下方 hljs.registerLanguage 列表），未知语言走 escapeHtml fallback，
+ * 不抛错也不留 `<code class="language-xxx">` 残留，让粘贴到公众号后样式收敛。
+ * 代码主题 CSS 直接内嵌（已剔除 font-family，符合 wxPatch 硬约束）。
+ *
+ * 主题感知配色（让代码块配色跟随当前主题的 codeBlock variant，而不是固定 Atom One Dark）
+ * 是已知未完成项——见 CONTRIBUTING.md "已知未完成模块"。
  */
 
 import hljs from 'highlight.js/lib/core'

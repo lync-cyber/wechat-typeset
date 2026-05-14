@@ -1,6 +1,6 @@
 # 派生现有主题模板
 
-> 9 套内置主题任选一作底，spread + 改 3 个字段。落地走 `scripts/persist-persona.ts`。
+> 内置主题任选一作底，spread + 改 3 个字段。落地走 `scripts/persist-persona.ts`。
 
 ## 派生模板 1：换主色 + 换 code 骨架
 

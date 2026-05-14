@@ -1,5 +1,5 @@
 /**
- * 预设调色板 · 10 套
+ * 预设调色板（数量由本文件末尾 palettePresets 决定；增减时同步主题配色入口的网格 UI）
  *
  * 每个 palette 只定义 "主色 + 辅色 + 强调色"三元组（seed）；
  * 完整的 Theme tokens（bg / bgSoft / border / textMuted / status ...）

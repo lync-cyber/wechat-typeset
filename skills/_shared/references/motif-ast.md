@@ -40,7 +40,7 @@ interface MotifTemplate extends MotifShape {
 
 ## `<svg>` 包装字段
 
-`SvgInlineStyle` 只开 4 个语义字段——这不是故意苛刻，是 9 套主题的真实需求收敛下来的：
+`SvgInlineStyle` 只开 4 个语义字段——这不是故意苛刻，是从全部内置主题的真实需求收敛下来的：
 
 ```ts
 interface SvgInlineStyle {

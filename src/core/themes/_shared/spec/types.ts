@@ -168,8 +168,8 @@ export type ViewBox = readonly [number, number, number, number]
  * SVG `<svg>` 标签的 inline style 语义子集。
  *
  * 为什么这么窄：prefix-type 图标（h2Prefix、tipIcon 等）需要 `display:inline-block`
- * + `vertical-align` + `margin-right` 才能贴在标题/段落里不顶格。9 套主题实测用到的
- * 样式就这 4 个属性；数值 `margin-*` 单位默认 px。
+ * + `vertical-align` + `margin-right` 才能贴在标题/段落里不顶格。全部内置主题实测
+ * 用到的样式就这 4 个属性；数值 `margin-*` 单位默认 px。
  *
  * 块级装饰（divider、quoteMark）通常不需要此字段。
  */

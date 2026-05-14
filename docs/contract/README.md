@@ -12,11 +12,11 @@
 
 | 层 | 由什么构成 | 谁负责 | 入口文档 |
 | --- | --- | --- | --- |
-| 1. **基础契约** | CommonMark + GFM + 5 个行内扩展 + 23 个通用容器 | 所有写作者必读 | [base.md](base.md) |
+| 1. **基础契约** | CommonMark + GFM + 行内扩展集 + 通用容器全集 | 所有写作者必读 | [base.md](base.md) |
 | 2. **扩展契约** | 领域专属容器包，按主题"承诺"加载（当前内置：`data-brief`） | 用对应主题时再翻 | [packs/](packs/) |
 | 3. **自定义扩展** | fork / 集成方在本地追加私有容器 | 进阶集成方 | [custom.md](custom.md) |
 
-> `容器`指 `::: name … :::` 这类 fence 块。通用 fence 语法（info / attrs / 嵌套 / variant 覆盖）和 5 个行内扩展见 [syntax.md](syntax.md)。
+> `容器`指 `::: name … :::` 这类 fence 块。通用 fence 语法（info / attrs / 嵌套 / variant 覆盖）和行内扩展见 [syntax.md](syntax.md)。
 
 ---
 
@@ -24,9 +24,9 @@
 
 | 文档 | 内容 | 面向 |
 | --- | --- | --- |
-| [syntax.md](syntax.md) | 容器 fence 通用语法、5 个行内扩展、常见错误 | 任何写作者 |
-| [base.md](base.md) | 基础契约的 23 个通用容器（结构 / 提示 / 内容 / 导航 / 媒体 / 签名 / 兜底） | 任何写作者 |
-| [packs/data-brief.md](packs/data-brief.md) | `data-brief` 扩展包：刊头 / 目录 / KPI 仪表盘 / 条形图 / 问答 / 脚注 等 12 个签名容器 | 写数据简报或栏目化深度文 |
+| [syntax.md](syntax.md) | 容器 fence 通用语法、行内扩展、常见错误 | 任何写作者 |
+| [base.md](base.md) | 基础契约的通用容器全集（结构 / 提示 / 内容 / 导航 / 媒体 / 签名 / 兜底） | 任何写作者 |
+| [packs/data-brief.md](packs/data-brief.md) | `data-brief` 扩展包：刊头 / 目录 / KPI 仪表盘 / 条形图 / 问答 / 脚注 等签名容器集 | 写数据简报或栏目化深度文 |
 | [custom.md](custom.md) | 在 fork 里加私有容器的流程，与契约保护范围的边界 | 集成方 / 主题作者 |
 | [platform.md](platform.md) | 公众号平台现实（外链白名单 / footer-cta href / 粘贴责任划分）+ 契约演进规则 | 任何发文的人 |
 

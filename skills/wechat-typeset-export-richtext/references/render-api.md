@@ -9,7 +9,7 @@ import { render } from '../../../src/public'
 
 interface PublicRenderInput {
   md: string
-  persona?: string       // 9 个内置 id 之一
+  persona?: string       // 内置 id 之一（清单见 listPersonas() / dist/api/capabilities.json）
   theme?: Theme          // 已构建的 Theme 对象（罕见）
   spec?: PersonaSpec     // 临时 spec（先校验再投影）
   wxPatch?: WxPatchOptions
@@ -128,7 +128,7 @@ catch (e) {
 
 ```
 md
- ├── markdown-it 解析（含 5 个行内扩展 + 25 个 container 注册）
+ ├── markdown-it 解析（含行内扩展集 + 全部已注册 container；清单见 vocabulary.ts）
  ├── plugin 链：mark / ins / footnote / task-lists / 自定义着重&波浪 / 容器
  ├── 主题样式投影：specToTheme（如果走 spec 路径）+ themeCSS 生成 inline style
  ├── juice 内联：把 <style> 内 CSS 全部内联到 style=""
@@ -144,7 +144,7 @@ md
 ## 性能特征
 
 - 单 persona 渲染（2000 字 markdown）：~50-100ms（Node 18+）
-- gallery 9 persona：~500-1000ms（串行；可加 worker 并行但对本 skill 不必要）
+- gallery 全主题（~10 persona）：~500-1000ms（串行；可加 worker 并行但对本 skill 不必要）
 - 大文档（≥10000 字）：~200-500ms
 
 **瓶颈**：juice 内联（字符串扫描合并 CSS）。无关 markdown-it 解析速度。

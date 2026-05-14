@@ -3,7 +3,7 @@
  * 配色自定义面板
  *
  * 工作流：
- *   1. 预设十套 palette 网格可点
+ *   1. palettePresets 网格可点（数量由 src/core/color/palettes.ts 决定）
  *   2. 三个色选器（primary / secondary / accent）+ dark toggle
  *   3. 每次 seed 改动 debounce 120ms → emit('apply', seed)，主区域实时重渲染
  *   4. 实时显示 primary 与推导 bg 的 WCAG 对比度，不过关时给红字警示

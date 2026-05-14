@@ -74,7 +74,6 @@ function elementSelector(tag: string): Selector {
 
 function containerSelector(name: string): Selector {
   // 容器节点由 containers/*.ts 渲染为 <section class="container-xxx"> 等结构
-  // Step 1 尚未生成容器节点，这些规则暂时不会命中，但保留给后续 Step 使用
   return `.${ROOT_CLASS} .container-${name}`
 }
 

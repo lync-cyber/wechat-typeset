@@ -82,7 +82,7 @@ SVG 子树内删所有 `id` 属性：
 
 **副作用**：依赖 id 的 `url(#g)` 引用失效。**这是与 5 矛盾的——为什么共存？**
 
-答：`patchSvgIds` 已经把 `id` 删了，所以 `url(#g)` 引用对象已不存在；本步骤需要在主题生成 SVG 时**避免使用 defs 引用**（用 inline fill 替代）。当前 9 套主题都不用 SVG defs 引用，所以两个 patch 不冲突。
+答：`patchSvgIds` 已经把 `id` 删了，所以 `url(#g)` 引用对象已不存在；本步骤需要在主题生成 SVG 时**避免使用 defs 引用**（用 inline fill 替代）。当前所有内置主题都不用 SVG defs 引用，所以两个 patch 不冲突。
 
 ### 7. `patchFlexToFallback`
 

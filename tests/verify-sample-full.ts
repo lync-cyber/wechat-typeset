@@ -3,13 +3,13 @@
  *
  * 目的：确保 src/samples-md/sample-full.md 在默认主题下
  *   - pipeline 不抛异常
- *   - 33 个 variant 的 class 全部出现（admonition 16 + quote 4 + compare 3 + steps 3
- *     + divider 5 + sectionTitle 2；codeBlock 独立检查）
- *   - 14 个无 variant 容器 class 也都出现：
- *       · 既有 9 个：intro / cover / author / highlight / footer-cta / recommend
- *                   / qrcode / mpvoice / mpvideo
- *       · 补齐 5 个：note（第五态）+ abstract / key-number / see-also（签名块）
- *                   + free（兜底）
+ *   - 各 variantKind 的 variant class 全部出现（admonition / quote / compare /
+ *     steps / divider / sectionTitle / note；codeBlock 独立检查）
+ *   - 所有无 variant 的基础容器 class 也都出现（intro / cover / author /
+ *     highlight / footer-cta / recommend / qrcode / mpvoice / mpvideo /
+ *     abstract / key-number / see-also / free 等）
+ *
+ * 具体清单从 vocabulary + VARIANT_IDS 派生，新增容器/variant 时不需要手改这里。
  *
  * 运行：npx tsx tests/verify-sample-full.ts
  */

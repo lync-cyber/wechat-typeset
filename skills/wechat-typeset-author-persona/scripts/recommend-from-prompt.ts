@@ -4,7 +4,7 @@
  *
  * 与 wechat-typeset-annotate-markdown/scripts/recommend-persona.ts 的差异：
  *   - 本脚本（author-persona）：判断"复用 / 派生 / 全新造"，含"是否建议造新"信号
- *   - annotate-markdown 版：只判"在 9 个内置里选哪个"，不输出"造新"建议
+ *   - annotate-markdown 版：只判"在已有内置里选哪个"，不输出"造新"建议
  *
  * 用法：
  *   tsx recommend-from-prompt.ts --description "<用户描述>"
@@ -74,7 +74,7 @@ function buildDecisionPrompt(args: CliArgs, candidates: OutputShape['candidates'
     '用户描述了想要的视觉气质，请判断：',
     '  A. 强匹配某个内置 persona（直接复用）→ 走 wechat-typeset-export-richtext',
     '  B. 部分匹配（改色板或换骨架就够）→ 走"派生现有主题"路径',
-    '  C. 气质全新（9 套都拉不上）→ 走"全新造主题"路径',
+    '  C. 气质全新（已注册主题都拉不上）→ 走"全新造主题"路径',
     '',
     '决策规则：',
     '  1. audience 匹配优先级最高',
@@ -85,7 +85,7 @@ function buildDecisionPrompt(args: CliArgs, candidates: OutputShape['candidates'
     args.description,
     args.style ? `## 参照锚点\n${args.style}` : '',
     '',
-    '## 候选 persona（9 套内置）',
+    '## 候选 persona（已注册内置主题，由 listPersonas() 派生）',
     personaCard,
     '',
     '## 请输出 JSON',
