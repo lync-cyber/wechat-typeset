@@ -18,6 +18,7 @@ import type {
   ThemeContainers,
   ThemeInline,
   ThemeInnerStyles,
+  ThemeKickers,
   ThemeTokens,
   ThemeVariants,
 } from '../../themes/types'
@@ -38,6 +39,11 @@ export interface ContainerRenderContext {
    * attrs.variant 可按容器级覆盖主题级选择（比如 `::: tip variant=terminal`）。
    */
   variants: ThemeVariants
+  /**
+   * R10 kicker 文案。renderer 在硬编码默认文案处读取 `ctx.kickers.<key>`，
+   * 作者侧 markdown 仅在需要单稿覆盖时才写 info。详见 `ThemeKickers` 注释。
+   */
+  kickers: ThemeKickers
   /** `::: tip 小贴士 type=positive` → info = "小贴士" */
   info: string
   /** 从 info 里剥出来的 YAML 风格 key=value（value 支持空格用引号包） */

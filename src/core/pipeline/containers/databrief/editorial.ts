@@ -24,7 +24,7 @@ import { inlineCss as inline } from '../_shared/cssInline'
 
 export const qaBlockContainer: ContainerRenderer = {
   open: (ctx) => {
-    const kicker = ctx.info.trim() || '读者问答 · Q&A'
+    const kicker = ctx.info.trim() || ctx.kickers.qaBlock
     const q = ctx.attrs.q ?? ''
     const c = ctx.tokens.colors
     // R4：wrapper 完全由 ctx.containers.qaBlock 决定。
@@ -148,7 +148,7 @@ export const refsContainer: ContainerRenderer = {
 
 export const editorNoteContainer: ContainerRenderer = {
   open: (ctx) => {
-    const kicker = ctx.info.trim() || '编 者 按'
+    const kicker = ctx.info.trim() || ctx.kickers.editorNote
     const c = ctx.tokens.colors
     const themeStyle = inline(ctx.containers.editorNote)
     const fallback = [
@@ -183,7 +183,7 @@ export const editorNoteContainer: ContainerRenderer = {
 
 export const methodologyContainer: ContainerRenderer = {
   open: (ctx) => {
-    const label = ctx.info.trim() || '方法论'
+    const label = ctx.info.trim() || ctx.kickers.methodology
     const c = ctx.tokens.colors
     const themeStyle = inline(ctx.containers.methodology)
     const fallback = [

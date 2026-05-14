@@ -27,7 +27,7 @@ function resolveIssueStampForFooter(
 
 export const footerCTAContainer: ContainerRenderer = {
   open: (ctx) => {
-    const title = ctx.info.trim() || '关注我'
+    const title = ctx.info.trim() || ctx.kickers.footerCTATitle
     const cta = ctx.attrs.cta ? escText(ctx.attrs.cta) : ''
     const href = ctx.attrs.href ?? ''
     // 按钮胶囊样式（span / a 共用）；color + bg 走主题 primary。
@@ -70,7 +70,7 @@ export const footerCTAContainer: ContainerRenderer = {
 
 export const recommendContainer: ContainerRenderer = {
   open: (ctx) => {
-    const title = ctx.info.trim() || '推荐阅读'
+    const title = ctx.info.trim() || ctx.kickers.recommend
     return (
       `<section class="container-recommend">\n` +
       `<section class="container-recommend__title" style="font-weight:700;margin-bottom:10px">${escText(title)}</section>\n`

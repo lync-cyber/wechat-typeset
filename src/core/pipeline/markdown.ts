@@ -89,6 +89,7 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
             innerStyles: theme.innerStyles,
             inline: theme.inline,
             variants: theme.variants,
+            kickers: theme.kickers,
             info: title,
             attrs,
           }
@@ -364,6 +365,7 @@ function emptyCtx(theme: Theme): ContainerRenderContext {
     innerStyles: theme.innerStyles,
     inline: theme.inline,
     variants: theme.variants,
+    kickers: theme.kickers,
     info: '',
     attrs: {},
   }
