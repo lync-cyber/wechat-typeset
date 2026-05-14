@@ -363,10 +363,23 @@
 
 .markdown-body .container-footnotes {
   border-top: 1px solid #e0d6c0;
-  padding-top: 8px;
+  padding-top: 6px;
+  padding-left: 1.6em;
+  text-indent: -1.6em;
   margin: 14px 0;
-  font-size: 10px;
-  line-height: 1.75;
+  font-size: 9px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: #5a6778;
+}
+
+.markdown-body .container-refs {
+  border-top: 1px solid #e0d6c0;
+  padding-top: 6px;
+  margin: 14px 0;
+  font-size: 9px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
   color: #5a6778;
 }
 

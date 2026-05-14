@@ -51,7 +51,8 @@
 |  | `kpi-item` |  | kpi-dashboard 内单指标 |
 |  | `bar-chart`（外层 `::::`） | ★ | 横向条形图 |
 |  | `bar` |  | bar-chart 内单条 |
-|  | `footnotes` | ★ | 脚注块：上分割线 + 编号引用 |
+|  | `footnotes` | ★ | 脚注块：上分割线 + 编号引用（一条一行） |
+|  | `refs` | ★ | 流式参考文献：同源紧凑、条目同段流式排列（长引用列表用） |
 |  | `cta-bar` | ★ | CTA 三栏（赞同 / 收藏 / 转发） |
 |  | `qr-follow` | ★ | 二维码订阅卡（左 QR + 右标题/说明） |
 |  | `editor-note` | ★ | 编辑部注：主色左竖条 callout |

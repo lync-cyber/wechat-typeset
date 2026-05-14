@@ -232,7 +232,8 @@ export const spec: PersonaSpec = {
     'kpiDashboard', // KPI 仪表盘
     'barChart', // 条形图
     'qaBlock', // 读者问答
-    'footnotes', // 脚注块
+    'footnotes', // 脚注块（一条一行 + hanging indent）
+    'refs', // 流式参考文献块（同字号紧凑、条目同段流式排列；长引用列表用）
     'ctaBar', // 三栏 CTA（赞同/收藏/转发）
     'qrFollow', // 二维码订阅卡
     'editorNote', // 编辑部注 callout（主色左条 + kicker）

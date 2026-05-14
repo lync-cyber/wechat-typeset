@@ -298,6 +298,7 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'barChart',
   'qaBlock',
   'footnotes',
+  'refs',
   'ctaBar',
   'qrFollow',
   'editorNote',

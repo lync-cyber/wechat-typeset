@@ -24,7 +24,7 @@
 | 类 | 容器 | ★ | 一句话用途 |
 | --- | --- | :-: | --- |
 | 结构 | `masthead` | ★ | 刊头：刊名（info）左对齐 + 期号·日期 monospace 右对齐 + 下划线。data-brief 家族签名。 |
-|  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。 |
+|  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。 |
 |  | `toc` | ★ | 目录三栏（序号·标题·页码）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker（如 "目录 · CONTENTS"）。 |
 |  | `toc-item` |  | toc 内单条；info 为条目标题。body 内容会被忽略。 |
 | 内容 | `qa-block` | ★ | 读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 "读者问答 · Q&A"）。 |
@@ -32,7 +32,8 @@
 |  | `kpi-item` |  | kpi-dashboard 内单指标。一切以 attrs 驱动，body 内容被忽略。 |
 |  | `bar-chart` | ★ | 横向条形图（纯 div 宽度，无 SVG）。外层用 4 个冒号，内部用 bar 条目。info 为图表标题。 |
 |  | `bar` |  | bar-chart 内单条；attrs.label/pct/value 必填，tone 决定柱色（normal 走主色）。 |
-|  | `footnotes` | ★ | 脚注块：上分割线 + 小字编号引用。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。 |
+|  | `footnotes` | ★ | 脚注块：上分割线 + 小字编号引用（一条一行，hanging indent）。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。 |
+|  | `refs` | ★ | 流式参考文献块：与 footnotes 同源，但所有条目同段流式排列（条目间作者自行用 `·` / `／` 分隔），同样高度可装 2~3 倍条目，适合长文献列表。公众号沙箱不支持滚动，长引用建议走 refs。 |
 |  | `cta-bar` | ★ | CTA 三栏：左/右描边格 + 中实色格。data-brief 签名（赞同 / 收藏 / 转发）。body 忽略。 |
 |  | `qr-follow` | ★ | 二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。 |
 |  | `editor-note` | ★ | 编辑部注：主色左竖条 callout + kicker 小标题 + 正文。data-brief / industry-observer 等深度刊家族常用，区别于中性的 note。 |
@@ -51,8 +52,7 @@
 ::: masthead 慢读简报 issue="004" date="2026.04.22"
 :::
 
-::: section-tag
-深度
+::: section-tag 深度
 :::
 
 ::: cover 在无人深夜，重新学习如何阅读一本书
@@ -147,16 +147,25 @@
 
 ---
 
-## 脚注块
+## 脚注块 / 参考文献
+
+两个同源容器，按"条目数 × 字数"选：
 
 ```
 ::: footnotes
 [1] 数据覆盖 2010–2025，以两年为滑动窗口平滑处理。
 [2] "深度理解得分"取自阅读后 24h 回忆测试，满分 100。
 :::
+
+::: refs
+[1] 全国国民阅读调查 2015–2024 · [2] 中国互联网络信息中心 第 53 次报告 · [3] OECD Reading Habits Survey 2023
+:::
 ```
 
-上分割线 + 小字编号引用。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。
+- `footnotes`：一条一行 + hanging indent，编号 `[N]` 悬挂在外、正文左缘对齐。适合 ≤ 6 条带说明性文字的脚注。
+- `refs`：所有条目同段流式排列，作者用 `·` / `／` 手动分隔条目。同样高度可装 2~3 倍条目，适合纯出处列表。
+
+> 公众号沙箱会剥 `overflow:auto` / `max-height`，**两者都没有滚动条**。超长引用列表请走 `refs` 或拆到正文附录段落，不要寄希望于滚动。
 
 ---
 

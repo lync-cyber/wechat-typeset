@@ -27,6 +27,7 @@ export {
   barContainer,
   qaBlockContainer,
   footnotesContainer,
+  refsContainer,
   editorNoteContainer,
   methodologyContainer,
   ctaBarContainer,

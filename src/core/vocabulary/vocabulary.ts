@@ -171,8 +171,8 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     category: 'structure',
     pack: 'data-brief',
     fenceLength: 3,
-    description: '小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。',
-    example: '::: section-tag\n深度\n:::\n',
+    description: '小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。',
+    example: '::: section-tag 深度\n:::\n',
   },
   {
     name: 'toc',
@@ -520,8 +520,19 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     pack: 'data-brief',
     fenceLength: 3,
     description:
-      '脚注块：上分割线 + 小字编号引用。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。',
+      '脚注块：上分割线 + 小字编号引用（一条一行，hanging indent）。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。',
     example: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
+  },
+  {
+    name: 'refs',
+    styleKey: 'refs',
+    category: 'signature',
+    pack: 'data-brief',
+    fenceLength: 3,
+    description:
+      '流式参考文献块：与 footnotes 同源，但所有条目同段流式排列（条目间作者自行用 `·` / `／` 分隔），同样高度可装 2~3 倍条目，适合长文献列表。公众号沙箱不支持滚动，长引用建议走 refs。',
+    example:
+      '::: refs\n[1] 全国国民阅读调查 2015–2024 · [2] 样本 n=1,432，CI=95% · [3] 详见方法论 §3.2\n:::\n',
   },
   {
     name: 'cta-bar',
