@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { PatchLog } from '../../core/pipeline/platforms/types'
 
 const props = defineProps<{ html: string; patchLog?: PatchLog }>()
@@ -11,6 +11,7 @@ const emit = defineEmits<{
 }>()
 
 const iframeEl = ref<HTMLIFrameElement | null>(null)
+let shellReady = false
 
 /** 暴露 iframe 元素给父组件（长图导出等场景需要访问 iframe.contentDocument） */
 function getIframe(): HTMLIFrameElement | null {
@@ -49,9 +50,15 @@ defineExpose({ getIframe, getScroller, scrollToRatio })
  * sandbox="allow-same-origin"：
  *   - 允许 iframe 与宿主同源，便于主题样式（已内联）即刻生效
  *   - 不加 allow-scripts：iframe 内不执行任何 JS，纯静态渲染
+ *
+ * 为什么 srcdoc 是常量壳：
+ *   srcdoc 一旦变更，浏览器会整体重建 contentDocument（等价 navigation），
+ *   iframe 内 scrollTop 归零、scroll listener 失效、闪屏明显。
+ *   做法：把外壳一次性塞进去（含空的 .phone-viewport 容器），
+ *   后续 props.html 变更走 innerHTML 注入到 .phone-viewport，
+ *   document 不重建——scrollTop 自然保留（浏览器会按新 scrollHeight 自动 clamp）。
  */
-const srcdoc = computed(() => {
-  return `<!doctype html>
+const SHELL_DOC = `<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -83,10 +90,18 @@ const srcdoc = computed(() => {
 </style>
 </head>
 <body>
-<div class="phone-viewport">${props.html}</div>
+<div class="phone-viewport"></div>
 </body>
 </html>`
-})
+
+function applyHtml(): boolean {
+  const doc = iframeEl.value?.contentDocument
+  if (!doc) return false
+  const slot = doc.querySelector('.phone-viewport') as HTMLElement | null
+  if (!slot) return false
+  slot.innerHTML = props.html
+  return true
+}
 
 let lastEmit = 0
 function onScroll() {
@@ -103,11 +118,18 @@ function onScroll() {
 function onIframeLoad() {
   const doc = iframeEl.value?.contentDocument
   if (!doc) return
-  // iframe 每次 srcdoc 更新会重建 document，需重新绑定滚动监听
-  doc.removeEventListener('scroll', onScroll)
+  // srcdoc 现在是常量壳，理论上只在首次 mount 触发一次 load；
+  // 但若宿主重新挂载（HMR / v-if）仍可能再次 load，复位 shellReady 并重新装配。
+  shellReady = true
   doc.addEventListener('scroll', onScroll, { passive: true })
+  applyHtml()
   emit('ready')
 }
+
+// props.html 变更：直接 patch .phone-viewport 的 innerHTML，不重建 document
+watch(() => props.html, () => {
+  if (shellReady) applyHtml()
+})
 </script>
 
 <template>
@@ -119,7 +141,7 @@ function onIframeLoad() {
     <iframe
       ref="iframeEl"
       class="preview-frame wechat-typeset-preview"
-      :srcdoc="srcdoc"
+      :srcdoc="SHELL_DOC"
       sandbox="allow-same-origin"
       title="wechat-typeset 预览"
       @load="onIframeLoad"
