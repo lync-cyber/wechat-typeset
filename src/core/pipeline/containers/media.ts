@@ -8,6 +8,11 @@
  *   2. 其他场景：占位卡，提示用户在公众号后台手动补视频组件
  *
  * 两者都没有有意义的正文；info 作为标题。所有色值从 ctx.tokens 读取。
+ *
+ * data-wx-mp-* 锚点：
+ *   open 行写 data-wx-mp-kind / data-wx-mp-fileid 属性，由 infra/clipboard/mpInsertHints
+ *   在复制路径扫读并注入微信识别的 `<!-- mpvoice fileid=... -->` 注释串。预览里
+ *   纯属语义锚，不影响视觉；公众号粘贴后才会被识别成播放器组件。
  */
 
 import type { ContainerRenderer, ContainerRenderContext } from './types'
@@ -28,8 +33,10 @@ export const mpvoiceContainer: ContainerRenderer = {
       ? `已携带 fileid=${escText(fileid)}，粘贴到公众号后自动展开`
       : '粘贴到公众号后请手动选择"插入音频"'
     const label = ctx.tokens.colors.primary
+    const fidAttr = fileid ? ` data-wx-mp-fileid="${escAttr(fileid)}"` : ''
+    const nameAttr = title ? ` data-wx-mp-name="${escAttr(title)}"` : ''
     return (
-      `<section class="container-mpvoice" style="${placeholderStyle(ctx)}">\n` +
+      `<section class="container-mpvoice" data-wx-mp-kind="voice"${fidAttr}${nameAttr} style="${placeholderStyle(ctx)}">\n` +
       `<section style="font-size:12px;letter-spacing:1px;color:${label};margin-bottom:6px">[ 音频 ]</section>\n` +
       `<section style="font-weight:700;margin-bottom:6px">${escText(title)}</section>\n` +
       `<section style="font-size:13px">${hint}</section>\n`
@@ -47,15 +54,18 @@ export const mpvideoContainer: ContainerRenderer = {
       // 外框 section 容器 + iframe；padding-top:56.25% 保持 16:9 时被公众号剥离
       // 因此直接给一个固定高度占位
       return (
-        `<section class="container-mpvideo">\n` +
+        `<section class="container-mpvideo" data-wx-mp-kind="video" data-wx-mp-vid="${escAttr(qqvid)}">\n` +
         `<iframe src="${escAttr(src)}" frameborder="0" ` +
         `width="100%" height="220" allowfullscreen="true" ` +
         `title="${escAttr(title)}"></iframe>\n`
       )
     }
     const label = ctx.tokens.colors.primary
+    const fileid = ctx.attrs.fileid ?? ctx.attrs.video_encode_fileid
+    const fidAttr = fileid ? ` data-wx-mp-fileid="${escAttr(fileid)}"` : ''
+    const nameAttr = title ? ` data-wx-mp-name="${escAttr(title)}"` : ''
     return (
-      `<section class="container-mpvideo" style="${placeholderStyle(ctx)}">\n` +
+      `<section class="container-mpvideo" data-wx-mp-kind="video"${fidAttr}${nameAttr} style="${placeholderStyle(ctx)}">\n` +
       `<section style="font-size:12px;letter-spacing:1px;color:${label};margin-bottom:6px">[ 视频 ]</section>\n` +
       `<section style="font-weight:700;margin-bottom:6px">${escText(title)}</section>\n` +
       `<section style="font-size:13px">粘贴到公众号后请手动选择"插入视频"</section>\n`

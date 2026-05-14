@@ -11,7 +11,7 @@
  *   - action 仅承载无载荷的纯动作；任何需要载荷的交互仍走自己的 update:* 事件
  */
 
-export type ToolbarToggleTarget = 'drafts' | 'components' | 'customizer' | 'checklist'
+export type ToolbarToggleTarget = 'drafts' | 'components' | 'customizer' | 'checklist' | 'personaStudio'
 
 export type ToolbarAction =
   | 'copy'

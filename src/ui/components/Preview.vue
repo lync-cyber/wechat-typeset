@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { PatchLog } from '../../core/pipeline/wxPatch'
+import type { PatchLog } from '../../core/pipeline/platforms/types'
 
 const props = defineProps<{ html: string; patchLog?: PatchLog }>()
 const transparencyExpanded = ref(false)

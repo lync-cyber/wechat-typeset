@@ -19,7 +19,7 @@ const props = defineProps<{
   error: string | null
   themeId: string
   hasCustomColor: boolean
-  drawer: { drafts: boolean; components: boolean; customizer: boolean; checklist: boolean }
+  drawer: { drafts: boolean; components: boolean; customizer: boolean; checklist: boolean; personaStudio: boolean }
   outlinkStrategy: OutlinkStrategy
   uiTheme: UiThemeMode
 }>()
@@ -208,6 +208,9 @@ defineExpose({
           </button>
           <button class="menu-item" @click="emit('toggle', 'customizer'); overflowOpen = false">
             <span>{{ props.drawer.customizer ? '关闭自定义配色' : '自定义配色' }}</span>
+          </button>
+          <button class="menu-item" @click="emit('toggle', 'personaStudio'); overflowOpen = false">
+            <span>{{ props.drawer.personaStudio ? '关闭主题编辑器' : '主题编辑器' }}</span>
           </button>
           <button class="menu-item" @click="emit('toggle', 'checklist'); overflowOpen = false">
             <span>{{ props.drawer.checklist ? '关闭发文清单' : '发文清单' }}</span>

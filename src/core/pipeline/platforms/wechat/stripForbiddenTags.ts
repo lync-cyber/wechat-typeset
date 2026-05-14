@@ -16,7 +16,7 @@
  */
 
 import { parseFragment, serializeFragment } from './utils'
-import { HARD_REMOVE_TAGS, IFRAME_SRC_ALLOW } from '../rules'
+import { HARD_REMOVE_TAGS, IFRAME_SRC_ALLOW } from '../../rules'
 
 export function stripForbiddenTags(html: string): string {
   const { container } = parseFragment(html)

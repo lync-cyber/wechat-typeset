@@ -18,3 +18,5 @@ export { primitivesToSvg, renderMotifTemplate, renderPrimitive, shapeToSvg } fro
 export { validateSpec } from './validate'
 export { PERSONA_SPEC_SCHEMA, getPersonaSpecSchema } from './schema'
 export type { JSONSchema7 } from './schema'
+export { makeCoverPlaceholder } from './coverPlaceholder'
+export type { CoverBuilderOptions } from './coverPlaceholder'

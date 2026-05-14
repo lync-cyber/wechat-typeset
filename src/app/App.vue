@@ -23,6 +23,7 @@ import Toolbar from '../ui/components/Toolbar.vue'
 import PaneSplitter from '../ui/components/PaneSplitter.vue'
 import DraftDrawer from '../ui/components/DraftDrawer.vue'
 import ColorCustomizer from '../ui/components/ColorCustomizer.vue'
+import PersonaStudio from '../ui/components/persona-studio/PersonaStudio.vue'
 import ComponentPalette from '../ui/components/ComponentPalette.vue'
 import PublishChecklist from '../ui/components/PublishChecklist.vue'
 import CommandPalette from '../ui/components/CommandPalette.vue'
@@ -141,6 +142,7 @@ const hasOpenDrawer = computed(
 // ==============================================
 function onToolbarToggle(target: ToolbarToggleTarget) {
   if (target === 'drafts') toggleLeft('drafts')
+  else if (target === 'personaStudio') toggleRight('persona-studio')
   else toggleRight(target)
 }
 function onToolbarAction(cmd: ToolbarAction) {
@@ -275,6 +277,13 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
         @close="ui.rightSlot = null"
       >
         <PublishChecklist :md="md" @close="ui.rightSlot = null" />
+      </ErrorBoundary>
+      <ErrorBoundary
+        v-else-if="ui.rightSlot === 'persona-studio'"
+        fallback-title="主题编辑器渲染失败"
+        @close="ui.rightSlot = null"
+      >
+        <PersonaStudio :initial-base-id="baseThemeId" @close="ui.rightSlot = null" />
       </ErrorBoundary>
     </main>
 

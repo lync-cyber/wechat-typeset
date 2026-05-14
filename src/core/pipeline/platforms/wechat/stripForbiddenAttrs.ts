@@ -17,7 +17,7 @@
  */
 
 import { parseFragment, parseStyle, serializeFragment, stringifyStyle, walkElements, isInSvg } from './utils'
-import { FORBIDDEN_POSITION_PROPS } from '../rules'
+import { FORBIDDEN_POSITION_PROPS } from '../../rules'
 
 const ID_WHITELIST = /^(fn|fnref|footnote)[-\d]/i
 

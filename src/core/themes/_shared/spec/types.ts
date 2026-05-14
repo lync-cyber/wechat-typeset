@@ -243,6 +243,16 @@ export interface MotifSpec {
   stepBadge?: MotifTemplate
   /** 模板：`{issue}` `{date}` `{kind}` 占位 */
   issueStamp?: MotifTemplate
+  /**
+   * 1200×630 封面占位 SVG（og:image / 公众号图文封面尺寸）。
+   *
+   * 不参与 ThemeAssets 投影——它是给外部消费方的静态资产（CDN 拉取后做光栅或
+   * 作为 fallback 封面）。scripts/build-cover-placeholders.ts 读取并写到
+   * dist/api/covers/<personaId>.svg；capabilities.json 派生 coverUriPattern。
+   *
+   * viewBox 必须 [0, 0, 1200, 630]（与 og:image 1.91:1 一致）。
+   */
+  coverPlaceholder?: MotifShape
 }
 
 // ============================================================

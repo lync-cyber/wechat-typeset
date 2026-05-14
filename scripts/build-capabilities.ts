@@ -5,6 +5,16 @@
  *
  * 契约版本 v2.1。
  *
+ * 2.3（非破坏，向后兼容）：
+ *   - 新增 selfUri / versionedSelfUri：jsDelivr 上的 canonical CDN URL，让下游
+ *     在拿到 JSON 内容时也知道自己来自哪里
+ *   - 新增 coverUriPattern / coverUriPatternVersioned：og:image / 公众号封面占位
+ *     SVG 资源路径模板，下游凭 `{personaId}` 占位算具体 URL
+ *
+ * 2.2（非破坏，向后兼容）：
+ *   - 新增 platforms[]：暴露已注册发布平台 adapter 与契约成熟度
+ *     （wechat=stable / zhihu+xhs=placeholder）
+ *
  * 2.1（非破坏，向后兼容）：
  *   - hardRules 的阈值常量由 validate.ts / rules.ts 真源派生（不再手抄）
  *   - 新增 deprecations[]：未来废弃字段先登记在此，给下游窗口迁移
@@ -21,7 +31,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
-import { listPersonas } from '../src/public'
+import { listPersonas, listPublishPlatforms } from '../src/public'
 import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/core/themes/types'
 import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/core/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
@@ -40,7 +50,7 @@ import { CONTAINER_VOCABULARY, packOf } from '../src/core/vocabulary/vocabulary'
  *   - 破坏 contract 的变更前，先把旧字段登记进 `deprecations[]`
  *   - 移除 deprecated 字段必须提升 major
  */
-type CapabilitiesSchemaVersion = '2.1'
+type CapabilitiesSchemaVersion = '2.3'
 
 interface DeprecationNotice {
   /** 受影响的字段或契约 id（dotted path，如 "hardRules.forbidClass"） */
@@ -111,6 +121,44 @@ interface CapabilitiesV2 {
     forbidMediaQueries: boolean
   }
   /**
+   * 本 JSON 在 jsDelivr 上的 canonical URL。下游集成方读到此字段后无需再硬编码 CDN
+   * 路径——若仓库改名 / fork 部署，本字段会跟着 package.json.homepage 走。
+   *
+   *   - selfUri          tracks @main，永远是仓库当前主分支的最新契约
+   *   - versionedSelfUri 钉到当前 package.json.version 对应的 git tag（v{x.y.z}）；
+   *                     若 tag 不存在（dev 期）下游建议回退到 selfUri
+   *
+   * 自 schemaVersion 2.3 起新增。
+   */
+  selfUri: string
+  versionedSelfUri: string
+  /**
+   * 封面占位 SVG 资源路径模板（与 selfUri 同 CDN，相同 ref 策略）。
+   *
+   *   coverUriPattern          @main 跟前沿
+   *   coverUriPatternVersioned @v{version} 钉版本
+   *
+   * 下游消费方用 `pattern.replace('{personaId}', id)` 算具体资源 URL。
+   * 自 schemaVersion 2.3 起新增（与 selfUri 同批）。
+   */
+  coverUriPattern: string
+  coverUriPatternVersioned: string
+  /**
+   * 已注册的发布平台 adapter 摘要。
+   *
+   *   - id        与 render(input.platform) 接受的字符串一致
+   *   - status    'stable' / 'beta' / 'placeholder'
+   *               下游 UI 建议只暴露 stable+beta；placeholder 表示 patch=identity，
+   *               是给社区 PR / fork 预留的空位
+   *
+   * 自 schemaVersion 2.2 起新增。
+   */
+  platforms: ReadonlyArray<{
+    id: string
+    name: string
+    status: 'stable' | 'beta' | 'placeholder'
+  }>
+  /**
    * 已登记的 deprecation 通道。下游适配时可检测 id 并准备迁移。
    * 当前为空数组占位；首次破坏 contract 时把旧字段登记进来。
    */
@@ -119,9 +167,70 @@ interface CapabilitiesV2 {
   docs: Record<string, string>
 }
 
-function pkgJson(): { name: string; version: string; homepage?: string } {
+function pkgJson(): {
+  name: string
+  version: string
+  homepage?: string
+  repository?: string | { type?: string; url?: string }
+} {
   const raw = readFileSync(resolve(process.cwd(), 'package.json'), 'utf8')
   return JSON.parse(raw)
+}
+
+/**
+ * 从 package.json.homepage / repository.url 提取 GitHub 的 owner/repo。
+ *
+ * 支持的输入形态：
+ *   - "https://github.com/owner/repo"
+ *   - "https://github.com/owner/repo#readme"
+ *   - "git+https://github.com/owner/repo.git"
+ *   - "git@github.com:owner/repo.git"
+ *
+ * 用于构造 jsDelivr URL `cdn.jsdelivr.net/gh/{owner}/{repo}@{ref}/...`。
+ * 非 GitHub 仓库返回 null——本工具目前只支持 jsDelivr GitHub 模式，私有镜像
+ * 的 selfUri 需要 fork 自己改 build 脚本。
+ */
+function parseGithubSlug(pkg: ReturnType<typeof pkgJson>): { owner: string; repo: string } | null {
+  const candidates: string[] = []
+  if (pkg.homepage) candidates.push(pkg.homepage)
+  if (typeof pkg.repository === 'string') {
+    candidates.push(pkg.repository)
+  } else if (pkg.repository?.url) {
+    candidates.push(pkg.repository.url)
+  }
+  for (const raw of candidates) {
+    // https://github.com/owner/repo(.git)?(#anchor)?  /  git+https://...
+    const httpsMatch = raw.match(/github\.com[/:]([^/]+)\/([^/?#.]+)(?:\.git)?/i)
+    if (httpsMatch) {
+      return { owner: httpsMatch[1], repo: httpsMatch[2] }
+    }
+  }
+  return null
+}
+
+const CAPABILITIES_REL_PATH = 'dist/api/capabilities.json'
+const COVERS_REL_DIR = 'dist/api/covers'
+
+interface SelfUriBundle {
+  selfUri: string
+  versionedSelfUri: string
+  coverUriPattern: string
+  coverUriPatternVersioned: string
+}
+
+function buildSelfUris(pkg: ReturnType<typeof pkgJson>): SelfUriBundle {
+  const slug = parseGithubSlug(pkg)
+  if (!slug) {
+    // 非 GitHub 部署：留空串而非编造一个不可达 URL；下游应据此回退到自己已知的来源
+    return { selfUri: '', versionedSelfUri: '', coverUriPattern: '', coverUriPatternVersioned: '' }
+  }
+  const base = `https://cdn.jsdelivr.net/gh/${slug.owner}/${slug.repo}`
+  return {
+    selfUri: `${base}@main/${CAPABILITIES_REL_PATH}`,
+    versionedSelfUri: `${base}@v${pkg.version}/${CAPABILITIES_REL_PATH}`,
+    coverUriPattern: `${base}@main/${COVERS_REL_DIR}/{personaId}.svg`,
+    coverUriPatternVersioned: `${base}@v${pkg.version}/${COVERS_REL_DIR}/{personaId}.svg`,
+  }
 }
 
 function buildContainers(): CapabilitiesV2['containers'] {
@@ -196,8 +305,14 @@ function build(): CapabilitiesV2 {
     variants: p.variants as unknown as Record<string, string>,
     palettePrimary: p.palette.primary,
   }))
+  const platforms = listPublishPlatforms().map((p) => ({
+    id: p.id,
+    name: p.name,
+    status: p.status,
+  }))
+  const { selfUri, versionedSelfUri, coverUriPattern, coverUriPatternVersioned } = buildSelfUris(pkg)
   return {
-    schemaVersion: '2.1',
+    schemaVersion: '2.3',
     tool: {
       name: pkg.name,
       version: pkg.version,
@@ -237,6 +352,11 @@ function build(): CapabilitiesV2 {
       forbidPosition: FORBIDDEN_CSS_PROPS.includes('position'),
       forbidMediaQueries: true,
     },
+    platforms,
+    selfUri,
+    versionedSelfUri,
+    coverUriPattern,
+    coverUriPatternVersioned,
     deprecations: [
       {
         // 字段命名误导：实际覆盖所有 styled 容器（intro / cover / author / ...），

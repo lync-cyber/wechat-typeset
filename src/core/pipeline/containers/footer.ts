@@ -10,6 +10,7 @@
 
 import type { ContainerRenderer } from './types'
 import { escAttr, escText } from './types'
+import { encodeQrSvg } from '../qr/encodeQrSvg'
 
 // 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）
 function resolveIssueStampForFooter(
@@ -78,13 +79,47 @@ export const recommendContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
+/**
+ * QR 码内联渲染：attrs.text 提供时直接生成 SVG，避免外链。
+ *
+ * fg/bg 取自主题 ctx.tokens.colors —— text 作前景，bg 作背景，主题切换时码本身
+ * 也跟着换色（暗底主题给出"反相 QR"，符合视觉系统的色彩律）。size 默认 160px。
+ * 缺省 ecc=M（约 15% 容错；中间常常会叠 logo 时再调到 H）。
+ *
+ * 不带 text 时退化为原"caption + 用户自带图片"形态，保留向后兼容。
+ */
+function renderInlineQr(
+  ctx: Parameters<ContainerRenderer['open']>[0],
+): string {
+  const text = ctx.attrs.text
+  if (!text) return ''
+  const ecc = (ctx.attrs.ecc ?? 'M').toUpperCase() as 'L' | 'M' | 'Q' | 'H'
+  const allowedEcc: ReadonlyArray<string> = ['L', 'M', 'Q', 'H']
+  const eccSafe = allowedEcc.includes(ecc) ? ecc : 'M'
+  const sizePx = Number(ctx.attrs.size ?? '') || 160
+  let svg: string
+  try {
+    svg = encodeQrSvg(text, {
+      ecc: eccSafe,
+      fg: ctx.tokens.colors.text,
+      bg: ctx.tokens.colors.bg,
+      size: sizePx,
+    })
+  } catch (err) {
+    // text 太长或编码失败 → 退化为可读的提示，不让整篇渲染崩
+    return `<section class="container-qrcode__error" style="color:${ctx.tokens.colors.textMuted};font-size:12px">[QR 编码失败：${escText(String(err))}]</section>\n`
+  }
+  return `<section class="container-qrcode__qr" style="display:inline-block;margin-bottom:8px">${svg}</section>\n`
+}
+
 export const qrcodeContainer: ContainerRenderer = {
   open: (ctx) => {
     const caption = ctx.info.trim()
     const cap = caption
       ? `<section class="container-qrcode__caption" style="text-align:center;color:${ctx.tokens.colors.textMuted};margin-bottom:8px">${escText(caption)}</section>`
       : ''
-    return `<section class="container-qrcode" style="text-align:center">\n${cap}\n`
+    const qr = renderInlineQr(ctx)
+    return `<section class="container-qrcode" style="text-align:center">\n${qr}${cap}\n`
   },
   close: '</section>\n',
 }

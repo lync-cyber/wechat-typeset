@@ -18,6 +18,10 @@ import { onBeforeUnmount, onMounted, watch, type Ref, type ComputedRef } from 'v
 import { baseThemeId, editorWidth, md } from './state'
 import { safeRead, safeWrite } from '../infra/storage/_kv'
 import { useUiTheme } from './uiTheme'
+import {
+  peekComponentShareHash,
+  tryImportComponentFromHash,
+} from '../infra/share/payloads/componentImport'
 
 const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
 const EDITOR_WIDTH_STORAGE_KEY = 'wechat-typeset:editor-width'
@@ -29,8 +33,39 @@ export interface BootstrapDeps {
   tryLoadShareFromHash: (
     onLoaded: (id: string, body: string, themeId: string) => void,
   ) => boolean
+  /**
+   * 我的组件库导入后回调（外部用来刷新 useUserComponents 的响应式 list）。
+   * 缺省则不调，仅本地 storage 写入。
+   */
+  onComponentImported?: () => void
   /** 任意抽屉/面板/浮层打开状态——移动端用来锁 body 滚动 */
   hasOpenDrawer: ComputedRef<boolean>
+}
+
+function importComponentFromHashIfPresent(onImported?: () => void): boolean {
+  if (typeof location === 'undefined') return false
+  const rawHash = location.hash
+  const preview = peekComponentShareHash(rawHash)
+  if (!preview) return false
+  const proceed = window.confirm(
+    `检测到分享链接里包含组件「${preview.component.name}」。\n` +
+      `导入到我的组件库吗？\n\n` +
+      `（${preview.component.description || '无描述'}）`,
+  )
+  // 不论用户选 Yes/No 都清 hash——下次刷新不重复弹窗。
+  try {
+    history.replaceState(null, '', location.pathname + location.search)
+  } catch {
+    location.hash = ''
+  }
+  if (!proceed) return false
+  const res = tryImportComponentFromHash(rawHash)
+  if (res.ok) {
+    onImported?.()
+    return true
+  }
+  if (res.message) window.alert(res.message)
+  return false
 }
 
 export function useBootstrap(deps: BootstrapDeps) {
@@ -50,7 +85,11 @@ export function useBootstrap(deps: BootstrapDeps) {
       const parsed = Number.parseInt(savedWidth, 10)
       if (Number.isFinite(parsed) && parsed > 0) editorWidth.value = parsed
     }
-    // 分享链接优先于草稿：若 URL 里带有 `#share=`，把 payload 作为新草稿载入；
+    // 组件分享链优先探测：`#share-component=...` 是"导入到我的组件库"，不替换草稿。
+    // 不论是否导入（用户可能 cancel），都不算 "已加载分享"；继续往下走正常初始化路径。
+    importComponentFromHashIfPresent(deps.onComponentImported)
+
+    // 文章分享链：若 URL 里带有 `#share=`，把 payload 作为新草稿载入；
     // 否则沿用正常的草稿恢复路径。
     const loaded = deps.tryLoadShareFromHash((id, body, themeId) => {
       deps.activeDraftId.value = id

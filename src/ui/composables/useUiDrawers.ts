@@ -10,7 +10,7 @@
 import { computed, reactive } from 'vue'
 
 export type LeftSlot = null | 'drafts'
-export type RightSlot = null | 'components' | 'customizer' | 'checklist'
+export type RightSlot = null | 'components' | 'customizer' | 'checklist' | 'persona-studio'
 
 export function useUiDrawers() {
   const ui = reactive({
@@ -25,12 +25,13 @@ export function useUiDrawers() {
     components: ui.rightSlot === 'components',
     customizer: ui.rightSlot === 'customizer',
     checklist: ui.rightSlot === 'checklist',
+    personaStudio: ui.rightSlot === 'persona-studio',
   }))
 
   function toggleLeft(slot: 'drafts') {
     ui.leftSlot = ui.leftSlot === slot ? null : slot
   }
-  function toggleRight(slot: 'components' | 'customizer' | 'checklist') {
+  function toggleRight(slot: 'components' | 'customizer' | 'checklist' | 'persona-studio') {
     ui.rightSlot = ui.rightSlot === slot ? null : slot
   }
   function closeAll() {

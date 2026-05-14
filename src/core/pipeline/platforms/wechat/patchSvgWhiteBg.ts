@@ -15,7 +15,7 @@
  */
 
 import { parseStyle, patchSvgSubtree, stringifyStyle } from './utils'
-import { NEAR_WHITE } from '../rules'
+import { NEAR_WHITE } from '../../rules'
 
 const WHITE_VALUES = new Set(['#fff', '#ffffff', 'white'])
 const RGB_WHITE_RE = /^\s*rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)\s*$/i

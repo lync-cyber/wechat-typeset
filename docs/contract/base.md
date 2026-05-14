@@ -33,7 +33,7 @@
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph。 |
 |  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。 |
 |  | `recommend` | ★ | 推荐阅读列表。 |
-| 媒体 | `qrcode` | ★ | 二维码块（图 + 说明文案）。 |
+| 媒体 | `qrcode` | ★ | 二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。 |
 |  | `mpvoice` | ★ | 公众号语音卡（占位，粘贴后在公众号编辑器补真 mpvoice 节点）。 |
 |  | `mpvideo` | ★ | 公众号视频卡（占位，粘贴后在公众号编辑器补真 mpvideo 节点）。 |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |

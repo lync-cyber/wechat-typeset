@@ -14,13 +14,24 @@ import { createMarkdown } from './markdown'
 import { generateThemeCSS } from './themeCSS'
 import { atomOneDarkCss, highlightCode } from './highlight'
 import { inlineHtml } from './juiceInline'
-import { applyWxPatches, inspectPatchTargets, type PatchLog, type WxPatchOptions } from './wxPatch'
+import type { WxPatchOptions } from './platforms/wechat'
+import type { PatchLog } from './platforms/types'
+import { DEFAULT_PLATFORM_ID, getPlatform } from './platforms/registry'
 import { CODE_BLOCK_VARIANTS } from '../variants/registry'
 import { parseInfo } from './containers'
 
 export interface RenderInput {
   md: string
   theme: Theme
+  /**
+   * 复制 / 导出目标平台 id。默认 'wechat'（保留 R10 之前行为）。
+   * 走 platforms/registry 派发；未知 id 抛错。zhihu / xhs 当前为 placeholder。
+   */
+  platform?: string
+  /**
+   * 微信平台特定选项。仅当 platform='wechat'（或缺省）时生效；其它平台静默忽略。
+   * 命名保留为 wxPatch 是因为公开 API 已用此字段名；增加平台 opts 时不破坏既有调用。
+   */
   wxPatch?: WxPatchOptions
 }
 
@@ -105,9 +116,12 @@ export function render(input: RenderInput): RenderOutput {
 
   const inlined = inlineHtml(htmlWithStyle)
 
-  // wxPatch 后处理层；inspect 必须在 applyWxPatches 之前——见模块头注释
-  const patchLog = inspectPatchTargets(inlined)
-  const finalHtml = applyWxPatches(inlined, input.wxPatch)
+  // Step 3：DOM 后处理层。按 platform 经 registry 派发。
+  // inspect 必须在 patch 之前：patches 幂等，应用后计数会归零。
+  // wxPatch 字段当前仅 wechat 消费；其它平台 adapter 静默忽略。
+  const platform = getPlatform(input.platform ?? DEFAULT_PLATFORM_ID)
+  const patchLog: PatchLog = platform.inspect ? platform.inspect(inlined) : { entries: [], total: 0 }
+  const finalHtml = platform.patch(inlined, input.wxPatch)
 
   const wordCount = countWords(source)
   const readingTime = Math.max(1, Math.ceil(wordCount / 300))
