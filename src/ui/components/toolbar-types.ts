@@ -22,6 +22,8 @@ export type ToolbarAction =
   | 'exportHtml'
   | 'exportMd'
   | 'exportImage'
+  | 'exportCoverHorizontal'
+  | 'exportCoverSquare'
   | 'copyShareLink'
   | 'openCommand'
   | 'openHelp'

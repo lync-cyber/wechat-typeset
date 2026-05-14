@@ -46,13 +46,41 @@ function readOutlinkStrategy(): OutlinkStrategy {
   return 'keep'
 }
 
+/**
+ * F4 段落计数 —— "由非空白行隔开的非空白行块"数。
+ * 与 markdown 渲染后 <p> 节点数大致一致；fenced code / list / heading 都各算一段（作者
+ * 通常希望"我刚才贴了多少段内容"这个体感数字）。
+ */
+function countParagraphs(md: string): number {
+  if (!md.trim()) return 0
+  return md
+    .split(/\n\s*\n+/)
+    .filter((block) => block.trim().length > 0)
+    .length
+}
+
+/** mp.weixin.qq.com 的"图文编辑器"列表页 —— 复制成功后引导作者下一步 */
+const WECHAT_MP_URL = 'https://mp.weixin.qq.com/'
+
+/** 复制成功的 toast 数据（持续 6 秒，含 CTA），与顶栏 transient label 互不冲突。 */
+export interface CopyResult {
+  message: string
+  details: string[]
+  cta?: { label: string; url: string }
+}
+
 export function useClipboardCopy(deps: ClipboardCopyDeps) {
   const outlinkStrategy = ref<OutlinkStrategy>(readOutlinkStrategy())
   const persistentError = ref<string | null>(null)
+  const copyResult = ref<CopyResult | null>(null)
 
   function setOutlinkStrategy(v: OutlinkStrategy) {
     outlinkStrategy.value = v
     safeWrite(OUTLINK_STRATEGY_KEY, v)
+  }
+
+  function dismissCopyResult() {
+    copyResult.value = null
   }
 
   async function handleCopy() {
@@ -66,15 +94,28 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
     const plain = deps.md.value
     const result = await copyHtmlToClipboard(html, plain)
     if (result.ok) {
-      const strategyNote =
-        count > 0 && outlinkStrategy.value === 'tail-list'
-          ? `（${count} 条外链已尾注）`
-          : count > 0 && outlinkStrategy.value === 'drop'
-          ? `（${count} 条外链已丢弃）`
-          : ''
-      const imageNote = inlineImages > 0 ? `（${inlineImages} 张内联图将由微信转存）` : ''
+      const details: string[] = []
+      // F4：先放"全文体量"——作者发文前最关心"刚才复制了多少字 / 几段"
+      const wordCount = deps.rendered.value.wordCount
+      const paragraphCount = countParagraphs(plain)
+      if (wordCount > 0) details.push(`${wordCount} 字`)
+      if (paragraphCount > 0) details.push(`${paragraphCount} 段`)
+      // 然后是降级处理摘要
+      if (count > 0 && outlinkStrategy.value === 'tail-list') details.push(`${count} 条外链已尾注`)
+      else if (count > 0 && outlinkStrategy.value === 'drop') details.push(`${count} 条外链已丢弃`)
+      if (inlineImages > 0) details.push(`${inlineImages} 张内联图待微信转存`)
+      if (result.mode !== 'clipboard-api') details.push('已降级走 execCommand')
+
+      // 顶栏短促 label —— 留作兜底（窄屏下 toast 可能被键盘遮挡时仍可见保存条上变化）
       const base = result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）'
-      deps.pingTransient(base + strategyNote + imageNote)
+      deps.pingTransient(details.length > 0 ? `${base}（${details.join(' · ')}）` : base)
+
+      // 主反馈：CopyResultToast，含"打开公众号后台"CTA
+      copyResult.value = {
+        message: '已复制到剪贴板',
+        details,
+        cta: { label: '打开公众号后台', url: WECHAT_MP_URL },
+      }
       persistentError.value = null
     } else {
       persistentError.value = `复制失败：${result.error ?? '未知错误'}（请换 Chrome/Safari 或关闭跨域 iframe）`
@@ -146,6 +187,8 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
     outlinkStrategy,
     setOutlinkStrategy,
     persistentError,
+    copyResult,
+    dismissCopyResult,
     handleCopy,
     handleCopyShareLink,
     tryLoadShareFromHash,

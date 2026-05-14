@@ -272,3 +272,57 @@ export function fixZhTypo(source: string): string {
   }
   return out
 }
+
+/**
+ * F3 diff 路径：与 fixZhTypo 行为完全一致，同时返回每条改动在 **新文本** 中的
+ * post-fix 半开区间，供编辑器装饰高亮（让作者看到"哪些片段被一键修复改了"）。
+ *
+ * 实现两阶段：
+ *   1) 倒序模拟一次"重叠跳过"决策，挑出真正被采纳的 hits（与 fixZhTypo 算法一致）
+ *   2) 正序应用 + 累计 delta，得到每条 hit 在新串中的位置
+ *
+ * 没有把这层算法塞回 fixZhTypo 是为了 fixZhTypo 保持 O(n) 单次分配 + 单一职责
+ * （现有 29 个单测、其它消费方仅需 string→string）。
+ */
+export interface FixZhTypoRange {
+  /** 新文本中的起点（含） */
+  from: number
+  /** 新文本中的终点（不含） */
+  to: number
+  code: ZhTypoCode
+}
+
+export interface FixZhTypoResult {
+  fixed: string
+  /** 长度 = 实际被采纳的 hits 数；按 `from` 升序 */
+  ranges: FixZhTypoRange[]
+}
+
+export function fixZhTypoWithRanges(source: string): FixZhTypoResult {
+  const hits = scanZhTypo(source)
+  if (hits.length === 0) return { fixed: source, ranges: [] }
+
+  // 阶段 1：倒序模拟，挑出实际被采纳的 hits（与 fixZhTypo 同款"重叠跳过"）
+  const taken: ZhTypoHit[] = []
+  let guard = Infinity
+  for (let i = hits.length - 1; i >= 0; i--) {
+    const h = hits[i]
+    if (h.to > guard) continue
+    taken.push(h)
+    guard = h.from
+  }
+  taken.reverse() // 倒序 → 正序
+
+  // 阶段 2：正序应用，累积 delta，落 post-fix 区间
+  let out = source
+  let delta = 0
+  const ranges: FixZhTypoRange[] = []
+  for (const h of taken) {
+    const postFrom = h.from + delta
+    out = out.slice(0, postFrom) + h.replacement + out.slice(postFrom + h.original.length)
+    const postTo = postFrom + h.replacement.length
+    ranges.push({ from: postFrom, to: postTo, code: h.code })
+    delta += h.replacement.length - h.original.length
+  }
+  return { fixed: out, ranges }
+}

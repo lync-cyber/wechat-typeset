@@ -9,6 +9,10 @@ import { ref, type Ref } from 'vue'
 import type { RenderOutput } from '../../core/pipeline'
 import type { Theme } from '../../core/themes/types'
 import { exportHtml, exportImage, exportMd } from '../../infra/exporters/exportFile'
+import { exportCoverImage } from '../../infra/exporters/exportCover'
+import { buildRuntimeCover, COVER_SIZES, type CoverSizeId } from '../../core/pipeline/cover/buildCover'
+import { shapeToSvg } from '../../core/themes/_shared/spec'
+import type { Palette } from '../../core/themes/_shared/spec/types'
 
 export interface ExportActionsDeps {
   md: Ref<string>
@@ -80,5 +84,80 @@ export function useExportActions(deps: ExportActionsDeps) {
     }
   }
 
-  return { doExportHtml, doExportMd, doExportImage, isExporting }
+  /**
+   * W2 公众号封面导出 —— 用当前主题 palette + 草稿首行作为 hero 文案，按 size preset
+   * 生成 SVG 并光栅化为 PNG。失败时走 persistentError（与长图导出一致的错误传染路径）。
+   *
+   * 文案来源（按优先级）：
+   *   1. md 首个 `# ` heading → 主标题
+   *   2. activeTheme.name → 主标题（兜底）
+   *   3. activeTheme.description → 副标题
+   *   4. activeTheme.id 大写 → kicker
+   */
+  async function doExportCover(size: CoverSizeId): Promise<void> {
+    if (isExporting.value) return
+    isExporting.value = true
+    try {
+      const meta = COVER_SIZES[size]
+      deps.pingTransient(`正在生成${meta.label}…`, 2500)
+      const theme = deps.activeTheme.value
+      const palette = themeColorsToPalette(theme)
+      const titleFromMd = extractTitleFromMd(deps.md.value)
+      const shape = buildRuntimeCover(
+        {
+          palette,
+          title: titleFromMd || theme.name,
+          tagline: theme.description,
+          kicker: theme.id.toUpperCase().replace(/-/g, ' '),
+        },
+        size,
+      )
+      const svg = shapeToSvg(shape)
+      const filename = `${deps.fileStem()}-cover-${size}.png`
+      const result = await exportCoverImage(svg, filename, {
+        width: meta.width,
+        height: meta.height,
+        scale: 2,
+        background: palette.bg,
+      })
+      if (result.ok) deps.pingTransient(`已导出${meta.label}`)
+      else deps.setPersistentError(`封面导出失败：${result.error ?? '未知错误'}`)
+    } finally {
+      isExporting.value = false
+    }
+  }
+
+  return { doExportHtml, doExportMd, doExportImage, doExportCover, isExporting }
+}
+
+/** 从 markdown 抽第一行 `# 标题`；找不到返回空串 */
+function extractTitleFromMd(md: string): string {
+  const lines = md.split('\n')
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (!line) continue
+    const m = /^#+\s+(.+)$/.exec(line)
+    if (m) return m[1].trim().slice(0, 40)
+    // 第一段非空行如果不是 heading，也视为可用标题（取前 40 字）
+    return line.slice(0, 40)
+  }
+  return ''
+}
+
+/** Theme.tokens.colors → spec.Palette（字段一一对应，仅做形状投影） */
+function themeColorsToPalette(theme: Theme): Palette {
+  const c = theme.tokens.colors
+  return {
+    primary: c.primary,
+    secondary: c.secondary,
+    accent: c.accent,
+    bg: c.bg,
+    bgSoft: c.bgSoft,
+    bgMuted: c.bgMuted,
+    text: c.text,
+    textMuted: c.textMuted,
+    textInverse: c.textInverse,
+    border: c.border,
+    code: c.code,
+  }
 }

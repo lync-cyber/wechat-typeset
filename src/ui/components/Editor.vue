@@ -6,6 +6,7 @@ import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirro
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { createContainerAutocomplete, createContainerLinter } from '../editor-extensions'
+import { applyZhFixHighlight, zhFixHighlightExtension } from '../editor-extensions-zhfix'
 import { sanitizePastedHtml, shouldSanitize } from '../../infra/clipboard/pasteSanitize'
 import { uploadImages, isImageFile } from '../../infra/clipboard/imageIntake'
 import { uiThemeMode } from '../../app/uiTheme'
@@ -98,12 +99,24 @@ function focus(): void {
   view?.focus()
 }
 
+/**
+ * F3 一键修复中文排版后，把命中范围短时间高亮 5s。
+ * actions.handleFixZhTypo 流程：先用 fixZhTypoWithRanges 拿 fixed + ranges，
+ * 写 md.value = fixed（触发 modelValue 回流并更新 doc），随后调本方法。
+ * doc 更新与高亮分两次 dispatch；ranges 已是 fixed 文本中的最终位置。
+ */
+function highlightZhFix(ranges: readonly { from: number; to: number }[]): void {
+  if (!view) return
+  applyZhFixHighlight(view, ranges)
+}
+
 defineExpose({
   insertAtCursor,
   getSelectedText,
   getScroller,
   scrollToRatio,
   focus,
+  highlightZhFix,
 })
 
 /** 在指定选区插入一段文本，并把光标落在插入末尾。 */
@@ -260,6 +273,7 @@ function createView(doc: string) {
       syntaxCompartment.of(syntaxExtensionFor(uiThemeMode.value)),
       createContainerAutocomplete(),
       createContainerLinter(),
+      ...zhFixHighlightExtension,
       EditorView.lineWrapping,
       EditorView.updateListener.of((upd) => {
         if (upd.docChanged) {

@@ -1,18 +1,25 @@
 <script setup lang="ts">
 /**
- * 首次使用的浮层卡片 · 只出现一次（localStorage 记忆）
+ * 首次使用的引导卡 · 三步 coachmark
  *
- * 两套内容：桌面端讲快捷键（⌘K / ⌘↵ / ?）；移动端没有键盘，改指向工具栏上的按钮
- * （主题切换 / 复制 / 更多菜单）——免得新用户看见 "⌘K" 不知所云。
- * 切分依据：`(max-width: 767px)` 与 `.mobile-tabs` 在 App.vue 的断点保持一致。
+ * P1：原本是"罗列三个键位/三个按钮"的静态文案。现在改为分步引导——每一步：
+ *   1. 在卡片里告诉用户接下来该做什么 / 在哪里点
+ *   2. 给对应目标按钮（.btn-theme / .btn-insert / .btn-copy-main）挂 .onboard-spotlight，
+ *      用脉冲 ring 把视觉锚点落到该按钮上
+ *   3. 用户点"下一步"或目标按钮的预期路径触发完成
+ *
+ * 桌面 / 移动共用同一组 step 文案，区别只在 step 3 的"复制路径"提示词（桌面 ⌘Enter，
+ * 移动指向底部 mobile-tab-copy）。
+ *
+ * Spotlight 实现说明：spotlight 类用全局 <style>（unscoped），因为目标按钮 DOM 在
+ * Toolbar 内、不属于本组件作用域。卡片自身 dismiss / unmount 时主动清理所有
+ * .onboard-spotlight，避免残留高亮。
  */
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const emit = defineEmits<{
   (e: 'dismiss'): void
   (e: 'openHelp'): void
-  (e: 'openCommand'): void
-  (e: 'openOverflow'): void
 }>()
 
 const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
@@ -23,65 +30,146 @@ let mq: MediaQueryList | null = null
 function syncMobile() {
   isMobile.value = mq?.matches ?? false
 }
+
+// 三步引导
+const step = ref<0 | 1 | 2>(0)
+const totalSteps = 3
+
+interface Step {
+  /** 目标按钮 CSS 选择器（spotlight 锚点）；null 表示该 step 不挂高亮 */
+  anchor: string | null
+  /** 步骤短标题 */
+  title: string
+  /** 主体说明 */
+  body: string
+  /** 下一步按钮文案 */
+  next: string
+}
+
+const desktopSteps: readonly Step[] = [
+  {
+    anchor: '.btn-theme',
+    title: '① 先选主题',
+    body: '点工具栏的「主题名」按钮，主题决定配色、字距、装饰；切换瞬时生效。',
+    next: '下一步 →',
+  },
+  {
+    anchor: '.btn-insert',
+    title: '② 插入排版块',
+    body: '点「+ 插入」打开组件库——提示块、金句卡、步骤、对比……一键插光标处。',
+    next: '下一步 →',
+  },
+  {
+    anchor: '.btn-copy-main',
+    title: '③ 一键复制到公众号',
+    body: `按 ${modKey} ↵ 或点工具栏「一键复制」，回到公众号编辑器粘贴即可。`,
+    next: '完成',
+  },
+]
+
+const mobileSteps: readonly Step[] = [
+  {
+    anchor: '.btn-theme',
+    title: '① 先选主题',
+    body: '点上方「主题名」选不同视觉气质；预览实时更新。',
+    next: '下一步 →',
+  },
+  {
+    anchor: '.btn-insert',
+    title: '② 插入排版块',
+    body: '点「+」插入提示块 / 金句卡 / 步骤等公众号常用版式。',
+    next: '下一步 →',
+  },
+  {
+    // 移动端 hero 复制按钮在底部 tab bar
+    anchor: '.mobile-tab-copy',
+    title: '③ 一键复制',
+    body: '底部「一键复制」按钮把富文本复制到剪贴板，去公众号粘贴即可。',
+    next: '完成',
+  },
+]
+
+const steps = computed(() => (isMobile.value ? mobileSteps : desktopSteps))
+const current = computed<Step>(() => steps.value[step.value])
+
+const SPOTLIGHT_CLASS = 'onboard-spotlight'
+
+function clearAllSpotlights() {
+  if (typeof document === 'undefined') return
+  document.querySelectorAll(`.${SPOTLIGHT_CLASS}`).forEach((el) => {
+    el.classList.remove(SPOTLIGHT_CLASS)
+  })
+}
+
+function applySpotlight(selector: string | null) {
+  clearAllSpotlights()
+  if (!selector || typeof document === 'undefined') return
+  const el = document.querySelector(selector)
+  el?.classList.add(SPOTLIGHT_CLASS)
+}
+
+function gotoStep(next: number) {
+  if (next >= totalSteps) {
+    dismiss()
+    return
+  }
+  step.value = next as 0 | 1 | 2
+  applySpotlight(current.value.anchor)
+}
+
+function dismiss() {
+  clearAllSpotlights()
+  emit('dismiss')
+}
+
 onMounted(() => {
   mq = window.matchMedia('(max-width: 767px)')
   syncMobile()
   mq.addEventListener('change', syncMobile)
-})
-onUnmounted(() => {
-  mq?.removeEventListener('change', syncMobile)
+  applySpotlight(current.value.anchor)
 })
 
-const heading = computed(() =>
-  isMobile.value ? '三步开始写' : '三个键，走通 80% 动作',
-)
+onUnmounted(() => {
+  mq?.removeEventListener('change', syncMobile)
+  // 卡片被外部 v-if 拆掉时也清掉高亮
+  clearAllSpotlights()
+})
 </script>
 
 <template>
-  <aside class="onboard" role="note" aria-label="首次使用提示">
+  <aside class="onboard" role="note" aria-label="首次使用引导">
     <header class="onboard-head">
-      <span class="onboard-kicker mono">WELCOME</span>
-      <button class="close" title="不再显示" @click="emit('dismiss')">×</button>
+      <span class="onboard-kicker mono">WELCOME · {{ step + 1 }}/{{ totalSteps }}</span>
+      <button class="close" title="不再显示" aria-label="不再显示" @click="dismiss">×</button>
     </header>
-    <h4 class="onboard-title">{{ heading }}</h4>
+    <h4 class="onboard-title">{{ current.title }}</h4>
+    <p class="onboard-body">{{ current.body }}</p>
 
-    <!-- 桌面：讲快捷键 -->
-    <ul v-if="!isMobile" class="onboard-list">
-      <li>
-        <button class="kbd-btn mono" @click="emit('openCommand')">{{ modKey }} K</button>
-        <span>打开命令面板，搜索一切动作</span>
-      </li>
-      <li>
-        <span class="kbd mono">{{ modKey }} ↵</span>
-        <span>复制排版后的富文本</span>
-      </li>
-      <li>
-        <button class="kbd-btn mono" @click="emit('openHelp')">?</button>
-        <span>查看全部快捷键</span>
-      </li>
-    </ul>
+    <div class="onboard-dots" role="tablist" aria-label="引导步骤">
+      <button
+        v-for="i in totalSteps"
+        :key="i"
+        type="button"
+        role="tab"
+        class="onboard-dot"
+        :class="{ active: i - 1 === step }"
+        :aria-selected="i - 1 === step"
+        :aria-label="`第 ${i} 步`"
+        @click="gotoStep(i - 1)"
+      />
+    </div>
 
-    <!-- 移动：讲工具栏按钮 -->
-    <ul v-else class="onboard-list onboard-list--mobile">
-      <li>
-        <span class="pill">顶栏</span>
-        <span>选 <strong>主题</strong>、打开 <strong>插入组件</strong>、<strong>自定义配色</strong></span>
-      </li>
-      <li>
-        <span class="pill pill-accent">复制</span>
-        <span>右上角 <strong>复制到公众号</strong> 按钮 —— 长按可直接粘贴到公众号后台</span>
-      </li>
-      <li>
-        <button class="pill pill-btn" @click="emit('openOverflow')">⋯ 更多</button>
-        <span>草稿管理 / 载入示例 / 导出 HTML MD / 快捷键帮助</span>
-      </li>
-      <li>
-        <span class="pill">底栏</span>
-        <span><strong>编辑 ⇄ 预览</strong> 切换；右半屏写完切过去检查效果</span>
-      </li>
-    </ul>
+    <div class="onboard-actions">
+      <button class="onboard-skip" type="button" @click="dismiss">跳过</button>
+      <button class="onboard-next" type="button" @click="gotoStep(step + 1)">
+        {{ current.next }}
+      </button>
+    </div>
 
-    <button class="dismiss" @click="emit('dismiss')">明白了</button>
+    <p v-if="step === 0" class="onboard-foot">
+      想直接看快捷键？
+      <button class="onboard-link" type="button" @click="emit('openHelp'); dismiss()">打开帮助</button>
+    </p>
   </aside>
 </template>
 
@@ -90,7 +178,7 @@ const heading = computed(() =>
   position: absolute;
   right: var(--sp-5);
   bottom: var(--sp-5);
-  width: 300px;
+  width: 320px;
   padding: var(--sp-4) var(--sp-5);
   background: var(--surface-raised);
   border: 1px solid var(--border);
@@ -121,81 +209,87 @@ const heading = computed(() =>
 }
 .close:hover { color: var(--text); }
 .onboard-title {
-  margin: 0 0 var(--sp-3);
+  margin: 0 0 var(--sp-2);
   font-family: var(--font-display);
-  font-size: var(--fs-17);
+  font-size: var(--fs-15);
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-tight);
 }
-.onboard-list {
-  list-style: none; margin: 0 0 var(--sp-3); padding: 0;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.onboard-list li {
-  display: flex; align-items: center; gap: var(--sp-3);
+.onboard-body {
+  margin: 0 0 var(--sp-3);
   font-size: var(--fs-12);
   color: var(--text-muted);
+  line-height: 1.55;
 }
-.onboard-list--mobile li {
-  align-items: flex-start;
-  line-height: 1.5;
+.onboard-dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-bottom: var(--sp-3);
 }
-.onboard-list--mobile strong {
-  color: var(--text);
-  font-weight: var(--fw-bold);
-}
-.kbd, .kbd-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 36px; height: 22px;
-  padding: 0 6px;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-bottom-width: 2px;
-  border-radius: var(--radius-1);
-}
-.kbd-btn { cursor: pointer; transition: var(--t-quick); }
-.kbd-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
-.pill {
-  flex-shrink: 0;
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 44px; height: 22px;
-  padding: 0 8px;
-  font-size: var(--fs-11);
-  font-weight: var(--fw-bold);
-  letter-spacing: var(--ls-tight);
-  color: var(--text-subtle);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-1);
-}
-.pill-accent {
-  color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-.pill-btn {
+.onboard-dot {
+  width: 18px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--surface-alt);
   cursor: pointer;
+  padding: 0;
   transition: var(--t-quick);
-  font-family: var(--font-mono);
 }
-.pill-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
-.dismiss {
-  width: 100%;
-  height: 28px;
+.onboard-dot:hover { background: var(--border-strong); }
+.onboard-dot.active { background: var(--accent); }
+
+.onboard-actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+.onboard-skip {
+  flex: 0 0 auto;
+  padding: 0 var(--sp-3);
+  height: 30px;
+  background: transparent;
   border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
+  color: var(--text-muted);
   border-radius: var(--radius-2);
   font-size: var(--fs-12);
+  font-family: inherit;
   cursor: pointer;
+  transition: var(--t-quick);
 }
-.dismiss:hover { background: var(--surface-alt); }
+.onboard-skip:hover { background: var(--surface); color: var(--text); }
+.onboard-next {
+  flex: 1 1 auto;
+  height: 30px;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: var(--accent-on);
+  border-radius: var(--radius-2);
+  font-size: var(--fs-12);
+  font-weight: var(--fw-medium);
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.onboard-next:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+.onboard-foot {
+  margin: var(--sp-3) 0 0;
+  font-size: var(--fs-11);
+  color: var(--text-subtle);
+  text-align: center;
+}
+.onboard-link {
+  background: none; border: none; padding: 0;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fs-11);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
 
 @media (max-width: 767px) {
-  /* 贴到屏幕中部偏下，不被底部 tab 遮挡 */
+  /* 移动端把卡贴到屏幕中部偏下，不被底部 tab 遮挡 */
   .onboard {
     right: var(--sp-3);
     left: var(--sp-3);
@@ -203,6 +297,39 @@ const heading = computed(() =>
     width: auto;
     max-width: 360px;
     margin: 0 auto;
+  }
+}
+</style>
+
+<!--
+  全局 spotlight 样式 —— 必须 unscoped，因为目标节点（.btn-theme / .btn-insert /
+  .btn-copy-main / .mobile-tab-copy）位于 Toolbar / App 模板内、不属于 OnboardingCard
+  的 scoped 作用域。
+  脉冲 ring 用 box-shadow 双层（实环 + 软光晕），不依赖外部布局空间，对原按钮无侵入。
+-->
+<style>
+@keyframes onboard-spotlight-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px var(--accent),
+      0 0 0 6px var(--accent-soft);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px var(--accent),
+      0 0 0 10px transparent;
+  }
+}
+.onboard-spotlight {
+  position: relative;
+  z-index: 30;
+  border-radius: var(--radius-2, 4px);
+  animation: onboard-spotlight-pulse 1.6s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .onboard-spotlight {
+    animation: none;
+    box-shadow: 0 0 0 2px var(--accent), 0 0 0 6px var(--accent-soft);
   }
 }
 </style>

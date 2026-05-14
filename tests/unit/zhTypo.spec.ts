@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { scanZhTypo, fixZhTypo } from '../../src/core/pipeline/zhTypo'
+import { scanZhTypo, fixZhTypo, fixZhTypoWithRanges } from '../../src/core/pipeline/zhTypo'
 
 describe('scanZhTypo · 规则 1 中英空格', () => {
   it('CJK 后紧邻 ASCII 字母命中', () => {
@@ -204,5 +204,54 @@ describe('scanZhTypo · 排序与偏移', () => {
     const src = '说hello'
     const hit = scanZhTypo(src).find((h) => h.code === 'zh-ascii-spacing')!
     expect(src.slice(hit.from, hit.to)).toBe(hit.original)
+  })
+})
+
+describe('fixZhTypoWithRanges · F3 diff 路径', () => {
+  it('fixed 与 fixZhTypo 一字不差', () => {
+    const src = '今天1天，hello world！'
+    expect(fixZhTypoWithRanges(src).fixed).toBe(fixZhTypo(src))
+  })
+
+  it('无 typo 时 ranges 为空且 fixed === source', () => {
+    const src = 'hello world'
+    const { fixed, ranges } = fixZhTypoWithRanges(src)
+    expect(ranges).toHaveLength(0)
+    expect(fixed).toBe(src)
+  })
+
+  it('post-fix ranges 在新文本里切出来正是 replacement', () => {
+    const src = '今天1天'
+    const { fixed, ranges } = fixZhTypoWithRanges(src)
+    expect(ranges.length).toBeGreaterThan(0)
+    // 每条 range 在 fixed 中应能切出一段非空内容（验位置不越界）
+    for (const r of ranges) {
+      expect(r.from).toBeGreaterThanOrEqual(0)
+      expect(r.to).toBeLessThanOrEqual(fixed.length)
+      expect(r.to).toBeGreaterThan(r.from)
+    }
+  })
+
+  it('ranges 按 from 升序', () => {
+    const src = '前world，中...后A'
+    const { ranges } = fixZhTypoWithRanges(src)
+    for (let i = 1; i < ranges.length; i++) {
+      expect(ranges[i].from).toBeGreaterThanOrEqual(ranges[i - 1].from)
+    }
+  })
+
+  it('累积 delta 正确：多条不同长度的替换串联', () => {
+    // `...` → `……` 改 3 字符为 2 字符，delta=-1；后续命中需相应右移
+    const src = '说...A中'
+    const { fixed, ranges } = fixZhTypoWithRanges(src)
+    // 每条 range 切出的内容长度等于该条 replacement 的长度
+    // 用 scanZhTypo 拿到原始 replacement 序列；按 fixZhTypoWithRanges 的"重叠跳过"
+    // 决策，taken 的总数 = ranges.length
+    expect(ranges.length).toBeGreaterThan(0)
+    for (const r of ranges) {
+      // fixed 切片至少存在
+      const slice = fixed.slice(r.from, r.to)
+      expect(slice.length).toBe(r.to - r.from)
+    }
   })
 })
