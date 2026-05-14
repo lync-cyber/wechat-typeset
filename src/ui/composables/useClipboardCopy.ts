@@ -10,6 +10,7 @@
 import { ref, type Ref } from 'vue'
 import type { RenderOutput } from '../../core/pipeline'
 import { copyHtmlToClipboard } from '../../infra/clipboard/copyHtml'
+import { countInlineImages } from '../../infra/clipboard/copyHints'
 import {
   degradeOutlinks,
   OUTLINK_STRATEGIES,
@@ -18,6 +19,7 @@ import {
 import {
   buildShareUrl,
   parseShareHash,
+  stripInlineImagesForShare,
   type SharePayload,
 } from '../../infra/share/shareLink'
 import { createDraft, setActiveDraftId } from '../../infra/storage/drafts'
@@ -56,6 +58,8 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
     deps.flush()
     const rawHtml = deps.rendered.value.html
     const { html, count } = degradeOutlinks(rawHtml, outlinkStrategy.value)
+    // 自检在降级后的 HTML 上跑——若未来 outlink 策略也影响图片，这里能跟上
+    const inlineImages = countInlineImages(html)
     const plain = deps.md.value
     const result = await copyHtmlToClipboard(html, plain)
     if (result.ok) {
@@ -65,8 +69,9 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
           : count > 0 && outlinkStrategy.value === 'drop'
           ? `（${count} 条外链已丢弃）`
           : ''
+      const imageNote = inlineImages > 0 ? `（${inlineImages} 张内联图将由微信转存）` : ''
       const base = result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）'
-      deps.pingTransient(base + strategyNote)
+      deps.pingTransient(base + strategyNote + imageNote)
       persistentError.value = null
     } else {
       persistentError.value = `复制失败：${result.error ?? '未知错误'}（请换 Chrome/Safari 或关闭跨域 iframe）`
@@ -74,19 +79,24 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
   }
 
   async function handleCopyShareLink() {
+    // 分享前必剥 data: 内联图：一张 100 KB 截图就能把 hash 撑到 ~140 KB，Safari 截断。
+    // 接收侧据 strippedImages 计数提示读者"原稿端补图"。
+    const { md: stripped, count } = stripInlineImagesForShare(deps.md.value)
     const payload: SharePayload = {
       v: 1,
-      md: deps.md.value,
+      md: stripped,
       themeId: deps.baseThemeId.value,
+      ...(count > 0 ? { strippedImages: count } : {}),
     }
     const url = buildShareUrl(payload)
+    const tail = count > 0 ? `（${count} 张内联图已剥离）` : ''
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(url)
-        deps.pingTransient('已复制分享链接')
+        deps.pingTransient('已复制分享链接' + tail)
       } else {
         location.hash = url.slice(url.indexOf('#'))
-        deps.pingTransient('请从地址栏复制当前链接')
+        deps.pingTransient('请从地址栏复制当前链接' + tail)
       }
     } catch {
       persistentError.value = '分享链接复制失败：请手动复制地址栏 URL'
@@ -122,7 +132,10 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
     } catch {
       location.hash = ''
     }
-    deps.pingTransient('已从分享链接载入新草稿', 2500)
+    const tail = payload.strippedImages
+      ? `（原稿剥离了 ${payload.strippedImages} 张内联图，请在编辑端补图）`
+      : ''
+    deps.pingTransient('已从分享链接载入新草稿' + tail, 3500)
     return true
   }
 

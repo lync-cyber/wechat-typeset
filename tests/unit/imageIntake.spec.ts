@@ -7,7 +7,13 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { uploadImages, isImageFile, type ImageProvider } from '../../src/infra/clipboard/imageIntake'
+import {
+  uploadImages,
+  isImageFile,
+  type ImageProvider,
+  DEFAULT_TARGET_BYTES,
+  DEFAULT_TOTAL_BUDGET_BYTES,
+} from '../../src/infra/clipboard/imageIntake'
 
 function makeFile(name: string, type: string, size = 100): File {
   const blob = new Blob(['x'.repeat(size)], { type })
@@ -114,5 +120,63 @@ describe('uploadImages · provider 接口', () => {
 
   it('空数组返回空串', async () => {
     expect(await uploadImages([], ok)).toBe('')
+  })
+})
+
+describe('uploadImages · 总量闸门', () => {
+  const KB = 1024
+  function bigSrcProvider(payloadBytes: number): ImageProvider {
+    return {
+      name: 'big',
+      async upload(file) {
+        return `data:image/webp;base64,${'A'.repeat(payloadBytes)}#${file.name}`
+      },
+    }
+  }
+
+  it('累计未超预算时按原样返回所有项', async () => {
+    const files = [
+      makeFile('a.png', 'image/png'),
+      makeFile('b.png', 'image/png'),
+      makeFile('c.png', 'image/png'),
+    ]
+    const md = await uploadImages(files, bigSrcProvider(10 * KB), { totalBudgetBytes: 100 * KB })
+    expect(md).toContain('a.png')
+    expect(md).toContain('b.png')
+    expect(md).toContain('c.png')
+    expect(md).not.toMatch(/budget exceeded/)
+  })
+
+  it('超总量预算后停余下项，写注释带剩余张数', async () => {
+    const files = [
+      makeFile('a.png', 'image/png'),
+      makeFile('b.png', 'image/png'),
+      makeFile('c.png', 'image/png'),
+      makeFile('d.png', 'image/png'),
+    ]
+    // 每张 50 KB；预算 80 KB → 第 2 张后即超
+    const md = await uploadImages(files, bigSrcProvider(50 * KB), { totalBudgetBytes: 80 * KB })
+    expect(md).toContain('a.png')
+    expect(md).toContain('b.png')
+    expect(md).not.toContain('c.png')
+    expect(md).not.toContain('d.png')
+    expect(md).toMatch(/image budget exceeded/)
+    expect(md).toMatch(/剩余 2 张未上传/)
+  })
+
+  it('totalBudgetBytes=0 关闭闸门，不论多大都全上传', async () => {
+    const files = [
+      makeFile('a.png', 'image/png'),
+      makeFile('b.png', 'image/png'),
+    ]
+    const md = await uploadImages(files, bigSrcProvider(10_000 * KB), { totalBudgetBytes: 0 })
+    expect(md).toContain('a.png')
+    expect(md).toContain('b.png')
+    expect(md).not.toMatch(/budget exceeded/)
+  })
+
+  it('默认值常量合理：单图 200KB / 总量 4MB', () => {
+    expect(DEFAULT_TARGET_BYTES).toBe(200_000)
+    expect(DEFAULT_TOTAL_BUDGET_BYTES).toBe(4_000_000)
   })
 })

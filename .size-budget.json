@@ -1,0 +1,49 @@
+{
+  "$schema-hint": "scripts/check-size.ts 读取此文件。entries 按 dist/assets/<prefix>-<hash>.<ext> 匹配；limit/gzipLimit 为字节阈值；mustBeChunked=true 时再断言该 prefix 不在主 bundle 里复用。",
+  "distDir": "dist/assets",
+  "entries": [
+    {
+      "name": "main app bundle",
+      "prefix": "index",
+      "ext": "js",
+      "limit": 700000,
+      "gzipLimit": 240000,
+      "mustNotEmbed": ["html2canvas"]
+    },
+    {
+      "name": "main app stylesheet",
+      "prefix": "index",
+      "ext": "css",
+      "limit": 90000,
+      "gzipLimit": 14000
+    },
+    {
+      "name": "codemirror chunk",
+      "prefix": "codemirror",
+      "ext": "js",
+      "limit": 720000,
+      "gzipLimit": 240000
+    },
+    {
+      "name": "juice chunk",
+      "prefix": "juice",
+      "ext": "js",
+      "limit": 440000,
+      "gzipLimit": 160000
+    },
+    {
+      "name": "markdown chunk",
+      "prefix": "markdown",
+      "ext": "js",
+      "limit": 150000,
+      "gzipLimit": 60000
+    },
+    {
+      "name": "html2canvas chunk (lazy import on long-image export)",
+      "prefix": "html2canvas",
+      "ext": "js",
+      "limit": 260000,
+      "gzipLimit": 60000
+    }
+  ]
+}
