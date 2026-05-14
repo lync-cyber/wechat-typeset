@@ -598,7 +598,7 @@ export const spec: PersonaSpec = {
 # 出血副刊头大字
 `,
     authorBar: `::: author
-撰文　李翊云
+撰文　何已阅
 日期　2026.04.22
 :::
 `,

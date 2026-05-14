@@ -685,7 +685,7 @@ export const spec: PersonaSpec = {
 # 在无人深夜，重新学习如何阅读一本书
 `,
     authorBar: `::: author
-李翊云 · 2026.04.22
+沈听雨 · 2026.04.22
 :::
 `,
     // 下期预告 · 走 colophon（mook 不走"营销按钮"footer）
