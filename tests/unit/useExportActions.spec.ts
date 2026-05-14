@@ -33,7 +33,7 @@ function mountExport() {
   const flush = vi.fn()
   const activeTheme = ref<Theme>(defaultTheme)
   const previewBody = document.createElement('div')
-  const getPreviewBody = vi.fn(() => previewBody)
+  const getPreviewBody = vi.fn<() => HTMLElement | null>(() => previewBody)
   const fileStem = vi.fn(() => 'stem')
   const pingTransient = vi.fn()
   const setPersistentError = vi.fn()

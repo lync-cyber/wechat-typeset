@@ -64,7 +64,7 @@ describe('persistThemeId', () => {
 
 describe('resetCustomThemeWithUndo', () => {
   it('有 customTheme 时切主题 → 清空 + 挂 undo', async () => {
-    customTheme.value = markRaw({ ...mockTheme(), id: 'default--custom' })
+    customTheme.value = markRaw({ ...mockTheme(), id: 'default--custom' }) as never
     lastSeed.value = { primary: '#f00', secondary: '#0f0', accent: '#00f', dark: false }
     baseThemeId.value = 'tech-geek'
     await nextTick()
@@ -82,7 +82,7 @@ describe('resetCustomThemeWithUndo', () => {
 
   it('undo restore 能恢复主题 + customTheme + seed', async () => {
     // markRaw 避免 Vue ref 把 plain object 包成 Proxy，让 toBe 引用相等成立
-    const prevCustom = markRaw({ ...mockTheme(), id: 'default--custom' })
+    const prevCustom = markRaw({ ...mockTheme(), id: 'default--custom' }) as never
     const prevSeed = markRaw({ primary: '#abc', secondary: '#def', accent: '#012', dark: false })
     customTheme.value = prevCustom
     lastSeed.value = prevSeed
@@ -148,7 +148,40 @@ describe('val === prev 守卫', () => {
   })
 })
 
-// helper: 构造一个最简 Theme stub，仅 id 字段被 R7-D 这层测试使用
-function mockTheme() {
-  return { id: '__mock__' } as never
+describe('suppressOnce · undo 不重入', () => {
+  it('undo restore 写回 baseThemeId 不会再次触发 autoSwapPristineSample / persistDraftTheme', async () => {
+    // 准备：md 是 default 的 pristine sample，并有 customTheme 让 reset 流程能挂 undo
+    md.value = getSample('default')
+    customTheme.value = markRaw({ ...mockTheme(), id: 'default--custom' }) as never
+    lastSeed.value = markRaw({ primary: '#f00', secondary: '#0f0', accent: '#00f', dark: false })
+    const created = createDraft({ title: 't', body: 'x', themeId: 'default' })
+    mounted!.deps.activeDraftId.value = created.id
+
+    // 切到 tech-geek：触发完整副作用链
+    baseThemeId.value = 'tech-geek'
+    await nextTick()
+    expect(md.value).toBe(getSample('tech-geek'))  // pristine swap 生效
+    expect(readDraft(created.id)?.themeId).toBe('tech-geek')
+    const tickAfterSwitch = mounted!.deps.draftIndexTick.value
+
+    // restore → 期望 md 不被 autoSwap 替回 default sample，draft.themeId 也不重写
+    const restore = mounted!.deps.showUndo.mock.calls[0][1] as () => void
+    restore()
+    await nextTick()
+    expect(baseThemeId.value).toBe('default')
+    // 关键断言：md 仍是 tech-geek sample（undo 只回滚主题，不动正文）
+    expect(md.value).toBe(getSample('tech-geek'))
+    // draft.themeId 也没被自动持久化为 default（用户若要重写要再切一次主题）
+    expect(readDraft(created.id)?.themeId).toBe('tech-geek')
+    // tick 不再 bump（除了 restore 自己可能改的）
+    expect(mounted!.deps.draftIndexTick.value).toBe(tickAfterSwitch)
+  })
+})
+
+// helper: 构造一个最简 Theme stub，仅 id 字段被 R7-D 这层测试使用。
+// 用 any cast 避免完整实现 Theme 接口仅为塞两个 ref——本 spec 只验证 watcher
+// 行为，不读 Theme 内部字段。
+type AnyTheme = Record<string, unknown>
+function mockTheme(): AnyTheme {
+  return { id: '__mock__' }
 }

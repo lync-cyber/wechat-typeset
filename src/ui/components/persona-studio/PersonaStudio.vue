@@ -18,6 +18,7 @@ import { VARIANT_IDS } from '../../../core/themes/types'
 import { customTheme } from '../../../app/state'
 import { downloadBlob } from '../../../infra/exporters/exportFile'
 import PanelHeader from '../../primitives/PanelHeader.vue'
+import PaletteEditor from './PaletteEditor.vue'
 import { usePersonaDraft } from './usePersonaDraft'
 
 const props = defineProps<{ initialBaseId: string }>()
@@ -38,28 +39,7 @@ function pingStatus(msg: string, ms = 2000) {
   }, ms)
 }
 
-// 可枚举的颜色字段（11 项）
-const PALETTE_KEYS = [
-  ['primary', '主色'],
-  ['secondary', '次色'],
-  ['accent', '点睛色'],
-  ['bg', '正文底色'],
-  ['bgSoft', '柔底（intro / quote 等）'],
-  ['bgMuted', '极柔底（inline code）'],
-  ['text', '正文文本'],
-  ['textMuted', '次要文本（脚注 / hint）'],
-  ['textInverse', '反白文本（暗底主题）'],
-  ['border', '描边 / divider'],
-  ['code', 'inline code 文本色'],
-] as const
-
-const STATUS_KEYS = [
-  ['tip', 'tip · 提示'],
-  ['info', 'info · 信息'],
-  ['warning', 'warning · 警告'],
-  ['danger', 'danger · 危险'],
-] as const
-
+// 色板 / 状态四色编辑已抽到 PaletteEditor.vue
 const VARIANT_SLOTS = [
   ['admonition', 'admonition (tip/warning/info/danger)'],
   ['quote', 'quote-card'],
@@ -188,60 +168,7 @@ const idCollision = computed(() => reservedIds.has(draft.id) && draft.id !== dra
         </label>
       </section>
 
-      <!-- 色板 -->
-      <details class="section" open>
-        <summary class="section-title">色板 · palette</summary>
-        <label v-for="[key, label] in PALETTE_KEYS" :key="key" class="color-row">
-          <span class="row-label">{{ label }}</span>
-          <input
-            type="color"
-            :value="draft.palette[key]"
-            @input="draft.palette[key] = ($event.target as HTMLInputElement).value"
-          />
-          <input
-            class="hex-input"
-            type="text"
-            :value="draft.palette[key]"
-            @input="draft.palette[key] = ($event.target as HTMLInputElement).value"
-          />
-        </label>
-      </details>
-
-      <!-- 状态四色 -->
-      <details class="section">
-        <summary class="section-title">状态四色 · status</summary>
-        <div v-for="[key, label] in STATUS_KEYS" :key="key" class="status-block">
-          <div class="status-label">{{ label }}</div>
-          <label class="color-row">
-            <span class="row-label">accent</span>
-            <input
-              type="color"
-              :value="draft.status[key].accent"
-              @input="draft.status[key].accent = ($event.target as HTMLInputElement).value"
-            />
-            <input
-              class="hex-input"
-              type="text"
-              :value="draft.status[key].accent"
-              @input="draft.status[key].accent = ($event.target as HTMLInputElement).value"
-            />
-          </label>
-          <label class="color-row">
-            <span class="row-label">soft</span>
-            <input
-              type="color"
-              :value="draft.status[key].soft"
-              @input="draft.status[key].soft = ($event.target as HTMLInputElement).value"
-            />
-            <input
-              class="hex-input"
-              type="text"
-              :value="draft.status[key].soft"
-              @input="draft.status[key].soft = ($event.target as HTMLInputElement).value"
-            />
-          </label>
-        </div>
-      </details>
+      <PaletteEditor :palette="draft.palette" :status="draft.status" />
 
       <!-- 字号 / 行高 / 字距 -->
       <details class="section">
@@ -439,7 +366,7 @@ const idCollision = computed(() => reservedIds.has(draft.id) && draft.id !== dra
 }
 .section-warn .section-title { color: var(--danger); }
 
-.row, .color-row {
+.row {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
@@ -470,43 +397,7 @@ const idCollision = computed(() => reservedIds.has(draft.id) && draft.id !== dra
   padding: var(--sp-2);
   resize: vertical;
 }
-.color-row input[type="color"] {
-  width: 32px;
-  height: 26px;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-2);
-  background: none;
-  cursor: pointer;
-}
-.hex-input {
-  flex: 0 1 96px;
-  height: 26px;
-  padding: 0 var(--sp-2);
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-2);
-  background: var(--surface-raised);
-  color: var(--text);
-}
-
-.status-block {
-  margin-top: var(--sp-2);
-  padding-top: var(--sp-2);
-  border-top: 1px dashed var(--border);
-}
-.status-block:first-of-type {
-  border-top: none;
-  padding-top: 0;
-  margin-top: 0;
-}
-.status-label {
-  font-size: var(--fs-11);
-  color: var(--text-muted);
-  margin-bottom: 2px;
-}
+/* color-row / hex-input / status-block / status-label 见 PaletteEditor.vue */
 
 .hint {
   font-size: var(--fs-11);

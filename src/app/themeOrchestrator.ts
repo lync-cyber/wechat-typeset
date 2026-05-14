@@ -28,6 +28,13 @@ function persistThemeId(val: string) {
 /**
  * 切主题时若 customTheme 存在，把它和 seed 清空并挂 undo——用户可以一键回到上一个
  * 主题 + 上一份自定义配色。Toast 文案显式说"已重置自定义配色"，避免暗箱。
+ *
+ * undo restore 里要先置 suppressOnce=true 再写 baseThemeId.value=prev——否则本
+ * watcher 会被自己的赋值再触发一遍，导致：
+ *   1. autoSwapPristineSample(prev) 把 md 换回 prev 主题的 sample，破坏 undo 语义
+ *   2. persistDraftTheme 把 draftIndexTick 多 bump 一次，UI 抖动
+ *   3. resetCustomThemeWithUndo 因 customTheme 还没 restore 完为 null 而短路（侥幸
+ *      不出 bug），但语义上仍是"undo 触发了一次完整副作用链"——脆弱。
  */
 function resetCustomThemeWithUndo(
   prev: string,
@@ -39,6 +46,7 @@ function resetCustomThemeWithUndo(
   customTheme.value = null
   lastSeed.value = null
   showUndo('已切换主题并重置自定义配色', () => {
+    suppressOnce = true
     baseThemeId.value = prev
     customTheme.value = prevCustom
     lastSeed.value = prevSeed
@@ -85,9 +93,24 @@ export interface UseThemeOrchestratorDeps {
   draftIndexTick: Ref<number>
 }
 
+/**
+ * 模块级 suppressOnce 旗：undo restore 路径写回 baseThemeId 时置 true，
+ * watcher 入口检查并跳过本次副作用链。persistThemeId 例外——localStorage 仍要
+ * 跟着 baseThemeId 走，否则 undo 后刷新页面会丢主题。
+ *
+ * 不在 useThemeOrchestrator 闭包内：showUndo 的 callback 在 orchestrator setup
+ * 阶段之外才被调用，但闭包 + 模块级单例 ref 行为一致——baseThemeId 是单例，
+ * suppressOnce 也应为单例（同进程下只有一个 orchestrator 实例）。
+ */
+let suppressOnce = false
+
 export function useThemeOrchestrator(deps: UseThemeOrchestratorDeps) {
   watch(baseThemeId, (val, prev) => {
     persistThemeId(val)
+    if (suppressOnce) {
+      suppressOnce = false
+      return
+    }
     if (val === prev) return
     resetCustomThemeWithUndo(prev, deps.showUndo)
     autoSwapPristineSample(val)
