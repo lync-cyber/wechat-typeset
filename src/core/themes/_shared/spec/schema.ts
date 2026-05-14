@@ -415,7 +415,7 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
             'intro 首段首字下沉。声明则启用,样式参数由本结构提供;前导标点跳过 / 数字判定的扫描逻辑由 markdown.ts 共享层实现。',
           required: ['color'],
           properties: {
-            color: { enum: ['primary', 'secondary', 'accent', 'text', 'textMuted'] },
+            color: { enum: ['primary', 'secondary', 'accent', 'text', 'textMuted', 'textInverse'] },
             fontSize: { type: 'number' },
             fontWeight: { enum: [400, 500, 600, 700] },
             marginRight: { type: 'number' },
@@ -456,7 +456,21 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
                 type: 'object',
                 required: ['color'],
                 properties: {
-                  color: { enum: ['primary', 'secondary', 'accent', 'text', 'textMuted'] },
+                  color: { enum: ['primary', 'secondary', 'accent', 'text', 'textMuted', 'textInverse'] },
+                  backgroundColor: {
+                    enum: ['primary', 'secondary', 'accent', 'text', 'textMuted', 'textInverse'],
+                    description:
+                      '装饰前缀底色（token 引用）。声明则把编号渲染成色块徽章——典型例 swiss-grid 主题的 H2「01」红方块前缀。'
+                      + ' 缺省 = 不设底色。需与 paddingX/paddingY 搭配以撑开方块。',
+                  },
+                  paddingX: {
+                    type: 'number',
+                    description: '装饰前缀左右内边距 px（仅 backgroundColor 声明时生效），缺省 0。',
+                  },
+                  paddingY: {
+                    type: 'number',
+                    description: '装饰前缀上下内边距 px（仅 backgroundColor 声明时生效），缺省 0。',
+                  },
                   fontFamily: { enum: ['monospace'] },
                   fontWeight: { enum: [400, 500, 600, 700] },
                   fontSize: { type: 'number' },

@@ -46,6 +46,16 @@ function decorationCss(style: HeadingPrefixDecoration['style'], colors: ThemeTok
     parts.push(`border-bottom:1px solid ${color}`)
     parts.push(`padding-bottom:${style.underlinePad ?? 2}px`)
   }
+  // 色块徽章：声明 backgroundColor 即把编号撑成方块（典型例 swiss-grid 的 H2 「01」红章）。
+  // paddingX/paddingY 仅在 backgroundColor 声明时生效，缺省 0；underline + 色块同时声明
+  // 时不互斥，但视觉上很少同时用。
+  if (style.backgroundColor) {
+    const bg = resolveColor(style.backgroundColor, colors)
+    parts.push(`background-color:${bg}`)
+    const px = style.paddingX ?? 0
+    const py = style.paddingY ?? 0
+    if (px || py) parts.push(`padding:${py}px ${px}px`)
+  }
   return parts.join(';')
 }
 
