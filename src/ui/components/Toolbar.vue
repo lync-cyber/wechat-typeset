@@ -1,20 +1,18 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import ThemePicker from './ThemePicker.vue'
+import OverflowMenu from './OverflowMenu.vue'
 import { themeList } from '../../core/themes'
-import {
-  OUTLINK_STRATEGIES,
-  OUTLINK_STRATEGY_LABEL,
-  type OutlinkStrategy,
-} from '../../infra/clipboard/outlinkDegrade'
+import type { OutlinkStrategy } from '../../infra/clipboard/outlinkDegrade'
 import type { UiThemeMode } from '../../app/uiTheme'
 import type { ToolbarAction, ToolbarToggleTarget } from './toolbar-types'
+import { useToolbarPopovers } from '../composables/useToolbarPopovers'
 
 const props = defineProps<{
   draftTitle: string
   wordCount: number
   readingTime: number
-  savingState: 'idle' | 'saving' | 'saved'
+  savingState: 'idle' | 'saving' | 'saved' | 'error'
   savingLabel: string
   error: string | null
   themeId: string
@@ -39,8 +37,7 @@ const emit = defineEmits<{
   (e: 'hoverTheme', id: string | null): void
 }>()
 
-const themeOpen = ref(false)
-const overflowOpen = ref(false)
+const popovers = useToolbarPopovers()
 
 const currentThemeName = computed(
   () => themeList.find((t) => t.id === props.themeId)?.name ?? props.themeId,
@@ -49,46 +46,12 @@ const currentThemeName = computed(
 function selectTheme(id: string) {
   emit('update:themeId', id)
   emit('hoverTheme', null)
-  themeOpen.value = false
+  popovers.theme.value = false
 }
-/**
- * popover 关闭时主动清 hover，避免预览停留在临时主题上——
- * 用户点页面其他地方关闭 popover 也会先触发 closePopovers，但 watcher
- * 写在这里更直接。
- */
-watch(themeOpen, (open) => {
+
+// popover 关闭时主动清 hover，避免预览停留在临时主题上
+watch(popovers.theme, (open) => {
   if (!open) emit('hoverTheme', null)
-})
-
-function closePopovers(ev: MouseEvent) {
-  const target = ev.target as HTMLElement | null
-  if (!target) return
-  if (!target.closest('[data-popover-root]')) {
-    themeOpen.value = false
-    overflowOpen.value = false
-  }
-}
-
-function onEsc(ev: KeyboardEvent) {
-  if (ev.key === 'Escape') {
-    themeOpen.value = false
-    overflowOpen.value = false
-  }
-}
-
-watch([themeOpen, overflowOpen], ([t, o]) => {
-  if (t || o) {
-    window.addEventListener('mousedown', closePopovers)
-    window.addEventListener('keydown', onEsc)
-  } else {
-    window.removeEventListener('mousedown', closePopovers)
-    window.removeEventListener('keydown', onEsc)
-  }
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('mousedown', closePopovers)
-  window.removeEventListener('keydown', onEsc)
 })
 
 const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
@@ -97,8 +60,8 @@ const modKey = isMac ? '⌘' : 'Ctrl'
 /** 允许父组件（如 OnboardingCard 移动端引导）打开 "更多操作" 菜单 */
 defineExpose({
   openOverflow() {
-    overflowOpen.value = true
-    themeOpen.value = false
+    popovers.overflow.value = true
+    popovers.theme.value = false
   },
 })
 </script>
@@ -129,15 +92,15 @@ defineExpose({
       <div class="pop-wrap" data-popover-root>
         <button
           class="btn btn-ghost btn-theme"
-          :class="{ active: themeOpen }"
+          :class="{ active: popovers.theme.value }"
           :title="'切换主题'"
-          @click="themeOpen = !themeOpen; overflowOpen = false"
+          @click="popovers.toggleTheme()"
         >
           <span class="dot-mark" />
           <span class="theme-name-full">{{ currentThemeName }}</span>
           <span v-if="props.hasCustomColor" class="custom-chip" title="已有自定义配色">·自定义</span>
         </button>
-        <div v-if="themeOpen" class="popover popover-theme">
+        <div v-if="popovers.theme.value" class="popover popover-theme">
           <ThemePicker
             :model-value="props.themeId"
             @update:model-value="selectTheme"
@@ -195,76 +158,20 @@ defineExpose({
       <div class="pop-wrap" data-popover-root>
         <button
           class="btn btn-ghost icon"
-          :class="{ active: overflowOpen }"
+          :class="{ active: popovers.overflow.value }"
           title="更多操作"
-          @click="overflowOpen = !overflowOpen; themeOpen = false"
+          @click="popovers.toggleOverflow()"
         >···</button>
-        <div v-if="overflowOpen" class="popover popover-menu">
-          <button class="menu-item" @click="emit('toggle', 'drafts'); overflowOpen = false">
-            <span>{{ props.drawer.drafts ? '关闭草稿列表' : '草稿列表' }}</span>
-          </button>
-          <button class="menu-item" @click="emit('toggle', 'components'); overflowOpen = false">
-            <span>{{ props.drawer.components ? '关闭组件库' : '插入组件' }}</span>
-          </button>
-          <button class="menu-item" @click="emit('toggle', 'customizer'); overflowOpen = false">
-            <span>{{ props.drawer.customizer ? '关闭自定义配色' : '自定义配色' }}</span>
-          </button>
-          <button class="menu-item" @click="emit('toggle', 'personaStudio'); overflowOpen = false">
-            <span>{{ props.drawer.personaStudio ? '关闭主题编辑器' : '主题编辑器' }}</span>
-          </button>
-          <button class="menu-item" @click="emit('toggle', 'checklist'); overflowOpen = false">
-            <span>{{ props.drawer.checklist ? '关闭发文清单' : '发文清单' }}</span>
-          </button>
-          <div class="menu-sep" />
-          <button class="menu-item" @click="emit('action', 'saveSelection'); overflowOpen = false">
-            <span>保存选区为组件</span>
-          </button>
-          <button class="menu-item" @click="emit('action', 'loadSample'); overflowOpen = false">
-            <span>载入当前主题示例</span>
-          </button>
-          <button class="menu-item" @click="emit('action', 'fixZhTypo'); overflowOpen = false">
-            <span>一键修复中文排版</span>
-          </button>
-          <div class="menu-sep" />
-          <button class="menu-item" @click="emit('action', 'exportHtml'); overflowOpen = false">
-            <span>导出 HTML</span><span class="menu-kbd">{{ modKey }}⇧H</span>
-          </button>
-          <button class="menu-item" @click="emit('action', 'exportMd'); overflowOpen = false">
-            <span>导出 Markdown</span><span class="menu-kbd">{{ modKey }}⇧M</span>
-          </button>
-          <button class="menu-item" @click="emit('action', 'exportImage'); overflowOpen = false">
-            <span>导出长图</span>
-          </button>
-          <button class="menu-item" @click="emit('action', 'copyShareLink'); overflowOpen = false">
-            <span>复制分享链接</span>
-          </button>
-          <div class="menu-sep" />
-          <div class="menu-section">
-            <div class="menu-section-head">外链处理</div>
-            <div class="menu-segment" role="radiogroup" aria-label="外链处理">
-              <button
-                v-for="s in OUTLINK_STRATEGIES"
-                :key="s"
-                class="menu-segment-btn"
-                :class="{ active: props.outlinkStrategy === s }"
-                role="radio"
-                :aria-checked="props.outlinkStrategy === s"
-                @click="emit('update:outlinkStrategy', s)"
-              >{{ OUTLINK_STRATEGY_LABEL[s] }}</button>
-            </div>
-          </div>
-          <div class="menu-sep" />
-          <button class="menu-item" @click="emit('action', 'openCommand'); overflowOpen = false">
-            <span>命令面板</span><span class="menu-kbd">{{ modKey }}K</span>
-          </button>
-          <button class="menu-item" @click="emit('action', 'openHelp'); overflowOpen = false">
-            <span>快捷键与帮助</span>
-          </button>
-          <div class="menu-sep" />
-          <button class="menu-item danger" @click="emit('action', 'clear'); overflowOpen = false">
-            <span>清空正文</span>
-          </button>
-        </div>
+        <OverflowMenu
+          v-if="popovers.overflow.value"
+          :drawer="props.drawer"
+          :outlink-strategy="props.outlinkStrategy"
+          :mod-key="modKey"
+          @toggle="emit('toggle', $event)"
+          @action="emit('action', $event)"
+          @update:outlink-strategy="emit('update:outlinkStrategy', $event)"
+          @close="popovers.overflow.value = false"
+        />
       </div>
 
       <button class="btn btn-primary" :title="`复制到剪贴板  ${modKey}+Enter`" @click="emit('action', 'copy')">
@@ -548,6 +455,8 @@ defineExpose({
 }
 .saving.saving .saving-dot { background: var(--amber-500); }
 .saving.saved .saving-dot { background: var(--success); }
+.saving.error .saving-dot { background: var(--danger); }
+.saving.error .saving-text { color: var(--danger); font-weight: var(--fw-medium); }
 .saving.idle .saving-text { color: transparent; }
 
 .pop-wrap { position: relative; }
@@ -562,72 +471,7 @@ defineExpose({
   min-width: 220px;
 }
 .popover-theme { left: 0; padding: var(--sp-2); width: 320px; }
-.popover-menu {
-  right: 0;
-  padding: var(--sp-2);
-  width: 220px;
-}
-.menu-item {
-  display: flex; align-items: center; justify-content: space-between;
-  width: 100%;
-  padding: var(--sp-3) var(--sp-3);
-  border-radius: var(--radius-1);
-  border: none;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  font-size: var(--fs-13);
-  cursor: pointer;
-  text-align: left;
-}
-.menu-item:hover { background: var(--surface); }
-.menu-item.danger { color: var(--danger); }
-.menu-item.danger:hover { background: var(--danger-soft); }
-.menu-kbd {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
-  color: var(--text-subtle);
-  letter-spacing: var(--ls-wide);
-}
-.menu-sep { height: 1px; background: var(--border); margin: var(--sp-2) 0; }
-
-.menu-section {
-  padding: var(--sp-2) var(--sp-3) var(--sp-3);
-}
-.menu-section-head {
-  font-size: var(--fs-11);
-  color: var(--text-subtle);
-  letter-spacing: var(--ls-wide);
-  margin-bottom: var(--sp-2);
-  padding: 0 var(--sp-1);
-}
-.menu-segment {
-  display: inline-flex;
-  gap: 1px;
-  padding: 2px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-2);
-}
-.menu-segment-btn {
-  flex: 1 1 auto;
-  min-width: 48px;
-  padding: var(--sp-1) var(--sp-3);
-  font-size: var(--fs-12);
-  font-family: var(--font-text);
-  color: var(--text-muted);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-1);
-  cursor: pointer;
-  transition: var(--t-quick);
-}
-.menu-segment-btn:hover { color: var(--text); }
-.menu-segment-btn.active {
-  background: var(--surface-raised);
-  color: var(--text);
-  box-shadow: var(--shadow-inset);
-}
+/* popover-menu 与其内部 .menu-* 样式见 OverflowMenu.vue */
 
 /* Error banner sits as a full-width sliver under the toolbar */
 .error-banner {

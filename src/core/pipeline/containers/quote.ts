@@ -9,21 +9,14 @@
  */
 
 import type { QuoteVariantId } from '../../themes/types'
-import type { ContainerRenderer, ContainerRenderContext } from './types'
+import type { ContainerRenderer } from './types'
 import { escText } from './types'
 import { QUOTE_VARIANTS } from '../../variants/registry'
-
-function resolveVariantId(ctx: ContainerRenderContext): QuoteVariantId {
-  const override = ctx.attrs.variant
-  if (override && override in QUOTE_VARIANTS) {
-    return override as QuoteVariantId
-  }
-  return ctx.variants.quote ?? 'classic'
-}
+import { resolveVariantId } from './_shared/resolveVariant'
 
 export const quoteCardContainer: ContainerRenderer = {
   open: (ctx) => {
-    const id = resolveVariantId(ctx)
+    const id = resolveVariantId<QuoteVariantId>(ctx, 'quote', QUOTE_VARIANTS, 'classic')
     const result = QUOTE_VARIANTS[id].render(ctx)
     const parts: string[] = []
     parts.push(`<section class="container-quote-card container-quote-card--${id}" style="${result.wrapperCSS}">`)

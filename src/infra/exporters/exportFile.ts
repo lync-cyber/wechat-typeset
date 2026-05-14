@@ -7,6 +7,8 @@
  *   其次 getComputedStyle，最终回退 #ffffff
  */
 
+import { WECHAT_PREVIEW_WIDTH } from '../../core/pipeline/constants'
+
 export function downloadBlob(filename: string, text: string, mime: string): void {
   const blob = new Blob([text], { type: mime })
   const url = URL.createObjectURL(blob)
@@ -31,7 +33,7 @@ export function exportHtml(filename: string, html: string, opts: ExportHtmlOptio
   const bg = opts.background ?? '#ffffff'
   const fg = opts.color ?? '#222222'
   const wrapped =
-    `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=375,initial-scale=1">` +
+    `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=${WECHAT_PREVIEW_WIDTH},initial-scale=1">` +
     `<title>${title}</title>` +
     `<style>body{margin:0;padding:24px 0;background:${bg};color:${fg};` +
     `font-family:"PingFang SC","Microsoft YaHei",sans-serif;}` +

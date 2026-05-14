@@ -19,6 +19,8 @@ import type { PatchLog } from './platforms/types'
 import { DEFAULT_PLATFORM_ID, getPlatform } from './platforms/registry'
 import { CODE_BLOCK_VARIANTS } from '../variants/registry'
 import { parseInfo } from './containers'
+import { ROOT_CLASS } from './constants'
+import { createLRU } from './_lru'
 
 export interface RenderInput {
   md: string
@@ -46,28 +48,22 @@ export interface RenderOutput {
   patchLog: PatchLog
 }
 
-const ROOT_CLASS = 'markdown-body'
-
 /**
  * 按 theme.id 缓存 MarkdownIt 实例。
  *
  * 容器渲染器在 createMarkdown 的闭包里绑定了 theme 引用，
  * 因此主题切换必须换新实例。同 theme 复用——避免每次击键重建插件链。
  *
- * LRU（MAX=8）：自定义配色 apply 一次就产出 `${base.id}--custom` 这样的新 id，
- * 无上限会随操作堆积。8 个容量对"4 套基础 + 数次自定义"足够周转。
+ * LRU（MAX=12）：自定义配色 apply 一次就产出 `${base.id}--custom` 这样的新 id，
+ * 无上限会随操作堆积。12 个容量对"10 套基础 + 几次自定义"足够周转。
+ * R7-C 起从 8 升到 12，与 themeCSS 缓存容量对齐。
  */
-const MD_CACHE_MAX = 8
-const mdCache = new Map<string, MarkdownIt>()
+const MD_CACHE_MAX = 12
+const mdCache = createLRU<string, MarkdownIt>(MD_CACHE_MAX)
 
 function getMarkdown(theme: Theme): MarkdownIt {
   const cached = mdCache.get(theme.id)
-  if (cached) {
-    // LRU 更新：重新插入到末尾
-    mdCache.delete(theme.id)
-    mdCache.set(theme.id, cached)
-    return cached
-  }
+  if (cached) return cached
   const md = createMarkdown({ theme })
   // 接管 fence 规则而不走 md.options.highlight：
   //   markdown-it 的默认 fence 规则要求 highlight hook 返回值以 `<pre` 开头，
@@ -91,11 +87,6 @@ function getMarkdown(theme: Theme): MarkdownIt {
     return variant.render(theme, { language, codeInnerHtml: html }) + '\n'
   }
   mdCache.set(theme.id, md)
-  // 超出容量淘汰最老（Map 迭代序 = 插入序）
-  if (mdCache.size > MD_CACHE_MAX) {
-    const oldest = mdCache.keys().next().value
-    if (oldest !== undefined) mdCache.delete(oldest)
-  }
   return md
 }
 

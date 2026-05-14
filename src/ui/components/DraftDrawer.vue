@@ -8,6 +8,7 @@
 import { computed, nextTick, ref, watch } from 'vue'
 import { type DraftMeta } from '../../infra/storage/drafts'
 import { useDraftManager } from '../../domain/drafts/useDraftManager'
+import { downloadBlob } from '../../infra/exporters/exportFile'
 import PanelHeader from '../primitives/PanelHeader.vue'
 
 const props = defineProps<{ activeId: string | null }>()
@@ -124,20 +125,12 @@ function toggleTagFilter(tag: string) {
   tagFilter.value = tagFilter.value === tag ? null : tag
 }
 
-function download(filename: string, text: string, mime = 'application/json') {
-  const blob = new Blob([text], { type: mime })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
-
 function exportAll() {
-  download(`wechat-typeset-drafts-${Date.now()}.json`, mgr.exportJSON())
+  downloadBlob(
+    `wechat-typeset-drafts-${Date.now()}.json`,
+    mgr.exportJSON(),
+    'application/json',
+  )
 }
 
 function onImport(ev: Event) {

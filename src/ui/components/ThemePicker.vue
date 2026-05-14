@@ -9,7 +9,7 @@
  * App.vue 把这个事件接到 state.hoverThemeId，activeTheme 派生时优先级高于 customTheme。
  * 移动端没有 hover 事件，自然降级到 click 锁定路径，不需额外处理。
  */
-import { computed } from 'vue'
+import { computed, onBeforeUnmount } from 'vue'
 import { themeList } from '../../core/themes'
 
 const props = defineProps<{ modelValue: string }>()
@@ -34,12 +34,41 @@ const options = computed(() =>
 function pick(id: string) {
   if (id !== props.modelValue) emit('update:modelValue', id)
 }
+
+/**
+ * hover 写入走 rAF 同帧合并：mouseenter 在快速划过网格时会高频触发，每次
+ * 都同步触发 activeTheme → themeCSS → md re-render，链路里 generateThemeCSS
+ * 即便命中缓存仍要走一次 vue 响应式开销。rAF 把同一帧内的多次写并成最后一
+ * 次，划过中间格子不会被无意义渲染。
+ *
+ * enter/leave 走同一队列：rAF 内只取最新值，保证 leave 后能立即清回锁定主题，
+ * 不会被前一次 enter 残留覆盖。
+ */
+let rafId: number | null = null
+let pending: string | null = null
+
+function scheduleHover(id: string | null) {
+  pending = id
+  if (rafId !== null) return
+  rafId = requestAnimationFrame(() => {
+    rafId = null
+    emit('hover', pending)
+  })
+}
+
 function onEnter(id: string) {
-  emit('hover', id)
+  scheduleHover(id)
 }
 function onLeave() {
-  emit('hover', null)
+  scheduleHover(null)
 }
+
+onBeforeUnmount(() => {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
+})
 </script>
 
 <template>

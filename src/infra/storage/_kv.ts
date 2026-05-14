@@ -7,6 +7,10 @@
  *   - genId 的 prefix 形如 `d` / `uc`，输出 `<prefix>_<time36>_<rnd6>` 字符串
  *   - safeReadJson / safeWriteJson 处理 JSON.parse 失败路径，内部按 fallback 返回
  *     —— 调用方只传 key + fallback，不用再本地 try-catch
+ *   - safeWrite / safeWriteJson 返回 boolean：true=成功，false=失败（quota / 隐私模式 /
+ *     stringify 错）。R7-A 之前 catch 静默吞错，调用方拿不到反馈，QuotaExceededError 时
+ *     草稿丢失但 UI 仍显示"已保存"。R7-B 起所有写入返回布尔，让 hot path（updateDraft /
+ *     flushDraftSave）能向 UI 上抛"写盘失败 · 存储已满"。旧调用方忽略返回值不影响行为。
  */
 
 export function safeRead(key: string): string | null {
@@ -17,11 +21,16 @@ export function safeRead(key: string): string | null {
   }
 }
 
-export function safeWrite(key: string, value: string): void {
+export function safeWrite(key: string, value: string): boolean {
   try {
     localStorage.setItem(key, value)
-  } catch {
-    // 配额超限 / 隐私模式下忽略；上层靠 storage.estimate() 提前告警
+    return true
+  } catch (err) {
+    // QuotaExceededError / 隐私模式 / SSR：返回 false 让上层做用户可见反馈。
+    // warn 一次让 dev console 看到具体 key（便于诊断"哪些 key 触发的"）。
+    // eslint-disable-next-line no-console
+    console.warn(`[storage] safeWrite failed: ${key}`, err)
+    return false
   }
 }
 
@@ -29,7 +38,7 @@ export function safeRemove(key: string): void {
   try {
     localStorage.removeItem(key)
   } catch {
-    // ignore
+    // ignore——删除失败几乎只在 SSR 触发，无需上抛
   }
 }
 
@@ -48,13 +57,20 @@ export function safeReadJson<T>(key: string, fallback: T): T {
   }
 }
 
-/** 写 JSON：stringify 失败（循环引用等）则按 safeWrite 规则静默忽略 */
-export function safeWriteJson<T>(key: string, value: T): void {
+/**
+ * 写 JSON：返回 true=成功，false=stringify 失败 / setItem 失败。
+ * stringify 失败（循环引用等）极少，但与 quota 失败一同 warn + 返回 false，让 UI 走同一个错误路径。
+ */
+export function safeWriteJson<T>(key: string, value: T): boolean {
+  let serialized: string
   try {
-    safeWrite(key, JSON.stringify(value))
-  } catch {
-    // stringify 抛出（极少，循环引用）—— 忽略
+    serialized = JSON.stringify(value)
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn(`[storage] safeWriteJson stringify failed: ${key}`, err)
+    return false
   }
+  return safeWrite(key, serialized)
 }
 
 /**

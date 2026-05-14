@@ -323,7 +323,7 @@ export type SignatureContainerId = (typeof SUPPORTED_SIGNATURE_CONTAINERS)[numbe
 // ============================================================
 
 /**
- * 主题"人设"的完整合同。persona.spec.ts 文件导出一份 PersonaSpec，
+ * 主题"人设"的完整合同。persona.data.ts 文件导出一份 PersonaSpec，
  * 由 specToTheme(spec) 投影为运行时 Theme。
  */
 export interface PersonaSpec {

@@ -16,7 +16,7 @@
  * 命名约定：只有"模板里直接用"的 ref / computed / handler 才在此 setup；任何能
  * 抽出去单独命名一个函数的都拒绝再写进 App.vue。
  */
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Editor from '../ui/components/Editor.vue'
 import Preview from '../ui/components/Preview.vue'
 import Toolbar from '../ui/components/Toolbar.vue'
@@ -47,6 +47,7 @@ import { useThemeOrchestrator } from './themeOrchestrator'
 import { buildCommands } from './commands'
 import { createAppActions } from './actions'
 import { useBootstrap } from './bootstrap'
+import { EDITOR_MIN_W, usePaneSizing } from './usePaneSizing'
 
 const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
@@ -93,29 +94,8 @@ const {
 // mobileTab 切换关闭 drawer——避免横屏切到 preview 还有抽屉占着半屏
 watch(mobileTab, () => { closeAll() })
 
-// ==============================================
-// 桌面分隔条：viewport 追踪 + max 计算 + 越界 clamp
-// ==============================================
-// 预览栏锁 var(--preview-w) + var(--sp-7) = 375 + 32 = 407（WeChat 保真）；
-// 分隔条本身 6px；额外留 8px 防贴边。这些常数与 PaneSplitter.vue / 全局 CSS
-// 保持一致——改了别忘了同步。
-const PREVIEW_PANE_W = 407
-const SPLITTER_W = 6
-const EDITOR_MIN_W = 320
-const viewportW = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
-function trackViewport() { viewportW.value = window.innerWidth }
-onMounted(() => window.addEventListener('resize', trackViewport))
-onBeforeUnmount(() => window.removeEventListener('resize', trackViewport))
-
-const editorMaxWidth = computed(() =>
-  Math.max(EDITOR_MIN_W, viewportW.value - PREVIEW_PANE_W - SPLITTER_W - 8),
-)
-// 视口缩小时若当前 editorWidth 已经放不下，回收到当前 max——避免预览栏被挤出去
-watch([viewportW, editorMaxWidth], () => {
-  if (editorWidth.value !== null && editorWidth.value > editorMaxWidth.value) {
-    editorWidth.value = editorMaxWidth.value
-  }
-})
+// 桌面分隔条 viewport 追踪 + max 计算 + 越界回收：见 usePaneSizing.ts
+const { editorMaxWidth } = usePaneSizing({ editorWidth })
 
 // ==============================================
 // 引导层（模板里 v-if 直接用，留在 App.vue）

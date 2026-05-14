@@ -2,7 +2,7 @@
  * themeToSpec：Theme → PersonaSpec 的一次性迁移助手。
  *
  * 用途：Phase 2 每主题 PR 的"code 侧 spec 初稿"—— 跑 themeToSpec(themeRegistry[id])
- * 得到可直接写入 persona.spec.ts 的对象，与 gallery 侧的 spec 做 3-way merge。
+ * 得到可直接写入 persona.data.ts 的对象，与 gallery 侧的 spec 做 3-way merge。
  *
  * 限制：motif 的 SVG 字符串 → JSON AST 的反向解析**不做**（复杂度高、容错差）。
  * Phase 2 的流程是：

@@ -17,6 +17,7 @@
  */
 
 import { type ShareCodec } from '../codec'
+import { isRecord } from '../_utils'
 
 const COMPONENT_VERSION = 1
 const COMPONENT_PREFIX = 'share-component='
@@ -41,10 +42,6 @@ export interface SharePayloadComponent {
   v: 1
   kind: 'component'
   component: ComponentSnapshot
-}
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null && !Array.isArray(v)
 }
 
 function validateSnapshot(raw: unknown): ComponentSnapshot | null {

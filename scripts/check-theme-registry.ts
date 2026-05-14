@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * CI 守卫：核对 `src/core/themes/<slug>/persona.spec.ts` 与 `src/core/themes/index.ts`
+ * CI 守卫：核对 `src/core/themes/<slug>/persona.data.ts` 与 `src/core/themes/index.ts`
  * 注册表三处（import 列表 / ALL_THEMES 数组 / DISPLAY_ORDER 排序数组）的对齐。
  *
  * 设计动机（review P3）：
@@ -10,8 +10,8 @@
  *   下需要更早的 CI gate（无需启动 vitest）。
  *
  * 检查项：
- *   1. 每份 persona.spec.ts 对应的目录都被 index.ts import 到（按目录名查 import 路径）
- *   2. 每份 persona.spec.ts 的 spec.id 出现在 DISPLAY_ORDER 数组里
+ *   1. 每份 persona.data.ts 对应的目录都被 index.ts import 到（按目录名查 import 路径）
+ *   2. 每份 persona.data.ts 的 spec.id 出现在 DISPLAY_ORDER 数组里
  *   3. 反方向：DISPLAY_ORDER / import 列表里没有 dangling 项（指向不存在的目录）
  *
  * 不检查（交给 conformance.spec.ts）：
@@ -34,12 +34,12 @@ interface ThemeOnDisk {
   dir: string
   /** spec.id（应与 dir 相等；conformance 守这一道） */
   specId: string
-  /** persona.spec.ts 绝对路径 */
+  /** persona.data.ts 绝对路径 */
   path: string
 }
 
 async function discoverThemesOnDisk(): Promise<ThemeOnDisk[]> {
-  const paths = globSync('src/core/themes/*/persona.spec.ts', { cwd: REPO_ROOT })
+  const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: REPO_ROOT })
     .map((p) => resolve(REPO_ROOT, p))
     .sort()
   const out: ThemeOnDisk[] = []
@@ -121,7 +121,7 @@ async function main() {
   for (const t of onDisk) {
     if (!importedSet.has(t.dir)) {
       errors.push(
-        `themes/${t.dir}/persona.spec.ts 存在,但 themes/index.ts 未 import './${t.dir}'`,
+        `themes/${t.dir}/persona.data.ts 存在,但 themes/index.ts 未 import './${t.dir}'`,
       )
     }
   }
@@ -136,13 +136,13 @@ async function main() {
   // 3. import 不指向不存在的目录
   for (const d of importDirs) {
     if (!diskDirs.has(d)) {
-      errors.push(`themes/index.ts import './${d}' 但 themes/${d}/persona.spec.ts 不存在`)
+      errors.push(`themes/index.ts import './${d}' 但 themes/${d}/persona.data.ts 不存在`)
     }
   }
   // 4. DISPLAY_ORDER 不引用不存在的 id
   for (const id of displayOrder) {
     if (!diskIds.has(id)) {
-      errors.push(`themes/index.ts:DISPLAY_ORDER 包含 "${id}" 但磁盘上没有对应 persona.spec.ts`)
+      errors.push(`themes/index.ts:DISPLAY_ORDER 包含 "${id}" 但磁盘上没有对应 persona.data.ts`)
     }
   }
 

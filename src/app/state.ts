@@ -73,3 +73,21 @@ export const activeTheme = computed<Theme>(() => {
   if (hoverThemeId.value) return getTheme(hoverThemeId.value)
   return customTheme.value ?? getTheme(baseThemeId.value)
 })
+
+/**
+ * 测试钩子：把所有 ref 复位到初始值。tests/setup.ts 在每个 afterEach 调用一次，
+ * 避免 spec A 的 baseThemeId='tech-geek' 泄漏给 spec B（state.ts 是模块单例，
+ * vitest 进程内共享）。仅供测试代码使用——生产代码不应该 import。
+ *
+ * 若以后新增 ref，记得加入此处；保留 plain 写法而非 reflection，遗漏会被
+ * useDraftLifecycle.spec / themeOrchestrator.spec 等通过断言 default 状态发现。
+ */
+export function __resetForTest(): void {
+  md.value = ''
+  baseThemeId.value = 'default'
+  hoverThemeId.value = null
+  customTheme.value = null
+  lastSeed.value = null
+  mobileTab.value = 'editor'
+  editorWidth.value = null
+}

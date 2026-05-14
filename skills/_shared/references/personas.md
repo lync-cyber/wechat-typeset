@@ -2,7 +2,7 @@
 
 > author-persona / annotate-markdown 两个 skill 通过 `../_shared/references/personas.md` 相对路径共同引用本文件，零副本零同步。改本文件 = 两个 skill 同时生效。
 >
-> 权威依据：`src/core/themes/<id>/persona.spec.ts`（每个主题的 `name` / `description` / `audience` / `palette` / `variants` / `signatureContainers` 字段）+ `src/public/personas.ts` 的导出顺序。
+> 权威依据：`src/core/themes/<id>/persona.data.ts`（每个主题的 `name` / `description` / `audience` / `palette` / `variants` / `signatureContainers` 字段）+ `src/public/personas.ts` 的导出顺序。
 
 选型时先读 **受众** 和 **视觉签名**（variants），再对比 **signature 容器** 看是否满足内容需要。id 只是索引，不要按字面猜（`tech-geek` 和 `tech-explainer` 都属技术题材，但气质截然不同）。
 

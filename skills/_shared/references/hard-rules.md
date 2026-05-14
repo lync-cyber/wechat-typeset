@@ -50,8 +50,8 @@
 
 | 规则 | 触发路径 | 为什么 |
 | --- | --- | --- |
-| `id` 必须 kebab-case（`^[a-z][a-z0-9-]*$`） | `validatePersona` | 和目录名绑定（`src/core/themes/<id>/persona.spec.ts`），也是 `render({ persona: id })` 的查找键。 |
-| `id` 等于其 `persona.spec.ts` 所在目录名 | conformance 测试 | 目录名 ≠ id 会让 `themeList` 错位。 |
+| `id` 必须 kebab-case（`^[a-z][a-z0-9-]*$`） | `validatePersona` | 和目录名绑定（`src/core/themes/<id>/persona.data.ts`），也是 `render({ persona: id })` 的查找键。 |
+| `id` 等于其 `persona.data.ts` 所在目录名 | conformance 测试 | 目录名 ≠ id 会让 `themeList` 错位。 |
 | `name` / `description` / `audience` 非空 | `validatePersona` | LLM 选型主要靠这三项；空字符串会让 `listPersonas()` 的推荐阶段退化成「按 id 猜」。 |
 | `meta.createdAt` 必填 | `validatePersona` | 用于 gallery 里按时间排序，也方便版本管理。 |
 

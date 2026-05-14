@@ -9,10 +9,11 @@
  * App.vue 注入：md（编辑器正文 ref）、baseThemeId、初始 sample 工厂（getSample）。
  */
 
-import { computed, ref, watch, type Ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue'
 import {
   createDraft,
   deleteDraft,
+  DRAFT_STORAGE_PREFIX,
   getActiveDraftId,
   importDraftsJSONDetailed,
   listDrafts,
@@ -72,7 +73,14 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
   const activeDraftId = ref<string | null>(null)
   const draftIndexTick = ref(0) // 强制重算草稿标题列表（重命名/删除/新建后）
 
-  const savingState = ref<'idle' | 'saving' | 'saved'>('idle')
+  /**
+   * 保存状态机：
+   *   - idle  → 无活动写盘
+   *   - saving → 防抖窗口内或正在写
+   *   - saved  → 刚写成功（SAVED_FADE_MS 后回 idle）
+   *   - error  → 上次写盘失败（quota / 隐私模式）；下次写成功或正文变更触发 'saving' 才退出
+   */
+  const savingState = ref<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const transientStatus = ref<string>('')
   let transientTimer: number | null = null
 
@@ -92,9 +100,12 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
     if (transientStatus.value) return transientStatus.value
     if (savingState.value === 'saving') return '保存中…'
     if (savingState.value === 'saved') return '已保存'
+    if (savingState.value === 'error') return '草稿写盘失败 · 存储已满'
     return '　'
   })
-  const displayedSavingState = computed<'idle' | 'saving' | 'saved'>(() => {
+  const displayedSavingState = computed<'idle' | 'saving' | 'saved' | 'error'>(() => {
+    // error 态优先于 transient——quota 失败的反馈不能被 transient 弹幕掩盖
+    if (savingState.value === 'error') return 'error'
     if (transientStatus.value) return 'saved'
     return savingState.value
   })
@@ -122,14 +133,21 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
       draftSaveTimer = null
     }
     if (pendingDraftBody !== null && activeDraftId.value) {
-      updateDraft(activeDraftId.value, { body: pendingDraftBody })
-      pendingDraftBody = null
-      draftIndexTick.value += 1
-      savingState.value = 'saved'
-      if (savedFadeTimer !== null) window.clearTimeout(savedFadeTimer)
-      savedFadeTimer = window.setTimeout(() => {
-        if (savingState.value === 'saved') savingState.value = 'idle'
-      }, SAVED_FADE_MS)
+      const ok = updateDraft(activeDraftId.value, { body: pendingDraftBody })
+      if (ok) {
+        pendingDraftBody = null
+        draftIndexTick.value += 1
+        savingState.value = 'saved'
+        if (savedFadeTimer !== null) window.clearTimeout(savedFadeTimer)
+        savedFadeTimer = window.setTimeout(() => {
+          if (savingState.value === 'saved') savingState.value = 'idle'
+        }, SAVED_FADE_MS)
+      } else {
+        // 写失败：不清 pendingDraftBody——下次正文变更触发的 watch 会用更新值覆盖、再试一次。
+        // savingState='error' 让顶部 label 持续显示警告，不被 transient 短暂"已复制"等覆盖。
+        savingState.value = 'error'
+        pingTransient('草稿写盘失败 · 存储已满', 4000)
+      }
     }
   }
 
@@ -249,6 +267,28 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
       draftIndexTick.value += 1
     })
   }
+
+  /**
+   * 跨 tab 同步：另一个同域 tab 写草稿 storage 时，本 tab 收到 storage event。
+   * 仅 bump draftIndexTick，让 currentDraftTitle / DraftDrawer 重读最新索引。
+   * 不做乐观锁——并发写入仍可能后写覆盖前写，但至少 UI 视图一致，避免显示陈旧的标题列表。
+   */
+  function onCrossTabStorage(ev: StorageEvent) {
+    // ev.key === null 时是 localStorage.clear() 触发；保守也刷新一次。
+    if (ev.key === null || ev.key.startsWith(DRAFT_STORAGE_PREFIX)) {
+      draftIndexTick.value += 1
+    }
+  }
+  onMounted(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', onCrossTabStorage)
+    }
+  })
+  onBeforeUnmount(() => {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('storage', onCrossTabStorage)
+    }
+  })
 
   /** 文件名 stem：活跃草稿标题剥非法字符；空则回退到默认前缀。 */
   function fileStem(fallback: string = 'wechat-typeset-export'): string {

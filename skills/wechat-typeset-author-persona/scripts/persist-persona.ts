@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 /**
- * persist-persona —— spec.json → src/core/themes/<id>/persona.spec.ts + 改 src/public/personas.ts
+ * persist-persona —— spec.json → src/core/themes/<id>/persona.data.ts + 改 src/public/personas.ts
  *
  * 落地流程：
  *   1. 校验 spec（不通过拒绝写）
- *   2. 生成 persona.spec.ts（导出 spec = ...）
+ *   2. 生成 persona.data.ts（导出 spec = ...）
  *   3. 修改 src/public/personas.ts（追加 import + 加入 PERSONA_SPECS 数组）
  *
  * 安全性：
@@ -91,14 +91,14 @@ export default spec
 }
 
 function patchPublicPersonas(existing: string, id: string, varName: string): string {
-  const importLine = `import { spec as ${varName} } from '../core/themes/${id}/persona.spec'`
+  const importLine = `import { spec as ${varName} } from '../core/themes/${id}/persona.data'`
   const importBlock = existing.match(
     /(import \{ spec as \w+ \} from '\.\.\/core\/themes\/[^']+\/persona\.spec'\n)+/,
   )
   if (!importBlock) {
     throw new Error(`failed to locate import block in ${PUBLIC_PERSONAS_TS}`)
   }
-  if (existing.includes(`from '../core/themes/${id}/persona.spec'`)) {
+  if (existing.includes(`from '../core/themes/${id}/persona.data'`)) {
     return existing // 已存在
   }
 
@@ -137,7 +137,7 @@ function main() {
     process.exit(2)
   }
 
-  const personaPath = resolve(process.cwd(), `src/core/themes/${spec.id}/persona.spec.ts`)
+  const personaPath = resolve(process.cwd(), `src/core/themes/${spec.id}/persona.data.ts`)
   if (existsSync(personaPath) && !args.force) {
     process.stderr.write(
       `[persist-persona] persona id "${spec.id}" already exists at ${personaPath}.\n` +

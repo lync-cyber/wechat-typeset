@@ -260,7 +260,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 export function generateGallery(specs: readonly PersonaSpec[], meta: { generatedAt?: string } = {}): string {
   const cards = specs.map((s, i) => renderCard(s, i, specs.length)).join('\n\n')
   const ts = meta.generatedAt ?? ''
-  const sub = ts ? `从 ${specs.length} 份 persona.spec.ts 派生 · ${esc(ts)}` : `从 ${specs.length} 份 persona.spec.ts 派生`
+  const sub = ts ? `从 ${specs.length} 份 persona.data.ts 派生 · ${esc(ts)}` : `从 ${specs.length} 份 persona.data.ts 派生`
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
