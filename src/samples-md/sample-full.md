@@ -102,6 +102,10 @@
 这是 `news-row` 骨架 —— 左 3px 色条 + 实色徽章 + 紧凑单行,data-brief 家族签名。
 :::
 
+::: info variant=mook-tag
+这是 `mook-tag` 骨架 —— 米卡纸底 + 主色左条 + 単字 CJK 标签（参 / 編 / 注 / 禁），editorial-mook 家族签名。
+:::
+
 ---
 
 ## 引用卡 4 种 variant

@@ -113,6 +113,89 @@ describe('autoNumber · 标题前缀渲染', () => {
     expect(extractAutonumberSpans(html)).toEqual(['I', 'II', 'III', 'IV'])
   })
 
+  it('circled：圆圈数字 1–20 + (N) 回退', () => {
+    const theme = withHeadingPrefix(
+      {
+        headingPrefix: [
+          {
+            level: 2,
+            autoNumber: 'circled',
+            style: { color: 'accent' },
+          },
+        ],
+      },
+      'autonumber-circled',
+    )
+    // 5 个 h2 应输出 ❶❷❸❹❺
+    const md = `## A\n\n## B\n\n## C\n\n## D\n\n## E\n`
+    const { html } = render({ md, theme })
+    expect(extractAutonumberSpans(html)).toEqual(['❶', '❷', '❸', '❹', '❺'])
+  })
+
+  it('circled + display:block + suffix `{cn}`：mook 系两行 kicker 布局', () => {
+    const theme = withHeadingPrefix(
+      {
+        headingPrefix: [
+          {
+            level: 2,
+            autoNumber: 'circled',
+            style: {
+              color: 'accent',
+              display: 'block',
+              marginBottom: 6,
+              suffix: '  第{cn}章',
+              fontSize: 10,
+              letterSpacing: 2,
+            },
+          },
+        ],
+      },
+      'autonumber-circled-block-suffix',
+    )
+    const md = `## 为什么我们失去了阅读的耐心\n\n## 慢读的三种练习\n\n## 夜晚作为最后的阅读时区\n`
+    const { html } = render({ md, theme })
+
+    // 1) 文本：❶ + suffix 替换后的中文章号
+    expect(extractAutonumberSpans(html)).toEqual([
+      '❶  第一章',
+      '❷  第二章',
+      '❸  第三章',
+    ])
+
+    // 2) 样式：display:block + margin-bottom:6px 而非 margin-right
+    const blockSpanRe = /<span class="heading-prefix heading-prefix--autonumber" style="([^"]+)">/g
+    const styles: string[] = []
+    let m: RegExpExecArray | null
+    while ((m = blockSpanRe.exec(html)) !== null) styles.push(m[1])
+    expect(styles.length).toBeGreaterThan(0)
+    for (const s of styles) {
+      expect(s).toMatch(/display:block/)
+      expect(s).toMatch(/margin-bottom:6px/)
+      expect(s).not.toMatch(/margin-right:/)
+    }
+  })
+
+  it('circled + suffix `{n}`：用 autoNumber 输出值占位', () => {
+    const theme = withHeadingPrefix(
+      {
+        headingPrefix: [
+          {
+            level: 2,
+            autoNumber: 'circled',
+            style: { color: 'primary', suffix: ' chapter {n}' },
+          },
+        ],
+      },
+      'autonumber-circled-n-placeholder',
+    )
+    const md = `## A\n\n## B\n`
+    const { html } = render({ md, theme })
+    expect(extractAutonumberSpans(html)).toEqual([
+      '❶ chapter ❶',
+      '❷ chapter ❷',
+    ])
+  })
+
   it('arabic-section-padded：h2 段号零填充两位', () => {
     const theme = withHeadingPrefix(
       {
