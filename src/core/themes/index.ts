@@ -25,6 +25,7 @@ import { peopleStoryTheme } from './people-story'
 import { academicFrontierTheme } from './academic-frontier'
 import { editorialMookTheme } from './editorial-mook'
 import { swissGridTheme } from './swiss-grid'
+import { brutalistTheme } from './brutalist'
 
 /**
  * 主题展示顺序。与 import 顺序解耦：改这里不影响 import 列表，反之亦然。
@@ -43,6 +44,7 @@ const DISPLAY_ORDER: readonly string[] = [
   'academic-frontier',
   'editorial-mook',
   'swiss-grid',
+  'brutalist',
 ]
 
 const ALL_THEMES: Theme[] = [
@@ -58,6 +60,7 @@ const ALL_THEMES: Theme[] = [
   academicFrontierTheme,
   editorialMookTheme,
   swissGridTheme,
+  brutalistTheme,
 ]
 
 function collect(): Record<string, Theme> {

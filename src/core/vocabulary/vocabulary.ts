@@ -158,11 +158,18 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     pack: 'data-brief',
     fenceLength: 3,
     attrs: [
-      { key: 'issue', description: '期号（monospace 右对齐）', example: '004' },
+      { key: 'issue', description: '期号（monospace 右对齐；默认两栏布局生效）', example: '004' },
       { key: 'date', description: '日期（monospace 右对齐）', example: '2026.04.22' },
+      {
+        key: 'kicker',
+        description:
+          '左侧前缀（如 "第 04 期"）。提供时切换为三栏 ribbon 布局：' +
+          '左=kicker / 中=name（accent 色） / 右=date —— 报刊期次条骨架。',
+        example: '第 04 期',
+      },
     ],
     description:
-      '刊头：刊名（info）左对齐 + 期号·日期 monospace 右对齐 + 下划线。data-brief 家族签名。',
+      '刊头：默认两栏（刊名左 + 期号·日期 monospace 右）；声明 attrs.kicker 切三栏 ribbon。',
     example: '::: masthead 慢读简报 issue="004" date="2026.04.22"\n:::\n',
   },
   {

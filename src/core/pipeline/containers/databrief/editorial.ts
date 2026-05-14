@@ -159,8 +159,10 @@ export const editorNoteContainer: ContainerRenderer = {
     ].join(';')
     const wrapperCSS = themeStyle || fallback
     // R8 风格：kicker CSS 由 ctx.innerStyles.editorNoteKicker 决定（baseInnerStyles 兜底 +
-    // spec.innerStyles 深合并）。这样像 swiss-grid 那种"全幅黑底白字 header bar"形态
-    // 就能由主题作者用 spec.innerStyles.editorNoteKicker 配置出来，无需改 renderer。
+    // spec.innerStyles 深合并）。允许主题作者重塑 kicker 形态而无需改 renderer：
+    //   - swiss-grid: "全幅黑底白字 header bar"
+    //   - brutalist: editor-note 整块荧光黄底 + kicker 走 textInverse 反色（避免色/底同色不可见）
+    // 与 abstractKicker / keyNumberKicker 同构。
     const kickerCSS = inline(ctx.innerStyles.editorNoteKicker)
     return (
       `<section class="container-editor-note" style="${wrapperCSS}">\n` +

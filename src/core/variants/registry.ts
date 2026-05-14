@@ -80,6 +80,7 @@ const QUOTE_ORDER: readonly string[] = [
   'magazine-dropcap',
   'column-rule',
   'frame-brackets',
+  'tilted-sticker',
 ]
 const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
 const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeline-dot']

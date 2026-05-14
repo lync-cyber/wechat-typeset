@@ -202,6 +202,15 @@ export interface ThemeInnerStyles {
   keyNumberValue: CSSObject
   keyNumberKicker: CSSObject
   seeAlsoTitle: CSSObject
+  /**
+   * 编辑部注（editor-note）容器顶部 kicker（如 "编 者 按"）的样式。
+   *
+   * 为什么开此槽位：数据简报家族默认走 `color: primary`（主色文字 + 浅底）。
+   * 想重塑 kicker 形态的主题作者无需改 renderer：
+   *   - swiss-grid: 全幅黑底白字 header bar（display:block + 负 margin 撑到 wrapper 边缘）
+   *   - brutalist: editor-note bg 涂满 primary 后,kicker 走 textInverse 反色避免色/底同色
+   * 与 abstractKicker / keyNumberKicker 同构。
+   */
   editorNoteKicker: CSSObject
 }
 
@@ -334,6 +343,9 @@ export type QuoteVariantId =
   | 'column-rule'
   // 四角括号框：四个角各一个 L 形 SVG 装饰
   | 'frame-brackets'
+  // 旋转贴纸：反色卡片 + transform:rotate(-1deg) + 大字号粗体 sans 左对齐
+  // （punk-zine / brutalist 撕贴纸语义；与 classic 形成"克制 vs 张力"对立轴）
+  | 'tilted-sticker'
 
 export type CompareVariantId =
   // 两栏卡片（当前默认行为，display:table-cell）
@@ -454,6 +466,7 @@ export const VARIANT_IDS = {
     'magazine-dropcap',
     'column-rule',
     'frame-brackets',
+    'tilted-sticker',
   ] as const satisfies readonly QuoteVariantId[],
   compare: [
     'column-card',

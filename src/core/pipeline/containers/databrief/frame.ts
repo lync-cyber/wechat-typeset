@@ -29,13 +29,48 @@ export const mastheadContainer: ContainerRenderer = {
     const name = ctx.info.trim() || '简报'
     const issue = ctx.attrs.issue ?? ''
     const date = ctx.attrs.date ?? ''
+    const kicker = ctx.attrs.kicker ?? ''
     const c = ctx.tokens.colors
     // R4：装饰位（padding / border / bg / margin）由 ctx.containers.masthead 决定。
-    // 结构性 display:grid 是本容器的视觉契约（左 1fr 右 auto），由 renderer 强制——
+    // 结构性 display:grid 是本容器的视觉契约，由 renderer 强制——
     // 不进 ThemeContainers 槽位（themeCSS guard 会拒绝 display:grid）。
-    const wrapperCSS =
-      `display:grid;grid-template-columns:1fr auto;align-items:baseline;` +
-      inline(ctx.containers.masthead)
+    //
+    // 两种布局模式（由 attrs.kicker 切换）：
+    //   - 默认（无 kicker）：左 1fr 名 / 右 auto 期号·日期 —— data-brief 经典刊头
+    //   - ribbon（有 kicker）：三栏等宽，左 kicker / 中 name（accent 色） / 右 date
+    //     —— 报刊"期次条"骨架（粗野主义 / 杂志编辑系常用），date 直接走 attrs.date
+    //     不再前缀"第 N 期"（前缀语义由 kicker 承担：例 kicker="第 04 期"）。
+    const isRibbon = kicker !== ''
+    const wrapperCSS = isRibbon
+      ? `display:grid;grid-template-columns:1fr 1fr 1fr;align-items:baseline;` +
+        inline(ctx.containers.masthead)
+      : `display:grid;grid-template-columns:1fr auto;align-items:baseline;` +
+        inline(ctx.containers.masthead)
+    if (isRibbon) {
+      // ribbon 模式：三栏等宽 monospace，中间 name 走 primary（accent）色突出
+      const sideCSS = [
+        `color:${c.text}`,
+        'font-family:Menlo,Monaco,monospace',
+        'font-size:10px',
+        'letter-spacing:0.1em',
+      ].join(';')
+      const sideRightCSS = sideCSS + ';text-align:right'
+      const nameCSS = [
+        `color:${c.primary}`,
+        'font-family:Menlo,Monaco,monospace',
+        'font-size:10px',
+        'font-weight:700',
+        'letter-spacing:0.1em',
+        'text-align:center',
+      ].join(';')
+      return (
+        `<section class="container-masthead container-masthead--ribbon" style="${wrapperCSS}">\n` +
+        `<span class="container-masthead__kicker" style="${sideCSS}">${escText(kicker)}</span>` +
+        `<span class="container-masthead__name" style="${nameCSS}">${escText(name)}</span>` +
+        `<span class="container-masthead__date" style="${sideRightCSS}">${escText(date)}</span>` +
+        `\n`
+      )
+    }
     const nameCSS = [
       `color:${c.text}`,
       'font-size:13px',
