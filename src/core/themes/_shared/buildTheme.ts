@@ -498,6 +498,17 @@ export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
     },
+    // editor-note kicker 兜底：与 databrief/editorial.ts 旧版硬编码字节等价（primary 色
+    // 小字 + 粗体 + 0.1em letter-spacing + 下间距）。
+    // swiss-grid 主题深合并覆盖为"display:block + 黑底白字 + 负 margin 撑到 wrapper 边缘"，
+    // 实现 1958 Neue Grafik 编者按的全幅黑色 header-bar 形态。
+    editorNoteKicker: {
+      color: c.primary,
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.1em',
+      'margin-bottom': '6px',
+    },
   }
 }
 

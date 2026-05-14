@@ -19,6 +19,7 @@ import { spec as industryObserverSpec } from '../core/themes/industry-observer/p
 import { spec as peopleStorySpec } from '../core/themes/people-story/persona.data'
 import { spec as academicFrontierSpec } from '../core/themes/academic-frontier/persona.data'
 import { spec as editorialMookSpec } from '../core/themes/editorial-mook/persona.data'
+import { spec as swissGridSpec } from '../core/themes/swiss-grid/persona.data'
 import type { PersonaSpec } from '../core/themes/_shared/spec'
 
 /**
@@ -37,6 +38,7 @@ export const PERSONA_SPECS: readonly PersonaSpec[] = [
   peopleStorySpec,
   academicFrontierSpec,
   editorialMookSpec,
+  swissGridSpec,
 ]
 
 export const PERSONA_REGISTRY: Readonly<Record<string, PersonaSpec>> = Object.freeze(

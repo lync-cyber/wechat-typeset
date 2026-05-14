@@ -188,6 +188,7 @@ describe('枚举完整性', () => {
       'people-story',
       'academic-frontier',
       'editorial-mook',
+      'swiss-grid',
     ])
   })
 })

@@ -194,12 +194,15 @@ export interface ThemeContainers {
  *   - keyNumberValue     大数字本体（数字字号 / 颜色 / 字距）
  *   - keyNumberKicker    大数字上方 kicker（小标题）
  *   - seeAlsoTitle       延伸阅读列表的标题
+ *   - editorNoteKicker   编辑部注容器的 kicker 行（默认 primary 小字 + letter-spacing；
+ *                        swiss-grid 用全幅黑底白字 header bar 形态——负 margin 撑到 wrapper 边缘）
  */
 export interface ThemeInnerStyles {
   abstractKicker: CSSObject
   keyNumberValue: CSSObject
   keyNumberKicker: CSSObject
   seeAlsoTitle: CSSObject
+  editorNoteKicker: CSSObject
 }
 
 export interface ThemeAssets {
@@ -511,6 +514,12 @@ export type PaletteColorKey =
   | 'accent'
   | 'text'
   | 'textMuted'
+  /**
+   * 反白文字色（典型: 红底/黑底色块徽章上的白字）。
+   * 加入动机: swiss-grid H2 红章徽章需要 color='textInverse' + backgroundColor='primary',
+   * 否则只能 hardcode '#ffffff' 失去 token 流动。其它"色块徽章"主题也会受益。
+   */
+  | 'textInverse'
 
 export interface HeadingPrefixDecoration {
   /** 适用的标题级别。h1 由作者写文章标题，不接入装饰；通常用 h2/h3。 */
@@ -544,6 +553,22 @@ export interface HeadingPrefixDecoration {
   /** 装饰样式（声明式 token 引用）。 */
   style: {
     color: PaletteColorKey
+    /**
+     * 装饰前缀的底色（token 引用）；声明则把编号渲染成"色块徽章"——
+     * 典型例：swiss-grid 主题的 H2 「01」红方块前缀。
+     * 缺省 = 不设底色（保持纯文字编号）。需与 paddingX / paddingY 搭配使用以撑开方块。
+     */
+    backgroundColor?: PaletteColorKey
+    /**
+     * 装饰前缀的左右内边距 px（仅 backgroundColor 声明时生效）；缺省 0。
+     * 与 paddingY 一起拼成 `padding:${paddingY}px ${paddingX}px`，让色块徽章撑开数字。
+     */
+    paddingX?: number
+    /**
+     * 装饰前缀的上下内边距 px（仅 backgroundColor 声明时生效）；缺省 0。
+     * 与 paddingX 配合形成方块徽章；典型值 paddingX=8, paddingY=2 复刻 Swiss-Grid「01」红章。
+     */
+    paddingY?: number
     /** 只允许 monospace（正文字体由系统决定）；缺省时继承标题字体 */
     fontFamily?: 'monospace'
     fontWeight?: 400 | 500 | 600 | 700

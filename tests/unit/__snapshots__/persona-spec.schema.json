@@ -7596,7 +7596,8 @@
                 "secondary",
                 "accent",
                 "text",
-                "textMuted"
+                "textMuted",
+                "textInverse"
               ]
             },
             "fontSize": {
@@ -7662,8 +7663,28 @@
                       "secondary",
                       "accent",
                       "text",
-                      "textMuted"
+                      "textMuted",
+                      "textInverse"
                     ]
+                  },
+                  "backgroundColor": {
+                    "enum": [
+                      "primary",
+                      "secondary",
+                      "accent",
+                      "text",
+                      "textMuted",
+                      "textInverse"
+                    ],
+                    "description": "装饰前缀底色（token 引用）。声明则把编号渲染成色块徽章——典型例 swiss-grid 主题的 H2「01」红方块前缀。 缺省 = 不设底色。需与 paddingX/paddingY 搭配以撑开方块。"
+                  },
+                  "paddingX": {
+                    "type": "number",
+                    "description": "装饰前缀左右内边距 px（仅 backgroundColor 声明时生效），缺省 0。"
+                  },
+                  "paddingY": {
+                    "type": "number",
+                    "description": "装饰前缀上下内边距 px（仅 backgroundColor 声明时生效），缺省 0。"
                   },
                   "fontFamily": {
                     "enum": [
