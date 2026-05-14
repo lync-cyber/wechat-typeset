@@ -15,6 +15,7 @@ import {
 } from './rules'
 import { STYLED_CONTAINERS } from '../vocabulary/vocabulary'
 import { ROOT_CLASS } from './constants'
+import { createLRU } from './_lru'
 
 type Selector = string
 
@@ -76,7 +77,30 @@ function containerSelector(name: string): Selector {
   return `.${ROOT_CLASS} .container-${name}`
 }
 
+/**
+ * 缓存 key 为 theme.id，但 entry 同时记录 theme 对象引用做守卫：
+ *   - base theme：themeList 引用稳定，hover/锁定切换重复同一 id 直接命中
+ *   - custom theme：id 固定为 `${baseId}--custom`（不带 seed hash），新对象虽然
+ *     与上一次同 id，但引用 !== → 不命中、重算、覆盖。否则会渲染出上一次的配色。
+ *
+ * 容量 12：10 套主题 + 2~3 个 custom 派生轮转。custom 切换频率低于 base hover。
+ */
+const themeCssCache = createLRU<string, { theme: Theme; css: string }>(12)
+
 export function generateThemeCSS(theme: Theme): string {
+  const cached = themeCssCache.get(theme.id)
+  if (cached && cached.theme === theme) return cached.css
+  const css = computeThemeCSS(theme)
+  themeCssCache.set(theme.id, { theme, css })
+  return css
+}
+
+/** 测试钩子：本测试间清空缓存，避免上一个 it 的 theme 引用泄漏到下一个。 */
+export function __resetThemeCssCacheForTest(): void {
+  themeCssCache.clear()
+}
+
+function computeThemeCSS(theme: Theme): string {
   const chunks: string[] = []
 
   // Root 自身：背景、基础字体（但不含 font-family）

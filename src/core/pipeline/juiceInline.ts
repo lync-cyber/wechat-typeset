@@ -10,7 +10,21 @@
 
 import juice from 'juice'
 
+/**
+ * last-result 单格缓存：防抖击键期间 bodyHtml / themeCss 都未变时（连续触发
+ * 同一参数的 render），跳过 juice.inlineContent。juice 是同步 CPU 密集（大文
+ * 档 50~150ms），但产出对 (htmlWithStyle) 是纯函数 → 字符串相等即可命中。
+ *
+ * 不用 Map：juice 调用在击键防抖路径上，最近一次输入即是热数据，再往前的
+ * (theme A → theme B → theme A) 回切场景频率远低于单 theme 内连续触发。
+ * 多格 Map 占用键字符串开销不划算。
+ */
+let lastInput: string | null = null
+let lastOutput: string | null = null
+
 export function inlineHtml(htmlWithStyle: string): string {
+  if (lastInput !== null && lastInput === htmlWithStyle) return lastOutput as string
+
   // 抽出所有 <style> 内容作为 CSS；原位置替换为空
   const styles: string[] = []
   const htmlWithoutStyle = htmlWithStyle.replace(
@@ -21,13 +35,23 @@ export function inlineHtml(htmlWithStyle: string): string {
     },
   )
   const css = styles.join('\n')
-  if (!css.trim()) return htmlWithoutStyle
+  const out = !css.trim()
+    ? htmlWithoutStyle
+    : juice.inlineContent(htmlWithoutStyle, css, {
+        inlinePseudoElements: false,
+        preserveImportant: false,
+        preserveMediaQueries: false,
+        preserveFontFaces: false,
+        removeStyleTags: true,
+      })
 
-  return juice.inlineContent(htmlWithoutStyle, css, {
-    inlinePseudoElements: false,
-    preserveImportant: false,
-    preserveMediaQueries: false,
-    preserveFontFaces: false,
-    removeStyleTags: true,
-  })
+  lastInput = htmlWithStyle
+  lastOutput = out
+  return out
+}
+
+/** 测试钩子：让 spec 间不串台。 */
+export function __resetJuiceCacheForTest(): void {
+  lastInput = null
+  lastOutput = null
 }
