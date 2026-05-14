@@ -13,7 +13,7 @@
 一个主题的 ground truth 是 `PersonaSpec`——**一份 JSON-serializable 对象**。
 
 ```
-persona.spec.ts  ──┬─► specToTheme(spec)   → 运行时 Theme（渲染管线吃这个）
+persona.data.ts  ──┬─► specToTheme(spec)   → 运行时 Theme（渲染管线吃这个）
                    ├─► specToGallery(spec) → 人看的目录页（generated/personas-spec-gallery.html）
                    └─► getSchema()         → JSON Schema（约束 LLM 结构化输出）
 ```
@@ -34,7 +34,7 @@ cp -r src/themes/default src/themes/your-slug
 
 `id` 用 kebab-case，与目录名一致（e.g. `urban-diary`）。
 
-### 2. 编辑 `persona.spec.ts`
+### 2. 编辑 `persona.data.ts`
 
 必填字段（[完整类型](../src/themes/_shared/spec/types.ts)）：
 
@@ -76,7 +76,7 @@ export const spec: PersonaSpec = {
 
 ```ts
 import { specToTheme } from '../_shared/spec'
-import { spec } from './persona.spec'
+import { spec } from './persona.data'
 
 export const urbanDiaryTheme = specToTheme(spec)
 ```
@@ -233,7 +233,7 @@ npm run gen:schema       # 重新导出 JSON Schema（用于 LLM 结构化输出
 npm test                 # 全量：vitest + sample-full 端到端
 ```
 
-- **完整示例**：[`src/themes/default/persona.spec.ts`](../src/themes/default/persona.spec.ts) 是最干净的参照；[`tech-geek/persona.spec.ts`](../src/themes/tech-geek/persona.spec.ts) 展示了深色主题 + 复杂 motif 的用法。
+- **完整示例**：[`src/themes/default/persona.data.ts`](../src/themes/default/persona.data.ts) 是最干净的参照；[`tech-geek/persona.data.ts`](../src/themes/tech-geek/persona.data.ts) 展示了深色主题 + 复杂 motif 的用法。
 - **类型定义**：[`src/themes/_shared/spec/types.ts`](../src/themes/_shared/spec/types.ts)
 - **校验器源码**：[`src/themes/_shared/spec/validate.ts`](../src/themes/_shared/spec/validate.ts)
 - **设计笔记范本**：[`docs/design/personas/`](design/personas/)

@@ -5,11 +5,11 @@
  * gallery 漏渲染 / schema 漂移）都会在这里先红。
  *
  * 覆盖：
- *   A. spec ↔ Theme：所有 persona.spec.ts 通过 specToTheme 后，palette/typography/spacing/
+ *   A. spec ↔ Theme：所有 persona.data.ts 通过 specToTheme 后，palette/typography/spacing/
  *      radius/variants/assets 都与 spec 声明结构相等
  *   B. spec ↔ Gallery：generateGallery 产物包含每份 spec 的全部 palette + status hex
  *      + 每个声明 motif 的 SVG 特征（viewBox 片段）
- *   C. Registry：themeList 与 persona.spec.ts 文件一一对应
+ *   C. Registry：themeList 与 persona.data.ts 文件一一对应
  *   D. Schema contract：PERSONA_SPEC_SCHEMA 的 enum 与 VARIANT_IDS 同步；
  *      schema JSON 由 toMatchFileSnapshot 锁定在 __snapshots__/persona-spec.schema.json
  */
@@ -37,7 +37,7 @@ import { STYLED_CONTAINERS } from '../../src/core/vocabulary'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/core/themes/_shared/spec'
 
 // ============================================================
-// 加载器：所有 persona.spec.ts → 按目录名排序
+// 加载器：所有 persona.data.ts → 按目录名排序
 // ============================================================
 
 interface Loaded {
@@ -49,7 +49,7 @@ interface Loaded {
 let LOADED: Loaded[] = []
 
 beforeAll(async () => {
-  const paths = globSync('src/core/themes/*/persona.spec.ts', { cwd: process.cwd() })
+  const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
     .sort()
   for (const p of paths) {
@@ -84,7 +84,7 @@ describe('A. spec → Theme 投影保真', () => {
 
   it('spec.id 与目录名一致', () => {
     for (const { spec, dir } of eachSpec()) {
-      expect(spec.id, `${dir}/persona.spec.ts`).toBe(dir)
+      expect(spec.id, `${dir}/persona.data.ts`).toBe(dir)
     }
   })
 
@@ -216,14 +216,14 @@ describe('B. spec → Gallery 投影保真', () => {
 // ============================================================
 
 describe('C. Registry ↔ spec 文件', () => {
-  it('themeList 与 persona.spec.ts 文件数一致', () => {
+  it('themeList 与 persona.data.ts 文件数一致', () => {
     expect(themeList.length).toBe(eachSpec().length)
   })
 
-  it('每个 themeList[i].id 都有同名的 persona.spec.ts', () => {
+  it('每个 themeList[i].id 都有同名的 persona.data.ts', () => {
     const specIds = new Set(eachSpec().map((l) => l.spec.id))
     for (const theme of themeList) {
-      expect(specIds.has(theme.id), `themeList has "${theme.id}" but no matching persona.spec.ts`).toBe(true)
+      expect(specIds.has(theme.id), `themeList has "${theme.id}" but no matching persona.data.ts`).toBe(true)
     }
   })
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * CLI：校验一个或多个 persona.spec.ts 文件的合法性。
+ * CLI：校验一个或多个 persona.data.ts 文件的合法性。
  *
  * 用法：
- *   tsx scripts/validate-spec.ts src/core/themes/default/persona.spec.ts
- *   tsx scripts/validate-spec.ts src/core/themes/**\/persona.spec.ts
+ *   tsx scripts/validate-spec.ts src/core/themes/default/persona.data.ts
+ *   tsx scripts/validate-spec.ts src/core/themes/**\/persona.data.ts
  *
- * 不传参则扫描 src/core/themes/*\/persona.spec.ts。
+ * 不传参则扫描 src/core/themes/*\/persona.data.ts。
  */
 
 import { existsSync } from 'node:fs'
@@ -26,12 +26,12 @@ async function main() {
   const args = process.argv.slice(2)
   const paths = args.length > 0
     ? args.map((p) => resolve(process.cwd(), p))
-    : globSync('src/core/themes/*/persona.spec.ts', { cwd: process.cwd() }).map((p) =>
+    : globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() }).map((p) =>
         resolve(process.cwd(), p),
       )
 
   if (paths.length === 0) {
-    console.error('No persona.spec.ts files found')
+    console.error('No persona.data.ts files found')
     process.exit(1)
   }
 

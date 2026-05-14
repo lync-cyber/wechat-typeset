@@ -93,7 +93,7 @@ tsx skills/wechat-typeset-author-persona/scripts/persist-persona.ts \
   tmp/spec.json --id <kebab-id>
 ```
 
-落到 `src/core/themes/<id>/persona.spec.ts` + 改 `src/public/personas.ts` 的 import 列表。
+落到 `src/core/themes/<id>/persona.data.ts` + 改 `src/public/personas.ts` 的 import 列表。
 
 ## 派生现有主题
 
@@ -163,7 +163,7 @@ LLM 经常凭设计稿习惯写 `fontSize: 12` 或 `strokeWidth: 0.5`——硬�
 | `scripts/new-persona-from-prompt.ts` | 输出"给 LLM 用的结构化输出 prompt"（schema + 硬约束 + 相邻样例），不调 LLM |
 | `scripts/validate-and-fix.ts` | 读 spec.json → `validatePersona` → 输出 errors[] + 修复建议（喂回 LLM 用） |
 | `scripts/preview-motifs.ts` | 读 spec.json → 生成单页 HTML gallery（色板 + 所有 motif + 各容器的 admonition icon） |
-| `scripts/persist-persona.ts` | 把 spec.json 落到 `src/core/themes/<id>/persona.spec.ts` + patch `src/public/personas.ts` |
+| `scripts/persist-persona.ts` | 把 spec.json 落到 `src/core/themes/<id>/persona.data.ts` + patch `src/public/personas.ts` |
 
 ## 模板
 

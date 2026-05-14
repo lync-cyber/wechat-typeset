@@ -20,7 +20,7 @@
 
 ## 硬约束（主题作者不能突破，写作者不会踩到）
 
-主题通过 [`persona.spec.ts`](../../src/themes/) 声明调色板、排版、装饰与 variant 选择。
+主题通过 [`persona.data.ts`](../../src/themes/) 声明调色板、排版、装饰与 variant 选择。
 以下约束由 `src/pipeline/rules.ts` / `src/themes/_shared/spec/validate.ts` 在构建期校验：
 
 - 字号 ≥ 14、SVG `stroke-width` ≥ 1、`fill` 纯白 `#ffffff` 统一换 `#fefefe`

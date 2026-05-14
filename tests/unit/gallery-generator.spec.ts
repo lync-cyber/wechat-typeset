@@ -16,7 +16,7 @@ import { generateGallery } from '../../src/domain/gallery/generate'
 import type { PersonaSpec } from '../../src/core/themes/_shared/spec'
 
 async function loadAllSpecs(): Promise<PersonaSpec[]> {
-  const paths = globSync('src/core/themes/*/persona.spec.ts', { cwd: process.cwd() })
+  const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
     .sort()
   const specs: PersonaSpec[] = []

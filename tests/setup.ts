@@ -46,3 +46,20 @@ if (typeof window !== 'undefined' && window !== (globalThis as unknown as Window
     writable: true,
   })
 }
+
+/**
+ * 全局 afterEach：
+ *   1. localStorage.clear()——drafts / theme-id 等 spec 间不串台
+ *   2. state.__resetForTest()——src/app/state.ts 是模块单例，跨 spec 共享同一份 ref
+ *
+ * 任何不需要 reset 的 spec 也不会受影响（reset 是 idempotent）。这两条全局守护让
+ * 新增的 app/composable spec 不需要自己写 beforeEach/afterEach 样板，写测试时只
+ * 关心被测代码本身。
+ */
+import { afterEach } from 'vitest'
+import { __resetForTest as resetAppState } from '../src/app/state'
+
+afterEach(() => {
+  storage.clear()
+  resetAppState()
+})

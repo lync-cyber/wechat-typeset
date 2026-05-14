@@ -13,7 +13,7 @@
 
 > **可移植性**：本包容器在任何主题里**语法都合法**，但只有"承诺渲染本包"的主题才会给出签名视觉。
 > 其他主题里它会回退到中性兜底样式——**不塌版、不丢内容，但少签名感**。
-> 谁承诺了：在 `src/themes/<slug>/persona.spec.ts` 的 `signatureContainers` 字段里登记本包的容器 styleKey。
+> 谁承诺了：在 `src/themes/<slug>/persona.data.ts` 的 `signatureContainers` 字段里登记本包的容器 styleKey。
 
 ## 速查表
 

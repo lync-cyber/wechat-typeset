@@ -8,17 +8,17 @@
  * 断言会守住两处的同步：漏注册一处即 CI 红。
  */
 
-import { spec as defaultSpec } from '../core/themes/default/persona.spec'
-import { spec as techGeekSpec } from '../core/themes/tech-geek/persona.spec'
-import { spec as techExplainerSpec } from '../core/themes/tech-explainer/persona.spec'
-import { spec as lifeAestheticSpec } from '../core/themes/life-aesthetic/persona.spec'
-import { spec as businessFinanceSpec } from '../core/themes/business-finance/persona.spec'
-import { spec as dataBriefSpec } from '../core/themes/data-brief/persona.spec'
-import { spec as literaryHumanismSpec } from '../core/themes/literary-humanism/persona.spec'
-import { spec as industryObserverSpec } from '../core/themes/industry-observer/persona.spec'
-import { spec as peopleStorySpec } from '../core/themes/people-story/persona.spec'
-import { spec as academicFrontierSpec } from '../core/themes/academic-frontier/persona.spec'
-import { spec as editorialMookSpec } from '../core/themes/editorial-mook/persona.spec'
+import { spec as defaultSpec } from '../core/themes/default/persona.data'
+import { spec as techGeekSpec } from '../core/themes/tech-geek/persona.data'
+import { spec as techExplainerSpec } from '../core/themes/tech-explainer/persona.data'
+import { spec as lifeAestheticSpec } from '../core/themes/life-aesthetic/persona.data'
+import { spec as businessFinanceSpec } from '../core/themes/business-finance/persona.data'
+import { spec as dataBriefSpec } from '../core/themes/data-brief/persona.data'
+import { spec as literaryHumanismSpec } from '../core/themes/literary-humanism/persona.data'
+import { spec as industryObserverSpec } from '../core/themes/industry-observer/persona.data'
+import { spec as peopleStorySpec } from '../core/themes/people-story/persona.data'
+import { spec as academicFrontierSpec } from '../core/themes/academic-frontier/persona.data'
+import { spec as editorialMookSpec } from '../core/themes/editorial-mook/persona.data'
 import type { PersonaSpec } from '../core/themes/_shared/spec'
 
 /**

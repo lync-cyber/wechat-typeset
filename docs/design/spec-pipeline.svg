@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 260" role="img" aria-label="PersonaSpec 三条投影路径示意图">
   <title>PersonaSpec · 一份 spec 三条投影</title>
-  <desc>persona.spec.ts 是主题的唯一真相来源。三条投影 specToTheme / specToGallery / getSchema 分别喂给运行时、人类目录、LLM 约束。</desc>
+  <desc>persona.data.ts 是主题的唯一真相来源。三条投影 specToTheme / specToGallery / getSchema 分别喂给运行时、人类目录、LLM 约束。</desc>
 
   <!-- Backdrop -->
   <rect x="0" y="0" width="960" height="260" fill="#fdfcf8"/>
 
   <!-- Title -->
   <text x="480" y="30" text-anchor="middle" font-family="Georgia, 'Noto Serif SC', serif" font-size="16" fill="#2c2a22" font-weight="600">一份 spec，三条投影</text>
-  <text x="480" y="48" text-anchor="middle" font-family="-apple-system, 'PingFang SC', sans-serif" font-size="11" fill="#636870">改色板 / 改字距 / 改 motif —— 全部在 persona.spec.ts；运行时、目录页、LLM schema 自动对齐</text>
+  <text x="480" y="48" text-anchor="middle" font-family="-apple-system, 'PingFang SC', sans-serif" font-size="11" fill="#636870">改色板 / 改字距 / 改 motif —— 全部在 persona.data.ts；运行时、目录页、LLM schema 自动对齐</text>
 
-  <!-- Source: persona.spec.ts (left) -->
+  <!-- Source: persona.data.ts (left) -->
   <g transform="translate(40,90)">
     <rect width="210" height="100" fill="#fefefe" stroke="#2c2a22" stroke-width="1.5" rx="2"/>
     <rect x="0" y="0" width="210" height="22" fill="#2c2a22"/>
-    <text x="105" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#fdfcf8" font-weight="600">persona.spec.ts</text>
+    <text x="105" y="15" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="11" fill="#fdfcf8" font-weight="600">persona.data.ts</text>
     <text x="12" y="40" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">id, name, description</text>
     <text x="12" y="56" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">palette · typography</text>
     <text x="12" y="72" font-family="'JetBrains Mono', monospace" font-size="10" fill="#2c2a22">motifs (SVG AST)</text>

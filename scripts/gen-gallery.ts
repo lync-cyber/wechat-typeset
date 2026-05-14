@@ -2,7 +2,7 @@
 /**
  * 生成 docs/generated/personas-spec-gallery.html。
  *
- * 读取 src/core/themes/*\/persona.spec.ts 里的全部 spec，按目录名排序后投射为单文件 HTML。
+ * 读取 src/core/themes/*\/persona.data.ts 里的全部 spec，按目录名排序后投射为单文件 HTML。
  * 输出路径固定，drift 检查在 tests/gallery-generator.spec.ts 用 toMatchFileSnapshot。
  */
 
@@ -14,11 +14,11 @@ import { generateGallery } from '../src/domain/gallery/generate'
 import type { PersonaSpec } from '../src/core/themes/_shared/spec'
 
 async function main() {
-  const paths = globSync('src/core/themes/*/persona.spec.ts', { cwd: process.cwd() })
+  const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
     .sort()
   if (paths.length === 0) {
-    console.error('No persona.spec.ts files found')
+    console.error('No persona.data.ts files found')
     process.exit(1)
   }
 

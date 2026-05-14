@@ -463,7 +463,7 @@ export const spec: PersonaSpec = {
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'pilot: Phase 2 的第一个 persona.spec.ts；规范 §0-§3.4 三条不可妥协决策在本文档落实。',
+      'pilot: Phase 2 的第一个 persona.data.ts；规范 §0-§3.4 三条不可妥协决策在本文档落实。',
   },
 }
 
