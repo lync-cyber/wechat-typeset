@@ -16,6 +16,7 @@ import {
   OUTLINK_STRATEGIES,
   type OutlinkStrategy,
 } from '../../infra/clipboard/outlinkDegrade'
+import { insertMpHints } from '../../infra/clipboard/mpInsertHints'
 import {
   buildShareUrl,
   parseShareHash,
@@ -57,7 +58,9 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
   async function handleCopy() {
     deps.flush()
     const rawHtml = deps.rendered.value.html
-    const { html, count } = degradeOutlinks(rawHtml, outlinkStrategy.value)
+    const { html: degradedHtml, count } = degradeOutlinks(rawHtml, outlinkStrategy.value)
+    // mp 容器注释串注入：在 outlink 降级之后，让公众号粘贴侧识别音视频组件锚点。
+    const { html } = insertMpHints(degradedHtml)
     // 自检在降级后的 HTML 上跑——若未来 outlink 策略也影响图片，这里能跟上
     const inlineImages = countInlineImages(html)
     const plain = deps.md.value
