@@ -9,11 +9,6 @@
  * 与父协作：每次业务事件后额外 emit 'close'，让父统一关闭 popover——避免每
  * 个 @click 都写 `; overflowOpen = false` 样板。
  */
-import {
-  OUTLINK_STRATEGIES,
-  OUTLINK_STRATEGY_LABEL,
-  type OutlinkStrategy,
-} from '../../infra/clipboard/outlinkDegrade'
 import type { ToolbarAction, ToolbarToggleTarget } from './toolbar-types'
 
 defineProps<{
@@ -24,14 +19,12 @@ defineProps<{
     checklist: boolean
     personaStudio: boolean
   }
-  outlinkStrategy: OutlinkStrategy
   modKey: string
 }>()
 
 const emit = defineEmits<{
   (e: 'toggle', target: ToolbarToggleTarget): void
   (e: 'action', cmd: ToolbarAction): void
-  (e: 'update:outlinkStrategy', value: OutlinkStrategy): void
   (e: 'close'): void
 }>()
 
@@ -46,7 +39,15 @@ function fireAction(cmd: ToolbarAction) {
 </script>
 
 <template>
+  <!--
+    四段式菜单（命令面板 / 快捷键与帮助 / 主题编辑器 / 外链处理 已迁出，不再重复）：
+      1. 抽屉：草稿 / 组件 / 配色 / 发文清单（主题编辑器走主题 popover 底部入口）
+      2. 内容操作：载入示例 / 保存选区 / 中文修复
+      3. 导出：HTML / Markdown / 长图 / 分享链接（外链处理已前置到"一键复制"split-button）
+      4. 危险：清空正文（actions.handleClear 已走 UndoToast 可撤销）
+  -->
   <div class="popover popover-menu">
+    <div class="menu-section-head">视图</div>
     <button class="menu-item" @click="fireToggle('drafts')">
       <span>{{ drawer.drafts ? '关闭草稿列表' : '草稿列表' }}</span>
     </button>
@@ -56,23 +57,22 @@ function fireAction(cmd: ToolbarAction) {
     <button class="menu-item" @click="fireToggle('customizer')">
       <span>{{ drawer.customizer ? '关闭自定义配色' : '自定义配色' }}</span>
     </button>
-    <button class="menu-item" @click="fireToggle('personaStudio')">
-      <span>{{ drawer.personaStudio ? '关闭主题编辑器' : '主题编辑器' }}</span>
-    </button>
     <button class="menu-item" @click="fireToggle('checklist')">
       <span>{{ drawer.checklist ? '关闭发文清单' : '发文清单' }}</span>
     </button>
     <div class="menu-sep" />
-    <button class="menu-item" @click="fireAction('saveSelection')">
-      <span>保存选区为组件</span>
-    </button>
+    <div class="menu-section-head">内容操作</div>
     <button class="menu-item" @click="fireAction('loadSample')">
       <span>载入当前主题示例</span>
+    </button>
+    <button class="menu-item" @click="fireAction('saveSelection')">
+      <span>保存选区为组件</span>
     </button>
     <button class="menu-item" @click="fireAction('fixZhTypo')">
       <span>一键修复中文排版</span>
     </button>
     <div class="menu-sep" />
+    <div class="menu-section-head">导出</div>
     <button class="menu-item" @click="fireAction('exportHtml')">
       <span>导出 HTML</span><span class="menu-kbd">{{ modKey }}⇧H</span>
     </button>
@@ -80,32 +80,16 @@ function fireAction(cmd: ToolbarAction) {
       <span>导出 Markdown</span><span class="menu-kbd">{{ modKey }}⇧M</span>
     </button>
     <button class="menu-item" @click="fireAction('exportImage')">
-      <span>导出长图</span>
+      <span>导出全文长图</span>
+    </button>
+    <button class="menu-item" @click="fireAction('exportCoverHorizontal')">
+      <span>导出封面 · 横版 900×383</span>
+    </button>
+    <button class="menu-item" @click="fireAction('exportCoverSquare')">
+      <span>导出封面 · 方版 900×900</span>
     </button>
     <button class="menu-item" @click="fireAction('copyShareLink')">
       <span>复制分享链接</span>
-    </button>
-    <div class="menu-sep" />
-    <div class="menu-section">
-      <div class="menu-section-head">外链处理</div>
-      <div class="menu-segment" role="radiogroup" aria-label="外链处理">
-        <button
-          v-for="s in OUTLINK_STRATEGIES"
-          :key="s"
-          class="menu-segment-btn"
-          :class="{ active: outlinkStrategy === s }"
-          role="radio"
-          :aria-checked="outlinkStrategy === s"
-          @click="emit('update:outlinkStrategy', s)"
-        >{{ OUTLINK_STRATEGY_LABEL[s] }}</button>
-      </div>
-    </div>
-    <div class="menu-sep" />
-    <button class="menu-item" @click="fireAction('openCommand')">
-      <span>命令面板</span><span class="menu-kbd">{{ modKey }}K</span>
-    </button>
-    <button class="menu-item" @click="fireAction('openHelp')">
-      <span>快捷键与帮助</span>
     </button>
     <div class="menu-sep" />
     <button class="menu-item danger" @click="fireAction('clear')">
@@ -162,8 +146,16 @@ function fireAction(cmd: ToolbarAction) {
   font-size: var(--fs-11);
   color: var(--text-subtle);
   letter-spacing: var(--ls-wide);
-  margin-bottom: var(--sp-2);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-1);
+  /* 顶层使用：与 .menu-item padding-left 视觉对齐（sp-3） */
+  padding: var(--sp-2) var(--sp-3) var(--sp-1);
+}
+/* 嵌套于 .menu-section 内的标题保持紧凑（原 OUTLINK 段落用） */
+.menu-section .menu-section-head {
   padding: 0 var(--sp-1);
+  margin-bottom: var(--sp-2);
+  text-transform: none;
 }
 .menu-segment {
   display: inline-flex;

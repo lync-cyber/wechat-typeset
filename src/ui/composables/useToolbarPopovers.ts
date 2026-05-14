@@ -18,20 +18,42 @@ import { onBeforeUnmount, ref, watch } from 'vue'
 export function useToolbarPopovers() {
   const theme = ref(false)
   const overflow = ref(false)
+  const outlink = ref(false)
+  const draft = ref(false)
 
   function toggleTheme() {
     theme.value = !theme.value
     overflow.value = false
+    outlink.value = false
+    draft.value = false
   }
 
   function toggleOverflow() {
     overflow.value = !overflow.value
     theme.value = false
+    outlink.value = false
+    draft.value = false
+  }
+
+  function toggleOutlink() {
+    outlink.value = !outlink.value
+    theme.value = false
+    overflow.value = false
+    draft.value = false
+  }
+
+  function toggleDraft() {
+    draft.value = !draft.value
+    theme.value = false
+    overflow.value = false
+    outlink.value = false
   }
 
   function closeAll() {
     theme.value = false
     overflow.value = false
+    outlink.value = false
+    draft.value = false
   }
 
   function onOutside(ev: MouseEvent) {
@@ -44,8 +66,8 @@ export function useToolbarPopovers() {
     if (ev.key === 'Escape') closeAll()
   }
 
-  watch([theme, overflow], ([t, o]) => {
-    if (t || o) {
+  watch([theme, overflow, outlink, draft], ([t, o, l, d]) => {
+    if (t || o || l || d) {
       window.addEventListener('mousedown', onOutside)
       window.addEventListener('keydown', onEsc)
     } else {
@@ -59,5 +81,8 @@ export function useToolbarPopovers() {
     window.removeEventListener('keydown', onEsc)
   })
 
-  return { theme, overflow, toggleTheme, toggleOverflow, closeAll }
+  return {
+    theme, overflow, outlink, draft,
+    toggleTheme, toggleOverflow, toggleOutlink, toggleDraft, closeAll,
+  }
 }

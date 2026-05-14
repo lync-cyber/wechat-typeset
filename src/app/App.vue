@@ -30,6 +30,7 @@ import CommandPalette from '../ui/components/CommandPalette.vue'
 import HelpPanel from '../ui/components/HelpPanel.vue'
 import OnboardingCard from '../ui/components/OnboardingCard.vue'
 import UndoToast from '../ui/components/UndoToast.vue'
+import CopyResultToast from '../ui/components/CopyResultToast.vue'
 import ErrorBoundary from '../ui/primitives/ErrorBoundary.vue'
 import type { ToolbarAction, ToolbarToggleTarget } from '../ui/components/toolbar-types'
 import { useDebouncedRender } from '../ui/composables/useDebouncedRender'
@@ -38,8 +39,10 @@ import { useDraftLifecycle } from '../ui/composables/useDraftLifecycle'
 import { useClipboardCopy } from '../ui/composables/useClipboardCopy'
 import { useExportActions } from '../ui/composables/useExportActions'
 import { useKeyboardShortcuts } from '../ui/composables/useKeyboardShortcuts'
+import { useToolbarCollapse } from '../ui/composables/useToolbarCollapse'
 import { getSample } from '../domain/samples'
 import { safeRead, safeWrite } from '../infra/storage/_kv'
+import { createDraft } from '../infra/storage/drafts'
 import { md, baseThemeId, hoverThemeId, customTheme, mobileTab, activeTheme, editorWidth } from './state'
 import { uiThemeMode } from './uiTheme'
 import { useScrollSync } from './scrollSync'
@@ -72,10 +75,11 @@ const { rendered, flush } = useDebouncedRender(pipelineInput, { delayMs: 80 })
 
 const {
   outlinkStrategy, setOutlinkStrategy, persistentError,
+  copyResult, dismissCopyResult,
   handleCopy, handleCopyShareLink, tryLoadShareFromHash,
 } = useClipboardCopy({ md, rendered, flush, baseThemeId, activeDraftId, draftIndexTick, pingTransient })
 
-const { doExportHtml, doExportMd, doExportImage } = useExportActions({
+const { doExportHtml, doExportMd, doExportImage, doExportCover } = useExportActions({
   md, rendered, flush, activeTheme,
   getPreviewBody: () => previewRef.value?.getIframe?.()?.contentDocument?.body ?? null,
   fileStem: () => fileStem(),
@@ -84,12 +88,33 @@ const { doExportHtml, doExportMd, doExportImage } = useExportActions({
 })
 
 useThemeOrchestrator({ showUndo, activeDraftId, draftIndexTick })
-const { onEditorScroll, onPreviewScroll } = useScrollSync({ editorRef, previewRef })
+const { onEditorScroll: rawEditorScroll, onPreviewScroll: rawPreviewScroll } = useScrollSync({ editorRef, previewRef })
+// L4 移动端瘦顶栏：scrollSync 已经在两侧 scroll 时被调，复用其 ratio 信号
+// 决定是否收起标题行——不再额外挂监听到 cm-scroller / iframe，省一次绑定。
+const { collapsed: toolbarCollapsed, observe: observeScroll } = useToolbarCollapse()
+function onEditorScroll(ratio: number) {
+  rawEditorScroll(ratio)
+  observeScroll(ratio, 'editor')
+}
+function onPreviewScroll(ratio: number) {
+  rawPreviewScroll(ratio)
+  observeScroll(ratio, 'preview')
+}
 
 const {
   handleClear, handleLoadSample, handleFixZhTypo,
   handleApplyPalette, handleResetPalette, handleInsertTemplate, handleSaveSelection,
 } = createAppActions({ showUndo, pingTransient, editorRef, paletteRef, ui })
+
+/**
+ * Toolbar draft popover 内的"新建草稿"——与 commands.ts 内同名命令保持行为一致：
+ * 用当前主题生成新草稿、切到它、bump tick 让顶栏 popover 与 DraftDrawer 同步刷新。
+ */
+function handleNewDraft() {
+  const created = createDraft({ title: '新草稿', body: '# 新草稿\n', themeId: baseThemeId.value })
+  handleSelectDraft(created.id)
+  draftIndexTick.value += 1
+}
 
 // mobileTab 切换关闭 drawer——避免横屏切到 preview 还有抽屉占着半屏
 watch(mobileTab, () => { closeAll() })
@@ -135,6 +160,8 @@ function onToolbarAction(cmd: ToolbarAction) {
     case 'exportHtml': return doExportHtml()
     case 'exportMd': return doExportMd()
     case 'exportImage': return doExportImage()
+    case 'exportCoverHorizontal': return doExportCover('wechat-horizontal')
+    case 'exportCoverSquare': return doExportCover('wechat-square')
     case 'copyShareLink': return handleCopyShareLink()
     case 'openCommand': ui.commandOpen = true; return
     case 'openHelp': ui.helpOpen = true; return
@@ -146,6 +173,8 @@ const commands = buildCommands({
   modKey, ui, drawerStates, toggleLeft, toggleRight,
   draftIndexTick, activeDraftId, handleSave, handleSelectDraft,
   handleCopy, handleCopyShareLink, doExportHtml, doExportMd, doExportImage,
+  doExportCoverHorizontal: () => doExportCover('wechat-horizontal'),
+  doExportCoverSquare: () => doExportCover('wechat-square'),
   handleClear, handleLoadSample, handleSaveSelection, handleFixZhTypo,
 })
 
@@ -168,7 +197,10 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
   <div class="app" :class="{ 'drawer-open': hasOpenDrawer }">
     <Toolbar
       ref="toolbarRef"
+      :collapsed="toolbarCollapsed"
       :draft-title="currentDraftTitle"
+      :active-draft-id="activeDraftId"
+      :draft-index-tick="draftIndexTick"
       :word-count="rendered.wordCount"
       :reading-time="rendered.readingTime"
       :saving-state="displayedSavingState"
@@ -185,6 +217,8 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
       @hover-theme="hoverThemeId = $event"
       @toggle="onToolbarToggle"
       @action="onToolbarAction"
+      @select-draft="handleSelectDraft"
+      @new-draft="handleNewDraft"
     />
     <main class="main" :data-mobile-tab="mobileTab">
       <ErrorBoundary
@@ -209,8 +243,6 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
           v-if="showOnboard"
           @dismiss="dismissOnboard"
           @open-help="ui.helpOpen = true; dismissOnboard()"
-          @open-command="ui.commandOpen = true; dismissOnboard()"
-          @open-overflow="toolbarRef?.openOverflow(); dismissOnboard()"
         />
       </section>
       <PaneSplitter
@@ -286,6 +318,13 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
       />
     </ErrorBoundary>
     <UndoToast v-if="undo" :message="undo.message" @undo="onUndo" @expire="onUndoExpire" />
+    <CopyResultToast
+      v-if="copyResult"
+      :message="copyResult.message"
+      :details="copyResult.details"
+      :cta="copyResult.cta"
+      @dismiss="dismissCopyResult"
+    />
 
     <!-- Mobile backdrop: tap outside an open drawer to dismiss (mobile only via CSS) -->
     <div

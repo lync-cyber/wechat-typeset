@@ -19,7 +19,7 @@ import {
 } from './state'
 import { getTheme } from '../core/themes'
 import { applyPalette } from '../core/color/applyPalette'
-import { fixZhTypo, scanZhTypo } from '../core/pipeline/zhTypo'
+import { fixZhTypoWithRanges } from '../core/pipeline/zhTypo'
 import { getSample } from '../domain/samples'
 
 export interface ActionDeps {
@@ -29,6 +29,8 @@ export interface ActionDeps {
   editorRef: Ref<{
     insertAtCursor?: (text: string) => void
     getSelectedText?: () => string
+    /** F3：在新文档应用后短时高亮一组 post-fix 区间 */
+    highlightZhFix?: (ranges: readonly { from: number; to: number }[]) => void
   } | null>
   /** 组件库 palette 实例（保存选区时唤起对话框） */
   paletteRef: Ref<{ openSaveDialog?: (text: string) => void } | null>
@@ -60,7 +62,8 @@ export function createAppActions(deps: ActionDeps) {
 
   /**
    * 一键修复中文排版 —— 扫描并应用 zhTypo 四条规则。
-   * 无命中时用瞬时提示"本文已干净"；有命中时写回 md 并把"撤销"入口挂到 UndoToast。
+   * 无命中时用瞬时提示"本文已干净"；有命中时写回 md，把"撤销"入口挂到 UndoToast，
+   * 并把每条改动在新文本中的位置传给 Editor 短时高亮（F3 diff）。
    */
   function handleFixZhTypo() {
     const prev = md.value
@@ -68,13 +71,17 @@ export function createAppActions(deps: ActionDeps) {
       pingTransient('正文为空')
       return
     }
-    const hits = scanZhTypo(prev)
-    if (hits.length === 0) {
+    const { fixed, ranges } = fixZhTypoWithRanges(prev)
+    if (ranges.length === 0) {
       pingTransient('中文排版已干净')
       return
     }
-    md.value = fixZhTypo(prev)
-    showUndo(`已修正 ${hits.length} 处中文排版`, () => { md.value = prev })
+    md.value = fixed
+    showUndo(`已修正 ${ranges.length} 处中文排版`, () => { md.value = prev })
+    // 等下一个 tick：modelValue 回流到 CM doc 后再下发高亮，确保 ranges 落在最新文本上
+    requestAnimationFrame(() => {
+      editorRef.value?.highlightZhFix?.(ranges)
+    })
   }
 
   function handleApplyPalette(seed: Seed) {

@@ -27,6 +27,13 @@ export const OUTLINK_STRATEGY_LABEL: Record<OutlinkStrategy, string> = {
   drop: '丢弃',
 }
 
+/** Toolbar split-button 内的二级说明，告诉作者每种策略复制到公众号后的效果。 */
+export const OUTLINK_STRATEGY_HINT: Record<OutlinkStrategy, string> = {
+  keep: '正文保留蓝色超链，公众号读者不可点',
+  'tail-list': '正文加 [N]，文末追加参考链接',
+  drop: '剥掉 <a>，只留文字',
+}
+
 export interface DegradeResult {
   html: string
   /** 被影响的外链数量 */

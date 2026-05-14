@@ -34,6 +34,8 @@ export interface BuildCommandsDeps {
   doExportHtml: () => void
   doExportMd: () => void
   doExportImage: () => void
+  doExportCoverHorizontal: () => void
+  doExportCoverSquare: () => void
   /** 本地动作 */
   handleClear: () => void
   handleLoadSample: () => void
@@ -61,7 +63,9 @@ export function buildCommands(deps: BuildCommandsDeps): ComputedRef<Command[]> {
 
     list.push({ id: 'export-html', title: '导出 HTML', group: '导出', shortcut: `${modKey} ⇧ H`, run: deps.doExportHtml })
     list.push({ id: 'export-md', title: '导出 Markdown', group: '导出', shortcut: `${modKey} ⇧ M`, run: deps.doExportMd })
-    list.push({ id: 'export-image', title: '导出长图', group: '导出', run: deps.doExportImage })
+    list.push({ id: 'export-image', title: '导出全文长图', group: '导出', run: deps.doExportImage })
+    list.push({ id: 'export-cover-h', title: '导出封面 · 横版 900×383', group: '导出', keywords: '封面 cover 公众号', run: deps.doExportCoverHorizontal })
+    list.push({ id: 'export-cover-s', title: '导出封面 · 方版 900×900', group: '导出', keywords: '封面 cover 公众号 方版 缩略图', run: deps.doExportCoverSquare })
     list.push({ id: 'copy-share-link', title: '复制分享链接', group: '导出', run: deps.handleCopyShareLink })
 
     themeList.forEach((t) => {
