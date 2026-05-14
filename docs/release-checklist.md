@@ -191,6 +191,28 @@ Chrome / Edge / Safari 各**复制一次**，分别粘贴到公众号后台：
 - [ ] 代码块配色保留
 - [ ] 手机预览 SVG `<text>` 字号 ≥ 14 px（光栅化后不糊）
 
+## 图片与分享自检
+
+新加入的两道闸门（详见 `src/infra/clipboard/imageIntake.ts` / `src/infra/share/shareLink.ts`）：
+
+- [ ] 拖入 / 粘贴一张 ≥ 1 MB 高分屏截图 → markdown 里的 data URI 长度 < 280 KB（webp 阶梯压缩生效）
+- [ ] 一次拖入 30 张高清图 → markdown 末尾出现 `<!-- image budget exceeded -->` 注释，前 N 张正常入站
+- [ ] 一键复制：toolbar toast 显示 `（X 张内联图将由微信转存）` 提示
+- [ ] 分享链接：含内联图的草稿，复制分享链接 toast 显示 `（X 张内联图已剥离）`；接收方打开链接看到 `（原稿剥离了 X 张内联图）` 提示
+- [ ] 接收方草稿里图片 src 是 `#wechat-typeset-stripped-image`（视觉空但 markdown 结构完整）
+
+## bundle size 预算
+
+每次发版前：
+
+```bash
+npm run build
+npm run check:size
+```
+
+- [ ] 6 个 entry 全部 ok
+- [ ] 若任一 chunk OVER：先排查回归源（看 `npm run build` 时是否新增大依赖），再决定是否调整 `.size-budget.json`
+
 ---
 
 ## 出现问题时的排查顺序

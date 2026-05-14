@@ -29,10 +29,11 @@
   },
   "scripts": {
     "dev": "npm run build:samples && vite",
-    "build": "npm run build:samples && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run gen:schema && npm run build:capabilities && npm run build:writer-docs -- --check",
+    "build": "npm run build:samples && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run check:size && npm run gen:schema && npm run build:capabilities && npm run build:writer-docs -- --check",
     "lint:core": "eslint src/core --max-warnings 0",
     "typecheck:core": "tsc -p tsconfig.core.json --noEmit",
     "check:registry": "tsx scripts/check-theme-registry.ts",
+    "check:size": "tsx scripts/check-size.ts",
     "build:capabilities": "tsx scripts/build-capabilities.ts",
     "build:samples": "tsx scripts/build-samples.ts",
     "build:writer-docs": "tsx scripts/build-writer-docs.ts",

@@ -13,6 +13,8 @@ import {
   decodeShare,
   buildShareUrl,
   parseShareHash,
+  stripInlineImagesForShare,
+  STRIPPED_IMAGE_PLACEHOLDER,
 } from '../../src/infra/share/shareLink'
 
 describe('encodeShare / decodeShare · 往返', () => {
@@ -117,5 +119,87 @@ describe('parseShareHash', () => {
 
   it('损坏的 payload → null（不抛）', () => {
     expect(parseShareHash('#share=@@broken@@')).toBeNull()
+  })
+})
+
+describe('stripInlineImagesForShare', () => {
+  it('无图片：返回原文 + count=0', () => {
+    const r = stripInlineImagesForShare('# 标题\n\n普通段落')
+    expect(r.md).toBe('# 标题\n\n普通段落')
+    expect(r.count).toBe(0)
+  })
+
+  it('替换 data: 图为占位符并计数', () => {
+    const r = stripInlineImagesForShare(
+      '# 标题\n\n![图](data:image/webp;base64,AAAA)\n\n后续。',
+    )
+    expect(r.count).toBe(1)
+    expect(r.md).toContain(`![图](${STRIPPED_IMAGE_PLACEHOLDER})`)
+    expect(r.md).not.toContain('data:image/webp')
+  })
+
+  it('多张图全部剥离', () => {
+    const md = '![a](data:image/png;base64,XYZ)\n\n![b](data:image/webp;base64,ABC)'
+    const r = stripInlineImagesForShare(md)
+    expect(r.count).toBe(2)
+    expect(r.md.split(STRIPPED_IMAGE_PLACEHOLDER).length).toBe(3)
+  })
+
+  it('http(s) 图片不剥离', () => {
+    const md = '![](https://cdn.example.com/x.png)\n![](data:image/png;base64,YYY)'
+    const r = stripInlineImagesForShare(md)
+    expect(r.count).toBe(1)
+    expect(r.md).toContain('https://cdn.example.com/x.png')
+    expect(r.md).not.toContain('data:image/png')
+  })
+
+  it('代码块内的 data: URI 不被改写（演示示例保护）', () => {
+    const md = [
+      '在文档外：![out](data:image/png;base64,AAA)',
+      '',
+      '```md',
+      '示例：![demo](data:image/png;base64,BBB)',
+      '```',
+      '',
+      '尾部：![tail](data:image/webp;base64,CCC)',
+    ].join('\n')
+    const r = stripInlineImagesForShare(md)
+    expect(r.count).toBe(2) // out + tail；demo 在 fence 内保留
+    expect(r.md).toContain('data:image/png;base64,BBB') // 代码块内保留
+    expect(r.md).not.toContain('data:image/png;base64,AAA')
+    expect(r.md).not.toContain('data:image/webp;base64,CCC')
+  })
+
+  it('空 md 安全返回', () => {
+    expect(stripInlineImagesForShare('')).toEqual({ md: '', count: 0 })
+  })
+})
+
+describe('encodeShare / decodeShare · strippedImages 透传', () => {
+  it('带 strippedImages 字段往返不丢', () => {
+    const p = {
+      v: 1 as const,
+      md: '![x](#wechat-typeset-stripped-image)',
+      themeId: 'default',
+      strippedImages: 3,
+    }
+    const round = decodeShare(encodeShare(p))
+    expect(round?.strippedImages).toBe(3)
+  })
+
+  it('strippedImages=0 不进 payload（旧链接保持紧凑）', () => {
+    const encoded = encodeShare({
+      v: 1,
+      md: 'x',
+      themeId: 'default',
+      strippedImages: 0,
+    })
+    const decoded = decodeShare(encoded)
+    expect(decoded?.strippedImages).toBeUndefined()
+  })
+
+  it('decode 老链接（无 strippedImages 字段）：返回不带该字段', () => {
+    const encoded = encodeShare({ v: 1, md: 'x', themeId: 'default' })
+    expect(decodeShare(encoded)?.strippedImages).toBeUndefined()
   })
 })
