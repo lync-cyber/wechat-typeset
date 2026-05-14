@@ -1,0 +1,29 @@
+# 默认：所有文本文件以 LF 保存到仓库，工作区也尽量保持 LF
+* text=auto eol=lf
+
+# Windows 批处理脚本必须 CRLF，否则在 cmd.exe 下会出错
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+
+# macOS / Linux shell 脚本强制 LF
+*.sh        text eol=lf
+*.command   text eol=lf
+
+# 常见二进制：不做换行转换、不做 diff
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary
+*.woff  binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+
+# lockfile 体量大，diff 噪音多，做语言提示即可
+package-lock.json linguist-generated=true
