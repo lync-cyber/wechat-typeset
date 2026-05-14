@@ -98,6 +98,26 @@ export const footnotesContainer: ContainerRenderer = {
 }
 
 // ============================================================
+// refs · 流式参考文献块（footnotes 的「inline run-on」版）
+//
+// 与 footnotes 的取舍：footnotes 一条一行（hanging indent），refs 让所有条目同段流式
+// 排列——参考学术期刊和新闻周刊的 references 段落写法（条目间作者自行用 `·` / `／`
+// 分隔）。同样的纵向高度可以装下 2~3 倍条目，适合"长文献列表 + 公众号沙箱不支持
+// 滚动"的现实约束。
+//
+// 渲染只负责外壳；body 的"流式感"靠作者把内容写成单段落（无空行）+ markdown-it 把
+// 短软换行折成一段达成。也可写成有空行分段，每段一组——视觉密度由作者决定。
+// ============================================================
+
+export const refsContainer: ContainerRenderer = {
+  open: (ctx) => {
+    const wrapperCSS = inline(ctx.containers.refs)
+    return `<section class="container-refs" style="${wrapperCSS}">\n`
+  },
+  close: '</section>\n',
+}
+
+// ============================================================
 // editor-note · 编辑部注 callout
 //
 // 设计稿原型（sample-data-brief.md 旧版 inline `<section>` 三层嵌套）：

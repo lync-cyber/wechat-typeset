@@ -291,7 +291,18 @@ export const barChartContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
-/** bar · 单条（attrs: label / pct / value / tone=normal|warn） */
+/**
+ * bar · 单条（attrs: label / pct / value / tone=normal|warn）
+ *
+ * 公众号兼容性纪律：
+ *   - 行布局走 `display:table` + 三个 `display:table-cell`，**不用 grid**——FORBIDDEN_DISPLAY_VALUES
+ *     明文禁 grid（粘贴后被剥成空值，三栏塌成顺排）。table 是公众号已知保留的多列布局机制，
+ *     仓库内 colophon 已有先例。
+ *   - 轨道/填充走块级 `<section>`，**不用 `<span>`**——inline 元素的 height/width/background-color
+ *     在公众号粘贴后会被无视（inline 不接受块级尺寸）。`<section>` 默认 display:block，
+ *     宽度撑满 table-cell，10px 高的彩条才能稳定出现。
+ *   - 填充的 `width:${pct}%` 以轨道宽为参照——轨道是 cell 内的块元素 width:100%，参照确定。
+ */
 export const barContainer: ContainerRenderer = {
   open: (ctx) => {
     const label = ctx.attrs.label ?? ''
@@ -302,23 +313,50 @@ export const barContainer: ContainerRenderer = {
     const c = ctx.tokens.colors
     const barColor = tone === 'warn' ? c.status.danger.accent : c.primary
     const wrapperCSS = [
-      'display:grid',
-      'grid-template-columns:40px 1fr 42px',
-      'gap:6px',
-      'align-items:center',
+      'display:table',
+      'width:100%',
+      'table-layout:fixed',
       'font-family:Menlo,Monaco,monospace',
       'font-size:11px',
       'margin-bottom:6px',
     ].join(';')
-    const labelCSS = `color:${c.text}`
-    const trackCSS = [`background-color:${c.border}`, 'height:10px'].join(';')
-    const fillCSS = [`background-color:${barColor}`, 'height:10px', `width:${pct}%`].join(';')
-    const valueCSS = [`color:${c.text}`, 'text-align:right'].join(';')
+    const labelCellCSS = [
+      'display:table-cell',
+      'width:40px',
+      'vertical-align:middle',
+      `color:${c.text}`,
+    ].join(';')
+    const trackCellCSS = [
+      'display:table-cell',
+      'padding:0 6px',
+      'vertical-align:middle',
+    ].join(';')
+    const valueCellCSS = [
+      'display:table-cell',
+      'width:42px',
+      'vertical-align:middle',
+      'text-align:right',
+      `color:${c.text}`,
+    ].join(';')
+    const trackCSS = [
+      'display:block',
+      'width:100%',
+      `background-color:${c.border}`,
+      'height:10px',
+    ].join(';')
+    const fillCSS = [
+      'display:block',
+      `background-color:${barColor}`,
+      'height:10px',
+      `width:${pct}%`,
+    ].join(';')
     return (
       `<section class="container-bar" style="${wrapperCSS}">` +
-      `<span style="${labelCSS}">${escText(label)}</span>` +
-      `<span style="${trackCSS}"><span style="display:block;${fillCSS}"></span></span>` +
-      `<span style="${valueCSS}">${escText(value)}</span>` +
+      `<span style="${labelCellCSS}">${escText(label)}</span>` +
+      `<span style="${trackCellCSS}">` +
+      `<section style="${trackCSS}"><section style="${fillCSS}"></section></section>` +
+      `</span>` +
+      `<span style="${valueCellCSS}">${escText(value)}</span>` +
       `</section>\n`
     )
   },

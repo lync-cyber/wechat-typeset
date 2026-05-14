@@ -156,8 +156,10 @@ export interface ThemeContainers {
   barChart: CSSObject
   /** 读者问答（Q/A 头像方块） */
   qaBlock: CSSObject
-  /** 脚注块（上分割线 + 编号引用） */
+  /** 脚注块（上分割线 + 编号引用，一条一行） */
   footnotes: CSSObject
+  /** 流式参考文献块（footnotes 的 inline run-on 版，长引用列表用） */
+  refs: CSSObject
   /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
   ctaBar: CSSObject
   /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
