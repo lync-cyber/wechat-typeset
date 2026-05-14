@@ -134,6 +134,19 @@ npm run dev
 
 `skills/wechat-typeset/` 是一份可挂载到 Claude / 其它 Agent 的 skill 包，支持结构化生成主题、校验微信平台约束。参考文档在 [skills/wechat-typeset/references/](skills/wechat-typeset/references/)。
 
+### 公开契约：capabilities.json
+
+外部工具链（LLM agent / MCP server / 自建 CI）通过订阅 `capabilities.json` 获悉当前支持的主题、容器、变体、平台与硬约束。本契约保持向后兼容（minor 仅增字段；移除项先经一个 minor 窗口的 `deprecations[]` 登记，详见 [scripts/capabilities-diff.ts](scripts/capabilities-diff.ts)）。
+
+订阅 URL（jsDelivr CDN，免鉴权、CORS 友好）：
+
+- **追主分支** — `https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@main/dist/api/capabilities.json`
+  jsDelivr 主分支缓存 12 h，发布后自然刷新；适合开发期工具链
+- **钉版本** — `https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@v{x.y.z}/dist/api/capabilities.json`
+  钉到 git tag，永远不变；适合生产消费方
+
+字段 `selfUri` / `versionedSelfUri` 同样写在 JSON 内部，下游拿到内容时即可知自己来自哪里。
+
 项目技术栈：Vue 3 · TypeScript · Vite · markdown-it · CodeMirror 6（含 autocomplete / lint）· turndown · juice。
 
 ---
