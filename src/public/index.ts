@@ -35,7 +35,9 @@ import {
   validateSpec,
 } from '../core/themes/_shared/spec'
 import { render as pipelineRender, type RenderOutput } from '../core/pipeline'
-import type { WxPatchOptions } from '../core/pipeline/wxPatch'
+import type { WxPatchOptions } from '../core/pipeline/platforms/wechat'
+import { listPlatforms } from '../core/pipeline/platforms/registry'
+import type { PlatformAdapter, PlatformStatus } from '../core/pipeline/platforms/types'
 import { PERSONA_REGISTRY, PERSONA_SPECS } from './personas'
 import {
   getContainerVocabulary as _getContainerVocabulary,
@@ -199,6 +201,11 @@ export interface PublicRenderInput {
   persona?: string
   theme?: Theme
   spec?: PersonaSpec
+  /**
+   * 复制 / 导出目标平台 id。默认 'wechat'。
+   * 走 platforms/registry 派发；可选值见 listPublishPlatforms()。
+   */
+  platform?: string
   wxPatch?: WxPatchOptions
 }
 
@@ -212,7 +219,32 @@ export type PublicRenderOutput = RenderOutput
  */
 export function render(input: PublicRenderInput): PublicRenderOutput {
   const theme = resolveTheme(input)
-  return pipelineRender({ md: input.md, theme, wxPatch: input.wxPatch })
+  return pipelineRender({
+    md: input.md,
+    theme,
+    platform: input.platform,
+    wxPatch: input.wxPatch,
+  })
+}
+
+/**
+ * 列出所有已注册发布平台 adapter（id / name / status）。
+ *
+ * 外部集成方据此知道当前哪些平台可用 / 处于占位状态——也由 capabilities.json
+ * 同源派生。不暴露 patch / inspect 函数，避免外部绕过 pipeline 直接调用。
+ */
+export interface PublicPlatformInfo {
+  id: string
+  name: string
+  status: PlatformStatus
+}
+
+export function listPublishPlatforms(): readonly PublicPlatformInfo[] {
+  return listPlatforms().map((p: PlatformAdapter) => ({
+    id: p.id,
+    name: p.name,
+    status: p.status,
+  }))
 }
 
 function resolveTheme(input: PublicRenderInput): Theme {
@@ -302,6 +334,7 @@ export type {
   Theme,
   ThemeVariants,
   WxPatchOptions,
+  PlatformStatus,
   ContainerSpec,
   ContainerCategory,
   ContainerPack,

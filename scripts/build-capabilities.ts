@@ -5,6 +5,10 @@
  *
  * 契约版本 v2.1。
  *
+ * 2.2（非破坏，向后兼容）：
+ *   - 新增 platforms[]：暴露已注册发布平台 adapter 与契约成熟度
+ *     （wechat=stable / zhihu+xhs=placeholder）
+ *
  * 2.1（非破坏，向后兼容）：
  *   - hardRules 的阈值常量由 validate.ts / rules.ts 真源派生（不再手抄）
  *   - 新增 deprecations[]：未来废弃字段先登记在此，给下游窗口迁移
@@ -21,7 +25,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
-import { listPersonas } from '../src/public'
+import { listPersonas, listPublishPlatforms } from '../src/public'
 import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/core/themes/types'
 import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/core/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
@@ -40,7 +44,7 @@ import { CONTAINER_VOCABULARY, packOf } from '../src/core/vocabulary/vocabulary'
  *   - 破坏 contract 的变更前，先把旧字段登记进 `deprecations[]`
  *   - 移除 deprecated 字段必须提升 major
  */
-type CapabilitiesSchemaVersion = '2.1'
+type CapabilitiesSchemaVersion = '2.2'
 
 interface DeprecationNotice {
   /** 受影响的字段或契约 id（dotted path，如 "hardRules.forbidClass"） */
@@ -110,6 +114,21 @@ interface CapabilitiesV2 {
     forbidPosition: boolean
     forbidMediaQueries: boolean
   }
+  /**
+   * 已注册的发布平台 adapter 摘要。
+   *
+   *   - id        与 render(input.platform) 接受的字符串一致
+   *   - status    'stable' / 'beta' / 'placeholder'
+   *               下游 UI 建议只暴露 stable+beta；placeholder 表示 patch=identity，
+   *               是给社区 PR / fork 预留的空位
+   *
+   * 自 schemaVersion 2.2 起新增。
+   */
+  platforms: ReadonlyArray<{
+    id: string
+    name: string
+    status: 'stable' | 'beta' | 'placeholder'
+  }>
   /**
    * 已登记的 deprecation 通道。下游适配时可检测 id 并准备迁移。
    * 当前为空数组占位；首次破坏 contract 时把旧字段登记进来。
@@ -196,8 +215,13 @@ function build(): CapabilitiesV2 {
     variants: p.variants as unknown as Record<string, string>,
     palettePrimary: p.palette.primary,
   }))
+  const platforms = listPublishPlatforms().map((p) => ({
+    id: p.id,
+    name: p.name,
+    status: p.status,
+  }))
   return {
-    schemaVersion: '2.1',
+    schemaVersion: '2.2',
     tool: {
       name: pkg.name,
       version: pkg.version,
@@ -237,6 +261,7 @@ function build(): CapabilitiesV2 {
       forbidPosition: FORBIDDEN_CSS_PROPS.includes('position'),
       forbidMediaQueries: true,
     },
+    platforms,
     deprecations: [
       {
         // 字段命名误导：实际覆盖所有 styled 容器（intro / cover / author / ...），
