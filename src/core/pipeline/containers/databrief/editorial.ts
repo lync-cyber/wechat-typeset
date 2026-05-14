@@ -107,12 +107,32 @@ export const footnotesContainer: ContainerRenderer = {
 //
 // 渲染只负责外壳；body 的"流式感"靠作者把内容写成单段落（无空行）+ markdown-it 把
 // 短软换行折成一段达成。也可写成有空行分段，每段一组——视觉密度由作者决定。
+//
+// kicker（参考文献标签头）：与 editorNote / qaBlock 同源——`ctx.info` 非空时按 primary
+// 色 + letter-spacing 渲染；缺省不渲染（保持向后兼容：未指定 info 的现有内容渲染不变）。
+// 作者写法：`::: refs 参考文献` 或 `::: refs REFERENCES`。
 // ============================================================
 
 export const refsContainer: ContainerRenderer = {
   open: (ctx) => {
     const wrapperCSS = inline(ctx.containers.refs)
-    return `<section class="container-refs" style="${wrapperCSS}">\n`
+    const kicker = ctx.info.trim()
+    if (!kicker) {
+      return `<section class="container-refs" style="${wrapperCSS}">\n`
+    }
+    const c = ctx.tokens.colors
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:10px',
+      'font-weight:700',
+      'letter-spacing:0.15em',
+      'margin-bottom:6px',
+      'text-indent:0',
+    ].join(';')
+    return (
+      `<section class="container-refs" style="${wrapperCSS}">\n` +
+      `<section class="container-refs__kicker" style="${kickerCSS}">${escText(kicker)}</section>\n`
+    )
   },
   close: '</section>\n',
 }

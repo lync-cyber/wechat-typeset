@@ -216,10 +216,143 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
   // h2Prefix SVG 装饰互不冲突——前者改 `<h2>` 标签内文本流，后者注入紧贴 `<h2>` 后的 SVG。
   applyHeadingPrefixDecorations(md, theme)
 
+  // ---------- footnotes 条目切分：把 `[N] …` 行切成独立 <p> ---------- //
+  // 报刊脚注的排印基线是「一条一行 + hanging indent」（baseContainers.footnotes
+  // 已声明 padding-left:1.6em / text-indent:-1.6em）。但 hanging indent 是
+  // **块级**属性——只对每个 `<p>` 的第一行生效。
+  //
+  // 作者写法（与 11-data-brief.html:514-515 设计稿一致）：
+  //     ::: footnotes
+  //     [1]　数据覆盖 2010–2025…
+  //     [2]　"深度理解得分"取自…
+  //     :::
+  //
+  // markdown-it 在 breaks:false 下把两行合成单个 paragraph + 一个 softbreak。
+  // hanging indent 只在「整段」的第一行落地，[2] 之后没有悬挂效果——视觉退化为
+  // 流水段落。修复：扫描 container_footnotes_open/close 之间的 inline 子 token，
+  // 在「softbreak + 紧跟 `[\d+]` 起始的 text」处切段，让每条 `[N]…` 成为独立
+  // paragraph，hanging indent 自然按条目复用。
+  //
+  // 规则只对 `[\d+]` 模式触发，editorial-mook 类 `※ …` 单行脚注不会被误切。
+  applyFootnotesEntrySplit(md)
+
   // stepBadge：theme.assets.stepBadge(n) 是扩展点；默认不自动注入，
   // 避免污染全局 <ol>。后续主题如需自动编号，可在此处加限定路径的 DOM pass。
 
   return md
+}
+
+// ============================================================
+// footnotes 条目切分：把 `[N] 正文` 软换行序列切成独立 paragraph
+//
+// 设计纪律：本函数与 dropcap / heading-prefix 同源——都是「声明式排版语义 →
+// markdown-it core.ruler 在 token 层落地」的小型 pass。它**只看** token 类型
+// （`container_footnotes_open/close` + paragraph triplet + 子 token 类型），
+// 不耦合任何主题；任何启用 `::: footnotes` 的主题都自然受益。
+//
+// 不做的事：
+//   - 不改 inline token 的 content 缓存——content 是 markdown-it 内部 hot path
+//     的回退路径，渲染器实际读 children；保留与原段落一致的 content 即可。
+//   - 不处理 `[\d+]` 之外的编号模式（罗马 / ⓪①）——若未来扩展先升级正则，不要
+//     把判断散到调用方。
+// ============================================================
+
+const FOOTNOTE_ENTRY_RE = /^\[\d+\][\s　]+/
+
+/**
+ * inline 子 token 的最小结构（与 InlineChild 同型；为避免循环依赖再声明一次）。
+ */
+type FtChild = { type: string; content: string; constructor: unknown }
+
+function applyFootnotesEntrySplit(md: MarkdownIt): void {
+  md.core.ruler.push('wx_footnotes_entry_split', (state) => {
+    const tokens = state.tokens
+    if (tokens.length === 0) return
+    type TokenCtor = new (type: string, tag: string, nesting: number) => typeof tokens[number]
+    const Token = tokens[0].constructor as TokenCtor
+
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type !== 'container_footnotes_open') continue
+
+      // 找配对的 close（footnotes 不嵌套，但用 depth 防御写法变更）
+      let depth = 1
+      let j = i + 1
+      while (j < tokens.length) {
+        if (tokens[j].type === 'container_footnotes_open') depth++
+        else if (tokens[j].type === 'container_footnotes_close') {
+          depth--
+          if (depth === 0) break
+        }
+        j++
+      }
+      if (j >= tokens.length) continue
+
+      // 扫 [i+1, j-1] 之间每个 paragraph 三元组,尝试切分
+      const next: typeof tokens = []
+      let k = i + 1
+      while (k < j) {
+        const pOpen = tokens[k]
+        const inl = tokens[k + 1]
+        const pClose = tokens[k + 2]
+        if (
+          pOpen?.type === 'paragraph_open' &&
+          inl?.type === 'inline' &&
+          pClose?.type === 'paragraph_close'
+        ) {
+          const groups = splitFootnoteChildren((inl.children ?? []) as FtChild[])
+          if (groups.length <= 1) {
+            next.push(pOpen, inl, pClose)
+          } else {
+            for (const g of groups) {
+              const np = new Token('paragraph_open', 'p', 1)
+              const ni = new Token('inline', '', 0)
+              ni.children = g as unknown as typeof inl.children
+              ni.content = g
+                .filter((c) => c.type === 'text')
+                .map((c) => c.content)
+                .join('')
+              const nc = new Token('paragraph_close', 'p', -1)
+              next.push(np, ni, nc)
+            }
+          }
+          k += 3
+        } else {
+          next.push(pOpen)
+          k++
+        }
+      }
+      tokens.splice(i + 1, j - i - 1, ...next)
+      // i 当前位置仍是 container_footnotes_open；外层 for 的 i++ 会前进进入
+      // 我们新插入的 paragraph_open 段——它们 type 不等于 container_footnotes_open，
+      // 不会触发重复处理。container_footnotes_close 现在在 i + next.length + 1。
+    }
+  })
+}
+
+/**
+ * 按「softbreak/hardbreak + 紧跟 `[N] ` 起始的 text」切分 inline children。
+ *   - 第一个子串保留前导内容（可能没有 `[N]` 前缀，比如 `※ 引用` 类——这种情况
+ *     会得到一个组，调用方依据 groups.length<=1 跳过切分，等价于不动）
+ *   - 切分点的 break token 被丢弃（已经物理分段，软换行视觉冗余）
+ */
+function splitFootnoteChildren(children: FtChild[]): FtChild[][] {
+  if (children.length === 0) return []
+  const groups: FtChild[][] = []
+  let current: FtChild[] = []
+  for (let idx = 0; idx < children.length; idx++) {
+    const ch = children[idx]
+    if (ch.type === 'softbreak' || ch.type === 'hardbreak') {
+      const nx = children[idx + 1]
+      if (nx && nx.type === 'text' && FOOTNOTE_ENTRY_RE.test(nx.content)) {
+        if (current.length > 0) groups.push(current)
+        current = []
+        continue
+      }
+    }
+    current.push(ch)
+  }
+  if (current.length > 0) groups.push(current)
+  return groups
 }
 
 // ============================================================
