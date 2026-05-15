@@ -93,6 +93,7 @@ function renderMotifs(spec: PersonaSpec): string {
   if (m.externalLinkIcon) shapes.push(['externalLinkIcon', renderMotif(m.externalLinkIcon)])
   if (m.terminalPrompt) shapes.push(['terminalPrompt', renderMotif(m.terminalPrompt)])
   if (m.sealMark) shapes.push(['sealMark', renderMotif(m.sealMark)])
+  if (m.editorNoteKickerIcon) shapes.push(['editorNoteKickerIcon', renderMotif(m.editorNoteKickerIcon)])
 
   out.push(`
 <section class="block">

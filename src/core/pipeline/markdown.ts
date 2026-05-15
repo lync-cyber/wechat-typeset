@@ -122,6 +122,9 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
 
   applyDropcap(md, theme)
   applyHeadingPrefixDecorations(md, theme)
+  // 微信沙箱会剥 <input>，markdown-it-task-lists 注入的原生 checkbox 粘贴后丢失。
+  // 这里把 `<input type="checkbox">` 替换为主题主色实心方块（已勾）/ 描边空方块（未勾）。
+  applyTaskListSquares(md, theme)
 
   // ---------- footnotes 条目切分：把 `[N] …` 行切成独立 <p> ---------- //
   // 报刊脚注的排印基线是「一条一行 + hanging indent」（baseContainers.footnotes
@@ -352,6 +355,51 @@ function applyDropcap(md: MarkdownIt, theme: Theme): void {
         children.splice(k + 1, 0, ...newSegments)
       } else {
         children.splice(k, 1, ...newSegments)
+      }
+    }
+  })
+}
+
+// ============================================================
+// task-list 红方块 ✓ 替换
+//
+// markdown-it-task-lists 把 `- [x] foo` 渲染为 html_inline <input type="checkbox" checked>
+// + text "foo"。微信沙箱剥 <input>，预览与产物体感分裂；改写为主题主色方块。
+// 12×12 inline-block：已勾用主色 background + ✓ 白字；未勾用 1px border 实线方框。
+// 同时清空 markdown-it-task-lists 注入的 <label> 包裹标签（label 在公众号粘贴后无语义）。
+// ============================================================
+
+type TLChild = { type: string; content: string }
+
+const CHECKBOX_INPUT_RE = /<input[^>]*\btask-list-item-checkbox\b[^>]*>/i
+const CHECKBOX_CHECKED_RE = /\bchecked\b/i
+const LABEL_TAG_RE = /^<\/?label\b/i
+
+function applyTaskListSquares(md: MarkdownIt, theme: Theme): void {
+  const c = theme.tokens.colors
+  const filled =
+    `<span class="wx-task-square wx-task-square--on" ` +
+    `style="display:inline-block;width:12px;height:12px;` +
+    `background-color:${c.primary};color:${c.textInverse};` +
+    `text-align:center;line-height:12px;font-size:11px;font-weight:700;` +
+    `vertical-align:-2px;margin-right:8px">✓</span>`
+  const empty =
+    `<span class="wx-task-square wx-task-square--off" ` +
+    `style="display:inline-block;width:12px;height:12px;` +
+    `border:1px solid ${c.text};` +
+    `vertical-align:-2px;margin-right:8px">&nbsp;</span>`
+
+  md.core.ruler.push('wx_tasklist_squares', (state) => {
+    for (const tok of state.tokens) {
+      if (tok.type !== 'inline' || !tok.children) continue
+      const children = tok.children as unknown as TLChild[]
+      for (const child of children) {
+        if (child.type !== 'html_inline') continue
+        if (CHECKBOX_INPUT_RE.test(child.content)) {
+          child.content = CHECKBOX_CHECKED_RE.test(child.content) ? filled : empty
+        } else if (LABEL_TAG_RE.test(child.content)) {
+          child.content = ''
+        }
       }
     }
   })

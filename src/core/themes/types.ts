@@ -137,6 +137,11 @@ export interface ThemeContainers {
   mpvoice: CSSObject
   /** 公众号视频占位卡 */
   mpvideo: CSSObject
+  /**
+   * 四态 callout 联表外框（callout-group）。承担"上/下/左/右 hairline"，
+   * 子项 (tip/warning/info/danger) 在内串联。设计稿 multi-callout 母本。
+   */
+  calloutGroup: CSSObject
   /** 文首 tl;dr 摘要块（signature 容器） */
   abstract: CSSObject
   /** 大数字 + 说明（signature 容器） */
@@ -148,6 +153,17 @@ export interface ThemeContainers {
   masthead: CSSObject
   /** 小栏目标签（黑底白字胶囊） */
   sectionTag: CSSObject
+  /**
+   * 署名条 byline。N 栏分隔（AUTHOR / EDITOR / SET 多栏 newspaper 形态），data-brief 家族签名。
+   * 与 author（单作者名 + role 签名块）正交。
+   */
+  byline: CSSObject
+  /**
+   * 装饰性副刊头（editorial-header）。跨栏大字标题 + chip 红章 + PP 页码 + subtitle + titleDot 红点。
+   * data-brief 家族签名；与 cover（图卡封面）正交——cover 管"封面图 + 期号戳"，
+   * editorial-header 管"红章 + 大字标题 + 副标题"。
+   */
+  editorialHeader: CSSObject
   /** 目录三栏 grid（序号 · 标题 · 页码） */
   toc: CSSObject
   /** KPI 仪表盘外壳（三指标 + sparkline + 源标注） */
@@ -254,6 +270,18 @@ export interface ThemeAssets {
    * （如 literary-humanism 的藏经朱）——其他主题留空即可，renderer 不做默认兜底。
    */
   sealMark?: SVGString
+  /**
+   * editor-note kicker 行最左侧的装饰图标（典型 8×8 实色方块）。
+   *
+   * 渲染契约：editor-note renderer 检测到此 asset 存在时，在 kicker 文字前 prepend
+   *   `<span style="display:inline-block;vertical-align:middle;margin-right:6px;">${svg}</span>`
+   * 主题不提供则不渲染图标，kicker 仅含文本。
+   *
+   * 设计动机：swiss-grid 设计稿的 editor-note 黑底白字 header bar 以红色 ▮ 字符开头,
+   * 跨主题做 SVG 装饰更可控（字符 ▮ 在 iOS / Android 渲染粗细不一）。
+   * 走 motifs AST 而非硬编码 SVG, 让色随 token 流动。
+   */
+  editorNoteKickerIcon?: SVGString
   /**
    * 期号印章（newsletter 期刊戳）。当主题提供 + markdown 容器上声明了 issue/date/kind
    * 任一 attr 时，cover / author / footerCTA renderer 会在各自配置的位置注入该 SVG。
@@ -371,6 +399,9 @@ export type DividerVariantId =
   | 'flower'
   | 'rule'
   | 'glyph' // 单字符装饰（§ / ❦ / ◆）
+  // 大色块印章：消费 theme.assets.sealMark；右对齐"全文收束"签名印
+  // （设计稿 02 swiss-grid signoff: 20×20 红方块右对齐）
+  | 'seal-mark'
 
 export type SectionTitleVariantId =
   // 底部 2px 主色线（当前默认）
@@ -541,6 +572,7 @@ export const VARIANT_IDS = {
     'flower',
     'rule',
     'glyph',
+    'seal-mark',
   ] as const satisfies readonly DividerVariantId[],
   sectionTitle: [
     'bordered',

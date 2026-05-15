@@ -32,11 +32,17 @@ export const ctaBarContainer: ContainerRenderer = {
     const like = ctx.attrs.like ?? '♡ 赞同'
     const star = ctx.attrs.star ?? '★ 收藏'
     const share = ctx.attrs.share ?? '↗ 转发'
+    const kicker = ctx.info.trim()
     // wrapper margin / 装饰由 ctx.containers.ctaBar 决定；display:table 排版骨架
     // 由 renderer 强制保证（不可主题化——是 ctaBar 的视觉契约本身）。
-    const wrapperCSS =
-      `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate;` +
-      inline(ctx.containers.ctaBar)
+    //
+    // kicker（info）声明时：渲染顶部黑底白字 header bar（与 editor-note innerStyles 同源审美），
+    // 三栏 cta 落在 header 下方，整体被 ctx.containers.ctaBar 的外框 wrap。
+    // kicker 缺省 = 经典三栏，与 R10 前行为字节等价。
+    const wrapperCSS = kicker
+      ? inline(ctx.containers.ctaBar)
+      : `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate;` +
+        inline(ctx.containers.ctaBar)
     const outlineCell = [
       'display:table-cell',
       'padding:10px 0',
@@ -56,12 +62,31 @@ export const ctaBarContainer: ContainerRenderer = {
       'font-weight:500',
       'box-sizing:border-box',
     ].join(';')
-    return (
-      `<section class="container-cta-bar" style="${wrapperCSS}">` +
+    const cellsCSS =
+      `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate`
+    const cells =
       `<span style="${outlineCell}">${escText(like)}</span>` +
       `<span style="${fillCell}">${escText(star)}</span>` +
-      `<span style="${outlineCell}">${escText(share)}</span>` +
-      `</section>\n`
+      `<span style="${outlineCell}">${escText(share)}</span>`
+    if (kicker) {
+      const headerCSS = [
+        'display:block',
+        `background-color:${c.text}`,
+        `color:${c.textInverse}`,
+        'padding:5px 10px',
+        'font-size:10px',
+        'letter-spacing:0.2em',
+        'font-weight:700',
+      ].join(';')
+      return (
+        `<section class="container-cta-bar" style="${wrapperCSS}">` +
+        `<section class="container-cta-bar__kicker" style="${headerCSS}">${escText(kicker)}</section>` +
+        `<section class="container-cta-bar__cells" style="${cellsCSS}">${cells}</section>` +
+        `</section>\n`
+      )
+    }
+    return (
+      `<section class="container-cta-bar" style="${wrapperCSS}">${cells}</section>\n`
     )
   },
   close: '',

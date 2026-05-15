@@ -37,7 +37,7 @@
 |  | `mpvoice` | ★ | 公众号语音卡（占位，粘贴后在公众号编辑器补真 mpvoice 节点）。 |
 |  | `mpvideo` | ★ | 公众号视频卡（占位，粘贴后在公众号编辑器补真 mpvideo 节点）。 |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |
-|  | `key-number` | ★ | 大数字 + 说明（研究报告／内参版面）。attrs.value 为数字，info 为 kicker。 |
+|  | `key-number` | ★ | 大数字 + 说明（研究报告 / 内参版面 / issue-banner）。attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。 |
 |  | `see-also` | ★ | 相关阅读链接列表（academic-frontier / tech-explainer 的"扩展阅读"）。 |
 | 兜底 | `free` |  | 兜底容器：渲染器刻意不施加主题样式，写不归类内容。 |
 

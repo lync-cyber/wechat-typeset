@@ -253,10 +253,22 @@
   margin: 0 0 14px 0;
 }
 
+.markdown-body .container-byline {
+  margin: 0 0 22px 0;
+}
+
+.markdown-body .container-editorial-header {
+  margin: 0 0 18px 0;
+}
+
 .markdown-body .container-toc {
   background-color: #ece5d1;
   padding: 12px 14px;
   margin: 0 0 24px 0;
+}
+
+.markdown-body .container-callout-group {
+  margin: 20px 0;
 }
 
 .markdown-body .container-note {

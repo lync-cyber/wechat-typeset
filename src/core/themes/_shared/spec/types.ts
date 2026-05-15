@@ -240,6 +240,12 @@ export interface MotifSpec {
   externalLinkIcon?: MotifShape
   terminalPrompt?: MotifShape
   sealMark?: MotifShape
+  /**
+   * editor-note kicker 装饰图标（与 ThemeAssets.editorNoteKickerIcon 对位）。
+   * 典型尺寸 8×8 实色方块；spec-to-theme 投影到 SVG 字符串后由 editor-note renderer
+   * 在 kicker 前 prepend。设计稿:swiss-grid 黑底白字 header bar 上的红 ▮。
+   */
+  editorNoteKickerIcon?: MotifShape
   /** 模板：`{N}` 占位 step 序号 */
   stepBadge?: MotifTemplate
   /** 模板：`{issue}` `{date}` `{kind}` 占位 */
@@ -300,6 +306,9 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   // data-brief 家族（数据简报：晚点 / 财新数据 / Morning Brew）
   'masthead',
   'sectionTag',
+  'byline',
+  'editorialHeader',
+  'calloutGroup',
   'toc',
   'kpiDashboard',
   'barChart',

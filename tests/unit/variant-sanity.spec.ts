@@ -158,7 +158,7 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 37 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
+  it('6 kind × 38 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
@@ -166,7 +166,7 @@ describe('枚举完整性', () => {
       quote: 5, // +1: tilted-sticker (brutalist 家族 punk-zine 撕贴纸)
       compare: 4, // +1: data-card (data-brief 家族)
       steps: 3,
-      divider: 5,
+      divider: 6, // +1: seal-mark (swiss-grid 家族收束印章)
       sectionTitle: 2,
     })
   })

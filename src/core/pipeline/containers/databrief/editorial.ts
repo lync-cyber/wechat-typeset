@@ -155,9 +155,15 @@ export const editorNoteContainer: ContainerRenderer = {
     // kicker CSS 由主题 innerStyles.editorNoteKicker 决定（baseInnerStyles 兜底 +
     // spec.innerStyles 深合并），允许主题作者重塑 kicker 形态而无需改 renderer。
     const kickerCSS = inline(ctx.innerStyles.editorNoteKicker)
+    // 主题声明 assets.editorNoteKickerIcon 时，在 kicker 文字前 prepend 装饰图标。
+    // 不声明则仅渲染文本——保持现有主题（data-brief / industry-observer 等）兼容。
+    const icon = ctx.assets.editorNoteKickerIcon
+    const iconSpan = icon
+      ? `<span style="display:inline-block;vertical-align:middle;margin-right:6px;">${icon}</span>`
+      : ''
     return (
       `<section class="container-editor-note" style="${wrapperCSS}">\n` +
-      `<section class="container-editor-note__kicker" style="${kickerCSS}">${escText(kicker)}</section>\n`
+      `<section class="container-editor-note__kicker" style="${kickerCSS}">${iconSpan}${escText(kicker)}</section>\n`
     )
   },
   close: '</section>\n',

@@ -21,6 +21,8 @@
 export {
   mastheadContainer,
   sectionTagContainer,
+  bylineContainer,
+  editorialHeaderContainer,
   tocContainer,
   tocItemContainer,
   colophonContainer,
@@ -42,3 +44,5 @@ export {
 } from './editorial'
 
 export { ctaBarContainer, qrFollowContainer } from './cta'
+
+export { calloutGroupContainer } from './calloutGroup'
