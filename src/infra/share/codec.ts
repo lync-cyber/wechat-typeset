@@ -38,18 +38,13 @@ export function bytesToUtf8(b: Uint8Array): string {
 export function toBase64Url(bytes: Uint8Array): string {
   let binary = ''
   for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
-  const b64 = typeof btoa === 'function'
-    ? btoa(binary)
-    : Buffer.from(binary, 'binary').toString('base64')
-  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
 export function fromBase64Url(s: string): Uint8Array {
   const pad = (4 - (s.length % 4)) % 4
   const fix = s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat(pad)
-  const binary = typeof atob === 'function'
-    ? atob(fix)
-    : Buffer.from(fix, 'base64').toString('binary')
+  const binary = atob(fix)
   const out = new Uint8Array(binary.length)
   for (let i = 0; i < binary.length; i++) out[i] = binary.charCodeAt(i)
   return out

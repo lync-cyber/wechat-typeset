@@ -96,7 +96,6 @@ const current = computed<Step>(() => steps.value[step.value])
 const SPOTLIGHT_CLASS = 'onboard-spotlight'
 
 function clearAllSpotlights() {
-  if (typeof document === 'undefined') return
   document.querySelectorAll(`.${SPOTLIGHT_CLASS}`).forEach((el) => {
     el.classList.remove(SPOTLIGHT_CLASS)
   })
@@ -104,7 +103,7 @@ function clearAllSpotlights() {
 
 function applySpotlight(selector: string | null) {
   clearAllSpotlights()
-  if (!selector || typeof document === 'undefined') return
+  if (!selector) return
   const el = document.querySelector(selector)
   el?.classList.add(SPOTLIGHT_CLASS)
 }

@@ -27,11 +27,7 @@ const LS_ESTIMATED_QUOTA = 5 * 1024 * 1024
 
 export async function getStorageStat(): Promise<StorageStat> {
   try {
-    if (
-      typeof navigator !== 'undefined' &&
-      navigator.storage &&
-      typeof navigator.storage.estimate === 'function'
-    ) {
+    if (navigator.storage && typeof navigator.storage.estimate === 'function') {
       const { usage = 0, quota = 0 } = await navigator.storage.estimate()
       if (quota > 0) {
         const pct = usage / quota

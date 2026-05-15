@@ -23,7 +23,7 @@ export interface PaneSizingDeps {
 }
 
 export function usePaneSizing(deps: PaneSizingDeps) {
-  const viewportW = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+  const viewportW = ref(window.innerWidth)
 
   function trackViewport() {
     viewportW.value = window.innerWidth

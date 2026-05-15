@@ -81,10 +81,6 @@ function listDepth(el: Element): number {
 /**
  * 把一个 <ul>/<ol> 子树递归扁平化为 DocumentFragment（一串 <p data-wx-list-flatten>）。
  *
- * 处理顺序：
- *   先递归把每个 <li> 内部的 <ul>/<ol> 换成"扁平段落"，然后把 <li> 自己的
- *   inline 内容也裹成带 bullet 前缀的 <p>，最后把两段顺序拼入结果 fragment。
- *
  * 不保留 <li>、不保留嵌套 <ul>/<ol>——这是"扁平化"的定义。作者如果需要保留结构，
  * 应在编辑期看到 diagnose 的 list-too-deep 红线后自己改短。
  */

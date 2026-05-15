@@ -3,7 +3,7 @@
  *   - codec.ts             ShareCodec 契约 + base64url / JSON 原语 + URL 包装
  *   - payloads/article.ts  article 形态：`#share={...}`（含 stripInlineImagesForShare）
  *   - payloads/component.ts component 形态：`#share-component={...}`
- *   - shareLink.ts         dispatcher + 旧 article 形态的 alias re-export
+ *   - shareLink.ts         dispatcher + article 形态的 alias re-export
  *
  * 新增 payload 类型流程：
  *   1. 在 payloads/ 下加 `<kind>.ts`，定义 `<kind>Codec: ShareCodec<P>`
@@ -52,10 +52,7 @@ export function parseAnyShareHash(hash: string): AnySharePayload | null {
   return null
 }
 
-// article 形态的命名别名（旧 4 个对外 export + SharePayload 类型）
-
-/** @deprecated 新代码用 `SharePayloadArticle`；本别名供旧调用方使用。 */
-export type SharePayload = SharePayloadArticle
+// article 形态的命名别名：本文件作为入口，让调用方不必关心 payloads/article 子路径。
 
 export {
   encodeArticleShare as encodeShare,

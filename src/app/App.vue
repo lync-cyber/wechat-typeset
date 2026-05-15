@@ -49,7 +49,7 @@ import { useBootstrap } from './bootstrap'
 import { EDITOR_MIN_W, usePaneSizing } from './usePaneSizing'
 
 const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
-const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
+const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
 const modKey = isMac ? '⌘' : 'Ctrl'
 
 const editorRef = ref<InstanceType<typeof Editor> | null>(null)

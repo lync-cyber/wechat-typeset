@@ -25,7 +25,6 @@
  * 放在 src/domain/gallery/ 的理由：
  *   - 它是从 vocabulary 派生的"域级资产"，被测试与 showcase 生成器双端消费
  *   - 不依赖 jsdom / pipeline，纯字符串拼接，src/ 可放
- *   - 历史曾在 tests/helpers/，迁移后那里改为 reexport 保持外部入口稳定
  */
 
 import {

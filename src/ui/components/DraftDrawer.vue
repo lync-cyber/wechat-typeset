@@ -109,7 +109,7 @@ function requestDelete(d: DraftMeta, ev: Event) {
 function editTags(d: DraftMeta, ev: Event) {
   ev.stopPropagation()
   const current = (d.tags ?? []).join(', ')
-  const next = typeof window !== 'undefined' ? window.prompt(`标签（用逗号或空格分隔，留空删除全部）`, current) : null
+  const next = window.prompt(`标签（用逗号或空格分隔，留空删除全部）`, current)
   if (next === null) return // 用户取消
   const list = Array.from(new Set(
     next

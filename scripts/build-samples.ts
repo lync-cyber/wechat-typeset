@@ -2,11 +2,9 @@
 /**
  * 样稿生成器：src/samples-md/sample-{themeId}.md → src/domain/samples/_generated.ts
  *
- * 历史：src/samples/*.ts 与 sample-*.md 曾是两套独立硬编码，随容器增删必须双写、
- * 容易漂移。现在 src/samples-md/ 是权威单一来源（曾在 docs/samples，2026-05 迁入
- * src 树以匹配"主题示例属于源码而非文档"的定位），本脚本把所有 sample-*.md
- * 打包到一个 _generated.ts 里（R6 改名加下划线前缀，明示构建产物），让
- * src/domain/samples/index.ts 直接消费静态字符串字典；Vite / tsx / Node 三种运行时都无差别。
+ * src/samples-md/ 是权威单一来源；本脚本把所有 sample-*.md 打包到一个 _generated.ts
+ * 里（下划线前缀明示构建产物），让 src/domain/samples/index.ts 直接消费静态字符串
+ * 字典；Vite / tsx / Node 三种运行时都无差别。
  *
  * 映射规则：
  *   src/samples-md/sample-{themeId}.md  →  SAMPLE_BY_THEME[themeId]
@@ -14,7 +12,7 @@
  *        的全量回归 fixture；也会导出为 FULL_SAMPLE 便于按需使用。
  *
  * 产物规则：
- *   - generated.ts 是派生文件，纳入 git（像 capabilities.json 一样），
+ *   - _generated.ts 是派生文件，纳入 git（像 capabilities.json 一样），
  *     避免开发启动阶段依赖生成器；CI 可额外校验 `npm run build:samples` 后
  *     工作区无 diff。
  *   - 生成内容头部加 `@generated` 标签，便于 IDE / linter 识别。

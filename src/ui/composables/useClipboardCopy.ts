@@ -21,7 +21,7 @@ import {
   buildShareUrl,
   parseShareHash,
   stripInlineImagesForShare,
-  type SharePayload,
+  type SharePayloadArticle,
 } from '../../infra/share/shareLink'
 import { createDraft, setActiveDraftId } from '../../infra/storage/drafts'
 import { safeRead, safeWrite } from '../../infra/storage/_kv'
@@ -100,7 +100,6 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
       const paragraphCount = countParagraphs(plain)
       if (wordCount > 0) details.push(`${wordCount} 字`)
       if (paragraphCount > 0) details.push(`${paragraphCount} 段`)
-      // 然后是降级处理摘要
       if (count > 0 && outlinkStrategy.value === 'tail-list') details.push(`${count} 条外链已尾注`)
       else if (count > 0 && outlinkStrategy.value === 'drop') details.push(`${count} 条外链已丢弃`)
       if (inlineImages > 0) details.push(`${inlineImages} 张内联图待微信转存`)
@@ -126,7 +125,7 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
     // 分享前必剥 data: 内联图：一张 100 KB 截图就能把 hash 撑到 ~140 KB，Safari 截断。
     // 接收侧据 strippedImages 计数提示读者"原稿端补图"。
     const { md: stripped, count } = stripInlineImagesForShare(deps.md.value)
-    const payload: SharePayload = {
+    const payload: SharePayloadArticle = {
       v: 1,
       md: stripped,
       themeId: deps.baseThemeId.value,
@@ -160,7 +159,6 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
   function tryLoadShareFromHash(
     setActiveAndBody: (id: string, body: string, themeId: string) => void,
   ): boolean {
-    if (typeof location === 'undefined') return false
     const payload = parseShareHash(location.hash)
     if (!payload) return false
     const created = createDraft({

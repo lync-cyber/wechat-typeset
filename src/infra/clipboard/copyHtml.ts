@@ -18,14 +18,8 @@ export interface CopyResult {
 }
 
 export async function copyHtmlToClipboard(html: string, plain: string): Promise<CopyResult> {
-  // 首选 Clipboard API
-  if (
-    typeof navigator !== 'undefined' &&
-    navigator.clipboard &&
-    typeof window !== 'undefined' &&
-    window.isSecureContext &&
-    typeof ClipboardItem !== 'undefined'
-  ) {
+  // 首选 Clipboard API；非 secure context（file:// / 内网 http）或老 Safari 走降级。
+  if (navigator.clipboard && window.isSecureContext && typeof ClipboardItem !== 'undefined') {
     try {
       // Safari 要求 ClipboardItem 的 value 是 Blob 或 Promise<Blob>，且构造必须处在用户
       // 手势同步栈顶。传 Promise.resolve(Blob) 即可让 Safari 认识"异步准备好后写入"的语义，
