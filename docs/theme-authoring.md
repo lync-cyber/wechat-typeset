@@ -86,9 +86,36 @@ export const urbanDiaryTheme = specToTheme(spec)
 ### 4. 跑校验 → 预览 → 测试
 
 ```bash
-npm run validate:spec   # 扫 spec 的硬约束（字号 / 描边 / hex / 占位符）
-npm run dev             # 热更新预览，切到新主题肉眼过一遍
-npm test                # 全量单测 + sample-full.md 端到端
+npm run validate:spec     # spec 硬约束（字号 / 描边 / hex / 占位符）
+npm run voice:report      # 主题 voice 覆盖度（base 容器 / 元素）
+npm run gen:showcase      # 生成 docs/generated/showcase/<id>.html
+npm run gen:gallery       # 更新 spec 数据拼盘 docs/generated/personas-spec-gallery.html
+npm run dev               # 热更新预览，切到新主题肉眼过一遍
+npm test                  # 全量单测（含 voice / showcase / rendered-snapshot 三道守卫）
+```
+
+#### Showcase 审稿 7 区块（PR 必看）
+
+`pnpm gen:showcase` 会写出 `docs/generated/showcase/<your-id>.html`。把它当作"主题视觉契约的 ground truth"过一遍，按顺序确认 7 个区块没有"出戏"：
+
+| 区块 | 内容 | 看什么 |
+| --- | --- | --- |
+| ① Header | id / name / description / audience | 一眼能说出该主题的定位与受众 |
+| ② TokenSwatches | 11 色板 + 4 态 status | 没有色差冲突，textInverse 不是纯白 |
+| ③ Typography | h1–h3 + p + pull-quote 行 | 字号/字距与定位一致（编辑刊 ≠ 终端） |
+| ④ Motifs | 全部声明的 SVG 母题 | 装饰强度与"签名动作"匹配 |
+| ⑤ Rendered · 元素 | 渲染产物：h1-h4 / p / list / table / pre / blockquote | 元素 voice 表达正确，不是 default 兜底 |
+| ⑥ Rendered · Base 容器 | 渲染产物：tip/warning/info/danger/note/quote-card/highlight/compare/steps/divider/footer-cta/recommend/qrcode 等 | base 容器有可辨识 voice |
+| ⑦ Rendered · 扩展签名容器 | 渲染产物：pack:editorial / theme:* 中声明的签名容器 | 想演刊物形态的主题在此区块发挥；声明=必有产物 |
+
+下面还附了 **Voice 覆盖度报告**：覆盖率 < 30% 会 hard-fail（除非主题在 `LOW_VOICE_TEMPORARY_GRACE` 临时清单里）。Warning 列出"哪些 base 槽位走兜底"，info 列出"哪些扩展包被消费"。
+
+#### Voice 覆盖率快查
+
+```bash
+npm run voice:report              # 表格：14 主题概览
+npm run voice:report -- --theme my-id    # 单主题：每条 issue 明细
+npm run voice:report -- --json    # 结构化 JSON
 ```
 
 ### 5. 补一份设计笔记（PR 要求）

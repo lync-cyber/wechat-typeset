@@ -16,6 +16,14 @@ export { motifsToAssets, specToTheme } from './spec-to-theme'
 export { themeToSpec } from './theme-to-spec'
 export { primitivesToSvg, renderMotifTemplate, renderPrimitive, shapeToSvg } from './render-motif'
 export { validateSpec } from './validate'
+export {
+  analyzeThemeVoice,
+  getBaseContainerStyleKeys,
+  BASE_ELEMENT_KEYS,
+  DEFAULT_MIN_COVERAGE_RATE,
+  LOW_VOICE_TEMPORARY_GRACE,
+} from './voice'
+export type { ThemeVoiceResult, ThemeVoiceCoverage, VoiceIssue } from './voice'
 export { PERSONA_SPEC_SCHEMA, getPersonaSpecSchema } from './schema'
 export type { JSONSchema7 } from './schema'
 export { makeCoverPlaceholder } from './coverPlaceholder'

@@ -29,7 +29,7 @@
   },
   "scripts": {
     "dev": "npm run build:samples && vite",
-    "build": "npm run build:samples && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run check:size && npm run gen:schema && npm run build:capabilities && npm run build:covers && npm run build:writer-docs -- --check && npm run build:skill-refs -- --check",
+    "build": "npm run build:samples && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run check:size && npm run gen:schema && npm run build:capabilities && npm run build:covers && npm run build:writer-docs -- --check && npm run build:skill-refs -- --check && npm run gen:showcase -- --check",
     "lint:core": "eslint src/core --max-warnings 0",
     "typecheck:core": "tsc -p tsconfig.core.json --noEmit",
     "check:registry": "tsx scripts/check-theme-registry.ts",
@@ -49,6 +49,8 @@
     "typecheck": "vue-tsc --noEmit",
     "gen:schema": "tsx scripts/gen-schema.ts",
     "gen:gallery": "tsx scripts/gen-gallery.ts",
+    "gen:showcase": "tsx scripts/gen-showcase.ts",
+    "voice:report": "tsx scripts/theme-voice-report.ts",
     "validate:spec": "tsx scripts/validate-spec.ts",
     "cli": "tsx scripts/wechat-typeset-cli.ts"
   },
