@@ -579,6 +579,46 @@ export const spec: PersonaSpec = {
   // 容器内层 inline-style 覆盖
   // ============================================================
   innerStyles: {
+    // abstract 容器透明底 = 落在近黑页底（#0a0a0a）上，kicker 走荧光黄 primary 保持可见
+    abstractKicker: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '6px',
+    },
+    // keyNumber 容器底色 #1a1a1a（暗底），大数字走荧光黄 primary 承担视觉重量
+    keyNumberValue: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '34px',
+      'font-weight': '900',
+      'line-height': '1.0',
+      'letter-spacing': '-0.5px',
+      'margin-bottom': '4px',
+    },
+    // keyNumber 暗底上的小 kicker 走荧光黄 primary，与 abstractKicker 语言统一
+    keyNumberKicker: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    // seeAlso 容器底色 #1a1a1a（暗底），title 走荧光黄 primary 保持可读性
+    seeAlsoTitle: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
     // editor-note kicker（"编 者 按"）：黄底 callout 上不能用 primary（同色不可见）,
     // 走 textInverse 反色 + letter-spacing 拉开"被点名"气质
     editorNoteKicker: {
