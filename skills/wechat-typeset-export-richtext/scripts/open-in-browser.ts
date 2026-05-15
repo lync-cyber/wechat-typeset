@@ -3,7 +3,7 @@
  * open-in-browser —— annotated md + persona → 写 HTML 到 tmp → 用默认浏览器打开。
  *
  * 用途：作者粘贴到公众号前先在浏览器里肉眼检查渲染（确认折叠 / 留白 / 颜色 / 字号）。
- * 与 render-html.ts 的差异：默认输出到 tmpdir，自动打开，不让作者操心路径。
+ * 与 `npm run cli -- render` 的差异：默认输出到 tmpdir，自动打开，不让作者操心路径。
  *
  * 用法：
  *   tsx open-in-browser.ts --input <md> --persona <id> [--keep] [--gallery <id1,id2,...>]
@@ -246,7 +246,7 @@ function main() {
         keep: args.keep,
         hint:
           '已用默认浏览器打开预览。该 HTML 是预览版（含外壳/工具栏），不要直接复制 → ' +
-          '确认主题后请用 copy-richtext.ts 写剪贴板，或 render-html.ts 导出纯净 HTML。',
+          '确认主题后请用 copy-richtext.ts 写剪贴板，或 `npm run cli -- render` 导出纯净 HTML。',
       },
       null,
       2,

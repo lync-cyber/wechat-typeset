@@ -442,19 +442,15 @@ export interface PersonaSpec {
 }
 
 // ============================================================
-// 校验结果
+// 校验结果（WtError 统一形状；createPersona / validatePersona 共用）
 // ============================================================
 
-export interface SpecValidationIssue {
-  path: string
-  message: string
-  severity: 'error' | 'warning'
-}
+import type { WtError } from '../../../errors'
 
 export interface SpecValidationResult {
   ok: boolean
-  errors: SpecValidationIssue[]
-  warnings: SpecValidationIssue[]
+  errors: WtError[]
+  warnings: WtError[]
 }
 
 // Re-export helper types for external consumers

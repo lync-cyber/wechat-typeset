@@ -1,0 +1,26 @@
+{
+  "name": "@wechat-typeset/mcp",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Model Context Protocol server exposing wechat-typeset commands to LLM agents.",
+  "license": "MIT",
+  "author": "lync-cyber",
+  "homepage": "https://github.com/lync-cyber/wechat-typeset#readme",
+  "main": "./src/server.ts",
+  "bin": {
+    "wechat-typeset-mcp": "./bin/wechat-typeset-mcp.mjs"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0",
+    "typescript": "^5.6.3"
+  }
+}

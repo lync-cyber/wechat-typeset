@@ -61,9 +61,11 @@ L4 各 slot fallbackId（见 `DEFAULT_VARIANTS`，与 `makeVariantContainer.fall
 | frontmatter `theme:` 命中未知 id | **静默回退**到 input.persona / theme / spec | `RenderOutput.frontmatterIssues[]` warning |
 | `getTheme(id)` 未知 id（内部 API） | 回退到 `defaultTheme` | — |
 | `render(input)` 三选一都未给 | 默认 `persona: 'default'` | — |
-| `render(input)` 同时给多个 | **抛错**（fail-fast 让上游早发现） | `Error: render: provide exactly one of ...` |
+| `render(input)` 同时给多个 | **抛 `WtException(INPUT_AMBIGUOUS)`** | `e.code === 'INPUT_AMBIGUOUS'` |
+| 未知 `persona` id | **抛 `WtException(RESOURCE_NOT_FOUND)`** | `e.code === 'RESOURCE_NOT_FOUND'` |
+| 未知 `platform` id | **抛 `WtException(PLATFORM_UNSUPPORTED)`** | `e.code === 'PLATFORM_UNSUPPORTED'` |
 | Spec 投影失败（`createPersona(spec)` 校验出 errors） | 仍返回 best-effort Theme + `ok: false` 校验报告 | `CreatePersonaResult.validation` |
-| `render({ spec })` 投影失败 | **抛 `SpecValidationError`**（携带 errors / warnings） | — |
+| `render({ spec })` 投影失败 | **抛 `WtException(SPEC_INVALID)`**（携带 errors / warnings） | `e.errors[]` 数组 |
 
 ---
 
@@ -105,4 +107,4 @@ L4 各 slot fallbackId（见 `DEFAULT_VARIANTS`，与 `makeVariantContainer.fall
 
 ## 演进策略
 
-新增降级路径走 deprecation 流程：见 [platform.md · 契约演进](platform.md#契约演进)。capabilities.json 的 `fallbackBehavior` 字段（自 schemaVersion 2.4 起）是本文档的机器可读副本。
+新增降级路径走 deprecation 流程：见 [platform.md · 契约演进](platform.md#契约演进)。capabilities.json 的 `fallbackBehavior` 字段是本文档的机器可读副本。

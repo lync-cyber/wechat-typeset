@@ -1,0 +1,20 @@
+{
+  "//": "tsconfig.lib.json —— 仅为 dist/lib/index.js 配套生成 .d.ts。JS 由 vite.lib.config 输出。",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [],
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationMap": false,
+    "outDir": "dist/lib",
+    "rootDir": "src"
+  },
+  "include": ["src/public/**/*.ts", "src/core/**/*.ts", "src/shims-vue.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ]
+}

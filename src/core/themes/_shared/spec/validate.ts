@@ -11,6 +11,7 @@
  * 这是 conformance 测试和 CLI (`pnpm validate:spec`) 的共用实现。
  */
 
+import type { WtError } from '../../../errors'
 import { VARIANT_IDS, type ThemeVariants, type VariantKind } from '../../types'
 import {
   SUPPORTED_SIGNATURE_CONTAINERS,
@@ -18,7 +19,6 @@ import {
   type MotifShape,
   type MotifTemplate,
   type PersonaSpec,
-  type SpecValidationIssue,
   type SpecValidationResult,
   type StatusKey,
 } from './types'
@@ -41,8 +41,8 @@ function isHex(v: unknown): v is string {
 }
 
 export function validateSpec(spec: PersonaSpec): SpecValidationResult {
-  const errors: SpecValidationIssue[] = []
-  const warnings: SpecValidationIssue[] = []
+  const errors: WtError[] = []
+  const warnings: WtError[] = []
   const err = (path: string, message: string) => errors.push({ path, message, severity: 'error' })
   const warn = (path: string, message: string) => warnings.push({ path, message, severity: 'warning' })
 

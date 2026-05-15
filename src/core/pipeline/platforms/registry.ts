@@ -14,6 +14,7 @@ import type { PlatformAdapter } from './types'
 import { wechatAdapter } from './wechat'
 import { zhihuAdapter } from './zhihu'
 import { xhsAdapter } from './xhs'
+import { fail } from '../../errors'
 
 const ALL: readonly PlatformAdapter[] = [wechatAdapter, zhihuAdapter, xhsAdapter]
 
@@ -29,14 +30,15 @@ export function listPlatforms(): readonly PlatformAdapter[] {
 }
 
 /**
- * 按 id 取 adapter。未知 id 抛 Error——不要静默回退到 wechat，会掩盖配置错误。
+ * 按 id 取 adapter。未知 id 抛 `WtException(PLATFORM_UNSUPPORTED)`——不静默回退，
+ * 避免拼写错误造成"看似 wechat 实际跑 xhs identity"。
  */
 export function getPlatform(id: string): PlatformAdapter {
   const adapter = BY_ID[id]
   if (!adapter) {
-    throw new Error(
-      `Unknown platform id: "${id}". Known: ${ALL.map((a) => a.id).join(', ')}`,
-    )
+    fail('PLATFORM_UNSUPPORTED', `Unknown platform id: "${id}"`, {
+      hint: `Known: ${ALL.map((a) => a.id).join(', ')}`,
+    })
   }
   return adapter
 }

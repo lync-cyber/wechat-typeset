@@ -22,18 +22,13 @@
 import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
+  HARD_RULES,
   getSchema,
   getSupportedSignatureContainers,
   getVariantIds,
   getPersona,
   listPersonas,
 } from '../../../src/public'
-import {
-  HEX_RE,
-  MIN_FONT_SIZE,
-  MIN_STROKE_WIDTH,
-  ALLOWED_FONT_FAMILIES,
-} from '../../../src/core/themes/_shared/spec/validate'
 
 interface CliArgs {
   description: string
@@ -62,10 +57,10 @@ function fail(code: number, msg: string): never {
 
 function buildHardRulesSummary() {
   return {
-    hex_regex: HEX_RE.source,
-    min_font_size: MIN_FONT_SIZE,
-    min_stroke_width: MIN_STROKE_WIDTH,
-    allowed_font_families: [...ALLOWED_FONT_FAMILIES],
+    hex_regex: HARD_RULES.hexPattern,
+    min_font_size: HARD_RULES.minFontSize,
+    min_stroke_width: HARD_RULES.minStrokeWidth,
+    allowed_font_families: HARD_RULES.allowedFontFamilies,
     forbidden_css_props: [
       'font-family',
       'position: absolute/fixed/sticky',
@@ -104,8 +99,8 @@ function buildPrompt(args: CliArgs, baseSpec: unknown | null) {
       '2. 不要在 JSON 里写 $comment 之类的注解字段。',
       '3. motif 必须是 AST（primitives 数组），不允许塞 raw SVG 字符串。',
       '4. 所有 hex 用 6 位（含 # 共 7 字符），except primary/accent 等长度可不同但必须匹配 hex_regex。',
-      '5. 所有 motif 内 text.fontSize ≥ ' + MIN_FONT_SIZE + '，所有 strokeWidth ≥ ' + MIN_STROKE_WIDTH + '。',
-      '6. motif 内 text.fontFamily 只能是 ' + [...ALLOWED_FONT_FAMILIES].join(' / ') + '。',
+      '5. 所有 motif 内 text.fontSize ≥ ' + HARD_RULES.minFontSize + '，所有 strokeWidth ≥ ' + HARD_RULES.minStrokeWidth + '。',
+      '6. motif 内 text.fontFamily 只能是 ' + HARD_RULES.allowedFontFamilies.join(' / ') + '。',
       '7. signatureContainers 只能取 whitelist 内的 camelCase id，且要确认对应主题真的会在该容器上提供视觉。',
       '8. variants 各 slot 的 id 必须在 variant_ids_whitelist 内。',
       '9. meta.createdAt 必填（ISO 日期 YYYY-MM-DD）。',

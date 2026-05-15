@@ -28,9 +28,9 @@ interface PublicRenderOutput {
 
 ### 三选一规则（exclusive）
 
-- 同时给两个以上 → 抛 `Error('render: provide exactly one of persona | theme | spec')`
+- 同时给两个以上 → 抛 `WtException(INPUT_AMBIGUOUS)`
 - 都不给 → 默认 `persona: 'default'`
-- 给 `spec` 时先 `validateSpec`，不通过抛 `SpecValidationError`
+- 给 `spec` 时先 `validateSpec`，不通过抛 `WtException(SPEC_INVALID)`（e.errors 携带逐条 WtError）
 
 ### 三条路径的语义
 
@@ -94,25 +94,23 @@ render({ md, persona: 'default', wxPatch: { svgWhiteBg: false } })
 
 ## 异常类型
 
-### `SpecValidationError`
-
-走 `render({ spec })` 路径时 spec 校验失败抛出：
+所有边界处错误统一走 `WtException`，按 `e.code` 程序化分支（见 capabilities.json.errorCodes）：
 
 ```ts
 try { render({ md, spec: llmSpec }) }
 catch (e) {
-  if (e instanceof SpecValidationError) {
-    console.log(e.result.errors)
-    // [{ path: 'palette.primary', message: 'must match ^#[0-9a-fA-F]{3,8}$', severity: 'error' }, ...]
+  if (e instanceof WtException && e.code === 'SPEC_INVALID') {
+    console.log(e.errors)
+    // [{ path: 'palette.primary', message: 'must match ^#[0-9a-fA-F]{3,8}$', severity: 'error', hint? }, ...]
   }
 }
 ```
 
-`e.result.errors` 数组可以原样喂回 LLM 做 self-correct——但这是 author-persona skill 的工作，不是本 skill。
+`e.errors` 数组可以原样喂回 LLM 做 self-correct——但这是 author-persona skill 的工作，不是本 skill。
 
-### `Error('Unknown persona id')`
+### `RESOURCE_NOT_FOUND`
 
-`getPersona(id)` 路径上 id 未注册时抛出。本 skill 应：
+`getPersona(id)` 路径上 id 未注册时抛 `WtException(RESOURCE_NOT_FOUND)`。本 skill 应：
 
 1. 不 catch，直接转告用户检查拼写
 2. 用 `listPersonas()` 显示合法 id 清单

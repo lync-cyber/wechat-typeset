@@ -33,8 +33,10 @@ export type JSONSchema7 = {
 }
 
 import { VARIANT_IDS } from '../../types'
+import { ALLOWED_FONT_FAMILIES, HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from './validate'
 
-const HEX_PATTERN = '^#[0-9a-fA-F]{3,8}$'
+const HEX_PATTERN = HEX_RE.source
+const FONT_FAMILY_ENUM = [...ALLOWED_FONT_FAMILIES]
 
 const PALETTE_SCHEMA: JSONSchema7 = {
   type: 'object',
@@ -91,7 +93,7 @@ const MOTIF_PRIMITIVE_SCHEMA: JSONSchema7 = {
         h: { type: 'number' },
         fill: { type: 'string' },
         stroke: { type: 'string' },
-        strokeWidth: { type: 'number', minimum: 1 },
+        strokeWidth: { type: 'number', minimum: MIN_STROKE_WIDTH },
         rx: { type: 'number' },
         ry: { type: 'number' },
         opacity: { type: 'number', minimum: 0, maximum: 1 },
@@ -108,7 +110,7 @@ const MOTIF_PRIMITIVE_SCHEMA: JSONSchema7 = {
         r: { type: 'number' },
         fill: { type: 'string' },
         stroke: { type: 'string' },
-        strokeWidth: { type: 'number', minimum: 1 },
+        strokeWidth: { type: 'number', minimum: MIN_STROKE_WIDTH },
         opacity: { type: 'number', minimum: 0, maximum: 1 },
       },
       additionalProperties: false,
@@ -121,7 +123,7 @@ const MOTIF_PRIMITIVE_SCHEMA: JSONSchema7 = {
         d: { type: 'string' },
         fill: { type: 'string' },
         stroke: { type: 'string' },
-        strokeWidth: { type: 'number', minimum: 1 },
+        strokeWidth: { type: 'number', minimum: MIN_STROKE_WIDTH },
         strokeLinecap: { enum: ['butt', 'round', 'square'] },
         strokeLinejoin: { enum: ['miter', 'round', 'bevel'] },
         strokeDasharray: { type: 'string' },
@@ -137,8 +139,8 @@ const MOTIF_PRIMITIVE_SCHEMA: JSONSchema7 = {
         x: { type: 'number' },
         y: { type: 'number' },
         content: { type: 'string' },
-        fontSize: { type: 'number', minimum: 14 },
-        fontFamily: { enum: ['serif', 'sans-serif', 'monospace'] },
+        fontSize: { type: 'number', minimum: MIN_FONT_SIZE },
+        fontFamily: { enum: FONT_FAMILY_ENUM },
         fontWeight: {},
         fill: { type: 'string' },
         textAnchor: { enum: ['start', 'middle', 'end'] },
@@ -160,7 +162,7 @@ const MOTIF_PRIMITIVE_SCHEMA: JSONSchema7 = {
         x2: { type: 'number' },
         y2: { type: 'number' },
         stroke: { type: 'string' },
-        strokeWidth: { type: 'number', minimum: 1 },
+        strokeWidth: { type: 'number', minimum: MIN_STROKE_WIDTH },
         strokeLinecap: { enum: ['butt', 'round', 'square'] },
         strokeDasharray: { type: 'string' },
         opacity: { type: 'number', minimum: 0, maximum: 1 },
@@ -178,7 +180,7 @@ const MOTIF_PRIMITIVE_SCHEMA: JSONSchema7 = {
         ry: { type: 'number' },
         fill: { type: 'string' },
         stroke: { type: 'string' },
-        strokeWidth: { type: 'number', minimum: 1 },
+        strokeWidth: { type: 'number', minimum: MIN_STROKE_WIDTH },
         opacity: { type: 'number', minimum: 0, maximum: 1 },
       },
       additionalProperties: false,

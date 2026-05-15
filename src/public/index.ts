@@ -1,21 +1,20 @@
 /**
- * wechat-typeset 公共 API。
+ * wechat-typeset 公共 API —— LLM / 外部集成方的唯一入口。
  *
- * 这是 LLM / 外部集成方的唯一入口。设计三条约束：
- *   1. Node-safe：只用静态 import，不碰 import.meta.glob；tsx / vite / bun 下都能跑。
- *   2. 无副作用：createPersona 不改注册表；LLM 每次都能信赖 listPersonas() 的结果是恒定的。
- *   3. 窄表面：暴露 12 个符号，不暴露 Theme 内部的 buildTheme / themeCSS 等实现细节。
- *
- * 分层：
- *   - 只读元信息：listPersonas / getPersona / getPersonaSummary / getSchema
- *                 / getSupportedSignatureContainers / getVariantIds
- *   - 校验：validatePersona
- *   - 渲染：render（md → html）/ createPersona（spec → Theme）
- *   - Motif 工具：getMotifSpec / renderMotif / renderMotifWithValues
+ * 设计约束：Node-safe（静态 import，不用 import.meta.glob）；无副作用（createPersona 不改
+ * 注册表）；窄表面（不暴露 Theme 内部 buildTheme / themeCSS）。
  */
 
 import type { Theme, ThemeVariants } from '../core/themes/types'
-import { DEFAULT_VARIANTS, VARIANT_IDS } from '../core/themes/types'
+import { DEFAULT_KICKERS, DEFAULT_VARIANTS, VARIANT_IDS } from '../core/themes/types'
+import {
+  ALLOWED_FONT_FAMILIES,
+  HEX_RE,
+  MIN_FONT_SIZE,
+  MIN_STROKE_WIDTH,
+} from '../core/themes/_shared/spec/validate'
+import { INLINE_EXTENSIONS, type InlineExtensionSpec } from '../core/pipeline/inlineExtensions'
+import { WtException, fail } from '../core/errors'
 import type {
   JSONSchema7,
   MotifShape,
@@ -39,7 +38,7 @@ import { parseFrontmatter } from '../core/pipeline/frontmatter'
 import type { WxPatchOptions } from '../core/pipeline/platforms/wechat'
 import { listPlatforms } from '../core/pipeline/platforms/registry'
 import type { PlatformAdapter, PlatformStatus } from '../core/pipeline/platforms/types'
-import { PERSONA_REGISTRY, PERSONA_SPECS } from './personas'
+import { SPEC_REGISTRY, ORDERED_SPECS } from '../core/themes/registry'
 import {
   getContainerVocabulary as _getContainerVocabulary,
   getContainerSpec as _getContainerSpec,
@@ -57,14 +56,9 @@ import {
   type ThemeCapabilitiesView,
 } from '../core/vocabulary'
 
-// ============================================================
-// 只读元信息
-// ============================================================
+// region 只读元信息
 
-/**
- * LLM 友好的主题摘要。去掉了样式补丁和 meta.ownerNotes 等重字段，
- * 只保留选型信号（name / description / audience / palette / signatureContainers / variants）。
- */
+/** LLM 友好的主题摘要。去掉样式补丁和 meta.ownerNotes 等重字段，只保留选型信号。 */
 export interface PersonaSummary {
   id: string
   name: string
@@ -87,21 +81,22 @@ function toSummary(spec: PersonaSpec): PersonaSummary {
   }
 }
 
-/** 列出所有内置 persona 的摘要。展示顺序稳定（见 personas.ts 的 PERSONA_SPECS）。 */
+/** 列出所有内置 persona 的摘要。展示顺序见 themes/registry.ts:DISPLAY_ORDER。 */
 export function listPersonas(): readonly PersonaSummary[] {
-  return PERSONA_SPECS.map(toSummary)
+  return ORDERED_SPECS.map(toSummary)
 }
 
 /**
  * 返回指定 id 的 PersonaSpec 完整对象。
- * 未知 id 抛 Error（不静默回退到 default —— LLM 若拼错 id 应当早失败）。
+ * 未知 id 抛 `WtException(RESOURCE_NOT_FOUND)`——不静默回退到 default。
  */
 export function getPersona(id: string): PersonaSpec {
-  const spec = PERSONA_REGISTRY[id]
+  const spec = SPEC_REGISTRY[id]
   if (!spec) {
-    throw new Error(
-      `Unknown persona id: "${id}". Known: ${Object.keys(PERSONA_REGISTRY).join(', ')}`,
-    )
+    fail('RESOURCE_NOT_FOUND', `Unknown persona id: "${id}"`, {
+      path: `persona.id`,
+      hint: `Known ids: ${Object.keys(SPEC_REGISTRY).join(', ')}`,
+    })
   }
   return spec
 }
@@ -126,17 +121,27 @@ export function getVariantIds(): typeof VARIANT_IDS {
   return VARIANT_IDS
 }
 
-// ============================================================
-// Container Vocabulary（Headless 契约层的作者查询接口）
-// ============================================================
+/** 微信平台硬约束阈值（spec 校验 / LLM 生成提示统一引用）。 */
+export const HARD_RULES = Object.freeze({
+  hexPattern: HEX_RE.source,
+  minFontSize: MIN_FONT_SIZE,
+  minStrokeWidth: MIN_STROKE_WIDTH,
+  allowedFontFamilies: Object.freeze([...ALLOWED_FONT_FAMILIES]) as readonly string[],
+})
 
-/**
- * 返回所有合法 `:::` 容器的权威词汇表（主题无关）。
- *
- * 每个条目含：name（kebab fence）、category、variantKind?、fenceLength、
- * description、example、attrs? —— 足够 LLM 直接生成合法 markdown 而不需要
- * 反查任何主题。
- */
+/** 主题级 kicker 文案的全局兜底（与主题 `kickers` 字段深合并后产出最终值）。 */
+export function getDefaultKickers(): typeof DEFAULT_KICKERS {
+  return DEFAULT_KICKERS
+}
+
+/** 行内扩展清单（==mark== / [.着重.] 等），与 capabilities.json 同源。 */
+export function getInlineExtensions(): readonly InlineExtensionSpec[] {
+  return INLINE_EXTENSIONS
+}
+
+// region Container Vocabulary（Headless 契约层的作者查询接口）
+
+/** 返回所有合法 `:::` 容器的权威词汇表（主题无关）。足够 LLM 直接生成合法 markdown。 */
 export function getContainerVocabulary(): readonly ContainerSpec[] {
   return _getContainerVocabulary()
 }
@@ -146,30 +151,19 @@ export function getContainerSpec(name: string): ContainerSpec | undefined {
   return _getContainerSpec(name)
 }
 
-/**
- * 某容器可切换的所有 variant 骨架（id + 中文名 + description + themeCompat）。
- * 不支持 variant 切换的容器（note / intro / highlight 等）返回空数组。
- */
+/** 某容器可切换的所有 variant 骨架。不支持切换的容器（note/intro/highlight）返回空数组。 */
 export function getVariantsForContainer(containerName: string): VariantDescriptor[] {
   return _getVariantsForContainer(containerName)
 }
 
-/**
- * 某主题为各 variant slot 选的默认骨架描述集。
- *
- * 典型用法：先 getPersona(id) 拿 PersonaSpec，再把 spec.variants 传进来。
- */
+/** 某主题为各 variant slot 选的默认骨架描述集。传 PersonaSpec.variants 进来。 */
 export function getThemeDefaultVariants(
   variants: import('../core/themes/types').ThemeVariants,
 ): VariantDescriptor[] {
   return _getThemeDefaultVariants(variants)
 }
 
-/**
- * 为指定容器生成最小 markdown snippet。
- *   - 不传 options：返回 spec.example 原样
- *   - 传 variantId：在 open 行追加/替换 variant=xxx
- */
+/** 为指定容器生成最小 markdown snippet。传 variantId 时在 open 行追加/替换 variant=xxx。 */
 export function getContainerSnippet(
   containerName: string,
   options?: SnippetOptions,
@@ -178,14 +172,9 @@ export function getContainerSnippet(
 }
 
 /**
- * 主题能力复合查询（"按主题筛容器 + 推荐 variant"一站式）。
- *
- * 输入 personaId 后聚合：
- *   - PersonaSpec.variants / signatureContainers / capabilities
- *   - ContainerVocabulary 全集（按 namespace 过滤本主题可用容器）
- *   - 反向索引 themeCompat：哪些 variant 对本主题友好
- *
- * 让 LLM / 写作集成方一次拿到"swiss-grid 主题下该用什么、推荐什么、排除什么"。
+ * 主题能力复合查询（"按主题筛容器 + 推荐 variant"一站式）。聚合 PersonaSpec.variants /
+ * signatureContainers / capabilities + ContainerVocabulary 全集（按 namespace 过滤）+
+ * themeCompat 反向索引。
  */
 export function getThemeCapabilities(personaId: string): ThemeCapabilitiesView {
   const spec = getPersona(personaId)
@@ -198,11 +187,8 @@ export function getThemeCapabilities(personaId: string): ThemeCapabilitiesView {
 }
 
 /**
- * 反向索引：列出对指定主题"友好"的 variant 清单（按 kind 分组），
+ * 反向索引：列出对指定主题"友好"的 variant 清单（按 kind 分组）。
  * `spec.capabilities.variantOverrides` 中显式推荐的 id 排在最前。
- *
- * 与 getVariantsForContainer 的差别：本函数从主题视角枚举所有"对本主题友好"的 variant，
- * 用于回答"作者切到 swiss-grid 后，admonition 类除了主题默认还推荐用什么"。
  */
 export function getRecommendedVariantsFor(
   personaId: string,
@@ -214,38 +200,22 @@ export function getRecommendedVariantsFor(
   })
 }
 
-// ============================================================
-// 校验
-// ============================================================
+// region 校验
 
-/**
- * 对任意 PersonaSpec 跑硬约束校验。
- * 输入可能来自 LLM 生成，不保证类型完整——参数签名用 `unknown` 不合适会误导调用方，
- * 这里要求 PersonaSpec 类型，靠 JSON Schema 验证让外部先做结构拦截。
- */
+/** 对任意 PersonaSpec 跑硬约束校验。LLM 生成的 spec 先靠 JSON Schema 做结构拦截再传入。 */
 export function validatePersona(spec: PersonaSpec): SpecValidationResult {
   return validateSpec(spec)
 }
 
-// ============================================================
-// 渲染
-// ============================================================
+// region 渲染
 
-/**
- * 三选一输入（exclusive）：
- *   - persona: id，查内置注册表
- *   - theme: 已构建的 Theme 对象
- *   - spec: 临时 PersonaSpec（先投影为 Theme 再渲染）
- */
+/** 三选一输入（exclusive）：persona id / 已构建的 Theme / 临时 PersonaSpec（投影前先校验）。 */
 export interface PublicRenderInput {
   md: string
   persona?: string
   theme?: Theme
   spec?: PersonaSpec
-  /**
-   * 复制 / 导出目标平台 id。默认 'wechat'。
-   * 走 platforms/registry 派发；可选值见 listPublishPlatforms()。
-   */
+  /** 平台 id，默认 'wechat'。可选值见 listPublishPlatforms()。 */
   platform?: string
   wxPatch?: WxPatchOptions
 }
@@ -253,16 +223,10 @@ export interface PublicRenderInput {
 export type PublicRenderOutput = RenderOutput
 
 /**
- * markdown → HTML 主入口。
+ * markdown → HTML 主入口。三选一 persona / theme / spec 必须恰好给一个；都不给时默认 persona="default"。
  *
- * 三选一 persona / theme / spec 必须恰好给一个；都不给时默认 persona="default"。
- * 传 spec 时会先 validatePersona，失败抛 SpecValidationError。
- *
- * Frontmatter（L2 页面局部配置）解析：
- *   - markdown 首部 `---\n theme: <id>\n---` 会**覆盖**入参 persona / theme / spec
- *     （让一篇 markdown 自带主题声明；集成方读 frontmatter 后即可决定渲染人格）
- *   - `variants:` 嵌套块作为 L2 优先级生效，介于 attrs.variant 与 theme.variants 之间
- *   - 未识别的主题 id 静默回退到 input.persona / theme / spec；frontmatterIssues 报告 warning
+ * Frontmatter (L2)：markdown 首部 `---\n theme: <id>\nvariants:\n  …\n---` 覆盖入参；未识别的
+ * `theme` 静默回退到 input，warning 由 RenderOutput.frontmatterIssues 携带。
  */
 export function render(input: PublicRenderInput): PublicRenderOutput {
   const { config: fm } = parseFrontmatter(input.md)
@@ -276,10 +240,8 @@ export function render(input: PublicRenderInput): PublicRenderOutput {
 }
 
 /**
- * 列出所有已注册发布平台 adapter（id / name / status）。
- *
- * 外部集成方据此知道当前哪些平台可用 / 处于占位状态——也由 capabilities.json
- * 同源派生。不暴露 patch / inspect 函数，避免外部绕过 pipeline 直接调用。
+ * 列出所有已注册发布平台 adapter。不暴露 patch / inspect 函数，避免外部绕过 pipeline。
+ * 与 capabilities.json.platforms 同源派生。
  */
 export interface PublicPlatformInfo {
   id: string
@@ -298,20 +260,19 @@ export function listPublishPlatforms(): readonly PublicPlatformInfo[] {
 function resolveTheme(input: PublicRenderInput, frontmatterTheme?: string): Theme {
   const declared = [input.persona, input.theme, input.spec].filter((v) => v !== undefined).length
   if (declared > 1) {
-    throw new Error(
-      'render: provide exactly one of `persona` | `theme` | `spec` (got ' + declared + ')',
+    fail(
+      'INPUT_AMBIGUOUS',
+      `render: provide exactly one of \`persona\` | \`theme\` | \`spec\` (got ${declared})`,
     )
   }
-  // L2 frontmatter.theme 优先级最高：让一篇 markdown 自带主题声明，凌驾于调用方的 input.persona / theme / spec。
-  // 未注册的 frontmatter.theme 静默回退到 input（避免 publish 时因小拼写挂掉整篇）；详细 warning 由
-  // pipelineRender 输出的 frontmatterIssues 承担。
-  if (frontmatterTheme && PERSONA_REGISTRY[frontmatterTheme]) {
-    return specToTheme(PERSONA_REGISTRY[frontmatterTheme])
+  // L2 frontmatter.theme 优先级最高：让一篇 markdown 自带主题声明，凌驾于 input.persona/theme/spec。
+  if (frontmatterTheme && SPEC_REGISTRY[frontmatterTheme]) {
+    return specToTheme(SPEC_REGISTRY[frontmatterTheme])
   }
   if (input.theme) return input.theme
   if (input.spec) {
     const result = validateSpec(input.spec)
-    if (!result.ok) throw new SpecValidationError(result)
+    if (!result.ok) throw new WtException('SPEC_INVALID', result.errors, result.warnings)
     return specToTheme(input.spec)
   }
   const id = input.persona ?? 'default'
@@ -320,11 +281,8 @@ function resolveTheme(input: PublicRenderInput, frontmatterTheme?: string): Them
 }
 
 /**
- * spec → Theme 投影 + 校验。返回结果里附带 validation，失败时不抛错——
- * LLM 生成流程常会拿到部分合规的 spec，让调用方自己决定是警告还是硬拒。
- *
- * 调用方拿到 ok=true 的 Theme 就可以直接传给 render()；
- * ok=false 时 theme 仍然返回（best-effort 投影），但外观可能脱离平台约束。
+ * spec → Theme 投影 + 校验。返回 `{ theme, validation }`，失败时不抛错；调用方据
+ * `validation.ok` 自决是警告还是硬拒。ok=false 时仍返回 best-effort Theme。
  */
 export interface CreatePersonaResult {
   theme: Theme
@@ -337,22 +295,7 @@ export function createPersona(spec: PersonaSpec): CreatePersonaResult {
   return { theme, validation }
 }
 
-/** 校验失败抛出的专用错误类型；携带 errors / warnings 原文，便于 LLM 改写重试。 */
-export class SpecValidationError extends Error {
-  readonly result: SpecValidationResult
-  constructor(result: SpecValidationResult) {
-    super(
-      `PersonaSpec validation failed (${result.errors.length} errors):\n` +
-        result.errors.map((e) => `  ${e.path}: ${e.message}`).join('\n'),
-    )
-    this.name = 'SpecValidationError'
-    this.result = result
-  }
-}
-
-// ============================================================
-// Motif 工具
-// ============================================================
+// region Motif 工具
 
 /** 取指定 persona 的 motif AST 集合（用于独立渲染、预览或 LLM 参考）。 */
 export function getMotifSpec(personaId: string): MotifSpec {
@@ -372,9 +315,13 @@ export function renderMotifWithValues(
   return renderMotifTemplate(template, values)
 }
 
-// ============================================================
-// 类型再导出（消费方单点引用）
-// ============================================================
+// region 类型再导出（消费方单点引用）
+
+export { parseFrontmatter } from '../core/pipeline/frontmatter'
+export type { FrontmatterParseIssue, PageConfig } from '../core/pipeline/frontmatter'
+
+export { EXIT_CODES, WtException } from '../core/errors'
+export type { WtError, WtErrorCode } from '../core/errors'
 
 export type {
   JSONSchema7,
@@ -396,4 +343,5 @@ export type {
   VariantDescriptor,
   SnippetOptions,
   ThemeCapabilitiesView,
+  InlineExtensionSpec,
 }

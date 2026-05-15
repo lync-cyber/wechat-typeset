@@ -19,8 +19,16 @@ description: 将满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 
 - 用户给的 markdown 还没标 `:::` → 先转 `wechat-typeset-annotate-markdown`
 - 用户要造新主题 → 先转 `wechat-typeset-author-persona`
-- 渲染失败 stack 里是 `SpecValidationError` → 转 `wechat-typeset-author-persona` 修 spec
-- 渲染失败 stack 里是 `fence_syntax` / `unknown_container` → 转 `wechat-typeset-annotate-markdown` 修 markdown
+- 渲染失败抛 `WtException(SPEC_INVALID)` → 转 `wechat-typeset-author-persona` 修 spec
+- 渲染失败抛 `WtException(CONTRACT_VIOLATION)` 或 lint 报 `unknown_container` → 转 `wechat-typeset-annotate-markdown` 修 markdown
+
+## CLI 入口
+
+```bash
+npm run cli -- <subcommand> [--flag value | --json]
+```
+
+退出码：`0` ok / `1` 输入解析错 / `2` 业务 ok=false / `3-5` WtException(SPEC_INVALID / CONTRACT_VIOLATION / PLATFORM_UNSUPPORTED)。详见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)。
 
 ## 主线工作流（4 步）
 
@@ -28,57 +36,50 @@ description: 将满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 
 ```
 Task Progress:
-- [ ] 1. lint-contract.ts --input <md> --persona <id> 确认契约合法（主题敏感）
-- [ ] 2. render-html.ts --input <md> --persona <id> --output output.html
-- [ ] 3. （可选）render-gallery.ts 比较多 persona
-- [ ] 4. 浏览器打开 → 全选复制 → 粘公众号 / 或 copy-richtext.ts
+- [ ] 1. lint --persona 确认契约合法（主题敏感）
+- [ ] 2. render → output.html
+- [ ] 3. （可选）render-gallery 多 persona 比较
+- [ ] 4. 浏览器打开 → 全选复制 → 粘公众号 / 或 copy-richtext
 ```
-
-CLI 标志详表见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)（所有脚本的 flag / 退出码 / IO 形态单一真源）。
 
 ### Step 1 · lint（契约合法性预检 · 主题敏感）
 
 ```bash
 # 推荐：传 --persona 触发主题敏感检查
-tsx skills/wechat-typeset-export-richtext/scripts/lint-contract.ts --input <md> --persona <id>
+echo '{"md":"...","persona":"<id>"}' | npm run cli -- lint --json
+# 或文件输入
+npm run cli -- lint --input <md> --persona <id>
 
-# 或在 markdown frontmatter 写 `theme: <id>`：lint 自动取（frontmatter 优先于 --persona）
+# 在 markdown frontmatter 写 `theme: <id>` 让 lint 自动取（frontmatter 优先于 --persona）
 ```
 
-输出含 `error_count` / `warning_count`：
+输出含 `ok` / `errorCount` / `warningCount`：
 
-- **`ok=true`** 且 `warning_count=0` → 直接进 Step 2
-- **`ok=true`** 且 `warning_count>0` → 通常是 `wrong_theme_namespace`（用了 theme:* 容器但当前主题不是其专属），渲染仍出 HTML，但失去签名视觉。**告知用户后再决定是否进 Step 2**
+- **`ok=true` 且 `warningCount=0`** → 直接进 Step 2
+- **`ok=true` 且 `warningCount>0`** → 通常是 `wrong_theme_namespace`（用了 theme:* 容器但当前主题不是其专属），渲染仍出 HTML 但失去签名视觉。**告知用户后再决定是否进 Step 2**
 - **`ok=false`**（含 error） → 修完再 render。render 阶段才发现错误成本更高
 
-issue 修复指南见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)（lint issue 修复表与 annotate-markdown 共用一份）。
+issue 修复指南见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)。
 
 > **强烈建议传 `--persona`**：不传只查语法，等到 render 才发现 `kpi-dashboard` 在 `default` 主题下没签名视觉，用户已经写完一千字了。
 
 ### Step 2 · 单 persona 渲染
 
 ```bash
-tsx skills/wechat-typeset-export-richtext/scripts/render-html.ts \
-  --input <md> \
-  --persona <id> \
-  --output output.html
+echo '{"md":"...原文...","persona":"<id>"}' | npm run cli -- render --json > tmp/result.json
+jq -r .html tmp/result.json > output.html
+# 或文件输入
+npm run cli -- render --input <md> --persona <id> | jq -r .html > output.html
 ```
 
-输出：
-
-- `output.html` 完整 HTML（含 juice 内联 + wxPatch）
-- stdout JSON：`{ ok, persona, word_count, reading_time_min, html_length, svg_white_bg, patch_summary }`
+输出 JSON：`{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }`。
 
 退出码：
 - `0` 成功
-- `1` IO / 参数错
-- `2` 未知 persona id
-- `3` SpecValidationError（如果将来扩展 `--spec` 路径而 spec 非法）
-- `4` render 失败（容器语法错 / 嵌套不闭合）
-
-补充标志：
-- `--meta` 仅打印元数据 JSON，不写 HTML
-- `--no-svg-white-bg` 关闭 wxPatch 的 `#fff → #fefefe` 替换（默认开启）
+- `1` 输入解析错
+- `2` 未知 persona id（WtException RESOURCE_NOT_FOUND 走 exit 2）
+- `3` 用 `--spec` 走临时 spec 路径且 spec 非法（SPEC_INVALID）
+- `4` 渲染失败（CONTRACT_VIOLATION / RENDER_FAILED）
 
 ### Step 3 · 多 persona 比较（可选）
 
@@ -93,6 +94,8 @@ tsx skills/wechat-typeset-export-richtext/scripts/render-gallery.ts \
 
 - 用户写完一篇文章，不知道哪套 persona 更合气质
 - 给客户提交 3 套备选
+
+> render-gallery 是本 skill 独家工具（CLI 单命令一次只渲一个 persona；并排预览 + iframe 隔离是 skill-side 增值）。
 
 ### Step 4 · 复制到公众号
 
@@ -115,7 +118,7 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
   [--save-fallback tmp/output.html]
 ```
 
-直接吃源 markdown + persona，内部完成 render → 写入系统剪贴板（macOS 用 `osascript` 写 `public.html`、Windows 用 `Set-Clipboard -AsHtml`、Linux 用 `xclip -selection clipboard -t text/html`）。剪贴板写入失败时落盘到 `--save-fallback` 指定路径，并提示作者手动 Ctrl+A/Cmd+A + Ctrl+C/Cmd+C 复制。
+直接吃源 markdown + persona，内部完成 render → 写入系统剪贴板（macOS 用 `osascript` 写 `public.html`、Windows 用 `Set-Clipboard -AsHtml`、Linux 用 `xclip -selection clipboard -t text/html`）。剪贴板写入失败时落盘到 `--save-fallback` 指定路径，并提示作者手动复制。
 
 注意：本脚本 **不** 接受已渲染的 HTML 文件路径——所有渲染都在脚本内重跑，避免"render 与 copy 之间错版本"。
 
@@ -128,16 +131,16 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
 
 ## 渲染失败排查路径
 
-| 退出码 | error 字段 | 推断 | 路径 |
+| 退出码 | code | 推断 | 路径 |
 | --- | --- | --- | --- |
-| `2` | `unknown_persona` | persona id 拼错 / 未注册 | 检查拼写 / 用 `listPersonas()` 查 |
-| `3` | `spec_validation` | 用 `--spec` 走临时 spec 路径，spec 非法 | 转 `wechat-typeset-author-persona`，跑 `validate-and-fix.ts` |
-| `4` | `fence_syntax` | fence 名不存在 / 嵌套不闭合 / variant 写错 | 转 `wechat-typeset-annotate-markdown`，跑 `lint-contract.ts` |
-| `4` | `render_failure` | 其他渲染错误（罕见） | 看 stack；多半是 markdown-it 解析问题或 wxPatch 边界 case |
+| `2` | `RESOURCE_NOT_FOUND` | persona id 拼错 / 未注册 | 检查拼写 / `npm run cli -- personas list \| jq -r '.[].id'` |
+| `3` | `SPEC_INVALID` | 用 `--spec` 走临时 spec 路径，spec 非法 | 转 `wechat-typeset-author-persona`，跑 `validate-and-fix.ts` |
+| `4` | `CONTRACT_VIOLATION` | fence 名不存在 / 嵌套不闭合 / variant 写错 | 转 `wechat-typeset-annotate-markdown`，跑 `npm run cli -- lint --persona <id>` |
+| `4` | `RENDER_FAILED` | 其他渲染错误（罕见） | 看 stderr stack；多半是 markdown-it 解析问题或 wxPatch 边界 case |
 
 ## 粘贴后的人工 checklist
 
-**公众号编辑器粘贴完成后**，建议执行：
+公众号编辑器粘贴完成后，建议执行：
 
 ```
 - [ ] 标题栏填写文章标题（粘贴不会自动填）
@@ -151,15 +154,21 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
 
 完整粘贴指南见 [references/paste-checklist.md](references/paste-checklist.md)。
 
-## 脚本清单
+## CLI 子命令清单（本 skill 用到的）
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount }` |
+| `render` | `{ md, persona?, spec?, platform? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues }` |
+| `validate` | `{ spec }` 或 `{ md, persona? }` | `{ ok, errors[], warnings[] }` |
+
+skill 独家脚本（保留，CLI 不覆盖）：
 
 | 脚本 | 用途 |
 | --- | --- |
-| `scripts/lint-contract.ts` | 契约合法性预检（fence / 嵌套 / variant / 行内闭合） |
-| `scripts/render-html.ts` | 单 persona 渲染（薄壳，转发到仓库根 scripts/wechat-typeset-cli.ts） |
 | `scripts/render-gallery.ts` | 多 persona 并排预览（iframe srcdoc） |
-| `scripts/copy-richtext.ts` | HTML 写入系统剪贴板（Win/Mac/Linux 兼容） |
-| `scripts/open-in-browser.ts` | 启动 vite preview + 自动打开浏览器（少用，命令行场景） |
+| `scripts/copy-richtext.ts` | HTML 写入系统剪贴板（Win/Mac/Linux） |
+| `scripts/open-in-browser.ts` | 启动 vite preview + 自动打开浏览器 |
 
 ## 不要做的事
 
@@ -177,9 +186,9 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
 - [references/wxpatch-behavior.md](references/wxpatch-behavior.md) · WxPatch 8 步自动修复的具体行为
 - [references/paste-checklist.md](references/paste-checklist.md) · 粘贴前后的人工 checklist
 
-共享 references（与 author-persona / annotate-markdown 共用同一份权威源，通过相对路径软链）：
+共享 references（三个 skill 共用同一份权威源）：
 
-- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · 脚本签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**所有 CLI 真源**）
-- [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单（用于排查渲染失败的"为什么"）
+- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**CLI 真源**）
+- [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单（排查渲染失败的"为什么"）
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
 - [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（gallery 时挑哪几套对比）

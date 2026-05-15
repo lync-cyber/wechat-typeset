@@ -5,7 +5,7 @@ description: 设计并创建 wechat-typeset 的组件样式——色板、字号
 
 # wechat-typeset · 主题/Persona 创作
 
-把"我想要一套什么气质的公众号视觉"翻译成机器可投影的 `PersonaSpec` JSON。LLM 生成 → `validatePersona` 校验 → `specToTheme` 投影 → `render()` 渲染。**真相来源永远是 spec**，不是手写 Theme 对象、不是 SVG 字符串。
+把"我想要一套什么气质的公众号视觉"翻译成机器可投影的 `PersonaSpec` JSON。LLM 生成 → `validate` 校验 → `specToTheme` 投影 → `render` 渲染。**真相来源永远是 spec**，不是手写 Theme 对象、不是 SVG 字符串。
 
 ## 何时使用
 
@@ -14,13 +14,23 @@ description: 设计并创建 wechat-typeset 的组件样式——色板、字号
 - 用户描述视觉气质（"暖米底圆角"、"VT220 琥珀字"、"杂志感首字下沉"、"newsletter 期号印章"）
 - 用户要从现有主题派生（"在 default 基础上换主色"、"tech-explainer 但代码块要更花"）
 - 用户要造装饰元素（h2 前缀图标、分隔线 motif、步骤徽章、印章）
-- 用户问"应该选哪套主题"——先用 [`scripts/recommend-from-prompt.ts`](scripts/recommend-from-prompt.ts) 看是否能复用内置主题，**不能复用再造新的**
+- 用户问"应该选哪套主题"——先用 `wechat-typeset personas recommend` 看是否能复用内置主题，**不能复用再造新的**
 
 不要用本 skill：
 
 - 用户给一段 markdown 要"标注"或"加排版块" → 转 `wechat-typeset-annotate-markdown`
 - 用户要"渲染" / "导出 HTML" / "复制到公众号" → 转 `wechat-typeset-export-richtext`
 - 改通用 CSS / 加非主题的 fence 容器 → 改 `src/core/vocabulary/vocabulary.ts`，不在本 skill 边界内
+
+## CLI 入口
+
+校验 / 选型走 `@wechat-typeset/cli` 子命令。skill 独家工具（prompt 构造、HTML 预览、文件落地）保留为 `scripts/*.ts`。
+
+```bash
+npm run cli -- <subcommand> [--flag value | --json]
+```
+
+退出码：`0` ok / `1` 输入解析错 / `2` 业务 ok=false / `3-5` WtException(SPEC_INVALID 等)。详见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)。
 
 ## 主线工作流（5 步）
 
@@ -29,9 +39,9 @@ description: 设计并创建 wechat-typeset 的组件样式——色板、字号
 ```
 Task Progress:
 - [ ] 1. 收集视觉定位（受众 / 题材 / 参照风格 / 强弱）
-- [ ] 2. 决策：复用内置 / 派生现有 / 全新造
+- [ ] 2. 决策：复用内置 / 派生现有 / 全新造（wechat-typeset personas recommend）
 - [ ] 3. 生成 spec JSON（new-persona-from-prompt.ts 输出 schema + prompt）
-- [ ] 4. 校验循环（validate-and-fix.ts 至 ok=true）
+- [ ] 4. 校验循环（wechat-typeset validate --json，errors 喂回 LLM）
 - [ ] 5. 预览 + 落地（preview-motifs.ts → 用户拍板 → persist-persona.ts）
 ```
 
@@ -46,11 +56,19 @@ Task Progress:
 
 ### Step 2 · 决策：复用 / 派生 / 全新
 
-`scripts/recommend-from-prompt.ts --description "<用户描述>"` 输出推荐链：
+```bash
+echo '{
+  "title":"<占位标题，可写视觉描述>",
+  "summary":"<视觉气质一句话>",
+  "style":"<参照锚点>"
+}' | npm run cli -- personas recommend --json
+```
 
-1. **强匹配**（受众 + 视觉参照都对上）→ 直接 `wechat-typeset-export-richtext` 用内置 id，本 skill 退出
+输出 `{ ranked[3], recommendNew, rationaleOneLine }`：
+
+1. **`recommendNew=false` 且 `ranked[0].staticScore ≥ 0.85`** → 直接 `wechat-typeset-export-richtext` 用 `ranked[0].id`，本 skill 退出
 2. **改色板/换骨架就够**（受众对、palette 不对）→ 走 [派生现有主题](#派生现有主题) 路径
-3. **气质全新**（参照锚点和现有内置主题都拉不上）→ 走 [全新造主题](#全新造主题) 路径
+3. **`recommendNew=true`**（气质全新）→ 走 [全新造主题](#全新造主题) 路径
 
 ### Step 3 · 生成 spec JSON
 
@@ -59,23 +77,27 @@ Task Progress:
 ```bash
 tsx skills/wechat-typeset-author-persona/scripts/new-persona-from-prompt.ts \
   --description "<用户描述>" \
-  --out tmp/new-spec.json
+  --out tmp/new-spec-prompt.json
 ```
 
-脚本输出**给 LLM 的结构化输出 prompt**（含 JSON Schema 摘要 + 硬约束清单 + 类似主题的 spec 片段）。LLM 把 JSON 写到 `tmp/new-spec.json`。
+脚本输出**给 LLM 的结构化输出 prompt**（含 JSON Schema 摘要 + 硬约束清单 + 类似主题的 spec 片段）。LLM 消费 prompt，把生成的 spec 写到 `tmp/spec.json`。
 
 **派生现有主题**：从 `templates/derive-from-base.md` 拷骨架（含 spread + 改改样例），改完保存到 `tmp/spec.json`。
 
 ### Step 4 · 校验循环（feedback loop）
 
 ```bash
-tsx skills/wechat-typeset-author-persona/scripts/validate-and-fix.ts tmp/spec.json
+# 直接喂 spec 文件
+cat tmp/spec.json | jq -c '{spec:.}' | npm run cli -- validate --json
+
+# 或用 --spec 简写（CLI 自动读文件 + 包到 input.spec）
+npm run cli -- validate --spec tmp/spec.json
 ```
 
-输出三种结果：
+输出 `{ ok, errors[], warnings[] }`；每条 error 含 `path` / `message` / `severity` / `hint?`（hint 是匹配硬约束规则后的修复提示）。三种结果：
 
 - **`ok=true`**：进 Step 5
-- **`ok=false`，列了 errors[]**：每条 error 含 `path` + `message` + 修复建议。把整份 errors 喂回 LLM 让它 self-correct 同一份 spec，重跑校验
+- **`ok=false`，errors[]**：把整份 errors（含 hint）喂回 LLM 让它 self-correct 同一份 spec，重跑校验
 - **重试 3 轮仍失败**：去 [常见失败模式](#常见失败模式与处理) 手工诊断
 
 ### Step 5 · 预览 + 落地
@@ -93,7 +115,7 @@ tsx skills/wechat-typeset-author-persona/scripts/persist-persona.ts \
   tmp/spec.json --id <kebab-id>
 ```
 
-落到 `src/core/themes/<id>/persona.data.ts` + 改 `src/public/personas.ts` 的 import 列表。
+落到 `src/core/themes/<id>/persona.data.ts` + 改 `src/core/themes/registry.ts` 的 import 列表。
 
 ## 派生现有主题
 
@@ -116,7 +138,7 @@ const tweaked: PersonaSpec = {
 
 - `id` / `name` 不能直接 spread（必须改）——用户重复用同 id 会冲突
 - `palette.accent = palette.primary` 是 default 的设计选择；其他主题里 accent 可与 primary 不同，按主题原 spec 判断
-- 派生 spec 也必须过 `validate-and-fix.ts`——patch 系统的 `__reset: true` 能意外清掉硬约束
+- 派生 spec 也必须过 `wechat-typeset validate`——patch 系统的 `__reset: true` 能意外清掉硬约束
 
 ## 全新造主题
 
@@ -126,7 +148,7 @@ const tweaked: PersonaSpec = {
 
 ### palette 的 4 态 status
 
-`status` 是 `{ tip, info, warning, danger }` 四态，每态 `{ accent, soft }` 成对。soft 是底色（10% 不透明的 accent 近似），accent 是边线/图标色。最容易遗漏 `info`（被当成"我又不用 info 容器"忽略掉）。
+`status` 是 `{ tip, info, warning, danger }` 四态，每态 `{ accent, soft }` 成对。soft 是底色（10% 不透明的 accent 近似），accent 是边线/图标色。最容易遗漏 `info`。
 
 ### motif 字号 / 描边
 
@@ -135,6 +157,8 @@ LLM 经常凭设计稿习惯写 `fontSize: 12` 或 `strokeWidth: 0.5`——硬�
 完整硬约束清单见 [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md)；motif AST 完整字段见 [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md)。
 
 ## 常见失败模式与处理
+
+cli `validate` 输出的 errors[] 每条带 `hint`；下表是 cli hint 表的速查：
 
 | 错误 path 模式 | 推断 | 修复 |
 | --- | --- | --- |
@@ -147,23 +171,32 @@ LLM 经常凭设计稿习惯写 `fontSize: 12` 或 `strokeWidth: 0.5`——硬�
 | `signatureContainers[N]` | id 不在白名单 | 用 `getSupportedSignatureContainers()` 查；不要写 kebab，是 camelCase |
 | `variants.<kind>` | id 不在白名单 | `getVariantIds().<kind>`；典型幻觉 `'glow'` / `'modern'` 不存在 |
 
+把 cli validate 的 errors[] 整体喂回 LLM 是最稳的 self-correct 模式——LLM 拿到 path + hint 就能改对。
+
 ## 不要做的事
 
 - **不要手写 `Theme` 对象**——永远走 `PersonaSpec`。`specToTheme` 里隐含的 `commonTemplates` 合并和 asset 规范化不能绕过
 - **不要在 spec 里塞原始 SVG 字符串**——motif 必须是 AST。校验器看不穿字符串
-- **不要跳过 `validatePersona`**——即便在内置 persona 上做微调。patch 系统的 `__reset: true` 能清掉平台约束
+- **不要跳过 `wechat-typeset validate`**——即便在内置 persona 上做微调
 - **不要发明 fence 名**——主题的边界是 token / motif / variant 选择 + signatureContainers 声明，**不**包括新增容器；新容器走 `docs/contract/custom.md` 流程
 - **不要让用户跳过预览**——SVG motif 文字描述与渲染效果差异极大，必须 preview-motifs.ts 让用户视觉确认
 
-## 脚本清单
+## CLI 子命令清单（本 skill 用到的）
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `personas recommend` | `{ title, summary, topic?, style? }` | `{ ranked[3], recommendNew, rationaleOneLine }` |
+| `validate` | `{ spec }` 或 `{ md, persona? }` | `{ ok, errors[], warnings[] }`（含 hint） |
+| `personas get` | `{ id }` | 完整 PersonaSpec（派生 base 时用） |
+| `personas list` | — | PersonaSummary[] |
+
+skill 独家脚本（保留，CLI 不覆盖）：
 
 | 脚本 | 用途 |
 | --- | --- |
-| `scripts/recommend-from-prompt.ts` | 用户描述 → 输出 top-3 内置主题推荐（含选/不选的理由）+ 是否建议造新 |
-| `scripts/new-persona-from-prompt.ts` | 输出"给 LLM 用的结构化输出 prompt"（schema + 硬约束 + 相邻样例），不调 LLM |
-| `scripts/validate-and-fix.ts` | 读 spec.json → `validatePersona` → 输出 errors[] + 修复建议（喂回 LLM 用） |
-| `scripts/preview-motifs.ts` | 读 spec.json → 生成单页 HTML gallery（色板 + 所有 motif + 各容器的 admonition icon） |
-| `scripts/persist-persona.ts` | 把 spec.json 落到 `src/core/themes/<id>/persona.data.ts` + patch `src/public/personas.ts` |
+| `scripts/new-persona-from-prompt.ts` | 输出"给 LLM 用的结构化输出 prompt"（schema + 硬约束 + 相邻样例） |
+| `scripts/preview-motifs.ts` | 读 spec.json → 生成单页 HTML gallery（色板 + 所有 motif + 各容器 icon） |
+| `scripts/persist-persona.ts` | spec.json 落到 `src/core/themes/<id>/` + patch registry |
 
 ## 模板
 
@@ -177,9 +210,9 @@ LLM 经常凭设计稿习惯写 `fontSize: 12` 或 `strokeWidth: 0.5`——硬�
 
 ## 相关参考
 
-共享 references（三个 skill 共用同一份权威源，通过相对路径软链）：
+共享 references（三个 skill 共用同一份权威源）：
 
-- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · 脚本签名 / 退出码 / validate-and-fix 错误模式表（**所有 CLI 真源**）
+- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / hint 表（**CLI 真源**）
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束完整清单
 - [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md) · Motif AST 完整字段
 - [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（由 build:skill-refs 派生）

@@ -781,7 +781,7 @@ export const CONTAINER_NAME_TO_STYLE_KEY: Readonly<Record<string, string>> = Obj
   STYLED_CONTAINERS.map((s) => [s.name, s.styleKey]),
 )
 
-/** camel → kebab 映射（兼容旧 SIGNATURE_CONTAINER_MARKDOWN_NAME）。 */
+/** camel → kebab 映射（spec.signatureContainers 用 camelCase，markdown fence 用 kebab）。 */
 export const STYLE_KEY_TO_CONTAINER_NAME: Readonly<Record<string, string>> = Object.fromEntries(
   STYLED_CONTAINERS.map((s) => [s.styleKey, s.name]),
 )
@@ -842,4 +842,34 @@ export function isContainerEnabledForTheme(spec: ContainerSpec, themeId: string)
   const ns = namespaceOf(packOf(spec))
   if (ns === 'base' || ns === 'pack') return true
   return namespaceIdOf(packOf(spec)) === themeId
+}
+
+/**
+ * 渲染行为维度（对 category 的归纳，独立于作者心智分组）。
+ *   - variantized：有 variant slot 可切骨架
+ *   - admonition：四态 tip/warning/info/danger 共享 variant 清单
+ *   - nested：必须嵌在父容器内
+ *   - fixed：固定骨架 + 主题化 CSS 槽位
+ *   - free：兜底 escape-hatch，无主题样式
+ */
+export type ContainerKind = 'variantized' | 'admonition' | 'nested' | 'fixed' | 'free'
+
+const ADMONITION_NAMES: ReadonlySet<string> = new Set(['tip', 'warning', 'info', 'danger'])
+
+export function kindOf(spec: ContainerSpec): ContainerKind {
+  if (spec.variantKind) return ADMONITION_NAMES.has(spec.name) ? 'admonition' : 'variantized'
+  if (spec.parent) return 'nested'
+  if (spec.category === 'free') return 'free'
+  return 'fixed'
+}
+
+/** capabilities.json `notes` 字段派生：给作者解释容器的特殊约束。 */
+export function notesFor(spec: ContainerSpec): string | undefined {
+  if (spec.parent) return `必须嵌在 ${spec.parent} 内（外层 ::::，内层 :::）`
+  if (ADMONITION_NAMES.has(spec.name))
+    return 'admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。'
+  if (spec.name === 'note')
+    return '第五态补注：独立 variantKind=note，中性骨架；可通过 variant=xxx 切骨架，色彩走 textMuted 不抢色。'
+  if (spec.category === 'free') return '兜底 escape hatch：无主题样式，按作者内容原样透传。'
+  return undefined
 }

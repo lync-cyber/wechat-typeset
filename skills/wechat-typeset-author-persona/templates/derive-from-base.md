@@ -100,11 +100,13 @@ export const spec: PersonaSpec = {
 
 ## 派生主题的校验流程
 
-派生 spec 也必须过 `validate-and-fix.ts`——patch 系统的 `__reset: true` 能意外清掉硬约束：
+派生 spec 也必须过 `wechat-typeset validate`——patch 系统的 `__reset: true` 能意外清掉硬约束：
 
 ```bash
-tsx skills/wechat-typeset-author-persona/scripts/validate-and-fix.ts <spec-path>
+npm run cli -- validate --spec <spec-path>
 ```
+
+输出 `{ ok, errors[], warnings[] }`；每条 error 附 `hint` 字段，可整体喂回 LLM 让其 self-correct。
 
 ## 不要做的事
 

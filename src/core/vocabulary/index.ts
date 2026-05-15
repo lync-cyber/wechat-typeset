@@ -21,11 +21,14 @@ export {
   namespaceIdOf,
   listPacks,
   isContainerEnabledForTheme,
+  kindOf,
+  notesFor,
   type ContainerSpec,
   type ContainerCategory,
   type ContainerPack,
   type PackNamespace,
   type AttrSpec,
+  type ContainerKind,
 } from './vocabulary'
 
 export {

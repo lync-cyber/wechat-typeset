@@ -131,7 +131,7 @@ note:          'minimal-callout' | 'box-callout' | 'side-bar'
 
 | 现象 | 推断 | 修复路径 |
 | --- | --- | --- |
-| `SpecValidationError` | spec 校验失败 | 拿 `e.result.errors` 数组，按 `path` 逐条修；典型路径见上表 |
+| `WtException(SPEC_INVALID)` | spec 校验失败 | 拿 `e.errors` 数组，按 `path` 逐条修；典型路径见上表 |
 | `palette.*` 报错 | hex 非法 / 11 键缺一 | 用 `#[0-9a-f]{3,8}` 形式，补齐 11 键 |
 | `motifs.*.primitives[N].fontSize` | < 14 | 放大到 ≥ 14 |
 | `motifs.*.primitives[N].strokeWidth` | < 1 | 放粗到 ≥ 1 |

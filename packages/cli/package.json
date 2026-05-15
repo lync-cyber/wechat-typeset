@@ -1,0 +1,32 @@
+{
+  "name": "@wechat-typeset/cli",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Self-describing wechat-typeset CLI — render / validate / lint / personas / containers / motif / annotate. JSON in, JSON out.",
+  "license": "MIT",
+  "author": "lync-cyber",
+  "homepage": "https://github.com/lync-cyber/wechat-typeset#readme",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./commands": "./src/commands/index.ts",
+    "./types": "./src/types.ts"
+  },
+  "bin": {
+    "wechat-typeset": "./bin/wechat-typeset.mjs"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md"
+  ],
+  "dependencies": {
+    "jsdom": "^25.0.1"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^28.0.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.6.3"
+  }
+}
