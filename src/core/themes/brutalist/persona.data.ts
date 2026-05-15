@@ -181,6 +181,27 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 主题级 kicker 文案覆盖（UNIX 终端注释 + punk-zine 母语）
+  //
+  // 结构性导航标签走 `//` 注释前缀（终端/程序员美学）；
+  // 编辑声音走方括号 `[TAG]`（punk-zine 的 ASCII 标签气质）；
+  // 刊物元数据混用中英，与 colophon 设计稿的"下期 / ISSUE"双轨一致。
+  // ============================================================
+  kickers: {
+    toc: '// CONTENTS',
+    qaBlock: '// Q&A',
+    editorNote: '// EDITOR_NOTE',
+    methodology: '// METHOD',
+    qrFollowKicker: '// SCAN & FOLLOW',
+    qrFollowTitle: '慢读 // slow.read',
+    recommend: '[READ_NEXT]',
+    footerCTATitle: '[FOLLOW]',
+    colophonNextLabel: '下期',
+    colophonIssueLabel: 'ISSUE',
+    mastheadName: '慢读',
+  },
+
+  // ============================================================
   // 签名容器：复用 data-brief 家族（masthead / toc / cta-bar / qr-follow /
   // footnotes / qa-block / editor-note / colophon）。粗野主义不引入新签名容器。
   // ============================================================

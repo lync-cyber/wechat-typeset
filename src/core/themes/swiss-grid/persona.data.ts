@@ -194,6 +194,26 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 主题级 kicker 文案覆盖（Neue Grafik 国际排印母语）
+  //
+  // Swiss grid 的栏目标签全走英文大写短语——国际版面设计的母语形态。
+  // toc 的 INDEX 对位设计稿 #03；colophon 的 NEXT / VOL 对位设计稿 #24。
+  // ============================================================
+  kickers: {
+    toc: 'INDEX',
+    qaBlock: 'Q & A',
+    editorNote: "EDITOR'S NOTE",
+    methodology: 'METHODOLOGY',
+    qrFollowKicker: 'SUBSCRIBE',
+    qrFollowTitle: 'NEUE LESE GRAFIK',
+    recommend: 'FURTHER READING',
+    footerCTATitle: 'FOLLOW THE PUBLICATION',
+    colophonNextLabel: 'NEXT ·',
+    colophonIssueLabel: 'VOL ·',
+    mastheadName: 'NEUE LESE GRAFIK',
+  },
+
+  // ============================================================
   // 签名容器：声明本主题需要的所有签名容器（renderer 在 pipeline/containers/databrief
   // / signature 已实现）。conformance 测试会校验注册表对齐。
   // ============================================================

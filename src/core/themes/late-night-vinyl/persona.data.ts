@@ -190,8 +190,13 @@ export const spec: PersonaSpec = {
     toc: '— tracklist · 节目单 —',
     qaBlock: '听 · 众 · 连 · 线',
     editorNote: '播 · 后 · 札记',
+    methodology: '制作手记 · LINER NOTES',
     qrFollowKicker: 'tune · in',
     qrFollowTitle: '夜读电台',
+    recommend: '深 夜 选 听',
+    footerCTATitle: '长夜收听',
+    colophonNextLabel: '下期',
+    colophonIssueLabel: 'EP ·',
     mastheadName: '夜读电台',
   },
 
