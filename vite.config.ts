@@ -138,9 +138,8 @@ export default defineConfig({
     include: ['tests/unit/**/*.spec.ts'],
     // Node 24+ 的原生退化 localStorage 会影子掉 jsdom 的实现；setup 里强制替换
     setupFiles: ['tests/setup.ts'],
-    // R7-D：覆盖率聚焦"应用层"。core/pipeline 早已被 themes/conformance/variant-sanity
-    // 等 spec 覆盖良好；coverage 关注 app/composable/infra 的回归网。50% lines 是初
-    // 始门槛，避免 R7-E 拆分时回退；后续 spec 补完可以阶梯调高。
+    // 覆盖率聚焦"应用层"：core/pipeline 已被 themes/conformance/variant-sanity 等
+    // spec 覆盖良好；这里只盯 app/composable/infra 的回归网，50% lines 是初始门槛。
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],

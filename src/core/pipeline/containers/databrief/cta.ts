@@ -38,7 +38,7 @@ export const ctaBarContainer: ContainerRenderer = {
     //
     // kicker（info）声明时：渲染顶部黑底白字 header bar（与 editor-note innerStyles 同源审美），
     // 三栏 cta 落在 header 下方，整体被 ctx.containers.ctaBar 的外框 wrap。
-    // kicker 缺省 = 经典三栏，与 R10 前行为字节等价。
+    // kicker 缺省 = 经典三栏。
     //
     // 单元格之间的分隔走"左/中格的 border-right"——共享 1px 黑线，
     // 不再用 border-spacing 留白缝（设计稿的三栏是 flush 的）。

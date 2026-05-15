@@ -27,8 +27,9 @@ function fail(code: number, msg: string): never {
   process.exit(code)
 }
 
-function parseArgs(argv: string[]): { input: string; json: boolean } {
+function parseArgs(argv: string[]): { input: string; persona?: string; json: boolean } {
   let input: string | undefined
+  let persona: string | undefined
   let json = false
   for (let i = 2; i < argv.length; i++) {
     const k = argv[i]
@@ -42,10 +43,16 @@ function parseArgs(argv: string[]): { input: string; json: boolean } {
       input = v
       continue
     }
-    fail(1, `unknown flag "${k}" (expected --input <md> [--json])`)
+    if (k === '--persona') {
+      const v = argv[++i]
+      if (v === undefined || v.startsWith('--')) fail(1, '--persona expects a value')
+      persona = v
+      continue
+    }
+    fail(1, `unknown flag "${k}" (expected --input <md> [--persona id] [--json])`)
   }
   if (!input) fail(1, '--input <md> required')
-  return { input, json }
+  return { input, persona, json }
 }
 
 function main() {
@@ -53,11 +60,14 @@ function main() {
   const here = dirname(fileURLToPath(import.meta.url))
   const annotateLint = resolve(here, '../../wechat-typeset-annotate-markdown/scripts/lint-contract.ts')
 
-  const child = spawnSync(
-    'npx',
-    ['tsx', annotateLint, resolve(process.cwd(), args.input), ...(args.json ? ['--json'] : [])],
-    { stdio: 'inherit', shell: process.platform === 'win32' },
-  )
+  const flags: string[] = [resolve(process.cwd(), args.input)]
+  if (args.persona) flags.push('--persona', args.persona)
+  if (args.json) flags.push('--json')
+
+  const child = spawnSync('npx', ['tsx', annotateLint, ...flags], {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+  })
   process.exit(child.status ?? 1)
 }
 

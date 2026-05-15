@@ -1,8 +1,8 @@
 /**
  * quote-card / highlight 容器
  *
- * v2 变更：quote-card 走 variant registry（classic / magazine-dropcap / column-rule / frame-brackets）。
- * highlight 保持 v1 行为（简单高亮块，无骨架切换需求）。
+ * quote-card 走 variant registry（classic / magazine-dropcap / column-rule / frame-brackets）；
+ * highlight 是简单高亮块，无骨架切换。
  *
  * byline（ctx.info）作为署名，在 close 时用 textMuted 色加一行"— 作者"。
  * 所有 variant 共享这个收尾逻辑，避免每个 variant 重写。

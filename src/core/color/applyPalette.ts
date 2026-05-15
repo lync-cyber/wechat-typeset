@@ -61,7 +61,7 @@ export function applyPalette(opts: ApplyPaletteOptions): Theme {
     elements: recolor(elementsDelta, base.tokens.colors, newColors) as never,
     containers: recolor(containersDelta, base.tokens.colors, newColors) as never,
     inline: recolor(inlineDelta, base.tokens.colors, newColors) as never,
-    // R10：保留 base 主题的 kickers 覆盖（用户调色不应丢失主题母语 kicker）。
+    // 保留 base 主题的 kickers 覆盖：用户调色不应丢失主题母语 kicker。
     kickers: base.kickers,
   })
 }

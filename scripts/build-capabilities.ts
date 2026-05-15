@@ -3,36 +3,14 @@
  * 生成 dist/api/capabilities.json —— 外部集成方（如 InkFlow）读取此文件
  * 来发现 wechat-typeset 当前支持的主题、容器、变体、硬约束。
  *
- * 契约版本 v2.1。
- *
- * 2.3（非破坏，向后兼容）：
- *   - 新增 selfUri / versionedSelfUri：jsDelivr 上的 canonical CDN URL，让下游
- *     在拿到 JSON 内容时也知道自己来自哪里
- *   - 新增 coverUriPattern / coverUriPatternVersioned：og:image / 公众号封面占位
- *     SVG 资源路径模板，下游凭 `{personaId}` 占位算具体 URL
- *
- * 2.2（非破坏，向后兼容）：
- *   - 新增 platforms[]：暴露已注册发布平台 adapter 与契约成熟度
- *     （wechat=stable / zhihu+xhs=placeholder）
- *
- * 2.1（非破坏，向后兼容）：
- *   - hardRules 的阈值常量由 validate.ts / rules.ts 真源派生（不再手抄）
- *   - 新增 deprecations[]：未来废弃字段先登记在此，给下游窗口迁移
- *
- * 2.0 起：
- *   - personas[] 提供完整选型信号（audience / signatureContainers / variants）
- *   - containers[] 枚举所有合法 `:::` fence 名 + 每个容器支持的 variant id
- *   - inlineExtensions 列 == / ~~ / ++ / [. .] / [~ ~]
- *   - personaSchemaUri 指向 persona-spec.schema.json 的相对路径
- *
  * 运行：`npx tsx scripts/build-capabilities.ts`（通常由 `npm run build` 链触发）
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
-import { listPersonas, listPublishPlatforms } from '../src/public'
-import { VARIANT_IDS, DEFAULT_VARIANTS } from '../src/core/themes/types'
+import { getPersona, listPersonas, listPublishPlatforms } from '../src/public'
+import { VARIANT_IDS, DEFAULT_VARIANTS, DEFAULT_KICKERS } from '../src/core/themes/types'
 import { SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../src/core/pipeline/containers'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
 import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../src/core/themes/_shared/spec/validate'
@@ -50,7 +28,7 @@ import { CONTAINER_VOCABULARY, packOf } from '../src/core/vocabulary/vocabulary'
  *   - 破坏 contract 的变更前，先把旧字段登记进 `deprecations[]`
  *   - 移除 deprecated 字段必须提升 major
  */
-type CapabilitiesSchemaVersion = '2.3'
+type CapabilitiesSchemaVersion = '2.4'
 
 interface DeprecationNotice {
   /** 受影响的字段或契约 id（dotted path，如 "hardRules.forbidClass"） */
@@ -82,12 +60,26 @@ interface CapabilitiesV2 {
     signatureContainers: readonly string[]
     variants: Record<string, string>
     palettePrimary: string
+    /** 主题级 kicker 文案覆盖（与 DEFAULT_KICKERS 深合并的最终值） */
+    kickers: Record<string, string>
+    /** 主题能力自描述（spec.capabilities，可选）。未声明 = 全集兜底 */
+    capabilities?: {
+      containers?: readonly string[]
+      variantOverrides?: Record<string, string>
+      excluded?: readonly string[]
+    }
   }>
   containers: Array<{
     id: string
     category: string
-    /** 所属契约扩展包（缺省 = base）。下游可按此过滤"我只关心 base 容器"。 */
-    pack: 'base' | 'data-brief'
+    /**
+     * 所属契约扩展包（缺省 = base）。下游可按此过滤"我只关心 base 容器"。
+     * 三层 namespace：
+     *   - `'base'`              基础契约，任何主题都渲染
+     *   - `pack:<domain>`       领域扩展，多主题可借用（如 `pack:editorial`）
+     *   - `theme:<themeId>`     主题专属，仅该主题渲染（如 `theme:data-brief`）
+     */
+    pack: 'base' | `pack:${string}` | `theme:${string}`
     /**
      * kind 是对 category 的"渲染行为"维度归纳：
      *   variantized - 有 variant slot，可通过 variant=xxx 切骨架
@@ -163,6 +155,25 @@ interface CapabilitiesV2 {
    * 当前为空数组占位；首次破坏 contract 时把旧字段登记进来。
    */
   deprecations: readonly DeprecationNotice[]
+  /**
+   * 4 级降级链与每层失效行为的机器可读版本。配合 `docs/contract/fallback.md`
+   * 使用——下游集成方据此提前做 lint / warning。自 schemaVersion 2.4 起新增。
+   */
+  fallbackBehavior: {
+    variantChain: ReadonlyArray<{
+      level: 'L1' | 'L2' | 'L3' | 'L4'
+      source: string
+      action: string
+    }>
+    /** 各 slot 的 L4 fallback id（与 DEFAULT_VARIANTS 同源） */
+    defaultVariants: Record<string, string>
+    /** 各非法触发的处理策略（silently / warning / error） */
+    triggers: ReadonlyArray<{
+      condition: string
+      action: 'silent-fallback' | 'warning' | 'error'
+      report: string
+    }>
+  }
   personaSchemaUri: string
   docs: Record<string, string>
 }
@@ -235,7 +246,6 @@ function buildSelfUris(pkg: ReturnType<typeof pkgJson>): SelfUriBundle {
 
 function buildContainers(): CapabilitiesV2['containers'] {
   // 单一真相：直接迭代 CONTAINER_VOCABULARY；新增容器只需在 vocabulary 登记。
-  // R8 之后 note 不再属于 admonition variant 池——它走独立的 variantKind='note'。
   const admonitions = new Set(['tip', 'warning', 'info', 'danger'])
   const result: CapabilitiesV2['containers'] = []
 
@@ -296,15 +306,28 @@ function buildContainers(): CapabilitiesV2['containers'] {
 
 function build(): CapabilitiesV2 {
   const pkg = pkgJson()
-  const personas = listPersonas().map((p) => ({
-    id: p.id,
-    name: p.name,
-    description: p.description,
-    audience: p.audience,
-    signatureContainers: p.signatureContainers,
-    variants: p.variants as unknown as Record<string, string>,
-    palettePrimary: p.palette.primary,
-  }))
+  const personas = listPersonas().map((p) => {
+    const fullSpec = getPersona(p.id)
+    const kickers = { ...DEFAULT_KICKERS, ...(fullSpec.kickers ?? {}) }
+    const out: CapabilitiesV2['personas'][number] = {
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      audience: p.audience,
+      signatureContainers: p.signatureContainers,
+      variants: p.variants as unknown as Record<string, string>,
+      palettePrimary: p.palette.primary,
+      kickers: kickers as unknown as Record<string, string>,
+    }
+    if (fullSpec.capabilities) {
+      out.capabilities = {
+        containers: fullSpec.capabilities.containers,
+        variantOverrides: fullSpec.capabilities.variantOverrides as unknown as Record<string, string> | undefined,
+        excluded: fullSpec.capabilities.excluded,
+      }
+    }
+    return out
+  })
   const platforms = listPublishPlatforms().map((p) => ({
     id: p.id,
     name: p.name,
@@ -312,7 +335,7 @@ function build(): CapabilitiesV2 {
   }))
   const { selfUri, versionedSelfUri, coverUriPattern, coverUriPatternVersioned } = buildSelfUris(pkg)
   return {
-    schemaVersion: '2.3',
+    schemaVersion: '2.4',
     tool: {
       name: pkg.name,
       version: pkg.version,
@@ -329,6 +352,8 @@ function build(): CapabilitiesV2 {
         'admonition 不是容器名；用 tip / warning / info / danger / note 之一',
         'compare 外层用 :::: 四冒号，内层 pros/cons 用 ::: 三冒号',
         '<!-- variant=X --> HTML 注释不被解析；variant 必须写在 open 行',
+        'containers[].pack 三层 namespace：base（基础契约） / pack:<domain>（领域扩展，多主题共享） / theme:<themeId>（主题专属，仅该主题渲染）',
+        'L2 页面局部配置：markdown frontmatter `---\\nvariants:\\n  admonition: terminal\\n---` 覆盖主题默认，逐处 attrs.variant 仍优先',
       ],
     },
     personas,
@@ -361,18 +386,38 @@ function build(): CapabilitiesV2 {
       {
         // 字段命名误导：实际覆盖所有 styled 容器（intro / cover / author / ...），
         // 而非仅 signature 容器。下游已可从 containers[].id 直接读到 markdown fence 名，
-        // 无需中间 camelCase→kebab 映射；保留字段仅为 v2.x 兼容。
+        // 无需中间 camelCase→kebab 映射。
         id: 'signatureContainerMarkdownNames',
         sinceVersion: '2.1',
         replacement: '改用 containers[].id 作为 markdown fence 名权威源；signatureContainerIds 仅给"是否签名"分类信号。',
         removalPlannedIn: '3.0',
       },
     ],
+    fallbackBehavior: {
+      variantChain: [
+        { level: 'L1', source: 'attrs.variant', action: '逐处覆盖。非法 id 静默忽略，回退 L2/L3/L4' },
+        { level: 'L2', source: 'markdown frontmatter `variants:`', action: '页面级覆盖。非法 id 写入 frontmatterIssues warning，回退 L3/L4' },
+        { level: 'L3', source: 'theme.variants[slot]', action: '主题映射表。注册表里不存在则回退 L4' },
+        { level: 'L4', source: 'DEFAULT_VARIANTS / makeVariantContainer.fallbackId', action: '系统默认，保证渲染必定有骨架' },
+      ],
+      defaultVariants: { ...DEFAULT_VARIANTS } as unknown as Record<string, string>,
+      triggers: [
+        { condition: 'attrs.variant 非法 id', action: 'silent-fallback', report: '回退 L2/L3/L4；lint 阶段用 getVariantsForContainer 校验' },
+        { condition: 'frontmatter variants[slot] 非法 id', action: 'warning', report: 'RenderOutput.frontmatterIssues[]' },
+        { condition: 'frontmatter theme 未知 id', action: 'warning', report: 'RenderOutput.frontmatterIssues[]；回退 input.persona/theme/spec' },
+        { condition: 'theme:<X> 容器在非该主题渲染', action: 'silent-fallback', report: 'wrapper CSS 走 token 中性兜底；通过 getThemeCapabilities().containers[].available 提前发现' },
+        { condition: 'render 同时给 persona/theme/spec', action: 'error', report: '抛 Error: provide exactly one of ...' },
+        { condition: 'render(spec) 投影失败', action: 'error', report: '抛 SpecValidationError' },
+      ],
+    },
     personaSchemaUri: '../schema/persona-spec.schema.json',
     docs: {
       writerContract: 'docs/contract/README.md',
-      containerSyntax: 'docs/contract/base.md',
-      containerPackDataBrief: 'docs/contract/packs/data-brief.md',
+      containerSyntax: 'docs/contract/syntax.md',
+      containerBase: 'docs/contract/base.md',
+      containerPackEditorial: 'docs/contract/packs/editorial.md',
+      containerThemeDataBrief: 'docs/contract/packs/data-brief.md',
+      fallback: 'docs/contract/fallback.md',
       skillReadme: 'skills/wechat-typeset/SKILL.md',
       personas: 'skills/wechat-typeset/references/personas.md',
       hardRules: 'skills/wechat-typeset/references/hard-rules.md',

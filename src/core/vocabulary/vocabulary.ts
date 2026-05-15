@@ -45,16 +45,20 @@ export type ContainerCategory =
   | 'free' // 兜底 escape hatch：free
 
 /**
- * 契约扩展包（pack）。决定容器属于"基础契约"还是某个领域扩展包。
- * 同一容器只能属于一个 pack；pack 是契约文档分组手段，也是 capabilities.json
- * 与 build-writer-docs 的派生输入。
+ * 契约扩展包 namespace（三层）：
+ *   - `'base'`              基础契约，所有主题渲染（核心通用组件）
+ *   - `pack:<domain>`       领域扩展包，多主题可借用（如 `pack:editorial` 刊物出版）
+ *   - `theme:<themeId>`     主题专属扩展，只有该主题渲染时启用（如 `theme:data-brief`）
  *
- * 新增 pack 流程：
- *   1. 在本 union 追加 pack id
+ * 同一容器只能属于一个 namespace。pack 是契约文档分组手段，也是 capabilities.json
+ * 与 build-writer-docs 的派生输入；理论上`theme:` 容器在其他主题中渲染会回退到 free 兜底。
+ *
+ * 新增 namespace 流程：
+ *   1. 直接给容器 spec 写 `pack: 'pack:<domain>'` 或 `pack: 'theme:<id>'`（无须改 union）
  *   2. 在 scripts/build-writer-docs.ts:PACK_TARGETS 追加文档目标
  *   3. 在目标文档里放置 `<!-- generated:container-quick-ref:<pack>:start/end -->` 标记对
  */
-export type ContainerPack = 'base' | 'data-brief'
+export type ContainerPack = 'base' | `pack:${string}` | `theme:${string}`
 
 /**
  * open 行允许声明的 `key=value` attr。attrs 是**额外**语义，不是 variant 切换。
@@ -155,7 +159,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'masthead',
     styleKey: 'masthead',
     category: 'structure',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       { key: 'issue', description: '期号（monospace 右对齐；默认两栏布局生效）', example: '004' },
@@ -176,7 +180,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'section-tag',
     styleKey: 'sectionTag',
     category: 'structure',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     description: '小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。',
     example: '::: section-tag 深度\n:::\n',
@@ -185,7 +189,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'byline',
     styleKey: 'byline',
     category: 'structure',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       {
@@ -212,7 +216,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'editorial-header',
     styleKey: 'editorialHeader',
     category: 'structure',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       {
@@ -258,7 +262,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'toc',
     styleKey: 'toc',
     category: 'structure',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 4,
     children: ['toc-item'],
     attrs: [
@@ -285,7 +289,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'toc-item',
     styleKey: null,
     category: 'structure',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     parent: 'toc',
     fenceLength: 3,
     attrs: [
@@ -344,7 +348,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'callout-group',
     styleKey: 'calloutGroup',
     category: 'admonition',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     nestable: true,
     children: ['tip', 'warning', 'info', 'danger'],
     fenceLength: 4,
@@ -431,7 +435,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'qa-block',
     styleKey: 'qaBlock',
     category: 'content',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       {
@@ -580,7 +584,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'kpi-dashboard',
     styleKey: 'kpiDashboard',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'theme:data-brief',
     fenceLength: 4,
     children: ['kpi-item'],
     attrs: [
@@ -596,7 +600,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'kpi-item',
     styleKey: null,
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'theme:data-brief',
     parent: 'kpi-dashboard',
     fenceLength: 3,
     attrs: [
@@ -621,7 +625,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'bar-chart',
     styleKey: 'barChart',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'theme:data-brief',
     fenceLength: 4,
     children: ['bar'],
     attrs: [
@@ -636,7 +640,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'bar',
     styleKey: null,
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'theme:data-brief',
     parent: 'bar-chart',
     fenceLength: 3,
     attrs: [
@@ -652,7 +656,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'footnotes',
     styleKey: 'footnotes',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     description:
       '脚注块：上分割线 + 小字编号引用（一条一行，hanging indent）。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。',
@@ -662,7 +666,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'refs',
     styleKey: 'refs',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     description:
       '流式参考文献块：与 footnotes 同源，但所有条目同段流式排列（条目间作者自行用 `·` / `／` 分隔），同样高度可装 2~3 倍条目，适合长文献列表。公众号沙箱不支持滚动，长引用建议走 refs。',
@@ -673,7 +677,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'cta-bar',
     styleKey: 'ctaBar',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       { key: 'like', description: '左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
@@ -688,7 +692,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'qr-follow',
     styleKey: 'qrFollow',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       { key: 'kicker', description: '左上小字 kicker（默认 SUBSCRIBE）', example: 'SUBSCRIBE' },
@@ -703,7 +707,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'editor-note',
     styleKey: 'editorNote',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     description:
       '编辑部注：主色左竖条 callout + kicker 小标题 + 正文。data-brief / industry-observer 等深度刊家族常用，区别于中性的 note。',
@@ -713,7 +717,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'methodology',
     styleKey: 'methodology',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     description:
       '方法论小字注释：浅底 + 10px textMuted + 粗体标签头。调研类主题的脚注本，与中性 note 的区别在排印密度（更紧、更小、更"说明栏"）。',
@@ -723,7 +727,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'colophon',
     styleKey: 'colophon',
     category: 'signature',
-    pack: 'data-brief',
+    pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
       { key: 'next', description: '左栏：下期预告标题', example: '纸本之必要：论书脊与手指的记忆' },
@@ -794,4 +798,48 @@ export function packOf(spec: ContainerSpec): ContainerPack {
 /** 某 pack 包含的所有容器 spec。 */
 export function containersInPack(pack: ContainerPack): ContainerSpec[] {
   return CONTAINER_VOCABULARY.filter((s) => packOf(s) === pack)
+}
+
+/** Namespace 分类：base / 领域扩展（pack:*）/ 主题专属（theme:*） */
+export type PackNamespace = 'base' | 'pack' | 'theme'
+
+/** 从 pack 值取 namespace 类别。`'base'` → `'base'`；`'pack:X'` → `'pack'`；`'theme:X'` → `'theme'`。 */
+export function namespaceOf(pack: ContainerPack): PackNamespace {
+  if (pack === 'base') return 'base'
+  if (pack.startsWith('pack:')) return 'pack'
+  return 'theme'
+}
+
+/** 取 namespace 后的部分。`'pack:editorial'` → `'editorial'`；`'theme:data-brief'` → `'data-brief'`；`'base'` → `''`。 */
+export function namespaceIdOf(pack: ContainerPack): string {
+  if (pack === 'base') return ''
+  return pack.slice(pack.indexOf(':') + 1)
+}
+
+/** 列出词汇表中出现过的所有 pack 值（去重，稳定排序：base 在前，pack:* 中间，theme:* 在后）。 */
+export function listPacks(): readonly ContainerPack[] {
+  const set = new Set<ContainerPack>()
+  for (const s of CONTAINER_VOCABULARY) set.add(packOf(s))
+  const arr = [...set]
+  return arr.sort((a, b) => {
+    const rank = (p: ContainerPack) =>
+      p === 'base' ? 0 : p.startsWith('pack:') ? 1 : 2
+    const ra = rank(a)
+    const rb = rank(b)
+    return ra !== rb ? ra - rb : a.localeCompare(b)
+  })
+}
+
+/**
+ * 判定容器在给定主题语境下"是否启用"。
+ *   - base / pack:* 任何主题都启用
+ *   - theme:<id> 只在 themeId === id 时启用
+ *
+ * Renderer 不直接读本函数（兼容期内 markdown 仍可写 theme:* 容器，会得到 token 兜底）。
+ * capabilities / lint / 推荐 API 用本函数决定"该不该曝光给作者"。
+ */
+export function isContainerEnabledForTheme(spec: ContainerSpec, themeId: string): boolean {
+  const ns = namespaceOf(packOf(spec))
+  if (ns === 'base' || ns === 'pack') return true
+  return namespaceIdOf(packOf(spec)) === themeId
 }

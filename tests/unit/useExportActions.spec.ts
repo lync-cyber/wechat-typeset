@@ -29,6 +29,8 @@ function mountExport() {
     wordCount: 1,
     readingTime: 1,
     patchLog: { entries: [], total: 0 },
+    pageConfig: {},
+    frontmatterIssues: [],
   })
   const flush = vi.fn()
   const activeTheme = ref<Theme>(defaultTheme)

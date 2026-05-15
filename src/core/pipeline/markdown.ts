@@ -19,7 +19,7 @@ import markdownItFootnote from 'markdown-it-footnote'
 import markdownItTaskLists from 'markdown-it-task-lists'
 
 import { defaultTheme } from '../themes/default'
-import type { Theme } from '../themes/types'
+import type { Theme, ThemeVariants } from '../themes/types'
 import { CONTAINER_REGISTRY } from './containers'
 import type { ContainerRenderContext } from './containers'
 import { parseInfo } from './containers'
@@ -30,9 +30,13 @@ import { applyHeadingPrefixDecorations } from './headingDecorations'
  * 容器渲染器在 open 时解析 info/attrs，close 是函数时也要能读取——
  * 用一个 per-render 的 stack：按 name 压入 open 时的 ctx，close 时弹出同名。
  * stack 存在 env 里，确保每次 md.render(...) 彼此隔离。
+ *
+ * `pageVariants`：L2 页面局部配置（frontmatter `variants:` 解析结果），由 pipeline 入口
+ * 通过 env 透传到每个容器的 ctx；容器 renderer 不需要感知 frontmatter 解析细节。
  */
 interface ContainerEnv {
   __wxContainerStacks?: Record<string, ContainerRenderContext[]>
+  __wxPageVariants?: Partial<ThemeVariants>
 }
 
 function pushCtx(env: ContainerEnv, name: string, ctx: ContainerRenderContext): void {
@@ -89,6 +93,7 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
             innerStyles: theme.innerStyles,
             inline: theme.inline,
             variants: theme.variants,
+            pageVariants: env.__wxPageVariants,
             kickers: theme.kickers,
             info: title,
             attrs,
@@ -96,7 +101,7 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
           pushCtx(env, name, ctx)
           return renderer.open(ctx)
         }
-        const ctx = popCtx(env, name) ?? emptyCtx(theme)
+        const ctx = popCtx(env, name) ?? emptyCtx(theme, env.__wxPageVariants)
         return typeof renderer.close === 'function' ? renderer.close(ctx) : renderer.close
       },
     })
@@ -104,13 +109,11 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
 
   registerInlineExtensions(md)
 
-  // 标题装饰：h2Prefix SVG（motif 通路，与 decorations 正交）
+  // h2Prefix SVG 属于 motif → assets 通路，与 decorations.headingPrefix 正交：
+  //   motif 通路：theme.assets.h2Prefix 是静态 SVG 字符串，直接在 <h2> 后注入。
+  //   decorations 通路：运行时编号 / 文本 kicker 走 decorations.headingPrefix 声明式（headingDecorations.ts）。
   // 为什么不用 CSS ::before：公众号后台剥离 ::before/::after；
   // 唯一稳妥的路径是在 DOM 里真实插入一个 inline-block 元素。
-  //
-  // h2Prefix（SVG 装饰）属于 motif → assets 通路：theme.assets.h2Prefix 提供的是
-  // 静态 SVG 字符串，直接在 `<h2>` 后注入。运行时编号 / 文本 kicker 这类装饰已
-  // 统一搬到 decorations.headingPrefix 走声明式（见 headingDecorations.ts）。
   const h2Prefix = theme.assets.h2Prefix ?? null
   if (h2Prefix) {
     md.renderer.rules.heading_open = (tokens, idx, opts, _env, self) => {
@@ -405,7 +408,7 @@ function applyTaskListSquares(md: MarkdownIt, theme: Theme): void {
   })
 }
 
-function emptyCtx(theme: Theme): ContainerRenderContext {
+function emptyCtx(theme: Theme, pageVariants?: Partial<ThemeVariants>): ContainerRenderContext {
   return {
     tokens: theme.tokens,
     assets: theme.assets,
@@ -413,6 +416,7 @@ function emptyCtx(theme: Theme): ContainerRenderContext {
     innerStyles: theme.innerStyles,
     inline: theme.inline,
     variants: theme.variants,
+    pageVariants,
     kickers: theme.kickers,
     info: '',
     attrs: {},

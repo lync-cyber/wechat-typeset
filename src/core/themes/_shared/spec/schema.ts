@@ -509,6 +509,28 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
       items: { type: 'string' },
       description: '该主题声称支持的签名容器 id 清单',
     },
+    capabilities: {
+      type: 'object',
+      description: '主题能力自描述（白名单/排除/推荐 variant）。仅供 API 查询使用，不影响渲染。',
+      properties: {
+        containers: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '本主题启用的容器 fence 名白名单；未声明 = 全集兜底（base + pack:* + 自家 theme:）',
+        },
+        variantOverrides: {
+          type: 'object',
+          description: '在 spec.variants 默认骨架之外的额外建议 variant（按 slot 部分指定）',
+          additionalProperties: { type: 'string' },
+        },
+        excluded: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '显式排除的容器 fence 名清单',
+        },
+      },
+      additionalProperties: false,
+    },
     templates: {
       type: 'object',
       additionalProperties: { type: 'string' },

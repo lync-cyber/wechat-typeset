@@ -36,16 +36,26 @@ interface PackTarget {
   intro: string
 }
 
-const PACK_TARGETS: Record<ContainerPack, PackTarget> = {
+/**
+ * Namespace → 文档目标映射。键名直接使用 vocabulary 的 ContainerPack 值（含 namespace 前缀），
+ * 派生 quick-ref 时按 packOf(spec) === packId 过滤。
+ */
+const PACK_TARGETS: Partial<Record<ContainerPack, PackTarget>> = {
   base: {
     docPath: resolve(process.cwd(), 'docs/contract/base.md'),
     intro: '所有主题都覆盖渲染；写作者无需关心当前主题是谁。带 ★ 是可登记的**签名容器**。',
   },
-  'data-brief': {
+  'pack:editorial': {
+    docPath: resolve(process.cwd(), 'docs/contract/packs/editorial.md'),
+    intro:
+      '为刊物 / 栏目化深度文 / newsletter 设计的领域容器集（多主题可借用）。' +
+      '在未声明 signatureContainers 的主题里语法仍合法，但会回退到中性兜底样式（不塌版，少签名）。带 ★ 是可登记的**签名容器**。',
+  },
+  'theme:data-brief': {
     docPath: resolve(process.cwd(), 'docs/contract/packs/data-brief.md'),
     intro:
-      '为数据简报 / 财经栏目化版面设计的签名元素。' +
-      '在其他主题里语法仍合法，但会回退到中性兜底样式（不塌版，少签名）。带 ★ 是可登记的**签名容器**。',
+      '`data-brief` 主题专属：KPI 仪表盘 / 横向条形图等数据可视化容器。' +
+      '只在 `data-brief` 主题渲染时给出签名视觉；其他主题里属于"主题专属扩展"未启用范畴。',
   },
 }
 
@@ -75,6 +85,7 @@ function renderPackTable(packId: ContainerPack): string {
   if (specs.length === 0) return ''
 
   const target = PACK_TARGETS[packId]
+  if (!target) return ''
   const lines: string[] = []
   lines.push(target.intro)
   lines.push('')
@@ -157,6 +168,7 @@ function main() {
 
   for (const packId of Object.keys(PACK_TARGETS) as ContainerPack[]) {
     const target = PACK_TARGETS[packId]
+    if (!target) continue
     const current = readFileSync(target.docPath, 'utf8')
     const next = splice(current, packId, renderPackTable(packId), target.docPath)
 

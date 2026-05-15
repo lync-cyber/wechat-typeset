@@ -21,6 +21,7 @@ import { CODE_BLOCK_VARIANTS } from '../variants/registry'
 import { parseInfo } from './containers'
 import { ROOT_CLASS } from './constants'
 import { createLRU } from './_lru'
+import { parseFrontmatter, type FrontmatterParseIssue, type PageConfig } from './frontmatter'
 
 export interface RenderInput {
   md: string
@@ -46,6 +47,17 @@ export interface RenderOutput {
    * 供"渲染透明度面板"展示；作者据此知道我们改了什么、没改什么。
    */
   patchLog: PatchLog
+  /**
+   * Markdown frontmatter（L2 页面局部配置）解析结果。
+   *   - pageConfig: 已校验的 `{ variants?, theme? }`；缺省时为空对象
+   *   - issues: 解析期间的告警（非法 variant id / 未识别 key 等），由上层决定 surface 方式
+   *
+   * `theme:` 字段不会在 pipeline 内部生效——pipeline 接受的是已构建 Theme；
+   * 主题切换由 `src/public/render` 在 frontmatter.theme 覆盖 input.persona/theme 后再调用 pipeline。
+   * 此字段透传出来仅供调用方观察与诊断。
+   */
+  pageConfig: PageConfig
+  frontmatterIssues: readonly FrontmatterParseIssue[]
 }
 
 /**
@@ -90,9 +102,17 @@ function getMarkdown(theme: Theme): MarkdownIt {
 export function render(input: RenderInput): RenderOutput {
   const { md: source, theme } = input
 
+  const { config: pageConfig, body, issues: frontmatterIssues } = parseFrontmatter(source)
+
   const mdInstance = getMarkdown(theme)
 
-  const bodyHtml = mdInstance.render(source)
+  // env.__wxPageVariants 是约定 key（见 markdown.ts ContainerEnv），由容器 ctx 通过 pipeline
+  // 透传到 makeVariantContainer.resolveVariant 的 L2 优先级层。frontmatter.theme 已在上游
+  // （src/public/render）解析完毕——pipeline 接 Theme 已构建好，theme 字段不在这里二次生效。
+  const env: { __wxPageVariants?: PageConfig['variants'] } = {}
+  if (pageConfig.variants) env.__wxPageVariants = pageConfig.variants
+
+  const bodyHtml = mdInstance.render(body, env)
   const themeCss = generateThemeCSS(theme)
 
   const htmlWithStyle = [
@@ -111,10 +131,17 @@ export function render(input: RenderInput): RenderOutput {
   const patchLog: PatchLog = platform.inspect ? platform.inspect(inlined) : { entries: [], total: 0 }
   const finalHtml = platform.patch(inlined, input.wxPatch)
 
-  const wordCount = countWords(source)
+  const wordCount = countWords(body)
   const readingTime = Math.max(1, Math.ceil(wordCount / 300))
 
-  return { html: finalHtml, wordCount, readingTime, patchLog }
+  return {
+    html: finalHtml,
+    wordCount,
+    readingTime,
+    patchLog,
+    pageConfig,
+    frontmatterIssues,
+  }
 }
 
 function countWords(s: string): number {

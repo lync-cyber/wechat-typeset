@@ -11,7 +11,7 @@
 
 **[在线编辑器](https://lync-cyber.github.io/wechat-typeset)** — 无需安装，浏览器打开即用。
 
-> [写作契约](docs/contract/README.md)：基础契约（通用容器 + 行内扩展）+ 扩展包（按需领域容器）+ 自定义扩展，三层覆盖全部作者 API。主题间切换不塌版，复制到公众号不丢样。
+> [写作契约](docs/contract/README.md)：基础契约（`base`）+ 领域扩展包（`pack:*`，如 `pack:editorial`）+ 主题专属扩展（`theme:*`）三层覆盖全部作者 API，可在 markdown 头部用 frontmatter 声明页面级主题与变体。主题间切换不塌版，复制到公众号不丢样。
 
 ---
 
@@ -34,7 +34,7 @@
 | **文档白昼** | 清爽白底·等宽 | 教程、产品说明、手把手跟做 |
 | **慢生活** | 暖米·圆角·叶片装饰 | 饮食、旅行、生活记录 |
 | **硬核财经** | 深栗墨·内参蓝·直角 | 行业分析、财经报道 |
-| **数据简报** | 数据蓝·黑底代码·直角 | 数据 newsletter、季度复盘、刊物化深度文 |
+| **数据简报** | 数据蓝·黑底代码·直角 | 数据 newsletter、季度复盘；KPI 仪表盘/条形图等主题专属容器仅此主题下生效 |
 | **人文札记** | 古籍朱红·方版心 | 散文、书评、长评 |
 | **行业观察** | 米底·Issue 印章 | 行业周刊、观点文章 |
 | **人物特稿** | 冷米·深墨靛·巨号引号 | 人物故事、深度报道 |
@@ -88,7 +88,7 @@
 ::::
 ```
 
-完整清单（作者卡、封面、分割线、推荐卡、二维码……）见 [docs/contract/base.md](docs/contract/base.md)；数据简报家族（KPI 仪表盘、目录、条形图、脚注……）见 [docs/contract/packs/data-brief.md](docs/contract/packs/data-brief.md)。
+完整清单（作者卡、封面、分割线、推荐卡、二维码……）见 [docs/contract/base.md](docs/contract/base.md)；刊物/newsletter 家族（刊头、目录、Q&A、脚注、CTA……）见 [docs/contract/packs/editorial.md](docs/contract/packs/editorial.md)；数据简报 KPI/条形图（仅 `data-brief` 主题）见 [docs/contract/packs/data-brief.md](docs/contract/packs/data-brief.md)。页面级主题或变体切换可用 frontmatter 声明，API 层可通过 `getThemeCapabilities(personaId)` 查询主题可用容器与推荐变体。
 
 ---
 
@@ -146,7 +146,7 @@ npm run dev
 - **钉版本** — `https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@v{x.y.z}/dist/api/capabilities.json`
   钉到 git tag，永远不变；适合生产消费方
 
-字段 `selfUri` / `versionedSelfUri` 同样写在 JSON 内部，下游拿到内容时即可知自己来自哪里。
+字段 `selfUri` / `versionedSelfUri` 同样写在 JSON 内部，下游拿到内容时即可知自己来自哪里。`fallbackBehavior` 字段（自 schemaVersion 2.4 起）是降级合同的机器可读副本，详见 [docs/contract/fallback.md](docs/contract/fallback.md)。
 
 项目技术栈：Vue 3 · TypeScript · Vite · markdown-it · CodeMirror 6（含 autocomplete / lint）· turndown · juice。
 
