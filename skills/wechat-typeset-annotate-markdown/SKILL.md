@@ -70,7 +70,7 @@ echo '{
 | `recommendNew=true` | 退出本 skill，先去 `wechat-typeset-author-persona` 造新主题 |
 | 用户明确说"不要花哨" | 用 `default`，跳过 abstract / key-number / cover 等签名容器的提议 |
 
-### Step 2 · 查主题能力（关键：避免用错容器）
+### Step 2 · 查主题能力
 
 ```bash
 npm run cli -- personas capabilities --id <persona-id>
@@ -224,10 +224,10 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 
 ## 选 variant 的两条规则
 
-- **遵从 persona 默认**：不指定 `variant=` 时走主题 spec.variants 的默认骨架，**这是最稳的选择**
-- **覆盖只在两种情况**：
+- **默认不写 `variant=`**：走主题 spec.variants 的默认骨架
+- **仅在以下两种情况覆盖**：
   1. 单处想出位强调（如"这一处就要 pill-tag"）
-  2. 主题默认不适合这一段（如 tech-explainer 的 `column-rule` quote 给"金句卡"看着太弱，单段升级 `magazine-dropcap`）
+  2. 主题默认不适合这一段（如 tech-explainer 的 `column-rule` quote 给"金句卡"太弱，单段升级 `magazine-dropcap`）
 
 合法 variant id 从 `npm run cli -- personas capabilities --id <p>` 的 `recommendedVariants` / `defaultVariants` 取。**不要凭记忆写**——LLM 经常幻觉出 `glow` / `modern` / `flat`。
 

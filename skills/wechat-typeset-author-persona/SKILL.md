@@ -70,8 +70,8 @@ echo '{
 | 输出特征 | 决策 |
 | --- | --- |
 | `recommendNew=false` 且 `ranked[0].staticScore ≥ 0.85` | 直接 `wechat-typeset-export-richtext` 用 `ranked[0].id`，本 skill 退出 |
-| 受众对、palette 不对（改色板/换骨架就够） | 走 [派生现有主题](#派生现有主题) 路径 |
-| `recommendNew=true`（气质全新） | 走 [全新造主题](#全新造主题) 路径 |
+| 受众对、palette 不对（改色板/换骨架就够） | 走 [派生现有主题](#派生现有主题) |
+| `recommendNew=true` | 走 [全新造主题](#全新造主题) |
 
 ### Step 3 · 生成 spec JSON
 
@@ -114,7 +114,7 @@ tsx skills/wechat-typeset-author-persona/scripts/preview-motifs.ts \
   --out tmp/preview.html
 ```
 
-浏览器打开 `tmp/preview.html` 给用户看 SVG motif gallery（色板色块 + h2Prefix + 全部 divider + stepBadge 占位符示例 + 5 态 admonition icon）。**这是用户拍板的关键步骤——不要跳**。
+浏览器打开 `tmp/preview.html` 给用户看 SVG motif gallery（色板色块 + h2Prefix + 全部 divider + stepBadge 占位符示例 + 5 态 admonition icon）。**用户拍板后才进 persist——不要跳预览**。
 
 用户确认后：
 
@@ -179,7 +179,7 @@ cli `validate` 输出的 errors[] 每条带 `hint`；下表是 cli hint 表的�
 | `signatureContainers[N]` | id 不在白名单 | 用 `getSupportedSignatureContainers()` 查；不要写 kebab，是 camelCase |
 | `variants.<kind>` | id 不在白名单 | `getVariantIds().<kind>`；典型幻觉 `'glow'` / `'modern'` 不存在 |
 
-把 cli validate 的 errors[] 整体喂回 LLM 是最稳的 self-correct 模式——LLM 拿到 `path` + `hint` 就能改对。
+self-correct 时把整份 `errors[]`（含 `path` + `hint`）一起喂回 LLM，不要逐条手喂。
 
 ## PersonaSpec 创作：✅ 与 ❌ 对照
 

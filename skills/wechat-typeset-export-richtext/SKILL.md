@@ -61,7 +61,7 @@ npm run cli -- lint --input <md> --persona <id>
 
 issue 修复指南见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md#lint-issue-修复表)。
 
-> **强烈建议传 `--persona`**：不传只查语法，等到 render 才发现 `kpi-dashboard` 在 `default` 主题下没签名视觉，用户已经写完一千字了。
+> **必须传 `--persona`**：不传则跳过 `wrong_theme_namespace` 检查，render 时才暴露主题-容器错配。
 
 ### Step 2 · 单 persona 渲染
 
@@ -84,14 +84,7 @@ tsx skills/wechat-typeset-export-richtext/scripts/render-gallery.ts \
   --output gallery.html
 ```
 
-`--personas all` 渲染全部已注册主题。输出 `gallery.html` 包含 N 个 persona 并排预览（iframe srcdoc 隔离）。
-
-**典型场景**：
-
-- 用户写完一篇文章，不知道哪套 persona 更合气质
-- 给客户提交 3 套备选
-
-> `render-gallery` 是本 skill 独家工具——CLI 单命令一次只渲一个 persona，并排预览 + iframe 隔离是 skill-side 增值。
+`--personas all` 渲染全部已注册主题。输出 `gallery.html` 包含 N 个 persona 并排预览（iframe srcdoc 隔离），用于让用户选主题或给客户提交备选。
 
 ### Step 4 · 复制到公众号
 
@@ -140,7 +133,7 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
 | `2` | `RESOURCE_NOT_FOUND` | persona id 拼错 / 未注册 | 检查拼写 / `npm run cli -- personas list \| jq -r '.[].id'` |
 | `3` | `SPEC_INVALID` | 用 `--spec` 走临时 spec 路径，spec 非法 | 转 `wechat-typeset-author-persona`，跑 `npm run cli -- validate` |
 | `4` | `CONTRACT_VIOLATION` | fence 名不存在 / 嵌套不闭合 / variant 写错 | 转 `wechat-typeset-annotate-markdown`，跑 `npm run cli -- lint --persona <id>` |
-| `4` | `RENDER_FAILED` | 其他渲染错误（罕见） | 看 stderr stack；多半是 markdown-it 解析问题或 wxPatch 边界 case |
+| `4` | `RENDER_FAILED` | 其他渲染错误 | 看 stderr stack；通常是 markdown-it 解析问题或 wxPatch 边界 case |
 
 ## 粘贴后的人工 checklist
 
@@ -212,6 +205,6 @@ skill 独家脚本（CLI 不覆盖）：
 共享 references（三个 skill 共用同一份权威源）：
 
 - [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**CLI 真源**）
-- [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单（排查渲染失败的"为什么"）
+- [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
 - [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（gallery 时挑哪几套对比）

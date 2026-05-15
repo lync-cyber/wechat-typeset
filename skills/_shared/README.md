@@ -29,8 +29,3 @@
 1. 在 `references/` 下新建 `<name>.md`
 2. 在需要引用它的 skill 的 SKILL.md "相关参考"段加 `[../_shared/references/<name>.md](../_shared/references/<name>.md)`
 3. 更新本 README 的订阅表
-
-## 为什么不用文件系统软链
-
-Windows 上 `mklink` 默认需要管理员权限或开发者模式；git 默认不保留软链；跨平台 CI 容易踩坑。
-Markdown 相对路径在所有 markdown viewer / agent 工具下表现一致，是更稳健的"软链"形式。

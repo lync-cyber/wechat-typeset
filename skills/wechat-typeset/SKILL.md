@@ -5,7 +5,7 @@ description: wechat-typeset 仓库的意图路由入口。当用户对仓库提�
 
 # wechat-typeset · 路由入口
 
-> 这是**意图分发** skill，不是工作流 skill。职责：在用户给出"宽口径需求"时，5 秒内判断走哪条主线、给出一次性的项目概览、把控制权交给真正执行工作的子 skill。
+> **意图分发 skill**。职责：判断走哪条主线 → 给一次性项目概览 → 交控制权给子 skill。**不做实际工作**（不写 spec / 不改 markdown / 不渲染）。
 
 ## 子 skill 边界
 
@@ -14,8 +14,6 @@ description: wechat-typeset 仓库的意图路由入口。当用户对仓库提�
 | [wechat-typeset-author-persona](../wechat-typeset-author-persona/SKILL.md) | **视觉设计** | "造主题"、"换色板"、"加个 motif"、"VT220 琥珀字"、"像 Stripe Docs" |
 | [wechat-typeset-annotate-markdown](../wechat-typeset-annotate-markdown/SKILL.md) | **写作改写** | "改成公众号格式"、"加排版块"、"标注成 tip"、"按契约改写"、"挑一套 persona" |
 | [wechat-typeset-export-richtext](../wechat-typeset-export-richtext/SKILL.md) | **渲染导出** | "渲染出来"、"复制到公众号"、"导出 HTML"、"几套主题比较" |
-
-用户的第一句话经常是宽口径的——"帮我用 wechat-typeset 发一篇文章" / "做个公众号"。本 skill 顶上来做一次路由，避免 LLM 在三个 skill 描述之间反复横跳。
 
 ## 路由总表（信号 → skill）{#routing-table}
 
