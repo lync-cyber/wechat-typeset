@@ -329,18 +329,58 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
-  // 元素级样式（从 index.ts 的 elements 原样搬运，hex 全部 inline）
+  // 元素级样式
   // ============================================================
   elements: {
+    // 展签标题：字重 500（不 700）+ 大字距，杂志页眉的"稀疏克制"感
+    h1: {
+      'font-size': '24px',
+      'font-weight': '500',
+      color: '#3a2d20',
+      'margin-top': '32px',
+      'margin-bottom': '18px',
+      'line-height': '1.45',
+      'letter-spacing': '3px',
+      'text-align': 'center',
+    },
     h2: {
       'font-size': '20px',
-      'font-weight': '700',
+      'font-weight': '600',
       color: '#3a2d20',
       'margin-top': '30px',
       'margin-bottom': '14px',
       'line-height': '1.5',
       'padding-bottom': '6px',
       'border-bottom': '2px dotted #d98141',
+    },
+    // 条目级：与正文同字号，靠字重 600 + 字距区分，不加装饰
+    h3: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#3a2d20',
+      'margin-top': '24px',
+      'margin-bottom': '10px',
+      'line-height': '1.6',
+      'letter-spacing': '1.2px',
+    },
+    // 四级标题：与正文并排、靠字重 600 轻描淡写，不抢戏
+    h4: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#7a6a58',
+      'margin-top': '18px',
+      'margin-bottom': '8px',
+      'line-height': '1.6',
+      'letter-spacing': '0.8px',
+    },
+    // 正文杂志行高 1.85（书斋是 2.0，这里略收紧）+ 字距 0.8px（不拉开）
+    p: {
+      'font-size': '15px',
+      'line-height': '1.85',
+      color: '#3a2d20',
+      'margin-top': '0',
+      'margin-bottom': '22px',
+      'letter-spacing': '0.8px',
     },
     blockquote: {
       'border-left': '4px solid #d98141',
@@ -351,9 +391,42 @@ export const spec: PersonaSpec = {
       'padding-bottom': '14px',
       'padding-left': '18px',
       'margin-top': '0',
-      'margin-bottom': '20px',
-      'border-radius': '12px',
+      'margin-bottom': '22px',
+      'border-radius': '10px',
       'font-style': 'italic',
+      'letter-spacing': '0.6px',
+    },
+    // 列表：行距宽松（生活清单需要呼吸感）
+    ul: { 'padding-left': '20px', 'margin-top': '0', 'margin-bottom': '22px' },
+    ol: { 'padding-left': '20px', 'margin-top': '0', 'margin-bottom': '22px' },
+    li: {
+      'margin-bottom': '10px',
+      'line-height': '1.85',
+      color: '#3a2d20',
+      'letter-spacing': '0.6px',
+    },
+    // 强调：字重 600（不 700）+ 同文字色，克制不广告感
+    strong: { 'font-weight': '600', color: '#3a2d20' },
+    em: { 'font-style': 'italic', color: '#7a6a58' },
+    // 链接：走主色暖橙，下划线保持可识别
+    a: { color: '#d98141', 'text-decoration': 'underline' },
+    // 分割线：细发丝、暖边框色，上下留白比 default 大
+    hr: {
+      border: 'none',
+      height: '1px',
+      'background-color': '#e0d1ba',
+      'margin-top': '28px',
+      'margin-bottom': '28px',
+    },
+    // 图片：软圆角（10px，不是 0 直角也不是 6px 教程感）
+    img: {
+      'max-width': '100%',
+      display: 'block',
+      'margin-top': '12px',
+      'margin-right': 'auto',
+      'margin-bottom': '12px',
+      'margin-left': 'auto',
+      'border-radius': '10px',
     },
     pre: {
       'background-color': '#fffaef',
@@ -384,15 +457,104 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
-  // 容器视觉（仅 quoteCard，与原 index.ts 对齐）
+  // 容器视觉
   // ============================================================
   containers: {
+    // 短札引子：大 padding + 暖底 + 无边框，靠留白定义空间
+    intro: {
+      'background-color': '#f2ead8',
+      'border-radius': '10px',
+      padding: '20px 22px',
+      margin: '0 0 28px 0',
+      color: '#7a6a58',
+      'letter-spacing': '0.8px',
+      'line-height': '1.85',
+    },
+    // 署名：左侧 3px 暖橙竖条 + 无底色无圆角
+    author: {
+      'border-left': '3px solid #d98141',
+      'background-color': 'transparent',
+      'border-radius': '0',
+      padding: '6px 0 6px 14px',
+      margin: '18px 0',
+      color: '#3a2d20',
+      'font-size': '14px',
+    },
+    // 扉页：宽松外边距，图片软圆角由 img 元素接管
+    cover: {
+      margin: '0 0 32px 0',
+    },
+    // 提示四件套：variant 接管外壳，此处仅声明以计入 voice 覆盖
+    // 各自 soft 底色由 status token 驱动，靠 variant 形状差异区分
+    tip: {
+      'background-color': '#eef3e4',
+      'border-radius': '8px',
+      padding: '14px 18px',
+      margin: '18px 0',
+    },
+    warning: {
+      'background-color': '#fcf1dc',
+      'border-radius': '8px',
+      padding: '14px 18px',
+      margin: '18px 0',
+    },
+    info: {
+      'background-color': '#e6edf3',
+      'border-radius': '8px',
+      padding: '14px 18px',
+      margin: '18px 0',
+    },
+    danger: {
+      'background-color': '#f8e1dc',
+      'border-radius': '8px',
+      padding: '16px 18px',
+      margin: '18px 0',
+    },
+    // 小记：无框无底色，仅左侧内缩，像书边的铅笔标注
+    note: {
+      __reset: true,
+      'background-color': 'transparent',
+      padding: '4px 0 4px 20px',
+      margin: '16px 0',
+      'border-radius': '0',
+    },
     quoteCard: {
       'background-color': '#fffaf1',
       padding: '22px 20px',
       margin: '22px 0',
-      'border-radius': '14px',
+      'border-radius': '12px',
       border: '1px dashed #e0d1ba',
+    },
+    // 重音段：大内缩 + 字号升 1px + 无底色，靠留白和字距自然"抬头"
+    highlight: {
+      'background-color': 'transparent',
+      padding: '8px 28px',
+      margin: '22px 0',
+      'border-radius': '0',
+      'font-size': '16px',
+      'font-weight': '500',
+      'letter-spacing': '1px',
+    },
+    // 卷末：宽松上下 padding + 无底色，与正文保持同一"白纸"底
+    footerCTA: {
+      margin: '32px 0',
+      padding: '28px 0 20px 0',
+      'background-color': 'transparent',
+      'border-radius': '0',
+    },
+    // 书单：暖底 + 内缩，与 intro 同血统但更紧凑
+    recommend: {
+      margin: '24px 0',
+      padding: '18px 22px',
+      'background-color': '#f2ead8',
+      'border-radius': '10px',
+    },
+    // 印章位：居中底色 + 细边框内衬，让 QR code 落在暖底上
+    qrcode: {
+      margin: '28px 0',
+      padding: '18px',
+      'background-color': '#faf6f0',
+      'border-radius': '10px',
     },
   },
 

@@ -663,6 +663,81 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 内层元素 inline style 槽位（renderer 不硬编码，主题通过 spec.innerStyles 接管）
+  // ============================================================
+  innerStyles: {
+    // abstract 导读 kicker · 文首最强势的"栏头"信号
+    // 对位设计稿 component 02（toc kicker）& 15（callout kicker）：
+    //   font-size:10px / letter-spacing:0.2em / color:#e85a3c 是 mook 全篇 kicker 母型。
+    // 在此基础上加 border-bottom 1px hairline + padding-bottom 让 kicker 自成"栏头"——
+    // 区别于其余 kicker（其余不加 border），作为"文首导读"给最强的形式感。
+    abstractKicker: {
+      color: '#e85a3c',
+      'font-size': '10px',
+      'font-weight': '600',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'padding-bottom': '5px',
+      'border-bottom': '1px solid #c7bfb0',
+      'margin-bottom': '10px',
+      display: 'block',
+    },
+    // key-number 大数字本体 · "杂志大字"气质
+    // mook 用非典型字号（28px，不是 32px 标准值）+ italic 拉出"印刷大字"的动态感；
+    // 对位设计稿 cover-header 的"56px 300 weight #e85a3c"大数字精神，
+    // 在 key-number 容器里以克制比例（28px）复现"数字主导版面"的签名张力。
+    keyNumberValue: {
+      color: '#e85a3c',
+      'font-size': '28px',
+      'font-weight': '300',
+      'font-style': 'italic',
+      'line-height': '1.1',
+      'letter-spacing': '-0.03em',
+      'margin-bottom': '6px',
+    },
+    // key-number 上方 kicker · 弱于 abstractKicker，无 border，纯小字字距撑开
+    // letter-spacing 0.18em（比 abstractKicker 的 0.2em 略窄）——细微层级差避免公式感。
+    keyNumberKicker: {
+      color: '#6b7885',
+      'font-size': '10px',
+      'font-weight': '400',
+      'letter-spacing': '0.18em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '4px',
+    },
+    // see-also "延伸阅读" 栏头 · 番外栏感
+    // 对位设计稿 component 02 toc 的"contents · 目次"kicker：
+    //   10px / letter-spacing:0.2em / textMuted 灰蓝。
+    // 比 abstractKicker 更退场（用 textMuted 而非 primary），
+    // letter-spacing 0.25em（全篇最大字距值）——用"最稀疏"的字间距
+    // 把 seeAlso 的"别册附录"感与主栏正文彻底拉开。
+    seeAlsoTitle: {
+      color: '#6b7885',
+      'font-size': '10px',
+      'font-weight': '400',
+      'letter-spacing': '0.25em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '10px',
+      display: 'block',
+    },
+    // editor-note kicker · 最权威的"機構按語"
+    // 对位设计稿 component 15（callout 编辑手记）：
+    //   "❹　编辑手记"用 10px / letter-spacing:0.2em / color:#e85a3c。
+    // 在 abstractKicker 基础上加 border-bottom 1px solid #e85a3c（朱橙线，而非 border 灰线）——
+    // 用 accent 色线条把 kicker 本身做成"红批"视觉，区别于 abstractKicker 的灰底线。
+    editorNoteKicker: {
+      color: '#e85a3c',
+      'font-size': '10px',
+      'font-weight': '600',
+      'letter-spacing': '0.2em',
+      'padding-bottom': '5px',
+      'border-bottom': '1px solid #e85a3c',
+      'margin-bottom': '12px',
+      display: 'block',
+    },
+  },
+
+  // ============================================================
   // 模板片段（commonTemplates 隐式合并，本处仅覆盖需要 mook voice 的项）
   // ============================================================
   templates: {
