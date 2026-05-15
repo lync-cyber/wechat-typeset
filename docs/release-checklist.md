@@ -68,7 +68,7 @@ node serve.mjs            # 或双击 ./launcher.{bat,command}
 
 **媒体**
 
-- [ ] `mpvoice`（占位）/ `mpvideo`（`vid=` 占位 / `qqvid=` 渲染 iframe）
+- [ ] `voice-card`（占位）/ `video-card`（`vid=` 占位 / `qqvid=` 渲染 iframe）
 
 **兜底**
 

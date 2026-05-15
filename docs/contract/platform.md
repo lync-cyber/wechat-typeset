@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | 塌版 / 丢样（基础契约容器） | wechat-typeset 的 bug（`wxPatch` 层未覆盖的平台行为） | 开 [issue](https://github.com/lync-cyber/wechat-typeset/issues) |
 | `::: free` 里手写 HTML 塌了 | 写作者退出契约 | 自行承担——`free` 之外不要手写 HTML |
-| `mpvoice` / `mpvideo` 占位卡未替换为真节点 | 公众号后台功能，契约外 | 粘贴后在公众号编辑器用"插入音频/视频"补真节点 |
+| `voice-card` / `video-card` 占位卡未替换为真节点 | 公众号后台功能，契约外 | 粘贴后在公众号编辑器用"插入音频/视频"补真节点（mpvoice / mpvideo） |
 | 原创声明、封面图、小程序卡片缺失 | 公众号后台功能，契约外 | 后台发文时手动配置 |
 | 自定义扩展容器（fork 私有）塌了 | fork 维护方 | 自行修 wxPatch 或回退到 `::: free` |
 
