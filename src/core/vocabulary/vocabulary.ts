@@ -36,12 +36,13 @@ import { VARIANT_IDS } from '../themes/types'
  * 作者心智分组。组件库 UI 按此分 tab；LLM 做"推荐容器"时也按此聚合。
  */
 export type ContainerCategory =
-  | 'structure' // 骨架：intro / cover / author / section-title
-  | 'admonition' // 五态提示：tip / warning / info / danger / note
-  | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps
-  | 'navigation' // 导航/收束：divider / footer-cta / recommend
-  | 'media' // 媒体：qrcode / mpvoice / mpvideo
-  | 'signature' // 签名块：abstract / key-number / see-also
+  | 'structure' // 骨架：intro / cover / author / section-title / author-bio / masthead / byline / editorial-header
+  | 'admonition' // 五态提示：tip / warning / info / danger / note / announcement / callout-group
+  | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
+  | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
+  | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
+  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes / refs / qa-block
+  | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
   | 'free' // 兜底 escape hatch：free
 
 /**
@@ -261,7 +262,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'toc',
     styleKey: 'toc',
-    category: 'structure',
+    category: 'navigation',
     pack: 'pack:editorial',
     fenceLength: 4,
     children: ['toc-item'],
@@ -288,7 +289,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'toc-item',
     styleKey: null,
-    category: 'structure',
+    category: 'navigation',
     pack: 'pack:editorial',
     parent: 'toc',
     fenceLength: 3,
@@ -371,7 +372,10 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
         enum: VARIANT_IDS.note,
       },
     ],
-    description: 'note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。',
+    description:
+      'note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。' +
+      '与 editor-note 的边界：note 是"作者**自己**附在正文边上的注脚"（题外话 / 题中题外）；' +
+      'editor-note 是"**编辑部**以机构身份对全文加按语"（主色左条 + 强 kicker）。语气主体不同。',
     example: '::: note 补注\n内容 …\n:::\n',
   },
 
@@ -390,7 +394,10 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'highlight',
     category: 'content',
     fenceLength: 3,
-    description: '高亮段落（bgMuted 底色块）。无 variant 切换。',
+    description:
+      '行内高亮段（bgMuted 底色块，无 variant）。与 quote-card 的边界：' +
+      'quote-card 是"成段引用"（外部话语、有 variant 骨架），highlight 是"作者自己想强调的一段话"（无骨架切换、视觉更轻）。' +
+      '想强调一句"我要让读者停下来"用 highlight；想引用一段他人话用 quote-card。',
     example: '::: highlight\n需要读者停下来的一段话 …\n:::\n',
   },
   {
@@ -434,7 +441,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'qa-block',
     styleKey: 'qaBlock',
-    category: 'content',
+    category: 'signature',
     pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
@@ -452,12 +459,15 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
 
   // ── navigation（3） ──────────────────────────────────────
   {
+    // divider 是"styleKey=null + variantKind 非空"的唯一一对组合：
+    // variant 模块直接产出完整 HTML（含 SVG / line），没有 wrapper CSS 槽位需要 themeCSS 注入。
+    // 因此不进 ThemeContainers 字段集，仅按 variantKind 分派。
     name: 'divider',
     styleKey: null,
     category: 'navigation',
     variantKind: 'divider',
     fenceLength: 3,
-    description: '装饰分隔线。可切 wave / dots / flower / rule / glyph。',
+    description: '装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。',
     example: '::: divider\n:::\n',
   },
   {
@@ -485,7 +495,11 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'recommend',
     category: 'navigation',
     fenceLength: 3,
-    description: '推荐阅读列表。',
+    description:
+      '推荐阅读链接列表（"看完这篇还可以读"）。与 see-also 的边界：' +
+      'recommend 是面向**读者**的"延伸阅读"（同一作者/账号的其他文章、相关公众号推送）；' +
+      'see-also 是面向**论证**的学术性"参考引用"（论文 / 原始数据 / 二次研究）。' +
+      '一般文章用 recommend；学术 / 调研类文章用 see-also。',
     example: '::: recommend\n- [前作](url)\n- [续篇](url)\n:::\n',
   },
 
@@ -493,7 +507,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'qrcode',
     styleKey: 'qrcode',
-    category: 'media',
+    category: 'navigation',
     fenceLength: 3,
     attrs: [
       {
@@ -515,7 +529,9 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       },
     ],
     description:
-      '二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。',
+      '通用二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。' +
+      '与 qr-follow 的边界：qrcode 是"任意场景的 QR"（赞赏码 / 活动链接 / 小程序），布局极简；' +
+      'qr-follow 是 pack:editorial 的"订阅二维码栏"（左 QR + 右 kicker+title+desc 三行版式），刊物收尾专用。',
     example: '::: qrcode text="https://mp.weixin.qq.com/s/xxx"\n扫码关注\n:::\n',
   },
   {
@@ -577,13 +593,15 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'seeAlso',
     category: 'signature',
     fenceLength: 3,
-    description: '相关阅读链接列表（academic-frontier / tech-explainer 的"扩展阅读"）。',
+    description:
+      '学术参考引用列表（"本文论证依据"）。与 recommend 的边界见 recommend.description；' +
+      '此容器走 textMuted 小字 + uppercase kicker，视觉上比 recommend 更克制，意图强调"凭证"而非"延伸娱乐"。',
     example: '::: see-also 延伸阅读\n- [相关论文](url)\n:::\n',
   },
   {
     name: 'kpi-dashboard',
     styleKey: 'kpiDashboard',
-    category: 'signature',
+    category: 'data',
     pack: 'theme:data-brief',
     fenceLength: 4,
     children: ['kpi-item'],
@@ -599,7 +617,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'kpi-item',
     styleKey: null,
-    category: 'signature',
+    category: 'data',
     pack: 'theme:data-brief',
     parent: 'kpi-dashboard',
     fenceLength: 3,
@@ -624,7 +642,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'bar-chart',
     styleKey: 'barChart',
-    category: 'signature',
+    category: 'data',
     pack: 'theme:data-brief',
     fenceLength: 4,
     children: ['bar'],
@@ -639,7 +657,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'bar',
     styleKey: null,
-    category: 'signature',
+    category: 'data',
     pack: 'theme:data-brief',
     parent: 'bar-chart',
     fenceLength: 3,
@@ -676,7 +694,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'cta-bar',
     styleKey: 'ctaBar',
-    category: 'signature',
+    category: 'navigation',
     pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
@@ -691,7 +709,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'qr-follow',
     styleKey: 'qrFollow',
-    category: 'signature',
+    category: 'navigation',
     pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
