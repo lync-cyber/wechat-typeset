@@ -126,14 +126,15 @@
 
 .markdown-body kbd {
   display: inline-block;
-  background-color: #2f2920;
+  background-color: #3a3328;
   color: #ebdfca;
   border: 1px solid #4a4034;
   border-bottom-width: 2px;
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 1px 6px;
   font-size: 12px;
   line-height: 1.4;
+  letter-spacing: 0.6px;
   vertical-align: middle;
 }
 
@@ -193,20 +194,26 @@
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
-  font-size: 14px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  letter-spacing: 0.4px;
 }
 
 .markdown-body th {
-  border: 1px solid #4a4034;
-  padding: 6px 10px;
-  background-color: #2f2920;
+  background-color: #ebdfca;
+  color: #262019;
+  border: 1px dashed #4a4034;
+  padding: 5px 10px;
+  font-weight: 600;
   text-align: left;
+  letter-spacing: 0.8px;
 }
 
 .markdown-body td {
-  border: 1px solid #4a4034;
-  padding: 6px 10px;
+  border: none;
+  border-bottom: 1px dashed #4a4034;
+  padding: 5px 10px;
+  color: #ebdfca;
 }
 
 .markdown-body strong {
@@ -356,8 +363,13 @@
 }
 
 .markdown-body .container-image-caption {
-  margin: 18px 0;
-  text-align: center;
+  margin: 8px 0 18px 0;
+  text-align: left;
+  font-size: 13px;
+  color: #9a8f7e;
+  letter-spacing: 0.4px;
+  padding-left: 14px;
+  border-left: 2px solid #4a4034;
 }
 
 .markdown-body .container-timeline {

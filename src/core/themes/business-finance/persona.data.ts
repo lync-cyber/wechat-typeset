@@ -424,6 +424,45 @@ export const spec: PersonaSpec = {
       'border-radius': '2px',
       'font-size': '14px',
     },
+    // Bloomberg Terminal / 财经账本表格：radius 0 直角 + 紧凑 padding + tabular nums 感
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '18px',
+      'font-size': '13px',
+      'border-radius': '0',
+    },
+    th: {
+      'background-color': '#2a1a14', // primary 深栗墨反白表头（账本记账栏）
+      color: '#fefefe',
+      border: '1px solid #d0cec8',
+      'border-bottom': 'none',
+      padding: '5px 10px',
+      'font-weight': '700',
+      'text-align': 'left',
+      'letter-spacing': '0.3px',
+    },
+    td: {
+      border: 'none',
+      'border-bottom': '1px solid #d0cec8', // 行间 hairline + 无侧线（账本紧凑直角）
+      padding: '5px 10px',
+      color: '#0f141b',
+      'font-variant-numeric': 'tabular-nums',
+    },
+    // 财经稿少用 kbd，给"账本表单元格"风 — radius 0 直角 + 等宽紧凑
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#e6e2d8',
+      color: '#0f141b',
+      border: '1px solid #d0cec8',
+      'border-radius': '0',
+      padding: '1px 5px',
+      'font-size': '12px',
+      'line-height': '1.4',
+      'letter-spacing': '0',
+      'vertical-align': 'middle',
+    },
   },
 
   // ============================================================
@@ -544,6 +583,24 @@ export const spec: PersonaSpec = {
       padding: '0',
       'background-color': 'transparent',
       'border-radius': '0',
+    },
+    // "Source: 央行 2026Q1 · n=1432" 数据图注风 — textMuted serif 紧凑（FT 图表来源标注）
+    imageCaption: {
+      margin: '4px 0 16px 0',
+      'text-align': 'left',
+      'font-size': '11px',
+      color: '#56606e',
+      'letter-spacing': '0.2px',
+      'padding-top': '4px',
+      'border-top': '1px solid #d0cec8',
+    },
+    // 宏观政策时间轴：上下 1.5px primary 横线 + 无底色（与 footerCTA 同语汇）
+    timeline: {
+      margin: '24px 0',
+      'border-top': '1.5px solid #2a1a14',
+      'border-bottom': '1.5px solid #2a1a14',
+      padding: '18px 0',
+      'background-color': 'transparent',
     },
   },
 

@@ -384,7 +384,31 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-style': 'italic',
     },
-    // kbd：规范 §1.2 键帽。浅底 + 四边 1px + 底边 2px（不对称 = 立体）
+    // Stripe Docs / MDN API reference 表格：th bgMuted + 主色 1px 下划线 + 中字距
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '20px',
+      'font-size': '13px',
+      'letter-spacing': '0.2px',
+    },
+    th: {
+      'background-color': '#e8ecf1', // bgMuted 灰蓝表头底（API reference 标准）
+      color: '#1a2233',
+      border: '1px solid #d9dee5',
+      'border-bottom': '2px solid #0066cc', // 主色下划线：Stripe Docs 签名
+      padding: '7px 12px',
+      'font-weight': '600',
+      'text-align': 'left',
+      'letter-spacing': '0.3px',
+    },
+    td: {
+      border: '1px solid #d9dee5',
+      padding: '7px 12px',
+      color: '#1a2233',
+    },
+    // Stripe / MDN 键帽：白底 + 1px 细边 + 底边 2px 模拟立体凹陷（文档白昼家族）
     kbd: {
       display: 'inline-block',
       'background-color': '#fafbfc',
@@ -581,6 +605,16 @@ export const spec: PersonaSpec = {
       padding: '10px 0 4px 0',
       margin: '18px 0',
       'border-radius': '0',
+    },
+    // "Figure N: ..." 数字编号注脚风 — 居中 textMuted + 1px 顶线（Stripe Docs 图说）
+    imageCaption: {
+      margin: '4px 0 18px 0',
+      'text-align': 'center',
+      'font-size': '12px',
+      color: '#5c6778',
+      'padding-top': '6px',
+      'border-top': '1px solid #d9dee5',
+      'letter-spacing': '0.2px',
     },
   },
 
