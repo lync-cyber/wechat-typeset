@@ -358,6 +358,9 @@ export type AdmonitionVariantId =
   | 'report-section'
   // 数据简报单行：左 3px 色条 + 实色徽章 + 紧凑单行正文（data-brief 专属）
   | 'news-row'
+  // 苏黎世下划线：实色徽章 + 1px 黑竖分隔 + 1px 黑底线（swiss-grid 专属）
+  // 设计稿 multi-callout 母本，四态独立 ::: 块连续罗列即成一栏，无需 :::: callout-group
+  | 'news-underline'
   // 编集附注 単字：参 / 編 / 注 / 禁 单字 CJK 标签 + 米卡纸底 + 主色左条
   // （editorial-mook 专属；POPEYE / BRUTUS 系编集所附注的母语形态）
   | 'mook-tag'
@@ -546,6 +549,7 @@ export const VARIANT_IDS = {
     'magazine-pull',
     'report-section',
     'news-row',
+    'news-underline',
     'mook-tag',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [

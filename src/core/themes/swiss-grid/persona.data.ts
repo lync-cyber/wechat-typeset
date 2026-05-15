@@ -22,8 +22,8 @@
  *   仅在 tokens / variants / innerStyles 上分叉视觉个性。
  *
  * 复用策略：
- *   - admonition variant 走 `news-row`（左 3px 色条 + 实色徽章 INFO/TIP/WARN/STOP）——
- *     与设计稿 multi-callout 一模一样；renderer 不动一行
+ *   - admonition variant 走 `news-underline`（实色徽章 + 1px 黑竖分隔 + 1px 黑底线）——
+ *     设计稿 multi-callout 母本；四态独立 ::: 块连续罗列时下划线自然贴合成一栏
  *   - 期号横幅（issue-banner）走 `key-number` 容器 —— kicker / value / body 三段
  *     vertical stack 适配 375px 移动端，比强行 2 栏 layout 更稳
  *   - 编者按（editor-note）走"黑底白字 header bar" —— 通过 innerStyles.editorNoteKicker
@@ -183,7 +183,7 @@ export const spec: PersonaSpec = {
   // 骨架变体
   // ============================================================
   variants: {
-    admonition: 'news-row', // ★ 设计稿 multi-callout 的 1:1 复刻 (INFO/TIP/WARN/STOP 左色条 + 实色徽章)
+    admonition: 'news-underline', // ★ 设计稿 multi-callout 母本：实色徽章 + 1px 竖分隔 + 1px 底线（四态独立 ::: 块连续罗列即成一栏，无需 :::: callout-group）
     quote: 'classic', // pull-quote 走 blockquote element 自定义样式（左 12px 红条 + 25% 偏移）
     compare: 'data-card', // 数据卡（顶 3px 色条 + 大号数字）—— 设计稿少见,保留备用
     steps: 'number-circle',

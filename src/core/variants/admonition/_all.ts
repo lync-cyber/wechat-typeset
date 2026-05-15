@@ -25,6 +25,7 @@ import bubbleOrganic from './bubble-organic'
 import magazinePull from './magazine-pull'
 import reportSection from './report-section'
 import newsRow from './news-row'
+import newsUnderline from './news-underline'
 import mookTag from './mook-tag'
 
 export default [
@@ -45,5 +46,6 @@ export default [
   magazinePull,
   reportSection,
   newsRow,
+  newsUnderline,
   mookTag,
 ]

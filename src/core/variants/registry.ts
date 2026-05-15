@@ -69,6 +69,7 @@ const ADMONITION_ORDER: readonly string[] = [
   'magazine-pull',
   'report-section',
   'news-row',
+  'news-underline',
   'mook-tag',
 ]
 const QUOTE_ORDER: readonly string[] = [

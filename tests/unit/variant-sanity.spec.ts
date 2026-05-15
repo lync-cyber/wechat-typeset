@@ -158,11 +158,11 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 38 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
+  it('6 kind × 39 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      admonition: 18, // +1: news-row (data-brief 家族) +1: mook-tag (editorial-mook 家族)
+      admonition: 19, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook)
       quote: 5, // +1: tilted-sticker (brutalist 家族 punk-zine 撕贴纸)
       compare: 4, // +1: data-card (data-brief 家族)
       steps: 3,

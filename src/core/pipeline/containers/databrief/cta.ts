@@ -39,35 +39,40 @@ export const ctaBarContainer: ContainerRenderer = {
     // kicker（info）声明时：渲染顶部黑底白字 header bar（与 editor-note innerStyles 同源审美），
     // 三栏 cta 落在 header 下方，整体被 ctx.containers.ctaBar 的外框 wrap。
     // kicker 缺省 = 经典三栏，与 R10 前行为字节等价。
+    //
+    // 单元格之间的分隔走"左/中格的 border-right"——共享 1px 黑线，
+    // 不再用 border-spacing 留白缝（设计稿的三栏是 flush 的）。
     const wrapperCSS = kicker
       ? inline(ctx.containers.ctaBar)
-      : `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate;` +
+      : `display:table;width:100%;table-layout:fixed;border-collapse:collapse;` +
         inline(ctx.containers.ctaBar)
-    const outlineCell = [
+    const baseCell = [
       'display:table-cell',
-      'padding:10px 0',
+      'padding:12px 0',
       'text-align:center',
-      `border:1px solid ${c.text}`,
-      'font-size:12px',
-      `color:${c.text}`,
+      'font-size:11px',
+      'letter-spacing:0.1em',
       'box-sizing:border-box',
+    ]
+    const outlineCellLeftMid = [
+      ...baseCell,
+      `color:${c.text}`,
+      `border-right:1px solid ${c.text}`,
     ].join(';')
+    const outlineCellRight = [...baseCell, `color:${c.text}`].join(';')
     const fillCell = [
-      'display:table-cell',
-      'padding:10px 0',
-      'text-align:center',
+      ...baseCell,
       `background-color:${c.primary}`,
-      'font-size:12px',
       `color:${c.textInverse}`,
       'font-weight:500',
-      'box-sizing:border-box',
+      `border-right:1px solid ${c.text}`,
     ].join(';')
     const cellsCSS =
-      `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate`
+      `display:table;width:100%;table-layout:fixed;border-collapse:collapse`
     const cells =
-      `<span style="${outlineCell}">${escText(like)}</span>` +
+      `<span style="${outlineCellLeftMid}">${escText(like)}</span>` +
       `<span style="${fillCell}">${escText(star)}</span>` +
-      `<span style="${outlineCell}">${escText(share)}</span>`
+      `<span style="${outlineCellRight}">${escText(share)}</span>`
     if (kicker) {
       const headerCSS = [
         'display:block',
@@ -115,15 +120,22 @@ export const qrFollowContainer: ContainerRenderer = {
     const qrUrl = ctx.attrs.qr ?? ''
     // wrapper 装饰由 ctx.containers.qrFollow 决定；display:table 排版骨架由
     // renderer 保证（"左 QR 右文字"是本容器的视觉契约）。
+    // border-collapse:collapse + 左格 border-right —— 与外框 1px 共享，无白缝。
     const wrapperCSS =
-      `display:table;width:100%;table-layout:auto;border-collapse:separate;` +
+      `display:table;width:100%;table-layout:auto;border-collapse:collapse;` +
       inline(ctx.containers.qrFollow)
-    // 左格：QR
-    const qrCellCSS = 'display:table-cell;vertical-align:middle;width:60px;padding-right:14px'
-    const qrImgCSS = 'display:block;width:60px;height:60px;background-color:#fff'
+    // 左格：QR —— 四向 12px 内边距 + 右侧 1px 黑分隔线（设计稿 02-swiss-grid.html:485）
+    const qrCellCSS = [
+      'display:table-cell',
+      'vertical-align:middle',
+      'padding:12px',
+      `border-right:1px solid ${c.text}`,
+      `background-color:${c.bg}`,
+    ].join(';')
+    const qrImgCSS = 'display:block;width:64px;height:64px'
     // 占位 QR SVG：仿真三角眼 + 数据点
     const qrSvg =
-      `<svg viewBox="0 0 60 60" width="60" height="60" style="${qrImgCSS}">` +
+      `<svg viewBox="0 0 60 60" width="64" height="64" style="${qrImgCSS}">` +
       `<g fill="${c.text}">` +
       `<rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="#fff"/><rect x="9" y="9" width="4" height="4"/>` +
       `<rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="#fff"/><rect x="47" y="9" width="4" height="4"/>` +
@@ -136,26 +148,27 @@ export const qrFollowContainer: ContainerRenderer = {
     const qrEl = qrUrl
       ? `<img src="${escText(qrUrl)}" alt="QR" style="${qrImgCSS}"/>`
       : qrSvg
-    // 右格：三行文字
-    const textCellCSS = 'display:table-cell;vertical-align:middle'
+    // 右格：三行文字 —— 自带 padding，不再依赖左格 padding-right 撑开
+    const textCellCSS = 'display:table-cell;vertical-align:middle;padding:10px 14px'
     const kickerCSS = [
       'font-family:Menlo,Monaco,monospace',
-      'font-size:10px',
+      'font-size:9px',
       'font-weight:700',
       `color:${c.primary}`,
-      'letter-spacing:0.15em',
+      'letter-spacing:0.2em',
     ].join(';')
     const titleCSS = [
       'font-size:14px',
       'font-weight:700',
       `color:${c.text}`,
-      'margin-top:3px',
+      'margin-top:4px',
       'letter-spacing:-0.01em',
     ].join(';')
     const descCSS = [
-      'font-size:11px',
+      'font-size:10px',
       `color:${c.textMuted}`,
-      'margin-top:3px',
+      'margin-top:4px',
+      'line-height:1.5',
     ].join(';')
     const descEl = desc
       ? `<section style="${descCSS}">${escText(desc)}</section>`
