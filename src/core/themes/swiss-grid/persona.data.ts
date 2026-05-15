@@ -650,16 +650,19 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.01em',
       color: '#333333',
     },
-    // refs：本主题里承担"NOTES 脚注"角色（refs 自带 kicker, footnotes 不带）
     refs: {
       __reset: true,
       'border-top': '1px solid #000000',
       'padding-top': '10px',
+      'padding-right': '4px',
       margin: '24px 0',
       'font-size': '10px',
       'line-height': '1.7',
       'letter-spacing': '0.01em',
       color: '#333333',
+      'max-height': '320px',
+      'overflow-y': 'auto',
+      '-webkit-overflow-scrolling': 'touch',
     },
     // cta-bar：设计稿"IF YOU LIKED THIS 黑底头 + 三栏 (描边/实色/描边)"
     // renderer 固定 table 三栏: 描边 / fill / 描边; fill 走 primary=red, 与设计稿一致
