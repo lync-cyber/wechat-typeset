@@ -454,6 +454,49 @@ export const spec: PersonaSpec = {
       'border-radius': '4px',
       'font-size': '14px',
     },
+    // 柔键：bgSoft 暖米底 + 大圆角 (radius.md=12px) + 不对称边框（底边加重代替 box-shadow），手账标签感
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#f2ead8',
+      color: '#3a2d20',
+      'border-top': '1px solid #e0d1ba',
+      'border-right': '1px solid #e0d1ba',
+      'border-bottom': '2px solid #d98141',
+      'border-left': '1px solid #e0d1ba',
+      'border-radius': '12px',
+      padding: '1px 8px',
+      'font-size': '12px',
+      'line-height': '1.4',
+      'vertical-align': 'middle',
+    },
+    // 慢生活柔表：radius.md 圆角 + textMuted serif 色系 + 弱 border（行间 hairline，无列框）
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '22px',
+      'font-size': '14px',
+    },
+    th: {
+      'border-bottom': '1.5px solid #d98141',
+      'border-top': 'none',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '8px 12px',
+      'background-color': 'transparent',
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#3a2d20',
+      'letter-spacing': '0.5px',
+    },
+    td: {
+      'border-bottom': '1px solid #e0d1ba',
+      'border-top': 'none',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '8px 12px',
+      color: '#3a2d20',
+    },
   },
 
   // ============================================================
@@ -556,10 +599,32 @@ export const spec: PersonaSpec = {
       'background-color': '#faf6f0',
       'border-radius': '10px',
     },
+    // 柔图注：居中 serif 色系小字 + 字距 0 + textMuted 弱化，暖米底上的轻描淡写
+    imageCaption: {
+      margin: '6px 0 20px',
+      'text-align': 'center',
+      'font-size': '12px',
+      color: '#7a6a58',
+      'font-style': 'italic',
+      'letter-spacing': '0',
+      'line-height': '1.6',
+    },
+    // 慢生活作者卡：圆角软底 + 暖橙顶线，scrapbook 签名感
+    authorBio: {
+      __reset: true,
+      'background-color': '#f2ead8',
+      'border-top': '2px solid #d98141',
+      'border-radius': '12px',
+      padding: '18px 20px',
+      margin: '28px 0',
+      color: '#3a2d20',
+    },
   },
 
-  // 暂不声明签名容器
-  signatureContainers: [],
+  signatureContainers: [
+    'imageCaption', // 柔图注（居中 italic textMuted 小字）
+    'authorBio', // 慢生活作者卡（圆角软底 + 暖橙顶线）
+  ],
 
   // ============================================================
   // 模板覆盖（原 index.ts 的 cover / authorBar）

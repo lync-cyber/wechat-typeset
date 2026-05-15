@@ -192,15 +192,28 @@
 }
 
 .markdown-body th {
-  border: 1px solid #4a6080;
+  border-bottom: 1px solid #d97a3c;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 6px 10px;
-  background-color: #14263d;
+  background-color: transparent;
   text-align: left;
+  font-weight: 600;
+  color: #d97a3c;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  border: 1px solid #4a6080;
 }
 
 .markdown-body td {
+  border-bottom: 1px solid #4a6080;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 7px 10px;
+  color: #d9c9a8;
   border: 1px solid #4a6080;
-  padding: 6px 10px;
 }
 
 .markdown-body strong {
@@ -270,9 +283,11 @@
 
 .markdown-body .container-author-bio {
   background-color: #14263d;
-  border-radius: 0px;
-  padding: 14px 16px;
-  margin: 20px 0;
+  border-top: 2px solid #d97a3c;
+  border-radius: 0;
+  padding: 16px 18px;
+  margin: 24px 0;
+  color: #d9c9a8;
 }
 
 .markdown-body .container-section-title {
@@ -346,12 +361,19 @@
 }
 
 .markdown-body .container-image-caption {
-  margin: 18px 0;
-  text-align: center;
+  margin: 4px 0 14px;
+  text-align: left;
+  font-size: 11px;
+  color: #d97a3c;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
 }
 
 .markdown-body .container-timeline {
+  border-left: 1px solid #d97a3c;
+  padding: 0 0 0 18px;
   margin: 20px 0;
+  background-color: transparent;
 }
 
 .markdown-body .container-qa-block {

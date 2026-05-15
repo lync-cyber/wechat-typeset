@@ -124,13 +124,17 @@
   display: inline-block;
   background-color: #f0f0f0;
   color: #000000;
+  border-top: 1px solid #000000;
+  border-right: 1px solid #000000;
+  border-bottom: 2px solid #000000;
+  border-left: 1px solid #000000;
+  border-radius: 0;
+  padding: 0 5px;
+  font-size: 11px;
+  line-height: 1.5;
+  vertical-align: middle;
   border: 1px solid #000000;
   border-bottom-width: 2px;
-  border-radius: 3px;
-  padding: 1px 6px;
-  font-size: 12px;
-  line-height: 1.4;
-  vertical-align: middle;
 }
 
 .markdown-body pre {
@@ -183,20 +187,34 @@
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
-  font-size: 14px;
+  margin-bottom: 16px;
+  font-size: 13px;
 }
 
 .markdown-body th {
-  border: 1px solid #000000;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  border-left: none;
+  border-right: none;
   padding: 6px 10px;
-  background-color: #f0f0f0;
+  background-color: transparent;
   text-align: left;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #000000;
+  border: 1px solid #000000;
 }
 
 .markdown-body td {
-  border: 1px solid #000000;
+  border-top: none;
+  border-bottom: 1px solid #e8e8e8;
+  border-left: none;
+  border-right: none;
   padding: 6px 10px;
+  color: #000000;
+  border: 1px solid #000000;
 }
 
 .markdown-body strong {
@@ -310,11 +328,14 @@
 }
 
 .markdown-body .container-announcement {
-  background-color: #fde0e2;
-  border-left: 4px solid #e30613;
-  padding: 14px 16px;
+  background-color: #e30613;
+  color: #ffffff;
+  padding: 12px 16px;
   margin: 18px 0;
-  border-radius: 0px;
+  border-radius: 0;
+  border: 1px solid #000000;
+  font-weight: 700;
+  letter-spacing: 0.05em;
 }
 
 .markdown-body .container-callout-group {
@@ -354,8 +375,12 @@
 }
 
 .markdown-body .container-image-caption {
-  margin: 18px 0;
-  text-align: center;
+  margin: 6px 0 16px;
+  text-align: left;
+  font-size: 10px;
+  color: #888888;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
 }
 
 .markdown-body .container-timeline {

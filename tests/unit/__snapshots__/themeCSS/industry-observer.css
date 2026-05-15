@@ -125,9 +125,9 @@
   display: inline-block;
   background-color: #f5efe1;
   color: #1a2332;
-  border: 1px solid #e0d6c0;
+  border: 1px solid #24364f;
   border-bottom-width: 2px;
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 1px 6px;
   font-size: 12px;
   line-height: 1.4;
@@ -189,20 +189,33 @@
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   font-size: 14px;
 }
 
 .markdown-body th {
-  border: 1px solid #e0d6c0;
+  border-bottom: 1.5px solid #24364f;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 6px 10px;
-  background-color: #f5efe1;
+  background-color: transparent;
   text-align: left;
+  font-weight: 600;
+  color: #24364f;
+  font-size: 13px;
+  border: 1px solid #e0d6c0;
 }
 
 .markdown-body td {
+  border-bottom: 1px solid #e0d6c0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 7px 10px;
+  color: #1a2332;
+  font-size: 14px;
   border: 1px solid #e0d6c0;
-  padding: 6px 10px;
 }
 
 .markdown-body strong {
@@ -266,9 +279,10 @@
 
 .markdown-body .container-author-bio {
   background-color: #f5efe1;
-  border-radius: 3px;
-  padding: 14px 16px;
-  margin: 20px 0;
+  border-top: 2px solid #24364f;
+  border-radius: 2px;
+  padding: 16px 18px;
+  margin: 28px 0;
 }
 
 .markdown-body .container-section-title {
@@ -340,12 +354,18 @@
 }
 
 .markdown-body .container-image-caption {
-  margin: 18px 0;
-  text-align: center;
+  margin: 8px 0 20px;
+  text-align: left;
+  font-size: 13px;
+  color: #5a6778;
+  font-style: italic;
+  line-height: 1.6;
 }
 
 .markdown-body .container-timeline {
-  margin: 20px 0;
+  border-left: 2px solid #24364f;
+  padding: 0 0 0 20px;
+  margin: 24px 0;
 }
 
 .markdown-body .container-qa-block {

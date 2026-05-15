@@ -269,7 +269,17 @@ export const spec: PersonaSpec = {
     note: 'side-bar', // 左 2px 标线 + 缩进，与 report-section 条款感呼应
   },
 
-  signatureContainers: ['cover', 'author', 'footerCTA', 'abstract', 'keyNumber', 'seeAlso'],
+  signatureContainers: [
+    'cover',
+    'author',
+    'footerCTA',
+    'abstract',
+    'keyNumber',
+    'seeAlso',
+    'imageCaption', // italic 居左图注，Stratechery 风
+    'authorBio', // newsletter 作者卡（作者 + bio + 期号）
+    'timeline', // newsletter 期号时间线
+  ],
 
   // ============================================================
   // 元素级样式（规范 §1.2）
@@ -397,6 +407,48 @@ export const spec: PersonaSpec = {
       'font-size': '14px',
       'font-weight': '500',
     },
+    // 米黄 newsletter 键：bgSoft 米底 + 暖墨蓝边（primary 色，无立体夸张感）
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#f5efe1',
+      color: '#1a2332',
+      border: '1px solid #24364f',
+      'border-bottom-width': '2px',
+      'border-radius': '2px',
+      padding: '1px 6px',
+      'font-size': '12px',
+      'line-height': '1.4',
+      'vertical-align': 'middle',
+    },
+    // Stratechery 米黄 newsletter 表：极简 hairline + serif 小字 + 数据栏感（无左右边框）
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '20px',
+      'font-size': '14px',
+    },
+    th: {
+      'border-bottom': '1.5px solid #24364f',
+      'border-top': 'none',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '6px 10px',
+      'background-color': 'transparent',
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#24364f',
+      'font-size': '13px',
+    },
+    td: {
+      'border-bottom': '1px solid #e0d6c0',
+      'border-top': 'none',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '7px 10px',
+      color: '#1a2332',
+      'font-size': '14px',
+    },
   },
 
   // ============================================================
@@ -506,6 +558,31 @@ export const spec: PersonaSpec = {
       padding: '0',
       'background-color': 'transparent',
       'border-radius': '0',
+    },
+    // Stratechery 图注：italic + 居左 textMuted，分析稿图注克制不喧宾
+    imageCaption: {
+      margin: '8px 0 20px',
+      'text-align': 'left',
+      'font-size': '13px',
+      color: '#5a6778',
+      'font-style': 'italic',
+      'line-height': '1.6',
+    },
+    // newsletter 作者卡：Stratechery 风"作者 + bio + 期号"卡，暖米底 + primary 顶线
+    authorBio: {
+      __reset: true,
+      'background-color': '#f5efe1',
+      'border-top': '2px solid #24364f',
+      'border-radius': '2px',
+      padding: '16px 18px',
+      margin: '28px 0',
+    },
+    // newsletter 期号时间线：左侧 primary 竖线 + accent 橙金点，报告演进感
+    timeline: {
+      __reset: true,
+      'border-left': '2px solid #24364f',
+      padding: '0 0 0 20px',
+      margin: '24px 0',
     },
   },
 

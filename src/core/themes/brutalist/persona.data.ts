@@ -214,6 +214,8 @@ export const spec: PersonaSpec = {
     'qrFollow', // 二维码关注
     'editorNote', // 编 者 按 callout（荧光黄整块）
     'colophon', // 下期预告 + 卷·期
+    'imageCaption', // 图注（// CAPTION 注释风 + 荧光黄）
+    'announcement', // 强警示横幅（荧光黄整块反色）
   ],
 
   // ============================================================
@@ -333,6 +335,43 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '13px',
       'font-weight': '700',
+    },
+    // 撕贴纸键：荧光黄底 + 黑实色边（全 1px 等粗）+ 字距 0，粗野徽章感
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#ebff00',
+      color: '#0a0a0a',
+      border: '1px solid #f0f0f0',
+      'border-radius': '0',
+      padding: '0 5px',
+      'font-size': '12px',
+      'font-weight': '700',
+      'letter-spacing': '0',
+      'line-height': '1.5',
+      'vertical-align': 'middle',
+    },
+    // 粗野黄黑表：radius 0 + 荧光黄 th 反色 + 全大写 + 1px 黑实色边
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '16px',
+      'font-size': '13px',
+    },
+    th: {
+      border: '1px solid #f0f0f0',
+      padding: '6px 10px',
+      'background-color': '#ebff00',
+      color: '#0a0a0a',
+      'text-align': 'left',
+      'font-weight': '700',
+      'text-transform': 'uppercase',
+      'letter-spacing': '0.05em',
+    },
+    td: {
+      border: '1px solid #f0f0f0',
+      padding: '6px 10px',
+      color: '#f0f0f0',
     },
   },
 
@@ -593,6 +632,27 @@ export const spec: PersonaSpec = {
       'margin-top': '24px',
       'padding-top': '12px',
       'border-radius': '0',
+    },
+    // 粗野图注：`// CAPTION` 注释风 + 荧光黄 + 等宽，终端输出感
+    imageCaption: {
+      __reset: true,
+      margin: '4px 0 16px',
+      'text-align': 'left',
+      'font-size': '11px',
+      color: '#ebff00',
+      'font-weight': '700',
+      'letter-spacing': '0.1em',
+    },
+    // 撕贴纸反色横幅：荧光黄整块 + 反色黑字 + 全大写，强势 punk-zine 通告
+    announcement: {
+      __reset: true,
+      'background-color': '#ebff00',
+      color: '#0a0a0a',
+      padding: '12px 16px',
+      margin: '18px 0',
+      'border-radius': '0',
+      'font-weight': '700',
+      'letter-spacing': '0.05em',
     },
   },
 
