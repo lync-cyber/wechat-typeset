@@ -48,6 +48,24 @@
   line-height: 1.5;
 }
 
+.markdown-body h5 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d3a4a;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7885;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 13px;
   line-height: 2.0;
@@ -106,12 +124,13 @@
   background-color: #f0ebe0;
   color: #2d3a4a;
   border: 1px solid #c7bfb0;
-  border-bottom-width: 2px;
-  border-radius: 3px;
-  padding: 1px 6px;
-  font-size: 12px;
-  line-height: 1.4;
+  border-radius: 0;
+  padding: 0px 4px;
+  font-size: 10px;
+  line-height: 1.6;
   vertical-align: middle;
+  letter-spacing: 0;
+  border-bottom-width: 2px;
 }
 
 .markdown-body pre {
@@ -169,13 +188,33 @@
 }
 
 .markdown-body th {
+  text-align: left;
+  font-weight: 600;
+  color: #e85a3c;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding-top: 3px;
+  padding-right: 10px;
+  padding-bottom: 8px;
+  padding-left: 0;
+  border-bottom: 1px solid #e85a3c;
+  background-color: transparent;
   border: 1px solid #c7bfb0;
   padding: 6px 10px;
-  background-color: #f0ebe0;
-  text-align: left;
 }
 
 .markdown-body td {
+  text-align: left;
+  color: #2d3a4a;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding-top: 6px;
+  padding-right: 10px;
+  padding-bottom: 6px;
+  padding-left: 0;
+  border-bottom: 1px solid #c7bfb0;
+  vertical-align: top;
   border: 1px solid #c7bfb0;
   padding: 6px 10px;
 }
@@ -208,6 +247,16 @@
   font-weight: 600;
 }
 
+.markdown-body s, .markdown-body del {
+  color: #6b7885;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #e85a3c;
+  text-decoration: underline;
+}
+
 .markdown-body .container-intro {
   background-color: transparent;
   border-radius: 0;
@@ -230,6 +279,17 @@
   font-size: 10px;
   color: #6b7885;
   letter-spacing: 0.3px;
+}
+
+.markdown-body .container-author-bio {
+  background-color: transparent;
+  border-top: 1px solid #c7bfb0;
+  border-radius: 0;
+  padding: 8px 0;
+  margin: 16px 0;
+  font-size: 10px;
+  color: #6b7885;
+  letter-spacing: 0.05em;
 }
 
 .markdown-body .container-section-title {
@@ -262,6 +322,19 @@
   padding: 0;
   margin: 0 0 40px 0;
   border-radius: 0;
+}
+
+.markdown-body .container-announcement {
+  background-color: transparent;
+  border-top: 1px solid #2d3a4a;
+  border-bottom: 1px solid #2d3a4a;
+  border-radius: 0;
+  padding: 12px 0;
+  margin: 22px 0;
+  color: #2d3a4a;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 1.8;
 }
 
 .markdown-body .container-callout-group {
@@ -302,6 +375,20 @@
   margin: 22px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 8px 0 22px;
+  text-align: left;
+  color: #6b7885;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  border-radius: 0;
+}
+
+.markdown-body .container-timeline {
+  margin: 20px 0;
+}
+
 .markdown-body .container-qa-block {
   background-color: transparent;
   border-top: none;
@@ -337,11 +424,19 @@
   border-radius: 0;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #f0ebe0;
+  border: 1px solid #c7bfb0;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #f0ebe0;
+  border: 1px solid #c7bfb0;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

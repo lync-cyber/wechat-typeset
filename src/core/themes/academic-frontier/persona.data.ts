@@ -349,13 +349,45 @@ export const spec: PersonaSpec = {
       'margin-left': 'auto',
       'border-radius': '2px',
     },
+    // LaTeX booktabs 风三线表：top heavy / midrule / bottom heavy + th 无侧线 + serif 小字
     table: {
       'border-collapse': 'collapse',
       width: '100%',
       'margin-top': '0',
-      'margin-bottom': '18px',
-      'font-size': '14px',
+      'margin-bottom': '20px',
+      'font-size': '13px',
+      'border-top': '2px solid #16181d', // booktabs \toprule（heavy line）
+      'border-bottom': '2px solid #16181d', // booktabs \bottomrule（heavy line）
+    },
+    th: {
+      'background-color': 'transparent',
+      color: '#5a5d64',
+      border: 'none',
+      'border-bottom': '1px solid #16181d', // booktabs \midrule（single line）
+      padding: '5px 10px',
+      'font-weight': '600',
+      'text-align': 'center', // LaTeX tabular 默认居中对齐
+      'font-size': '12px',
+      'letter-spacing': '0.2px',
+    },
+    td: {
+      border: 'none',
+      padding: '5px 10px',
+      color: '#16181d',
+      'text-align': 'center',
+    },
+    // LaTeX \texttt{} 风键帽：极简 + 无 box-shadow + bgSoft 浅底（论文行内等宽代码感）
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#f6f6f4',
+      color: '#16181d',
       border: '1px solid #d8d8d4',
+      'border-radius': '2px',
+      padding: '1px 4px',
+      'font-size': '12px',
+      'line-height': '1.4',
+      'letter-spacing': '0',
+      'vertical-align': 'middle',
     },
 
     // 代码块（规范 §1.1 code = 中性深墨 + 灰底，不染 primary）
@@ -490,12 +522,42 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'border-top': '1px solid #d8d8d4',
     },
+    abstract: {
+      'background-color': '#f6f6f4',
+      border: '1px solid #d8d8d4',
+      padding: '14px 16px',
+      margin: '18px 0 24px',
+      'border-radius': '2px',
+    },
+    seeAlso: {
+      'background-color': '#f6f6f4',
+      'border-top': '1px solid #d8d8d4',
+      padding: '12px 16px',
+      margin: '20px 0',
+      'border-radius': '0',
+    },
     // 规范 §2.9 qrcode = 通讯地址块（Correspondence）
     qrcode: {
       margin: '32px 0 0 0',
       padding: '0',
       'background-color': 'transparent',
       'border-radius': '0',
+    },
+    // LaTeX figure caption：serif italic + "Figure 1. ..." 编号注脚风（textMuted 居中）
+    imageCaption: {
+      margin: '4px 0 20px 0',
+      'text-align': 'center',
+      'font-size': '12px',
+      'font-style': 'italic',
+      color: '#5a5d64',
+      'letter-spacing': '0.1px',
+    },
+    // 论文研究阶段时间线：左 1px secondary 细竖线 + 透明底（与 blockquote 语汇一致）
+    timeline: {
+      margin: '24px 0',
+      'border-left': '1px solid #4a5670',
+      'padding-left': '18px',
+      'background-color': 'transparent',
     },
   },
 

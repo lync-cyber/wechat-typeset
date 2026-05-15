@@ -1,5 +1,5 @@
 /**
- * free · mpvideo（腾讯视频占位）。直接渲染 v.qq.com iframe。
+ * video-card（腾讯视频占位）。带 qqvid 直出 v.qq.com iframe。
  */
 
 import type { VariantDef } from '../../../core/variants/_core'
@@ -13,9 +13,9 @@ function thumb(): string {
   )
 }
 
-const mpvideo: VariantDef = {
+const videoCard: VariantDef = {
   meta: {
-    id: 'mpvideo',
+    id: 'video-card',
     kind: 'none',
     name: '腾讯视频',
     description: '直接渲染 v.qq.com iframe',
@@ -23,12 +23,12 @@ const mpvideo: VariantDef = {
   thumbnail: thumb,
   snippets: [
     {
-      presetId: 'free-mpvideo-qq',
+      presetId: 'free-video-card-qq',
       name: '腾讯视频',
       description: '直接渲染 v.qq.com iframe',
-      markdown: '::: mpvideo qqvid=v326875u4ek\n视频标题\n:::\n',
+      markdown: '::: video-card qqvid=v326875u4ek\n视频标题\n:::\n',
     },
   ],
 }
 
-export default mpvideo
+export default videoCard

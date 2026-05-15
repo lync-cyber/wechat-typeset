@@ -9,16 +9,18 @@
 
 .markdown-body h1 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 500;
   color: #3a2d20;
-  margin-top: 28px;
-  margin-bottom: 16px;
-  line-height: 1.4;
+  margin-top: 32px;
+  margin-bottom: 18px;
+  line-height: 1.45;
+  letter-spacing: 3px;
+  text-align: center;
 }
 
 .markdown-body h2 {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 600;
   color: #3a2d20;
   margin-top: 30px;
   margin-bottom: 14px;
@@ -28,30 +30,50 @@
 }
 
 .markdown-body h3 {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 600;
   color: #3a2d20;
-  margin-top: 22px;
+  margin-top: 24px;
   margin-bottom: 10px;
-  line-height: 1.5;
+  line-height: 1.6;
+  letter-spacing: 1.2px;
 }
 
 .markdown-body h4 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  color: #3a2d20;
+  color: #7a6a58;
   margin-top: 18px;
   margin-bottom: 8px;
+  line-height: 1.6;
+  letter-spacing: 0.8px;
+}
+
+.markdown-body h5 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #3a2d20;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #7a6a58;
+  margin-top: 12px;
+  margin-bottom: 4px;
   line-height: 1.5;
 }
 
 .markdown-body p {
   font-size: 15px;
-  line-height: 1.9;
+  line-height: 1.85;
   color: #3a2d20;
   margin-top: 0;
-  margin-bottom: 18px;
-  letter-spacing: 0.6px;
+  margin-bottom: 22px;
+  letter-spacing: 0.8px;
 }
 
 .markdown-body blockquote {
@@ -63,27 +85,29 @@
   padding-bottom: 14px;
   padding-left: 18px;
   margin-top: 0;
-  margin-bottom: 20px;
-  border-radius: 12px;
+  margin-bottom: 22px;
+  border-radius: 10px;
   font-style: italic;
+  letter-spacing: 0.6px;
 }
 
 .markdown-body ul {
-  padding-left: 24px;
+  padding-left: 20px;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .markdown-body ol {
-  padding-left: 24px;
+  padding-left: 20px;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .markdown-body li {
-  margin-bottom: 8px;
-  line-height: 1.9;
+  margin-bottom: 10px;
+  line-height: 1.85;
   color: #3a2d20;
+  letter-spacing: 0.6px;
 }
 
 .markdown-body code {
@@ -99,13 +123,17 @@
   display: inline-block;
   background-color: #f2ead8;
   color: #3a2d20;
-  border: 1px solid #e0d1ba;
-  border-bottom-width: 2px;
-  border-radius: 3px;
-  padding: 1px 6px;
+  border-top: 1px solid #e0d1ba;
+  border-right: 1px solid #e0d1ba;
+  border-bottom: 2px solid #d98141;
+  border-left: 1px solid #e0d1ba;
+  border-radius: 12px;
+  padding: 1px 8px;
   font-size: 12px;
   line-height: 1.4;
   vertical-align: middle;
+  border: 1px solid #e0d1ba;
+  border-bottom-width: 2px;
 }
 
 .markdown-body pre {
@@ -138,11 +166,11 @@
 .markdown-body img {
   max-width: 100%;
   display: block;
-  margin-top: 10px;
+  margin-top: 12px;
   margin-right: auto;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   margin-left: auto;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .markdown-body a {
@@ -154,38 +182,50 @@
   border: none;
   height: 1px;
   background-color: #e0d1ba;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin-top: 28px;
+  margin-bottom: 28px;
 }
 
 .markdown-body table {
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
   font-size: 14px;
 }
 
 .markdown-body th {
-  border: 1px solid #e0d1ba;
-  padding: 6px 10px;
-  background-color: #f2ead8;
+  border-bottom: 1.5px solid #d98141;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 8px 12px;
+  background-color: transparent;
   text-align: left;
+  font-weight: 600;
+  color: #3a2d20;
+  letter-spacing: 0.5px;
+  border: 1px solid #e0d1ba;
 }
 
 .markdown-body td {
+  border-bottom: 1px solid #e0d1ba;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 8px 12px;
+  color: #3a2d20;
   border: 1px solid #e0d1ba;
-  padding: 6px 10px;
 }
 
 .markdown-body strong {
-  font-weight: 700;
+  font-weight: 600;
   color: #3a2d20;
 }
 
 .markdown-body em {
   font-style: italic;
-  color: #3a2d20;
+  color: #7a6a58;
 }
 
 .markdown-body mark {
@@ -206,23 +246,47 @@
   font-weight: 600;
 }
 
+.markdown-body s, .markdown-body del {
+  color: #7a6a58;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #d98141;
+  text-decoration: underline;
+}
+
 .markdown-body .container-intro {
   background-color: #f2ead8;
-  border-radius: 6px;
-  padding: 14px 16px;
-  margin: 16px 0;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin: 0 0 28px 0;
   color: #7a6a58;
+  letter-spacing: 0.8px;
+  line-height: 1.85;
 }
 
 .markdown-body .container-cover {
-  margin: 16px 0;
+  margin: 0 0 32px 0;
 }
 
 .markdown-body .container-author {
+  border-left: 3px solid #d98141;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 6px 0 6px 14px;
+  margin: 18px 0;
+  color: #3a2d20;
+  font-size: 14px;
+}
+
+.markdown-body .container-author-bio {
   background-color: #f2ead8;
-  border-radius: 6px;
-  padding: 12px 14px;
-  margin: 16px 0;
+  border-top: 2px solid #d98141;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 28px 0;
+  color: #3a2d20;
 }
 
 .markdown-body .container-section-title {
@@ -255,27 +319,69 @@
   margin: 0 0 24px 0;
 }
 
+.markdown-body .container-announcement {
+  background-color: #f8e1dc;
+  border-left: 4px solid #c05a4e;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 6px;
+}
+
+.markdown-body .container-tip {
+  background-color: #eef3e4;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+
+.markdown-body .container-warning {
+  background-color: #fcf1dc;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+
+.markdown-body .container-info {
+  background-color: #e6edf3;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 18px 0;
+}
+
+.markdown-body .container-danger {
+  background-color: #f8e1dc;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 18px 0;
+}
+
 .markdown-body .container-callout-group {
   margin: 20px 0;
 }
 
 .markdown-body .container-note {
+  background-color: transparent;
+  padding: 4px 0 4px 20px;
   margin: 16px 0;
+  border-radius: 0;
 }
 
 .markdown-body .container-quote-card {
   background-color: #fffaf1;
   padding: 22px 20px;
   margin: 22px 0;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px dashed #e0d1ba;
 }
 
 .markdown-body .container-highlight {
-  background-color: #eadfc7;
-  padding: 12px 14px;
-  margin: 16px 0;
-  border-radius: 6px;
+  background-color: transparent;
+  padding: 8px 28px;
+  margin: 22px 0;
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 1px;
 }
 
 .markdown-body .container-compare {
@@ -286,6 +392,20 @@
   margin: 16px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 6px 0 20px;
+  text-align: center;
+  font-size: 12px;
+  color: #7a6a58;
+  font-style: italic;
+  letter-spacing: 0;
+  line-height: 1.6;
+}
+
+.markdown-body .container-timeline {
+  margin: 20px 0;
+}
+
 .markdown-body .container-qa-block {
   border-top: 1px solid #e0d1ba;
   border-bottom: 1px solid #e0d1ba;
@@ -294,29 +414,39 @@
 }
 
 .markdown-body .container-footer-cta {
-  margin: 24px 0;
-  padding: 16px;
-  background-color: #f2ead8;
-  border-radius: 8px;
+  margin: 32px 0;
+  padding: 28px 0 20px 0;
+  background-color: transparent;
+  border-radius: 0;
 }
 
 .markdown-body .container-recommend {
-  margin: 20px 0;
-  padding: 14px 16px;
+  margin: 24px 0;
+  padding: 18px 22px;
   background-color: #f2ead8;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .markdown-body .container-qrcode {
-  margin: 20px 0;
+  margin: 28px 0;
+  padding: 18px;
+  background-color: #faf6f0;
+  border-radius: 10px;
+}
+
+.markdown-body .container-voice-card {
+  background-color: #f2ead8;
+  border: 1px solid #e0d1ba;
+  border-radius: 12px;
   padding: 14px 16px;
-}
-
-.markdown-body .container-mpvoice {
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #f2ead8;
+  border: 1px solid #e0d1ba;
+  border-radius: 12px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

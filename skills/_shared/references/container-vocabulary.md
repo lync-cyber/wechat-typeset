@@ -14,50 +14,69 @@
 | --- | --- | :-: | --- | --- |
 | 结构 | `intro` | ★ | 文首引子／导语卡 | — |
 |  | `cover` | ★ | 封面卡（封面图 + 题头 + 期号戳） | — |
-|  | `author` | ★ | 作者栏：头像 + 名字 + 日期 | — |
+|  | `author` | ★ | 作者栏：单行署名块 | — |
+|  | `author-bio` | ★ | 多行作者简介卡（avatar + name + role + bio） | — |
 |  | `section-title` | ★ | 章节标题块（比 ## 更强势） | `sectionTitle` |
-| 提示 | `tip` | ★ | 小贴士／正向提示 | `admonition` |
+| 提示 | `announcement` | ★ | 文章级强警示横幅（attrs.tone=danger\|primary\|accent） | — |
+|  | `tip` | ★ | 小贴士／正向提示 | `admonition` |
 |  | `warning` | ★ | 需读者注意的提醒 | `admonition` |
 |  | `info` | ★ | 中性说明 / 补充信息 | `admonition` |
 |  | `danger` | ★ | 高风险警告 / 错误示范 | `admonition` |
 |  | `note` | ★ | 第五态补注（中性，不抢色） | `note` |
-| 内容 | `quote-card` | ★ | 大段引用卡 | `quote` |
-|  | `highlight` | ★ | 高亮段落（bgMuted 底色块） | — |
+| 内容 | `quote-card` | ★ | 大段引用卡（"引用他人"） | `quote` |
+|  | `highlight` | ★ | 行内高亮段（"作者自我强调"） | — |
 |  | `compare`（外层 `::::`） | ★ | 双列对比 | `compare` |
 |  | `pros` |  | compare 的"正面"列 | — |
 |  | `cons` |  | compare 的"反面"列 | — |
-|  | `steps` | ★ | 编号步骤列表 | `steps` |
+|  | `steps` | ★ | 编号步骤列表（动作序列） | `steps` |
+|  | `image-caption` | ★ | 图 + 居中小字灰说明（attrs.src 自动渲染 img） | — |
+|  | `timeline`（外层 `::::`） | ★ | 年份+事件时序（与 steps 动作序列正交） | — |
+|  | `timeline-item` |  | timeline 内单条（attrs.year） | — |
 | 导航 | `divider` |  | 装饰分隔线 | `divider` |
 |  | `footer-cta` | ★ | 文末 CTA 块（关注 / 投喂 / 二维码收束） | — |
-|  | `recommend` | ★ | 推荐阅读列表 | — |
-| 媒体 | `qrcode` | ★ | 二维码块 | — |
-|  | `mpvoice` | ★ | 公众号语音卡（占位） | — |
-|  | `mpvideo` | ★ | 公众号视频卡（v.qq.com 直渲，wxv_xxx 占位） | — |
+|  | `recommend` | ★ | 推荐阅读链接（"读者延伸阅读"） | — |
+|  | `qrcode` | ★ | 通用二维码块（任意 QR） | — |
+| 媒体 | `voice-card` | ★ | 公众号语音占位卡（粘贴后识别为 mpvoice） | — |
+|  | `video-card` | ★ | 公众号视频占位卡（qqvid 直渲 v.qq.com iframe） | — |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要 | — |
 |  | `key-number` | ★ | 大数字 + 说明（attrs.value 为数字） | — |
-|  | `see-also` | ★ | 相关阅读链接 | — |
+|  | `see-also` | ★ | 学术参考引用列表（"论证凭证"，与 recommend 正交） | — |
 | 兜底 | `free` |  | 不施加主题样式（退出契约保护） | — |
 
-## data-brief 扩展包
+## 编辑刊扩展包（pack:editorial）
 
 | 类 | fence 名 | ★ | 用途 |
 | --- | --- | :-: | --- |
 | 结构 | `masthead` | ★ | 刊头：刊名 + 期号·日期 monospace 右对齐 |
 |  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊） |
-|  | `toc`（外层 `::::`） | ★ | 目录三栏（序号·标题·页码） |
+|  | `byline` | ★ | 多栏 newspaper 署名（AUTHOR / EDITOR / SET） |
+|  | `editorial-header` | ★ | 装饰副刊头（红章 + 大字标题 + PP 页码 + subtitle） |
+| 提示 | `callout-group`（外层 `::::`） | ★ | 四态 callout 联表（tip/warning/info/danger 串联） |
+| 导航 | `toc`（外层 `::::`） | ★ | 目录三栏（序号·标题·页码） |
 |  | `toc-item` |  | toc 内单条 |
-| 内容 | `qa-block` | ★ | 读者问答（attrs.q 为问题） |
-| 签名 | `kpi-dashboard`（外层 `::::`） | ★ | KPI 仪表盘 + sparkline |
-|  | `kpi-item` |  | kpi-dashboard 内单指标 |
-|  | `bar-chart`（外层 `::::`） | ★ | 横向条形图 |
-|  | `bar` |  | bar-chart 内单条 |
+|  | `cta-bar` | ★ | CTA 三栏（赞同 / 收藏 / 转发） |
+|  | `qr-follow` | ★ | 二维码订阅卡（左 QR + 右 kicker/title/desc 三行版式） |
+| 签名 | `qa-block` | ★ | 读者问答（固定签名格式，attrs.q 为问题） |
 |  | `footnotes` | ★ | 脚注块：上分割线 + 编号引用（一条一行） |
 |  | `refs` | ★ | 流式参考文献：同源紧凑、条目同段流式排列（长引用列表用） |
-|  | `cta-bar` | ★ | CTA 三栏（赞同 / 收藏 / 转发） |
-|  | `qr-follow` | ★ | 二维码订阅卡（左 QR + 右标题/说明） |
 |  | `editor-note` | ★ | 编辑部注：主色左竖条 callout |
 |  | `methodology` | ★ | 方法论小字注释 |
 |  | `colophon` | ★ | 刊物收束栏 |
+
+## data-brief 主题专属（theme:data-brief）
+
+| 类 | fence 名 | ★ | 用途 |
+| --- | --- | :-: | --- |
+| 数据 | `kpi-dashboard`（外层 `::::`） | ★ | KPI 仪表盘 + sparkline |
+|  | `kpi-item` |  | kpi-dashboard 内单指标 |
+|  | `bar-chart`（外层 `::::`） | ★ | 横向条形图 |
+|  | `bar` |  | bar-chart 内单条 |
+
+> 边界提示：
+> - `recommend` vs `see-also`：前者是"读者延伸阅读"（同号其他文章），后者是"学术参考引用"（论文 / 数据原始来源）
+> - `qrcode` vs `qr-follow`：前者通用 QR（任意场景），后者是订阅栏版式（kicker + title + desc + 左 QR）
+> - `note` vs `editor-note`：前者作者题外话，后者编辑部机构按语
+> - `voice-card` / `video-card` 是作者面语义命名；平台契约（HTML 注释 + data-wx-mp-kind）保持 mpvoice / mpvideo
 
 ## 通用 fence 语法
 

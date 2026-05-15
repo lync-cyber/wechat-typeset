@@ -356,6 +356,47 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '12px',
     },
+    // 苏黎世新闻数据栏：上下 1px 黑实线（无侧边框）+ th 极小字 letter-spacing（图表表头风）
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '18px',
+      'font-size': '12px',
+      'border-radius': '0',
+    },
+    th: {
+      'background-color': 'transparent',
+      color: '#5a6068',
+      border: 'none',
+      'border-top': '1px solid #111418',
+      'border-bottom': '1px solid #111418',
+      padding: '4px 8px',
+      'font-weight': '700',
+      'text-align': 'left',
+      'letter-spacing': '0.8px', // 极小字宽字距：苏黎世图表表头特征
+      'font-size': '10px',
+    },
+    td: {
+      border: 'none',
+      'border-bottom': '1px solid #e5e7eb',
+      padding: '4px 8px',
+      color: '#111418',
+    },
+    // 极简方块键帽：radius 0 直角 + monospace 感 + 紧凑 padding（简报直角纪律）
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#eef0f2',
+      color: '#111418',
+      border: '1px solid #e5e7eb',
+      'border-bottom-width': '2px',
+      'border-radius': '0',
+      padding: '1px 5px',
+      'font-size': '11px',
+      'line-height': '1.4',
+      'letter-spacing': '0',
+      'vertical-align': 'middle',
+    },
   },
 
   // ============================================================
@@ -568,6 +609,22 @@ export const spec: PersonaSpec = {
       'border-top': '1px solid #111418',
       'margin-top': '20px',
       'padding-top': '12px',
+      'border-radius': '0',
+    },
+    // 极小字来源注脚一体感：letter-spacing 宽字距 + textMuted + 无底色（苏黎世简报图注）
+    imageCaption: {
+      margin: '2px 0 16px 0',
+      'text-align': 'left',
+      'font-size': '10px',
+      color: '#5a6068',
+      'letter-spacing': '0.5px',
+    },
+    // 事件 / 期号时间线：左 3px 数据蓝竖条 + bgSoft 底（与 editorNote 同语汇）
+    timeline: {
+      margin: '20px 0',
+      'border-left': '3px solid #1756d1',
+      'background-color': '#f5f7fa',
+      padding: '12px 14px 12px 17px',
       'border-radius': '0',
     },
   },

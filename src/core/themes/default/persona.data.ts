@@ -295,6 +295,7 @@ export const spec: PersonaSpec = {
       color: '#1c1f24',
     },
     kbd: {
+      // Medium/MDN 通用键帽：bgSoft 浅底 + 1/2px 不对称边框，微信无 box-shadow 时靠边框厚度表达立体
       display: 'inline-block',
       'background-color': '#f5f5f3',
       color: '#1c1f24',
@@ -305,6 +306,27 @@ export const spec: PersonaSpec = {
       'font-size': '12px',
       'line-height': '1.4',
       'vertical-align': 'middle',
+    },
+    // Medium/Notion 中性表格：bgSoft th + 适中 padding + border 灰边
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '18px',
+      'font-size': '14px',
+    },
+    th: {
+      border: '1px solid #d8d8d4',
+      padding: '8px 12px',
+      'background-color': '#f5f5f3',
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#1c1f24',
+    },
+    td: {
+      border: '1px solid #d8d8d4',
+      padding: '8px 12px',
+      color: '#1c1f24',
     },
     a: {
       color: '#2558b0',
@@ -453,10 +475,28 @@ export const spec: PersonaSpec = {
       margin: '16px 0',
       color: '#636870',
     },
+    // Medium/Notion 中性图注：居中 textMuted 小字，默认兜底气质
+    imageCaption: {
+      margin: '8px 0 18px',
+      'text-align': 'center',
+      'font-size': '12px',
+      color: '#636870',
+      'line-height': '1.6',
+    },
+    // 中性警示横幅：status.danger 风，全框 + 左 4px 色条，比 tip 更强势但不越界
+    announcement: {
+      'background-color': '#fbecea',
+      'border-left': '4px solid #b42318',
+      border: '1px solid #b42318',
+      padding: '12px 16px',
+      margin: '18px 0',
+      'border-radius': '4px',
+      color: '#1c1f24',
+    },
   },
 
-  // default 只用通用容器（不声明任何签名容器）
-  signatureContainers: [],
+  // default 声明 imageCaption / announcement 以计入 voice 覆盖率
+  signatureContainers: ['imageCaption', 'announcement'],
 
   meta: {
     createdAt: '2026-04-20',

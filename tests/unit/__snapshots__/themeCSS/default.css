@@ -49,6 +49,24 @@
   letter-spacing: 0.2px;
 }
 
+.markdown-body h5 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1c1f24;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #636870;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 15px;
   line-height: 1.75;
@@ -170,14 +188,17 @@
 
 .markdown-body th {
   border: 1px solid #d8d8d4;
-  padding: 6px 10px;
+  padding: 8px 12px;
   background-color: #f5f5f3;
   text-align: left;
+  font-weight: 600;
+  color: #1c1f24;
 }
 
 .markdown-body td {
   border: 1px solid #d8d8d4;
-  padding: 6px 10px;
+  padding: 8px 12px;
+  color: #1c1f24;
 }
 
 .markdown-body strong {
@@ -208,6 +229,16 @@
   font-weight: 600;
 }
 
+.markdown-body s, .markdown-body del {
+  color: #636870;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #2558b0;
+  text-decoration: underline;
+}
+
 .markdown-body .container-intro {
   background-color: #f5f5f3;
   border-radius: 6px;
@@ -228,6 +259,13 @@
   margin: 16px 0;
   font-size: 13px;
   color: #636870;
+}
+
+.markdown-body .container-author-bio {
+  background-color: #f5f5f3;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 20px 0;
 }
 
 .markdown-body .container-section-title {
@@ -258,6 +296,16 @@
   background-color: #f5f5f3;
   padding: 12px 14px;
   margin: 0 0 24px 0;
+}
+
+.markdown-body .container-announcement {
+  background-color: #fbecea;
+  border-left: 4px solid #b42318;
+  border: 1px solid #b42318;
+  padding: 12px 16px;
+  margin: 18px 0;
+  border-radius: 4px;
+  color: #1c1f24;
 }
 
 .markdown-body .container-callout-group {
@@ -294,6 +342,18 @@
   margin: 20px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 8px 0 18px;
+  text-align: center;
+  font-size: 12px;
+  color: #636870;
+  line-height: 1.6;
+}
+
+.markdown-body .container-timeline {
+  margin: 20px 0;
+}
+
 .markdown-body .container-qa-block {
   border-top: 1px solid #d8d8d4;
   border-bottom: 1px solid #d8d8d4;
@@ -324,11 +384,19 @@
   border-radius: 6px;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #f5f5f3;
+  border: 1px solid #d8d8d4;
+  border-radius: 6px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #f5f5f3;
+  border: 1px solid #d8d8d4;
+  border-radius: 6px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

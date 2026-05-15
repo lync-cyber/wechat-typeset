@@ -49,6 +49,24 @@
   letter-spacing: 0.2px;
 }
 
+.markdown-body h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2332;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #5a6778;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 16px;
   line-height: 1.85;
@@ -107,9 +125,9 @@
   display: inline-block;
   background-color: #f5efe1;
   color: #1a2332;
-  border: 1px solid #e0d6c0;
+  border: 1px solid #24364f;
   border-bottom-width: 2px;
-  border-radius: 3px;
+  border-radius: 2px;
   padding: 1px 6px;
   font-size: 12px;
   line-height: 1.4;
@@ -171,20 +189,33 @@
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   font-size: 14px;
 }
 
 .markdown-body th {
-  border: 1px solid #e0d6c0;
+  border-bottom: 1.5px solid #24364f;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 6px 10px;
-  background-color: #f5efe1;
+  background-color: transparent;
   text-align: left;
+  font-weight: 600;
+  color: #24364f;
+  font-size: 13px;
+  border: 1px solid #e0d6c0;
 }
 
 .markdown-body td {
+  border-bottom: 1px solid #e0d6c0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 7px 10px;
+  color: #1a2332;
+  font-size: 14px;
   border: 1px solid #e0d6c0;
-  padding: 6px 10px;
 }
 
 .markdown-body strong {
@@ -215,6 +246,16 @@
   font-weight: 600;
 }
 
+.markdown-body s, .markdown-body del {
+  color: #5a6778;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #24364f;
+  text-decoration: underline;
+}
+
 .markdown-body .container-intro {
   background-color: transparent;
   border-left: 3px solid #b86f2a;
@@ -234,6 +275,14 @@
   border-radius: 0;
   padding: 10px 0;
   margin: 0 0 24px 0;
+}
+
+.markdown-body .container-author-bio {
+  background-color: #f5efe1;
+  border-top: 2px solid #24364f;
+  border-radius: 2px;
+  padding: 16px 18px;
+  margin: 28px 0;
 }
 
 .markdown-body .container-section-title {
@@ -263,6 +312,14 @@
   background-color: #f5efe1;
   padding: 12px 14px;
   margin: 0 0 24px 0;
+}
+
+.markdown-body .container-announcement {
+  background-color: #ecd4cf;
+  border-left: 4px solid #8a2a1c;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 2px;
 }
 
 .markdown-body .container-callout-group {
@@ -296,6 +353,21 @@
   margin: 24px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 8px 0 20px;
+  text-align: left;
+  font-size: 13px;
+  color: #5a6778;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.markdown-body .container-timeline {
+  border-left: 2px solid #24364f;
+  padding: 0 0 0 20px;
+  margin: 24px 0;
+}
+
 .markdown-body .container-qa-block {
   border-top: 1px solid #e0d6c0;
   border-bottom: 1px solid #e0d6c0;
@@ -326,17 +398,25 @@
   border-radius: 0;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #f5efe1;
+  border: 1px solid #e0d6c0;
+  border-radius: 3px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #f5efe1;
+  border: 1px solid #e0d6c0;
+  border-radius: 3px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
 .markdown-body .container-abstract {
   background-color: #f5efe1;
-  border-left: 4px solid #24364f;
+  border-left: 3px solid #24364f;
   padding: 14px 16px 14px 18px;
   margin: 18px 0 24px;
   border-radius: 2px;
@@ -344,18 +424,18 @@
 
 .markdown-body .container-key-number {
   background-color: #f5efe1;
-  padding: 16px 18px;
+  border-top: 3px solid #b86f2a;
+  padding: 14px 16px;
   margin: 18px 0;
-  border-radius: 3px;
-  border-top: 3px solid #24364f;
+  border-radius: 2px;
 }
 
 .markdown-body .container-see-also {
   background-color: #f5efe1;
+  border-left: 3px solid #3d5063;
   padding: 14px 16px;
   margin: 20px 0;
-  border-radius: 3px;
-  border-left: 3px solid #3d5063;
+  border-radius: 2px;
 }
 
 .markdown-body .container-kpi-dashboard {

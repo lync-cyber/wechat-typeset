@@ -125,6 +125,8 @@ function computeThemeCSS(theme: Theme): string {
     ['h2', theme.elements.h2],
     ['h3', theme.elements.h3],
     ['h4', theme.elements.h4],
+    ['h5', theme.elements.h5],
+    ['h6', theme.elements.h6],
     ['p', theme.elements.p],
     ['blockquote', theme.elements.blockquote],
     ['ul', theme.elements.ul],
@@ -145,16 +147,9 @@ function computeThemeCSS(theme: Theme): string {
     ['a', theme.elements.a],
     ['hr', theme.elements.hr],
     ['table', theme.elements.table],
-    ['th', {
-      border: `1px solid ${theme.tokens.colors.border}`,
-      padding: '6px 10px',
-      'background-color': theme.tokens.colors.bgSoft,
-      'text-align': 'left',
-    }],
-    ['td', {
-      border: `1px solid ${theme.tokens.colors.border}`,
-      padding: '6px 10px',
-    }],
+    // th / td 下沉到主题槽位；baseElements 提供与历史等价的兜底。
+    ['th', theme.elements.th],
+    ['td', theme.elements.td],
     ['strong', theme.elements.strong],
     ['em', theme.elements.em],
   ]
@@ -167,6 +162,8 @@ function computeThemeCSS(theme: Theme): string {
   chunks.push(rule(`.${ROOT_CLASS} mark`, theme.inline.highlight, 'inline.highlight'))
   chunks.push(rule(`.${ROOT_CLASS} .wx-wavy`, theme.inline.wavy, 'inline.wavy'))
   chunks.push(rule(`.${ROOT_CLASS} .wx-emphasis`, theme.inline.emphasis, 'inline.emphasis'))
+  chunks.push(rule(`.${ROOT_CLASS} s, .${ROOT_CLASS} del`, theme.inline.del, 'inline.del'))
+  chunks.push(rule(`.${ROOT_CLASS} ins`, theme.inline.ins, 'inline.ins'))
 
   // Containers：按 CONTAINER_VOCABULARY 迭代。每个 styleKey 非 null 的容器都生成一条
   // `.markdown-body .container-{name} { ... }` 规则；空 CSS 对象被 `rule()` 自然跳过。

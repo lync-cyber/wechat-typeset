@@ -261,6 +261,9 @@ export const spec: PersonaSpec = {
     'qrFollow', // 二维码订阅
     'editorNote', // 编辑手记单色块（callout #15）
     'colophon', // 下期预告
+    'imageCaption', // mook 图注（极小字 + letter-spacing）
+    'authorBio', // mook 番外编辑栏（极简 hairline）
+    'announcement', // 特辑预告（上下 text 双线）
   ],
 
   // ============================================================
@@ -412,12 +415,59 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '11px',
     },
+    // mook 番外栏表：th 极小字 + letter-spacing 极大 + accent 1px 下划线 + 极疏 padding——
+    // 对应 04-japanese-mook.html toc "contents · 目次" kicker 的排印语言：
+    // 10px / letter-spacing:0.2em / accent 色是全篇 kicker 母型，表头借用此型。
     table: {
       'border-collapse': 'collapse',
       width: '100%',
       'margin-top': '0',
       'margin-bottom': '22px',
       'font-size': '12px',
+    },
+    // th：极小字 + letter-spacing 极大 + accent 1px 下划线——mook kicker 母型的"栏头"写法，
+    // 与 abstractKicker 同系（10px / letter-spacing:0.2em / accent 色），让表头成为"栏眉"而非表格标题。
+    th: {
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#e85a3c',
+      'font-size': '10px',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'padding-top': '3px',
+      'padding-right': '10px',
+      'padding-bottom': '8px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #e85a3c',
+      'background-color': 'transparent',
+    },
+    // td：13px 正文同字号 + 极疏 padding + 仅底部 border 色分隔——mook 慢读节奏。
+    td: {
+      'text-align': 'left',
+      color: '#2d3a4a',
+      'font-size': '12px',
+      'letter-spacing': '0.02em',
+      'padding-top': '6px',
+      'padding-right': '10px',
+      'padding-bottom': '6px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #c7bfb0',
+      'vertical-align': 'top',
+    },
+    // mook 番外栏 inline kbd：极小 monospace + 字距 0 + 米卡纸底——
+    // 对应 04-japanese-mook.html inline-code 的"11px / Menlo / #f0ebe0 底"写法；
+    // kbd 在 mook 语境里等同于 code 的"符号注释"，走同款极小字号不加边框立体感。
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#f0ebe0',
+      color: '#2d3a4a',
+      border: '1px solid #c7bfb0',
+      'border-radius': '0',
+      padding: '0px 4px',
+      'font-size': '10px',
+      'line-height': '1.6',
+      'vertical-align': 'middle',
+      'letter-spacing': '0',
     },
   },
 
@@ -648,6 +698,48 @@ export const spec: PersonaSpec = {
       color: '#6b7885',
       'border-radius': '0',
     },
+    // mook 图注极小字 + letter-spacing + textMuted——
+    // 对应 04-japanese-mook.html image-with-caption 图注："10px / textMuted / letter-spacing:0.05em"，
+    // 圈号 ❶ 前导由 renderer 内层控制，wrapper 只管字号 / 颜色 / 字距 / 对齐。
+    imageCaption: {
+      margin: '8px 0 22px',
+      'text-align': 'left',
+      color: '#6b7885',
+      'font-size': '10px',
+      'letter-spacing': '0.05em',
+      'line-height': '1.6',
+      'border-radius': '0',
+    },
+    // mook 番外编辑栏 authorBio：极简，无底色无边框，仅上下 hairline + 紧凑 padding——
+    // 对应 04-japanese-mook.html byline 行："10px / textMuted / letter-spacing:0.05em"，
+    // mook 编辑署名像脚注小字，不是卡片，不做色块。
+    authorBio: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #c7bfb0',
+      'border-radius': '0',
+      padding: '8px 0',
+      margin: '16px 0',
+      'font-size': '10px',
+      color: '#6b7885',
+      'letter-spacing': '0.05em',
+    },
+    // 特辑预告 announcement：上下 text 色双线 + 无底色 + accent kicker 感——
+    // 对应 04-japanese-mook.html footer "下期预告" 结构（上 1px text 线 + accent 标签）；
+    // mook 的"特辑预告"是编集后记的一部分，不是"危险警示"，所以不走 danger 红。
+    announcement: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #2d3a4a',
+      'border-bottom': '1px solid #2d3a4a',
+      'border-radius': '0',
+      padding: '12px 0',
+      margin: '22px 0',
+      color: '#2d3a4a',
+      'font-size': '12px',
+      'letter-spacing': '0.05em',
+      'line-height': '1.8',
+    },
     // colophon · 下期预告（设计稿 footer #23）
     //   renderer 走"上边线 + 双栏 monospace"；本主题用 next 单独一栏，
     //   issue 可留空让右栏空 kicker 也无妨——视觉与设计稿"上下边线 + accent kicker"接近
@@ -659,6 +751,81 @@ export const spec: PersonaSpec = {
       'padding-top': '16px',
       'padding-bottom': '16px',
       'border-radius': '0',
+    },
+  },
+
+  // ============================================================
+  // 内层元素 inline style 槽位（renderer 不硬编码，主题通过 spec.innerStyles 接管）
+  // ============================================================
+  innerStyles: {
+    // abstract 导读 kicker · 文首最强势的"栏头"信号
+    // 对位设计稿 component 02（toc kicker）& 15（callout kicker）：
+    //   font-size:10px / letter-spacing:0.2em / color:#e85a3c 是 mook 全篇 kicker 母型。
+    // 在此基础上加 border-bottom 1px hairline + padding-bottom 让 kicker 自成"栏头"——
+    // 区别于其余 kicker（其余不加 border），作为"文首导读"给最强的形式感。
+    abstractKicker: {
+      color: '#e85a3c',
+      'font-size': '10px',
+      'font-weight': '600',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'padding-bottom': '5px',
+      'border-bottom': '1px solid #c7bfb0',
+      'margin-bottom': '10px',
+      display: 'block',
+    },
+    // key-number 大数字本体 · "杂志大字"气质
+    // mook 用非典型字号（28px，不是 32px 标准值）+ italic 拉出"印刷大字"的动态感；
+    // 对位设计稿 cover-header 的"56px 300 weight #e85a3c"大数字精神，
+    // 在 key-number 容器里以克制比例（28px）复现"数字主导版面"的签名张力。
+    keyNumberValue: {
+      color: '#e85a3c',
+      'font-size': '28px',
+      'font-weight': '300',
+      'font-style': 'italic',
+      'line-height': '1.1',
+      'letter-spacing': '-0.03em',
+      'margin-bottom': '6px',
+    },
+    // key-number 上方 kicker · 弱于 abstractKicker，无 border，纯小字字距撑开
+    // letter-spacing 0.18em（比 abstractKicker 的 0.2em 略窄）——细微层级差避免公式感。
+    keyNumberKicker: {
+      color: '#6b7885',
+      'font-size': '10px',
+      'font-weight': '400',
+      'letter-spacing': '0.18em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '4px',
+    },
+    // see-also "延伸阅读" 栏头 · 番外栏感
+    // 对位设计稿 component 02 toc 的"contents · 目次"kicker：
+    //   10px / letter-spacing:0.2em / textMuted 灰蓝。
+    // 比 abstractKicker 更退场（用 textMuted 而非 primary），
+    // letter-spacing 0.25em（全篇最大字距值）——用"最稀疏"的字间距
+    // 把 seeAlso 的"别册附录"感与主栏正文彻底拉开。
+    seeAlsoTitle: {
+      color: '#6b7885',
+      'font-size': '10px',
+      'font-weight': '400',
+      'letter-spacing': '0.25em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '10px',
+      display: 'block',
+    },
+    // editor-note kicker · 最权威的"機構按語"
+    // 对位设计稿 component 15（callout 编辑手记）：
+    //   "❹　编辑手记"用 10px / letter-spacing:0.2em / color:#e85a3c。
+    // 在 abstractKicker 基础上加 border-bottom 1px solid #e85a3c（朱橙线，而非 border 灰线）——
+    // 用 accent 色线条把 kicker 本身做成"红批"视觉，区别于 abstractKicker 的灰底线。
+    editorNoteKicker: {
+      color: '#e85a3c',
+      'font-size': '10px',
+      'font-weight': '600',
+      'letter-spacing': '0.2em',
+      'padding-bottom': '5px',
+      'border-bottom': '1px solid #e85a3c',
+      'margin-bottom': '12px',
+      display: 'block',
     },
   },
 

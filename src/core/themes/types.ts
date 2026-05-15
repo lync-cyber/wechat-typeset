@@ -79,6 +79,13 @@ export interface ThemeElements {
    * 介于 h3 章节小节与 p 正文之间，和 steps 容器搭配使用。
    */
   h4: CSSObject
+  /**
+   * 五/六级标题。markdown-it 默认解析 `##### / ######` 为 `<h5>/<h6>`,
+   * 早期骨架只到 h4 让 h5/h6 走浏览器默认字号——本字段补齐主题入口。
+   * 主题不显式覆写时由 baseElements 给一个比 h4 更弱的兜底。
+   */
+  h5: CSSObject
+  h6: CSSObject
   p: CSSObject
   blockquote: CSSObject
   ul: CSSObject
@@ -95,6 +102,10 @@ export interface ThemeElements {
   a: CSSObject
   hr: CSSObject
   table: CSSObject
+  /** 表头单元格。旧版硬编码在 themeCSS, 主题无法定制；现下沉到主题槽位。 */
+  th: CSSObject
+  /** 数据单元格。同 th。 */
+  td: CSSObject
   strong: CSSObject
   em: CSSObject
 }
@@ -128,10 +139,18 @@ export interface ThemeContainers {
   footerCTA: CSSObject
   recommend: CSSObject
   qrcode: CSSObject
-  /** 公众号语音占位卡 */
-  mpvoice: CSSObject
-  /** 公众号视频占位卡 */
-  mpvideo: CSSObject
+  /** 公众号语音占位卡（粘贴后由微信识别为 mpvoice）。fence 名 voice-card。 */
+  voiceCard: CSSObject
+  /** 公众号视频占位卡（粘贴后由微信识别为 mpvideo）。fence 名 video-card。 */
+  videoCard: CSSObject
+  /** 强警示横幅：文章级"置顶通告"，比 tip/warning 视觉强度更高。 */
+  announcement: CSSObject
+  /** 多行作者简介卡：头像 + 名字 + 身份 + bio。与 author 单行署名块正交。 */
+  authorBio: CSSObject
+  /** 图注块：图 + 居中小字灰说明。 */
+  imageCaption: CSSObject
+  /** 时间线：左侧年份 + 右侧事件的时序列表。 */
+  timeline: CSSObject
   /**
    * 四态 callout 联表外框（callout-group）。承担"上/下/左/右 hairline"，
    * 子项 (tip/warning/info/danger) 在内串联。设计稿 multi-callout 母本。
@@ -303,6 +322,15 @@ export interface ThemeInline {
   highlight: CSSObject
   wavy: CSSObject
   emphasis: CSSObject
+  /**
+   * GFM 删除线（`~~text~~` → `<s>`）。早期 ThemeInline 没此槽位,
+   * 浏览器默认 line-through 与主题无关；现给主题作者一个调色 / 调位置的入口。
+   */
+  del: CSSObject
+  /**
+   * 插入（markdown-it-ins `++text++` → `<ins>`）。同 del。
+   */
+  ins: CSSObject
 }
 
 // ============================================================

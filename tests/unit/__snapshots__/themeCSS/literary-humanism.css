@@ -50,6 +50,24 @@
   letter-spacing: 1px;
 }
 
+.markdown-body h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1b14;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b5f4a;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 16px;
   line-height: 2.0;
@@ -104,14 +122,14 @@
 .markdown-body kbd {
   display: inline-block;
   background-color: #ece5d1;
-  color: #1f1b14;
+  color: #6b5f4a;
   border: 1px solid #cfc3a8;
-  border-bottom-width: 2px;
-  border-radius: 3px;
-  padding: 1px 6px;
-  font-size: 12px;
-  line-height: 1.4;
+  border-radius: 1px;
+  padding: 1px 5px;
+  font-size: 13px;
+  line-height: 1.5;
   vertical-align: middle;
+  border-bottom-width: 2px;
 }
 
 .markdown-body pre {
@@ -168,18 +186,39 @@
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 28px;
   font-size: 14px;
+  border-top: 1px solid #cfc3a8;
+  border-bottom: 1px solid #cfc3a8;
 }
 
 .markdown-body th {
+  text-align: left;
+  font-weight: 500;
+  color: #6b5f4a;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  padding-top: 6px;
+  padding-right: 12px;
+  padding-bottom: 6px;
+  padding-left: 0;
+  border-bottom: 1px solid #cfc3a8;
+  background-color: transparent;
   border: 1px solid #cfc3a8;
   padding: 6px 10px;
-  background-color: #ece5d1;
-  text-align: left;
 }
 
 .markdown-body td {
+  text-align: left;
+  color: #1f1b14;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding-top: 6px;
+  padding-right: 12px;
+  padding-bottom: 6px;
+  padding-left: 0;
+  border-bottom: 1px solid #ece5d1;
+  vertical-align: top;
   border: 1px solid #cfc3a8;
   padding: 6px 10px;
 }
@@ -212,6 +251,16 @@
   font-weight: 500;
 }
 
+.markdown-body s, .markdown-body del {
+  color: #6b5f4a;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #5a4a3a;
+  text-decoration: underline;
+}
+
 .markdown-body .container-intro {
   background-color: #ece5d1;
   border-left: 2px solid #5a4a3a;
@@ -235,6 +284,14 @@
   color: #5a4a3a;
   font-size: 14px;
   letter-spacing: 1px;
+}
+
+.markdown-body .container-author-bio {
+  background-color: #ece5d1;
+  border-left: 2px solid #5a4a3a;
+  border-radius: 0;
+  padding: 12px 18px 12px 20px;
+  margin: 20px 0;
 }
 
 .markdown-body .container-section-title {
@@ -265,6 +322,14 @@
   background-color: #ece5d1;
   padding: 12px 14px;
   margin: 0 0 24px 0;
+}
+
+.markdown-body .container-announcement {
+  background-color: #ecd6cf;
+  border-left: 4px solid #8e3a2d;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 0px;
 }
 
 .markdown-body .container-callout-group {
@@ -302,6 +367,19 @@
   margin: 24px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 10px 0 28px;
+  text-align: center;
+  color: #6b5f4a;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  border-radius: 0;
+}
+
+.markdown-body .container-timeline {
+  margin: 20px 0;
+}
+
 .markdown-body .container-qa-block {
   border-top: 1px solid #cfc3a8;
   border-bottom: 1px solid #cfc3a8;
@@ -330,11 +408,19 @@
   border-radius: 0;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #ece5d1;
+  border: 1px solid #cfc3a8;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #ece5d1;
+  border: 1px solid #cfc3a8;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

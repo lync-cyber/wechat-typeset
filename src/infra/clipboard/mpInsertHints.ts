@@ -1,5 +1,9 @@
 /**
- * 在复制路径里把 mpvoice / mpvideo 容器旁注入微信识别的注释串。
+ * 在复制路径里把 voice-card / video-card 容器旁注入微信识别的 mpvoice / mpvideo 注释串。
+ *
+ * 命名分层：作者面 fence 是 voice-card / video-card（语义化）；平台契约
+ * （HTML 注释 + data-wx-mp-kind 锚点）仍是 mpvoice / mpvideo（微信后台读这串）。
+ * 本模块按 data-wx-mp-kind 检测节点，与 fence 名解耦。
  *
  * 为什么放在 infra/clipboard 而不是渲染管线：
  *   - renderer 不知道下游平台是哪个；mp 注释串是"微信生态专属粘贴技巧"。
@@ -8,8 +12,8 @@
  *     再 mpInsertHints —— 注释插入是最后一步，避免被 patch 流程吞掉。
  *
  * 注释格式 MP_HINT_FORMAT：
- *   - mpvoice：`<mpvoice name="标题" voice_encode_fileid="xxx"></mpvoice>`
- *   - mpvideo：`<mpvideo vid="xxx" name="标题"></mpvideo>`
+ *   - voice：`<mpvoice name="标题" voice_encode_fileid="xxx"></mpvoice>`
+ *   - video：`<mpvideo vid="xxx" name="标题"></mpvideo>`
  *   公众号实测发现"伪标签"形式比纯 HTML 注释更稳定被编辑器吃进——本工具仍以注释
  *   占位（避免被任何 sanitizer 当成未知标签剥掉），格式常量集中在 MP_HINT_TEMPLATES，
  *   后续真机验证后可统一改字符串。

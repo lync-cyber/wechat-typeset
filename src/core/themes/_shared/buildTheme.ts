@@ -159,6 +159,25 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'margin-bottom': '8px',
       'line-height': '1.5',
     },
+    // h5 / h6 比 h4 更弱 —— 公众号正文很少深到 5/6 级,
+    // 默认走"与正文同字号 + textMuted + 600/500 字重"克制处理,
+    // 给作者一个不至于跌进浏览器默认的兜底。
+    h5: {
+      'font-size': `${typography.baseSize}px`,
+      'font-weight': '600',
+      color: colors.text,
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+    },
+    h6: {
+      'font-size': `${typography.baseSize}px`,
+      'font-weight': '500',
+      color: colors.textMuted,
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+    },
     p: {
       'font-size': `${typography.baseSize}px`,
       'line-height': String(typography.lineHeight),
@@ -257,6 +276,18 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'margin-bottom': '18px',
       'font-size': '14px',
     },
+    // th / td 旧版硬编码在 themeCSS 里；下沉到主题槽位后由各主题按 voice 覆写。
+    // 兜底保持与历史 themeCSS 等价行为：border 单色 + 6px/10px padding + bgSoft 表头。
+    th: {
+      border: `1px solid ${colors.border}`,
+      padding: '6px 10px',
+      'background-color': colors.bgSoft,
+      'text-align': 'left',
+    },
+    td: {
+      border: `1px solid ${colors.border}`,
+      padding: '6px 10px',
+    },
     strong: { 'font-weight': '700', color: colors.text },
     em: { 'font-style': 'italic', color: colors.text },
   }
@@ -317,8 +348,46 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     // note 走独立 variantKind='note'；wrapper CSS 由 variants/note/<id>.ts 提供。
     // 这里只留 margin 兜底，主题 voice 可在 spec.containers.note 追加 border / padding。
     note: { margin: '16px 0' },
-    mpvoice: { margin: '20px 0' },
-    mpvideo: { margin: '20px 0' },
+    // voiceCard / videoCard 兜底：单色边框 + 浅底 + 圆角，比旧 `margin:20px 0` 强势。
+    // 暗底主题（brutalist / late-night-vinyl）需在 spec.containers 覆写 bg/border。
+    voiceCard: {
+      'background-color': tokens.colors.bgSoft,
+      border: `1px solid ${tokens.colors.border}`,
+      'border-radius': `${tokens.radius.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    videoCard: {
+      'background-color': tokens.colors.bgSoft,
+      border: `1px solid ${tokens.colors.border}`,
+      'border-radius': `${tokens.radius.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    // announcement 兜底：danger 色左条 + soft 底（视觉强度高于 tip/warning）。
+    announcement: {
+      'background-color': tokens.colors.status.danger.soft,
+      'border-left': `4px solid ${tokens.colors.status.danger.accent}`,
+      padding: '14px 16px',
+      margin: '18px 0',
+      'border-radius': `${tokens.radius.sm}px`,
+    },
+    // author-bio 兜底：bgSoft 卡 + 圆角 + 较紧凑 padding。
+    authorBio: {
+      'background-color': tokens.colors.bgSoft,
+      'border-radius': `${tokens.radius.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    // image-caption 兜底：仅 margin + 居中（renderer 控制 img + caption 内层）。
+    imageCaption: {
+      margin: '18px 0',
+      'text-align': 'center',
+    },
+    // timeline 兜底：仅外框 margin（renderer 控制 grid 双栏）。
+    timeline: {
+      margin: '20px 0',
+    },
     calloutGroup: { margin: '20px 0' },
     // abstract / keyNumber / seeAlso 的 wrapper CSS 兜底。
     // renderer 只读 ctx.containers.<x>，不做 substring 检测、不硬涂底色——
@@ -462,6 +531,16 @@ export function baseInline(tokens: ThemeTokens): ThemeInline {
     emphasis: {
       color: tokens.colors.primary,
       'font-weight': '600',
+    },
+    // 删除线 / 插入：让 textMuted 承担"已弃用"语义,主色承担"新增"语义。
+    // 主题作者通过 spec.inline.del / ins 覆写。
+    del: {
+      color: tokens.colors.textMuted,
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: tokens.colors.primary,
+      'text-decoration': 'underline',
     },
   }
 }

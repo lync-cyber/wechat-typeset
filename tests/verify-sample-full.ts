@@ -6,7 +6,7 @@
  *   - 各 variantKind 的 variant class 全部出现（admonition / quote / compare /
  *     steps / divider / sectionTitle / note；codeBlock 独立检查）
  *   - 所有无 variant 的基础容器 class 也都出现（intro / cover / author /
- *     highlight / footer-cta / recommend / qrcode / mpvoice / mpvideo /
+ *     highlight / footer-cta / recommend / qrcode / voice-card / video-card /
  *     abstract / key-number / see-also / free 等）
  *
  * 具体清单从 vocabulary + VARIANT_IDS 派生，新增容器/variant 时不需要手改这里。
@@ -86,8 +86,8 @@ const plainContainers = [
   'container-footer-cta',
   'container-recommend',
   'container-qrcode',
-  'container-mpvoice',
-  'container-mpvideo',
+  'container-voice-card',
+  'container-video-card',
   // 补齐五档：note（第五态）+ signature（abstract/key-number/see-also）+ free（escape hatch）
   'container-note',
   'container-abstract',
@@ -99,8 +99,8 @@ for (const c of plainContainers) {
   check(`plain:${c}`, () => html.includes(c), c)
 }
 
-// 3. 视频 iframe（qqvid 版本）应被保留
-check('mpvideo-iframe', () => html.includes('<iframe'), 'v.qq.com iframe')
+// 3. 视频 iframe（video-card qqvid 版本）应被保留
+check('video-card-iframe', () => html.includes('<iframe'), 'v.qq.com iframe')
 
 // 4. 基本健康：有字数
 check('word-count>0', () => wordCount > 0, `words=${wordCount}`)

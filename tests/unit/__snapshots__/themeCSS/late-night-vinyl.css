@@ -47,6 +47,24 @@
   letter-spacing: 0.04em;
 }
 
+.markdown-body h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d9c9a8;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a89070;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 14px;
   line-height: 2.1;
@@ -174,15 +192,28 @@
 }
 
 .markdown-body th {
-  border: 1px solid #4a6080;
+  border-bottom: 1px solid #d97a3c;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 6px 10px;
-  background-color: #14263d;
+  background-color: transparent;
   text-align: left;
+  font-weight: 600;
+  color: #d97a3c;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  border: 1px solid #4a6080;
 }
 
 .markdown-body td {
+  border-bottom: 1px solid #4a6080;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 7px 10px;
+  color: #d9c9a8;
   border: 1px solid #4a6080;
-  padding: 6px 10px;
 }
 
 .markdown-body strong {
@@ -213,6 +244,16 @@
   font-weight: 600;
 }
 
+.markdown-body s, .markdown-body del {
+  color: #a89070;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #d97a3c;
+  text-decoration: underline;
+}
+
 .markdown-body .container-intro {
   border-left: 1px solid #d97a3c;
   background-color: transparent;
@@ -238,6 +279,15 @@
   line-height: 1.8;
   letter-spacing: 0.05em;
   border-radius: 0;
+}
+
+.markdown-body .container-author-bio {
+  background-color: #14263d;
+  border-top: 2px solid #d97a3c;
+  border-radius: 0;
+  padding: 16px 18px;
+  margin: 24px 0;
+  color: #d9c9a8;
 }
 
 .markdown-body .container-section-title {
@@ -271,6 +321,14 @@
   border-radius: 0;
 }
 
+.markdown-body .container-announcement {
+  background-color: #14263d;
+  border-left: 4px solid #c44848;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 0px;
+}
+
 .markdown-body .container-callout-group {
   margin: 20px 0;
 }
@@ -302,6 +360,22 @@
   margin: 20px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 4px 0 14px;
+  text-align: left;
+  font-size: 11px;
+  color: #d97a3c;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+}
+
+.markdown-body .container-timeline {
+  border-left: 1px solid #d97a3c;
+  padding: 0 0 0 18px;
+  margin: 20px 0;
+  background-color: transparent;
+}
+
 .markdown-body .container-qa-block {
   background-color: #14263d;
   border-left: 2px solid #d97a3c;
@@ -330,11 +404,19 @@
   padding: 12px 14px;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #14263d;
+  border: 1px solid #4a6080;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #14263d;
+  border: 1px solid #4a6080;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

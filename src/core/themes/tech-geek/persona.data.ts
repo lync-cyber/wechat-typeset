@@ -347,6 +347,44 @@ export const spec: PersonaSpec = {
       'border-radius': '4px',
     },
 
+    // 终端数据表：暗底反白表头 + dashed 行间 + monospace 紧凑 padding（Plan 9 manpage 账本风）
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '20px',
+      'font-size': '13px',
+      'letter-spacing': '0.4px',
+    },
+    th: {
+      'background-color': '#ebdfca', // textInverse 反白表头
+      color: '#262019',
+      border: '1px dashed #4a4034',
+      padding: '5px 10px',
+      'font-weight': '600',
+      'text-align': 'left',
+      'letter-spacing': '0.8px',
+    },
+    td: {
+      border: 'none',
+      'border-bottom': '1px dashed #4a4034', // hairline 行间，无侧线（manpage 账本）
+      padding: '5px 10px',
+      color: '#ebdfca',
+    },
+    // 终端深底键帽：bgMuted 暗底 + 反色字 + 底边 2px 模拟凹陷（不对称键帽感）
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#3a3328',
+      color: '#ebdfca',
+      border: '1px solid #4a4034',
+      'border-bottom-width': '2px',
+      'border-radius': '2px',
+      padding: '1px 6px',
+      'font-size': '12px',
+      'line-height': '1.4',
+      'letter-spacing': '0.6px',
+      'vertical-align': 'middle',
+    },
     // 代码块（规范 §1.3 非割裂设计 —— code 与正文同色系）
     pre: {
       'background-color': '#2f2920',
@@ -498,6 +536,16 @@ export const spec: PersonaSpec = {
       padding: '4px 0 4px 16px',
       margin: '20px 0',
       'border-radius': '0',
+    },
+    // 终端图注：行首 `>` 提示符风 — monospace 13px + textMuted + 左对齐（manpage 图说）
+    imageCaption: {
+      margin: '8px 0 18px 0',
+      'text-align': 'left',
+      'font-size': '13px',
+      color: '#9a8f7e',
+      'letter-spacing': '0.4px',
+      'padding-left': '14px',
+      'border-left': '2px solid #4a4034',
     },
   },
 

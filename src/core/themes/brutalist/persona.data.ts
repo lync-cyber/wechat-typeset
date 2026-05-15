@@ -181,6 +181,27 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 主题级 kicker 文案覆盖（UNIX 终端注释 + punk-zine 母语）
+  //
+  // 结构性导航标签走 `//` 注释前缀（终端/程序员美学）；
+  // 编辑声音走方括号 `[TAG]`（punk-zine 的 ASCII 标签气质）；
+  // 刊物元数据混用中英，与 colophon 设计稿的"下期 / ISSUE"双轨一致。
+  // ============================================================
+  kickers: {
+    toc: '// CONTENTS',
+    qaBlock: '// Q&A',
+    editorNote: '// EDITOR_NOTE',
+    methodology: '// METHOD',
+    qrFollowKicker: '// SCAN & FOLLOW',
+    qrFollowTitle: '慢读 // slow.read',
+    recommend: '[READ_NEXT]',
+    footerCTATitle: '[FOLLOW]',
+    colophonNextLabel: '下期',
+    colophonIssueLabel: 'ISSUE',
+    mastheadName: '慢读',
+  },
+
+  // ============================================================
   // 签名容器：复用 data-brief 家族（masthead / toc / cta-bar / qr-follow /
   // footnotes / qa-block / editor-note / colophon）。粗野主义不引入新签名容器。
   // ============================================================
@@ -193,6 +214,8 @@ export const spec: PersonaSpec = {
     'qrFollow', // 二维码关注
     'editorNote', // 编 者 按 callout（荧光黄整块）
     'colophon', // 下期预告 + 卷·期
+    'imageCaption', // 图注（// CAPTION 注释风 + 荧光黄）
+    'announcement', // 强警示横幅（荧光黄整块反色）
   ],
 
   // ============================================================
@@ -312,6 +335,43 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '13px',
       'font-weight': '700',
+    },
+    // 撕贴纸键：荧光黄底 + 黑实色边（全 1px 等粗）+ 字距 0，粗野徽章感
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#ebff00',
+      color: '#0a0a0a',
+      border: '1px solid #f0f0f0',
+      'border-radius': '0',
+      padding: '0 5px',
+      'font-size': '12px',
+      'font-weight': '700',
+      'letter-spacing': '0',
+      'line-height': '1.5',
+      'vertical-align': 'middle',
+    },
+    // 粗野黄黑表：radius 0 + 荧光黄 th 反色 + 全大写 + 1px 黑实色边
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '16px',
+      'font-size': '13px',
+    },
+    th: {
+      border: '1px solid #f0f0f0',
+      padding: '6px 10px',
+      'background-color': '#ebff00',
+      color: '#0a0a0a',
+      'text-align': 'left',
+      'font-weight': '700',
+      'text-transform': 'uppercase',
+      'letter-spacing': '0.05em',
+    },
+    td: {
+      border: '1px solid #f0f0f0',
+      padding: '6px 10px',
+      color: '#f0f0f0',
     },
   },
 
@@ -573,12 +633,73 @@ export const spec: PersonaSpec = {
       'padding-top': '12px',
       'border-radius': '0',
     },
+    // 粗野图注：`// CAPTION` 注释风 + 荧光黄 + 等宽，终端输出感
+    imageCaption: {
+      __reset: true,
+      margin: '4px 0 16px',
+      'text-align': 'left',
+      'font-size': '11px',
+      color: '#ebff00',
+      'font-weight': '700',
+      'letter-spacing': '0.1em',
+    },
+    // 撕贴纸反色横幅：荧光黄整块 + 反色黑字 + 全大写，强势 punk-zine 通告
+    announcement: {
+      __reset: true,
+      'background-color': '#ebff00',
+      color: '#0a0a0a',
+      padding: '12px 16px',
+      margin: '18px 0',
+      'border-radius': '0',
+      'font-weight': '700',
+      'letter-spacing': '0.05em',
+    },
   },
 
   // ============================================================
   // 容器内层 inline-style 覆盖
   // ============================================================
   innerStyles: {
+    // abstract 容器透明底 = 落在近黑页底（#0a0a0a）上，kicker 走荧光黄 primary 保持可见
+    abstractKicker: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '6px',
+    },
+    // keyNumber 容器底色 #1a1a1a（暗底），大数字走荧光黄 primary 承担视觉重量
+    keyNumberValue: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '34px',
+      'font-weight': '900',
+      'line-height': '1.0',
+      'letter-spacing': '-0.5px',
+      'margin-bottom': '4px',
+    },
+    // keyNumber 暗底上的小 kicker 走荧光黄 primary，与 abstractKicker 语言统一
+    keyNumberKicker: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    // seeAlso 容器底色 #1a1a1a（暗底），title 走荧光黄 primary 保持可读性
+    seeAlsoTitle: {
+      __reset: true,
+      color: '#ebff00',
+      'font-size': '11px',
+      'font-weight': '700',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
     // editor-note kicker（"编 者 按"）：黄底 callout 上不能用 primary（同色不可见）,
     // 走 textInverse 反色 + letter-spacing 拉开"被点名"气质
     editorNoteKicker: {

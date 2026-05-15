@@ -46,6 +46,7 @@ const CATEGORY_LABEL: Record<ContainerSpec['category'], string> = {
   navigation: '导航',
   media: '媒体',
   signature: '签名',
+  data: '数据图表',
   free: '兜底',
 }
 const CATEGORY_ORDER: ContainerSpec['category'][] = [
@@ -53,6 +54,7 @@ const CATEGORY_ORDER: ContainerSpec['category'][] = [
   'admonition',
   'content',
   'navigation',
+  'data',
   'media',
   'signature',
   'free',

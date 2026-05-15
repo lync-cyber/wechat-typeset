@@ -190,8 +190,13 @@ export const spec: PersonaSpec = {
     toc: '— tracklist · 节目单 —',
     qaBlock: '听 · 众 · 连 · 线',
     editorNote: '播 · 后 · 札记',
+    methodology: '制作手记 · LINER NOTES',
     qrFollowKicker: 'tune · in',
     qrFollowTitle: '夜读电台',
+    recommend: '深 夜 选 听',
+    footerCTATitle: '长夜收听',
+    colophonNextLabel: '下期',
+    colophonIssueLabel: 'EP ·',
     mastheadName: '夜读电台',
   },
 
@@ -258,6 +263,9 @@ export const spec: PersonaSpec = {
     'ctaBar',
     'qrFollow',
     'colophon',
+    'imageCaption', // monospace 橙金时间戳图注
+    'authorBio', // 电台主播卡（深蓝卡底 + 橙顶线）
+    'timeline', // 节目时序线（橙竖线 + 内缩）
   ],
 
   // ============================================================
@@ -362,6 +370,7 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '12px',
     },
+    // 暗夜键：accent 1px 冷蓝灰边 + 深蓝底 + 暖米白字 + radius 0，老式收音机按键感
     kbd: {
       display: 'inline-block',
       'background-color': '#14263d',
@@ -419,12 +428,34 @@ export const spec: PersonaSpec = {
       'margin-top': '20px',
       'margin-bottom': '20px',
     },
+    // 电台数据栏：暗底 + th 走 monospace + accent 橙金 1px 下划线，无全框黑边
     table: {
       'border-collapse': 'collapse',
       width: '100%',
       'margin-top': '0',
       'margin-bottom': '16px',
       'font-size': '13px',
+    },
+    th: {
+      'border-bottom': '1px solid #d97a3c',
+      'border-top': 'none',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '6px 10px',
+      'background-color': 'transparent',
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#d97a3c',
+      'font-size': '11px',
+      'letter-spacing': '0.08em',
+    },
+    td: {
+      'border-bottom': '1px solid #4a6080',
+      'border-top': 'none',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '7px 10px',
+      color: '#d9c9a8',
     },
     // strong：橙色强调（设计稿 b style="color:#d97a3c" 原型）
     strong: { 'font-weight': '700', color: '#d97a3c' },
@@ -658,6 +689,99 @@ export const spec: PersonaSpec = {
       'border-top': '1px solid #d9c9a8',
       'margin-top': '24px',
       'padding-top': '12px',
+    },
+    // 电台图注：monospace 橙金小字 + 时间戳风（"FIG. · 03:41"），暗底上低调精准
+    // 电台图注：橙金小字 + 时间戳风字距（"FIG. · 03:41"），暗底上低调精准
+    imageCaption: {
+      __reset: true,
+      margin: '4px 0 14px',
+      'text-align': 'left',
+      'font-size': '11px',
+      color: '#d97a3c',
+      'letter-spacing': '0.1em',
+      'line-height': '1.5',
+    },
+    // 电台主播卡：深蓝卡底 + 顶端橙线，monospace 排版元数据气质
+    authorBio: {
+      __reset: true,
+      'background-color': '#14263d',
+      'border-top': '2px solid #d97a3c',
+      'border-radius': '0',
+      padding: '16px 18px',
+      margin: '24px 0',
+      color: '#d9c9a8',
+    },
+    // 时间线：暗底 + 左侧橙竖线 + 暖米内缩，节目时序感
+    timeline: {
+      __reset: true,
+      'border-left': '1px solid #d97a3c',
+      padding: '0 0 0 18px',
+      margin: '20px 0',
+      'background-color': 'transparent',
+    },
+  },
+
+  // ============================================================
+  // 容器内层 inline-style 覆盖（暗底专属）
+  //
+  // 兜底 baseInnerStyles 假设浅底（textMuted 灰色在浅底可见，primary 在浅底够亮）。
+  // 本主题 bg=#0e1a2b / containers bg=#14263d，textMuted=#a89070 在暗底对比度不足——
+  // 所有 kicker/title 改走 accent 橙金或 textInverse 白，保证暗底上可读。
+  // ============================================================
+  innerStyles: {
+    // abstract 容器：透明底落在文章底 #0e1a2b 上。kicker 走 accent 橙金 + monospace 电台信号感
+    abstractKicker: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '10px',
+      'font-weight': '700',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '6px',
+    },
+    // keyNumber 容器：bg=#14263d 暗底，大数字走 accent 橙金 + monospace 电台数据气质
+    keyNumberValue: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '34px',
+      'font-weight': '700',
+      'line-height': '1.1',
+      'letter-spacing': '-0.5px',
+      'margin-bottom': '4px',
+    },
+    // keyNumber 暗底上小 kicker（"KEY METRIC"）：textMuted 在 #14263d 几乎不可见，改 accent
+    keyNumberKicker: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '11px',
+      'font-weight': '600',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    // seeAlso 容器：bg=#14263d 暗底，title 走 textInverse（暖米白）保持最大对比
+    seeAlsoTitle: {
+      __reset: true,
+      color: '#d9c9a8',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '10px',
+      'font-weight': '700',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    // editor-note 容器：bg=#14263d 暗底，kicker（"播后札记 · LATE-NIGHT NOTE"）走 accent 橙金
+    editorNoteKicker: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '10px',
+      'font-weight': '700',
+      'letter-spacing': '1.5px',
+      'margin-bottom': '8px',
     },
   },
 

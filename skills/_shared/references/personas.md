@@ -14,20 +14,20 @@
 
 | id | 中文名 | 受众 | admonition | quote | steps | divider | codeBlock | note | signatureContainers |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `default` | 默认主题 | 通用（全题材公平阅读） | `accent-bar` | `classic` | `number-circle` | `rule` | `bare` | `minimal-callout` | —— |
+| `default` | 默认主题 | 通用（全题材公平阅读） | `accent-bar` | `classic` | `number-circle` | `rule` | `bare` | `minimal-callout` | imageCaption、announcement |
 | `tech-geek` | 极客夜行 | 技术布道 / 工程随笔 / 架构评论（manpage / RFC / TAOCP 脚注风） | `manpage-log` | `frame-brackets` | `number-circle` | `wave` | `bare` | `side-bar` | —— |
 | `tech-explainer` | 文档白昼 | 技术布道 / 产品文档 / 教程 | `accent-bar` | `column-rule` | `number-circle` | `rule` | `header-bar` | `box-callout` | note、seeAlso |
-| `life-aesthetic` | 慢生活 | 生活写作 / 非虚构随笔 | `bubble-organic` | `classic` | `number-circle` | `rule` | `bare` | `minimal-callout` | —— |
+| `life-aesthetic` | 慢生活 | 生活写作 / 非虚构随笔 | `bubble-organic` | `classic` | `number-circle` | `rule` | `bare` | `minimal-callout` | imageCaption、authorBio |
 | `business-finance` | 硬核财经 | 财经内参 / 研究所 newsletter（FT 中文、财新周刊、Bloomberg Terminal、HBR） | `ledger-cell` | `frame-brackets` | `timeline-dot` | `wave` | `bare` | `box-callout` | abstract、keyNumber |
 | `data-brief` | 数据简报 | 数据 newsletter / 数据简报 / 行业图表周刊 | `news-row` | `classic` | `number-circle` | `flower` | `bare` | `side-bar` | abstract、masthead、sectionTag、toc、kpiDashboard、barChart、qaBlock、footnotes、refs、ctaBar、qrFollow、editorNote、methodology、colophon |
-| `literary-humanism` | 人文札记 | 人文非虚构（散文 / 书评 / 长评 / 札记） | `marginalia` | `magazine-dropcap` | `timeline-dot` | `flower` | `bare` | `minimal-callout` | —— |
-| `industry-observer` | 行业观察 | 内参 newsletter / 行业周报 / analyst essay 读者 | `report-section` | `column-rule` | `timeline-dot` | `glyph` | `bare` | `side-bar` | cover、author、footerCTA、abstract、keyNumber、seeAlso |
-| `people-story` | 人物特稿 | 人物特稿 / 人文非虚构 / 杂志 Profile | `magazine-pull` | `magazine-dropcap` | `timeline-dot` | `rule` | `bare` | `minimal-callout` | —— |
+| `literary-humanism` | 人文札记 | 人文非虚构（散文 / 书评 / 长评 / 札记） | `marginalia` | `magazine-dropcap` | `timeline-dot` | `flower` | `bare` | `minimal-callout` | imageCaption、authorBio |
+| `industry-observer` | 行业观察 | 内参 newsletter / 行业周报 / analyst essay 读者 | `report-section` | `column-rule` | `timeline-dot` | `glyph` | `bare` | `side-bar` | cover、author、footerCTA、abstract、keyNumber、seeAlso、imageCaption、authorBio、timeline |
+| `people-story` | 人物特稿 | 人物特稿 / 人文非虚构 / 杂志 Profile | `magazine-pull` | `magazine-dropcap` | `timeline-dot` | `rule` | `bare` | `minimal-callout` | cover、author、intro、quoteCard、sectionTitle、footerCTA、recommend、qrcode、imageCaption、authorBio、announcement |
 | `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `sidenote-latex` | `frame-brackets` | `timeline-dot` | `rule` | `bare` | `box-callout` | abstract、seeAlso |
-| `editorial-mook` | 编辑刊 | 慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物 | `mook-tag` | `classic` | `number-circle` | `glyph` | `bare` | `minimal-callout` | abstract、masthead、toc、qaBlock、footnotes、ctaBar、qrFollow、editorNote、colophon |
-| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `classic` | `number-circle` | `seal-mark` | `bare` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、editorNote、footnotes、refs、calloutGroup、ctaBar、qrFollow、colophon、methodology、barChart |
-| `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `news-row` | `tilted-sticker` | `number-circle` | `flower` | `bare` | `side-bar` | masthead、toc、qaBlock、footnotes、ctaBar、qrFollow、editorNote、colophon |
-| `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `news-row` | `classic` | `number-circle` | `dots` | `bare` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、editorNote、footnotes、ctaBar、qrFollow、colophon |
+| `editorial-mook` | 编辑刊 | 慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物 | `mook-tag` | `classic` | `number-circle` | `glyph` | `bare` | `minimal-callout` | abstract、masthead、toc、qaBlock、footnotes、ctaBar、qrFollow、editorNote、colophon、imageCaption、authorBio、announcement |
+| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `classic` | `number-circle` | `seal-mark` | `bare` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、editorNote、footnotes、refs、calloutGroup、ctaBar、qrFollow、colophon、methodology、barChart、imageCaption、announcement |
+| `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `news-row` | `tilted-sticker` | `number-circle` | `flower` | `bare` | `side-bar` | masthead、toc、qaBlock、footnotes、ctaBar、qrFollow、editorNote、colophon、imageCaption、announcement |
+| `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `news-row` | `classic` | `number-circle` | `dots` | `bare` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、editorNote、footnotes、ctaBar、qrFollow、colophon、imageCaption、authorBio、timeline |
 
 <!-- generated:personas-table:end -->
 
@@ -42,6 +42,8 @@
 **描述**：有意识的中立——Medium/Notion/Substack 默认家族
 
 **视觉签名**：admonition=`accent-bar` · quote=`classic` · steps=`number-circle` · divider=`rule` · codeBlock=`bare` · note=`minimal-callout`
+
+**signatureContainers**：`imageCaption`、`announcement`
 
 ### tech-geek · 极客夜行
 
@@ -68,6 +70,8 @@
 **描述**：暖米底 + 圆角柔和，写写饮食、旅行与长日
 
 **视觉签名**：admonition=`bubble-organic` · quote=`classic` · steps=`number-circle` · divider=`rule` · codeBlock=`bare` · note=`minimal-callout`
+
+**signatureContainers**：`imageCaption`、`authorBio`
 
 ### business-finance · 硬核财经
 
@@ -97,6 +101,8 @@
 
 **视觉签名**：admonition=`marginalia` · quote=`magazine-dropcap` · steps=`timeline-dot` · divider=`flower` · codeBlock=`bare` · note=`minimal-callout`
 
+**signatureContainers**：`imageCaption`、`authorBio`
+
 ### industry-observer · 行业观察
 
 **受众**：内参 newsletter / 行业周报 / analyst essay 读者
@@ -105,7 +111,7 @@
 
 **视觉签名**：admonition=`report-section` · quote=`column-rule` · steps=`timeline-dot` · divider=`glyph` · codeBlock=`bare` · note=`side-bar`
 
-**signatureContainers**：`cover`、`author`、`footerCTA`、`abstract`、`keyNumber`、`seeAlso`
+**signatureContainers**：`cover`、`author`、`footerCTA`、`abstract`、`keyNumber`、`seeAlso`、`imageCaption`、`authorBio`、`timeline`
 
 ### people-story · 人物特稿
 
@@ -114,6 +120,8 @@
 **描述**：《人物》杂志 / New Yorker Profiles 家族，特稿的"肖像感"排版
 
 **视觉签名**：admonition=`magazine-pull` · quote=`magazine-dropcap` · steps=`timeline-dot` · divider=`rule` · codeBlock=`bare` · note=`minimal-callout`
+
+**signatureContainers**：`cover`、`author`、`intro`、`quoteCard`、`sectionTitle`、`footerCTA`、`recommend`、`qrcode`、`imageCaption`、`authorBio`、`announcement`
 
 ### academic-frontier · 学术前沿
 
@@ -133,7 +141,7 @@
 
 **视觉签名**：admonition=`mook-tag` · quote=`classic` · steps=`number-circle` · divider=`glyph` · codeBlock=`bare` · note=`minimal-callout`
 
-**signatureContainers**：`abstract`、`masthead`、`toc`、`qaBlock`、`footnotes`、`ctaBar`、`qrFollow`、`editorNote`、`colophon`
+**signatureContainers**：`abstract`、`masthead`、`toc`、`qaBlock`、`footnotes`、`ctaBar`、`qrFollow`、`editorNote`、`colophon`、`imageCaption`、`authorBio`、`announcement`
 
 ### swiss-grid · 苏黎世栅格
 
@@ -143,7 +151,7 @@
 
 **视觉签名**：admonition=`news-underline` · quote=`classic` · steps=`number-circle` · divider=`seal-mark` · codeBlock=`bare` · note=`side-bar`
 
-**signatureContainers**：`abstract`、`sectionTag`、`editorialHeader`、`byline`、`toc`、`keyNumber`、`qaBlock`、`editorNote`、`footnotes`、`refs`、`calloutGroup`、`ctaBar`、`qrFollow`、`colophon`、`methodology`、`barChart`
+**signatureContainers**：`abstract`、`sectionTag`、`editorialHeader`、`byline`、`toc`、`keyNumber`、`qaBlock`、`editorNote`、`footnotes`、`refs`、`calloutGroup`、`ctaBar`、`qrFollow`、`colophon`、`methodology`、`barChart`、`imageCaption`、`announcement`
 
 ### brutalist · 粗野主义报刊
 
@@ -153,7 +161,7 @@
 
 **视觉签名**：admonition=`news-row` · quote=`tilted-sticker` · steps=`number-circle` · divider=`flower` · codeBlock=`bare` · note=`side-bar`
 
-**signatureContainers**：`masthead`、`toc`、`qaBlock`、`footnotes`、`ctaBar`、`qrFollow`、`editorNote`、`colophon`
+**signatureContainers**：`masthead`、`toc`、`qaBlock`、`footnotes`、`ctaBar`、`qrFollow`、`editorNote`、`colophon`、`imageCaption`、`announcement`
 
 ### late-night-vinyl · 深夜电台
 
@@ -163,7 +171,7 @@
 
 **视觉签名**：admonition=`news-row` · quote=`classic` · steps=`number-circle` · divider=`dots` · codeBlock=`bare` · note=`side-bar`
 
-**signatureContainers**：`intro`、`cover`、`author`、`masthead`、`toc`、`qaBlock`、`editorNote`、`footnotes`、`ctaBar`、`qrFollow`、`colophon`
+**signatureContainers**：`intro`、`cover`、`author`、`masthead`、`toc`、`qaBlock`、`editorNote`、`footnotes`、`ctaBar`、`qrFollow`、`colophon`、`imageCaption`、`authorBio`、`timeline`
 
 <!-- generated:persona-cards:end -->
 

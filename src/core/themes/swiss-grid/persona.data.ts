@@ -194,6 +194,26 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 主题级 kicker 文案覆盖（Neue Grafik 国际排印母语）
+  //
+  // Swiss grid 的栏目标签全走英文大写短语——国际版面设计的母语形态。
+  // toc 的 INDEX 对位设计稿 #03；colophon 的 NEXT / VOL 对位设计稿 #24。
+  // ============================================================
+  kickers: {
+    toc: 'INDEX',
+    qaBlock: 'Q & A',
+    editorNote: "EDITOR'S NOTE",
+    methodology: 'METHODOLOGY',
+    qrFollowKicker: 'SUBSCRIBE',
+    qrFollowTitle: 'NEUE LESE GRAFIK',
+    recommend: 'FURTHER READING',
+    footerCTATitle: 'FOLLOW THE PUBLICATION',
+    colophonNextLabel: 'NEXT ·',
+    colophonIssueLabel: 'VOL ·',
+    mastheadName: 'NEUE LESE GRAFIK',
+  },
+
+  // ============================================================
   // 签名容器：声明本主题需要的所有签名容器（renderer 在 pipeline/containers/databrief
   // / signature 已实现）。conformance 测试会校验注册表对齐。
   // ============================================================
@@ -214,6 +234,8 @@ export const spec: PersonaSpec = {
     'colophon', // 刊物收束栏（NEXT · VOL 双栏）
     'methodology', // 方法论小字注释
     'barChart', // 条形图（FIG.01 按年龄）
+    'imageCaption', // 图注（居左 monospace 极小字 + letter-spacing）
+    'announcement', // 强警示横幅（国际红块 + 黑实线全框）
   ],
 
   // 内层元素 inline style 槽位（renderer 不硬编码，主题通过 spec.innerStyles 接管）。
@@ -402,6 +424,51 @@ export const spec: PersonaSpec = {
       border: '1px solid #000000',
       'border-radius': '0',
       'font-size': '12px',
+    },
+    // 极简方键：radius 0 + 不对称黑边（底 2px/右 1px，Swiss 不对称排印语言）
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#f0f0f0',
+      color: '#000000',
+      'border-top': '1px solid #000000',
+      'border-right': '1px solid #000000',
+      'border-bottom': '2px solid #000000',
+      'border-left': '1px solid #000000',
+      'border-radius': '0',
+      padding: '0 5px',
+      'font-size': '11px',
+      'line-height': '1.5',
+      'vertical-align': 'middle',
+    },
+    // 苏黎世数据栏：radius 0 + 上下 1px 黑实线 + th 全大写 letter-spacing 拉开，无左右竖边框
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '16px',
+      'font-size': '13px',
+    },
+    th: {
+      'border-top': '1px solid #000000',
+      'border-bottom': '1px solid #000000',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '6px 10px',
+      'background-color': 'transparent',
+      'text-align': 'left',
+      'font-weight': '700',
+      'font-size': '10px',
+      'letter-spacing': '0.15em',
+      'text-transform': 'uppercase',
+      color: '#000000',
+    },
+    td: {
+      'border-top': 'none',
+      'border-bottom': '1px solid #e8e8e8',
+      'border-left': 'none',
+      'border-right': 'none',
+      padding: '6px 10px',
+      color: '#000000',
     },
   },
 
@@ -709,6 +776,28 @@ export const spec: PersonaSpec = {
       'margin-top': '24px',
       'padding-top': '10px',
       'border-radius': '0',
+    },
+    // 苏黎世图注：居左极小字 + letter-spacing 0.2em 拉开，数据图说栏感（font-family 被平台剥，靠字距代偿 monospace 气质）
+    imageCaption: {
+      __reset: true,
+      margin: '6px 0 16px',
+      'text-align': 'left',
+      'font-size': '10px',
+      color: '#888888',
+      'letter-spacing': '0.2em',
+      'line-height': '1.5',
+    },
+    // 直角硬边强警示横幅：国际红块 + 白字 + 全框黑线，Swiss 的"STOP"信号
+    announcement: {
+      __reset: true,
+      'background-color': '#e30613',
+      color: '#ffffff',
+      padding: '12px 16px',
+      margin: '18px 0',
+      'border-radius': '0',
+      border: '1px solid #000000',
+      'font-weight': '700',
+      'letter-spacing': '0.05em',
     },
   },
 

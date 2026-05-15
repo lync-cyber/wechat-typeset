@@ -49,8 +49,8 @@ describe('BUILTIN_COMPONENTS', () => {
   it('markdownSnippet 能被 pipeline 正确渲染', () => {
     for (const c of BUILTIN_COMPONENTS) {
       const { html } = render({ md: c.markdownSnippet, theme: defaultTheme })
-      // 自由组件 mpvideo-qq：直接 iframe 不走 container
-      if (c.id === 'free-mpvideo-qq') {
+      // 自由组件 video-card-qq：直接 iframe 不走 container
+      if (c.id === 'free-video-card-qq') {
         expect(html).toMatch(/<iframe/)
         continue
       }
