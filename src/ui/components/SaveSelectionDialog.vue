@@ -139,7 +139,7 @@ function confirm() {
 .btn-primary { background: var(--accent); color: var(--accent-on); border: 1px solid var(--accent); }
 .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .modal-mask { position: fixed; z-index: 60; }
   .modal { width: min(320px, calc(100vw - 32px)); }
   .modal-field input { height: 40px; font-size: 16px; }

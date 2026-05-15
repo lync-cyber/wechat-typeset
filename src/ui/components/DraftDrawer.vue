@@ -504,7 +504,7 @@ defineExpose({ refresh })
 .cap-text { display: flex; gap: 4px; align-items: baseline; }
 
 /* ---- 移动端适配 ---- */
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   /* 关闭按钮触摸目标走 PanelHeader 内的 .panel-header__close（44px 由该原语自身保证） */
   .icon-btn { width: 40px; height: 40px; font-size: var(--fs-15); }
   .btn { height: 40px; padding: 0 var(--sp-4); font-size: 16px; }

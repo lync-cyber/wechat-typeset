@@ -195,7 +195,7 @@ function insertContainer(spec: ContainerSpec) {
   padding: var(--sp-4) var(--sp-5);
   border-bottom: 1px solid var(--border);
 }
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .help-icons { display: block; }
 }
 .icon-list { list-style: none; margin: var(--sp-2) 0 0; padding: 0; }

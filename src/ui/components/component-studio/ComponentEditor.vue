@@ -203,7 +203,7 @@ const validation = computed(() => validateSnippet(props.draft.markdownSnippet))
   border-radius: var(--radius-1, 2px);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .text-input { height: 40px; font-size: 16px; }
   .md-row { height: 220px; }
 }

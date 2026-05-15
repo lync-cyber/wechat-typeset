@@ -193,7 +193,7 @@ onBeforeUnmount(() => {
 }
 
 /* 移动端：tab 切换，无 splitter */
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .splitter { display: none; }
 }
 </style>

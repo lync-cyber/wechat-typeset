@@ -72,7 +72,7 @@ defineExpose({
   padding: 8px 12px;
   font-size: var(--fs-13);
 }
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   /* iOS 防 focus zoom：≥ 16px */
   .search-box--sm,
   .search-box--md {

@@ -118,7 +118,7 @@ function triggerAction(kind: GridAction, entry: ComponentEntry, ev: Event) {
 .cell-action--derive { background: var(--accent); }
 .cell-action--share  { background: var(--text-muted); }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .cell-action { width: 28px; height: 28px; font-size: var(--fs-15); }
 }
 </style>

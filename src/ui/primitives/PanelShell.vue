@@ -81,7 +81,7 @@ const maskStyle = computed(() =>
   color: var(--text);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   /* 移动端把顶部对齐型 modal 上推（CommandPalette 历史 6vh） */
   .panel-shell-mask--align-top {
     padding-top: 6vh !important;

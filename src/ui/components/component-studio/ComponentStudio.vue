@@ -247,7 +247,7 @@ const headerLabel = computed(() => {
 .btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .btn { min-height: 40px; padding: 0 var(--sp-4); }
 }
 </style>
