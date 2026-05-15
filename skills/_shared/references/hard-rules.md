@@ -96,7 +96,7 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 <!-- generated:variant-whitelist:start -->
 
 ```ts
-admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'mook-tag'
+admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag'
 quote:         'classic' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'tilted-sticker'
 compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
 steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot'
