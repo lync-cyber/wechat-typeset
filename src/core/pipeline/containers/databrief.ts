@@ -6,6 +6,8 @@
 export {
   mastheadContainer,
   sectionTagContainer,
+  bylineContainer,
+  editorialHeaderContainer,
   tocContainer,
   tocItemContainer,
   colophonContainer,
@@ -20,4 +22,5 @@ export {
   methodologyContainer,
   ctaBarContainer,
   qrFollowContainer,
+  calloutGroupContainer,
 } from './databrief/index'

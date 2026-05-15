@@ -31,21 +31,54 @@ export const abstractContainer: ContainerRenderer = {
 
 // key-number · 大数字 + 说明。wrapper / value / kicker 样式全由
 // ctx.containers.keyNumber / ctx.innerStyles.keyNumber{Value,Kicker} 接管。
+//
+// 两种布局（由 attrs.meta 切换）：
+//   - 默认：vertical stack（kicker → value → body）
+//   - meta 非空：display:table 双栏——左 cell 主视（kicker+value），右 cell monospace 元信息底对齐
+//     条目用 ` / ` 分隔（与 editorial-header 同源约定）。issue-banner 形态由此承担。
 
 export const keyNumberContainer: ContainerRenderer = {
   open: (ctx) => {
     const kicker = ctx.info.trim()
     const value = ctx.attrs.value ?? '0'
+    const meta = ctx.attrs.meta ?? ''
     const wrapperCSS = inline(ctx.containers.keyNumber)
     const valueCSS = inline(ctx.innerStyles.keyNumberValue)
     const kickerCSS = inline(ctx.innerStyles.keyNumberKicker)
     const kickerRow = kicker
       ? `<section class="container-key-number__kicker" style="${kickerCSS}">${escText(kicker)}</section>\n`
       : ''
+    const valueRow = `<section class="container-key-number__value" style="${valueCSS}">${escText(value)}</section>\n`
+
+    if (meta) {
+      const lines = meta.split(' / ').map((s) => s.trim()).filter(Boolean)
+      const tableCSS = `display:table;width:100%;table-layout:auto`
+      const leftCellCSS = `display:table-cell;vertical-align:bottom`
+      const rightCellCSS = [
+        'display:table-cell',
+        'vertical-align:bottom',
+        'text-align:right',
+        'font-family:Menlo,Monaco,monospace',
+        'font-size:9px',
+        'line-height:1.6',
+        'letter-spacing:0.1em',
+        'white-space:nowrap',
+        'padding-left:10px',
+      ].join(';')
+      const metaInner = lines.map((s) => `<span style="display:block">${escText(s)}</span>`).join('')
+      return (
+        `<section class="container-key-number" style="${wrapperCSS}">\n` +
+        `<section class="container-key-number__row" style="${tableCSS}">` +
+        `<span style="${leftCellCSS}">${kickerRow}${valueRow}</span>` +
+        `<span class="container-key-number__meta" style="${rightCellCSS}">${metaInner}</span>` +
+        `</section>\n`
+      )
+    }
+
     return (
       `<section class="container-key-number" style="${wrapperCSS}">\n` +
       kickerRow +
-      `<section class="container-key-number__value" style="${valueCSS}">${escText(value)}</section>\n`
+      valueRow
     )
   },
   close: '</section>\n',

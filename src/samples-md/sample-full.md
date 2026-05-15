@@ -221,7 +221,7 @@ wxPatch 把公众号不兼容的语法改造为兼容形态。
 
 ---
 
-## 分割线 5 种 variant
+## 分割线 6 种 variant
 
 ::: divider variant=wave
 :::
@@ -236,6 +236,9 @@ wxPatch 把公众号不兼容的语法改造为兼容形态。
 :::
 
 ::: divider variant=glyph glyph=◆
+:::
+
+::: divider variant=seal-mark
 :::
 
 ---

@@ -182,14 +182,102 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: section-tag 深度\n:::\n',
   },
   {
+    name: 'byline',
+    styleKey: 'byline',
+    category: 'structure',
+    pack: 'data-brief',
+    fenceLength: 3,
+    attrs: [
+      {
+        key: 'cells',
+        description:
+          '三栏（或更多）署名单元，竖线 `|` 分隔；每格 `kicker:value` 用半角冒号分隔。' +
+          '例：`AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026`。' +
+          '为零时回退到旧 author 形态（info 作 name + role/issue attrs），但 byline 建议总是声明 cells。',
+        example: 'AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026',
+      },
+      {
+        key: 'monospaceLast',
+        description: '末格 value 是否走 monospace 字体（typically "SET" 期次或日期）。',
+        enum: ['true', 'false'],
+      },
+    ],
+    description:
+      '署名条：N 栏分隔（kicker 小字 / value 主视），data-brief 家族签名。' +
+      '与 author 容器正交：author 是"作者名 + role"两段签名块；byline 是"AUTHOR / EDITOR / SET" 多栏 newspaper 形态。',
+    example:
+      '::: byline cells="AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026" monospaceLast="true"\n:::\n',
+  },
+  {
+    name: 'editorial-header',
+    styleKey: 'editorialHeader',
+    category: 'structure',
+    pack: 'data-brief',
+    fenceLength: 3,
+    attrs: [
+      {
+        key: 'chip',
+        description: '装饰小红章文字（如 "ESSAY · 01"）。声明则在大标题上方渲染 primary 实色徽章 + hairline。',
+        example: 'ESSAY · 01',
+      },
+      {
+        key: 'pp',
+        description: '右上页码区间（monospace 小字，与 chip 同一行 hairline 居中对齐）。',
+        example: 'PP.04–19',
+      },
+      {
+        key: 'subtitle',
+        description: '主标题下方副标题（13px 中粗黑字，无字距）。',
+        example: '论慢读在算法时代的价值',
+      },
+      {
+        key: 'topRule',
+        description: '顶部装饰色条宽度（px 整数，0=不渲染）。Swiss 苏黎世副刊头惯用 6。',
+        example: '6',
+      },
+      {
+        key: 'titleDot',
+        description: '主标题末色实心点（PaletteColorKey）。声明则在 info 末尾追加一个该色 "."。',
+        enum: ['primary', 'accent', 'secondary'],
+      },
+      {
+        key: 'br',
+        description:
+          '在 info 中作为换行分隔符的字符串（默认 " / "，前后各一空格）。让作者用一行 info 表达多行大标题：' +
+          '`info="在无人深夜， / 重新学习 / 如何阅读一本书"`',
+        example: ' / ',
+      },
+    ],
+    description:
+      '装饰性副刊头：跨栏大字标题 + 可选 chip 红章 + PP 页码 + subtitle + titleDot 红点。' +
+      '与微信原生标题（H1）正交，本容器输出 <section>，不抢平台 H1 语义。data-brief 家族签名。',
+    example:
+      '::: editorial-header 在无人深夜， / 重新学习 / 如何阅读一本书 chip="ESSAY · 01" pp="PP.04–19" subtitle="论慢读在算法时代的价值" topRule="6" titleDot="primary"\n:::\n',
+  },
+  {
     name: 'toc',
     styleKey: 'toc',
     category: 'structure',
     pack: 'data-brief',
     fenceLength: 4,
     children: ['toc-item'],
+    attrs: [
+      {
+        key: 'layout',
+        description:
+          '布局模式：default = 单列（kicker 顶 + items 下）；split = 双栏（左 kicker+meta / 右 toc-items）。' +
+          'Swiss 苏黎世双栏对开页用 split + meta 描述栏位比例。',
+        enum: ['default', 'split'],
+      },
+      {
+        key: 'meta',
+        description:
+          'split 布局时左列副说明（如 "目次排布采用12栏 / 1/3 : 2/3 比例"）。多行用 ` / ` 分隔。default 布局忽略。',
+        example: '目次排布采用12栏 / 1/3 : 2/3 比例',
+      },
+    ],
     description:
-      '目录三栏（序号·标题·页码）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker（如 "目录 · CONTENTS"）。',
+      '目录：默认单列（kicker 顶 + items 下）；声明 layout=split 切到双栏（左 INDEX kicker + meta 描述 / 右 toc-items）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker。',
     example:
       ':::: toc 目录 · CONTENTS\n::: toc-item no="01" page="p.04" 为什么我们失去了阅读的耐心\n:::\n::::\n',
   },
@@ -251,6 +339,20 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: 'danger：高风险警告／错误示范。',
     example: '::: danger 警告\n内容 …\n:::\n',
+  },
+  {
+    name: 'callout-group',
+    styleKey: 'calloutGroup',
+    category: 'admonition',
+    pack: 'data-brief',
+    nestable: true,
+    children: ['tip', 'warning', 'info', 'danger'],
+    fenceLength: 4,
+    description:
+      '四态 callout 联表：外框承担"上/下/左/右 hairline"，子项 (tip/warning/info/danger) 在内串联。' +
+      '设计稿 multi-callout 母本——配合 admonition variant=news-row 用最佳。外层用 4 个冒号。',
+    example:
+      ':::: callout-group\n::: info INFO variant=news-row\n说明一。\n:::\n::: tip TIP variant=news-row\n小贴士。\n:::\n::::\n',
   },
   {
     name: 'note',
@@ -453,8 +555,17 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     attrs: [
       { key: 'value', description: '大字号数字本体', example: '42%' },
+      {
+        key: 'meta',
+        description:
+          '右侧 monospace 元信息浮动列（如 "VOL.IV / 2026—04—22 / CHF 14.—"）。' +
+          '声明则切到"双栏"布局：左 kicker+value 占主视，右 meta 多行底对齐。条目用 ` / ` 分隔。',
+        example: 'VOL.IV / 2026—04—22 / CHF 14.—',
+      },
     ],
-    description: '大数字 + 说明（研究报告／内参版面）。attrs.value 为数字，info 为 kicker。',
+    description:
+      '大数字 + 说明（研究报告 / 内参版面 / issue-banner）。' +
+      'attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。',
     example: '::: key-number value="42%" 同比涨幅\n占全年营收 12pp …\n:::\n',
   },
   {

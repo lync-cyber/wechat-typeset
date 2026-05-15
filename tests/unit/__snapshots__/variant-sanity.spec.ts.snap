@@ -146,6 +146,12 @@ exports[`默认主题 · 每 variant 渲染片段快照 > divider:rule 1`] = `
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > divider:seal-mark 1`] = `
+"<section class="container-divider container-divider--seal-mark" style="text-align:right;margin:32px 0 20px">
+<span style="display:inline-block;width:12px;height:12px;background-color:#2558b0">&nbsp;</span>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > divider:wave 1`] = `
 "<section class="container-divider container-divider--wave" style="text-align:center;margin:24px 0">
 <svg viewBox="0 0 240 12" width="220" height="12" xmlns="http://www.w3.org/2000/svg"> <path d="M0,6 Q15,0 30,6 T60,6 T90,6 T120,6 T150,6 T180,6 T210,6 T240,6" fill="none" stroke="#d8d8d4" stroke-width="1.2"></path> </svg>

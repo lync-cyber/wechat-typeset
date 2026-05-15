@@ -10,5 +10,6 @@ import dots from './dots'
 import flower from './flower'
 import rule from './rule'
 import glyph from './glyph'
+import sealMark from './seal-mark'
 
-export default [wave, dots, flower, rule, glyph]
+export default [wave, dots, flower, rule, glyph, sealMark]

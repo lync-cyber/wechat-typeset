@@ -80,7 +80,7 @@ const QUOTE_ORDER: readonly string[] = [
 ]
 const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
 const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeline-dot']
-const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph']
+const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']

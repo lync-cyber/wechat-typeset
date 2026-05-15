@@ -42,6 +42,8 @@ import {
 import {
   mastheadContainer,
   sectionTagContainer,
+  bylineContainer,
+  editorialHeaderContainer,
   tocContainer,
   tocItemContainer,
   kpiDashboardContainer,
@@ -56,6 +58,7 @@ import {
   editorNoteContainer,
   methodologyContainer,
   colophonContainer,
+  calloutGroupContainer,
 } from './databrief'
 
 /**
@@ -101,9 +104,11 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   abstract: abstractContainer,
   'key-number': keyNumberContainer,
   'see-also': seeAlsoContainer,
-  // data-brief 家族（masthead / section-tag / toc / kpi-dashboard / bar-chart / qa-block / footnotes）
+  // data-brief 家族（masthead / section-tag / byline / editorial-header / toc / kpi-dashboard / bar-chart / qa-block / footnotes）
   masthead: mastheadContainer,
   'section-tag': sectionTagContainer,
+  byline: bylineContainer,
+  'editorial-header': editorialHeaderContainer,
   toc: tocContainer,
   'toc-item': tocItemContainer,
   'kpi-dashboard': kpiDashboardContainer,
@@ -118,6 +123,7 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   'editor-note': editorNoteContainer,
   methodology: methodologyContainer,
   colophon: colophonContainer,
+  'callout-group': calloutGroupContainer,
 }
 
 /**

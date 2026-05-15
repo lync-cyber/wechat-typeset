@@ -25,8 +25,11 @@
 | --- | --- | :-: | --- |
 | 结构 | `masthead` | ★ | 刊头：默认两栏（刊名左 + 期号·日期 monospace 右）；声明 attrs.kicker 切三栏 ribbon。 |
 |  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。 |
-|  | `toc` | ★ | 目录三栏（序号·标题·页码）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker（如 "目录 · CONTENTS"）。 |
+|  | `byline` | ★ | 署名条：N 栏分隔（kicker 小字 / value 主视），data-brief 家族签名。与 author 容器正交：author 是"作者名 + role"两段签名块；byline 是"AUTHOR / EDITOR / SET" 多栏 newspaper 形态。 |
+|  | `editorial-header` | ★ | 装饰性副刊头：跨栏大字标题 + 可选 chip 红章 + PP 页码 + subtitle + titleDot 红点。与微信原生标题（H1）正交，本容器输出 <section>，不抢平台 H1 语义。data-brief 家族签名。 |
+|  | `toc` | ★ | 目录：默认单列（kicker 顶 + items 下）；声明 layout=split 切到双栏（左 INDEX kicker + meta 描述 / 右 toc-items）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker。 |
 |  | `toc-item` |  | toc 内单条；info 为条目标题。body 内容会被忽略。 |
+| 提示 | `callout-group` | ★ | 四态 callout 联表：外框承担"上/下/左/右 hairline"，子项 (tip/warning/info/danger) 在内串联。设计稿 multi-callout 母本——配合 admonition variant=news-row 用最佳。外层用 4 个冒号。 |
 | 内容 | `qa-block` | ★ | 读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 "读者问答 · Q&A"）。 |
 | 签名 | `kpi-dashboard` | ★ | KPI 仪表盘：三指标 grid + sparkline。外层用 4 个冒号，内部用 kpi-item。info 为标题（如 "KEY METRICS · 三项关键指标"）。 |
 |  | `kpi-item` |  | kpi-dashboard 内单指标。一切以 attrs 驱动，body 内容被忽略。 |

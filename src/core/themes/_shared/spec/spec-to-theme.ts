@@ -52,6 +52,7 @@ export function motifsToAssets(motifs: MotifSpec): ThemeAssets {
     'externalLinkIcon',
     'terminalPrompt',
     'sealMark',
+    'editorNoteKickerIcon',
   ]
   for (const k of shapeKeys) {
     const shape = motifs[k]

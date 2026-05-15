@@ -168,6 +168,15 @@ export const spec: PersonaSpec = {
       height: 20,
       primitives: [{ type: 'rect', x: 0, y: 0, w: 20, h: 20, fill: '#e30613' }],
     },
+
+    // editorNoteKickerIcon：8×8 国际红方块,editor-note 黑底白字 header bar 的红 ▮
+    //   （对位设计稿 #19 editor-note kicker 行最左侧的红色 ▮ 字符）
+    editorNoteKickerIcon: {
+      viewBox: [0, 0, 8, 8],
+      width: 8,
+      height: 8,
+      primitives: [{ type: 'rect', x: 0, y: 0, w: 8, h: 8, fill: '#e30613' }],
+    },
   },
 
   // ============================================================
@@ -178,7 +187,7 @@ export const spec: PersonaSpec = {
     quote: 'classic', // pull-quote 走 blockquote element 自定义样式（左 12px 红条 + 25% 偏移）
     compare: 'data-card', // 数据卡（顶 3px 色条 + 大号数字）—— 设计稿少见,保留备用
     steps: 'number-circle',
-    divider: 'flower', // 用本主题 dividerFlower（两线 + 中央红方块）
+    divider: 'seal-mark', // 设计稿 signoff: 20×20 红方块右对齐（消费 sealMark motif）
     sectionTitle: 'bordered',
     codeBlock: 'bare', // pre 元素走主题 voice（黑底白字）
     note: 'side-bar', // 左 2px 中性线 + 缩进
@@ -191,13 +200,16 @@ export const spec: PersonaSpec = {
   signatureContainers: [
     'abstract', // 摘要块（tl;dr）
     'sectionTag', // ESSAY · 01 小标签
-    'toc', // 目录
-    'keyNumber', // 期号横幅（Nº04 全幅红） —— 复用 keyNumber 而非新增 issue-banner 容器
+    'editorialHeader', // 装饰副刊头（红章 + 大字 + subtitle + topRule）
+    'byline', // 三栏 newspaper 署名（AUTHOR / EDITOR / SET）
+    'toc', // 目录（layout=split 双栏）
+    'keyNumber', // 期号横幅（Nº04 全幅红，attrs.meta 切到双栏 issue-banner）
     'qaBlock', // 读者 Q&A
     'editorNote', // 编辑部注（黑底白字 header bar 形态）
     'footnotes', // 脚注
     'refs', // 流式参考文献块（带 kicker → 承担"NOTES"标签）
-    'ctaBar', // 三栏 CTA（描边 / 实色 / 描边）
+    'calloutGroup', // 四态 callout 联表外框（multi-callout 母本）
+    'ctaBar', // 三栏 CTA（attrs.info 切到 "IF YOU LIKED THIS" header bar 模式）
     'qrFollow', // 二维码订阅卡
     'colophon', // 刊物收束栏（NEXT · VOL 双栏）
     'methodology', // 方法论小字注释
@@ -272,20 +284,20 @@ export const spec: PersonaSpec = {
       'letter-spacing': '-0.01em',
     },
     // h2：红章徽章由 decorations.headingPrefix 自动注入；本规则只管标题文字本体
-    // 直角 + 无 border-bottom（区别于 default 主题）
+    // 直角 + border-bottom 模拟设计稿"标题文字 + 独立分隔 div"两段结构
     h2: {
       __reset: true,
       'font-size': '16px',
       'font-weight': '700',
       color: '#000000',
       'margin-top': '32px',
-      'margin-bottom': '10px',
+      'margin-bottom': '12px',
       'line-height': '1.2',
-      'padding-bottom': '0',
-      'border-bottom': '1px solid #000000', // Swiss hairline 章节分隔（设计稿 section-heading 下方细线）
+      // padding-bottom:10px → 文字与分隔线之间留呼吸,复刻设计稿"标题 div"和"分隔 div"两段间的间距
+      'padding-bottom': '10px',
+      'border-bottom': '1px solid #000000',
       'padding-top': '0',
       'letter-spacing': '-0.01em',
-      // 设计稿 H2 下方还有一条 1px 黑分隔线; border-bottom 模拟这道线 + margin-bottom 留呼吸
     },
     h3: {
       'font-size': '12px',
@@ -410,10 +422,14 @@ export const spec: PersonaSpec = {
       'text-decoration-color': '#e30613',
       'text-underline-offset': '3px',
     },
-    // emphasis：红色 + 600 字重（作者用 ==text== 触发的语义着重）
+    // emphasis：红色 + 600 字重 + text-emphasis dot（作者用 ==text== 触发的语义着重）
+    //   text-emphasis 在 wechat Chrome 86+ 与 Safari 15.4+ 上呈红点旁注; 较老客户端
+    //   降级为红色 + 粗体。-webkit- 前缀被 FORBIDDEN_VALUE_PATTERNS 拦截,不写。
     emphasis: {
       color: '#e30613',
       'font-weight': '600',
+      'text-emphasis': 'dot #e30613',
+      'text-emphasis-position': 'under',
     },
   },
 
@@ -554,6 +570,30 @@ export const spec: PersonaSpec = {
       'border-bottom': '1px solid #000000',
     },
     sectionTag: { margin: '0 0 12px 0' },
+    // byline：三栏 AUTHOR / EDITOR / SET，上下 hairline 黑分隔
+    byline: {
+      __reset: true,
+      'border-top': '1px solid #000000',
+      'border-bottom': '1px solid #000000',
+      margin: '0 0 28px 0',
+      padding: '0',
+    },
+    // editorial-header：装饰副刊头。renderer 已承担 topRule + chip + title + subtitle
+    // 全部 inline 装饰；wrapper 只留下与 byline 之间的呼吸
+    editorialHeader: {
+      __reset: true,
+      margin: '0 0 14px 0',
+      padding: '0',
+    },
+    // callout-group：四态 callout 联表外框。上下 1px 黑实线 + 无 padding,
+    // 子项 (news-row variant) 自带 border-left:3px 与左对齐徽章——视觉就是设计稿 multi-callout
+    calloutGroup: {
+      __reset: true,
+      'border-top': '1px solid #000000',
+      'border-bottom': '1px solid #000000',
+      padding: '0',
+      margin: '24px 0',
+    },
     // toc：设计稿"双栏压满 · INDEX 标签 + 带页码"; toc-item renderer 固定 30px/1fr/auto 三栏
     // 这里 wrapper 走 hairline 上下分隔 + 直角硬边
     toc: {

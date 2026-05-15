@@ -106,7 +106,7 @@ function renderMotifs(spec: PersonaSpec): string {
     'h2Prefix', 'h3Prefix', 'dividerFlower', 'dividerWave', 'dividerDots',
     'quoteMark', 'listBullet', 'sectionCorner', 'tipIcon', 'warningIcon',
     'infoIcon', 'dangerIcon', 'noteIcon', 'copyIcon', 'externalLinkIcon',
-    'terminalPrompt', 'sealMark',
+    'terminalPrompt', 'sealMark', 'editorNoteKickerIcon',
   ]
   const tiles: string[] = []
   for (const k of shapeKeys) {

@@ -310,6 +310,7 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     note: { margin: '16px 0' },
     mpvoice: { margin: '20px 0' },
     mpvideo: { margin: '20px 0' },
+    calloutGroup: { margin: '20px 0' },
     // abstract / keyNumber / seeAlso 的 wrapper CSS 兜底。
     // renderer 只读 ctx.containers.<x>，不做 substring 检测、不硬涂底色——
     // 主题 voice 通过 spec.containers 深合并接管。
@@ -347,6 +348,8 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       margin: '0 0 20px 0',
     },
     sectionTag: { margin: '0 0 14px 0' },
+    byline: { margin: '0 0 22px 0' },
+    editorialHeader: { margin: '0 0 18px 0' },
     toc: {
       'background-color': tokens.colors.bgSoft,
       padding: '12px 14px',
