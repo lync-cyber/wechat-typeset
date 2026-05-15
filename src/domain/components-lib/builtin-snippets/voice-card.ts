@@ -1,5 +1,5 @@
 /**
- * free · mpvoice（音频占位）。<mpvoice> 无法粘贴，此为占位。
+ * voice-card（音频占位）。粘贴后微信识别为 mpvoice 节点。
  */
 
 import type { VariantDef } from '../../../core/variants/_core'
@@ -13,23 +13,23 @@ function thumb(): string {
   )
 }
 
-const mpvoice: VariantDef = {
+const voiceCard: VariantDef = {
   meta: {
-    id: 'mpvoice',
+    id: 'voice-card',
     kind: 'none',
     name: '音频占位',
-    description: '<mpvoice> 无法粘贴，此为占位',
+    description: '粘贴后微信识别为 mpvoice 真节点',
   },
   thumbnail: thumb,
   snippets: [
     {
-      presetId: 'free-mpvoice',
+      presetId: 'free-voice-card',
       name: '音频占位',
-      description: '<mpvoice> 无法粘贴，此为占位',
+      description: '粘贴后微信识别为 mpvoice 真节点',
       markdown:
-        '::: mpvoice 本期播客\n粘贴后在公众号后台从素材库重新插入。\n:::\n',
+        '::: voice-card 本期播客\n粘贴后在公众号后台从素材库重新插入。\n:::\n',
     },
   ],
 }
 
-export default mpvoice
+export default voiceCard

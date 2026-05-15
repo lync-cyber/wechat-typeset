@@ -191,11 +191,11 @@ def merge_timeline(sources: list[list[dict]]) -> list[dict]:
 
 ## 媒体嵌入
 
-::: mpvideo
+::: video-card
 <iframe class="video_iframe" data-vidtype="2" allowfullscreen="" frameborder="0" data-ratio="1.7647058823529411" data-w="480" data-src="https://v.qq.com/iframe/preview.html?vid=placeholder&width=500&height=375&auto=0" style="z-index:1;" width="500" height="375" data-vh="281.25" data-vw="500" src="https://v.qq.com/iframe/preview.html?vid=placeholder&width=500&height=375&auto=0"></iframe>
 :::
 
-::: mpvoice
+::: voice-card
 <mpvoice frameborder="0" class="res_iframe js_editor_audio audio_iframe" name="事故复盘语音版" play_length="900000" voice_encode_fileid="placeholder"></mpvoice>
 :::
 

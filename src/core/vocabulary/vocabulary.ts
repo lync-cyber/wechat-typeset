@@ -144,8 +144,28 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       { key: 'issue', description: '期号（newsletter 主题可用）', example: '023' },
       { key: 'date', description: '日期', example: '2026-04-20' },
     ],
-    description: '作者栏：头像 + 名字 + 日期／期号。',
+    description:
+      '作者栏：单行署名块（名字 + 日期/期号）。与 author-bio 的边界见 author-bio.description。',
     example: '::: author\n作者 · 日期\n:::\n',
+  },
+  {
+    // author-bio：与 author 的边界：
+    //   - author：文首/文末"署名行"，单行紧凑（名字 · 日期 · 期号）
+    //   - author-bio：多行作者简介卡（头像 attr + 多行 body 介绍 + 可选社交链接），独立块
+    name: 'author-bio',
+    styleKey: 'authorBio',
+    category: 'structure',
+    fenceLength: 3,
+    attrs: [
+      { key: 'avatar', description: '头像图片 URL（声明则 renderer 自动渲染圆形头像）' },
+      { key: 'name', description: '作者姓名（缺省则取 info）' },
+      { key: 'role', description: '作者身份（如"专栏作者 · 城市观察"）' },
+    ],
+    description:
+      '多行作者简介卡：头像 + 名字 + 身份 + 多行简介。与 author 的边界：' +
+      'author 单行署名，author-bio 是独立块（头像 + 多行 bio + 社交链接），通常用在文末"关于作者"。',
+    example:
+      '::: author-bio avatar="me.png" name="顾留白" role="专栏作者"\n非虚构写作 8 年，关注城市与日常。\n:::\n',
   },
   {
     name: 'section-title',
@@ -301,7 +321,27 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: toc-item no="01" page="p.04" 为什么我们失去了阅读的耐心\n:::\n',
   },
 
-  // ── admonition（5） ───────────────────────────────────────
+  // ── admonition（6） ───────────────────────────────────────
+  {
+    // announcement：通用全宽强警示横幅。与 tip/warning 的边界：
+    //   - tip/warning 是段落级（多见于正文内"穿插提示"）
+    //   - announcement 是文章级"置顶通告"（活动告知 / 紧急公告 / 改版说明），视觉强度更高
+    name: 'announcement',
+    styleKey: 'announcement',
+    category: 'admonition',
+    fenceLength: 3,
+    attrs: [
+      {
+        key: 'tone',
+        description: '语义色调（默认 danger 强警示；可选 primary 中性告知 / accent 喜庆通告）',
+        enum: ['danger', 'primary', 'accent'],
+      },
+    ],
+    description:
+      '强警示横幅：文章顶部 / 中部"置顶通告"块，比 tip/warning 视觉强度更高。' +
+      'info 为标题，body 为说明文本。',
+    example: '::: announcement tone=danger 重要通知\n本期推送涉及账号迁移说明 …\n:::\n',
+  },
   {
     name: 'tip',
     styleKey: 'tip',
@@ -439,6 +479,49 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: steps\n1. 初始化\n2. 构建\n3. 发布\n:::\n',
   },
   {
+    // image-caption：图 + 居中小字灰说明的固定排版。body 是图片 + caption，
+    // renderer 把首段当 caption 行渲成 textMuted 小字（不要再用 free 凑）。
+    name: 'image-caption',
+    styleKey: 'imageCaption',
+    category: 'content',
+    fenceLength: 3,
+    attrs: [
+      { key: 'src', description: '图片 URL（声明则 renderer 自动渲染 <img>）' },
+      { key: 'alt', description: '图片替代文本' },
+    ],
+    description:
+      '图 + 居中小字灰说明的图注块。声明 attrs.src 时自动渲染 img；info 为图注文本。' +
+      'body 内容（如长描述 / 数据来源）作为副说明跟在 caption 下方。',
+    example:
+      '::: image-caption src="cover.png" alt="封面" 图 1 · 城市夜景与霓虹\n摄于 2026 年春，北京三里屯。\n:::\n',
+  },
+  {
+    // timeline：年份 + 事件的时序列表。与 steps 的边界：
+    //   - steps：动作序列（"先 A 后 B 再 C"，强调可执行）
+    //   - timeline：历史时序（"1979 / 2003 / 2024"，强调时间维度）
+    name: 'timeline',
+    styleKey: 'timeline',
+    category: 'content',
+    nestable: true,
+    children: ['timeline-item'],
+    fenceLength: 4,
+    description: '时间线：左侧年份 + 右侧事件。外层 4 个冒号，内部 timeline-item 列条目。',
+    example:
+      ':::: timeline 项目里程碑\n::: timeline-item year="2024" 项目立项\n方案确认，团队组建。\n:::\n::: timeline-item year="2025" 公测上线\n首批用户邀请制开放。\n:::\n::::\n',
+  },
+  {
+    name: 'timeline-item',
+    styleKey: null,
+    category: 'content',
+    parent: 'timeline',
+    fenceLength: 3,
+    attrs: [
+      { key: 'year', description: '左侧年份 / 日期标签（monospace）', example: '2024' },
+    ],
+    description: 'timeline 内单条；info 为事件标题，body 为详述。',
+    example: '::: timeline-item year="2024" 项目立项\n方案确认，团队组建。\n:::\n',
+  },
+  {
     name: 'qa-block',
     styleKey: 'qaBlock',
     category: 'signature',
@@ -535,28 +618,33 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: qrcode text="https://mp.weixin.qq.com/s/xxx"\n扫码关注\n:::\n',
   },
   {
-    name: 'mpvoice',
-    styleKey: 'mpvoice',
+    // 作者面 fence 名走语义命名（voice-card），平台粘贴契约（<!--mpvoice--> HTML 注释、
+    // data-wx-mp-kind="voice" 锚点）仍走微信原生标识，由 infra/clipboard/mpInsertHints 注入。
+    // 兼容期：旧 ::: mpvoice 仍可识别（见 vocabulary 末尾的 LEGACY_CONTAINER_ALIASES）。
+    name: 'voice-card',
+    styleKey: 'voiceCard',
     category: 'media',
     fenceLength: 3,
     attrs: [
       { key: 'src', description: '音频 URL（公众号素材库链接）' },
       { key: 'title', description: '标题' },
+      { key: 'voice_encode_fileid', description: '微信音频 fileid（粘贴后自动展开）' },
     ],
-    description: '公众号语音卡（占位，粘贴后在公众号编辑器补真 mpvoice 节点）。',
-    example: '::: mpvoice title="片头曲" src="..."\n:::\n',
+    description: '公众号语音占位卡（粘贴后由微信识别为真 mpvoice 节点）。',
+    example: '::: voice-card title="片头曲" src="..."\n:::\n',
   },
   {
-    name: 'mpvideo',
-    styleKey: 'mpvideo',
+    name: 'video-card',
+    styleKey: 'videoCard',
     category: 'media',
     fenceLength: 3,
     attrs: [
       { key: 'src', description: '视频 URL（公众号素材库链接）' },
       { key: 'title', description: '标题' },
+      { key: 'qqvid', description: '腾讯视频 vid（提供时渲染 v.qq.com iframe）' },
     ],
-    description: '公众号视频卡（占位，粘贴后在公众号编辑器补真 mpvideo 节点）。',
-    example: '::: mpvideo title="片段" src="..."\n:::\n',
+    description: '公众号视频占位卡（带 qqvid 时直出 v.qq.com iframe；其余为占位）。',
+    example: '::: video-card title="片段" qqvid="..."\n:::\n',
   },
 
   // ── signature（3） ───────────────────────────────────────

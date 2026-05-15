@@ -121,10 +121,10 @@ const { html, wordCount } = renderPipeline({
 
 ## 六、媒体占位
 
-::: mpvoice 开篇语 fileid=placeholder-fileid
+::: voice-card 开篇语 fileid=placeholder-fileid
 :::
 
-::: mpvideo 产品演示 qqvid=placeholder-vid
+::: video-card 产品演示 qqvid=placeholder-vid
 :::
 
 ::: divider variant=flower

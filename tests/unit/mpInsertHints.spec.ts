@@ -15,7 +15,7 @@ import { stripForbiddenAttrs } from '../../src/core/pipeline/platforms/wechat'
 describe('insertMpHints · voice', () => {
   it('完整 fileid + name → 注入注释串', () => {
     const html =
-      `<section class="container-mpvoice" data-wx-mp-kind="voice" data-wx-mp-fileid="MzA1Mg" data-wx-mp-name="开场白">x</section>`
+      `<section class="container-voice-card" data-wx-mp-kind="voice" data-wx-mp-fileid="MzA1Mg" data-wx-mp-name="开场白">x</section>`
     const r = insertMpHints(html)
     expect(r.count).toBe(1)
     expect(r.html).toContain('<!--')

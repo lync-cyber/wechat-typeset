@@ -270,6 +270,13 @@
   line-height: 1.7;
 }
 
+.markdown-body .container-author-bio {
+  background-color: #f6f6f4;
+  border-radius: 2px;
+  padding: 14px 16px;
+  margin: 20px 0;
+}
+
 .markdown-body .container-section-title {
   margin: 36px 0 16px;
   padding-bottom: 6px;
@@ -298,6 +305,14 @@
   background-color: #f6f6f4;
   padding: 12px 14px;
   margin: 0 0 24px 0;
+}
+
+.markdown-body .container-announcement {
+  background-color: #eeeff2;
+  border-left: 4px solid #3a3e48;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 2px;
 }
 
 .markdown-body .container-callout-group {
@@ -332,6 +347,15 @@
   margin: 22px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 18px 0;
+  text-align: center;
+}
+
+.markdown-body .container-timeline {
+  margin: 20px 0;
+}
+
 .markdown-body .container-qa-block {
   border-top: 1px solid #d8d8d4;
   border-bottom: 1px solid #d8d8d4;
@@ -363,11 +387,19 @@
   border-radius: 0;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #f6f6f4;
+  border: 1px solid #d8d8d4;
+  border-radius: 2px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #f6f6f4;
+  border: 1px solid #d8d8d4;
+  border-radius: 2px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

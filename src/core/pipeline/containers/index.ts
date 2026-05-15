@@ -32,8 +32,15 @@ import {
   recommendContainer,
   qrcodeContainer,
 } from './footer'
-import { mpvoiceContainer, mpvideoContainer } from './media'
+import { voiceCardContainer, videoCardContainer } from './media'
 import { noteContainer } from './note'
+import {
+  announcementContainer,
+  authorBioContainer,
+  imageCaptionContainer,
+  timelineContainer,
+  timelineItemContainer,
+} from './extras'
 import {
   abstractContainer,
   keyNumberContainer,
@@ -97,8 +104,13 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   'footer-cta': footerCTAContainer,
   recommend: recommendContainer,
   qrcode: qrcodeContainer,
-  mpvoice: mpvoiceContainer,
-  mpvideo: mpvideoContainer,
+  'voice-card': voiceCardContainer,
+  'video-card': videoCardContainer,
+  announcement: announcementContainer,
+  'author-bio': authorBioContainer,
+  'image-caption': imageCaptionContainer,
+  timeline: timelineContainer,
+  'timeline-item': timelineItemContainer,
   free: freeContainer,
   // 签名容器（abstract / key-number / see-also）
   abstract: abstractContainer,

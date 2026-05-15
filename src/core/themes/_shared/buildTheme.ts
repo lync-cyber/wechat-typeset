@@ -348,8 +348,46 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     // note 走独立 variantKind='note'；wrapper CSS 由 variants/note/<id>.ts 提供。
     // 这里只留 margin 兜底，主题 voice 可在 spec.containers.note 追加 border / padding。
     note: { margin: '16px 0' },
-    mpvoice: { margin: '20px 0' },
-    mpvideo: { margin: '20px 0' },
+    // voiceCard / videoCard 兜底：单色边框 + 浅底 + 圆角，比旧 `margin:20px 0` 强势。
+    // 暗底主题（brutalist / late-night-vinyl）需在 spec.containers 覆写 bg/border。
+    voiceCard: {
+      'background-color': tokens.colors.bgSoft,
+      border: `1px solid ${tokens.colors.border}`,
+      'border-radius': `${tokens.radius.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    videoCard: {
+      'background-color': tokens.colors.bgSoft,
+      border: `1px solid ${tokens.colors.border}`,
+      'border-radius': `${tokens.radius.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    // announcement 兜底：danger 色左条 + soft 底（视觉强度高于 tip/warning）。
+    announcement: {
+      'background-color': tokens.colors.status.danger.soft,
+      'border-left': `4px solid ${tokens.colors.status.danger.accent}`,
+      padding: '14px 16px',
+      margin: '18px 0',
+      'border-radius': `${tokens.radius.sm}px`,
+    },
+    // author-bio 兜底：bgSoft 卡 + 圆角 + 较紧凑 padding。
+    authorBio: {
+      'background-color': tokens.colors.bgSoft,
+      'border-radius': `${tokens.radius.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    // image-caption 兜底：仅 margin + 居中（renderer 控制 img + caption 内层）。
+    imageCaption: {
+      margin: '18px 0',
+      'text-align': 'center',
+    },
+    // timeline 兜底：仅外框 margin（renderer 控制 grid 双栏）。
+    timeline: {
+      margin: '20px 0',
+    },
     calloutGroup: { margin: '20px 0' },
     // abstract / keyNumber / seeAlso 的 wrapper CSS 兜底。
     // renderer 只读 ctx.containers.<x>，不做 substring 检测、不硬涂底色——

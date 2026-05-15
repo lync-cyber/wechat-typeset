@@ -265,6 +265,13 @@
   font-size: 11px;
 }
 
+.markdown-body .container-author-bio {
+  background-color: #f0f0f0;
+  border-radius: 0px;
+  padding: 14px 16px;
+  margin: 20px 0;
+}
+
 .markdown-body .container-section-title {
   margin: 32px 0 10px;
   padding-bottom: 0;
@@ -300,6 +307,14 @@
   margin: 0 0 24px 0;
   background-color: #ffffff;
   border-radius: 0;
+}
+
+.markdown-body .container-announcement {
+  background-color: #fde0e2;
+  border-left: 4px solid #e30613;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 0px;
 }
 
 .markdown-body .container-callout-group {
@@ -338,6 +353,15 @@
   margin: 20px 0;
 }
 
+.markdown-body .container-image-caption {
+  margin: 18px 0;
+  text-align: center;
+}
+
+.markdown-body .container-timeline {
+  margin: 20px 0;
+}
+
 .markdown-body .container-qa-block {
   border-top: 3px solid #000000;
   border-bottom: 3px solid #000000;
@@ -369,11 +393,19 @@
   border-radius: 0;
 }
 
-.markdown-body .container-mpvoice {
+.markdown-body .container-voice-card {
+  background-color: #f0f0f0;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 
-.markdown-body .container-mpvideo {
+.markdown-body .container-video-card {
+  background-color: #f0f0f0;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  padding: 14px 16px;
   margin: 20px 0;
 }
 

@@ -330,11 +330,11 @@ note 是"中性补注"——不抢色（走 textMuted），与 tip / warning / i
 ![二维码占位](https://placehold.co/240x240?text=QR)
 :::
 
-::: mpvoice 语音占位
+::: voice-card 语音占位
 用户粘贴富文本无法保留 `<mpvoice>`；此容器只渲染为占位提示。
 :::
 
-::: mpvideo qqvid=w0000examplevid
+::: video-card qqvid=w0000examplevid
 腾讯视频示例容器：占位 iframe 会保留 `v.qq.com` 白名单源。
 :::
 

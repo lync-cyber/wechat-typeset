@@ -183,23 +183,22 @@ describe('footer-cta / recommend / qrcode', () => {
   })
 })
 
-describe('mpvoice / mpvideo', () => {
-  it('mpvoice 默认占位卡', () => {
-    const out = run('::: mpvoice 本期播客\n:::\n')
-    expect(out).toMatch(/class="container-mpvoice"/)
+describe('voice-card / video-card', () => {
+  it('voice-card 默认占位卡', () => {
+    const out = run('::: voice-card 本期播客\n:::\n')
+    expect(out).toMatch(/class="container-voice-card"/)
     expect(out).toContain('本期播客')
   })
 
-  it('mpvideo qqvid 渲染腾讯视频 iframe（v.qq.com 白名单）', () => {
-    const out = run('::: mpvideo qqvid=w1234abcd 片头\n:::\n')
+  it('video-card qqvid 渲染腾讯视频 iframe（v.qq.com 白名单）', () => {
+    const out = run('::: video-card qqvid=w1234abcd 片头\n:::\n')
     expect(out).toMatch(/<iframe[^>]*v\.qq\.com/)
-    // 白名单保留
     expect(out).toContain('vid=w1234abcd')
   })
 
-  it('mpvideo 无 qqvid → 占位卡', () => {
-    const out = run('::: mpvideo 待补视频\n:::\n')
-    expect(out).toMatch(/class="container-mpvideo"/)
+  it('video-card 无 qqvid → 占位卡', () => {
+    const out = run('::: video-card 待补视频\n:::\n')
+    expect(out).toMatch(/class="container-video-card"/)
     expect(out).not.toMatch(/<iframe/)
   })
 })

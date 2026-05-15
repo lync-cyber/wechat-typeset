@@ -70,8 +70,8 @@ const BUILTIN_SNIPPET_ORDER: readonly string[] = [
   'footer-cta',
   'recommend',
   'qrcode',
-  'mpvoice',
-  'mpvideo',
+  'voice-card',
+  'video-card',
 ]
 
 const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {

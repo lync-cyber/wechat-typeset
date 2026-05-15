@@ -336,7 +336,7 @@ describe('E. Signature Container 注册表闭合性', () => {
 // （编 者 按 / 方法论 / 下期·卷期 三处），现已抽象为 editor-note / methodology /
 // colophon 三个容器，本测试钉住这条边界，防止回潮。
 //
-// 允许的例外：mpvideo 占位 iframe（公众号视频接口的硬约束，本身就是占位 HTML）。
+// 允许的例外：video-card 占位 iframe（公众号视频接口的硬约束，本身就是占位 HTML）。
 // ============================================================
 
 describe('F. samples 不得内联裸 style 装饰', () => {
@@ -387,14 +387,14 @@ describe('F. samples 不得内联裸 style 装饰', () => {
     }
   })
 
-  it('mpvideo iframe 占位是允许例外（其他 iframe 仍禁止）', () => {
-    // 此测试是"白名单边界"声明：mpvideo 容器渲染时确实需要 iframe 占位；
-    // 它出现在 sample 里是合规的。若未来出现非 mpvideo 的 iframe，应触发审视。
+  it('video-card / voice-card iframe 占位是允许例外（其他 iframe 仍禁止）', () => {
+    // 此测试是"白名单边界"声明：video-card 容器渲染时确实需要 iframe 占位；
+    // 它出现在 sample 里是合规的。若未来出现非 video-card 的 iframe，应触发审视。
     for (const { file, content } of SAMPLES) {
       const iframes = content.match(/<iframe[^>]*>/g) ?? []
       for (const tag of iframes) {
-        const isMpvideo = /v\.qq\.com|mpvoice|mpvideo|class="video_iframe/.test(tag)
-        expect(isMpvideo, `${file} 出现非 mpvideo iframe：${tag.slice(0, 80)}`).toBe(true)
+        const isVideoCard = /v\.qq\.com|mpvoice|mpvideo|class="video_iframe/.test(tag)
+        expect(isVideoCard, `${file} 出现非 video-card iframe：${tag.slice(0, 80)}`).toBe(true)
       }
     }
   })

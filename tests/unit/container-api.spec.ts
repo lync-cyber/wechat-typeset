@@ -52,7 +52,8 @@ describe('getContainerVocabulary', () => {
       'compare', 'pros', 'cons', 'steps',
       'divider',
       'footer-cta', 'recommend', 'qrcode', 'see-also',
-      'mpvoice', 'mpvideo',
+      'voice-card', 'video-card',
+      'announcement', 'author-bio', 'image-caption', 'timeline', 'timeline-item',
       'free',
       // data-brief 家族（12 styled + 3 nested children = 15 件）
       'masthead', 'section-tag', 'toc', 'toc-item',

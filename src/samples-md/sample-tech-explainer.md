@@ -154,11 +154,11 @@ JWT 是信任契约，不是加密容器。签名确保"数据未被篡改"，�
 
 ## 5. 视频 / 语音版
 
-::: mpvideo
+::: video-card
 <iframe class="video_iframe" data-vidtype="2" allowfullscreen="" frameborder="0" data-ratio="1.7647058823529411" data-w="480" data-src="https://v.qq.com/iframe/preview.html?vid=placeholder&width=500&height=375&auto=0" style="z-index:1;" width="500" height="375" data-vh="281.25" data-vw="500" src="https://v.qq.com/iframe/preview.html?vid=placeholder&width=500&height=375&auto=0"></iframe>
 :::
 
-::: mpvoice
+::: voice-card
 <mpvoice frameborder="0" class="res_iframe js_editor_audio audio_iframe" name="JWT 教程音频版" play_length="600000" voice_encode_fileid="placeholder"></mpvoice>
 :::
 
