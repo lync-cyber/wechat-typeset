@@ -1,16 +1,9 @@
 /**
- * themeToSpec：Theme → PersonaSpec 的一次性迁移助手。
+ * themeToSpec：Theme → PersonaSpec 的一次性迁移助手。跑 themeToSpec(theme) 抽出
+ * palette/typography/variants/elements/containers/inline/templates，得到可直接
+ * 写入 persona.data.ts 的对象初稿。
  *
- * 用途：Phase 2 每主题 PR 的"code 侧 spec 初稿"—— 跑 themeToSpec(themeRegistry[id])
- * 得到可直接写入 persona.data.ts 的对象，与 gallery 侧的 spec 做 3-way merge。
- *
- * 限制：motif 的 SVG 字符串 → JSON AST 的反向解析**不做**（复杂度高、容错差）。
- * Phase 2 的流程是：
- *   1. 用本函数抽出 palette/typography/variants/behavior/elements-containers-inline/templates
- *   2. motifs 留空或从 `extract-from-gallery.ts` 补齐（Phase 2 脚本）
- *   3. 人工 review + 调色
- *
- * PR 3-11 用完后本文件可删除。
+ * 限制：motif 的 SVG 字符串 → JSON AST 反向解析不做（容错差），由调用方补齐。
  */
 
 import type { Theme } from '../../types'
@@ -31,10 +24,8 @@ export function themeToSpec(
   const { colors, typography, spacing, radius } = theme.tokens
   const { status, ...palette } = colors
 
-  // 计算 elements/containers/inline 相对 base 的 delta —— 不做"全量导出"
-  // 也不做"属性级精简"（Phase 0 后 buildTheme 走深合并，delta 即可直接回灌）。
-  // 注意：如果某主题用了 __reset sentinel，这里抽不出来（base + theme = theme，delta 无损）。
-  // Phase 2 的 3-way merge 会人工加回 __reset。
+  // 计算 elements/containers/inline 相对 base 的 delta（buildTheme 深合并直接回灌）。
+  // __reset sentinel 无法从 base+theme 反推（信息已丢失），需在导出后人工加回。
   const elements = diffCSSMap(theme.elements, baseElements(theme.tokens))
   const containers = diffCSSMap(theme.containers, baseContainers(theme.tokens))
   const inline = diffCSSMap(theme.inline, baseInline(theme.tokens))

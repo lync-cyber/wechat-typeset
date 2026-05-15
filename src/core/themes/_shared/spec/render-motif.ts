@@ -159,10 +159,9 @@ export function primitivesToSvg(
   primitives: readonly MotifPrimitive[],
   wrapper: SvgWrapperAttrs = {},
 ): string {
-  // primitive 之间的单个空格是刻意保留的：
-  // 既有主题的 strip() 路径会把多行 SVG 塌缩成 `<svg> <p1/> <p2/> </svg>`
-  // 这种带空格的单行。Phase 2 要求 migrated-spec 与旧字符串 byte-identical，
-  // 所以这里也按同样分隔符输出。空数组 → `<svg></svg>`，不加伪造空格。
+  // primitive 之间的单空格是刻意保留：strip() 路径会把多行 SVG 塌缩成
+  // `<svg> <p1/> <p2/> </svg>` 单行形式，这里按同样分隔符输出，使两路输出
+  // 字节一致。空数组 → `<svg></svg>`，不加伪造空格。
   const parts = primitives.map(renderPrimitive)
   const body = parts.length ? ' ' + parts.join(' ') + ' ' : ''
   const attrs = renderAttrs([

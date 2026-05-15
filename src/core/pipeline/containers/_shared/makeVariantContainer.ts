@@ -1,5 +1,5 @@
 /**
- * makeVariantContainer —— variant 容器渲染器工厂（R3）
+ * makeVariantContainer —— variant 容器渲染器工厂。
  *
  * 收口 6 个容器（admonitions × 4 / note / pros / cons / steps / divider）共同的
  *"resolve variant → 套外壳"样板：

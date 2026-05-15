@@ -131,19 +131,10 @@ export const spec: PersonaSpec = {
     ],
   },
 
-  // ============================================================
-  // Motifs：极简——仅 divider + 四态图标（mook 风格本身就拒绝装饰过度）
-  //
-  // 为什么没有 h2Prefix / quoteMark / sectionCorner：
-  //   - 章节序号靠 decorations.headingPrefix 跑 autoNumber，无 SVG 介入
-  //   - pull-quote 用裸 blockquote + 左 1px 细线（设计稿原型，见 elements.blockquote）
-  //   - section-title 不是本主题主要的章节信号（h2 + kicker autoNumber 已经够了）
-  // ============================================================
+  // Motifs：极简——本主题章节序号靠 decorations.headingPrefix autoNumber，
+  // pull-quote 用裸 blockquote + 左 1px 细线，故意不声明 h2Prefix / quoteMark /
+  // sectionCorner（pipeline 检测到 theme.assets.h2Prefix 会自动注入 SVG）。
   motifs: {
-    // 故意不导出 h2Prefix：pipeline 检测到 theme.assets.h2Prefix 会**自动**在每个 h2 前
-    // 注入该 SVG。本主题 H2 的视觉签名是"小字 + 极宽上边距 + 朱橙 autoNumber 前缀"，
-    // 不需要任何 SVG 装饰——同 people-story（罗马数字派生）的设计取舍。
-
     // dividerFlower · ❋ 单字符（divider variant=glyph 时通过 attrs.glyph 覆盖；
     //   不通过 motif 暴露字符，保留 motif 仅为缩略图兼容）
     dividerFlower: {

@@ -1,25 +1,12 @@
 <script setup lang="ts">
 /**
- * PanelShell —— 居中 modal 弹层外壳（仅覆盖 modal 形态）
+ * PanelShell —— 居中 modal 弹层外壳（"全屏 mask + 居中卡片 + click-on-mask 关闭"）。
  *
- * R5：HelpPanel / CommandPalette 各自实现的 `<div class="*-mask"><div class="*-panel">`
- * 两层结构高度相似——本组件统一处理"全屏 mask + 居中卡片 + click-on-mask 关闭"。
+ * **本组件不覆盖侧面板**（DraftDrawer / ComponentPalette / ColorCustomizer /
+ * PublishChecklist）：那些根 className（`.drawer / .palette / .panel`）被 App.vue
+ * 的移动端 `:deep(...)` 选择器锁定，统一抽取会牵动一长串移动端 CSS 风险。
  *
- * **本组件不覆盖侧面板**（DraftDrawer / ComponentPalette / ColorCustomizer / PublishChecklist）：
- *   那些组件的根 className（`.drawer / .palette / .panel`）被 App.vue 的 mobile
- *   `:deep(...)` 选择器锁定（src/App.vue 的移动端"侧面板覆盖全屏"样式）。统一抽取会
- *   牵动一长串移动端 CSS 风险。R5 阶段不动它们的 root；只共享 PanelHeader / SearchBox。
- *
- * 用法：
- *   ```vue
- *   <PanelShell ariaLabel="快捷键与帮助" :max-height="80" :max-width="560" @close="emit('close')">
- *     <PanelHeader title="快捷键与帮助" @close="emit('close')" />
- *     <section>...body...</section>
- *   </PanelShell>
- *   ```
- *
- * Esc 关闭：本组件不监听 keydown。HelpPanel / CommandPalette 的 Esc 关闭已经在
- * App.vue 的 useKeyboardShortcuts 里处理（统一管所有 modal 的关闭快捷键）。
+ * Esc 关闭：本组件不监听 keydown，由 App.vue 的 useKeyboardShortcuts 统一管。
  */
 import { computed } from 'vue'
 

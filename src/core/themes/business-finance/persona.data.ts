@@ -13,9 +13,7 @@
  *   4. `<strong>` 字重 600（不是 800）—— 全页 800 = 没有重点
  *   5. 所有容器 radius ≤ 2（报告直角；radius ≥ 6 直接打回）
  *
- * 迁移说明：Phase 2 PR 6 — 本文件是 spec-first 的 ground truth，index.ts 投影而已。
- * 唯一视觉偏离：dividerWave 底部基线 stroke-width 从 0.8 提到 1.0（规范 §1.3 原计划亦如此，
- * 平台光栅化在 < 1 下会失真；validator 同样要求 ≥ 1）。
+ * 视觉细节：dividerWave 底部基线 stroke-width 1.0（< 1 平台光栅化失真，validator 硬下限）。
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -30,7 +28,7 @@ export const spec: PersonaSpec = {
   // 色板（规范 §1.1 · B 版：深栗墨为主，红留给涨/险）
   // ============================================================
   palette: {
-    // 规范 §1.1 关键改动：primary 从旧红 #b1252b 改到深栗墨
+    // 规范 §1.1：深栗墨为主（红只留给"涨/险"），降低整体视觉重量
     primary: '#2a1a14',
     // 规范 §1.1：内参蓝（略降饱和，研究部权威感）
     secondary: '#0e3654',
@@ -569,7 +567,7 @@ export const spec: PersonaSpec = {
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 PR 6 migrated. 唯一视觉偏离：dividerWave 基线 stroke-width 0.8 → 1.0（平台光栅化与 validator MIN_STROKE_WIDTH 纪律）。',
+      'dividerWave 基线 stroke-width 1.0（平台光栅化与 validator MIN_STROKE_WIDTH 硬下限）。',
   },
 }
 

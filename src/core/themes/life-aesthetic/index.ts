@@ -1,5 +1,5 @@
 /**
- * life-aesthetic · 慢生活（Phase 2 migrated — spec-first）
+ * life-aesthetic · 慢生活
  *
  * 主题 ground truth 在 persona.data.ts；本文件只负责投影为运行时 Theme。
  */

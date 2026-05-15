@@ -1,24 +1,18 @@
 /**
- * useOutsideClose —— 点击元素外部 / 按 Esc 触发关闭
- *
- * R5：Toolbar 的主题弹层与溢出菜单两处各自手写"mousedown 检测 + window.addEventListener
- * cleanup"，CommandPalette / HelpPanel 走 Vue 原生 `@click.self` 在 mask 上即可。
- * 本 composable 服务于"无 mask、需要监听全局 mousedown"的弹层场景（典型：Toolbar popover）。
- *
- * 使用：
- *   ```ts
- *   const popoverRef = ref<HTMLElement | null>(null)
- *   useOutsideClose(popoverRef, () => { open.value = false }, { active: open })
- *   ```
+ * useOutsideClose —— 点击元素外部 / 按 Esc 触发关闭。服务于"无 mask、需要监听
+ * 全局 mousedown"的弹层场景（如 Toolbar popover）；CommandPalette / HelpPanel
+ * 走 Vue 原生 `@click.self` 在 mask 上即可，不必用本 composable。
  *
  * 设计：
- *   - 监听 `mousedown` 而非 `click`：点击后想立即关闭，避免后续可能的 onClick 闯入新状态
- *   - 通过 `active` ref 控制是否挂载监听——弹层关时直接撤监听，省掉每次点击的元素链路检查
- *   - Esc 走 `keydown`，统一通过同一开关启停
- *   - 元素可以是 ref<HTMLElement> 或 ref<HTMLElement[]>（多锚点弹层，比如同时关心触发按钮和弹出体）
+ *   - 监听 `mousedown` 而非 `click`：点击后立即关闭，避免后续 onClick 闯入新状态
+ *   - 通过 `active` ref 控制挂载——弹层关时直接撤监听，省掉每次点击的元素链路检查
+ *   - 元素可以是 ref<HTMLElement> 或 ref<HTMLElement[]>（多锚点弹层）
  *
- * 注意 SSR：本 composable 直接读 window/document，若被 SSR 引用会报错——但 UI 原语
- * 本就只在客户端跑，可接受。如有 SSR 渲染诉求，调用方按需 `if (import.meta.env.SSR) return`。
+ * SSR：直接读 window/document，被 SSR 引用会报错；UI 原语本只在客户端跑。
+ *
+ * 使用：
+ *   const popoverRef = ref<HTMLElement | null>(null)
+ *   useOutsideClose(popoverRef, () => { open.value = false }, { active: open })
  */
 
 import { onBeforeUnmount, watch, type Ref } from 'vue'

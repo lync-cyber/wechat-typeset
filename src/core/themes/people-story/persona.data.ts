@@ -9,9 +9,7 @@
  *   2. Drop cap：intro 首段首字 48px / 700 / accent / inline-block（decorations.introDropcap）
  *   3. quoteCard = 巨号 serif 引号 SVG + 25px 金句 + byline attribution
  *
- * accent 稀缺纪律：每篇最多三处 —— drop cap + pull-quote 引号 + 罗马数字.
- *
- * 迁移：Phase 2 / PR 10 —— index.ts 只负责 `specToTheme(spec)`。
+ * accent 稀缺纪律：每篇最多三处 —— drop cap + pull-quote 引号 + 罗马数字。
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -71,13 +69,6 @@ export const spec: PersonaSpec = {
   // Motifs（规范 §1.3：巨号 serif 引号 + 瘦细 column rule + 罗马数字 + 肖像 silhouette）
   // ============================================================
   motifs: {
-    // h2Prefix（旧 3×13 primary 竖条）此处不声明 ——
-    // 旧实现里 h2RomanNumerals 开启时 heading_open hook 优先返回罗马数字 span，
-    // h2Prefix SVG 永远不会注入；既然是死代码就一并清理。
-    // 现在的罗马数字走 decorations.headingPrefix autoNumber（inline 通路），
-    // 与 motif → h2Prefix（heading_open 通路）正交——若未来某主题想"罗马数字 + SVG 竖条"
-    // 共存，只需同时声明 motifs.h2Prefix + decorations.headingPrefix。
-
     // sectionCorner：肖像 silhouette —— 头（圆）+ 肩（梯形），border 色让它退后
     sectionCorner: {
       viewBox: [0, 0, 24, 24],
@@ -208,8 +199,8 @@ export const spec: PersonaSpec = {
       primitives: [{ type: 'rect', x: 6.4, y: 3, w: 1.2, h: 8, fill: '#6b3a32', opacity: 0.7 }],
     },
 
-    // stepBadge：大号数字 + 下横线（24×24）
-    // `{N}` 占位符在运行时由渲染器替换为罗马数字（handled outside spec —— see Phase 2 PR10 note）
+    // stepBadge：大号数字 + 下横线（24×24）。
+    // `{N}` 占位符在运行时由渲染器替换为罗马数字（替换发生在 spec 层之外）。
     stepBadge: {
       viewBox: [0, 0, 40, 40],
       width: 24,
@@ -246,13 +237,8 @@ export const spec: PersonaSpec = {
     note: 'minimal-callout', // 与 magazine-pull 的"细线 + 空气感"语言一致
   },
 
-  // ============================================================
-  // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）
-  //
-  // 历史：旧版用 behavior.h2RomanNumerals + behavior.introDropcap + markdown.ts 私有分支实现。
-  // 迁到声明式 decorations 后，渲染逻辑由 pipeline/markdown.ts 统一执行（applyHeadingPrefixDecorations
-  // / applyIntroDropcap），本 spec 只描述"长什么样"。`ThemeBehavior` 接口 R8 后已删除。
-  // ============================================================
+  // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）。
+  // 渲染逻辑由 pipeline/markdown.ts 统一执行；本 spec 只描述"长什么样"。
   decorations: {
     // 规范 §1.2：intro 首段首字 48px / 700 / accent / inline-block。
     // 前导标点跳过 / 数字判定的扫描逻辑无法声明式表达, 由 markdown.ts 共享层实现；
@@ -514,7 +500,7 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // people-story 只用通用容器（Phase 5 再考虑 seal / prelude）
+  // people-story 只用通用容器
   signatureContainers: [],
 
   // ============================================================
@@ -548,7 +534,7 @@ export const spec: PersonaSpec = {
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 / PR 10: accent #8a3f2b 稀缺纪律 —— drop cap + pull-quote + roman 三处封顶. stepBadge {N} 占位符在运行时替换为罗马数字（outside spec）.',
+      'accent #8a3f2b 稀缺纪律 —— drop cap + pull-quote + roman 三处封顶。stepBadge {N} 占位符在运行时替换为罗马数字（替换发生在 spec 层之外）。',
   },
 }
 

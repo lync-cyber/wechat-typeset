@@ -204,14 +204,11 @@ export const spec: PersonaSpec = {
     'barChart', // 条形图（FIG.01 按年龄）
   ],
 
-  // ============================================================
-  // 内层元素 inline style 槽位（R8 风格 · renderer 不再硬编码）
-  //
+  // 内层元素 inline style 槽位（renderer 不硬编码，主题通过 spec.innerStyles 接管）。
   // - abstractKicker：红色 9px letter-spacing 0.2em（INDEX 风的栏位标签）
   // - keyNumberValue：56px 白色巨号 Nº04（issue-banner 主视觉）
   // - keyNumberKicker：9px 白色全大写 letter-spacing 0.3em（NEUE LESE GRAFIK）
   // - editorNoteKicker：全幅黑底白字 header bar——负 margin 撑到 wrapper 内边
-  // ============================================================
   innerStyles: {
     abstractKicker: {
       color: '#e30613',
@@ -527,14 +524,10 @@ export const spec: PersonaSpec = {
       'background-color': 'transparent',
       'border-radius': '0',
     },
-    // key-number 承担 issue-banner：满幅红底 + 大号 Nº04 + kicker / body 上下夹住
-    // 渲染顺序 (renderer 固定)：kicker(info) → value(attrs.value) → body markdown
-    //   - kicker: "NEUE LESE GRAFIK"（白色 9px letter-spacing 0.3em）
-    //   - value:  "Nº04"（白色 56px）
-    //   - body:   作者写 "VOL.IV · 2026—04—22 · CHF 14.—"（继承 p 样式但被本容器覆盖为白色）
-    // 注意 key-number 内部段落继承 elements.p 的黑色——必须用 inline style 覆盖
-    // (作者侧用 inline HTML 或加 spec.elements.p 覆盖不可行 —— 跨容器影响)。
-    // 解决方案：在 key-number wrapper 上设 color:white,p 会继承文字色（CSS color 是 inherit by default）
+    // key-number 承担 issue-banner：满幅红底 + 大号 Nº04 + kicker / body 上下夹住。
+    // 渲染顺序：kicker(info) → value(attrs.value) → body markdown。
+    // wrapper 上设 color:white，内部 p 通过 CSS color inheritance 继承反白文字色，
+    // 避免 spec.elements.p 跨容器染色。
     keyNumber: {
       __reset: true,
       'background-color': '#e30613',

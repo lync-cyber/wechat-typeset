@@ -1,22 +1,14 @@
 /**
- * 只读分享链接 · payload dispatcher
- *
- * R10 之前所有分享逻辑（article 唯一形态）写在本文件里。R10 拆分：
+ * 只读分享链接 · payload dispatcher。模块分工：
  *   - codec.ts             ShareCodec 契约 + base64url / JSON 原语 + URL 包装
  *   - payloads/article.ts  article 形态：`#share={...}`（含 stripInlineImagesForShare）
  *   - payloads/component.ts component 形态：`#share-component={...}`
- *   - shareLink.ts         本文件——dispatcher + 向后兼容 re-export 集中点
+ *   - shareLink.ts         dispatcher + 旧 article 形态的 alias re-export
  *
  * 新增 payload 类型流程：
  *   1. 在 payloads/ 下加 `<kind>.ts`，定义 `<kind>Codec: ShareCodec<P>`
  *   2. 在 KNOWN_CODECS 注册（让 parseAnyShareHash 能识别）
  *   3. 暴露具名的 build/parse helper（必要时由本文件 re-export）
- *
- * 向后兼容：
- *   原 4 个对外 export（encodeShare / decodeShare / buildShareUrl /
- *   parseShareHash）+ `SharePayload` 类型都是 article codec 的别名；R10 前的
- *   import 一字不改。新增 stripInlineImagesForShare / STRIPPED_IMAGE_PLACEHOLDER
- *   也从 article 模块 re-export，调用点（useClipboardCopy）不动。
  */
 
 import { parseHash, type ShareCodec } from './codec'
@@ -60,11 +52,9 @@ export function parseAnyShareHash(hash: string): AnySharePayload | null {
   return null
 }
 
-// ============================================================
-// 向后兼容：article 别名（R10 前的 4 个对外 export + SharePayload 类型）
-// ============================================================
+// article 形态的命名别名（旧 4 个对外 export + SharePayload 类型）
 
-/** @deprecated 新代码用 `SharePayloadArticle`；本别名保留是为了 R10 前的 import 不破坏。 */
+/** @deprecated 新代码用 `SharePayloadArticle`；本别名供旧调用方使用。 */
 export type SharePayload = SharePayloadArticle
 
 export {

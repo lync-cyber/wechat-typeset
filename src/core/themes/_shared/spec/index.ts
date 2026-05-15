@@ -4,7 +4,7 @@
  * 导出：
  *   - types：PersonaSpec、MotifSpec、MotifPrimitive、StatusKey 等
  *   - specToTheme：spec → Theme（运行时）
- *   - themeToSpec：Theme → spec（一次性迁移工具，Phase 2 用完即可删）
+ *   - themeToSpec：Theme → spec（迁移工具，仅离线脚本使用）
  *   - primitivesToSvg / renderMotifTemplate / shapeToSvg：motif 渲染
  *   - validateSpec：硬约束校验
  *   - PERSONA_SPEC_SCHEMA / getPersonaSpecSchema：JSON Schema

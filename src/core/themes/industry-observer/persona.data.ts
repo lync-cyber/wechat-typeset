@@ -231,8 +231,7 @@ export const spec: PersonaSpec = {
 
     // issueStamp(issue,date,kind) · 期号戳（industry 的 DNA）
     // 双线矩形框 + 中英混排 + 字距 1.5px 疏朗。由 cover/author/footerCTA 共享注入。
-    // Phase 2 偏差：原实现按参数空串条件拼接；spec 模板固定 `ISSUE #{issue} · {date} · {kind}`；
-    // 内框 stroke-width 0.5 受 validateSpec ≥1 约束提升到 1（视觉近乎不可辨）。
+    // 模板固定 `ISSUE #{issue} · {date} · {kind}`；内框 stroke-width ≥ 1（validateSpec 硬下限）。
     issueStamp: {
       viewBox: [0, 0, 260, 24],
       width: 260,
@@ -521,7 +520,7 @@ export const spec: PersonaSpec = {
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 migration: issueStamp 模板化后失去"空参数跳过"条件渲染（固定 ISSUE #{issue} · {date} · {kind}）；内框 stroke-width 0.5 → 1 以过 validateSpec。byte 级差异仅在 <text> 属性序（text-anchor 位置）——承袭 default pilot 渲染器。',
+      'issueStamp 走模板渲染（固定 ISSUE #{issue} · {date} · {kind}），不再做"空参数跳过"条件分支。SVG strokeWidth 全员 ≥ 1（validateSpec 硬下限）。',
   },
 }
 

@@ -264,18 +264,14 @@ export interface MotifSpec {
  * 该主题必须具备（渲染层有对应实现）的容器 id。conformance 测试会校验：
  * 每个 signatureContainer 都在渲染注册表里有实现。
  *
- * 设计纪律（R2）：本数组的成员**必须**与 `STYLED_CONTAINERS.map(s => s.styleKey)`
+ * 设计纪律：本数组的成员**必须**与 `STYLED_CONTAINERS.map(s => s.styleKey)`
  * 集合相等。手写在这里是为了保留 `as const` 的字面量字符串联合类型；
- * conformance.spec.ts 里有一道 set-equality 断言守住二者不漂移。
+ * conformance.spec.ts 有一道 set-equality 断言守住二者不漂移。
  *
  * 新增 styled 容器流程：
- *   1. vocabulary.ts 里追加 ContainerSpec（styleKey 非 null）
+ *   1. vocabulary.ts 追加 ContainerSpec（styleKey 非 null）
  *   2. 本数组同步追加同名 styleKey
  *   3. buildTheme.baseContainers + ThemeContainers 类型字段一致
- *
- * 历史包袱：algorithm / seal / prelude 三个占位 id 已于 R1 删除——它们
- * 没有 vocabulary 条目、没有 renderer，留在这里只会让 validateSpec 通过却在
- * conformance 期失败。需要类似容器时按上面三步正式登记。
  */
 export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'intro',
@@ -358,9 +354,6 @@ export interface PersonaSpec {
   /**
    * 声明式装饰规则。所有"主题专属视觉签名"（标题前缀编号 / intro 首字下沉……）一律走这里,
    * 共享层一次性实现"按声明执行"——不要在 markdown.ts 加 if 分支。
-   *
-   * 历史包袱：R8 前还有一个 `behavior?: ThemeBehavior` 字段承载 `introDropcap: boolean`,
-   * 已升为 `decorations.introDropcap`（可携带样式参数）。`ThemeBehavior` 接口完全删除。
    */
   decorations?: Decorations
   /**

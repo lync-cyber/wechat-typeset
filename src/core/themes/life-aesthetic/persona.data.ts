@@ -3,9 +3,6 @@
  *
  * 定位：暖米底 + 圆角柔和，记录饮食/旅行/长日的非虚构生活写作。
  * 视觉语言：手绘有机 · 波浪分割 · 花瓣/叶片装饰 · 软圆图标。
- *
- * 迁移自 src/themes/life-aesthetic/{index.ts, assets.ts}（Phase 2 / PR 8）。
- * 所有 hex 在本文件 inline 字面量；assets.ts 的 SVG 已逐一反拆为 MotifShape AST。
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -423,7 +420,7 @@ _一盏茶、一扇窗、一些可以慢下来的小事。_
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 / PR 8 迁移：assets.ts 的 11 个 SVG 全部 AST 化；dividerDots 的 4 组 rotated group 静态展开；iconFrame() helper 在 4 个图标里手动内联。',
+      '11 件 SVG motif 全部 AST 化；dividerDots 的 4 组 rotated group 静态展开；iconFrame helper 已在 4 个图标内联。',
   },
 }
 

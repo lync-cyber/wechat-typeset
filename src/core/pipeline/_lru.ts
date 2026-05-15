@@ -1,11 +1,7 @@
 /**
- * 极简 LRU 缓存 —— 用于 pipeline 内热点对象（MarkdownIt 实例、themeCSS 字符串等）。
- *
- * 实现：基于 Map 迭代序 = 插入序的 spec 保证。get 命中时把 entry 删除后重新 set
- * 到末尾，触发"刷新到最近使用"。set 满时淘汰 keys().next().value（最老）。
- *
- * 不引入 lru-cache 依赖：这里的容量都是个位数（8~12），TTL / weighed size 都不需要；
- * 引入会让 R12 移植到 lib-only build 时多带一份打包成本。
+ * 极简 LRU 缓存 —— 用于 pipeline 内热点对象（MarkdownIt 实例、themeCSS 字符串）。
+ * 基于 Map 的"迭代序 = 插入序"语义实现：get 命中时删除后重新 set 到末尾；set
+ * 满时淘汰 keys().next().value（最老）。容量个位数，不引入 lru-cache 依赖。
  */
 export interface LRU<K, V> {
   get(key: K): V | undefined

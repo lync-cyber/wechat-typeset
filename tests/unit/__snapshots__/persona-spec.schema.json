@@ -7582,7 +7582,7 @@
     },
     "decorations": {
       "type": "object",
-      "description": "声明式渲染层装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉……）的唯一承载点；共享层一次性实现\"如何按声明执行\"。R8 后 ThemeBehavior 接口已删除。",
+      "description": "声明式渲染层装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉……）的唯一承载点；共享层一次性实现\"如何按声明执行\"。",
       "properties": {
         "introDropcap": {
           "type": "object",

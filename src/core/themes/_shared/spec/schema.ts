@@ -1,13 +1,9 @@
 /**
- * PersonaSpec JSON Schema (draft-07).
- *
- * 手写，原因：
- *   - 项目 devDependencies 已经够长，再加 zod/ts-json-schema-generator 不值
- *   - PersonaSpec 相对稳定（重构完成后 surface 几乎不动）
- *   - 给 LLM 的 schema 需要人类可读的 description 字段——手写直接写注释
+ * PersonaSpec JSON Schema (draft-07)。手写理由：避免引入 zod /
+ * ts-json-schema-generator 依赖；给 LLM 用的 schema 需要人类可读的 description。
  *
  * 破坏性改动（删字段 / 收窄类型）= major bump；新增字段 = minor bump。
- * schema-contract.spec.ts（Phase 4）会对 schema 产出做快照，防止意外变更。
+ * schema-contract.spec.ts 对产出做快照，防止意外变更。
  */
 
 /**
@@ -279,7 +275,7 @@ const MOTIF_SPEC_SCHEMA: JSONSchema7 = {
   additionalProperties: false,
 }
 
-// R7：variants schema 直接派生自 VARIANT_IDS（themes/types.ts 的权威 satisfies 守护），
+// variants schema 直接派生自 VARIANT_IDS（themes/types.ts 的权威 satisfies 守护），
 // 新增 variant 改 variants/<kind>/_all.ts 与 VARIANT_IDS 即可，本 schema 自动跟进。
 const VARIANTS_SCHEMA: JSONSchema7 = {
   type: 'object',
@@ -407,7 +403,7 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
       type: 'object',
       description:
         '声明式渲染层装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉……）的唯一承载点；' +
-        '共享层一次性实现"如何按声明执行"。R8 后 ThemeBehavior 接口已删除。',
+        '共享层一次性实现"如何按声明执行"。',
       properties: {
         introDropcap: {
           type: 'object',

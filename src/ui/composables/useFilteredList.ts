@@ -1,18 +1,13 @@
 /**
- * useFilteredList —— "搜索框 + 列表过滤"通用组合
- *
- * R5：HelpPanel（容器速查）/ DraftDrawer（草稿）/ CommandPalette（命令）三处都在做
- * "query ref + computed(过滤)" 的小循环。本 composable 把这套形态收口：
- *
+ * useFilteredList —— "搜索框 + 列表过滤"通用组合：
  *   - query：reactive ref（双向绑定到 SearchBox）
  *   - filtered：computed，自动随 query / source 变化
  *   - 调用方提供 predicate：(item, lowercasedQuery) => boolean
  *
  * 不做的事（保持小而美）：
- *   - 不内建"高亮匹配片段"——调用方拿到 filtered 后自己渲染（match-substring 是 UI 事）
- *   - 不内建排序——调用方按需 sort（searchDrafts 已经按 mtime 排）
- *   - 不内建 debounce——这些列表都在百到千量级，前端 filter 同步即可；
- *     需要时调用方自己 debounce(query, 80) 再传进来
+ *   - 不内建高亮匹配片段——调用方拿 filtered 后自己渲染
+ *   - 不内建排序——调用方按需 sort（如 searchDrafts 按 mtime）
+ *   - 不内建 debounce——这些列表百到千量级前端 filter 同步即可
  */
 
 import { computed, ref, type ComputedRef, type Ref } from 'vue'

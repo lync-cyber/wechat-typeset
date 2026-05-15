@@ -219,8 +219,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       {
         key: 'variant',
         description: '覆盖主题默认的 admonition 骨架',
-        // R7：enum 从 VARIANT_IDS 派生——新增 admonition variant 改 _all.ts 即可，
-        // 无需同步动这里。
         enum: VARIANT_IDS.admonition,
       },
     ],
@@ -264,7 +262,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       {
         key: 'variant',
         description: '覆盖主题默认的 note 骨架（中性补注池，色彩走 textMuted 不抢色）',
-        // R7：从 VARIANT_IDS.note 派生
         enum: VARIANT_IDS.note,
       },
     ],

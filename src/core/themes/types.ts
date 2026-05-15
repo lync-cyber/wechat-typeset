@@ -379,16 +379,10 @@ export type SectionTitleVariantId =
   | 'cornered'
 
 /**
- * Note 第五态独立 variant 类（R8）。
- *
- * 设计动机：原来 note 与 tip/warning/info/danger 同名 category=admonition 但**不参与**
- * admonition variant 系统——容器同名共类却不共骨架，是"分类对外不一致"的契约破洞。
- * 现把 note 独立成 variantKind='note'，与 admonition 4 态视觉解耦：
- *   - admonition 4 态共享一个 admonition 池，骨架强调"四色差异"
+ * Note 第五态独立 variant 类。命名空间与 admonition 故意分离：
+ *   - admonition 4 态共享一个池，骨架强调"四色差异"
  *   - note 单独一个池，骨架强调"中性补注、低调、不抢色"（textMuted + 可选 noteIcon）
- *
- * 命名空间故意分离：避免 17 个 admonition variant 都要补一个"5th 中性回退分支"，
- * 也让 note 池可独立演进（增 LaTeX-旁注、CJK 书签式批注等"非情绪"骨架）。
+ * 让 note 池可独立演进（增 LaTeX-旁注、CJK 书签式批注等"非情绪"骨架）。
  */
 export type NoteVariantId =
   // 极简：顶端 1px 短分隔线 + textMuted 标题（当前 signature.ts 兜底，移植为默认）
@@ -417,7 +411,7 @@ export interface ThemeVariants {
   divider: DividerVariantId
   sectionTitle: SectionTitleVariantId
   codeBlock: CodeBlockVariantId
-  /** R8：note 第五态独立变体类，与 admonition 4 态解耦。 */
+  /** note 第五态独立变体类，与 admonition 4 态解耦。 */
   note: NoteVariantId
 }
 
@@ -503,22 +497,9 @@ export const VARIANT_IDS = {
 
 export type VariantKind = keyof ThemeVariants
 
-// ============================================================
-// Decorations：声明式渲染层装饰规则
-//
-// 主题对"渲染层视觉签名"的需求绝大多数是**模式化**的（按 regex 切前缀、按出现
-// 顺序编号、给标题加色块……），共享层只需实现一次"如何根据声明执行"，主题在 spec
-// 里写一份纯数据声明即可——避免在 schema / markdown.ts 多处加一段 if 分支的
-// 爆炸式增长。
-//
-// 历史包袱：曾经的 `ThemeBehavior` 接口只承载 `introDropcap: boolean` 一个 flag,
-// R8 把它升为 `Decorations.introDropcap`（可携带样式参数）后, ThemeBehavior 完全删除。
-// 此后**任何新的主题专属视觉签名都必须通过 decorations 表达**, 共享层只需实现"按声明执行"。
-//
-// 字段命名约束：所有颜色用 token 名（`primary` / `accent` 等），不写 hex；换
-// palette 时自动跟随主题色。font-family 只允许 `monospace` —— 与项目"主题不
-// 声明字体"的统一纪律一致（正文交给系统字体；monospace 是数据 / 代码场景的例外）。
-// ============================================================
+// Decorations: 声明式渲染层装饰规则。新增主题专属视觉签名必须通过 decorations
+// 表达——共享层只实现"按声明执行"。颜色字段只接受 token 名（primary/accent），
+// 不写 hex（换 palette 时自动跟随）。font-family 仅允许 monospace。
 
 /** 装饰里允许引用的色 token 键（必须是 ThemeTokens.colors 的合法 key） */
 export type PaletteColorKey =
@@ -632,9 +613,6 @@ export interface HeadingPrefixDecoration {
  *     的 Token 类内部细节
  * 这些逻辑被收口在 `markdown.ts:applyIntroDropcap` 的统一实现里, 主题作者只声明
  * "我要 dropcap, 用什么色 / 什么字号"。
- *
- * 历史包袱：R8 前是 `ThemeBehavior.introDropcap: boolean`，主题只能开关、不能调样式;
- * 升 decoration 后,字号、字重、间距都可由 spec 控制, 与 headingPrefix 同构。
  */
 export interface IntroDropcapDecoration {
   /** dropcap 颜色（token 引用） */
@@ -656,10 +634,7 @@ export interface Decorations {
    * 但通常没必要）。
    */
   headingPrefix?: readonly HeadingPrefixDecoration[]
-  /**
-   * intro 首段首字下沉。声明则启用,样式参数由本结构提供。
-   * 历史上是 `ThemeBehavior.introDropcap: boolean`,R8 升 decoration 后可调样式。
-   */
+  /** intro 首段首字下沉。声明则启用,样式参数由本结构提供。 */
   introDropcap?: IntroDropcapDecoration
 }
 
@@ -697,9 +672,6 @@ export interface Theme {
   /**
    * 声明式装饰规则。所有"主题专属视觉签名"（标题前缀编号 / kicker / 章节标记 /
    * intro 首字下沉……）一律走这里, 共享层只实现一次"按声明执行"。
-   *
-   * 历史包袱：R8 前还有一个 `behavior?: ThemeBehavior` 字段承载 `introDropcap: boolean`,
-   * 已升为 `decorations.introDropcap`。`ThemeBehavior` 接口完全删除。
    */
   decorations?: Decorations
 }

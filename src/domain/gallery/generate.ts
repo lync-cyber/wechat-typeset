@@ -139,11 +139,8 @@ function renderVariants(spec: PersonaSpec): string {
 }
 
 /**
- * 渲染 `spec.decorations`（声明式装饰规则）区块。
- *
- * R8 前是 `renderBehavior`,只渲染 `spec.behavior`（boolean flag 集合）；ThemeBehavior 接口
- * 已被 Decorations 取代后, 重命名 + 改为渲染 spec.decorations。展示格式仍为 key→value 表格,
- * 把对象 / 数组类型 JSON 序列化为单行。
+ * 渲染 `spec.decorations`（声明式装饰规则）区块。展示格式为 key→value 表格,
+ * 对象/数组类型 JSON 序列化为单行。
  */
 function renderDecorations(spec: PersonaSpec): string {
   if (!spec.decorations || Object.keys(spec.decorations).length === 0) return ''

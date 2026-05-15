@@ -1,10 +1,7 @@
 <script setup lang="ts">
 /**
- * App —— 组合根
- *
- * R6 之后这里只剩三件事：装配（template）、连线（拿 composable + state.ts 的输出
- * 拼成 props/handlers）、声明 onboarding 这种"只在模板里用"的派生态。具体业务逻辑
- * 全部在邻居文件，本 SFC 不再隐藏任何状态机：
+ * App —— 组合根：装配（template）、连线（composable + state 拼 props/handlers）、
+ * 声明 onboarding 这种"只在模板里用"的派生态。具体业务在邻居文件：
  *
  *   src/app/state.ts           - 跨 composable 共享的 ref（md / baseThemeId / ...）
  *   src/app/actions.ts         - handle* 动作（清空 / 载入示例 / 一键修复 / ...）
@@ -13,8 +10,7 @@
  *   src/app/themeOrchestrator.ts - baseThemeId watcher 的 4 条副作用
  *   src/app/bootstrap.ts       - onMounted / onBeforeUnmount 启停副作用
  *
- * 命名约定：只有"模板里直接用"的 ref / computed / handler 才在此 setup；任何能
- * 抽出去单独命名一个函数的都拒绝再写进 App.vue。
+ * 纪律：只有"模板里直接用"的 ref / computed / handler 才在此 setup；其余抽走。
  */
 import { computed, ref, watch } from 'vue'
 import Editor from '../ui/components/Editor.vue'

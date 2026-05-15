@@ -1,13 +1,9 @@
 <script setup lang="ts">
 /**
- * 帮助 / 快捷键面板
- *
- * R5 重构：modal 外壳 / 头部 / 搜索框 / 列表过滤改走 ui/primitives + useFilteredList。
- *
- * 数据源：
+ * 帮助 / 快捷键面板。数据源：
  *   - Command 列表（快捷键）由 App.vue 传入
  *   - 容器速查直接读 CONTAINER_VOCABULARY（与 docs/contract/base.md + docs/contract/packs/ 同源）
- * 作者看见的每条容器都能点击插入编辑器——不需要手抄 fence 到粘贴板。
+ * 容器条目可点击插入到编辑器。
  */
 import { computed } from 'vue'
 import type { Command } from './CommandPalette.vue'

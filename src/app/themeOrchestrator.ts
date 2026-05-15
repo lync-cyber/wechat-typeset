@@ -1,18 +1,12 @@
 /**
- * baseThemeId watcher 的副作用编排
- *
- * 切主题这一动作会触发 4 条独立副作用，原本挤在 App.vue 的一个 watch 回调里 ~40
- * 行难以单独读懂。R6 把每条拆成命名函数，组合根只负责连线。每条说明了"为什么这件
- * 事必须发生"，因为时序耦合不是显式的——例如自动换 sample 必须用 `prev` 而非
- * `current` 做比对，否则切完之后 md 已经更新就永远命中不到 pristine 判定。
- *
- * 4 条副作用（按当前执行顺序）：
+ * baseThemeId watcher 的副作用编排。切主题触发 4 条独立副作用：
  *   1. persistThemeId — localStorage 写盘，刷新页面后还原
- *   2. resetCustomThemeWithUndo — 切主题时把 ColorCustomizer 的自定义层清掉，挂 undo
- *   3. autoSwapPristineSample — 若正文还是某主题的原样示例，替换为新主题示例
- *   4. persistDraftTheme — 把当前活跃草稿的 themeId 字段也更新，避免下次打开漂移
+ *   2. resetCustomThemeWithUndo — 清掉 ColorCustomizer 自定义层，挂 undo
+ *   3. autoSwapPristineSample — 若正文还是某主题原样示例，替换为新主题示例
+ *   4. persistDraftTheme — 同步活跃草稿的 themeId 字段，避免下次打开漂移
  *
- * 这 4 条都仅在 `val !== prev` 时执行（persist 例外，首次 init 也写）。
+ * 时序耦合：autoSwapPristineSample 必须用 `prev` 而非 `current` 做 pristine 判定，
+ * 否则切完之后 md 已更新就永远命中不到。除 persist 外都仅在 `val !== prev` 执行。
  */
 import { watch, type Ref } from 'vue'
 import { baseThemeId, customTheme, lastSeed, md } from './state'

@@ -1,16 +1,11 @@
 <script setup lang="ts">
 /**
- * ⌘K 命令面板
- *
- * R5B 重构：modal 外壳改走 PanelShell，列表过滤改走 useFilteredList。
- *
- * 为什么 input 没用 SearchBox：
- *   CommandPalette 的 input 是"header 内嵌（透明 borderless + 旁列图标和提示）"形态——
- *   与 SearchBox 提供的"独立带框搜索框"是两套视觉契约，强配会引入 :deep / class 覆盖竞速。
- *   Header 区（图标 + input + 提示三栏）保留手写，承认这是命令面板的专有形态。
- *
- * 单一通道，把所有 Toolbar 动作 + 草稿切换 + 主题切换汇聚到可搜索列表。
+ * ⌘K 命令面板：把所有 Toolbar 动作 + 草稿切换 + 主题切换汇聚到可搜索列表。
  * 命令在父组件登记一次，两处复用（面板 + 帮助）。
+ *
+ * input 不走 SearchBox：CommandPalette 的 input 是"header 内嵌（透明 borderless +
+ * 旁列图标和提示）"形态，与 SearchBox 的"独立带框搜索框"是两套视觉契约，
+ * 强配会引入 :deep / class 覆盖竞速。
  *
  * 交互：
  *   - ↑/↓ 选择；Enter 执行；Esc 关闭

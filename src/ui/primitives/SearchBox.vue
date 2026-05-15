@@ -1,22 +1,13 @@
 <script setup lang="ts">
 /**
- * SearchBox —— `<input type="search">` 通用搜索框
- *
- * R5：HelpPanel（容器速查）/ DraftDrawer（草稿）/ CommandPalette（命令）的搜索 input
- * 样式高度一致——边框 + 圆角 + focus 时主色描边，差别只在 placeholder 文字。本组件
- * 收口该形态。
- *
- * 双向绑定：`v-model` —— 默认绑 modelValue，与 Vue 3 SFC 惯例一致。
- *
- * 暴露：
- *   - `focus()`：父组件可以 ref + onMounted focus（CommandPalette 是典型场景）
- *   - 不暴露 input element 本身，避免父组件直接动 DOM
+ * SearchBox —— `<input type="search">` 通用搜索框，收口 HelpPanel / DraftDrawer /
+ * CommandPalette 的"边框 + 圆角 + focus 主色描边"形态。
  *
  * 不做的事：
- *   - 不内建图标——图标在 CommandPalette 是 ⌘ 大字，在 HelpPanel 是无图标，
- *     由父组件按需在 left/right slot 提供
- *   - 不内建 clear 按钮——`type="search"` 浏览器原生有 ✕，跨浏览器一致
- *   - 不接 keydown——CommandPalette 的 ↑↓Enter 导航是命令面板专有，由父组件挂
+ *   - 不内建图标——由父组件按需在 left/right slot 提供
+ *   - 不内建 clear 按钮——`type="search"` 浏览器原生有 ✕
+ *   - 不接 keydown——↑↓Enter 导航是命令面板专有，由父组件挂
+ * 暴露 `focus()`，不暴露 input element，避免父组件直接动 DOM。
  */
 import { ref } from 'vue'
 

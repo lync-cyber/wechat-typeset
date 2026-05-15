@@ -31,7 +31,7 @@ export const mastheadContainer: ContainerRenderer = {
     const date = ctx.attrs.date ?? ''
     const kicker = ctx.attrs.kicker ?? ''
     const c = ctx.tokens.colors
-    // R4：装饰位（padding / border / bg / margin）由 ctx.containers.masthead 决定。
+    // 装饰位（padding / border / bg / margin）由 ctx.containers.masthead 决定。
     // 结构性 display:grid 是本容器的视觉契约，由 renderer 强制——
     // 不进 ThemeContainers 槽位（themeCSS guard 会拒绝 display:grid）。
     //
@@ -107,7 +107,7 @@ export const sectionTagContainer: ContainerRenderer = {
   open: (ctx) => {
     const label = ctx.info.trim() || '标签'
     const c = ctx.tokens.colors
-    // R4：外壳 section 仅承载 margin；标签本体走 inline-block 胶囊。
+    // 外壳 section 仅承载 margin；标签本体走 inline-block 胶囊。
     const wrapperCSS = inline(ctx.containers.sectionTag)
     const pillCSS = [
       'display:inline-block',
@@ -134,7 +134,6 @@ export const tocContainer: ContainerRenderer = {
   open: (ctx) => {
     const kicker = ctx.info.trim() || '目录 · CONTENTS'
     const c = ctx.tokens.colors
-    // R4：wrapper 完全由 ctx.containers.toc 决定。
     const wrapperCSS = inline(ctx.containers.toc)
     const kickerCSS = [
       `color:${c.primary}`,
@@ -195,14 +194,9 @@ export const tocItemContainer: ContainerRenderer = {
   close: '',
 }
 
-// ============================================================
-// colophon · 刊物收束栏（"下期 / 卷·期"双栏）
-//
-// 设计稿原型（旧版 inline `<section style="display:table">` + 双 table-cell）：
-//   上分割线（1px 实线，比 footnotes 的 border 更重，标记"全文结束"）+
-//   左右两栏 monospace 元数据。kicker（小字大写）+ value（normal）双行。
+// colophon · 刊物收束栏（"下期 / 卷·期"双栏）：
+// 上分割线 + 左右两栏 monospace 元数据，kicker（小字大写）+ value（normal）双行。
 // body 内容忽略；左栏数据走 attrs.next，右栏走 attrs.issue。
-// ============================================================
 
 export const colophonContainer: ContainerRenderer = {
   open: (ctx) => {

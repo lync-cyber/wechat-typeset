@@ -1,21 +1,13 @@
 /**
- * 应用级共享状态
+ * 应用级共享状态：模块级单例 ref，作为超轻量 store。
  *
- * R6 之前所有"跨 composable 共享 ref"都挂在 App.vue 的 setup 顶部，命令面板 /
- * 主题 orchestrator / 滚动联动等想读这些值就只能反向被注入，导致 App.vue 充当了
- * 隐式状态容器。本文件把它们提到模块级——单例 ref，约等于一个超轻量 store。
+ * 不用 Pinia：< 10 个 ref 时 store 库样板大于直接 import；未来若加多窗口再迁移。
  *
- * 为什么不用 Pinia：单页编辑器规模就这点状态（< 10 个 ref），引入 store 库的样板
- * 远大于直接 `import { md } from './state'`。如果未来加多窗口 / 多 tab，再考虑迁移。
- *
- * 谁可以写 / 读：
+ * 读写约定：
  *   - md / baseThemeId / mobileTab：所有 composable + App.vue 都可读写
  *   - hoverThemeId：ThemePicker 写、activeTheme 读
- *   - customTheme / lastSeed：ColorCustomizer 流写、activeTheme 读
- *   - activeTheme：派生只读 computed，永远不要直接赋值
- *
- * 测试隔离：vitest 每个 spec 默认共享一个模块实例。本 store 没有显式 reset()——
- * tests/unit/* 走的是 pipeline / 容器纯函数测试，不 import 本文件，互不影响。
+ *   - customTheme / lastSeed：ColorCustomizer 写、activeTheme 读
+ *   - activeTheme：派生只读 computed，不直接赋值
  */
 import { computed, ref } from 'vue'
 import type { Theme } from '../core/themes/types'

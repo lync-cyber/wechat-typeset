@@ -1,13 +1,7 @@
 /**
- * 命令面板清单构造
- *
- * 原本在 App.vue 的 `const commands = computed(...)` 一长串 push，~50 行。R6 拆到
- * 这里：依赖通过 deps 传入（组合根负责连线），输出仍是一个 ComputedRef<Command[]>。
- * 这样命令列表的"加一条/删一条/改快捷键"不再触发 App.vue diff，未来加 CommandSource
- * 插件接口（让组件库 / 主题包注入自己的命令）也是在此扩展。
- *
- * 设计选择：deps 字段较多，但都是"需要的最少集合"——没有把整个 useUiDrawers /
- * useDraftLifecycle 返回值塞进来当 black box，避免无关字段反向耦合 commands。
+ * 命令面板清单构造。依赖通过 deps 传入，输出 ComputedRef<Command[]>。
+ * deps 字段较多但都是"需要的最少集合"——不把整个 composable 返回值塞进来当 black box，
+ * 避免无关字段反向耦合 commands。未来可扩展 CommandSource 插件接口在此注入。
  */
 import { computed, type ComputedRef, type Ref } from 'vue'
 import type { Command } from '../ui/components/CommandPalette.vue'

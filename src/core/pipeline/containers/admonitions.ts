@@ -1,14 +1,8 @@
 /**
- * 四色提示容器：tip / warning / info / danger
- *
- * R3 重构：从 38 行手写 makeAdmonition + resolveVariantId 收拢到 makeVariantContainer 工厂调用。
- * 行为保持与重构前完全一致——SPI 暗号（titleCSS===''）、双 className（v1 兼容 + variant 后缀）、
- * icon 注入位置、titleCSS 默认值都由工厂统一表达。
- *
- * v2 的容器层职责（在工厂里实现）：
+ * 四色提示容器：tip / warning / info / danger。走 makeVariantContainer 工厂：
  *   1. 决定用哪个 variant（attrs.variant > theme.variants.admonition > 'accent-bar' 兜底）
  *   2. 组装 open/close HTML：wrapper + svgSlot + title? + body?
- *   3. 处理 title 显示约定（titleCSS==='' 跳过默认 title 行，由 svgSlot 承担）
+ *   3. titleCSS==='' 是约定的"跳过默认 title 行"暗号，title 由 svgSlot 承担
  */
 
 import type { ContainerRenderer } from './types'

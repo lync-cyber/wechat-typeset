@@ -12,9 +12,7 @@
  *      另三个靠 markdown 层 `variant=` 覆盖（见 Templates / sample-full.md）
  *   4. stepBadge 数字色 = primary 墨褐（不用朱砂）
  *   5. 所有容器 radius = 0（方版心是书，圆角是卡片）
- *
- * 迁移：Phase 2 迁移自 legacy index.ts + assets.ts；strokeWidth 0.6/0.8/0.9 → 1
- * （validator 硬下限，公众号光栅化友好），其余视觉细节 byte-identical。
+ *   6. SVG strokeWidth 全员 ≥ 1（validator 硬下限，公众号光栅化友好）
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -716,7 +714,7 @@ _写于春分后第二日，时雨初歇。_
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 迁移自 legacy index.ts + assets.ts；三件 motif 的 strokeWidth 0.6/0.8/0.9 抬至 1.0（validator 硬下限，公众号光栅化友好），其余视觉细节 byte-identical。',
+      '三件 motif 的 strokeWidth 全部 ≥ 1（validator 硬下限，公众号光栅化友好）。',
   },
 }
 

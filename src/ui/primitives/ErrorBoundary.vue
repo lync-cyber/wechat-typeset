@@ -1,17 +1,9 @@
 <script setup lang="ts">
 /**
- * ErrorBoundary —— 单子树渲染异常的兜底层
- *
- * Vue 的 `onErrorCaptured` 只能在组件实例里捕获子组件抛出的错误。R6 之前 App.vue
- * 没有任何 boundary，一旦 ColorCustomizer / ComponentPalette / DraftDrawer 等
- * 某个面板 setup 报错（typically：本地 storage 数据格式漂移、第三方依赖加载失败、
- * 自定义主题 spec 校验错过 schema），整个 App 都会白屏，连"切回默认主题"或者
- * "再次打开命令面板"这种自救动作都做不了。
- *
- * 本组件给"可能炸"的子树套一层壳：
- *   - errorCaptured 触发后渲染降级 UI（标题 + 可读错误描述 + 重试按钮 + 关闭按钮）
- *   - 返回 false 阻止错误继续冒泡到 App.vue 的 onErrorCaptured / Vue 全局 handler，
- *     避免一次抛错触发多次降级
+ * ErrorBoundary —— 单子树渲染异常的兜底层。给"可能炸"的子树套壳（ColorCustomizer /
+ * ComponentPalette / DraftDrawer 等面板的 setup 抛错时，避免整 App 白屏）：
+ *   - errorCaptured 触发后渲染降级 UI（标题 + 可读错误描述 + 重试 + 关闭）
+ *   - 返回 false 阻止错误冒泡到 App.vue / Vue 全局 handler
  *   - "重试"=key 重渲染 slot；"关闭"=触发 close emit 让父组件卸载本 boundary
  *
  * 用法：
@@ -19,10 +11,10 @@
  *     <ComponentPalette ... />
  *   </ErrorBoundary>
  *
- * 不接管的事：
+ * 不接管：
  *   - 异步错误（Promise reject、setTimeout 抛错）—— Vue errorCaptured 不覆盖；
  *     这些应该在原地 try/catch 后用 useDraftLifecycle.pingTransient 反馈
- *   - 模板表达式里的 `xxx.yyy` 空引用 —— 优先用 v-if 防御，不要寄希望于 boundary
+ *   - 模板表达式里的空引用——用 v-if 防御，不要寄希望于 boundary
  */
 import { onErrorCaptured, ref } from 'vue'
 

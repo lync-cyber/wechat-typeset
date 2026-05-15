@@ -1,5 +1,5 @@
 /**
- * industry-observer · 行业观察周刊（Phase 2 migrated — spec-first）
+ * industry-observer · 行业观察周刊
  *
  * 主题 ground truth 在 persona.data.ts；本文件只负责投影为运行时 Theme。
  * Palette / 字号 / motif / 元素样式等全部从 spec 读取——要改外观，改 spec。

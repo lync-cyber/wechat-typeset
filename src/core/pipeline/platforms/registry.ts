@@ -1,16 +1,13 @@
 /**
- * 平台 adapter 注册表
+ * 平台 adapter 注册表。pipeline 按 RenderInput.platform 查表派发 patch；
+ * 默认 platform='wechat'。
  *
- * pipeline 渲染管线按 RenderInput.platform 查表派发 patch。
- * 默认 platform='wechat'——历史用法不带该字段时与 R10 之前行为一致。
- *
- * 新增平台流程：
+ * 新增平台：
  *   1. 在 platforms/<id>/ 下新建 patch.ts + index.ts（参考 zhihu/xhs 占位）
- *   2. 把 adapter 注册到本 PLATFORMS 表
+ *   2. 把 adapter 注册到本表
  *   3. （可选）scripts/build-capabilities.ts 自动派生 capabilities.platforms[]
  *
- * 不暴露按 id 直查的内部 record—统一走 getPlatform()，未知 id 显式抛错而非
- * 静默回退，让调用方早失败（避免拼写错误造成"看似 wechat 实际跑 xhs identity"）。
+ * 未知 id 显式抛错而非静默回退，避免拼写错误造成"看似 wechat 实际跑 xhs identity"。
  */
 
 import type { PlatformAdapter } from './types'
