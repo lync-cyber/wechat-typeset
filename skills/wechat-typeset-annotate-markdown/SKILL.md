@@ -76,37 +76,49 @@ tsx skills/wechat-typeset-annotate-markdown/scripts/annotate-md.ts \
   --out tmp/patches.json
 ```
 
-输出 `patches.json`，结构：
+输出 `patches.json`，结构（实际 `kind` 枚举与脚本输出一致）：
 
 ```json
 {
+  "input": "<input.md 路径>",
   "persona": "tech-explainer",
+  "block_count": 24,
+  "patch_count": 5,
   "patches": [
     {
       "line": 3,
-      "kind": "wrap_with_container",
+      "end_line": 5,
+      "kind": "wrap_first_paragraph",
       "container": "intro",
-      "reason": "首段 2-3 行总览，符合 intro 用途",
-      "confidence": "high"
+      "reason": "文首总览段（120 字符）——典型 intro 位置",
+      "confidence": "high",
+      "preview": "本文将从三个角度…"
     },
     {
       "line": 18,
-      "kind": "convert_blockquote",
+      "end_line": 19,
+      "kind": "wrap_blockquote",
       "container": "quote-card",
-      "variant": "column-rule",
-      "reason": "短引用 + 完整句末标点，金句卡",
-      "confidence": "medium"
+      "reason": "blockquote 单段短句（42 字符，句末完整）——典型金句",
+      "confidence": "medium",
+      "preview": "技术的本质是对…"
     },
     {
       "line": 42,
+      "end_line": 47,
       "kind": "convert_list",
       "container": "steps",
-      "reason": "有序列表 5 条 + 动词开头",
-      "confidence": "high"
+      "reason": "有序列表 5 条，每条动词开头——操作流程",
+      "confidence": "high",
+      "preview": "1. 打开终端…"
     }
-  ]
+  ],
+  "apply_hint": "...",
+  "vocabulary_subset": [...]
 }
 ```
+
+合法 `kind` 枚举（脚本 [annotate-md.ts](scripts/annotate-md.ts) 单一真源）：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
 
 **v1 的策略**：脚本不直接改 md，只输出建议。Agent（你）拿着 `patches.json` + 原文，逐条决策"应用 / 跳过 / 改改 confidence"，最后写出新的 md。
 
@@ -202,8 +214,9 @@ issues 全部修完再交付——**不要把 lint 失败的 md 交给 export-ri
 
 共享 references（三个 skill 共用同一份权威源，通过相对路径软链）：
 
+- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · 脚本签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**所有 CLI 真源**）
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
-- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查
+- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（由 build:skill-refs 派生）
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单（用于排查 lint 失败原因）
 - [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md) · Motif AST 完整字段（少数情况 annotator 会接触）
 
