@@ -25,7 +25,7 @@
 | `people-story` | 人物特稿 | 人物特稿 / 人文非虚构 / 杂志 Profile | `magazine-pull` | `magazine-dropcap` | `timeline-dot` | `rule` | `bare` | `minimal-callout` | —— |
 | `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `sidenote-latex` | `frame-brackets` | `timeline-dot` | `rule` | `bare` | `box-callout` | abstract、seeAlso |
 | `editorial-mook` | 编辑刊 | 慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物 | `mook-tag` | `classic` | `number-circle` | `glyph` | `bare` | `minimal-callout` | abstract、masthead、toc、qaBlock、footnotes、ctaBar、qrFollow、editorNote、colophon |
-| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-row` | `classic` | `number-circle` | `flower` | `bare` | `side-bar` | abstract、sectionTag、toc、keyNumber、qaBlock、editorNote、footnotes、refs、ctaBar、qrFollow、colophon、methodology、barChart |
+| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-row` | `classic` | `number-circle` | `seal-mark` | `bare` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、editorNote、footnotes、refs、calloutGroup、ctaBar、qrFollow、colophon、methodology、barChart |
 | `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `news-row` | `tilted-sticker` | `number-circle` | `flower` | `bare` | `side-bar` | masthead、toc、qaBlock、footnotes、ctaBar、qrFollow、editorNote、colophon |
 | `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `news-row` | `classic` | `number-circle` | `dots` | `bare` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、editorNote、footnotes、ctaBar、qrFollow、colophon |
 
@@ -141,9 +141,9 @@
 
 **描述**：国际红 + 12 栏铁律 + 直角硬边：1958 Neue Grafik 苏黎世对开页
 
-**视觉签名**：admonition=`news-row` · quote=`classic` · steps=`number-circle` · divider=`flower` · codeBlock=`bare` · note=`side-bar`
+**视觉签名**：admonition=`news-row` · quote=`classic` · steps=`number-circle` · divider=`seal-mark` · codeBlock=`bare` · note=`side-bar`
 
-**signatureContainers**：`abstract`、`sectionTag`、`toc`、`keyNumber`、`qaBlock`、`editorNote`、`footnotes`、`refs`、`ctaBar`、`qrFollow`、`colophon`、`methodology`、`barChart`
+**signatureContainers**：`abstract`、`sectionTag`、`editorialHeader`、`byline`、`toc`、`keyNumber`、`qaBlock`、`editorNote`、`footnotes`、`refs`、`calloutGroup`、`ctaBar`、`qrFollow`、`colophon`、`methodology`、`barChart`
 
 ### brutalist · 粗野主义报刊
 

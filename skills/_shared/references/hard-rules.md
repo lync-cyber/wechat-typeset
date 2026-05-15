@@ -100,7 +100,7 @@ admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'min
 quote:         'classic' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'tilted-sticker'
 compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
 steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot'
-divider:       'wave' | 'dots' | 'flower' | 'rule' | 'glyph'
+divider:       'wave' | 'dots' | 'flower' | 'rule' | 'glyph' | 'seal-mark'
 sectionTitle:  'bordered' | 'cornered'
 codeBlock:     'bare' | 'header-bar'
 note:          'minimal-callout' | 'box-callout' | 'side-bar'
