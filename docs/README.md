@@ -25,10 +25,15 @@
 
 ## LLM / Agent 集成
 
-| 文档 | 面向 | 回答什么 |
+挂 skill 的 Agent 维护者：项目按"用户意图边界"拆成 3 个 skill + 1 个轻量调度入口，详见各 SKILL.md 顶部 description：
+
+| 文档 | 面向 | 何时使用 |
 | --- | --- | --- |
-| [../skills/wechat-typeset/SKILL.md](../skills/wechat-typeset/SKILL.md) | 挂 skill 的 Agent 维护者 | 何时启用、公共 API 速览、与平台约束的对应 |
-| [../skills/wechat-typeset/references/](../skills/wechat-typeset/references/) | 给 LLM 读的参考 | `api.md` / `hard-rules.md` / `motif-ast.md` / `personas.md` 四份密度写法 |
+| [../skills/wechat-typeset/SKILL.md](../skills/wechat-typeset/SKILL.md) | 不确定走哪条线时的路由入口 | 用户笼统说"想发到公众号"，由本 skill 判断分发 |
+| [../skills/wechat-typeset-author-persona/SKILL.md](../skills/wechat-typeset-author-persona/SKILL.md) | 主题视觉设计 | 造新主题 / 派生现有主题 / 改色板与 motif |
+| [../skills/wechat-typeset-annotate-markdown/SKILL.md](../skills/wechat-typeset-annotate-markdown/SKILL.md) | 写作契约改写 | 普通 markdown → 满足契约的 markdown（含 `:::` 容器） |
+| [../skills/wechat-typeset-export-richtext/SKILL.md](../skills/wechat-typeset-export-richtext/SKILL.md) | 渲染 / 导出 / 复制 | 契约 md → 可粘贴公众号的富文本 HTML |
+| [../skills/_shared/references/](../skills/_shared/references/) | 给 LLM 读的共享参考 | `hard-rules.md` / `motif-ast.md` / `personas.md` / `container-vocabulary.md` / `cli-contract.md` |
 
 ## 维护者
 

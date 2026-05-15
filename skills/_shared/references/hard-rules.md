@@ -91,22 +91,22 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 
 ## Variants 合法性
 
-`variants` 7 个字段各有固定 id 清单（权威源：`src/core/themes/types.ts` 的 `VARIANT_IDS` 常量）：
+`variants` 8 个字段各有固定 id 清单（权威源：`src/core/themes/types.ts` 的 `VARIANT_IDS` 常量）。**下方清单由 `npm run build:skill-refs` 派生，勿手改**：
+
+<!-- generated:variant-whitelist:start -->
 
 ```ts
-admonition:   accent-bar | pill-tag | ticket-notch | card-shadow |
-              minimal-underline | terminal | dashed-border |
-              double-border | top-bottom-rule | manpage-log |
-              ribbon-tab | leather-card | parchment-margin |
-              bubble-organic | scroll-band | report-section
-quote:        classic | magazine-dropcap | column-rule | frame-brackets
-compare:      column-card | stacked-row | ledger | data-card
-steps:        number-circle | ribbon-chain | timeline-dot
-divider:      wave | dots | flower | rule | glyph
-sectionTitle: bordered | cornered
-codeBlock:    bare | header-bar
-note:         minimal | margin-bracket | ledger-row
+admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'mook-tag'
+quote:         'classic' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'tilted-sticker'
+compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
+steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot'
+divider:       'wave' | 'dots' | 'flower' | 'rule' | 'glyph'
+sectionTitle:  'bordered' | 'cornered'
+codeBlock:     'bare' | 'header-bar'
+note:          'minimal-callout' | 'box-callout' | 'side-bar'
 ```
+
+<!-- generated:variant-whitelist:end -->
 
 任何其他字符串（典型的 LLM 幻觉：`'glow'` / `'modern'` / `'flat'`）都会在 `validatePersona` 抛错。LLM 生成 variant id 前先 `getVariantIds()` 拿真实白名单——**不要凭记忆写**。
 

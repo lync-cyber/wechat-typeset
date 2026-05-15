@@ -179,9 +179,10 @@ LLM 经常凭设计稿习惯写 `fontSize: 12` 或 `strokeWidth: 0.5`——硬�
 
 共享 references（三个 skill 共用同一份权威源，通过相对路径软链）：
 
+- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · 脚本签名 / 退出码 / validate-and-fix 错误模式表（**所有 CLI 真源**）
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束完整清单
 - [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md) · Motif AST 完整字段
-- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查
+- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（由 build:skill-refs 派生）
 
 独家 references（本 skill 专属）：
 

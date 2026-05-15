@@ -28,58 +28,62 @@ description: 将满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 
 ```
 Task Progress:
-- [ ] 1. lint-contract.ts <input.md> 确认契约合法
-- [ ] 2. render-html.ts <input.md> --persona <id> --out output.html
+- [ ] 1. lint-contract.ts --input <md> 确认契约合法
+- [ ] 2. render-html.ts --input <md> --persona <id> --output output.html
 - [ ] 3. （可选）render-gallery.ts 比较多 persona
 - [ ] 4. 浏览器打开 → 全选复制 → 粘公众号 / 或 copy-richtext.ts
 ```
 
+CLI 标志详表见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)（所有脚本的 flag / 退出码 / IO 形态单一真源）。
+
 ### Step 1 · lint（契约合法性预检）
 
 ```bash
-tsx skills/wechat-typeset-export-richtext/scripts/lint-contract.ts <input.md>
+tsx skills/wechat-typeset-export-richtext/scripts/lint-contract.ts --input <md>
 ```
 
 输出 `ok=true` 或 `issues[]`。**lint 失败不要进 Step 2**——render 阶段才发现错误成本更高。
 
-issue 修复指南见 `wechat-typeset-annotate-markdown` 的 SKILL.md（重复同一份 issue 修复表）。
+issue 修复指南见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)（lint issue 修复表与 annotate-markdown 共用一份）。
 
 ### Step 2 · 单 persona 渲染
 
 ```bash
 tsx skills/wechat-typeset-export-richtext/scripts/render-html.ts \
-  <input.md> \
+  --input <md> \
   --persona <id> \
-  --out output.html
+  --output output.html
 ```
 
 输出：
 
 - `output.html` 完整 HTML（含 juice 内联 + wxPatch）
-- stdout JSON：`{ ok, persona, wordCount, readingTime, htmlLength }`
+- stdout JSON：`{ ok, persona, word_count, reading_time_min, html_length, svg_white_bg, patch_summary }`
 
 退出码：
 - `0` 成功
-- `1` IO 错
+- `1` IO / 参数错
 - `2` 未知 persona id
-- `3` SpecValidationError（如果用了 `--spec` 路径而 spec 非法）
+- `3` SpecValidationError（如果将来扩展 `--spec` 路径而 spec 非法）
 - `4` render 失败（容器语法错 / 嵌套不闭合）
+
+补充标志：
+- `--meta` 仅打印元数据 JSON，不写 HTML
+- `--no-svg-white-bg` 关闭 wxPatch 的 `#fff → #fefefe` 替换（默认开启）
 
 ### Step 3 · 多 persona 比较（可选）
 
 ```bash
 tsx skills/wechat-typeset-export-richtext/scripts/render-gallery.ts \
-  <input.md> \
+  --input <md> \
   --personas default,tech-explainer,business-finance \
-  --out gallery.html
+  --output gallery.html
 ```
 
-输出 `gallery.html` 包含 N 个 persona 并排预览（iframe srcdoc 隔离）。**典型场景**：
+`--personas all` 渲染全部已注册主题。输出 `gallery.html` 包含 N 个 persona 并排预览（iframe srcdoc 隔离）。**典型场景**：
 
 - 用户写完一篇文章，不知道哪套 persona 更合气质
 - 给客户提交 3 套备选
-
-不指定 `--personas` 时默认渲染全部已注册主题。
 
 ### Step 4 · 复制到公众号
 
@@ -96,13 +100,15 @@ tsx skills/wechat-typeset-export-richtext/scripts/render-gallery.ts \
 **B. 脚本辅助**（实验性）：
 
 ```bash
-tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts output.html
+tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
+  --input <md> \
+  --persona <id> \
+  [--save-fallback tmp/output.html]
 ```
 
-把 HTML 写入系统剪贴板（Windows 用 `clip`，macOS 用 `pbcopy`，Linux 用 `xclip`）。**注意**：
+直接吃源 markdown + persona，内部完成 render → 写入系统剪贴板（macOS 用 `osascript` 写 `public.html`、Windows 用 `Set-Clipboard -AsHtml`、Linux 用 `xclip -selection clipboard -t text/html`）。剪贴板写入失败时落盘到 `--save-fallback` 指定路径，并提示作者手动 Ctrl+A/Cmd+A + Ctrl+C/Cmd+C 复制。
 
-- Windows 的 `clip` 只支持纯文本，HTML 进剪贴板需要专用脚本（脚本内已处理）
-- 公众号编辑器粘贴时优先识别 `text/html` MIME；如果剪贴板里只有 `text/plain`，会丢样
+注意：本脚本 **不** 接受已渲染的 HTML 文件路径——所有渲染都在脚本内重跑，避免"render 与 copy 之间错版本"。
 
 ## 选 persona 的两条规则
 
@@ -164,5 +170,7 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts output.html
 
 共享 references（与 author-persona / annotate-markdown 共用同一份权威源，通过相对路径软链）：
 
+- [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · 脚本签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**所有 CLI 真源**）
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单（用于排查渲染失败的"为什么"）
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
+- [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（gallery 时挑哪几套对比）

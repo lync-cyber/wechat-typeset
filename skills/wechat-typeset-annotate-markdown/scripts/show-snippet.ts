@@ -3,14 +3,22 @@
  * show-snippet —— 容器名 → 完整 example 片段。
  *
  * 用法：
- *   tsx show-snippet.ts <container-name>          # 单个容器示例
- *   tsx show-snippet.ts --list                    # 列出全部容器名
- *   tsx show-snippet.ts --list --category content # 按类别筛
+ *   tsx show-snippet.ts <container-name>                 # 单个容器示例
+ *   tsx show-snippet.ts <container-name> --variant <id>  # 指定 variant 骨架
+ *   tsx show-snippet.ts --list                           # 列出全部容器名
+ *   tsx show-snippet.ts --list --category content        # 按类别筛
+ *   tsx show-snippet.ts --variants <container-name>      # 列出该容器可切换的 variant
  *
- * 数据源：getContainerVocabulary()。本脚本不发明 example，全用权威 vocabulary 自带的。
+ * 数据源：getContainerVocabulary() / getContainerSnippet() / getVariantsForContainer()。
+ * 本脚本不发明 example，全用公共 API 派生。
  */
 
-import { getContainerVocabulary, type ContainerSpec } from '../../../src/public'
+import {
+  getContainerVocabulary,
+  getContainerSnippet,
+  getVariantsForContainer,
+  type ContainerSpec,
+} from '../../../src/public'
 
 function main() {
   const args = process.argv.slice(2)
@@ -36,11 +44,40 @@ function main() {
     return
   }
 
-  const name = args[0]
+  // --variants <name>：列出某容器可切换的 variant id
+  const variantsIdx = args.indexOf('--variants')
+  if (variantsIdx >= 0) {
+    const containerName = args[variantsIdx + 1]
+    if (!containerName) {
+      process.stderr.write('[show-snippet] --variants 需要容器名参数\n')
+      process.exit(1)
+    }
+    const variants = getVariantsForContainer(containerName)
+    if (variants.length === 0) {
+      process.stdout.write(
+        `[show-snippet] "${containerName}" 不支持 variant 切换（无 variantKind 或不存在）\n`,
+      )
+      return
+    }
+    process.stdout.write(`# ${containerName} · 可用 variants\n\n`)
+    for (const v of variants) {
+      process.stdout.write(`- \`${v.id}\` · ${v.name}\n  ${v.description}\n\n`)
+    }
+    return
+  }
+
+  const positional = args.filter((a) => !a.startsWith('--'))
+  const name = positional[0]
   if (!name) {
-    process.stderr.write('[show-snippet] usage: tsx show-snippet.ts <name> | --list [--category <cat>]\n')
+    process.stderr.write(
+      '[show-snippet] usage: tsx show-snippet.ts <name> [--variant <id>] | --list [--category <cat>] | --variants <name>\n',
+    )
     process.exit(1)
   }
+
+  // --variant <id>：用 getContainerSnippet 生成带 variant= 的 markdown
+  const variantIdx = args.indexOf('--variant')
+  const variantId = variantIdx >= 0 ? args[variantIdx + 1] : undefined
 
   const spec = vocab.find((v) => v.name === name)
   if (!spec) {
@@ -87,8 +124,32 @@ function main() {
   }
   process.stdout.write(`- description: ${spec.description}\n`)
 
+  // 例子段：默认是 vocabulary.example；指定 --variant <id> 时走 getContainerSnippet
+  // 以便在 open 行带上 variant=xxx
+  let snippet: string
+  if (variantId) {
+    if (!spec.variantKind) {
+      process.stderr.write(
+        `[show-snippet] "${name}" 没有 variant 系统（variantKind 未定义），忽略 --variant ${variantId}\n`,
+      )
+      snippet = spec.example
+    } else {
+      const variants = getVariantsForContainer(name)
+      if (!variants.some((v) => v.id === variantId)) {
+        process.stderr.write(
+          `[show-snippet] "${variantId}" 不是 ${name} 的合法 variant。合法 id：${variants.map((v) => v.id).join(', ')}\n`,
+        )
+        process.exit(2)
+      }
+      snippet = getContainerSnippet(name, { variantId })
+      process.stdout.write(`- variant: ${variantId}\n`)
+    }
+  } else {
+    snippet = spec.example
+  }
+
   process.stdout.write(`\n## example\n\n`)
-  process.stdout.write('```markdown\n' + spec.example.trimEnd() + '\n```\n')
+  process.stdout.write('```markdown\n' + snippet.trimEnd() + '\n```\n')
 }
 
 main()
