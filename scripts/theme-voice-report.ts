@@ -10,34 +10,11 @@
  * 本脚本仅做"format + CLI 参数路由"，无重复分析逻辑。
  */
 
-import { globSync } from 'node:fs'
-import { resolve, basename, dirname } from 'node:path'
-import { pathToFileURL } from 'node:url'
-
 import {
   analyzeThemeVoice,
-  type PersonaSpec,
   type ThemeVoiceResult,
 } from '../src/core/themes/_shared/spec'
-
-interface Loaded {
-  dir: string
-  spec: PersonaSpec
-}
-
-async function loadAllSpecs(): Promise<Loaded[]> {
-  const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
-    .map((p) => resolve(process.cwd(), p))
-    .sort()
-  const out: Loaded[] = []
-  for (const p of paths) {
-    const mod = await import(pathToFileURL(p).href)
-    const spec = (mod.spec ?? mod.default) as PersonaSpec | undefined
-    if (!spec) throw new Error(`No "spec" export in ${p}`)
-    out.push({ dir: basename(dirname(p)), spec })
-  }
-  return out
-}
+import { loadAllSpecs } from './_lib'
 
 function fmtRate(rate: number): string {
   return `${(rate * 100).toFixed(0).padStart(3)}%`

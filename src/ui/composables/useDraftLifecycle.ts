@@ -280,14 +280,10 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
     }
   }
   onMounted(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('storage', onCrossTabStorage)
-    }
+    window.addEventListener('storage', onCrossTabStorage)
   })
   onBeforeUnmount(() => {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('storage', onCrossTabStorage)
-    }
+    window.removeEventListener('storage', onCrossTabStorage)
   })
 
   /** 文件名 stem：活跃草稿标题剥非法字符；空则回退到默认前缀。 */

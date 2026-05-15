@@ -18,14 +18,7 @@ const emit = defineEmits<{
   (e: 'hover', id: string | null): void
 }>()
 
-/**
- * 卡片缩略图消费的 token 切片：
- *   - 基础 4 色（primary/secondary/accent + bg/text）—— 卡片底色与色块
- *   - bgSoft / border —— 引文区与 admonition 左条衬底
- *   - statusTip.* —— 演示 admonition voice（任何 voice 强的主题在 tip 上都有表达）
- * 仅读 token 不读 elements/containers CSSObject：缩略图保持稳定，避免被某主题
- * 的"硬编码 padding/margin"扭曲。
- */
+// 缩略图仅读 token、不读 elements/containers CSSObject：避免被某主题硬编码 padding/margin 扭曲。
 const options = computed(() =>
   themeList.map((t) => ({
     id: t.id,

@@ -1,19 +1,9 @@
 <script setup lang="ts">
 /**
- * 首次使用的引导卡 · 三步 coachmark
+ * 首次使用的引导卡 · 三步 coachmark（卡片文案 + 目标按钮挂 .onboard-spotlight 脉冲 ring）。
  *
- * P1：原本是"罗列三个键位/三个按钮"的静态文案。现在改为分步引导——每一步：
- *   1. 在卡片里告诉用户接下来该做什么 / 在哪里点
- *   2. 给对应目标按钮（.btn-theme / .btn-insert / .btn-copy-main）挂 .onboard-spotlight，
- *      用脉冲 ring 把视觉锚点落到该按钮上
- *   3. 用户点"下一步"或目标按钮的预期路径触发完成
- *
- * 桌面 / 移动共用同一组 step 文案，区别只在 step 3 的"复制路径"提示词（桌面 ⌘Enter，
- * 移动指向底部 mobile-tab-copy）。
- *
- * Spotlight 实现说明：spotlight 类用全局 <style>（unscoped），因为目标按钮 DOM 在
- * Toolbar 内、不属于本组件作用域。卡片自身 dismiss / unmount 时主动清理所有
- * .onboard-spotlight，避免残留高亮。
+ * spotlight 类用全局 unscoped <style>：目标按钮 DOM 在 Toolbar 内、不属本组件作用域。
+ * 卡片 dismiss / unmount 时主动清理所有 .onboard-spotlight，避免残留高亮。
  */
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { MOBILE_MEDIA_QUERY } from '../../app/layoutMode'
@@ -96,7 +86,6 @@ const current = computed<Step>(() => steps.value[step.value])
 const SPOTLIGHT_CLASS = 'onboard-spotlight'
 
 function clearAllSpotlights() {
-  if (typeof document === 'undefined') return
   document.querySelectorAll(`.${SPOTLIGHT_CLASS}`).forEach((el) => {
     el.classList.remove(SPOTLIGHT_CLASS)
   })
@@ -104,7 +93,7 @@ function clearAllSpotlights() {
 
 function applySpotlight(selector: string | null) {
   clearAllSpotlights()
-  if (!selector || typeof document === 'undefined') return
+  if (!selector) return
   const el = document.querySelector(selector)
   el?.classList.add(SPOTLIGHT_CLASS)
 }

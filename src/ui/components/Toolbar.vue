@@ -34,12 +34,7 @@ const props = defineProps<{
   uiTheme: UiThemeMode
 }>()
 
-/**
- * 命令总线：4 个事件覆盖原来 18 个 emit。
- *   - update:themeId / update:outlinkStrategy —— 带载荷，沿用 Vue update:xxx 规约
- *   - toggle —— 4 个抽屉切换合一，target 选择具体侧
- *   - action —— 所有无载荷纯动作（copy / export / 中文修复 / 关闭错误条 等）
- */
+// 命令总线：update:* 带载荷沿用 Vue 规约；toggle 切抽屉；action 跑无载荷动作。
 const emit = defineEmits<{
   (e: 'update:themeId', value: string): void
   (e: 'update:outlinkStrategy', value: OutlinkStrategy): void

@@ -30,16 +30,10 @@ function readInitial(): UiThemeMode {
 export const uiThemeMode = ref<UiThemeMode>(readInitial())
 
 function applyToDom(mode: UiThemeMode): void {
-  if (typeof document === 'undefined') return
   document.documentElement.dataset.theme = mode
 }
 
-/**
- * 在 onMounted 时调用：写当前模式到 <html>、订阅后续变更同步 DOM + 持久化。
- *
- * 不在模块加载期立刻 apply：SSR 场景 document 未必存在；bootstrap.ts 是
- * onMounted 入口，时序更明确。
- */
+/** 写当前模式到 <html>、订阅后续变更同步 DOM + 持久化。 */
 export function useUiTheme(): void {
   applyToDom(uiThemeMode.value)
   watch(uiThemeMode, (mode) => {

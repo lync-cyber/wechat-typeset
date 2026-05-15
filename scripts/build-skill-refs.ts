@@ -23,6 +23,7 @@ import { resolve } from 'node:path'
 
 import { listPersonas } from '../src/public'
 import { VARIANT_IDS } from '../src/core/themes/types'
+import { normalizeEol } from './_lib'
 
 interface SpliceTarget {
   /** reference 文件绝对路径 */
@@ -118,10 +119,6 @@ function splice(source: string, target: SpliceTarget): string {
 
 function detectEol(source: string): '\r\n' | '\n' {
   return source.includes('\r\n') ? '\r\n' : '\n'
-}
-
-function normalizeEol(source: string): string {
-  return source.replace(/\r\n/g, '\n')
 }
 
 function main() {

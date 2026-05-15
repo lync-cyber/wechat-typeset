@@ -22,20 +22,16 @@ export function useToolbarCollapse() {
   const isMobile = ref(false)
   const lastRatio: Record<'editor' | 'preview', number> = { editor: 0, preview: 0 }
 
-  let mq: MediaQueryList | null = null
+  const mq: MediaQueryList = window.matchMedia(MOBILE_MEDIA_QUERY)
   function syncMobile() {
-    isMobile.value = mq?.matches ?? false
+    isMobile.value = mq.matches
     if (!isMobile.value) collapsed.value = false
   }
-
-  if (typeof window !== 'undefined') {
-    mq = window.matchMedia(MOBILE_MEDIA_QUERY)
-    syncMobile()
-    mq.addEventListener('change', syncMobile)
-  }
+  syncMobile()
+  mq.addEventListener('change', syncMobile)
 
   onBeforeUnmount(() => {
-    mq?.removeEventListener('change', syncMobile)
+    mq.removeEventListener('change', syncMobile)
   })
 
   function observe(ratio: number, side: 'editor' | 'preview') {

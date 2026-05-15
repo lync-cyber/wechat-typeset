@@ -9,8 +9,8 @@
 
 import { computed, reactive } from 'vue'
 
-export type LeftSlot = null | 'drafts'
-export type RightSlot = null | 'components' | 'customizer' | 'checklist' | 'persona-studio'
+type LeftSlot = null | 'drafts'
+type RightSlot = null | 'components' | 'customizer' | 'checklist' | 'persona-studio'
 
 export function useUiDrawers() {
   const ui = reactive({

@@ -37,26 +37,15 @@ function scrollToRatio(ratio: number): void {
 defineExpose({ getIframe, getScroller, scrollToRatio })
 
 /**
- * 375px 移动端保真预览
+ * 375px 移动端保真预览。
  *
- * 保真不变量（原则 1）：
- *   iframe 内的 .phone-viewport 内容与剪贴板 text/html 一字不差——
- *   都来自同一份 props.html（已经 juice 内联过）。
+ * 保真不变量：iframe 内 .phone-viewport 与剪贴板 text/html 同源 props.html（juice 已内联）。
+ * 注入 CSS 仅命中 html/body/.phone-viewport 三个容器，不污染 .markdown-body。
+ * sandbox 只给 allow-same-origin（主题样式即刻生效），不给 allow-scripts（iframe 纯静态）。
  *
- * 关于 iframe 内注入的那点 CSS：
- *   仅作用于三个容器节点（html / body / .phone-viewport），
- *   **不会选中 .markdown-body 或其任何子元素**，因此不会"污染"内容样式。
- *
- * sandbox="allow-same-origin"：
- *   - 允许 iframe 与宿主同源，便于主题样式（已内联）即刻生效
- *   - 不加 allow-scripts：iframe 内不执行任何 JS，纯静态渲染
- *
- * 为什么 srcdoc 是常量壳：
- *   srcdoc 一旦变更，浏览器会整体重建 contentDocument（等价 navigation），
- *   iframe 内 scrollTop 归零、scroll listener 失效、闪屏明显。
- *   做法：把外壳一次性塞进去（含空的 .phone-viewport 容器），
- *   后续 props.html 变更走 innerHTML 注入到 .phone-viewport，
- *   document 不重建——scrollTop 自然保留（浏览器会按新 scrollHeight 自动 clamp）。
+ * srcdoc 用常量壳的理由：srcdoc 变更会整体重建 contentDocument（等价 navigation），
+ * scrollTop 归零、listener 失效、闪屏。改为外壳一次塞入，props.html 走 innerHTML
+ * 注入 .phone-viewport，document 不重建，scrollTop 自然保留。
  */
 const SHELL_DOC = `<!doctype html>
 <html>

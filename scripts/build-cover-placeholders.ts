@@ -1,20 +1,8 @@
 #!/usr/bin/env tsx
 /**
- * 生成 dist/api/covers/<personaId>.svg —— og:image / 公众号图文封面尺寸的占位
- * SVG，每 persona 一张，按各家 palette 染色。
- *
- * 设计意图：
- *   - 下游消费方（agent / 自动化发文工具）拉到 capabilities.json 后，可由
- *     `coverUriPattern` 算出每 persona 的封面 URL，无需自己合成 og:image。
- *   - 仓库本身不提交 PNG —— 需要光栅由下游 svg2png 自己跑（svg 是矢量唯一真源）。
- *   - 每张文件 ~2-3 KB，10 张 < 30 KB，跟着 dist/api/capabilities.json 同 CDN 分发。
- *
- * 生成策略：
- *   1. 若 persona.motifs.coverPlaceholder 显式存在 → 直接用（persona 自家设计）。
- *   2. 否则 → 调用 makeCoverPlaceholder({ palette, title, tagline }) 合成默认款。
- *
- * 运行：`npx tsx scripts/build-cover-placeholders.ts`（与 build:capabilities 并列；
- * `npm run build` 链应当串起来一起跑）。
+ * 生成 dist/api/covers/<personaId>.svg —— 每 persona 一张占位 SVG，按 palette 染色。
+ * 下游可由 capabilities.json 的 coverUriPattern 算出封面 URL；svg 是矢量唯一真源，
+ * 需光栅由下游自行 svg2png（仓库不提交 PNG）。
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs'

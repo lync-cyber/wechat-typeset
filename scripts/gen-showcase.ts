@@ -9,23 +9,14 @@
  *   tsx scripts/gen-showcase.ts          # 原地写 14 份 HTML
  *   tsx scripts/gen-showcase.ts --check  # CI 模式：与现有产物对账，drift 即 exit 1
  *
- * 流程：
- *   1. jsdom shim（wxPatch 依赖 DOMParser）
- *   2. 读全部 persona.data.ts → specToTheme
- *   3. 对每主题分别渲染 BASE_ELEMENT_FIXTURE_MD / BASE_CONTAINER_FIXTURE_MD /
- *      buildSignatureFixtureMd(spec).md 三段
- *   4. analyzeThemeVoice 拿 voice 报告
- *   5. generateShowcase 拼装单页 HTML → 写文件 / 比对（--check）
- *
- * 双层守卫：
- *   - tests/unit/showcase-generator.spec.ts 用 toMatchFileSnapshot 在 `npm test` 中守 drift
- *   - 本脚本 `--check` 在 `npm run build` 中守 drift（不跑 test 也能拦）
+ * 双层守卫：tests/unit/showcase-generator.spec.ts 在 `npm test` 守 drift，
+ * 本脚本 `--check` 在 `npm run build` 守 drift（不跑 test 也能拦）。
  */
 
-import { writeFileSync, mkdirSync, readFileSync, existsSync, globSync } from 'node:fs'
-import { resolve, basename, dirname } from 'node:path'
-import { pathToFileURL } from 'node:url'
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { JSDOM } from 'jsdom'
+import { loadAllSpecs, normalizeEol } from './_lib'
 
 // wxPatch 用了浏览器 DOMParser；Node 下缺，先把 jsdom 注入 globalThis
 const dom = new JSDOM('', { url: 'http://localhost/' })
@@ -45,30 +36,7 @@ import {
   buildSignatureFixtureMd,
 } from '../src/domain/gallery/baseFixture'
 import { generateShowcase } from '../src/domain/gallery/showcase'
-import { analyzeThemeVoice, specToTheme, type PersonaSpec } from '../src/core/themes/_shared/spec'
-
-interface Loaded {
-  dir: string
-  spec: PersonaSpec
-}
-
-async function loadAllSpecs(): Promise<Loaded[]> {
-  const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
-    .map((p) => resolve(process.cwd(), p))
-    .sort()
-  const out: Loaded[] = []
-  for (const p of paths) {
-    const mod = await import(pathToFileURL(p).href)
-    const spec = (mod.spec ?? mod.default) as PersonaSpec | undefined
-    if (!spec) throw new Error(`No "spec" export in ${p}`)
-    out.push({ dir: basename(dirname(p)), spec })
-  }
-  return out
-}
-
-function normalizeEol(s: string): string {
-  return s.replace(/\r\n/g, '\n')
-}
+import { analyzeThemeVoice, specToTheme } from '../src/core/themes/_shared/spec'
 
 async function main() {
   const isCheck = process.argv.includes('--check')

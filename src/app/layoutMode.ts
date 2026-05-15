@@ -9,6 +9,5 @@ export const MOBILE_MEDIA_QUERY =
   '(max-width: 767px) and (pointer: coarse), (max-width: 540px)'
 
 export function matchesMobile(): boolean {
-  if (typeof window === 'undefined') return false
   return window.matchMedia(MOBILE_MEDIA_QUERY).matches
 }

@@ -38,7 +38,6 @@ export interface BootstrapDeps {
 }
 
 function importComponentFromHashIfPresent(onImported?: () => void): boolean {
-  if (typeof location === 'undefined') return false
   const rawHash = location.hash
   const preview = peekComponentShareHash(rawHash)
   if (!preview) return false
@@ -104,7 +103,6 @@ export function useBootstrap(deps: BootstrapDeps) {
 
   // 移动端抽屉/面板打开 → 锁 body 滚动；桌面上抽屉不占满视口，无需锁。
   watch(deps.hasOpenDrawer, (open) => {
-    if (typeof document === 'undefined') return
     document.body.classList.toggle('drawer-scroll-lock', open && matchesMobile())
   })
 
@@ -118,8 +116,6 @@ export function useBootstrap(deps: BootstrapDeps) {
   onBeforeUnmount(() => {
     window.removeEventListener('pagehide', deps.flushDraftSave)
     deps.flushDraftSave()
-    if (typeof document !== 'undefined') {
-      document.body.classList.remove('drawer-scroll-lock')
-    }
+    document.body.classList.remove('drawer-scroll-lock')
   })
 }

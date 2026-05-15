@@ -1,9 +1,5 @@
 <script setup lang="ts">
-/**
- * 草稿抽屉：列出 / 搜索 / 重命名 / 删除 / 导入导出。
- * 所有 localStorage CRUD 走 useDraftManager（domain/drafts），本 SFC 只负责
- * UI 状态（重命名输入、tag 过滤、import feedback）+ 模板。
- */
+// 草稿抽屉：列出/搜索/重命名/删除/导入导出。CRUD 走 useDraftManager，本 SFC 只管 UI 状态。
 import { computed, nextTick, ref, watch } from 'vue'
 import { type DraftMeta } from '../../infra/storage/drafts'
 import { useDraftManager } from '../../domain/drafts/useDraftManager'
@@ -109,7 +105,7 @@ function requestDelete(d: DraftMeta, ev: Event) {
 function editTags(d: DraftMeta, ev: Event) {
   ev.stopPropagation()
   const current = (d.tags ?? []).join(', ')
-  const next = typeof window !== 'undefined' ? window.prompt(`标签（用逗号或空格分隔，留空删除全部）`, current) : null
+  const next = window.prompt(`标签（用逗号或空格分隔，留空删除全部）`, current)
   if (next === null) return // 用户取消
   const list = Array.from(new Set(
     next

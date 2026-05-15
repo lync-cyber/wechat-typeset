@@ -231,7 +231,6 @@ const KEYBOARD_HEIGHT_THRESHOLD = 100
 
 function onVisualViewportResize() {
   if (!view) return
-  if (typeof window === 'undefined') return
   if (window.innerWidth > MOBILE_BREAKPOINT) return
   const vv = window.visualViewport
   if (!vv) return
@@ -293,9 +292,7 @@ function createView(doc: string) {
 onMounted(() => {
   createView(props.modelValue)
   // 移动端键盘遮挡防护；visualViewport 不存在时不 attach 等于 no-op
-  if (typeof window !== 'undefined' && window.visualViewport) {
-    window.visualViewport.addEventListener('resize', onVisualViewportResize)
-  }
+  window.visualViewport?.addEventListener('resize', onVisualViewportResize)
 })
 
 watch(
@@ -316,9 +313,7 @@ watch(uiThemeMode, (mode) => {
 })
 
 onBeforeUnmount(() => {
-  if (typeof window !== 'undefined' && window.visualViewport) {
-    window.visualViewport.removeEventListener('resize', onVisualViewportResize)
-  }
+  window.visualViewport?.removeEventListener('resize', onVisualViewportResize)
   view?.destroy()
   view = null
 })

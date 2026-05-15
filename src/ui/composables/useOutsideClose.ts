@@ -29,7 +29,7 @@ export interface UseOutsideCloseOptions {
   escape?: boolean
 }
 
-export type OutsideAnchor =
+type OutsideAnchor =
   | Ref<HTMLElement | null>
   | Ref<HTMLElement[]>
   | (() => HTMLElement | HTMLElement[] | null)
