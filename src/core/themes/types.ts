@@ -430,6 +430,68 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   note: 'minimal-callout',
 }
 
+// ============================================================
+// Kickers：容器内默认 kicker 文案的主题级覆盖（R10）
+//
+// 设计动机：在 R10 之前，多数 data-brief 家族 renderer 的 kicker 默认文案
+// 硬编码在渲染器里（"读者问答 · Q&A" / "编 者 按" / "SUBSCRIBE" / "下 期" …）。
+// 主题想要"在我这里 qa-block 默认 kicker 是听 · 众 · 连 · 线"必须让作者每次
+// 显式写在 ::: qa-block 后面的 info——把主题装饰泄漏进作者写作契约。
+//
+// R10 把这些 kicker 文案提到 Theme.kickers 槽：
+//   - 主题在 PersonaSpec.kickers 声明母语 kicker；管线兜底 DEFAULT_KICKERS
+//   - renderer 读 `ctx.kickers.<key>` 兜底（info 仍优先 —— 作者随时可单稿覆盖）
+//   - 作者侧 markdown 干净："::: qa-block q='...'"  即可拿到主题母语 kicker
+//
+// 设计纪律：本接口承载的是"renderer 内硬编码的可见文案"。新增字段的判定是
+//   "renderer 里出现了字面值字符串并被注入到 HTML"。纯装饰图标 / SVG / CSS
+//   不进本接口（它们属于 motifs / variants / containers 的领地）。
+// ============================================================
+
+export interface ThemeKickers {
+  /** ::: toc 容器无 info 时的 kicker 兜底（renderer 默认 "目录 · CONTENTS"） */
+  toc: string
+  /** ::: qa-block 容器无 info 时的 kicker 兜底（renderer 默认 "读者问答 · Q&A"） */
+  qaBlock: string
+  /** ::: editor-note 容器无 info 时的 kicker 兜底（renderer 默认 "编 者 按"） */
+  editorNote: string
+  /** ::: methodology 容器无 info 时的 label 兜底（renderer 默认 "方法论"） */
+  methodology: string
+  /** ::: qr-follow attrs.kicker 兜底（renderer 默认 "SUBSCRIBE"） */
+  qrFollowKicker: string
+  /** ::: qr-follow 容器无 info 时的 title 兜底（renderer 默认 "订阅本刊"） */
+  qrFollowTitle: string
+  /** ::: recommend 容器无 info 时的 title 兜底（renderer 默认 "推荐阅读"） */
+  recommend: string
+  /** ::: footer-cta 容器无 info 时的 title 兜底（renderer 默认 "关注我"） */
+  footerCTATitle: string
+  /** ::: colophon 左栏 kicker（renderer 默认 "下 期"） */
+  colophonNextLabel: string
+  /** ::: colophon 右栏 kicker（renderer 默认 "卷 · 期"） */
+  colophonIssueLabel: string
+  /** ::: masthead 容器无 info 时的 name 兜底（renderer 默认 "简报"） */
+  mastheadName: string
+}
+
+/**
+ * 主题不声明 kickers 时的兜底文案。字面值与 R10 前 renderer 硬编码字节等价——
+ * 所有现有主题渲染输出不变,仅扩展了"主题作者可调"的覆盖空间。
+ * buildTheme 会在 opts.kickers 未提供时注入此常量；Partial 覆盖深合并。
+ */
+export const DEFAULT_KICKERS: ThemeKickers = {
+  toc: '目录 · CONTENTS',
+  qaBlock: '读者问答 · Q&A',
+  editorNote: '编 者 按',
+  methodology: '方法论',
+  qrFollowKicker: 'SUBSCRIBE',
+  qrFollowTitle: '订阅本刊',
+  recommend: '推荐阅读',
+  footerCTATitle: '关注我',
+  colophonNextLabel: '下 期',
+  colophonIssueLabel: '卷 · 期',
+  mastheadName: '简报',
+}
+
 /**
  * 所有可选 VariantId 的常量清单（供 variant-sanity 测试枚举使用，
  * 任何新增 id 必须同步补齐，否则测试会漏掉新 variant）。
@@ -661,6 +723,12 @@ export interface Theme {
    * 渲染器在 ContainerRenderContext.variants 里读取。
    */
   variants: ThemeVariants
+  /**
+   * R10 kicker 文案。主题不声明时由 buildTheme 填入 DEFAULT_KICKERS。
+   * 渲染器在 ContainerRenderContext.kickers 里读取——优先级低于作者侧 info。
+   * 详见 `ThemeKickers` 注释。
+   */
+  kickers: ThemeKickers
   /**
    * 参数化 SVG 资产工厂的形状变体。仅在 applyPalette（用户自定义配色）路径消费——
    * 此时 motifs AST 已固化在原主题上，重新生成 assets 时按此字段挑工厂。spec-first

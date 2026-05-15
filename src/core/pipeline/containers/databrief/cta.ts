@@ -84,8 +84,8 @@ export const ctaBarContainer: ContainerRenderer = {
 export const qrFollowContainer: ContainerRenderer = {
   open: (ctx) => {
     const c = ctx.tokens.colors
-    const kicker = ctx.attrs.kicker ?? 'SUBSCRIBE'
-    const title = ctx.info.trim() || '订阅本刊'
+    const kicker = ctx.attrs.kicker ?? ctx.kickers.qrFollowKicker
+    const title = ctx.info.trim() || ctx.kickers.qrFollowTitle
     const desc = ctx.attrs.desc ?? ''
     const qrUrl = ctx.attrs.qr ?? ''
     // wrapper 装饰由 ctx.containers.qrFollow 决定；display:table 排版骨架由

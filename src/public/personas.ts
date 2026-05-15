@@ -20,6 +20,7 @@ import { spec as academicFrontierSpec } from '../core/themes/academic-frontier/p
 import { spec as editorialMookSpec } from '../core/themes/editorial-mook/persona.data'
 import { spec as swissGridSpec } from '../core/themes/swiss-grid/persona.data'
 import { spec as brutalistSpec } from '../core/themes/brutalist/persona.data'
+import { spec as lateNightVinylSpec } from '../core/themes/late-night-vinyl/persona.data'
 import type { PersonaSpec } from '../core/themes/_shared/spec'
 
 /**
@@ -40,6 +41,7 @@ export const PERSONA_SPECS: readonly PersonaSpec[] = [
   editorialMookSpec,
   swissGridSpec,
   brutalistSpec,
+  lateNightVinylSpec,
 ]
 
 export const PERSONA_REGISTRY: Readonly<Record<string, PersonaSpec>> = Object.freeze(

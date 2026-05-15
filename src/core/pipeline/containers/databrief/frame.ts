@@ -26,7 +26,7 @@ import { inlineCss as inline } from '../_shared/cssInline'
 
 export const mastheadContainer: ContainerRenderer = {
   open: (ctx) => {
-    const name = ctx.info.trim() || '简报'
+    const name = ctx.info.trim() || ctx.kickers.mastheadName
     const issue = ctx.attrs.issue ?? ''
     const date = ctx.attrs.date ?? ''
     const kicker = ctx.attrs.kicker ?? ''
@@ -132,7 +132,7 @@ export const sectionTagContainer: ContainerRenderer = {
 
 export const tocContainer: ContainerRenderer = {
   open: (ctx) => {
-    const kicker = ctx.info.trim() || '目录 · CONTENTS'
+    const kicker = ctx.info.trim() || ctx.kickers.toc
     const c = ctx.tokens.colors
     const wrapperCSS = inline(ctx.containers.toc)
     const kickerCSS = [
@@ -225,10 +225,10 @@ export const colophonContainer: ContainerRenderer = {
     return (
       `<section class="container-colophon" style="${wrapperCSS}">` +
       `<span style="${cellLeftCSS}">` +
-      `<span style="${kickerCSS}">下 期</span>${escText(nextLine)}` +
+      `<span style="${kickerCSS}">${escText(ctx.kickers.colophonNextLabel)}</span>${escText(nextLine)}` +
       `</span>` +
       `<span style="${cellRightCSS}">` +
-      `<span style="${kickerCSS}">卷 · 期</span>${escText(issueLine)}` +
+      `<span style="${kickerCSS}">${escText(ctx.kickers.colophonIssueLabel)}</span>${escText(issueLine)}` +
       `</span>` +
       `</section>\n`
     )

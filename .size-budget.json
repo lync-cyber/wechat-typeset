@@ -3,10 +3,11 @@
   "distDir": "dist/assets",
   "entries": [
     {
+      "$comment": "raw limit 自 PR#18 设的 700K → 720K：累计 5+ 套主题加入（编 PR#18 时 567K → 当前 691K），原 13% headroom 已耗尽。gz 仍在 240K 内不动；下次再涨需先在 spec 里 trim 重复 motif/CSS 后再评估。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 700000,
+      "limit": 720000,
       "gzipLimit": 240000,
       "mustNotEmbed": ["html2canvas"]
     },
