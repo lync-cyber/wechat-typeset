@@ -112,7 +112,7 @@ SVG 内 `fill="#ffffff"` / `fill="#fff"` 全部替换为 `fill="#fefefe"`：
 
 ### 看某段 HTML 走 WxPatch 前后差异
 
-仓库根 `scripts/wechat-typeset-cli.ts` 输出的是**已经走过 WxPatch 的最终 HTML**。要看 WxPatch 前的 HTML：
+`npm run cli -- render` 输出的是**已经走过 WxPatch 的最终 HTML**。要看 WxPatch 前的 HTML：
 
 ```ts
 // 临时改 src/public/index.ts 的 render() 实现，把 pipelineRender 拆开调，
@@ -121,7 +121,7 @@ SVG 内 `fill="#ffffff"` / `fill="#fff"` 全部替换为 `fill="#fefefe"`：
 
 ### 验证某个 patch 是否生效
 
-写一段触发该 patch 的 markdown，跑 `render-html.ts` 看输出 HTML grep 关键字：
+写一段触发该 patch 的 markdown，跑 `npm run cli -- render --input <md> --persona <id> | jq -r .html` 看输出 HTML grep 关键字：
 
 | Patch | 触发 markdown | grep |
 | --- | --- | --- |

@@ -23,6 +23,7 @@ import {
   namespaceOf,
   packOf,
 } from './vocabulary'
+import { fail } from '../errors'
 import {
   ADMONITION_VARIANTS,
   ALL_VARIANT_DEFS,
@@ -171,7 +172,7 @@ export function getContainerSnippet(
   options: SnippetOptions = {},
 ): string {
   const spec = lookupContainerSpec(containerName)
-  if (!spec) throw new Error(`Unknown container name: "${containerName}"`)
+  if (!spec) fail('RESOURCE_NOT_FOUND', `Unknown container name: "${containerName}"`)
   if (!options.variantId) return spec.example
 
   const fence = spec.fenceLength === 4 ? '::::' : ':::'

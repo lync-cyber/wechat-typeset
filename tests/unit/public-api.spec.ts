@@ -11,7 +11,7 @@
 
 import { describe, it, expect } from 'vitest'
 import {
-  SpecValidationError,
+  WtException,
   createPersona,
   getMotifSpec,
   getPersona,
@@ -99,7 +99,7 @@ describe('validatePersona', () => {
     ;(spec.palette as unknown as Record<string, string>).primary = 'not-a-hex'
     const result = validatePersona(spec)
     expect(result.ok).toBe(false)
-    expect(result.errors.some((e) => e.path.includes('primary'))).toBe(true)
+    expect(result.errors.some((e) => e.path?.includes('primary'))).toBe(true)
   })
 })
 
@@ -124,20 +124,36 @@ describe('render', () => {
     expect(out.html).toContain('markdown-body')
   })
 
-  it('spec 路径非法 spec 抛 SpecValidationError', () => {
+  it('spec 路径非法 spec 抛 WtException(SPEC_INVALID)', () => {
     const bad = structuredClone(getPersona('default')) as PersonaSpec
     ;(bad.palette as unknown as Record<string, string>).primary = '##bad'
-    expect(() => render({ md, spec: bad })).toThrow(SpecValidationError)
+    try {
+      render({ md, spec: bad })
+      throw new Error('did not throw')
+    } catch (e) {
+      expect(e).toBeInstanceOf(WtException)
+      expect((e as WtException).code).toBe('SPEC_INVALID')
+      expect((e as WtException).errors.length).toBeGreaterThan(0)
+      expect((e as WtException).errors[0].path).toMatch(/palette/)
+    }
   })
 
-  it('多个来源同时给出时抛错', () => {
-    expect(() =>
-      render({ md, persona: 'default', theme: createPersona(getPersona('default')).theme }),
-    ).toThrow(/exactly one of/)
+  it('多个来源同时给出时抛 WtException(INPUT_AMBIGUOUS)', () => {
+    try {
+      render({ md, persona: 'default', theme: createPersona(getPersona('default')).theme })
+      throw new Error('did not throw')
+    } catch (e) {
+      expect((e as WtException).code).toBe('INPUT_AMBIGUOUS')
+    }
   })
 
-  it('未知 persona id 抛 Error', () => {
-    expect(() => render({ md, persona: 'no-such' })).toThrow(/Unknown persona id/)
+  it('未知 persona id 抛 WtException(RESOURCE_NOT_FOUND)', () => {
+    try {
+      render({ md, persona: 'no-such' })
+      throw new Error('did not throw')
+    } catch (e) {
+      expect((e as WtException).code).toBe('RESOURCE_NOT_FOUND')
+    }
   })
 })
 

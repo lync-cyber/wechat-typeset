@@ -1,15 +1,11 @@
 #!/usr/bin/env tsx
 /**
- * persist-persona —— spec.json → src/core/themes/<id>/persona.data.ts + 改 src/public/personas.ts
+ * persist-persona —— spec.json → src/core/themes/<id>/persona.data.ts + 改 src/core/themes/registry.ts
  *
  * 落地流程：
  *   1. 校验 spec（不通过拒绝写）
  *   2. 生成 persona.data.ts（导出 spec = ...）
- *   3. 修改 src/public/personas.ts（追加 import + 加入 PERSONA_SPECS 数组）
- *
- * 安全性：
- *   - id 已存在时拒绝（不覆盖现有主题，除非传 --force）
- *   - 落盘前先 dry-run，--dry 只打印 diff 不写文件
+ *   3. 修改 src/core/themes/registry.ts（追加 import + 加入 ALL_SPECS 数组）
  *
  * 用法：
  *   tsx persist-persona.ts <spec.json> [--id <override-id>] [--dry] [--force]
@@ -32,7 +28,7 @@ interface CliArgs {
   force: boolean
 }
 
-const PUBLIC_PERSONAS_TS = 'src/public/personas.ts'
+const REGISTRY_TS = 'src/core/themes/registry.ts'
 
 function parseArgs(argv: string[]): CliArgs {
   const positional: string[] = []
@@ -90,30 +86,21 @@ export default spec
 `
 }
 
-function patchPublicPersonas(existing: string, id: string, varName: string): string {
-  const importLine = `import { spec as ${varName} } from '../core/themes/${id}/persona.data'`
-  const importBlock = existing.match(
-    /(import \{ spec as \w+ \} from '\.\.\/core\/themes\/[^']+\/persona\.spec'\n)+/,
-  )
-  if (!importBlock) {
-    throw new Error(`failed to locate import block in ${PUBLIC_PERSONAS_TS}`)
-  }
-  if (existing.includes(`from '../core/themes/${id}/persona.data'`)) {
-    return existing // 已存在
-  }
+function patchRegistry(existing: string, id: string, varName: string): string {
+  if (existing.includes(`from './${id}/persona.data'`)) return existing
 
+  const importLine = `import { spec as ${varName} } from './${id}/persona.data'`
+  const importBlock = existing.match(
+    /(import \{ spec as \w+ \} from '\.\/[^']+\/persona\.data'\n)+/,
+  )
+  if (!importBlock) throw new Error(`failed to locate spec-import block in ${REGISTRY_TS}`)
   const withImport = existing.replace(importBlock[0], importBlock[0] + importLine + '\n')
 
-  // 追加到 PERSONA_SPECS 数组末尾
-  const arrayMatch = withImport.match(/export const PERSONA_SPECS[^=]*=\s*\[([^\]]*)\]/)
-  if (!arrayMatch) {
-    throw new Error(`failed to locate PERSONA_SPECS array in ${PUBLIC_PERSONAS_TS}`)
-  }
-  const oldBody = arrayMatch[1]
-  // 去掉末尾空白和尾逗号，再追加新条目（避免双逗号）
-  const trimmed = oldBody.replace(/,?\s*$/, '')
+  const arrayMatch = withImport.match(/const\s+ALL_SPECS[^=]*=\s*\[([^\]]*)\]/)
+  if (!arrayMatch) throw new Error(`failed to locate ALL_SPECS array in ${REGISTRY_TS}`)
+  const trimmed = arrayMatch[1].replace(/,?\s*$/, '')
   const newBody = trimmed + `,\n  ${varName},\n`
-  return withImport.replace(arrayMatch[0], `export const PERSONA_SPECS: readonly PersonaSpec[] = [${newBody}]`)
+  return withImport.replace(arrayMatch[0], `const ALL_SPECS: readonly PersonaSpec[] = [${newBody}]`)
 }
 
 function camelCaseFromKebab(s: string): string {
@@ -149,36 +136,36 @@ function main() {
   const personaTs = renderPersonaSpecModule(spec)
   const varName = camelCaseFromKebab(spec.id)
 
-  const publicPath = resolve(process.cwd(), PUBLIC_PERSONAS_TS)
-  const publicSource = readFileSync(publicPath, 'utf8')
-  const publicSourceNew = patchPublicPersonas(publicSource, spec.id, varName)
+  const registryPath = resolve(process.cwd(), REGISTRY_TS)
+  const registrySource = readFileSync(registryPath, 'utf8')
+  const registrySourceNew = patchRegistry(registrySource, spec.id, varName)
 
   if (args.dry) {
     process.stdout.write('=== ' + personaPath + ' ===\n')
     process.stdout.write(personaTs + '\n')
-    process.stdout.write('=== ' + publicPath + ' (diff) ===\n')
+    process.stdout.write('=== ' + registryPath + ' (diff) ===\n')
     process.stdout.write(
-      publicSourceNew === publicSource
+      registrySourceNew === registrySource
         ? '(no changes)\n'
-        : '(would patch import + PERSONA_SPECS)\n',
+        : '(would patch import + ALL_SPECS)\n',
     )
     process.exit(0)
   }
 
   mkdirSync(dirname(personaPath), { recursive: true })
   writeFileSync(personaPath, personaTs, 'utf8')
-  writeFileSync(publicPath, publicSourceNew, 'utf8')
+  writeFileSync(registryPath, registrySourceNew, 'utf8')
 
   process.stdout.write(
     JSON.stringify(
       {
         ok: true,
         persona_id: spec.id,
-        files_written: [personaPath, publicPath],
+        files_written: [personaPath, registryPath],
         next_steps: [
-          'npx tsx scripts/validate-spec.ts （仓库根脚本，校验全部 spec）',
+          'npx tsx scripts/validate-spec.ts （校验全部 spec）',
           'npm run build:capabilities （刷新 dist/api/capabilities.json）',
-          '在 src/themes/index.ts 的 DISPLAY_ORDER 里加上新 id（如果你用 Vue 端预览）',
+          '在 registry.ts:DISPLAY_ORDER 里加上新 id 决定展示顺序（缺省落到字典序末尾）',
         ],
       },
       null,

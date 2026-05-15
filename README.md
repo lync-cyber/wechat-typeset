@@ -146,7 +146,7 @@ npm run dev
 - **钉版本** — `https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@v{x.y.z}/dist/api/capabilities.json`
   钉到 git tag，永远不变；适合生产消费方
 
-字段 `selfUri` / `versionedSelfUri` 同样写在 JSON 内部，下游拿到内容时即可知自己来自哪里。`fallbackBehavior` 字段（自 schemaVersion 2.4 起）是降级合同的机器可读副本，详见 [docs/contract/fallback.md](docs/contract/fallback.md)。
+字段 `selfUri` / `versionedSelfUri` 同样写在 JSON 内部，下游拿到内容时即可知自己来自哪里。`fallbackBehavior` 字段是降级合同的机器可读副本，详见 [docs/contract/fallback.md](docs/contract/fallback.md)。`compatibility.minToolVersion` / `errorCodes` / `cli.commands` 三段位让 LLM 工具集成可以从一份 JSON 完成版本桥接、错误分支与 function-calling 注册。
 
 项目技术栈：Vue 3 · TypeScript · Vite · markdown-it · CodeMirror 6（含 autocomplete / lint）· turndown · juice。
 

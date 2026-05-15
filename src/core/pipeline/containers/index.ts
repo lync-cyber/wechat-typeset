@@ -126,14 +126,5 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   'callout-group': calloutGroupContainer,
 }
 
-/**
- * spec.signatureContainers 用的 camelCase id 到 markdown fence 名（kebab）的映射。
- *
- * 历史上这里是一张手写映射；现从 vocabulary 的 STYLED_CONTAINERS 自动派生，
- * 新增 styled 容器只需在 vocabulary.ts 追加一条 ContainerSpec 即可。
- * 名称保留是为了不惊动 conformance.spec.ts 和外部集成（capabilities.json）。
- */
-export { STYLE_KEY_TO_CONTAINER_NAME as SIGNATURE_CONTAINER_MARKDOWN_NAME } from '../../vocabulary/vocabulary'
-
 export type { ContainerRenderer, ContainerRenderContext } from './types'
 export { parseInfo, escAttr, escText } from './types'

@@ -26,6 +26,13 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "tests/**/*.ts", "vite.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "packages/*/src/**/*.ts",
+    "packages/*/bin/**/*.mjs",
+    "vite.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "packages/*/dist"]
 }

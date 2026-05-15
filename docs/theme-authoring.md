@@ -227,7 +227,7 @@ import {
   getSupportedSignatureContainers, getVariantIds,
 
   // 校验
-  validatePersona, SpecValidationError,
+  validatePersona, WtException,
 
   // 渲染
   render, createPersona,
@@ -240,7 +240,7 @@ import {
 const { html } = render({ md: '# Hello', persona: 'tech-geek' })
 
 // LLM 生成的临时 spec
-const { html } = render({ md: source, spec: llmOutput })  // 先 validate，失败抛 SpecValidationError
+const { html } = render({ md: source, spec: llmOutput })  // 先 validate，失败抛 WtException(SPEC_INVALID)
 
 // 想先看校验结果、再决定怎么处理
 const { theme, validation } = createPersona(llmOutput)

@@ -34,6 +34,16 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 - [ ] 不引入任何新网络请求（analytics / 远程字体 / 远程模板一律禁止）
 - [ ] 不引入新依赖，除非能用等量代码替换掉更重的现有依赖
 
+## Capabilities 演进（`dist/api/capabilities.json`）
+
+外部集成方（InkFlow / LLM agents / MCP）通过 `capabilities.json` 自描述能力发现。改动前请遵守演进纪律：
+
+- **schemaVersion 语义**：major 变更 = 破坏性（下游必须改代码）；minor = 新增字段；patch = 非契约修正
+- **破坏前先登记**：把旧字段加进 `deprecations[]`（带 `sinceVersion` / `replacement` / `removalPlannedIn`），至少保留一个 minor 窗口期再删
+- **CHANGELOG 双标**：契约变更条目同时标 `feat(api): ... [schema X.Y]`，让消费方一眼定位 schema 版本
+- **CI 守门**：`scripts/check-capabilities-stable.ts` 比对主分支基线 → 未登记的破坏性变更即 fail
+- **新增 inline 扩展 / 容器 / variant**：必须同时在源端（`src/core/pipeline/inlineExtensions.ts` / vocabulary / variants）登记 —— `capabilities.json` 是派生产物，不要手改
+
 ## 不可破坏的硬约束
 
 - **写作契约**：[docs/contract/](docs/contract/) 声明的容器 fence + 5 行内扩展是作者 API 的全集，分基础契约 / 扩展包 / 自定义扩展三层。**新主题不得扩展 fence 词汇**——新视觉一律走 variant 注册，在 `src/variants/<kind>/` 下新建 id。扩展 `src/containers/vocabulary.ts` 属于破坏作者契约的变更，需走主版本升级（自定义扩展流程见 [contract/custom.md](docs/contract/custom.md)）。

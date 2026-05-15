@@ -5,7 +5,7 @@
  * 用 jsdom 塞 globalThis，再 await import('../src/public')。否则会得到
  * "DOMParser is not defined" 错误。
  *
- * 与 scripts/wechat-typeset-cli.ts、tests/verify-sample-full.ts 同一套 stub。
+ * 与 packages/cli/src/shim.ts、tests/verify-sample-full.ts 同一套 stub。
  */
 
 import { JSDOM } from 'jsdom'

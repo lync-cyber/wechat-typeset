@@ -85,7 +85,7 @@ function buildOutput(): string {
   lines.push(`}`)
   lines.push(``)
   lines.push(`/** 全量容器回归 fixture（对应 src/samples-md/sample-full.md）；`)
-  lines.push(` *  tests/verify-sample-full.ts 与 scripts/wechat-typeset-cli.ts 消费。 */`)
+  lines.push(` *  tests/verify-sample-full.ts 与 @wechat-typeset/cli render 子命令消费。 */`)
   lines.push(`export const FULL_SAMPLE: string = ${JSON.stringify(fullSample)}`)
   lines.push(``)
   lines.push(`/** 样本指纹（sha1 截断 12 字）。dev 模式检测样本重建用，详见 useDraftLifecycle。 */`)

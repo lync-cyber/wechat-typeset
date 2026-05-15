@@ -6,7 +6,7 @@
  * 一个 HTML 文件，每个主题占一列，方便浏览器里左右对比。
  *
  * 注意：gallery HTML 不是给微信粘贴用的（含 <style>、外层 grid 等）。
- * 选定主题后请用 render-html.ts 单独导出该 persona 的可粘贴 HTML。
+ * 选定主题后请用 `npm run cli -- render --persona <id>` 单独导出该 persona 的可粘贴 HTML。
  *
  * 用法：
  *   tsx render-gallery.ts --input <md> --personas <id1,id2,id3> [--output <html>]
@@ -102,7 +102,7 @@ function buildGalleryHtml(
 <body>
   <div class="toolbar">
     <strong>Persona Gallery</strong> · 共 ${rendered.length} 套主题，左右滚动对比 ·
-    <span style="color:#888;">本页面非可粘贴 HTML，确定主题后请用 <code>render-html.ts</code> 单独导出</span>
+    <span style="color:#888;">本页面非可粘贴 HTML，确定主题后请用 <code>npm run cli -- render --persona &lt;id&gt;</code> 单独导出</span>
   </div>
   <div class="gallery">${cards}</div>
 </body>

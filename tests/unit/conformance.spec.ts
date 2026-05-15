@@ -29,11 +29,8 @@ import {
 import { generateGallery } from '../../src/domain/gallery/generate'
 import { themeList } from '../../src/core/themes'
 import { VARIANT_IDS, DEFAULT_VARIANTS } from '../../src/core/themes/types'
-import {
-  CONTAINER_REGISTRY,
-  SIGNATURE_CONTAINER_MARKDOWN_NAME,
-} from '../../src/core/pipeline/containers'
-import { STYLED_CONTAINERS } from '../../src/core/vocabulary'
+import { CONTAINER_REGISTRY } from '../../src/core/pipeline/containers'
+import { STYLED_CONTAINERS, STYLE_KEY_TO_CONTAINER_NAME } from '../../src/core/vocabulary'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../../src/core/themes/_shared/spec'
 
 // ============================================================
@@ -233,17 +230,6 @@ describe('C. Registry ↔ spec 文件', () => {
       expect(themeIds.has(spec.id), `spec "${dir}" (id=${spec.id}) not found in themeList`).toBe(true)
     }
   })
-
-  // public API 的 PERSONA_SPECS 是 src/core/themes/index.ts 之外的第二份冗余注册表
-  // （为兼容原生 Node 而存在；见 src/public/personas.ts 头注释）。
-  // 漏注册会让 listPersonas() / capabilities.json 看不到新主题——此前 data-brief
-  // 就是只加到 themeList、漏加到 PERSONA_SPECS，被本断言加入后才暴露。
-  it('PERSONA_SPECS 与 themeList id 集合完全一致（防"两处注册表漂移"）', async () => {
-    const { PERSONA_SPECS } = await import('../../src/public/personas')
-    const themeIds = themeList.map((t) => t.id).sort()
-    const specIds = PERSONA_SPECS.map((s) => s.id).sort()
-    expect(specIds).toEqual(themeIds)
-  })
 })
 
 // ============================================================
@@ -304,8 +290,8 @@ describe('E. Signature Container 注册表闭合性', () => {
     for (const { spec, dir } of eachSpec()) {
       for (const sig of spec.signatureContainers ?? []) {
         expect(
-          SIGNATURE_CONTAINER_MARKDOWN_NAME[sig],
-          `${dir}: signatureContainer "${sig}" 未在 SIGNATURE_CONTAINER_MARKDOWN_NAME 登记`,
+          STYLE_KEY_TO_CONTAINER_NAME[sig],
+          `${dir}: signatureContainer "${sig}" 未在 STYLE_KEY_TO_CONTAINER_NAME 登记`,
         ).toBeTruthy()
       }
     }
@@ -314,7 +300,7 @@ describe('E. Signature Container 注册表闭合性', () => {
   it('每个 signatureContainer 的 markdown 名都能在 CONTAINER_REGISTRY 找到 renderer', () => {
     for (const { spec, dir } of eachSpec()) {
       for (const sig of spec.signatureContainers ?? []) {
-        const mdName = SIGNATURE_CONTAINER_MARKDOWN_NAME[sig]
+        const mdName = STYLE_KEY_TO_CONTAINER_NAME[sig]
         expect(
           CONTAINER_REGISTRY[mdName],
           `${dir}: signatureContainer "${sig}" → "${mdName}" 未注册`,

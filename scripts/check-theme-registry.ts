@@ -1,23 +1,11 @@
 #!/usr/bin/env tsx
 /**
- * CI 守卫：核对 `src/core/themes/<slug>/persona.data.ts` 与 `src/core/themes/index.ts`
- * 注册表三处（import 列表 / ALL_THEMES 数组 / DISPLAY_ORDER 排序数组）的对齐。
+ * CI 守卫：核对 `src/core/themes/<slug>/persona.data.ts` 与 `src/core/themes/registry.ts`
+ * 的对齐（import 列表 + DISPLAY_ORDER）。
  *
- * 设计动机（review P3）：
- *   themes/index.ts 不能用 import.meta.glob —— tsx 在 Node 下跑 pipeline 不认 Vite 转换。
- *   显式 import 是刻意为之，但新增主题忘记动 index.ts 三行就会留下"主题文件存在但 themeList
- *   不知道"的静默漂移。conformance.spec.ts 兜底在测试阶段，但 LLM 自动化生成场景
- *   下需要更早的 CI gate（无需启动 vitest）。
- *
- * 检查项：
- *   1. 每份 persona.data.ts 对应的目录都被 index.ts import 到（按目录名查 import 路径）
- *   2. 每份 persona.data.ts 的 spec.id 出现在 DISPLAY_ORDER 数组里
- *   3. 反方向：DISPLAY_ORDER / import 列表里没有 dangling 项（指向不存在的目录）
- *
- * 不检查（交给 conformance.spec.ts）：
- *   - specToTheme 投影保真
- *   - schema 同步
- *   - SUPPORTED_SIGNATURE_CONTAINERS 与 vocabulary 同步
+ * registry.ts 是 LLM/scripts/editor 共享的单一真源；新增主题忘改 registry 会让
+ * themeList / listPersonas() / capabilities.json 看不到。本脚本提供早期 CI gate，
+ * 不依赖 vitest。
  */
 
 import { existsSync, readFileSync } from 'node:fs'
@@ -27,7 +15,7 @@ import { pathToFileURL } from 'node:url'
 import { validateSpec, type PersonaSpec } from '../src/core/themes/_shared/spec'
 
 const REPO_ROOT = process.cwd()
-const THEMES_INDEX = resolve(REPO_ROOT, 'src/core/themes/index.ts')
+const REGISTRY_TS = resolve(REPO_ROOT, 'src/core/themes/registry.ts')
 
 interface ThemeOnDisk {
   /** 目录名（kebab） */
@@ -55,41 +43,25 @@ async function discoverThemesOnDisk(): Promise<ThemeOnDisk[]> {
   return out
 }
 
-/**
- * 解析 themes/index.ts 中三处声明：
- *   - import 字符串字面量 `from './<dir>'`
- *   - DISPLAY_ORDER 数组里的字符串字面量
- *
- * 用纯正则解析而非 AST：本文件结构稳定（一头一尾 import + 顶层 const）。
- * 一旦未来引入更复杂语法（动态 import、from 表达式），改用 ts-morph 再说。
- *
- * `./types` 是 ThemeRegistry 自身的类型导入,不是主题目录,过滤掉。
- * 未来如果增加其他非主题相邻模块（如 `./_shared`），按需扩展此白名单。
- */
-const NON_THEME_IMPORTS: ReadonlySet<string> = new Set(['types'])
-
 function parseRegistry(source: string): { importDirs: string[]; displayOrder: string[] } {
   const importDirs: string[] = []
-  const importRe = /from\s+['"]\.\/([a-z][a-z0-9-]*)['"]/g
+  const importRe = /from\s+['"]\.\/([a-z][a-z0-9-]*)\/persona\.data['"]/g
   let m: RegExpExecArray | null
-  while ((m = importRe.exec(source))) {
-    if (!NON_THEME_IMPORTS.has(m[1])) importDirs.push(m[1])
-  }
+  while ((m = importRe.exec(source))) importDirs.push(m[1])
 
-  const displayMatch = /const\s+DISPLAY_ORDER\s*:\s*[^=]*=\s*\[([^\]]*)\]/m.exec(source)
+  const displayMatch = /DISPLAY_ORDER\s*:\s*[^=]*=\s*\[([^\]]*)\]/m.exec(source)
   const displayOrder: string[] = []
   if (displayMatch) {
-    const body = displayMatch[1]
     const strRe = /['"]([a-z][a-z0-9-]*)['"]/g
     let s: RegExpExecArray | null
-    while ((s = strRe.exec(body))) displayOrder.push(s[1])
+    while ((s = strRe.exec(displayMatch[1]))) displayOrder.push(s[1])
   }
   return { importDirs, displayOrder }
 }
 
 async function main() {
-  if (!existsSync(THEMES_INDEX)) {
-    console.error(`[fail] ${THEMES_INDEX} 不存在`)
+  if (!existsSync(REGISTRY_TS)) {
+    console.error(`[fail] ${REGISTRY_TS} 不存在`)
     process.exit(1)
   }
   const onDisk = await discoverThemesOnDisk()
@@ -108,7 +80,7 @@ async function main() {
   }
   if (invalid > 0) process.exit(1)
 
-  const src = readFileSync(THEMES_INDEX, 'utf-8')
+  const src = readFileSync(REGISTRY_TS, 'utf-8')
   const { importDirs, displayOrder } = parseRegistry(src)
 
   const errors: string[] = []
@@ -121,35 +93,32 @@ async function main() {
   for (const t of onDisk) {
     if (!importedSet.has(t.dir)) {
       errors.push(
-        `themes/${t.dir}/persona.data.ts 存在,但 themes/index.ts 未 import './${t.dir}'`,
+        `themes/${t.dir}/persona.data.ts 存在,但 themes/registry.ts 未 import './${t.dir}/persona.data'`,
       )
     }
   }
-  // 2. 磁盘上每个 spec.id 都在 DISPLAY_ORDER
   for (const t of onDisk) {
     if (!orderSet.has(t.specId)) {
       errors.push(
-        `themes/${t.dir} 的 spec.id="${t.specId}" 未列入 themes/index.ts:DISPLAY_ORDER`,
+        `themes/${t.dir} 的 spec.id="${t.specId}" 未列入 themes/registry.ts:DISPLAY_ORDER`,
       )
     }
   }
-  // 3. import 不指向不存在的目录
   for (const d of importDirs) {
     if (!diskDirs.has(d)) {
-      errors.push(`themes/index.ts import './${d}' 但 themes/${d}/persona.data.ts 不存在`)
+      errors.push(`themes/registry.ts import './${d}/persona.data' 但 themes/${d}/persona.data.ts 不存在`)
     }
   }
-  // 4. DISPLAY_ORDER 不引用不存在的 id
   for (const id of displayOrder) {
     if (!diskIds.has(id)) {
-      errors.push(`themes/index.ts:DISPLAY_ORDER 包含 "${id}" 但磁盘上没有对应 persona.data.ts`)
+      errors.push(`themes/registry.ts:DISPLAY_ORDER 包含 "${id}" 但磁盘上没有对应 persona.data.ts`)
     }
   }
 
   if (errors.length > 0) {
     console.error('[fail] theme registry 漂移:')
     for (const e of errors) console.error(`  - ${e}`)
-    console.error('\n修复方法: 在 src/core/themes/index.ts 同步 import / ALL_THEMES / DISPLAY_ORDER 三处。')
+    console.error('\n修复方法: 在 src/core/themes/registry.ts 同步 import + ALL_SPECS + DISPLAY_ORDER。')
     process.exit(1)
   }
 

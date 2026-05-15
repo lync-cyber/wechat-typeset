@@ -77,16 +77,16 @@
 
 > 写自动化集成的人请定期拉取 [`dist/api/capabilities.json`](../../dist/api/capabilities.json)，机器可读全集 + 版本号在那里。
 
-### 登记一个 deprecation（演练实例）
+### 登记一个 deprecation（模板）
 
 在 `scripts/build-capabilities.ts` 的 `deprecations: [...]` 里追加一条：
 
 ```ts
 {
-  id: 'signatureContainerMarkdownNames',     // 顶层字段名
-  sinceVersion: '2.1',                       // 何时标记 deprecated
-  replacement: '改用 containers[].id ...',    // 下游迁移指引
-  removalPlannedIn: '3.0',                   // 计划在哪个 major 移除
+  id: 'oldFieldName',                        // 顶层字段名 / 路径
+  sinceVersion: '3.1',                       // 何时标记 deprecated
+  replacement: '改用 newFieldName',           // 下游迁移指引
+  removalPlannedIn: '4.0',                   // 计划在哪个 major 移除
 }
 ```
 
@@ -96,4 +96,4 @@
 2. `sinceVersion` 满足 `主.次` 格式
 3. 登记 deprecated 的 id 必须**仍在** `capabilities.json` 顶层（窗口期承诺：字段还在，只是建议替换；真正移除要等下一个 major）
 
-`signatureContainerMarkdownNames` 是当前唯一登记的 deprecation 条目，作用是给后续真实改名事件提供可照搬的样板——首条 deprecation 走通后，再有字段重命名只是在数组追加一条。
+schema 3.0 初始版 `deprecations[]` 为空——首次破坏 contract 时按上述模板登记。

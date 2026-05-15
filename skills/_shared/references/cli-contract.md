@@ -1,235 +1,229 @@
 # CLI 契约速查（共享 reference）
 
-> 三个 skill 的脚本签名 / JSON 输出 / 退出码 / lint issue 表的**单一真源**。改这里 = 改所有调用方文档。
+> 三个 skill 共用同一个 CLI 入口：`@wechat-typeset/cli`。本文件是 subcommand 签名 / 输入 schema / JSON 输出 / 退出码 / lint issue 修复表的**单一真源**。改这里 = 改所有调用方文档。
 >
-> 权威依据：各脚本头部注释；本文件应与 [skills/wechat-typeset-annotate-markdown/scripts/](../../wechat-typeset-annotate-markdown/scripts) / [skills/wechat-typeset-author-persona/scripts/](../../wechat-typeset-author-persona/scripts) / [skills/wechat-typeset-export-richtext/scripts/](../../wechat-typeset-export-richtext/scripts) 同步。
+> 权威依据：[`packages/cli/src/commands/*.ts`](../../../packages/cli/src/commands)（每条 Command 自带 inputSchema / outputSchema），运行时一致性由 `npm run cli -- describe` 输出兜底。
 
 ## 目录
 
-- [统一旗标约定](#统一旗标约定)
-- [脚本签名表](#脚本签名表)
+- [调用约定](#调用约定)
+- [Subcommand 表](#subcommand-表)
 - [退出码语义](#退出码语义)
 - [lint issue 修复表](#lint-issue-修复表)
-- [validate-and-fix 错误模式表](#validate-and-fix-错误模式表)
+- [validate 错误模式表（hint）](#validate-错误模式表hint)
 - [JSON 输出形状](#json-输出形状)
+- [MCP 集成](#mcp-集成)
+- [Skill 独家脚本](#skill-独家脚本一览)
 
-## 统一旗标约定
+## 调用约定
 
-| 旗标 | 适用脚本 | 语义 |
+```bash
+# 通用形式
+npm run cli -- <subcommand> [args]
+
+# 模式 A · --json 从 stdin 读 JSON（推荐复杂参数 / 与 MCP 调用同 schema）
+echo '{"md":"...","persona":"default"}' | npm run cli -- render --json
+
+# 模式 B · --flag value（仅在 inputSchema 声明的字段上有效）
+npm run cli -- containers snippet --name tip --variant accent-bar
+
+# 文件捷径
+npm run cli -- render --input <md-path>           # 等价于 { md: readFile(...) }
+npm run cli -- validate --spec <spec-json-path>   # 等价于 { spec: JSON.parse(...) }
+
+# 自描述（MCP / LLM 用）
+npm run cli -- describe   # 输出 { version, commands[] }
+```
+
+- 未知 flag（不在 inputSchema 内）直接报错退出 1，不会静默丢
+- 字符串字段直接 `--key value`；object / array 字段必须走 `--json`
+- 子命令多词分隔用空格（`personas list`、`containers snippet`、`motif render`），MCP 端转下划线（`personas_list` 等）
+
+## Subcommand 表
+
+| 子命令 | 输入 schema | 输出（成功） |
 | --- | --- | --- |
-| `--input <md>` | annotate-md / lint-contract / render-html / render-gallery / copy-richtext | 输入 markdown 路径（相对 cwd） |
-| `--output <path>` 或 `--out <path>` | annotate-md (`--out`) / render-html (`--output`) / render-gallery (`--output`) / preview-motifs (`--out`) | 输出落盘路径；省略则写 stdout |
-| `--persona <id>` | render-html / render-gallery（限内置） / copy-richtext / annotate-md / recommend-persona | 内置 persona id（见 [personas.md](personas.md)） |
-| `--personas <ids \| all>` | render-gallery | 逗号分隔多个 id，或 `all` 渲染全部已注册 |
-| `--spec <path>` | validate-and-fix / preview-motifs / persist-persona / new-persona-from-prompt（--out spec.json） | PersonaSpec JSON 路径 |
-| `--meta` | render-html | 只打印元数据 JSON，不写 HTML |
-| `--no-svg-white-bg` | render-html | 关闭 wxPatch 的 `#fff → #fefefe` 替换 |
-| `--variant <id>` | show-snippet | 让生成的 snippet 带 variant=xxx |
-| `--variants <container>` | show-snippet | 列出某容器可切换的 variant id |
-| `--list` / `--list --category <cat>` | show-snippet | 列容器名 |
-| `--json` | lint-contract / theme-capabilities | 输出 JSON 而非可读文本 |
-| `--check` | build-skill-refs / build-writer-docs | CI 模式：差异即 exit 1 |
-
-> **统一规则**：render / lint / copy 系脚本一律 `--input <md>` + `--output <path>`，**不接受位置参数**。show-snippet / validate-and-fix / preview-motifs 等"主题工具"脚本仍接位置参数（按其 usage 写）。
-
-## 脚本签名表
-
-### wechat-typeset-annotate-markdown/scripts
-
-| 脚本 | 必填旗标 | 可选旗标 | 输出 |
-| --- | --- | --- | --- |
-| `recommend-persona.ts` | `--title` / `--summary` / `--topic` | `--style` | JSON（top-3 ranked + decision_prompt） |
-| `theme-capabilities.ts` | `--persona <id>` | `--json` | 可读文本 或 JSON（defaultVariants / recommendedVariants / containers / kickers） |
-| `annotate-md.ts` | `--input` / `--persona` | `--out` | patches.json（结构见下文，含 capability_snapshot） |
-| `lint-contract.ts` | `<md>`（位置参数）或在 export-richtext 入口走 `--input` | `--persona <id>` / `--json` | 可读文本 或 `{ ok, issues, count, error_count, warning_count, effective_persona, persona_source }` |
-| `show-snippet.ts` | `<container-name>` 或 `--list` 或 `--variants <name>` | `--variant <id>` / `--category <cat>` / `--persona <id>` | markdown snippet + 元信息（带 --persona 时 list 按 pack 分组，单容器跨主题出 warning） |
-
-### wechat-typeset-author-persona/scripts
-
-| 脚本 | 必填旗标 | 可选旗标 | 输出 |
-| --- | --- | --- | --- |
-| `recommend-from-prompt.ts` | `--description` | `--style` | JSON（candidates + decision_prompt） |
-| `new-persona-from-prompt.ts` | `--description` | `--base-id` / `--out` | "给 LLM 的 prompt + schema + 邻近样例" JSON |
-| `validate-and-fix.ts` | `<spec.json>`（位置参数） | — | JSON（errors[] + 修复建议） |
-| `preview-motifs.ts` | `<spec.json>` | `--out tmp/preview.html` | 单页 HTML gallery（色板 + motif） |
-| `persist-persona.ts` | `<spec.json>` / `--id <kebab>` | — | 落盘到 `src/core/themes/<id>/persona.data.ts` + patch 注册表 |
-
-### wechat-typeset-export-richtext/scripts
-
-| 脚本 | 必填旗标 | 可选旗标 | 输出 |
-| --- | --- | --- | --- |
-| `lint-contract.ts` | `--input` | `--persona <id>` / `--json` | 透传 annotate 的同名脚本（旗标全转发） |
-| `render-html.ts` | `--input` / `--persona` | `--output` / `--meta` / `--no-svg-white-bg` | HTML 文件 + 元数据 JSON |
-| `render-gallery.ts` | `--input` / `--personas` | `--output` | 多 persona 并排 HTML |
-| `copy-richtext.ts` | `--input` / `--persona` | `--save-fallback` | 写入剪贴板 / 落盘 fallback |
-| `open-in-browser.ts` | — | — | 启 vite preview + open browser |
+| `render` | `{ md, persona?, spec?, platform? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }` |
+| `validate` | `{ spec }` 或 `{ md, persona? }` | `{ ok, errors[], warnings[] }`（含 `hint`） |
+| `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }` |
+| `annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }` |
+| `personas list` | — | `PersonaSummary[]` |
+| `personas get` | `{ id }` | 完整 `PersonaSpec` |
+| `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, recommendedVariantOverrides, containers[], kickers }` |
+| `personas recommend` | `{ title, summary, topic?, style? }` | `{ ranked[3], recommendNew, rationaleOneLine }` |
+| `containers list` | — | `ContainerSpec[]`（vocabulary 全集） |
+| `containers snippet` | `{ name, variant?, persona? }` | `string`（markdown 片段；`persona` 仅 API 对称，对输出无影响） |
+| `motif render` | `{ shape }` 或 `{ template, values }` | `string`（SVG） |
+| `describe` | — | `{ version, commands[] }`（自描述清单） |
 
 ## 退出码语义
 
-按场景分层（同一退出码在不同脚本中语义一致）：
+| 退出码 | 含义 |
+| --- | --- |
+| `0` | 成功 |
+| `1` | 输入解析 / 参数错（CLI dispatcher 拒绝） |
+| `2` | 业务 `ok=false`（lint 有 error / validate 校验失败） |
+| `2` | `WtException(RESOURCE_NOT_FOUND)`（未知 persona / container 名等） |
+| `3` | `WtException(SPEC_INVALID)`（render 路径上 spec 投影校验失败） |
+| `4` | `WtException(CONTRACT_VIOLATION)` / `WtException(RENDER_FAILED)`（fence 不闭合、pipeline 报错） |
+| `5` | `WtException(PLATFORM_UNSUPPORTED)`（未知 publish target） |
 
-| 码 | 通用语义 | 出现脚本 |
-| --- | --- | --- |
-| `0` | 成功（含 `ok=true`） | 全部 |
-| `1` | IO / 参数错（找不到文件、缺少必填旗标、未知旗标） | 全部 |
-| `2` | 资源未知 / 业务校验失败（unknown persona id / unknown container name / lint `ok=false`） | render-html / render-gallery / copy-richtext / show-snippet / lint-contract / recommend-persona |
-| `3` | `SpecValidationError`（PersonaSpec 校验失败） | render-html（`--spec` 路径）/ validate-and-fix |
-| `4` | render 失败（容器语法错 / 嵌套不闭合 / wxPatch 边界 case） | render-html / render-gallery / copy-richtext |
-| `5` | 平台不支持（如 copy-richtext 在无剪贴板工具的 Linux 容器） | copy-richtext |
+退出码统一从 `src/core/errors.ts` 的 `EXIT_CODES` 映射；CLI 与 MCP 同源。
 
 ## lint issue 修复表
 
-`lint-contract.ts` 输出的 `issues[].kind` 全集 + `severity` + 修复路径：
-
-| issue.kind | severity | 原因 | 修法 |
+| `issue.kind` | severity | 原因 | 修法 |
 | --- | --- | --- | --- |
-| `unknown_container` | error | fence 名拼错或发明了新名字 | 改成 [container-vocabulary.md](container-vocabulary.md) 内的合法名 |
-| `unexpected_jsx_attrs` | error | 写了 `{variant="xxx"}` JSX 风格 | 改成 `variant=xxx`（不带大括号引号） |
-| `html_comment_variant` | error | 写了 `<!-- variant=xxx -->` | 删注释，写到 `::: name` open 行 |
-| `fence_not_closed` | error | 缺 `:::` | 补 close fence（同长度） |
-| `nesting_depth` | error | compare/toc 等外层用了 3 个冒号 | 外层升级为 `::::`（4 个冒号） |
-| `inline_unclosed` | error | `[.着重` 或 `[~波浪` 或 `==` 数量奇偶不对 | 补对应闭合标记 |
-| `fence_attr_yaml` | error | 在 open 行内/后写 YAML 风格属性 | 改成 `key=value` 形式 |
-| `wrong_theme_namespace` | **warning** | 用了 theme:* 容器但当前主题不是其专属（如 default 主题写 `kpi-dashboard`） | 切换主题 / 换 base / pack:editorial 内的替代容器；不阻塞导出但失去签名视觉 |
-| `frontmatter_invalid` | **warning** | frontmatter 内 variant id / theme id 非法 / 未识别字段 | 改成合法值或删除字段；pipeline 会回退 |
+| `unknown_container` | error | fence 名拼错 / 不在 vocabulary 内 | 改成 [`container-vocabulary.md`](container-vocabulary.md) 合法名；`npm run cli -- containers list` 查全集 |
+| `unexpected_jsx_attrs` | error | 写了 `{variant="x"}` JSX 风 | 改成 `variant=x`（无大括号） |
+| `html_comment_variant` | error | 写了 `<!-- variant=x -->` | 删注释，写到 `:::` open 行 |
+| `fence_not_closed` | error | 缺 `:::` 闭合 | 补一行同长度 `:::`/`::::` |
+| `nesting_depth` | error | compare/toc/kpi-dashboard 等外层用了 `:::`（3 个冒号） | 升级为 `::::`（4 个冒号） |
+| `inline_unclosed` | error | `[.着重` / `[~波浪` / `==高亮` 等行内扩展未闭合 | 补对应闭合标记 |
+| `wrong_theme_namespace` | warning | `theme:*` 容器在非该主题里使用 | 切到该 namespace 主题，或改用 base / pack:editorial 替代容器；不阻塞 |
+| `frontmatter_invalid` | warning | frontmatter 内 variant id / theme id 非法 | 改成合法 id 或删除字段（pipeline 会回退到入参 / 默认） |
 
-**修复完所有 error 再交付**（warning 不阻塞 export，但应该告诉用户后果） —— 不要把 error 残留的 md 喂给 render 阶段。
+## validate 错误模式表（hint）
 
-**主题敏感**：触发 `wrong_theme_namespace` 检查需要主题来源；优先级 `frontmatter.theme:` > `--persona <id>`。两者都没有时跳过主题敏感检查（仅做语法 lint）。
+cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。LLM 拿到 `path` + `message` + `hint` 三元组即可 self-correct：
 
-## validate-and-fix 错误模式表
-
-`validate-and-fix.ts` 输出的 `errors[].path` 模式 + 推断 + 修法：
-
-| path 模式 | 推断 | 修法 |
-| --- | --- | --- |
-| `palette.<key>` hex 报错 | hex 格式非法 | 用 `^#[0-9a-fA-F]{3,8}$` 形式（典型：`#1f2937` / `#fefefe`） |
-| `palette` 缺键 | 11 键不齐 | 补齐 `primary / secondary / accent / bg / bgSoft / bgMuted / text / textMuted / textInverse / border / code` |
-| `status.<key>` | 四态不齐 / `{accent,soft}` 不成对 | 必填 `tip / info / warning / danger`，每态两键 |
-| `motifs.*.primitives[N].fontSize` | < 14 | 放大到 ≥ 14 |
-| `motifs.*.primitives[N].strokeWidth` | < 1 | 放粗到 ≥ 1 |
-| `motifs.*.primitives[N].fontFamily` | 非白名单 | 只能 `serif` / `sans-serif` / `monospace` |
-| `motifs.*.placeholders` | 未声明占位符 | 把 primitives 里的 `{name}` 全部加进 `placeholders` |
-| `signatureContainers[N]` | id 不在白名单 | 用 `getSupportedSignatureContainers()`；camelCase，不是 kebab |
-| `variants.<kind>` | id 不在白名单 | 用 `getVariantIds().<kind>`；常见幻觉 `'glow'` / `'modern'` / `'flat'` 不存在 |
-
-完整规则与"为什么"见 [hard-rules.md](hard-rules.md)。
+| path 模式 | hint |
+| --- | --- |
+| `palette.<key>` + hex 非法 | 改成 `^#[0-9a-fA-F]{3,8}$`（典型：#1f2937 / #fefefe） |
+| `palette.<key>` missing | palette 11 键必齐：primary / secondary / accent / bg / bgSoft / bgMuted / text / textMuted / textInverse / border / code |
+| `status.<tip\|info\|warning\|danger>` | status 4 态齐全，每态 `{ accent, soft }`；最容易遗漏 info |
+| `motifs.*.fontSize < 14` | motif text.fontSize ≥ 14（公众号 SVG 光栅化的 CJK 字号底线） |
+| `motifs.*.strokeWidth < 1` | motif strokeWidth ≥ 1（亚像素描边在公众号会消失） |
+| `motifs.*.fontFamily` | 只能是 serif / sans-serif / monospace |
+| `motifs.*.placeholders` | MotifTemplate placeholders 必须包含 primitives 里出现的所有 `{name}` |
+| `signatureContainers[N]` | id 必须在 `getSupportedSignatureContainers()` 白名单（camelCase） |
+| `variants.<kind>` | id 必须在 `getVariantIds().<kind>` 白名单；幻觉 `glow`/`modern`/`flat` 不存在 |
+| `id` kebab | id 必须 `^[a-z][a-z0-9-]*$`，与目录名一致 |
+| `name`/`description`/`audience` required | 三者必填非空——LLM 选型主要靠这三项 |
+| `meta.createdAt` | ISO 日期 YYYY-MM-DD |
 
 ## JSON 输出形状
 
-### annotate-md.ts 输出
-
-```json
-{
-  "input": "<input.md 路径>",
-  "persona": "<persona id>",
-  "block_count": 24,
-  "patch_count": 5,
-  "patches": [
-    {
-      "line": 3,
-      "end_line": 5,
-      "kind": "wrap_first_paragraph | wrap_paragraph | wrap_blockquote | convert_list | wrap_section_title | wrap_pros_cons",
-      "container": "<容器 fence 名>",
-      "variant": "<可选 variant id>",
-      "reason": "<人话理由>",
-      "confidence": "high | medium | low",
-      "preview": "<首 60 字符摘要>"
-    }
-  ],
-  "apply_hint": "<应用顺序提示>",
-  "capability_snapshot": {
-    "persona_id": "<id>",
-    "default_variants": { "admonition": "accent-bar", ... },
-    "recommended_variants": { "admonition": ["accent-bar", ...], ... },
-    "containers": [
-      { "id": "tip", "namespace": "base", "pack": "base", "available": true, "signature": false, "excluded": false },
-      { "id": "kpi-dashboard", "namespace": "theme", "pack": "theme:data-brief", "available": false, "signature": false, "excluded": false }
-    ]
-  },
-  "vocabulary_subset": [{ "name": "...", "category": "...", "fenceLength": 3, "description": "...", "example": "..." }]
-}
-```
-
-> **agent 取 `capability_snapshot.containers` 作为"本主题下可用容器"的权威单一真源**，而非 `vocabulary_subset`。后者只用来查 example / attrs。
-
-### render-html.ts 输出（写文件 + 元数据 JSON）
+### `lint` 输出
 
 ```json
 {
   "ok": true,
-  "persona": "<id>",
-  "word_count": 1234,
-  "reading_time_min": 5,
-  "html_length": 56789,
-  "svg_white_bg": true,
-  "patch_summary": { "stripFontFamily": 12, "patchFlexToFallback": 3, "patchSvgWhiteBg": 8 }
+  "issues": [
+    {
+      "line": 12,
+      "kind": "wrong_theme_namespace",
+      "severity": "warning",
+      "name": "kpi-dashboard",
+      "hint": "…",
+      "excerpt": ":::: kpi-dashboard KEY METRICS"
+    }
+  ],
+  "count": 1,
+  "errorCount": 0,
+  "warningCount": 1,
+  "effectivePersona": "default",
+  "personaSource": "flag"
 }
 ```
 
-失败时（exit 3 / 4）：
+`personaSource` 取值：`'frontmatter'` / `'flag'` / `'none'`。
+
+### `annotate` 输出
 
 ```json
-{ "ok": false, "error": "spec_validation | render_failure", "errors": [...] | "message": "..." }
+{
+  "patches": [
+    {
+      "line": 3,
+      "endLine": 3,
+      "kind": "wrap_first_paragraph",
+      "container": "abstract",
+      "reason": "文首总览段（80 字符）——典型 abstract 位置",
+      "confidence": "high",
+      "preview": "本文将探讨 …"
+    }
+  ],
+  "capabilitySnapshot": {
+    "personaId": "swiss-grid",
+    "defaultVariants": { "admonition": "accent-bar" },
+    "recommendedVariants": { "admonition": ["accent-bar", "pill-tag"] },
+    "containers": [ { "id": "abstract", "available": true, "signature": true, "namespace": "base", "pack": "base" } ]
+  },
+  "vocabularySubset": [ { "name": "tip", "category": "admonition", "fenceLength": 3, "description": "…", "example": "…" } ],
+  "blockCount": 24
+}
 ```
 
-### lint-contract.ts 输出（`--json` 模式）
+合法 `kind`：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
+
+### `validate` 输出
 
 ```json
 {
   "ok": false,
-  "count": 3,
-  "error_count": 1,
-  "warning_count": 2,
-  "effective_persona": "default",
-  "persona_source": "flag | frontmatter | none",
-  "issues": [
+  "errors": [
     {
-      "line": 12,
-      "kind": "<kind>",
-      "severity": "error | warning",
-      "name": "<可选容器名>",
-      "hint": "<修法>",
-      "excerpt": "<原文片段>"
+      "message": "palette.primary: not a valid hex",
+      "severity": "error",
+      "path": "palette.primary",
+      "hint": "改成 ^#[0-9a-fA-F]{3,8}$ 形式（典型：#1f2937 / #2558b0 / #fefefe）"
     }
-  ]
-}
-```
-
-> `ok` 现在只看 error 数；warning（如 `wrong_theme_namespace`）不阻塞导出。
-
-### theme-capabilities.ts 输出（`--json` 模式）
-
-```json
-{
-  "persona": { "id": "<id>", "name": "...", "description": "...", "audience": "...", "palettePrimary": "#xxxxxx" },
-  "defaultVariants": { "admonition": "...", "quote": "...", ... },
-  "recommendedVariants": { "admonition": ["..."], ... },
-  "recommendedVariantOverrides": {},
-  "containers": [
-    { "id": "<fence-name>", "namespace": "base | pack | theme", "pack": "base | pack:X | theme:X", "available": true, "signature": false, "excluded": false }
   ],
-  "kickers": { "toc": "...", "qaBlock": "...", ... }
+  "warnings": []
 }
 ```
 
-### recommend-persona.ts 输出
+### `personas recommend` 输出
 
 ```json
 {
   "ranked": [
     {
-      "id": "<persona id>", "name": "...", "description": "...", "audience": "...",
-      "variants_signature": { "admonition": "...", "quote": "...", "...": "..." },
-      "signature_containers": ["..."],
-      "static_score": 0.85,
-      "static_reasons": ["..."]
+      "id": "tech-explainer",
+      "name": "文档白昼",
+      "description": "…",
+      "audience": "技术布道 / 产品文档 / 教程",
+      "variantsSignature": { "admonition": "accent-bar" },
+      "signatureContainers": ["note", "seeAlso"],
+      "staticScore": 1,
+      "staticReasons": ["audience/description 命中题材\"技术\"关键词 …"]
     }
   ],
-  "recommend_new": false,
-  "rationale_one_line": "强匹配 swiss-grid（0.92）",
-  "decision_prompt": "<给 LLM 用的多行 prompt>"
+  "recommendNew": false,
+  "rationaleOneLine": "强匹配 tech-explainer（1.00）"
 }
 ```
 
-`recommend_new=true`（top-1 < 0.6）= 信号 "内置都不够，建议去 wechat-typeset-author-persona 造新"。
+`recommendNew=true` ⇔ top-1 score < 0.6，建议去 `wechat-typeset-author-persona` 造新主题。
+
+## MCP 集成
+
+CLI 与 MCP 共享同一个 COMMANDS 数组，每条 Command 的 `inputSchema` 即 MCP tool 的 `inputSchema`：
+
+```jsonc
+// Claude Desktop / Cursor 的 mcp.json
+{
+  "mcpServers": {
+    "wechat-typeset": {
+      "command": "npx",
+      "args": ["-p", "@wechat-typeset/mcp", "wechat-typeset-mcp"]
+    }
+  }
+}
+```
+
+MCP tool 名映射：subcommand 空格转下划线（`personas list` → `personas_list`、`motif render` → `motif_render`）。`tools/list` 直接消费 `npm run cli -- describe` 的 commands 数组。
+
+## Skill 独家脚本一览
+
+CLI 不覆盖、各 skill 保留为本地脚本的工具（场景：HTML 报表、文件落地、prompt 模板构造）：
+
+| Skill | 脚本 | 作用 |
+| --- | --- | --- |
+| author-persona | `scripts/new-persona-from-prompt.ts` | 输出"给 LLM 用的结构化输出 prompt"（schema + 硬约束 + 邻近样例） |
+| author-persona | `scripts/preview-motifs.ts` | spec → 单页 HTML gallery（色板 + 全部 motif + admonition icon） |
+| author-persona | `scripts/persist-persona.ts` | spec → 落到 `src/core/themes/<id>/` + patch registry |
+| export-richtext | `scripts/render-gallery.ts` | 多 persona 并排预览（iframe srcdoc） |
+| export-richtext | `scripts/copy-richtext.ts` | HTML 写入系统剪贴板（Win/Mac/Linux） |
+| export-richtext | `scripts/open-in-browser.ts` | 启动 vite preview + 自动开浏览器 |
