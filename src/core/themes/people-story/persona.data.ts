@@ -498,10 +498,32 @@ export const spec: PersonaSpec = {
       'background-color': 'transparent',
       'border-radius': '0',
     },
+    // note：杂志批注 / 边注 —— 上下 1px hairline + 左缩进，与 magazine-pull admonition 同语调
+    note: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #c8c2b3',
+      'border-bottom': '1px solid #c8c2b3',
+      padding: '10px 0 10px 20px',
+      margin: '20px 0',
+      color: '#5d5d63',
+      'font-size': '14px',
+      'line-height': '1.75',
+      'letter-spacing': '0.3px',
+      'border-radius': '0',
+    },
   },
 
-  // people-story 只用通用容器
-  signatureContainers: [],
+  signatureContainers: [
+    'cover',
+    'author',
+    'intro',
+    'quoteCard',
+    'sectionTitle',
+    'footerCTA',
+    'recommend',
+    'qrcode',
+  ],
 
   // ============================================================
   // Templates（只声明覆盖项；commonTemplates 隐式作为基线）
