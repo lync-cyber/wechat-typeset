@@ -85,14 +85,9 @@ export const DEFAULT_MIN_COVERAGE_RATE = 0.3
  * 移除流程：在主题的 spec.containers / spec.elements 里补足覆写，使其 rate ≥
  * DEFAULT_MIN_COVERAGE_RATE，即可从本清单删除条目。
  *
- * 当前条目：
- *   - life-aesthetic（12.8%, 5/39）：spec 只覆写 quoteCard + 4 个元素，绝大多数 base
- *     容器走 token 兜底。后续 PR 应补 intro / author / footerCTA / recommend /
- *     qrcode / highlight 等容器的"暖底圆角"voice 表达。
+ * 当前条目：（空）
  */
-export const LOW_VOICE_TEMPORARY_GRACE: ReadonlySet<string> = new Set([
-  'life-aesthetic',
-])
+export const LOW_VOICE_TEMPORARY_GRACE: ReadonlySet<string> = new Set([])
 
 /**
  * Base 容器应覆盖集（styleKey）。从 STYLED_CONTAINERS 派生，过滤：
