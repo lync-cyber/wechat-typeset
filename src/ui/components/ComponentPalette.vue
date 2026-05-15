@@ -1,20 +1,7 @@
 <script setup lang="ts">
 /**
- * 组件库抽屉（P3 后只剩"装配 + 模式切换"，不再持有展示派生 / cell DOM / 保存弹窗 DOM）。
- *
- * 三个子组件 + 三个来源：
- *   - ComponentGrid          每个 tab 的 cell 网格 + hover 动作按钮
- *   - SaveSelectionDialog    选区另存为组件的弹窗
- *   - ComponentStudio        新建 / 编辑 / 派生组件的内嵌 split view
- *   - sources/builtin        admonition / quote / compare / steps / ... 内置预设
- *   - sources/theme-template 当前主题的 templates 字段派生条目
- *   - sources/user           我的组件（响应式快照）
- *
- * 状态机：
- *   mode = 'list'：tab 切换 + grid 选择 + 保存选区弹窗
- *   mode = 'studio'：内嵌 Studio 编辑器，关闭后回到 list
- *
- * "保存选区"通过 defineExpose 暴露 openSaveDialog,由 actions.handleSaveSelection 调用。
+ * 组件库抽屉：装配 + 模式切换（list / studio），不持有展示派生与 cell DOM。
+ * "保存选区"通过 defineExpose 暴露 openSaveDialog 由 actions.handleSaveSelection 调用。
  */
 import { computed, reactive, ref } from 'vue'
 import {

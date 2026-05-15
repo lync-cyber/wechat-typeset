@@ -11,9 +11,3 @@ export interface Command<I = unknown, O = unknown> {
 }
 
 export type AnyCommand = Command<unknown, unknown>
-
-export interface DispatchResult {
-  ok: boolean
-  exitCode: number
-  output: unknown
-}

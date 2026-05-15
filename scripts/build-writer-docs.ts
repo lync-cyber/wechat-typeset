@@ -28,6 +28,7 @@ import { resolve } from 'node:path'
 
 import { containersInPack, type ContainerPack } from '../src/core/vocabulary/vocabulary'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
+import { normalizeEol } from './_lib'
 
 interface PackTarget {
   /** 文档绝对路径（resolve 自 cwd） */
@@ -143,22 +144,10 @@ function splice(
   return `${before}\n\n${generated}\n\n${after}`
 }
 
-/**
- * 比较与写入的行尾归一化：
- *
- * 仓库以 LF 提交，但 Windows 检出（autocrlf=true）会把工作区的换行写成 CRLF。
- * 脚本 lines.join('\n') 永远是 LF，朴素字符串相等会让 Windows 开发者本地永久报漂移，
- * 即使内容完全一致。CI（Linux）则不会触发——这种"本地伪阳性"是最容易被开发者
- * 学会忽略的告警，从而真正的漂移也会被一起忽略，所以必须修。
- *
- * 策略：比较时把双方都归一化为 LF；写入时复用源文件原始换行风格（CRLF/LF）。
- */
+// Windows 检出（autocrlf=true）下工作区是 CRLF，但脚本生成的内容永远 LF；
+// 朴素字符串相等会本地伪阳性。比较时双方归一 LF；写入时沿用源文件原始换行风格。
 function detectEol(source: string): '\r\n' | '\n' {
   return source.includes('\r\n') ? '\r\n' : '\n'
-}
-
-function normalizeEol(source: string): string {
-  return source.replace(/\r\n/g, '\n')
 }
 
 function main() {

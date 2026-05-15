@@ -1,14 +1,5 @@
 <script setup lang="ts">
-/**
- * 配色自定义面板
- *
- * 工作流：
- *   1. palettePresets 网格可点（数量由 src/core/color/palettes.ts 决定）
- *   2. 三个色选器（primary / secondary / accent）+ dark toggle
- *   3. 每次 seed 改动 debounce 120ms → emit('apply', seed)，主区域实时重渲染
- *   4. 实时显示 primary 与推导 bg 的 WCAG 对比度，不过关时给红字警示
- *   5. 提供"还原为主题默认"按钮，一键去掉自定义层
- */
+// 配色自定义面板：预设网格 + 三色选器 + dark toggle，seed 改动 debounce 120ms emit apply。
 import { onBeforeUnmount, reactive, watch } from 'vue'
 import { palettePresets } from '../../core/color/palettes'
 import { checkContrast, derivePalette, seedFromPrimary } from '../../core/color/generator'

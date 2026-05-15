@@ -1,15 +1,8 @@
 /**
- * useDebouncedRender
- *
- * 把 "md 源码 → 渲染产物" 的链路加上防抖（默认 80ms），
+ * 把 "md 源码 → 渲染产物" 的链路加防抖（后沿触发，默认 80ms），
  * 避免每次击键都跑完整管线（markdown-it + juice + highlight）。
  *
- * - 后沿触发：用户停手 80ms 后才 render
- * - immediate=true：组件挂载时立即渲染一次，避免首屏空白
- * - 渲染出错时：返回错误块 HTML，字数/时长归零；不抛出到组件
- * - 显式 dispose：组件卸载时清 timer，避免内存泄漏
- *
- * 80ms：过短（<40ms）快速键入仍触发多次；过长（>150ms）用户感知预览滞后。
+ * 80ms 阈值：<40ms 快速键入仍触发多次；>150ms 用户感知预览滞后。
  */
 
 import { onBeforeUnmount, ref, watch, type Ref } from 'vue'

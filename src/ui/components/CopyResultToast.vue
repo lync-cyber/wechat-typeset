@@ -1,16 +1,7 @@
 <script setup lang="ts">
 /**
- * 复制成功后的"行动 toast"——区别于 UndoToast 的"撤销 toast"。
- *
- * 设计动机：
- *   - 复制成功后，作者的下一步是切到 mp.weixin.qq.com 粘贴。把这一步做成 toast 内
- *     的 next-action CTA，工作流闭环 1 次点击省下 1 次切应用 + 找标签的摩擦。
- *   - 顺便把"图片/外链处理摘要"显式呈现（之前隐在顶栏 1.5s 的 transient label 里
- *     很难注意到），让作者对降级行为可见。
- *
- * 与 UndoToast 的关系：复制成功路径不会同时触发 Undo，但若用户连点 / 复制后立刻
- * 清空，两者可能同时挂载。CSS 上 CopyResultToast 上移一格（bottom + 56px），避免
- * 视觉叠压。
+ * 复制成功后的"行动 toast"：next-action CTA 直跳 mp.weixin.qq.com，让降级摘要可见。
+ * 与 UndoToast 可能同时挂载——本组件 CSS bottom +56px 上移一格避免视觉叠压。
  */
 import { onBeforeUnmount, onMounted } from 'vue'
 
