@@ -16,9 +16,16 @@ import { shapeToSvg, renderMotifTemplate } from '../../core/themes/_shared/spec'
 
 // ============================================================
 // Card fragment
+//
+// 以下 helper 同时供 showcase.ts 复用：
+//   - esc                    HTML 安全转义
+//   - paletteVars            CSS 自定义属性串（卡片局部主题色）
+//   - renderPersonaCard      单 spec 卡片（palette / status / typography / motifs /
+//                            variants / decorations / owner-notes）
+//   - PAGE_STYLES            页面 chrome CSS（gallery / showcase 同源）
 // ============================================================
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -26,7 +33,7 @@ function esc(s: string): string {
     .replace(/"/g, '&quot;')
 }
 
-function paletteVars(spec: PersonaSpec): string {
+export function paletteVars(spec: PersonaSpec): string {
   const p = spec.palette
   return [
     `--p-bg:${p.bg}`,
@@ -159,12 +166,22 @@ function renderOwnerNotes(spec: PersonaSpec): string {
   return `<div class="section-label">Owner Notes</div><p class="owner-notes">${esc(notes)}</p>`
 }
 
-function renderCard(spec: PersonaSpec, idx: number, total: number): string {
+/**
+ * 单 spec persona card 渲染。
+ *
+ * `idxLabel` 可选：gallery 多卡片场景传 "03 / 14" 这种序号；showcase 单卡片场景省略。
+ */
+export function renderPersonaCard(
+  spec: PersonaSpec,
+  options: { idxLabel?: string } = {},
+): string {
   const vars = paletteVars(spec)
-  const idxLabel = `${String(idx + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
+  const idxLine = options.idxLabel
+    ? `<div class="card-idx mono">${esc(options.idxLabel)}</div>`
+    : ''
   return `<section class="persona-card" data-persona="${esc(spec.id)}" style="${vars}">
 <div class="card-head">
-  <div class="card-idx mono">${idxLabel}</div>
+  ${idxLine}
   <div class="card-title-row">
     <div class="card-zh">${esc(spec.name)}</div>
     <code class="card-slug">${esc(spec.id)}</code>
@@ -186,7 +203,7 @@ ${renderOwnerNotes(spec)}
 // Page chrome
 // ============================================================
 
-const PAGE_STYLES = `
+export const PAGE_STYLES = `
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
@@ -255,7 +272,13 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 `.trim()
 
 export function generateGallery(specs: readonly PersonaSpec[], meta: { generatedAt?: string } = {}): string {
-  const cards = specs.map((s, i) => renderCard(s, i, specs.length)).join('\n\n')
+  const cards = specs
+    .map((s, i) =>
+      renderPersonaCard(s, {
+        idxLabel: `${String(i + 1).padStart(2, '0')} / ${String(specs.length).padStart(2, '0')}`,
+      }),
+    )
+    .join('\n\n')
   const ts = meta.generatedAt ?? ''
   const sub = ts ? `从 ${specs.length} 份 persona.data.ts 派生 · ${esc(ts)}` : `从 ${specs.length} 份 persona.data.ts 派生`
   return `<!doctype html>

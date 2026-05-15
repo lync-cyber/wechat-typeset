@@ -18,6 +18,14 @@ const emit = defineEmits<{
   (e: 'hover', id: string | null): void
 }>()
 
+/**
+ * 卡片缩略图消费的 token 切片：
+ *   - 基础 4 色（primary/secondary/accent + bg/text）—— 卡片底色与色块
+ *   - bgSoft / border —— 引文区与 admonition 左条衬底
+ *   - statusTip.* —— 演示 admonition voice（任何 voice 强的主题在 tip 上都有表达）
+ * 仅读 token 不读 elements/containers CSSObject：缩略图保持稳定，避免被某主题
+ * 的"硬编码 padding/margin"扭曲。
+ */
 const options = computed(() =>
   themeList.map((t) => ({
     id: t.id,
@@ -27,7 +35,12 @@ const options = computed(() =>
     secondary: t.tokens.colors.secondary,
     accent: t.tokens.colors.accent,
     bg: t.tokens.colors.bg,
+    bgSoft: t.tokens.colors.bgSoft,
     text: t.tokens.colors.text,
+    textMuted: t.tokens.colors.textMuted,
+    border: t.tokens.colors.border,
+    tipAccent: t.tokens.colors.status.tip.accent,
+    tipSoft: t.tokens.colors.status.tip.soft,
   })),
 )
 
@@ -84,9 +97,31 @@ onBeforeUnmount(() => {
       @focus="onEnter(o.id)"
       @blur="onLeave"
     >
+      <!--
+        缩略图四段（对应主题最易辨识的 voice 槽位）：
+          ① H2 标题（主色 + 下划色条）
+          ② 引文（bgSoft 底 + 主色左条 + textMuted 字）
+          ③ tip admonition（status.tip.soft 底 + status.tip.accent 左条）
+          ④ 正文片段（text 色 + 微小 secondary 装饰）
+      -->
       <span class="preview" :style="{ background: o.bg, color: o.text }">
-        <span class="preview-title" :style="{ color: o.primary }">标题</span>
-        <span class="preview-bar" :style="{ background: o.secondary }" />
+        <span class="prev-h2" :style="{ color: o.primary, borderBottom: `2px solid ${o.primary}` }">H2 标题</span>
+        <span
+          class="prev-quote"
+          :style="{
+            background: o.bgSoft,
+            borderLeft: `3px solid ${o.primary}`,
+            color: o.textMuted,
+          }"
+        >引文示意</span>
+        <span
+          class="prev-tip"
+          :style="{
+            background: o.tipSoft,
+            borderLeft: `3px solid ${o.tipAccent}`,
+            color: o.tipAccent,
+          }"
+        >tip 提示</span>
       </span>
       <span class="card-foot">
         <span class="card-name">{{ o.name }}</span>
@@ -125,14 +160,26 @@ onBeforeUnmount(() => {
 .theme-card:hover { border-color: var(--border-strong); }
 .theme-card.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .preview {
-  display: flex; flex-direction: column; justify-content: space-between;
-  height: 64px;
-  padding: var(--sp-3);
+  display: flex; flex-direction: column;
+  gap: 4px;
+  padding: 8px var(--sp-3) 10px;
   font-family: var(--font-display);
-  font-size: var(--fs-12);
+  font-size: 10px;
+  line-height: 1.4;
 }
-.preview-title { font-weight: var(--fw-bold); letter-spacing: var(--ls-tight); }
-.preview-bar { display: block; height: 3px; border-radius: var(--radius-pill); width: 60%; }
+.prev-h2 {
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  padding-bottom: 2px;
+  align-self: flex-start;
+}
+.prev-quote,
+.prev-tip {
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 10px;
+}
 .card-foot {
   display: flex; align-items: center; justify-content: space-between;
   padding: 6px var(--sp-3);
