@@ -396,7 +396,7 @@
 
 .markdown-body .container-abstract {
   background-color: #f5efe1;
-  border-left: 4px solid #24364f;
+  border-left: 3px solid #24364f;
   padding: 14px 16px 14px 18px;
   margin: 18px 0 24px;
   border-radius: 2px;
@@ -404,18 +404,18 @@
 
 .markdown-body .container-key-number {
   background-color: #f5efe1;
-  padding: 16px 18px;
+  border-top: 3px solid #b86f2a;
+  padding: 14px 16px;
   margin: 18px 0;
-  border-radius: 3px;
-  border-top: 3px solid #24364f;
+  border-radius: 2px;
 }
 
 .markdown-body .container-see-also {
   background-color: #f5efe1;
+  border-left: 3px solid #3d5063;
   padding: 14px 16px;
   margin: 20px 0;
-  border-radius: 3px;
-  border-left: 3px solid #3d5063;
+  border-radius: 2px;
 }
 
 .markdown-body .container-kpi-dashboard {

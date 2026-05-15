@@ -490,6 +490,20 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'border-top': '1px solid #d8d8d4',
     },
+    abstract: {
+      'background-color': '#f6f6f4',
+      border: '1px solid #d8d8d4',
+      padding: '14px 16px',
+      margin: '18px 0 24px',
+      'border-radius': '2px',
+    },
+    seeAlso: {
+      'background-color': '#f6f6f4',
+      'border-top': '1px solid #d8d8d4',
+      padding: '12px 16px',
+      margin: '20px 0',
+      'border-radius': '0',
+    },
     // 规范 §2.9 qrcode = 通讯地址块（Correspondence）
     qrcode: {
       margin: '32px 0 0 0',

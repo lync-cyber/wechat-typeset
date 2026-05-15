@@ -399,17 +399,17 @@
 .markdown-body .container-abstract {
   background-color: #f3f1ec;
   border-left: 4px solid #2a1a14;
-  padding: 14px 16px 14px 18px;
+  padding: 12px 14px 12px 16px;
   margin: 18px 0 24px;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .markdown-body .container-key-number {
   background-color: #f3f1ec;
-  padding: 16px 18px;
-  margin: 18px 0;
-  border-radius: 2px;
   border-top: 3px solid #2a1a14;
+  padding: 14px 16px;
+  margin: 18px 0;
+  border-radius: 0;
 }
 
 .markdown-body .container-see-also {

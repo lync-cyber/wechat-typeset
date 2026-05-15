@@ -480,6 +480,27 @@ export const spec: PersonaSpec = {
       'background-color': '#f5efe1',
       'border-radius': '3px',
     },
+    abstract: {
+      'background-color': '#f5efe1',
+      'border-left': '3px solid #24364f',
+      padding: '14px 16px 14px 18px',
+      margin: '18px 0 24px',
+      'border-radius': '2px',
+    },
+    keyNumber: {
+      'background-color': '#f5efe1',
+      'border-top': '3px solid #b86f2a',
+      padding: '14px 16px',
+      margin: '18px 0',
+      'border-radius': '2px',
+    },
+    seeAlso: {
+      'background-color': '#f5efe1',
+      'border-left': '3px solid #3d5063',
+      padding: '14px 16px',
+      margin: '20px 0',
+      'border-radius': '2px',
+    },
     qrcode: {
       margin: '24px auto',
       padding: '0',

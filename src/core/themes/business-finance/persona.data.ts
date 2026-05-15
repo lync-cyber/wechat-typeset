@@ -524,6 +524,20 @@ export const spec: PersonaSpec = {
       'background-color': '#f3f1ec',
       'border-radius': '2px',
     },
+    abstract: {
+      'background-color': '#f3f1ec',
+      'border-left': '4px solid #2a1a14',
+      padding: '12px 14px 12px 16px',
+      margin: '18px 0 24px',
+      'border-radius': '0',
+    },
+    keyNumber: {
+      'background-color': '#f3f1ec',
+      'border-top': '3px solid #2a1a14',
+      padding: '14px 16px',
+      margin: '18px 0',
+      'border-radius': '0',
+    },
     // 规范 §2.9 qrcode：居中 block，容器无底色无边框
     qrcode: {
       margin: '28px auto',
