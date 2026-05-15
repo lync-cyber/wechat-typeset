@@ -261,6 +261,9 @@ export const spec: PersonaSpec = {
     'qrFollow', // 二维码订阅
     'editorNote', // 编辑手记单色块（callout #15）
     'colophon', // 下期预告
+    'imageCaption', // mook 图注（极小字 + letter-spacing）
+    'authorBio', // mook 番外编辑栏（极简 hairline）
+    'announcement', // 特辑预告（上下 text 双线）
   ],
 
   // ============================================================
@@ -412,12 +415,59 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '11px',
     },
+    // mook 番外栏表：th 极小字 + letter-spacing 极大 + accent 1px 下划线 + 极疏 padding——
+    // 对应 04-japanese-mook.html toc "contents · 目次" kicker 的排印语言：
+    // 10px / letter-spacing:0.2em / accent 色是全篇 kicker 母型，表头借用此型。
     table: {
       'border-collapse': 'collapse',
       width: '100%',
       'margin-top': '0',
       'margin-bottom': '22px',
       'font-size': '12px',
+    },
+    // th：极小字 + letter-spacing 极大 + accent 1px 下划线——mook kicker 母型的"栏头"写法，
+    // 与 abstractKicker 同系（10px / letter-spacing:0.2em / accent 色），让表头成为"栏眉"而非表格标题。
+    th: {
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#e85a3c',
+      'font-size': '10px',
+      'letter-spacing': '0.2em',
+      'text-transform': 'uppercase',
+      'padding-top': '3px',
+      'padding-right': '10px',
+      'padding-bottom': '8px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #e85a3c',
+      'background-color': 'transparent',
+    },
+    // td：13px 正文同字号 + 极疏 padding + 仅底部 border 色分隔——mook 慢读节奏。
+    td: {
+      'text-align': 'left',
+      color: '#2d3a4a',
+      'font-size': '12px',
+      'letter-spacing': '0.02em',
+      'padding-top': '6px',
+      'padding-right': '10px',
+      'padding-bottom': '6px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #c7bfb0',
+      'vertical-align': 'top',
+    },
+    // mook 番外栏 inline kbd：极小 monospace + 字距 0 + 米卡纸底——
+    // 对应 04-japanese-mook.html inline-code 的"11px / Menlo / #f0ebe0 底"写法；
+    // kbd 在 mook 语境里等同于 code 的"符号注释"，走同款极小字号不加边框立体感。
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#f0ebe0',
+      color: '#2d3a4a',
+      border: '1px solid #c7bfb0',
+      'border-radius': '0',
+      padding: '0px 4px',
+      'font-size': '10px',
+      'line-height': '1.6',
+      'vertical-align': 'middle',
+      'letter-spacing': '0',
     },
   },
 
@@ -647,6 +697,48 @@ export const spec: PersonaSpec = {
       'line-height': '1.7',
       color: '#6b7885',
       'border-radius': '0',
+    },
+    // mook 图注极小字 + letter-spacing + textMuted——
+    // 对应 04-japanese-mook.html image-with-caption 图注："10px / textMuted / letter-spacing:0.05em"，
+    // 圈号 ❶ 前导由 renderer 内层控制，wrapper 只管字号 / 颜色 / 字距 / 对齐。
+    imageCaption: {
+      margin: '8px 0 22px',
+      'text-align': 'left',
+      color: '#6b7885',
+      'font-size': '10px',
+      'letter-spacing': '0.05em',
+      'line-height': '1.6',
+      'border-radius': '0',
+    },
+    // mook 番外编辑栏 authorBio：极简，无底色无边框，仅上下 hairline + 紧凑 padding——
+    // 对应 04-japanese-mook.html byline 行："10px / textMuted / letter-spacing:0.05em"，
+    // mook 编辑署名像脚注小字，不是卡片，不做色块。
+    authorBio: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #c7bfb0',
+      'border-radius': '0',
+      padding: '8px 0',
+      margin: '16px 0',
+      'font-size': '10px',
+      color: '#6b7885',
+      'letter-spacing': '0.05em',
+    },
+    // 特辑预告 announcement：上下 text 色双线 + 无底色 + accent kicker 感——
+    // 对应 04-japanese-mook.html footer "下期预告" 结构（上 1px text 线 + accent 标签）；
+    // mook 的"特辑预告"是编集后记的一部分，不是"危险警示"，所以不走 danger 红。
+    announcement: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #2d3a4a',
+      'border-bottom': '1px solid #2d3a4a',
+      'border-radius': '0',
+      padding: '12px 0',
+      margin: '22px 0',
+      color: '#2d3a4a',
+      'font-size': '12px',
+      'letter-spacing': '0.05em',
+      'line-height': '1.8',
     },
     // colophon · 下期预告（设计稿 footer #23）
     //   renderer 走"上边线 + 双栏 monospace"；本主题用 next 单独一栏，

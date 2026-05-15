@@ -123,15 +123,16 @@
 
 .markdown-body kbd {
   display: inline-block;
-  background-color: #e9e5db;
-  color: #17171a;
+  background-color: transparent;
+  color: #1b2330;
   border: 1px solid #c8c2b3;
-  border-bottom-width: 2px;
-  border-radius: 3px;
-  padding: 1px 6px;
-  font-size: 12px;
-  line-height: 1.4;
+  border-radius: 0;
+  padding: 1px 5px;
+  font-size: 13px;
+  line-height: 1.5;
   vertical-align: middle;
+  letter-spacing: 0.5px;
+  border-bottom-width: 2px;
 }
 
 .markdown-body pre {
@@ -188,18 +189,38 @@
   border-collapse: collapse;
   width: 100%;
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   font-size: 14px;
 }
 
 .markdown-body th {
+  text-align: left;
+  font-weight: 600;
+  color: #5d5d63;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding-top: 4px;
+  padding-right: 14px;
+  padding-bottom: 8px;
+  padding-left: 0;
+  border-bottom: 1px solid #c8c2b3;
+  background-color: transparent;
   border: 1px solid #c8c2b3;
   padding: 6px 10px;
-  background-color: #e9e5db;
-  text-align: left;
 }
 
 .markdown-body td {
+  text-align: left;
+  color: #17171a;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  padding-top: 8px;
+  padding-right: 14px;
+  padding-bottom: 8px;
+  padding-left: 0;
+  border-bottom: 1px solid #e9e5db;
+  vertical-align: top;
   border: 1px solid #c8c2b3;
   padding: 6px 10px;
 }
@@ -262,9 +283,10 @@
 }
 
 .markdown-body .container-author-bio {
-  background-color: #e9e5db;
-  border-radius: 0px;
-  padding: 14px 16px;
+  background-color: transparent;
+  border-top: 1px solid #c8c2b3;
+  border-radius: 0;
+  padding: 12px 0 12px 0;
   margin: 20px 0;
 }
 
@@ -299,11 +321,15 @@
 }
 
 .markdown-body .container-announcement {
-  background-color: #dccdc7;
-  border-left: 4px solid #6b3a32;
-  padding: 14px 16px;
-  margin: 18px 0;
-  border-radius: 0px;
+  background-color: transparent;
+  border-top: 2px solid #1b2330;
+  border-bottom: 1px solid #1b2330;
+  border-radius: 0;
+  padding: 12px 0;
+  margin: 24px 0;
+  color: #17171a;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
 .markdown-body .container-callout-group {
@@ -347,8 +373,12 @@
 }
 
 .markdown-body .container-image-caption {
-  margin: 18px 0;
-  text-align: center;
+  margin: 8px 0 24px;
+  text-align: left;
+  color: #5d5d63;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  border-radius: 0;
 }
 
 .markdown-body .container-timeline {

@@ -399,6 +399,59 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '14px',
     },
+    // 杂志数据表 / 索引表骨架：th 走 hairline 下划线 + uppercase 小字 + tabular nums——
+    // 对应 people-story 规范 §1.2 byline 字距策略（大字距 + 小字号 = 版权行身份证），
+    // 表格字段名借用这套语言，让"数据栏"有档案索引感而非电子表格感。无外框无外底。
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '24px',
+      'font-size': '14px',
+    },
+    // th：uppercase 小字 + 大字距 + hairline 下划线——杂志年表索引的"栏目行"写法。
+    th: {
+      'text-align': 'left',
+      'font-weight': '600',
+      color: '#5d5d63',
+      'font-size': '12px',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
+      'padding-top': '4px',
+      'padding-right': '14px',
+      'padding-bottom': '8px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #c8c2b3',
+      'background-color': 'transparent',
+    },
+    // td：tabular nums 感（monospace 数字感，letter-spacing 0 贴紧数据）+ hairline 分隔。
+    td: {
+      'text-align': 'left',
+      color: '#17171a',
+      'font-size': '14px',
+      'letter-spacing': '0.3px',
+      'padding-top': '8px',
+      'padding-right': '14px',
+      'padding-bottom': '8px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #e9e5db',
+      'vertical-align': 'top',
+    },
+    // 杂志感 kbd：细 1px border + primary 深墨靛色 + 小字号——
+    // 人物稿里 kbd 偶尔出现在引用"某某说过的术语"场景，走版面感而非技术感。
+    // 对应 people-story 规范"瘦细线是杂志的分隔语言"。
+    kbd: {
+      display: 'inline-block',
+      'background-color': 'transparent',
+      color: '#1b2330',
+      border: '1px solid #c8c2b3',
+      'border-radius': '0',
+      padding: '1px 5px',
+      'font-size': '13px',
+      'line-height': '1.5',
+      'vertical-align': 'middle',
+      'letter-spacing': '0.5px',
+    },
   },
 
   // ============================================================
@@ -512,6 +565,44 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.3px',
       'border-radius': '0',
     },
+    // 杂志图注：左对齐 byline 格式感，textMuted 小字 + 大字距——
+    // 对应 people-story 规范 §1.2 byline："13px / textMuted / 2px 字距"的版权行身份证，
+    // 图注用同款语言表达"图N | 摄影：XX | 来源"等多段式图说，区别于 literary 的居中"图说"。
+    imageCaption: {
+      margin: '8px 0 24px',
+      'text-align': 'left',
+      color: '#5d5d63',
+      'font-size': '12px',
+      'letter-spacing': '1.2px',
+      'border-radius': '0',
+    },
+    // 杂志感作者卡：无底色无边框（人物稿 byline 就是一行小字不加任何装饰）+
+    // 仅靠 padding + border-top hairline 与正文分隔——
+    // 对应 people-story 规范 author 容器："无底色、无边框、无圆角——杂志 byline 就是一行小字"。
+    // wrapper 层不做 display:flex，renderer 的 nameCSS / roleCSS 走 token 兜底。
+    authorBio: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '1px solid #c8c2b3',
+      'border-radius': '0',
+      padding: '12px 0 12px 0',
+      margin: '20px 0',
+    },
+    // 新刊预告 announcement：上下双 1px primary 线 + 无底色——
+    // 对应 people-story 规范"新刊预告"场景（特稿刊物偶尔有"下期主题"横幅）；
+    // 走 primary 深墨靛双线而非 danger 红，传达"刊物通告"而非"警告"语义。
+    announcement: {
+      __reset: true,
+      'background-color': 'transparent',
+      'border-top': '2px solid #1b2330',
+      'border-bottom': '1px solid #1b2330',
+      'border-radius': '0',
+      padding: '12px 0',
+      margin: '24px 0',
+      color: '#17171a',
+      'font-size': '14px',
+      'letter-spacing': '0.5px',
+    },
   },
 
   signatureContainers: [
@@ -523,6 +614,9 @@ export const spec: PersonaSpec = {
     'footerCTA',
     'recommend',
     'qrcode',
+    'imageCaption',
+    'authorBio',
+    'announcement',
   ],
 
   // ============================================================

@@ -565,6 +565,58 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-size': '14px',
     },
+    // 藏经感旧书表格：骨架以上下 1px 实线限定，无外框，无圆角——
+    // 对应 06-dushu.html figure-main 的"版心规制"纪律：框只在内容边界出现，不做装饰围合。
+    table: {
+      'border-collapse': 'collapse',
+      width: '100%',
+      'margin-top': '0',
+      'margin-bottom': '28px',
+      'font-size': '14px',
+      'border-top': '1px solid #cfc3a8',
+      'border-bottom': '1px solid #cfc3a8',
+    },
+    // th 走 textMuted 墨灰 + 极小字 + 字距放宽——仿古籍"栏目小字"行款，无底色无外框。
+    th: {
+      'text-align': 'left',
+      'font-weight': '500',
+      color: '#6b5f4a',
+      'font-size': '13px',
+      'letter-spacing': '1.5px',
+      'padding-top': '6px',
+      'padding-right': '12px',
+      'padding-bottom': '6px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #cfc3a8',
+      'background-color': 'transparent',
+    },
+    // td 与 th 同节奏：无外框，仅靠行间纸感 padding 区分数据格。
+    td: {
+      'text-align': 'left',
+      color: '#1f1b14',
+      'font-size': '14px',
+      'letter-spacing': '1px',
+      'padding-top': '6px',
+      'padding-right': '12px',
+      'padding-bottom': '6px',
+      'padding-left': '0',
+      'border-bottom': '1px solid #ece5d1',
+      'vertical-align': 'top',
+    },
+    // 印章感 kbd：bgSoft 旧纸底 + textMuted 墨灰字 + 偏方边框（radius 1px 不圆）——
+    // 人文主题极少用 kbd；出现时走"注音符号"路线，不抢 code 块的视觉位。
+    // 对应 persona 规范："code 是注音符号，不是警示"。
+    kbd: {
+      display: 'inline-block',
+      'background-color': '#ece5d1',
+      color: '#6b5f4a',
+      border: '1px solid #cfc3a8',
+      'border-radius': '1px',
+      padding: '1px 5px',
+      'font-size': '13px',
+      'line-height': '1.5',
+      'vertical-align': 'middle',
+    },
   },
 
   // ============================================================
@@ -683,10 +735,31 @@ export const spec: PersonaSpec = {
       margin: '20px 0',
       'border-radius': '0',
     },
+    // 传统"图说"：居中 textMuted 小字，letter-spacing 放宽造出"版权行"沉静感——
+    // 对应 06-dushu.html figure-main 的图版图注："图版一　八十年代后海一带旧书店内景"
+    // 全居中、11px 小字、略宽字距是《读书》杂志图说的典型排法。
+    imageCaption: {
+      margin: '10px 0 28px',
+      'text-align': 'center',
+      color: '#6b5f4a',
+      'font-size': '13px',
+      'letter-spacing': '1.5px',
+      'border-radius': '0',
+    },
+    // 朱印感作者名片：left 2px primary 竖条 + bgSoft 旧纸底 + 无圆角——
+    // 与 intro 容器同母型（"题解内缩行款"），在书末出现即"落款"；
+    // renderer 的 nameCSS / roleCSS 走 token 兜底，本主题只接管 wrapper 层。
+    authorBio: {
+      __reset: true,
+      'background-color': '#ece5d1',
+      'border-left': '2px solid #5a4a3a',
+      'border-radius': '0',
+      padding: '12px 18px 12px 20px',
+      margin: '20px 0',
+    },
   },
 
-  // literary 只用通用容器 + variant；暂不声明签名容器
-  signatureContainers: [],
+  signatureContainers: ['imageCaption', 'authorBio'],
 
   // ============================================================
   // Templates（主题特化的 markdown 片段；commonTemplates 由 specToTheme 隐式并入）
