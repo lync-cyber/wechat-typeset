@@ -1,16 +1,13 @@
 /**
- * Builtin 组件源 —— 把容器 variant 的 def.snippets + 自由组件 snippet
- * 摊平为面板可消费的 ComponentEntry[]。
+ * Builtin 组件源：把容器 variant 的 def.snippets + 自由组件 snippet 摊平为
+ * 面板可消费的 ComponentEntry[]。
  *
- * P0 重构（R8 后）把这部分从 `core/variants/registry.ts` 搬过来：
- *   - core 只负责"variant 定义 + 运行时 render 派发表"
- *   - 面板/snippet 顺序、kebab presetId、ComponentEntry 形态等"展示资产"归 domain
+ * 职责分工：core 只负责 variant 定义 + 运行时 render 派发表；面板/snippet
+ * 顺序、kebab presetId、ComponentEntry 形态等"展示资产"归本 domain 层文件。
  *
- * R7-A 重构：自由组件源（freeAll）改在本文件 import，与 ALL_VARIANT_DEFS 合并为
- * ALL_DEFS_FOR_PANEL。core/variants/registry 不再反向 import domain 资产。
- *
- * 新增 builtin snippet 源（kind:'none' 的自由组件）：到 `../builtin-snippets/_all.ts` 追加。
- * 调整 snippet 在 UI 的展示顺序：改本文件的 ORDER_BY_KIND。
+ * 扩展位点：
+ *   - 新增 builtin snippet（kind:'none' 的自由组件）→ ../builtin-snippets/_all.ts
+ *   - 调整 snippet 在 UI 的展示顺序 → 本文件的 ORDER_BY_KIND
  */
 
 import type { AnyVariantDef } from '../../../core/variants/registry'

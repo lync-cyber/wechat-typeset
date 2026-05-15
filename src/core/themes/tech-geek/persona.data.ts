@@ -13,8 +13,6 @@
  *      "VSCode 装饰"迁到"manpage 印刷"（§ / ¶ / ⁂ / `[n]`）
  *   4. 深底字重纪律：正文 500（非 400 —— 深底光晕效应会让 400 发虚），
  *      强调 600，严禁 700/800 在大字号主色位（会变"塑料硬边"霓虹招牌）
- *
- * 迁移：Phase 2 · PR 4 · spec-first。index.ts 仅一行投影。
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -503,7 +501,7 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // Phase 5 候选容器由后续 PR 补；此处仅通用容器
+  // 仅通用容器
   signatureContainers: [],
 
   // 自定义模板覆盖（commonTemplates 由 specToTheme 隐式合并为基线）
@@ -535,7 +533,7 @@ export const spec: PersonaSpec = {
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 · PR 4：从 VSCode 皮肤（#4ec9b0 青绿）彻底迁到 VT220 琥珀（#c89759） + manpage 印刷传统；四态 admonition 四重冗余（注释前缀/边框样式/图标形状/位置）；motif 字号拉齐 >= 14 以过 MIN_FONT_SIZE 校验（原 12/13 仅 1-2px 差异，光栅后几乎不可察觉）。',
+      'VT220 琥珀（#c89759）+ manpage 印刷传统；四态 admonition 四重冗余（注释前缀/边框样式/图标形状/位置）；motif 字号 ≥ 14（MIN_FONT_SIZE 硬下限）。',
   },
 }
 

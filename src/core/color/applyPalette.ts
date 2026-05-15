@@ -27,10 +27,6 @@ export interface ApplyPaletteOptions {
   /**
    * SVG 形状变体覆盖。缺省时读 `base.svgVariant`（由 spec.svgVariant 下沉而来）；
    * 都缺则回退到 `'geometric'`。
-   *
-   * 历史包袱：旧版在本文件维护 `BASE_VARIANT: Record<themeId, SvgVariant>` 手写表,
-   * 新增主题要"额外去 applyPalette.ts 加一行",违反"主题只动新目录"的承诺。R8 后
-   * 该 hint 已下沉到 spec 层（PersonaSpec.svgVariant → Theme.svgVariant）, 本表被删除。
    */
   variant?: SvgVariant
 }

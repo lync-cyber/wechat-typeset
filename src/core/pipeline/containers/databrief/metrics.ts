@@ -95,7 +95,6 @@ export const kpiDashboardContainer: ContainerRenderer = {
     const source = ctx.attrs.source ?? ''
     KPI_DASHBOARD_STACK.push({ source, itemCount: 0 })
     const c = ctx.tokens.colors
-    // R4：wrapper 完全由 ctx.containers.kpiDashboard 决定。
     const wrapperCSS = inline(ctx.containers.kpiDashboard)
     const headerCSS = [
       'display:grid',
@@ -276,7 +275,6 @@ export const barChartContainer: ContainerRenderer = {
     const title = ctx.info.trim() || ''
     const subtitle = ctx.attrs.subtitle ?? ''
     const c = ctx.tokens.colors
-    // R4：wrapper 完全由 ctx.containers.barChart 决定。
     const wrapperCSS = inline(ctx.containers.barChart)
     const titleCSS = ['font-size:12px', 'font-weight:700', `color:${c.text}`, 'margin-bottom:4px'].join(';')
     const subtitleCSS = ['font-size:10px', `color:${c.textMuted}`, 'margin-bottom:14px'].join(';')

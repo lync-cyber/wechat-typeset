@@ -1,28 +1,20 @@
 <script setup lang="ts">
 /**
- * Popover —— dropdown / 工具菜单弹层外壳
+ * Popover —— dropdown / 工具菜单弹层外壳。形态定位（与 PanelShell 区别）：
+ *   - PanelShell：居中 modal，全屏 mask + 暗背景
+ *   - Popover：紧贴触发按钮的下拉浮层，无 mask
  *
- * R5D：Toolbar 的"主题选择"与"溢出菜单"两处各自手写 mousedown + keydown 监听挂载，
- * 通过 `data-popover-root` 属性识别"点击在弹层内"——这套逻辑共性可由本组件 + useOutsideClose
- * 收口。本 R5D 仅创建原语；Toolbar 实际迁移（627 行大文件）留待后续单独 PR。
- *
- * 形态定位（与 PanelShell 区别）：
- *   - PanelShell：居中 modal（HelpPanel / CommandPalette），全屏 mask + 暗背景
- *   - Popover：紧贴触发按钮的下拉浮层（Toolbar 主题/菜单弹层），无 mask 无遮罩
+ * 设计：
+ *   - 通过 `anchor` ref 取触发按钮 DOMRect 决定位置（视口 fixed 定位）
+ *   - 外部点击关闭：useOutsideClose 监听 mousedown；anchor 算"内部"避免点触发按钮立刻被关
+ *   - Esc 关闭：useOutsideClose 已包含
+ *   - z-index 50：低于 PanelShell modal (100)，高于 toolbar (auto)
  *
  * 用法：
- *   ```vue
  *   <button ref="triggerRef" @click="open = !open">主题</button>
  *   <Popover :open="open" :anchor="triggerRef" align="left" @update:open="open = $event">
  *     <ThemePicker v-model="themeId" />
  *   </Popover>
- *   ```
- *
- * 设计：
- *   - 通过 `anchor` ref 取触发按钮 DOMRect 决定位置（相对视口 fixed 定位）
- *   - 外部点击关闭：useOutsideClose 监听 mousedown；anchor 也算"内部"避免点触发按钮立刻被关
- *   - Esc 关闭：useOutsideClose 已包含
- *   - z-index 50：低于 PanelShell modal (100)，高于 toolbar (auto)
  */
 import { computed, ref, watchEffect, type Ref } from 'vue'
 import { useOutsideClose } from '../composables/useOutsideClose'

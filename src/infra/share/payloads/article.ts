@@ -1,18 +1,11 @@
 /**
  * Article 分享 payload —— 把整篇 markdown + 主题 id 编入 URL hash。
- *
- * 线路格式（R10 前后一致，破坏将触发 v 字段升级）：
+ * 线路格式（破坏将触发 v 字段升级）：
  *   `#share={base64url(JSON({ v: 1, md, themeId }))}`
  *
- * 为什么不 gzip：
- *   - 典型中文文章 10KB 原文，base64url 膨胀到 ~14KB，Chrome/Safari 均能承载
- *   - gzip 依赖 `CompressionStream` 需 async + HTTPS，jsdom 不一定具备
- *   - 纯 JSON 编码便于 URL 出问题时肉眼诊断
- *   如后续发现长文链接超出微信 / 短信 URL 限制，再加 `z=gz` 分支即可
- *
- * 命名：导出 `articleCodec` 作为 dispatcher 入口；同时导出 4 个 article-only
- * 函数（encode/decode/buildUrl/parseHash），让旧 import 路径在 shareLink.ts
- * 顶层 re-export 后仍可用。
+ * 不用 gzip：典型 10KB 中文原文 base64url 后 ~14KB，浏览器可承载；gzip 依赖
+ * CompressionStream（async + HTTPS，jsdom 不可靠）；纯 JSON 便于肉眼诊断。
+ * 如长文超 URL 限制再加 `z=gz` 分支。
  */
 
 import {
@@ -40,11 +33,9 @@ export interface SharePayloadArticle {
 }
 
 /**
- * shape 校验。
- *
- * 缺字段 / 类型错 / 版本不匹配一律返回 null。
- * 没有 `kind` 字段是有意的——article 是 R10 之前的唯一 payload，未来若强制 kind
- * 会破坏旧链接；新增 payload 一律带 kind，articleCodec 靠 prefix 唯一识别。
+ * shape 校验：缺字段 / 类型错 / 版本不匹配一律返回 null。
+ * 没有 `kind` 字段是有意的——加 kind 会破坏旧链接；articleCodec 靠 prefix 唯一识别，
+ * 新增 payload 一律带 kind。
  */
 export const articleCodec: ShareCodec<SharePayloadArticle> = {
   prefix: ARTICLE_PREFIX,

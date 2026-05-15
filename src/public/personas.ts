@@ -1,11 +1,10 @@
 /**
  * 公共 API 专用的 persona 注册表。
  *
- * 为什么不复用 src/themes/index.ts：那个模块过去走 `import.meta.glob`（仅 Vite 构建期生效）；
- * 公共 API 的首要消费者是 LLM / 外部脚本（tsx / Node），原生 Node 里 glob 语法会直接报错。
- * 这里用静态 import 做冗余注册表——增删主题时与 src/core/themes/index.ts 两处都要改，
- * 但换回来的是"任何 JS 运行时都能用"。conformance.spec.ts 的"PERSONA_SPECS ↔ themeList"
- * 断言会守住两处的同步：漏注册一处即 CI 红。
+ * 不复用 src/core/themes/index.ts 的注册流程：公共 API 的首要消费者是 LLM /
+ * 外部脚本（tsx / Node），保持纯静态 import 让任何 JS 运行时都能用。增删主题
+ * 时本文件与 src/core/themes/index.ts 两处都要改——conformance.spec.ts 的
+ * "PERSONA_SPECS ↔ themeList" 断言会守住两处的同步。
  */
 
 import { spec as defaultSpec } from '../core/themes/default/persona.data'

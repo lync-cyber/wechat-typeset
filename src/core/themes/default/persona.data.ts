@@ -8,8 +8,6 @@
  *   1. primary = #2558b0 编辑蓝（Medium/Economist/MDN 链接蓝家族；非 Bootstrap #007bff）
  *   2. accent = primary（字段保留但视觉系统里已删掉 accent 这个独立变量）
  *   3. motifs 故意只保留 4 件装饰 + 4 件语义图标 + stepBadge + sectionCorner 备用；**删除 quoteMark**
- *
- * 迁移：本文件是 Phase 2 的 pilot。index.ts 只需 `specToTheme(spec)` 一行导出。
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -463,7 +461,7 @@ export const spec: PersonaSpec = {
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'pilot: Phase 2 的第一个 persona.data.ts；规范 §0-§3.4 三条不可妥协决策在本文档落实。',
+      '规范 §0-§3.4 三条不可妥协决策在本文档落实（primary 编辑蓝、accent=primary、删除 quoteMark）。',
   },
 }
 

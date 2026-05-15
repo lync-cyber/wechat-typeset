@@ -1,16 +1,10 @@
 /**
- * localStorage 共享小工具 —— drafts.ts 和 userComponents.ts 原来各持一份同名
- * safeRead / safeWrite / safeRemove / genId，抽到这里统一。
- *
- * 规则：
+ * localStorage 共享小工具。规则：
  *   - 所有读写都包 try/catch：SSR、隐私模式、配额超限都不抛
  *   - genId 的 prefix 形如 `d` / `uc`，输出 `<prefix>_<time36>_<rnd6>` 字符串
- *   - safeReadJson / safeWriteJson 处理 JSON.parse 失败路径，内部按 fallback 返回
- *     —— 调用方只传 key + fallback，不用再本地 try-catch
  *   - safeWrite / safeWriteJson 返回 boolean：true=成功，false=失败（quota / 隐私模式 /
- *     stringify 错）。R7-A 之前 catch 静默吞错，调用方拿不到反馈，QuotaExceededError 时
- *     草稿丢失但 UI 仍显示"已保存"。R7-B 起所有写入返回布尔，让 hot path（updateDraft /
- *     flushDraftSave）能向 UI 上抛"写盘失败 · 存储已满"。旧调用方忽略返回值不影响行为。
+ *     stringify 错），让 hot path（updateDraft / flushDraftSave）能向 UI 上抛
+ *     "写盘失败 · 存储已满"。旧调用方忽略返回值不影响行为。
  */
 
 export function safeRead(key: string): string | null {
@@ -26,8 +20,7 @@ export function safeWrite(key: string, value: string): boolean {
     localStorage.setItem(key, value)
     return true
   } catch (err) {
-    // QuotaExceededError / 隐私模式 / SSR：返回 false 让上层做用户可见反馈。
-    // warn 一次让 dev console 看到具体 key（便于诊断"哪些 key 触发的"）。
+    // QuotaExceededError / 隐私模式 / SSR：返回 false 让上层做用户可见反馈
     // eslint-disable-next-line no-console
     console.warn(`[storage] safeWrite failed: ${key}`, err)
     return false

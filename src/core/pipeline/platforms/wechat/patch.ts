@@ -1,9 +1,9 @@
 /**
- * applyWxPatches：微信公众号 patch 链主入口
+ * applyWxPatches：微信公众号 patch 链主入口。
  *
  * 由 platforms/wechat/index.ts 包装为 PlatformAdapter，供 pipeline 通过 registry 调用。
- * 公开 export（applyWxPatches / inspectPatchTargets / PatchLog / 8 个具名 patch）保持
- * 在 platforms/wechat/index.ts。R7-A 起旧路径 core/pipeline/wxPatch shim 已删除。
+ * 公开 export（applyWxPatches / inspectPatchTargets / PatchLog / 8 个具名 patch）
+ * 集中在 platforms/wechat/index.ts。
  *
  * 顺序（每步都是纯函数 html → html）：
  *   1. patchListWrap            外包 section，保住列表外边距

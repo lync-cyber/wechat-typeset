@@ -1,18 +1,14 @@
 /**
- * 应用启动/卸载副作用 —— onMounted / onBeforeUnmount 的协调器
+ * 应用启动/卸载副作用 —— onMounted / onBeforeUnmount 的协调器。
  *
- * 拆出动机：App.vue 的 onMounted 在 R6 之前混着"读 localStorage 的主题"、"试着从
- * URL hash 恢复分享链"、"否则走草稿初始化"、"挂 pagehide flush"四件事。每件都有
- * 独立的失败路径与时序约束。拆到这里后 App.vue 只调用 useBootstrap(deps)。
+ * 顺序：
+ *   1. 先读 baseThemeId（决定后续 sample 选取）
+ *   2. 再试 share-hash 恢复（优先级最高，URL 携带的稿件覆盖本地草稿）
+ *   3. 都没有就走 initActiveDraft 正常路径
+ *   4. 挂 pagehide 监听——保证用户关闭 tab 前 flushDraftSave 兜底一次
  *
- * 顺序说明：
- *   1. 先读 baseThemeId（决定后续 sample 选取）；
- *   2. 再试 share-hash 恢复（优先级最高，URL 携带的稿件覆盖本地草稿）；
- *   3. 都没有就走 initActiveDraft 正常路径；
- *   4. 最后挂 pagehide 监听器——保证用户关闭 tab 前 flushDraftSave 兜底一次。
- *
- * onBeforeUnmount 镜像清理：解绑 pagehide，触发一次 flush（HMR 下也走过），
- * 清掉移动端 body class（避免热更替换 App 后样式残留）。
+ * onBeforeUnmount 镜像清理：解绑 pagehide、触发一次 flush（HMR 下也走过）、
+ * 清掉移动端 body class（避免热更后样式残留）。
  */
 import { onBeforeUnmount, onMounted, watch, type Ref, type ComputedRef } from 'vue'
 import { baseThemeId, editorWidth, md } from './state'

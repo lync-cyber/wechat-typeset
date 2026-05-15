@@ -27,7 +27,6 @@ export const qaBlockContainer: ContainerRenderer = {
     const kicker = ctx.info.trim() || ctx.kickers.qaBlock
     const q = ctx.attrs.q ?? ''
     const c = ctx.tokens.colors
-    // R4：wrapper 完全由 ctx.containers.qaBlock 决定。
     const wrapperCSS = inline(ctx.containers.qaBlock)
     const kickerCSS = [
       'font-size:11px',
@@ -89,7 +88,7 @@ export const qaBlockContainer: ContainerRenderer = {
 
 export const footnotesContainer: ContainerRenderer = {
   open: (ctx) => {
-    // R4：wrapper 完全由 ctx.containers.footnotes 决定（含小字号 / muted 色由
+    // wrapper 完全由 ctx.containers.footnotes 决定（小字号 / muted 色由
     // baseContainers 提供，主题可在 spec.containers.footnotes 覆盖）。
     const wrapperCSS = inline(ctx.containers.footnotes)
     return `<section class="container-footnotes" style="${wrapperCSS}">\n`
@@ -137,14 +136,9 @@ export const refsContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
-// ============================================================
-// editor-note · 编辑部注 callout
-//
-// 设计稿原型（sample-data-brief.md 旧版 inline `<section>` 三层嵌套）：
-//   主色左竖条 + kicker（标签头，info 文字）+ body（作者写的 markdown）。
-// 区别于通用 note：note 走 textMuted 中性色调，editor-note 是"被点名"
+// editor-note · 编辑部注 callout：主色左竖条 + kicker（标签头）+ body。
+// 区别于通用 note——note 走 textMuted 中性色调；editor-note 是"被点名"
 // 的栏目编辑发声块，主色调介入。
-// ============================================================
 
 export const editorNoteContainer: ContainerRenderer = {
   open: (ctx) => {
@@ -158,11 +152,8 @@ export const editorNoteContainer: ContainerRenderer = {
       'margin:22px 0',
     ].join(';')
     const wrapperCSS = themeStyle || fallback
-    // R8 风格：kicker CSS 由 ctx.innerStyles.editorNoteKicker 决定（baseInnerStyles 兜底 +
-    // spec.innerStyles 深合并）。允许主题作者重塑 kicker 形态而无需改 renderer：
-    //   - swiss-grid: "全幅黑底白字 header bar"
-    //   - brutalist: editor-note 整块荧光黄底 + kicker 走 textInverse 反色（避免色/底同色不可见）
-    // 与 abstractKicker / keyNumberKicker 同构。
+    // kicker CSS 由主题 innerStyles.editorNoteKicker 决定（baseInnerStyles 兜底 +
+    // spec.innerStyles 深合并），允许主题作者重塑 kicker 形态而无需改 renderer。
     const kickerCSS = inline(ctx.innerStyles.editorNoteKicker)
     return (
       `<section class="container-editor-note" style="${wrapperCSS}">\n` +
@@ -172,14 +163,9 @@ export const editorNoteContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
-// ============================================================
-// methodology · 方法论小字注释
-//
-// 设计稿原型（旧版 inline `<section style="font-size:10px;color:#5a6068">`）：
-//   浅底 + 粗体标签头（info 文字）+ 紧凑小字正文。
-// 体感上是"图注 / 调研口径"的脚注栏——与 note 的差别：methodology 排印更
-// 紧密（10px、padding 10px 12px），note 是叙事性补注（13px、行距更松）。
-// ============================================================
+// methodology · 方法论小字注释：浅底 + 粗体标签头 + 紧凑小字正文。
+// 是"图注 / 调研口径"的脚注栏——与 note 的差别：methodology 排印更紧密
+// （10px、padding 10px 12px），note 是叙事性补注（13px、行距更松）。
 
 export const methodologyContainer: ContainerRenderer = {
   open: (ctx) => {

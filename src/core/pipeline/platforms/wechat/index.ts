@@ -1,11 +1,6 @@
 /**
- * wechat 平台 adapter
- *
- * 把现有 applyWxPatches / inspectPatchTargets 包成 PlatformAdapter，让 registry 能统一派发。
- * 直接 export 也保留——pipeline / public API / 测试统一从此处 import。
- *
- * R7-A 重构：原 src/core/pipeline/wxPatch/{index,inspect}.ts 两个 shim 已删除；
- * 所有消费者直接 import 自此目录。
+ * wechat 平台 adapter：把 applyWxPatches / inspectPatchTargets 包成 PlatformAdapter
+ * 供 registry 统一派发；同时直接 export，pipeline / public API / 测试从此 import。
  */
 
 import { applyWxPatches, type WxPatchOptions } from './patch'

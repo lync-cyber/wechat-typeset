@@ -1,23 +1,17 @@
 /**
  * 主题工厂：给 tokens 就能得到完整 Theme。
  *
- * 分层定位（**故意保持两个包装器共用同一底层工厂**）：
- *   - buildTheme（本文件）——底层：tokens + 补丁 → Theme。不感知 spec / palette 概念
- *   - specToTheme（./spec/spec-to-theme.ts）——包装器 1：PersonaSpec → buildTheme args
- *   - applyPalette（../../color/applyPalette.ts）——包装器 2：既有 Theme + 新 palette → buildTheme args
- *   前者编译期从作者文件生成主题，后者运行时响应用户调色——两条路径共享同一份 mergeStyle
- *   与 DEFAULT_VARIANTS 兜底逻辑。不要因为"specToTheme 是主要调用点"就把 buildTheme
- *   内联进去，会把 applyPalette 的 delta 路径也搅进 spec 语义。
- *
- * API 形态（Phase 0 扁平化后）：
- *   - elements / containers / inline / assets 四个**深合并**样式字段
- *   - pre / code / elementOverrides / elementPatches 等双模式字段已移除
- *   - "整段重置某一 key" 极少场景用 sentinel：`elements: { h1: { __reset: true, ... } }`
+ * 分层（**故意保持两个包装器共用同一底层工厂**）：
+ *   - buildTheme（本文件）——底层：tokens + 补丁 → Theme。不感知 spec / palette
+ *   - specToTheme（./spec/spec-to-theme.ts）——PersonaSpec → buildTheme args
+ *   - applyPalette（../../color/applyPalette.ts）——既有 Theme + 新 palette → buildTheme args
+ *   两条路径共享同一份 mergeStyle 与 DEFAULT_VARIANTS 兜底逻辑，不要把 buildTheme
+ *   内联进 specToTheme，否则 applyPalette 的 delta 路径会被混入 spec 语义。
  *
  * 深合并语义（element/container/inline 三者一致）：
  *   patch[key] 不存在 → 保留 base[key] 原样
  *   patch[key] 存在 → 默认"属性级合并"：{ ...base[key], ...patch[key] }
- *   patch[key].__reset === true → 切换为"整段替换"：仅保留 patch[key] 自身的属性
+ *   patch[key].__reset === true → 切换为"整段替换"：仅保留 patch[key] 自身属性
  *
  * assets 是扁平 key → string/function 的映射，无嵌套 CSS，故走浅合并即可。
  */
@@ -111,8 +105,8 @@ export interface BuildThemeOptions {
    */
   kickers?: Partial<ThemeKickers>
   /**
-   * 声明式装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉等）走这里——
-   * R8 后 `ThemeBehavior` 接口已删除, decorations 是唯一承载点。
+   * 声明式装饰规则。所有主题专属视觉签名（标题前缀编号 / intro 首字下沉等）
+   * 都通过本字段承载，共享层只实现一次"按声明执行"。
    */
   decorations?: Decorations
 }
@@ -311,15 +305,14 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'border-radius': '6px',
     },
     qrcode: { margin: '20px 0', padding: '14px 16px' },
-    // R8：note 走独立 variantKind='note'；wrapper CSS 由 variants/note/<id>.ts
-    // 提供（minimal-callout 即原本的"顶端短线 + textMuted"骨架）。这里只留 margin
-    // 兜底，主题 voice 可在 spec.containers.note 里追加 border / padding 等。
+    // note 走独立 variantKind='note'；wrapper CSS 由 variants/note/<id>.ts 提供。
+    // 这里只留 margin 兜底，主题 voice 可在 spec.containers.note 追加 border / padding。
     note: { margin: '16px 0' },
     mpvoice: { margin: '20px 0' },
     mpvideo: { margin: '20px 0' },
-    // R3 + R4：abstract / keyNumber / seeAlso 的 wrapper CSS 兜底从 renderer 下沉到这里。
-    // 渲染器只读 ctx.containers.<x>，不再 substring 检测、不再硬涂底色——主题 voice 通过
-    // spec.containers 深合并接管即可。
+    // abstract / keyNumber / seeAlso 的 wrapper CSS 兜底。
+    // renderer 只读 ctx.containers.<x>，不做 substring 检测、不硬涂底色——
+    // 主题 voice 通过 spec.containers 深合并接管。
     abstract: {
       'background-color': tokens.colors.bgSoft,
       'border-left': `4px solid ${tokens.colors.primary}`,
@@ -341,14 +334,13 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'border-radius': `${tokens.radius.md}px`,
       'border-left': `3px solid ${tokens.colors.secondary}`,
     },
-    // R4：data-brief 家族 wrapper CSS 兜底从 renderer 下沉到这里。
-    // 非 data-brief 主题不主动声明时，得到 token 驱动的中性兜底（bgSoft / border 色），
-    // 不再继承 renderer 里的"数据简报几何审美"——遵守 packs/data-brief.md 的可移植性承诺。
+    // data-brief 家族 wrapper CSS 兜底。非 data-brief 主题得到 token 驱动的中性兜底
+    // （bgSoft / border 色），不继承 renderer 的"数据简报几何审美"——遵守
+    // packs/data-brief.md 的可移植性承诺。
     //
-    // 注意：display:grid / display:flex 不能进 ThemeContainers 槽位——themeCSS guard 会
-    // 拒绝（公众号粘贴后剥成空值，子项孤样式必塌）。结构性布局（grid / table）由 renderer
-    // 在 inline style 里合成；ThemeContainers 只承载 padding / border / bg / margin 这类
-    // "装饰位"——主题 voice 可深合并覆盖。
+    // 注意：display:grid / display:flex 不能进 ThemeContainers 槽位（themeCSS guard
+    // 会拒绝，公众号粘贴后剥成空值会让子项孤样式塌）。结构性布局由 renderer 在
+    // inline style 里合成；本字段只承载 padding / border / bg / margin。
     masthead: {
       'padding-bottom': '10px',
       'border-bottom': `1px solid ${tokens.colors.text}`,
@@ -414,9 +406,9 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       padding: '14px',
       margin: '22px 0',
     },
-    // editor-note / methodology / colophon：R3+R4 下沉模式——wrapper CSS 兜底由 token
-    // 驱动放在 baseContainers，renderer 只在 ctx.containers.<x> 之上做 inline 合并。
-    // 非 data-brief 主题不主动声明时也能得到一个克制的中性骨架。
+    // editor-note / methodology / colophon：wrapper CSS 兜底由 token 驱动，
+    // renderer 只在 ctx.containers.<x> 之上做 inline 合并。非 data-brief 主题
+    // 不主动声明时也能得到一个克制的中性骨架。
     editorNote: {
       'border-left': `3px solid ${tokens.colors.primary}`,
       'background-color': tokens.colors.bgSoft,
@@ -463,11 +455,8 @@ export function baseInline(tokens: ThemeTokens): ThemeInline {
 }
 
 /**
- * 容器内层元素 inline-style 兜底。R8 把 signature renderer 内硬编码的子元素样式提到这里,
- * 让主题作者可通过 spec.innerStyles 深合并接管（如把 keyNumber 数字字号从 32px 调到 28px）。
- *
- * 兜底值与 R8 前 signature.ts hardcoded 字面值字节等价——所有现有主题渲染输出不变,
- * 仅扩展了"主题作者可调"的覆盖空间。
+ * 容器内层元素 inline-style 兜底。主题作者通过 spec.innerStyles 深合并接管
+ * （如把 keyNumber 数字字号从 32px 调到 28px）。
  */
 export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
   const c = tokens.colors
@@ -504,13 +493,9 @@ export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
     },
-    // editor-note kicker 兜底：与 databrief/editorial.ts 旧版硬编码字节等价（primary 色
-    // 小字 + 粗体 + 0.1em letter-spacing + 下间距）。R4 后由 ctx.innerStyles.editorNoteKicker
-    // 承接,主题作者可深合并覆盖：
-    //   - swiss-grid: "display:block + 黑底白字 + 负 margin 撑到 wrapper 边缘"——
-    //     1958 Neue Grafik 编者按的全幅黑色 header-bar 形态
-    //   - brutalist: 把 editor-note 整块涂 primary（荧光黄）后,kicker 覆盖为 textInverse
-    //     反色,避免 kicker 与 bg 同色不可见
+    // editor-note kicker 兜底：primary 色小字 + 粗体 + 0.1em letter-spacing。
+    // 主题作者可通过 spec.innerStyles.editorNoteKicker 深合并覆盖（如全幅黑底
+    // 白字 header-bar 形态、或反色避免与 wrapper 同色）。
     editorNoteKicker: {
       color: c.primary,
       'font-size': '11px',

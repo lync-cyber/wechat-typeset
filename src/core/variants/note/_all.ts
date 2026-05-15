@@ -1,7 +1,5 @@
 /**
- * note 变体目录聚合器（R8）。
- *
- * 第五态 note 独立的变体池——和 admonition 4 态视觉解耦，
+ * note 变体目录聚合器。第五态 note 独立的变体池——和 admonition 4 态视觉解耦，
  * 强调"中性补注、不抢色"。
  *
  * 新增 note variant 两步：

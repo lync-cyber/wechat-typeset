@@ -12,11 +12,7 @@
  *   - CODE_BLOCK_VARIANTS —— signature 异质，独立桶
  *   - ALL_VARIANT_DEFS —— 全部容器骨架 variant def 的扁平数组（**不含** kind='none' 的
  *     自由组件 snippet）；自由组件 snippet 的源在 domain 层 builtin-source.ts 自行合并。
- *
- * R7-A 重构：删除对 `domain/components-lib/builtin-snippets` 的反向 import——
- * core 不再感知 domain 层的 free snippet 资产。BUILTIN_COMPONENTS / BuiltinEntry /
- * 面板顺序常量在 `src/domain/components-lib/sources/builtin-source.ts` 维护，
- * 该文件自己合并 ALL_VARIANT_DEFS + freeAll 后派生面板条目。
+ *     core 层不感知 domain 层的 free snippet 资产，避免反向依赖。
  *
  * 顺序：各 kind 的 `*_ORDER` 常量决定运行时表的稳定迭代顺序（影响快照），未列出的按 id 字典序追加。
  *
@@ -201,8 +197,3 @@ export const CODE_BLOCK_VARIANTS: Record<string, CodeBlockDef> = (() => {
   return out
 })()
 
-// VARIANT_IDS 权威定义在 src/themes/types.ts（带 satisfies 类型约束）。
-// registry.ts 不重复导出——消费方统一从 types.ts 导入。
-//
-// P0 重构：BUILTIN_COMPONENTS / BuiltinEntry / toEntry / buildBuiltinComponents
-// 已移到 src/domain/components-lib/sources/builtin-source.ts —— core 不再持有 UI 资产派生逻辑。

@@ -121,10 +121,8 @@
   --info-soft:      var(--iink-50);
 
   /* Editor pane —— 跟随 UI 亮/暗模式切换。
-   * Light（默认）：温暖纸色底 + 深墨字，与 toolbar / drawer 同语；
-   * Dark（见下方 [data-theme="dark"]）：深墨底 + 浅字，CodeMirror 同步换 oneDark。
-   * 历史：R8 前编辑栏在 light 模式下也强制 ink 暗槽（"工作台的 CodeMirror slot"）；
-   * 用户反馈要求编辑栏视觉跟随 UI 主题，已舍弃"暗槽即签名"的旧设计。 */
+   * Light：温暖纸色底 + 深墨字，与 toolbar / drawer 同语；
+   * Dark（[data-theme="dark"]）：深墨底 + 浅字，CodeMirror 同步换 oneDark。 */
   --editor-bg:        var(--paper-50);
   --editor-surface:   var(--paper-100);
   --editor-text:      var(--paper-800);

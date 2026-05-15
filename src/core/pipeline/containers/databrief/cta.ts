@@ -32,8 +32,8 @@ export const ctaBarContainer: ContainerRenderer = {
     const like = ctx.attrs.like ?? '♡ 赞同'
     const star = ctx.attrs.star ?? '★ 收藏'
     const share = ctx.attrs.share ?? '↗ 转发'
-    // R4：wrapper margin / 主题装饰由 ctx.containers.ctaBar 决定；display:table 等
-    // 排版骨架由 renderer 强制保证（不可主题化——是 ctaBar 的视觉契约本身）。
+    // wrapper margin / 装饰由 ctx.containers.ctaBar 决定；display:table 排版骨架
+    // 由 renderer 强制保证（不可主题化——是 ctaBar 的视觉契约本身）。
     const wrapperCSS =
       `display:table;width:100%;table-layout:fixed;border-spacing:6px 0;border-collapse:separate;` +
       inline(ctx.containers.ctaBar)
@@ -88,7 +88,7 @@ export const qrFollowContainer: ContainerRenderer = {
     const title = ctx.info.trim() || ctx.kickers.qrFollowTitle
     const desc = ctx.attrs.desc ?? ''
     const qrUrl = ctx.attrs.qr ?? ''
-    // R4：wrapper 装饰由 ctx.containers.qrFollow 决定；display:table 排版骨架由
+    // wrapper 装饰由 ctx.containers.qrFollow 决定；display:table 排版骨架由
     // renderer 保证（"左 QR 右文字"是本容器的视觉契约）。
     const wrapperCSS =
       `display:table;width:100%;table-layout:auto;border-collapse:separate;` +

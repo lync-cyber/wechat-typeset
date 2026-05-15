@@ -14,8 +14,6 @@
  *   1. primary = #0066cc Stripe 文档蓝（非紫 SaaS 味、非绿 success 冲突）
  *   2. codeBlock variant = 'header-bar'（Stripe Docs 的 signature）
  *   3. 与 tech-geek 三条硬边界不可破
- *
- * 迁移：Phase 2 / PR 11。本 spec 是 ground truth；index.ts 只做一行投影。
  */
 
 import type { PersonaSpec } from '../_shared/spec'
@@ -607,13 +605,13 @@ _15 分钟阅读 · 最后更新 2026-04-20_
 `,
   },
 
-  // Phase 5 gap-closing: note（motifs.noteIcon 承载第五态）+ seeAlso（教程向参考链接块）
+  // note（motifs.noteIcon 承载第五态）+ seeAlso（教程向参考链接块）
   signatureContainers: ['note', 'seeAlso'],
 
   meta: {
     createdAt: '2026-04-20',
     ownerNotes:
-      'Phase 2 / PR 11 迁移：tech-explainer 从 assets.ts 工厂形态改为 PersonaSpec 驱动。note 为第五态（由 motifs.noteIcon + textMuted 承载）；codeBlock header-bar + copyIcon 为签名语汇。',
+      'note 第五态由 motifs.noteIcon + textMuted 承载；codeBlock header-bar + copyIcon 为签名语汇。',
   },
 }
 

@@ -26,7 +26,7 @@ export interface RenderInput {
   md: string
   theme: Theme
   /**
-   * 复制 / 导出目标平台 id。默认 'wechat'（保留 R10 之前行为）。
+   * 复制 / 导出目标平台 id。默认 'wechat'。
    * 走 platforms/registry 派发；未知 id 抛错。zhihu / xhs 当前为 placeholder。
    */
   platform?: string
@@ -49,14 +49,11 @@ export interface RenderOutput {
 }
 
 /**
- * 按 theme.id 缓存 MarkdownIt 实例。
+ * 按 theme.id 缓存 MarkdownIt 实例。容器渲染器在 createMarkdown 的闭包里绑定
+ * 了 theme 引用，主题切换必须换新实例。同 theme 复用避免每次击键重建插件链。
  *
- * 容器渲染器在 createMarkdown 的闭包里绑定了 theme 引用，
- * 因此主题切换必须换新实例。同 theme 复用——避免每次击键重建插件链。
- *
- * LRU（MAX=12）：自定义配色 apply 一次就产出 `${base.id}--custom` 这样的新 id，
- * 无上限会随操作堆积。12 个容量对"10 套基础 + 几次自定义"足够周转。
- * R7-C 起从 8 升到 12，与 themeCSS 缓存容量对齐。
+ * LRU（MAX=12）：自定义配色 apply 一次就产出 `${base.id}--custom` 新 id，无上限
+ * 会堆积。容量对"10 套基础 + 几次自定义"足够，与 themeCSS 缓存对齐。
  */
 const MD_CACHE_MAX = 12
 const mdCache = createLRU<string, MarkdownIt>(MD_CACHE_MAX)

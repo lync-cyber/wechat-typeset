@@ -1,19 +1,10 @@
 /**
- * compare / pros / cons 容器
+ * compare / pros / cons 容器。wrapper 与列共用同一套 variant 模块，通过 slot
+ * 参数分派：compare→'wrapper'，pros→'pros'，cons→'cons'。所有 variant 都避开
+ * flex，改用 table / block + margin 组合——公众号粘贴后样式稳定。
  *
- * R3 重构：pros / cons 走 makeVariantContainer 工厂（slot 通过 args 注入）；
- * compareContainer 保留手写——它只是 wrapper + 关闭，套用工厂反而徒增配置噪声。
- *
- * wrapper 与列共用同一套 variant 模块，通过 slot 参数分派：
- *   - compare → slot:'wrapper' → 外壳样式
- *   - pros    → slot:'pros'    → 左/上列样式
- *   - cons    → slot:'cons'    → 右/下列样式
- *
- * column-card：display:table 等高两栏（v1 行为）
- * stacked-row：上下堆叠（小屏友好）
- * ledger：账本双色（tip.soft / danger.soft 底）
- *
- * 所有 variant 都避开 flex，改用 table / block + margin 组合——公众号粘贴后稳定。
+ * variant：column-card（display:table 等高两栏）/ stacked-row（小屏堆叠）/
+ *           ledger（账本双色 tip.soft / danger.soft）。
  */
 
 import type { CompareVariantId } from '../../themes/types'

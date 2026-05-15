@@ -1,12 +1,8 @@
 /**
- * divider 容器
- *
- * R3 重构：走 makeVariantContainer 工厂。
- * 5 种 variant（wave / dots / flower / rule / glyph）；解析优先级：
+ * divider 容器。5 种 variant（wave / dots / flower / rule / glyph）；解析优先级：
  *   attrs.variant（如 `::: divider variant=glyph`）> ctx.variants.divider > 'rule'
- *
- * 兼容 v1 的 'line' 别名（→ 'rule'），通过工厂 resolveAlias 表达。
- * 无标题、无 body wrapper——仅 wrapper + svgSlot（variant 自渲染分隔线视觉）。
+ * 'line' 是 'rule' 的别名（通过工厂 resolveAlias 表达）。
+ * 无标题、无 body wrapper——仅 wrapper + svgSlot。
  */
 
 import type { ContainerRenderer } from './types'
