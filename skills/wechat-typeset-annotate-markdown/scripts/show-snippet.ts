@@ -1,22 +1,26 @@
 #!/usr/bin/env tsx
 /**
- * show-snippet —— 容器名 → 完整 example 片段。
+ * show-snippet —— 容器名 → 完整 example 片段（主题敏感）。
  *
  * 用法：
- *   tsx show-snippet.ts <container-name>                 # 单个容器示例
- *   tsx show-snippet.ts <container-name> --variant <id>  # 指定 variant 骨架
- *   tsx show-snippet.ts --list                           # 列出全部容器名
- *   tsx show-snippet.ts --list --category content        # 按类别筛
- *   tsx show-snippet.ts --variants <container-name>      # 列出该容器可切换的 variant
+ *   tsx show-snippet.ts <container-name>                       # 单个容器示例
+ *   tsx show-snippet.ts <container-name> --variant <id>        # 指定 variant 骨架
+ *   tsx show-snippet.ts <container-name> --persona <id>        # 主题敏感：theme:* 跨主题会出 warning
+ *   tsx show-snippet.ts --list                                 # 列出全部容器名（按 pack 分组）
+ *   tsx show-snippet.ts --list --persona <id>                  # 列出该主题下可用容器（unavailable 灰显）
+ *   tsx show-snippet.ts --list --category content              # 按类别筛
+ *   tsx show-snippet.ts --variants <container-name>            # 列出该容器可切换的 variant
  *
- * 数据源：getContainerVocabulary() / getContainerSnippet() / getVariantsForContainer()。
- * 本脚本不发明 example，全用公共 API 派生。
+ * 数据源：getContainerVocabulary() / getContainerSnippet() / getVariantsForContainer() /
+ *         getThemeCapabilities()。本脚本不发明 example，全用公共 API 派生。
  */
 
 import {
   getContainerVocabulary,
   getContainerSnippet,
   getVariantsForContainer,
+  getThemeCapabilities,
+  getPersona,
   type ContainerSpec,
 } from '../../../src/public'
 
@@ -24,10 +28,63 @@ function main() {
   const args = process.argv.slice(2)
   const vocab = getContainerVocabulary()
 
+  // 主题敏感：--persona 在 list / single-container 两条路径上都生效
+  const personaIdx = args.indexOf('--persona')
+  const personaId = personaIdx >= 0 ? args[personaIdx + 1] : undefined
+  if (personaId) {
+    try {
+      getPersona(personaId)
+    } catch (e) {
+      process.stderr.write(`[show-snippet] ${(e as Error).message}\n`)
+      process.exit(2)
+    }
+  }
+
   if (args.includes('--list')) {
     const categoryIdx = args.indexOf('--category')
     const filter = categoryIdx >= 0 ? args[categoryIdx + 1] : undefined
     const filtered = filter ? vocab.filter((v) => v.category === filter) : vocab
+
+    // 有 --persona：按 pack 分组（base / pack:* / theme:*），各组内按 available 排序，未启用灰显
+    if (personaId) {
+      const caps = getThemeCapabilities(personaId)
+      const availableMap = new Map(caps.containers.map((c) => [c.id, c]))
+      const byPack = new Map<string, ContainerSpec[]>()
+      for (const v of filtered) {
+        const meta = availableMap.get(v.name)
+        if (!meta) continue
+        const key = meta.pack
+        if (!byPack.has(key)) byPack.set(key, [])
+        byPack.get(key)!.push(v)
+      }
+      const sortedPacks = [...byPack.keys()].sort((a, b) => {
+        const rank = (p: string) => (p === 'base' ? 0 : p.startsWith('pack:') ? 1 : 2)
+        const ra = rank(a)
+        const rb = rank(b)
+        return ra !== rb ? ra - rb : a.localeCompare(b)
+      })
+      process.stdout.write(`# 容器清单 · persona=${personaId}\n`)
+      for (const pack of sortedPacks) {
+        const items = byPack.get(pack)!
+        const sampleMeta = availableMap.get(items[0].name)!
+        const enabled = items.filter((v) => availableMap.get(v.name)!.available).length
+        process.stdout.write(
+          `\n## ${pack} (${enabled}/${items.length})${sampleMeta.namespace === 'theme' && enabled === 0 ? ' · 未启用（非本主题专属）' : ''}\n`,
+        )
+        for (const v of items) {
+          const c = availableMap.get(v.name)!
+          const fenceMark = ':'.repeat(v.fenceLength)
+          const sig = c.signature ? ' ★' : ''
+          const tag = c.available ? '' : ' · 未启用'
+          process.stdout.write(
+            `  ${fenceMark} ${v.name.padEnd(20)}${sig.padEnd(2)} — ${v.description}${tag}\n`,
+          )
+        }
+      }
+      return
+    }
+
+    // 无 --persona：旧行为，按 category 分组
     const grouped = new Map<string, ContainerSpec[]>()
     for (const v of filtered) {
       const arr = grouped.get(v.category) ?? []
@@ -95,6 +152,20 @@ function main() {
   }
 
   process.stdout.write(`# ${spec.name}\n\n`)
+  // 主题敏感：theme:* 容器跨主题使用时显式给出 warning
+  if (personaId) {
+    const caps = getThemeCapabilities(personaId)
+    const c = caps.containers.find((x) => x.id === name)
+    if (c) {
+      if (!c.available && c.namespace === 'theme') {
+        process.stdout.write(
+          `> [warn] "${name}" 属于 ${c.pack}（仅该主题渲染）。当前 persona "${personaId}" 不启用——renderer 仍会出 HTML，但走 token 中性兜底，失去签名视觉。\n>\n`,
+        )
+      } else if (c.signature) {
+        process.stdout.write(`> [info] "${name}" 是 ${personaId} 主题的 ★签名容器。\n>\n`)
+      }
+    }
+  }
   process.stdout.write(`- category: ${spec.category}\n`)
   process.stdout.write(`- fence: ${':'.repeat(spec.fenceLength)}\n`)
   if (spec.variantKind) {

@@ -28,7 +28,7 @@ description: 将满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 
 ```
 Task Progress:
-- [ ] 1. lint-contract.ts --input <md> 确认契约合法
+- [ ] 1. lint-contract.ts --input <md> --persona <id> 确认契约合法（主题敏感）
 - [ ] 2. render-html.ts --input <md> --persona <id> --output output.html
 - [ ] 3. （可选）render-gallery.ts 比较多 persona
 - [ ] 4. 浏览器打开 → 全选复制 → 粘公众号 / 或 copy-richtext.ts
@@ -36,15 +36,24 @@ Task Progress:
 
 CLI 标志详表见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)（所有脚本的 flag / 退出码 / IO 形态单一真源）。
 
-### Step 1 · lint（契约合法性预检）
+### Step 1 · lint（契约合法性预检 · 主题敏感）
 
 ```bash
-tsx skills/wechat-typeset-export-richtext/scripts/lint-contract.ts --input <md>
+# 推荐：传 --persona 触发主题敏感检查
+tsx skills/wechat-typeset-export-richtext/scripts/lint-contract.ts --input <md> --persona <id>
+
+# 或在 markdown frontmatter 写 `theme: <id>`：lint 自动取（frontmatter 优先于 --persona）
 ```
 
-输出 `ok=true` 或 `issues[]`。**lint 失败不要进 Step 2**——render 阶段才发现错误成本更高。
+输出含 `error_count` / `warning_count`：
+
+- **`ok=true`** 且 `warning_count=0` → 直接进 Step 2
+- **`ok=true`** 且 `warning_count>0` → 通常是 `wrong_theme_namespace`（用了 theme:* 容器但当前主题不是其专属），渲染仍出 HTML，但失去签名视觉。**告知用户后再决定是否进 Step 2**
+- **`ok=false`**（含 error） → 修完再 render。render 阶段才发现错误成本更高
 
 issue 修复指南见 [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md)（lint issue 修复表与 annotate-markdown 共用一份）。
+
+> **强烈建议传 `--persona`**：不传只查语法，等到 render 才发现 `kpi-dashboard` 在 `default` 主题下没签名视觉，用户已经写完一千字了。
 
 ### Step 2 · 单 persona 渲染
 

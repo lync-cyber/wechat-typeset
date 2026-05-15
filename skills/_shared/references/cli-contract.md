@@ -27,7 +27,7 @@
 | `--variant <id>` | show-snippet | 让生成的 snippet 带 variant=xxx |
 | `--variants <container>` | show-snippet | 列出某容器可切换的 variant id |
 | `--list` / `--list --category <cat>` | show-snippet | 列容器名 |
-| `--json` | lint-contract | 输出 JSON 而非可读文本 |
+| `--json` | lint-contract / theme-capabilities | 输出 JSON 而非可读文本 |
 | `--check` | build-skill-refs / build-writer-docs | CI 模式：差异即 exit 1 |
 
 > **统一规则**：render / lint / copy 系脚本一律 `--input <md>` + `--output <path>`，**不接受位置参数**。show-snippet / validate-and-fix / preview-motifs 等"主题工具"脚本仍接位置参数（按其 usage 写）。
@@ -39,9 +39,10 @@
 | 脚本 | 必填旗标 | 可选旗标 | 输出 |
 | --- | --- | --- | --- |
 | `recommend-persona.ts` | `--title` / `--summary` / `--topic` | `--style` | JSON（top-3 ranked + decision_prompt） |
-| `annotate-md.ts` | `--input` / `--persona` | `--out` | patches.json（结构见下文） |
-| `lint-contract.ts` | `<md>`（位置参数）或在 export-richtext 入口走 `--input` | `--json` | 可读文本 或 `{ ok, issues, count }` |
-| `show-snippet.ts` | `<container-name>` 或 `--list` 或 `--variants <name>` | `--variant <id>` / `--category <cat>` | markdown snippet + 元信息 |
+| `theme-capabilities.ts` | `--persona <id>` | `--json` | 可读文本 或 JSON（defaultVariants / recommendedVariants / containers / kickers） |
+| `annotate-md.ts` | `--input` / `--persona` | `--out` | patches.json（结构见下文，含 capability_snapshot） |
+| `lint-contract.ts` | `<md>`（位置参数）或在 export-richtext 入口走 `--input` | `--persona <id>` / `--json` | 可读文本 或 `{ ok, issues, count, error_count, warning_count, effective_persona, persona_source }` |
+| `show-snippet.ts` | `<container-name>` 或 `--list` 或 `--variants <name>` | `--variant <id>` / `--category <cat>` / `--persona <id>` | markdown snippet + 元信息（带 --persona 时 list 按 pack 分组，单容器跨主题出 warning） |
 
 ### wechat-typeset-author-persona/scripts
 
@@ -57,7 +58,7 @@
 
 | 脚本 | 必填旗标 | 可选旗标 | 输出 |
 | --- | --- | --- | --- |
-| `lint-contract.ts` | `--input` | `--json` | 透传 annotate 的同名脚本 |
+| `lint-contract.ts` | `--input` | `--persona <id>` / `--json` | 透传 annotate 的同名脚本（旗标全转发） |
 | `render-html.ts` | `--input` / `--persona` | `--output` / `--meta` / `--no-svg-white-bg` | HTML 文件 + 元数据 JSON |
 | `render-gallery.ts` | `--input` / `--personas` | `--output` | 多 persona 并排 HTML |
 | `copy-richtext.ts` | `--input` / `--persona` | `--save-fallback` | 写入剪贴板 / 落盘 fallback |
@@ -78,19 +79,23 @@
 
 ## lint issue 修复表
 
-`lint-contract.ts` 输出的 `issues[].kind` 全集 + 修复路径：
+`lint-contract.ts` 输出的 `issues[].kind` 全集 + `severity` + 修复路径：
 
-| issue.kind | 原因 | 修法 |
-| --- | --- | --- |
-| `unknown_container` | fence 名拼错或发明了新名字 | 改成 [container-vocabulary.md](container-vocabulary.md) 内的合法名 |
-| `unexpected_jsx_attrs` | 写了 `{variant="xxx"}` JSX 风格 | 改成 `variant=xxx`（不带大括号引号） |
-| `html_comment_variant` | 写了 `<!-- variant=xxx -->` | 删注释，写到 `::: name` open 行 |
-| `fence_not_closed` | 缺 `:::` | 补 close fence（同长度） |
-| `nesting_depth` | compare/toc 等外层用了 3 个冒号 | 外层升级为 `::::`（4 个冒号） |
-| `inline_unclosed` | `[.着重` 或 `[~波浪` 或 `==` 数量奇偶不对 | 补对应闭合标记 |
-| `fence_attr_yaml` | 在 open 行内/后写 YAML 风格属性 | 改成 `key=value` 形式 |
+| issue.kind | severity | 原因 | 修法 |
+| --- | --- | --- | --- |
+| `unknown_container` | error | fence 名拼错或发明了新名字 | 改成 [container-vocabulary.md](container-vocabulary.md) 内的合法名 |
+| `unexpected_jsx_attrs` | error | 写了 `{variant="xxx"}` JSX 风格 | 改成 `variant=xxx`（不带大括号引号） |
+| `html_comment_variant` | error | 写了 `<!-- variant=xxx -->` | 删注释，写到 `::: name` open 行 |
+| `fence_not_closed` | error | 缺 `:::` | 补 close fence（同长度） |
+| `nesting_depth` | error | compare/toc 等外层用了 3 个冒号 | 外层升级为 `::::`（4 个冒号） |
+| `inline_unclosed` | error | `[.着重` 或 `[~波浪` 或 `==` 数量奇偶不对 | 补对应闭合标记 |
+| `fence_attr_yaml` | error | 在 open 行内/后写 YAML 风格属性 | 改成 `key=value` 形式 |
+| `wrong_theme_namespace` | **warning** | 用了 theme:* 容器但当前主题不是其专属（如 default 主题写 `kpi-dashboard`） | 切换主题 / 换 base / pack:editorial 内的替代容器；不阻塞导出但失去签名视觉 |
+| `frontmatter_invalid` | **warning** | frontmatter 内 variant id / theme id 非法 / 未识别字段 | 改成合法值或删除字段；pipeline 会回退 |
 
-**修复完所有 issue 再交付** —— 不要把 lint 失败的 md 喂给 render 阶段。
+**修复完所有 error 再交付**（warning 不阻塞 export，但应该告诉用户后果） —— 不要把 error 残留的 md 喂给 render 阶段。
+
+**主题敏感**：触发 `wrong_theme_namespace` 检查需要主题来源；优先级 `frontmatter.theme:` > `--persona <id>`。两者都没有时跳过主题敏感检查（仅做语法 lint）。
 
 ## validate-and-fix 错误模式表
 
@@ -133,9 +138,20 @@
     }
   ],
   "apply_hint": "<应用顺序提示>",
+  "capability_snapshot": {
+    "persona_id": "<id>",
+    "default_variants": { "admonition": "accent-bar", ... },
+    "recommended_variants": { "admonition": ["accent-bar", ...], ... },
+    "containers": [
+      { "id": "tip", "namespace": "base", "pack": "base", "available": true, "signature": false, "excluded": false },
+      { "id": "kpi-dashboard", "namespace": "theme", "pack": "theme:data-brief", "available": false, "signature": false, "excluded": false }
+    ]
+  },
   "vocabulary_subset": [{ "name": "...", "category": "...", "fenceLength": 3, "description": "...", "example": "..." }]
 }
 ```
+
+> **agent 取 `capability_snapshot.containers` 作为"本主题下可用容器"的权威单一真源**，而非 `vocabulary_subset`。后者只用来查 example / attrs。
 
 ### render-html.ts 输出（写文件 + 元数据 JSON）
 
@@ -162,10 +178,38 @@
 ```json
 {
   "ok": false,
-  "count": 2,
+  "count": 3,
+  "error_count": 1,
+  "warning_count": 2,
+  "effective_persona": "default",
+  "persona_source": "flag | frontmatter | none",
   "issues": [
-    { "line": 12, "kind": "<kind>", "name": "<可选容器名>", "hint": "<修法>", "excerpt": "<原文片段>" }
+    {
+      "line": 12,
+      "kind": "<kind>",
+      "severity": "error | warning",
+      "name": "<可选容器名>",
+      "hint": "<修法>",
+      "excerpt": "<原文片段>"
+    }
   ]
+}
+```
+
+> `ok` 现在只看 error 数；warning（如 `wrong_theme_namespace`）不阻塞导出。
+
+### theme-capabilities.ts 输出（`--json` 模式）
+
+```json
+{
+  "persona": { "id": "<id>", "name": "...", "description": "...", "audience": "...", "palettePrimary": "#xxxxxx" },
+  "defaultVariants": { "admonition": "...", "quote": "...", ... },
+  "recommendedVariants": { "admonition": ["..."], ... },
+  "recommendedVariantOverrides": {},
+  "containers": [
+    { "id": "<fence-name>", "namespace": "base | pack | theme", "pack": "base | pack:X | theme:X", "available": true, "signature": false, "excluded": false }
+  ],
+  "kickers": { "toc": "...", "qaBlock": "...", ... }
 }
 ```
 

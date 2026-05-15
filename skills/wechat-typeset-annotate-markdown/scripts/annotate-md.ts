@@ -1,9 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * annotate-md (v1) —— 段落 → 容器提议表（不直接改原文）。
- *
- * 设计选择：v1 不端到端改写 md，只产 patches.json 让 agent 决策。
- * 原因：契约 md 改写比 spec 生成误差成本更高（一个 fence 写错让整段隐藏）。
+ * annotate-md —— 段落 → 容器提议表（不直接改原文）。
  *
  * 启发式扫描规则（与 references/annotation-recipes.md 同步）：
  *   - H1 → 题图 + intro 提议
@@ -22,7 +19,12 @@
 
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { getPersona, getContainerVocabulary } from '../../../src/public'
+import {
+  getContainerVocabulary,
+  getPersona,
+  getRecommendedVariantsFor,
+  getThemeCapabilities,
+} from '../../../src/public'
 
 interface CliArgs {
   input: string
@@ -186,9 +188,14 @@ function startsWithVerbCh(s: string): boolean {
 
 function suggest(blocks: Block[], personaId: string): Patch[] {
   const patches: Patch[] = []
-  const persona = getPersona(personaId)
-  const signatures = new Set(persona.signatureContainers)
-  const isDeepBrand = ['business-finance', 'industry-observer', 'academic-frontier'].includes(personaId)
+  const caps = getThemeCapabilities(personaId)
+  // available[fence-name] = boolean；任何"主题专属未启用"的容器都不入提议
+  const availableSet = new Set(caps.containers.filter((c) => c.available).map((c) => c.id))
+  // 签名容器（主题主动声明的 voice 容器）。abstract / keyNumber 是签名容器时优先提议；
+  // 不是签名容器（即便 available）只在确有内容信号时再用。
+  const signatureSet = new Set(caps.containers.filter((c) => c.signature).map((c) => c.id))
+  const has = (id: string) => availableSet.has(id)
+  const isSig = (id: string) => signatureSet.has(id)
 
   // 找文首"总览段"——第一个非 H1 非 blank 的 paragraph，长度合理
   const firstHeading = blocks.findIndex((b) => b.type === 'heading1')
@@ -199,11 +206,9 @@ function suggest(blocks: Block[], personaId: string): Patch[] {
     const b = blocks[firstParaAfterH1]
     const text = b.lines.join(' ')
     if (text.length >= 50 && text.length <= 300) {
-      // 深度刊优先 abstract，通用刊优先 intro
-      const container =
-        isDeepBrand && signatures.has('abstract')
-          ? 'abstract'
-          : 'intro'
+      // abstract 优先于 intro：abstract 是签名容器、有 kicker / 主色"摘要"母版；
+      // 不在主题签名容器集里时退到 intro（base 容器，所有主题都启用）。
+      const container = isSig('abstract') ? 'abstract' : 'intro'
       patches.push({
         line: b.start + 1,
         end_line: b.end + 1,
@@ -286,14 +291,14 @@ function suggest(blocks: Block[], personaId: string): Patch[] {
       } else if (
         /\d+(\.\d+)?\s?[%倍亿万千]/.test(text) &&
         text.length <= 150 &&
-        signatures.has('keyNumber')
+        isSig('key-number')
       ) {
         patches.push({
           line: b.start + 1,
           end_line: b.end + 1,
           kind: 'wrap_paragraph',
           container: 'key-number',
-          reason: '段落含显著数字（%/倍/亿/万）+ 主题登记了 keyNumber 签名',
+          reason: '段落含显著数字（%/倍/亿/万）+ 主题登记了 key-number 签名',
           confidence: 'low',
           preview: text.slice(0, 60),
         })
@@ -318,7 +323,9 @@ function suggest(blocks: Block[], personaId: string): Patch[] {
     }
   }
 
-  return patches
+  // 防御性过滤：任何"主题未启用"容器（含未来从 base 迁到 theme:* 的）都被剔除。
+  // 配合 patches.json 的 capability_snapshot，agent 不会拿到走不通的建议。
+  return patches.filter((p) => has(p.container))
 }
 
 function main() {
@@ -335,7 +342,20 @@ function main() {
   const blocks = splitBlocks(md)
   const patches = suggest(blocks, args.persona)
 
-  // 也输出 vocabulary 供 agent 拿 example
+  // 主题能力快照——告诉 agent "本主题下哪些容器可用 / 推荐什么 variant / 默认骨架是什么"。
+  // agent 应**只在 capability_snapshot.containers 中 available=true 的容器上做改写**，
+  // 不依赖 vocabulary_subset 全集——后者保留用于查 example 与 attrs，但不是 available 真源。
+  const caps = getThemeCapabilities(args.persona)
+  const recommended = getRecommendedVariantsFor(args.persona)
+  const capabilitySnapshot = {
+    persona_id: args.persona,
+    default_variants: caps.defaultVariants,
+    recommended_variants: recommended,
+    containers: caps.containers,
+  }
+
+  // vocabulary：保留全集供 agent 查 example / attrs / fenceLength。
+  // available 真源仍在 capability_snapshot.containers——不要从 vocabulary 推断。
   const vocab = getContainerVocabulary().map((v) => ({
     name: v.name,
     category: v.category,
@@ -351,9 +371,11 @@ function main() {
     patch_count: patches.length,
     patches,
     apply_hint:
-      'patches 仅是建议；请按 confidence high → medium → low 顺序逐条决策应用。' +
-      '应用顺序：先 section-title / intro 等结构容器，后 quote-card / steps 等内容容器，' +
-      '最后 footer-cta 等收束容器。',
+      'patches 仅是建议；按 confidence high → medium → low 决策。' +
+      '应用顺序：结构容器（section-title / intro）→ 内容容器（quote-card / steps）→ 收束容器（footer-cta）。' +
+      '**只用 capability_snapshot.containers 中 available=true 的容器**——其余在本主题下没有签名视觉。' +
+      'variant 默认走 default_variants；要覆盖时挑 recommended_variants 列表里的 id（不要凭记忆）。',
+    capability_snapshot: capabilitySnapshot,
     vocabulary_subset: vocab,
   }
 

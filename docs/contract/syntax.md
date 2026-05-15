@@ -43,6 +43,33 @@
 
 ---
 
+## Frontmatter（页面局部配置 · L2）
+
+markdown 文件首部允许声明一段 YAML 子集 frontmatter，作为**页面级**配置，介于"逐处 attrs 覆盖"与"主题默认骨架"之间生效。所有字段**均可缺省**。
+
+```markdown
+---
+theme: swiss-grid           # 页面级主题切换（可选），覆盖 render() 入参 persona/theme/spec
+variants:                   # 页面级 variant 覆盖（可选），按 slot 部分指定即可
+  admonition: terminal
+  quote: tilted-sticker
+  steps: ribbon-chain
+---
+
+# 正文从这里开始……
+```
+
+**优先级链（L1 高 → L4 低）**：
+
+1. **L1** · 逐处 attrs 覆盖：`::: tip variant=pill-tag 重要`
+2. **L2** · 本节 frontmatter `variants:` 字段（本页全局，覆盖主题默认）
+3. **L3** · 主题映射表 `theme.variants[slot]`
+4. **L4** · 系统默认 `DEFAULT_VARIANTS`
+
+合法 variant id 见下方 [variant 覆盖](#variant-覆盖) 段。frontmatter 里写了**非法 variant id** 会被静默忽略并回退到 L3/L4（不塌版）；非法 `theme:` 同样回退到入参主题。集成方可读 `RenderOutput.frontmatterIssues` 拿到告警明细。
+
+---
+
 ## variant 覆盖
 
 主题在 spec 里为每个类目（admonition / quote / compare / steps / divider / sectionTitle / note / codeBlock）挑了**默认骨架**。如果某一处想要不同骨架，可在 fence 的 attrs 里覆盖。两种语法形式：

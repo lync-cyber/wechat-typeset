@@ -179,27 +179,12 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
-  // R10 主题级 kicker 文案覆盖（解耦作者写作契约与主题装饰文案）
+  // 主题级 kicker 文案覆盖（电台母语）
   //
-  // 在 R10 之前，电台母语 kicker（"听 · 众 · 连 · 线" / "播 · 后 · 札记" / "tracklist" /
-  // "tune · in" 等）必须由作者每次在 markdown 里写出来——是主题装饰泄漏进作者契约的
-  // 主要来源。把这些文案声明在此后，作者侧 markdown 只需写：
-  //
-  //     ::: qa-block q="主播，周末只剩两小时..."
-  //     ...
-  //     :::
-  //
-  //     ::: editor-note
-  //     ...
-  //     :::
-  //
-  // 即可拿到电台母语 kicker。仍需个性化时随时可用 info 单稿覆盖：
-  //
-  //     ::: editor-note 这一期特别的"播后随感"
-  //     ...
-  //     :::
-  //
-  // 未声明的 key 会从 DEFAULT_KICKERS（types.ts）继承默认文案。
+  // 让作者侧 markdown 不必把"听 · 众 · 连 · 线" / "播 · 后 · 札记" / "tune · in"
+  // 这些主题装饰文案写在 info 里——renderer 缺省读 ctx.kickers.<key>。
+  // 单稿仍可用 info 个性化覆盖：`::: editor-note 这一期特别的"播后随感"`。
+  // 未声明的 key 从 DEFAULT_KICKERS（types.ts）继承。
   // ============================================================
   kickers: {
     toc: '— tracklist · 节目单 —',
@@ -701,7 +686,7 @@ export const spec: PersonaSpec = {
     ownerNotes:
       '三条不可妥协：暗底纪律 / radius=0 / accent 稀缺（橙 #d97a3c 单色担当）。' +
       '零新容器零新 variant；章节序号走 decorations.headingPrefix。' +
-      'R10 电台母语 kicker 全部走 spec.kickers，作者侧 markdown 不写主题装饰。',
+      '电台母语 kicker 全部走 spec.kickers，作者侧 markdown 不写主题装饰。',
   },
 }
 

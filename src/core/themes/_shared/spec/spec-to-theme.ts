@@ -97,12 +97,11 @@ export function specToTheme(spec: PersonaSpec): Theme {
     inline: spec.inline,
     templates,
     variants: spec.variants,
-    // R10：主题级 kicker 文案覆盖。Partial 透传，buildTheme 与 DEFAULT_KICKERS 深合并。
     kickers: spec.kickers,
-    // 注意：不能透传到 opts.variant —— 那会触发 buildAssets 工厂调用并覆盖 motifs
-    // 直接派生的 assets。走 svgVariant 字段（metadata-only）透传到 Theme.svgVariant
-    // 供 applyPalette 的 fallback 路径消费。
+    // opts.variant 不透传：会触发 buildAssets 工厂覆盖 motifs 直接渲染的 assets。
+    // opts.svgVariant 仅写到 Theme.svgVariant（metadata），供 applyPalette fallback 路径消费。
     svgVariant: spec.svgVariant,
     decorations: spec.decorations,
+    capabilities: spec.capabilities,
   })
 }

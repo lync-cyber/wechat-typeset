@@ -17,9 +17,14 @@ export {
   lookupContainerSpec,
   packOf,
   containersInPack,
+  namespaceOf,
+  namespaceIdOf,
+  listPacks,
+  isContainerEnabledForTheme,
   type ContainerSpec,
   type ContainerCategory,
   type ContainerPack,
+  type PackNamespace,
   type AttrSpec,
 } from './vocabulary'
 
@@ -29,6 +34,9 @@ export {
   getVariantsForContainer,
   getThemeDefaultVariants,
   getContainerSnippet,
+  getThemeCapabilitiesView,
+  getRecommendedVariantsFor,
   type VariantDescriptor,
   type SnippetOptions,
+  type ThemeCapabilitiesView,
 } from './api'

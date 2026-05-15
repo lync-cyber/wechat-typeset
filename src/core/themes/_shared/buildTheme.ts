@@ -1,12 +1,12 @@
 /**
  * 主题工厂：给 tokens 就能得到完整 Theme。
  *
- * 分层（**故意保持两个包装器共用同一底层工厂**）：
+ * 分层（两个包装器共用同一底层工厂）：
  *   - buildTheme（本文件）——底层：tokens + 补丁 → Theme。不感知 spec / palette
  *   - specToTheme（./spec/spec-to-theme.ts）——PersonaSpec → buildTheme args
  *   - applyPalette（../../color/applyPalette.ts）——既有 Theme + 新 palette → buildTheme args
- *   两条路径共享同一份 mergeStyle 与 DEFAULT_VARIANTS 兜底逻辑，不要把 buildTheme
- *   内联进 specToTheme，否则 applyPalette 的 delta 路径会被混入 spec 语义。
+ *   两条路径共享同一份 mergeStyle 与 DEFAULT_VARIANTS 兜底逻辑；applyPalette 的 delta
+ *   路径须与 spec 语义严格隔离，因此不能把 buildTheme 内联进 specToTheme。
  *
  * 深合并语义（element/container/inline 三者一致）：
  *   patch[key] 不存在 → 保留 base[key] 原样
@@ -74,7 +74,7 @@ export interface BuildThemeOptions {
   /**
    * 元素级样式：属性级深合并到 baseElements(tokens) 之上。
    * `__reset: true` sentinel 可在某 key 上切换为整段替换。
-   * 包含 pre / code（v1 的顶层 pre/code 字段已并入此处）。
+   * 包含 pre / code。
    */
   elements?: StylePatch<ThemeElements>
   /** 容器级样式（同 elements 语义） */
@@ -109,6 +109,15 @@ export interface BuildThemeOptions {
    * 都通过本字段承载，共享层只实现一次"按声明执行"。
    */
   decorations?: Decorations
+  /**
+   * 主题能力自描述（PersonaSpec.capabilities 的运行时透传）。
+   * 仅作为 metadata 写到 Theme.capabilities；不参与渲染。
+   */
+  capabilities?: {
+    containers?: readonly string[]
+    variantOverrides?: Partial<ThemeVariants>
+    excluded?: readonly string[]
+  }
 }
 
 export function baseElements(tokens: ThemeTokens): ThemeElements {
@@ -575,13 +584,12 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
     inline,
     variants,
     kickers,
-    // Theme.svgVariant 透传：
-    //   - applyPalette 路径走 opts.variant（既触发工厂又写到 Theme）
-    //   - spec-to-theme 路径走 opts.svgVariant（仅写到 Theme,不触发工厂——assets 已由 motifs 渲染）
-    // 显式透传到 Theme.svgVariant —— 删除 applyPalette.BASE_VARIANT 查表的关键。
+    // applyPalette 路径走 opts.variant（既触发工厂又写到 Theme.svgVariant）；
+    // spec-to-theme 路径走 opts.svgVariant（仅写到 Theme.svgVariant，不触发工厂——assets 已由 motifs 渲染）。
     ...(opts.variant ?? opts.svgVariant
       ? { svgVariant: opts.variant ?? opts.svgVariant }
       : {}),
     ...(opts.decorations ? { decorations: opts.decorations } : {}),
+    ...(opts.capabilities ? { capabilities: opts.capabilities } : {}),
   }
 }

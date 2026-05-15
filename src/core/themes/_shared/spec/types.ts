@@ -324,6 +324,28 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
 
 export type SignatureContainerId = (typeof SUPPORTED_SIGNATURE_CONTAINERS)[number]
 
+/**
+ * 主题能力自描述（PersonaSpec.capabilities）。
+ *
+ * 这是"主题对 API/LLM 查询的显式回答"：我支持哪些容器 / 我推荐哪些 variant / 我排除哪些容器。
+ * 未声明任何字段时全部走默认兜底（getThemeCapabilities 把它派生为"base + pack:* + 本主题 theme:* 全集"）。
+ *
+ * 字段值是 fence 名（kebab，如 'quote-card'），与 vocabulary 的 ContainerSpec.name 一致；
+ * variant 名是 VariantDef.meta.id。
+ */
+export interface ThemeCapabilities {
+  /** 本主题启用的容器 fence 名白名单；未声明 = 全集兜底 */
+  containers?: readonly string[]
+  /**
+   * 在 spec.variants 默认骨架之外的额外建议 variant（按 slot 部分指定）。
+   * 例：`{ admonition: 'terminal' }` 表示"如果作者本想换 admonition 骨架，推荐 terminal"——
+   * getRecommendedVariantsFor 把这些 hint 加在 themeCompat 反向索引的最前面。
+   */
+  variantOverrides?: Partial<ThemeVariants>
+  /** 显式排除：即便兜底集里有也不推荐（如 default 主题排除 tilted-sticker） */
+  excluded?: readonly string[]
+}
+
 // ============================================================
 // PersonaSpec 主类型
 // ============================================================
@@ -355,10 +377,7 @@ export interface PersonaSpec {
   /**
    * Renderer 默认 kicker 文案的主题级覆盖（Partial<ThemeKickers>）。
    *
-   * R10 引入：把 renderer 里硬编码的可见文案（"读者问答 · Q&A" / "编 者 按" /
-   * "SUBSCRIBE" / "下 期" 等）的主题级母语化通道。声明的 key 会覆盖
-   * DEFAULT_KICKERS 同名 key，作者侧 markdown 不写 info 即可拿到主题母语 kicker。
-   *
+   * 声明的 key 会覆盖 DEFAULT_KICKERS 同名 key，作者侧 markdown 不写 info 即可拿到主题母语 kicker。
    * 作者随时可单稿覆盖：`::: qa-block 这次特别 kicker q="..."` 仍走 info 优先。
    * 详见 `ThemeKickers` 注释（src/core/themes/types.ts）。
    */
@@ -366,10 +385,7 @@ export interface PersonaSpec {
   /**
    * 参数化 SVG 资产工厂的形状变体。spec-first 主路径不消费此字段（assets 由 motifs
    * 直接渲染）；它的唯一作用是给 applyPalette 在用户自定义配色路径上提供 fallback 工厂。
-   *
    * 缺省时 applyPalette 回退到 `'geometric'`。
-   * 历史包袱：旧版用 applyPalette.BASE_VARIANT 手写主题 id → variant 查表实现同样的
-   * fallback；下沉到 spec 后,新增主题不再需要"还要去 applyPalette.ts 加一行"的同步成本。
    */
   svgVariant?: SvgVariant
   /**
@@ -382,6 +398,25 @@ export interface PersonaSpec {
    * 不声明则默认空数组（只用通用容器）。
    */
   signatureContainers?: readonly SignatureContainerId[]
+  /**
+   * 主题能力自描述（**可选**，默认 = 全集兜底）。
+   *
+   * 决定 LLM / 写作集成方在本主题下"该推荐什么容器、什么 variant"——比 signatureContainers
+   * 更宽（containers 涵盖未签名但本主题愿意渲染的容器）、比 ThemeContainers 字段更窄
+   * （excluded 让主题显式排除某些"理论上能用但本主题不希望出现"的容器）。
+   *
+   * 字段语义：
+   *   - `containers`        声明本主题启用的容器 fence 名白名单（kebab）。未声明 = 兜底
+   *                         全集（base + pack:* + 自家 theme:<id>）。
+   *   - `variantOverrides`  额外建议 variant 选择（除已在 spec.variants 声明的之外的 hint），
+   *                         给"我推荐用这个，但不强制改全局默认"用——getRecommendedVariantsFor
+   *                         会读此字段。
+   *   - `excluded`          显式排除容器（即便在白名单 / 兜底集里也不曝光给 LLM 推荐）。
+   *
+   * 仅供 API 查询与推荐使用——pipeline 渲染**不读**本字段（与 isContainerEnabledForTheme
+   * 的 namespace 判定平行；想要"渲染期硬阻断"未来由独立 strict-mode 开关承担）。
+   */
+  capabilities?: ThemeCapabilities
   /**
    * 模板片段（封面卡 / 作者栏 / CTA / 推荐 / tip / compare / steps）。
    * 仅用于 markdown 层的示例片段，不影响 CSS 生成。

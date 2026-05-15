@@ -35,12 +35,18 @@ export interface ContainerRenderContext {
   innerStyles: ThemeInnerStyles
   inline: ThemeInline
   /**
-   * v2 骨架选择。renderer 按 ctx.variants.{kind} 分派到 variants/{kind}/{id}.ts。
+   * 骨架选择。renderer 按 ctx.variants.{kind} 分派到 variants/{kind}/{id}.ts。
    * attrs.variant 可按容器级覆盖主题级选择（比如 `::: tip variant=terminal`）。
    */
   variants: ThemeVariants
   /**
-   * R10 kicker 文案。renderer 在硬编码默认文案处读取 `ctx.kickers.<key>`，
+   * L2 页面局部配置（来自 markdown frontmatter `variants:` 字段）。可缺省。
+   * 4 级优先级链：attrs.variant > pageVariants[slot] > variants[slot] > fallbackId。
+   * 实现位于 `_shared/makeVariantContainer.ts:resolveVariant`。
+   */
+  pageVariants?: Partial<ThemeVariants>
+  /**
+   * 主题级 kicker 文案。renderer 在硬编码默认文案处读取 `ctx.kickers.<key>`，
    * 作者侧 markdown 仅在需要单稿覆盖时才写 info。详见 `ThemeKickers` 注释。
    */
   kickers: ThemeKickers

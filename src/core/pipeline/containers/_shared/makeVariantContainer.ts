@@ -100,15 +100,22 @@ export function makeVariantContainer<Args = void>(
   const { name, themeSlot, table, fallbackId, resolveAlias, args, title, body } = opts
 
   /**
-   * 抽取出来供 open / close 复用——variant 注册表里 render 都是纯函数，两次调用产物一致。
-   * 为何不在 open 时把 result 缓存到 ctx：ContainerRenderContext 由 markdown-it env 栈管理，
-   * open 与 close 之间可能嵌套子容器；把 per-open 缓存挂在共享 ctx 上会被嵌套覆盖。
-   * 直接重新调用 render（O(1) 字符串拼装）比设计 token 配对更稳。
+   * open / close 共用。render 是纯函数，两次调用产物一致。
+   * 不在 open 时把 result 缓存到 ctx：open 与 close 之间可能嵌套子容器，
+   * per-open 缓存挂在共享 ctx 上会被嵌套覆盖，重新调用 render（O(1)）更稳。
+   *
+   * 4 级优先级：L1 attrs.variant > L2 pageVariants[slot] > L3 theme.variants[slot] > L4 fallbackId。
+   * 非法 L1 回退到 L2/L3/L4，非法 L2 回退到 L3/L4；每层按 table.keys 做合法性确认。
    */
   function resolveVariant(ctx: ContainerRenderContext): {
     id: string
     result: VariantRenderResult
   } {
+    const pageId = (ctx.pageVariants?.[themeSlot] as string | undefined)
+    const themeId = (ctx.variants[themeSlot] as string | undefined)
+    const pageValid = pageId && pageId in table ? pageId : undefined
+    const themeValid = themeId && themeId in table ? themeId : undefined
+
     let id = fallbackId
     const rawOverride = ctx.attrs.variant
     if (rawOverride) {
@@ -116,9 +123,9 @@ export function makeVariantContainer<Args = void>(
       const aliased = resolveAlias?.(normalized)
       const candidate = aliased ?? rawOverride
       if (candidate in table) id = candidate
-      else id = (ctx.variants[themeSlot] as string | undefined) ?? fallbackId
+      else id = pageValid ?? themeValid ?? fallbackId
     } else {
-      id = (ctx.variants[themeSlot] as string | undefined) ?? fallbackId
+      id = pageValid ?? themeValid ?? fallbackId
     }
     const entry = table[id] ?? table[fallbackId]
     // entry.render 在调用方语境下必定存在（kind='none' 的 variant 不会进 variant 容器）；

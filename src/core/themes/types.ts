@@ -17,12 +17,7 @@ export type SVGString = string
 /**
  * 参数化 SVG 资产工厂的形状变体。控制 SVG 图形语言（sharp / soft / serif / playful），
  * 不控制颜色——颜色随 tokens 自动流动。
- *
- * 为什么类型放在 types.ts 而非 _shared/svgAssets.ts：
- *   _shared/svgAssets.ts 是渲染工厂的实现细节，但 SvgVariant 现在是 PersonaSpec 与
- *   Theme 都要消费的"主题 voice 声明"——用于 applyPalette 的 fallback 路径，决定用户
- *   自定义配色时用哪套工厂重新合成 assets。挪到 types.ts 后两端 import 不再交叉。
- *   实现端（svgAssets.ts）改为 re-export 此类型。
+ * PersonaSpec 与 Theme 双端消费；_shared/svgAssets.ts re-export 此类型。
  */
 export type SvgVariant = 'geometric' | 'soft' | 'serif' | 'playful'
 
@@ -311,7 +306,7 @@ export interface ThemeInline {
 }
 
 // ============================================================
-// Variants：骨架变体（v2 新增）
+// Variants：骨架变体
 // ============================================================
 //
 // 每一类容器提供 N 种"视觉骨架"。主题在 Theme.variants 里声明要用哪一个，
@@ -427,16 +422,12 @@ export type NoteVariantId =
   | 'side-bar'
 
 export type CodeBlockVariantId =
-  // 裸 <pre><code>（默认，与 v1 行为等价）
+  // 裸 <pre><code>（默认）
   | 'bare'
   // 顶部语言标签带：语言名大写 + 可选 copy 图标；Stripe Docs / MDN 家族 signature
   | 'header-bar'
 
-/**
- * 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。
- *
- * 初版覆盖：6 + 4 + 3 + 3 + 5 + 2 = 23 种 variant，远超"至少 5×4=20 组合"基线。
- */
+/** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
   admonition: AdmonitionVariantId
   quote: QuoteVariantId
@@ -450,7 +441,7 @@ export interface ThemeVariants {
 }
 
 /**
- * 主题不声明时的回退。对齐 v1 各渲染器的当前视觉，保证现有主题零改动兼容。
+ * 主题不声明时的回退。保证现有主题零改动兼容。
  * buildTheme 会在 opts.variants 未提供时注入此常量。
  */
 export const DEFAULT_VARIANTS: ThemeVariants = {
@@ -465,21 +456,13 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
 }
 
 // ============================================================
-// Kickers：容器内默认 kicker 文案的主题级覆盖（R10）
+// Kickers：容器内默认 kicker 文案的主题级覆盖
 //
-// 设计动机：在 R10 之前，多数 data-brief 家族 renderer 的 kicker 默认文案
-// 硬编码在渲染器里（"读者问答 · Q&A" / "编 者 按" / "SUBSCRIBE" / "下 期" …）。
-// 主题想要"在我这里 qa-block 默认 kicker 是听 · 众 · 连 · 线"必须让作者每次
-// 显式写在 ::: qa-block 后面的 info——把主题装饰泄漏进作者写作契约。
+// 主题在 PersonaSpec.kickers 声明母语 kicker；管线兜底 DEFAULT_KICKERS。
+// renderer 读 ctx.kickers.<key>（info 仍优先——作者随时可单稿覆盖）。
 //
-// R10 把这些 kicker 文案提到 Theme.kickers 槽：
-//   - 主题在 PersonaSpec.kickers 声明母语 kicker；管线兜底 DEFAULT_KICKERS
-//   - renderer 读 `ctx.kickers.<key>` 兜底（info 仍优先 —— 作者随时可单稿覆盖）
-//   - 作者侧 markdown 干净："::: qa-block q='...'"  即可拿到主题母语 kicker
-//
-// 设计纪律：本接口承载的是"renderer 内硬编码的可见文案"。新增字段的判定是
-//   "renderer 里出现了字面值字符串并被注入到 HTML"。纯装饰图标 / SVG / CSS
-//   不进本接口（它们属于 motifs / variants / containers 的领地）。
+// 设计纪律：本接口只承载"renderer 里会注入到 HTML 的可见文案字面值"。
+// 纯装饰图标 / SVG / CSS 不进本接口（属于 motifs / variants / containers 领地）。
 // ============================================================
 
 export interface ThemeKickers {
@@ -508,8 +491,7 @@ export interface ThemeKickers {
 }
 
 /**
- * 主题不声明 kickers 时的兜底文案。字面值与 R10 前 renderer 硬编码字节等价——
- * 所有现有主题渲染输出不变,仅扩展了"主题作者可调"的覆盖空间。
+ * 主题不声明 kickers 时的兜底文案。
  * buildTheme 会在 opts.kickers 未提供时注入此常量；Partial 覆盖深合并。
  */
 export const DEFAULT_KICKERS: ThemeKickers = {
@@ -755,14 +737,13 @@ export interface Theme {
   templates: ThemeTemplates
   inline: ThemeInline
   /**
-   * v2 骨架选择。主题不声明时由 buildTheme 填入 DEFAULT_VARIANTS。
+   * 骨架选择。主题不声明时由 buildTheme 填入 DEFAULT_VARIANTS。
    * 渲染器在 ContainerRenderContext.variants 里读取。
    */
   variants: ThemeVariants
   /**
-   * R10 kicker 文案。主题不声明时由 buildTheme 填入 DEFAULT_KICKERS。
+   * 主题级 kicker 文案覆盖。主题不声明时由 buildTheme 填入 DEFAULT_KICKERS。
    * 渲染器在 ContainerRenderContext.kickers 里读取——优先级低于作者侧 info。
-   * 详见 `ThemeKickers` 注释。
    */
   kickers: ThemeKickers
   /**
@@ -778,6 +759,15 @@ export interface Theme {
    * intro 首字下沉……）一律走这里, 共享层只实现一次"按声明执行"。
    */
   decorations?: Decorations
+  /**
+   * 主题能力自描述。结构与 PersonaSpec.capabilities 同源，由 specToTheme 透传。
+   * 仅供 API 查询与 LLM 推荐使用，pipeline 渲染不读此字段。
+   */
+  capabilities?: {
+    containers?: readonly string[]
+    variantOverrides?: Partial<ThemeVariants>
+    excluded?: readonly string[]
+  }
 }
 
 export class ThemeAuthoringError extends Error {

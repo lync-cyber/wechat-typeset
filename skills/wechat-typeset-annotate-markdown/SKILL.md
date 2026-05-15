@@ -22,17 +22,18 @@ description: 将原始 Markdown 改写成满足 wechat-typeset 写作契约的 M
 - 用户问主题色 / motif / 自定义视觉 → 转 `wechat-typeset-author-persona`
 - 文章主体是数学公式 / 流程图 / 不可识别的非 markdown 内容 → 本 skill 不处理；让用户先转标准 markdown
 
-## 主线工作流（5 步）
+## 主线工作流（6 步）
 
 复制此 checklist 跟踪进度：
 
 ```
 Task Progress:
 - [ ] 1. 意图判定 + persona 推荐（recommend-persona.ts）
-- [ ] 2. 结构扫描（H1 / H2 / 列表 / 引用块 / 代码块）
-- [ ] 3. 段落分类 + 容器提议（annotate-md.ts → patches.json）
-- [ ] 4. 应用提议（agent 写 markdown，用 show-snippet.ts 拿模板）
-- [ ] 5. 校验（lint-contract.ts 至 ok=true）
+- [ ] 2. 查主题能力（theme-capabilities.ts）—— "开工前先查，避免给 default 写 kpi-dashboard"
+- [ ] 3. 结构扫描（H1 / H2 / 列表 / 引用块 / 代码块）
+- [ ] 4. 段落分类 + 容器提议（annotate-md.ts → patches.json）
+- [ ] 5. 应用提议（agent 写 markdown，用 show-snippet.ts 拿模板）
+- [ ] 6. 校验（lint-contract.ts --persona 至 ok=true）
 ```
 
 ### Step 1 · 意图判定 + persona 推荐
@@ -51,7 +52,33 @@ tsx skills/wechat-typeset-annotate-markdown/scripts/recommend-persona.ts \
 - **三选都不强**（< 70%）→ 退出本 skill，先去 `wechat-typeset-author-persona` 造新主题，造完回来继续 Step 2
 - **不打算用容器签名功能**（用户明确说"不要花哨"）→ 用 `default`，跳过 abstract/key-number/cover 等签名容器的提议
 
-### Step 2 · 结构扫描
+### Step 2 · 查主题能力（关键：避免用错容器）
+
+```bash
+tsx skills/wechat-typeset-annotate-markdown/scripts/theme-capabilities.ts --persona <id>
+```
+
+输出包含：
+
+- **`defaultVariants`** —— 每个 slot 的当前默认骨架（写 markdown 时不指定 variant 默认走这些）
+- **`recommendedVariants`** —— 每个 kind 对本主题"友好"的 variant id 列表（覆盖时挑这里的）
+- **`containers[]`** —— 每个容器在本主题下的 `available` / `signature` / `excluded` / `namespace` 状态
+- **`kickers`** —— renderer 内默认 kicker 文案（写 ::: qa-block 不指定 info 时这是兜底）
+
+**Agent 决策规则**：
+
+- 只对 `available: true` 的容器做提议（避免给 `default` 主题写 `kpi-dashboard`——它属于 `theme:data-brief`，跨主题渲染会失去签名视觉）
+- 优先用 `signature: true` 的容器承担"主题 voice"（如 brutalist 的 masthead / colophon、tech-explainer 的 note / see-also）
+- 不要凭记忆写 variant id；从 `recommendedVariants` 里挑
+
+可选 `--json` 输出机器可读形式（Agent 在 multi-shot 里 parse）。
+
+```bash
+tsx skills/wechat-typeset-annotate-markdown/scripts/theme-capabilities.ts --persona swiss-grid --json | jq '.containers | map(select(.available and .signature)) | map(.id)'
+# → ["abstract", "section-tag", "editorial-header", "byline", ...]
+```
+
+### Step 3 · 结构扫描
 
 按以下顺序扫一遍原文：
 
@@ -67,7 +94,7 @@ tsx skills/wechat-typeset-annotate-markdown/scripts/recommend-persona.ts \
 | 摘要段（文首 2-4 行总览） | 段首"本文..."、"TL;DR"、"简言之" | `::: abstract` |
 | 数据段（"X% / Y倍 / Z亿"） | 数字密度高的句子 | 周围段落提议 `::: key-number value=X 标签` |
 
-### Step 3 · 段落分类 + 容器提议（v1：标注提议而非端到端改写）
+### Step 4 · 段落分类 + 容器提议（v1：标注提议而非端到端改写）
 
 ```bash
 tsx skills/wechat-typeset-annotate-markdown/scripts/annotate-md.ts \
@@ -76,47 +103,17 @@ tsx skills/wechat-typeset-annotate-markdown/scripts/annotate-md.ts \
   --out tmp/patches.json
 ```
 
-输出 `patches.json`，结构（实际 `kind` 枚举与脚本输出一致）：
+输出 `patches.json` 顶层结构（**完整 schema + 占位符示例见 [_shared/cli-contract.md · annotate-md.ts 输出](../_shared/references/cli-contract.md#annotate-mdts-输出)，单一真源**）：
 
-```json
-{
-  "input": "<input.md 路径>",
-  "persona": "tech-explainer",
-  "block_count": 24,
-  "patch_count": 5,
-  "patches": [
-    {
-      "line": 3,
-      "end_line": 5,
-      "kind": "wrap_first_paragraph",
-      "container": "intro",
-      "reason": "文首总览段（120 字符）——典型 intro 位置",
-      "confidence": "high",
-      "preview": "本文将从三个角度…"
-    },
-    {
-      "line": 18,
-      "end_line": 19,
-      "kind": "wrap_blockquote",
-      "container": "quote-card",
-      "reason": "blockquote 单段短句（42 字符，句末完整）——典型金句",
-      "confidence": "medium",
-      "preview": "技术的本质是对…"
-    },
-    {
-      "line": 42,
-      "end_line": 47,
-      "kind": "convert_list",
-      "container": "steps",
-      "reason": "有序列表 5 条，每条动词开头——操作流程",
-      "confidence": "high",
-      "preview": "1. 打开终端…"
-    }
-  ],
-  "apply_hint": "...",
-  "vocabulary_subset": [...]
-}
-```
+| 字段 | 用途 |
+| --- | --- |
+| `input` / `persona` / `block_count` / `patch_count` | 输入元信息与统计 |
+| `patches[]` | 段落 → 容器提议列表；每条含 `line` / `end_line` / `kind` / `container` / `variant?` / `reason` / `confidence` / `preview` |
+| `apply_hint` | 应用顺序提示 |
+| `capability_snapshot` | 与 Step 2 `theme-capabilities.ts` 同源；含 `persona_id` / `default_variants` / `recommended_variants` / `containers[]` |
+| `vocabulary_subset` | 全容器 example/attrs 速查（仅查参考，**不是 available 真源**） |
+
+> **Agent 用 `capability_snapshot.containers` 作为"本主题下可用容器"的权威单一真源**，而非 `vocabulary_subset`。后者只用来查 example / attrs。
 
 合法 `kind` 枚举（脚本 [annotate-md.ts](scripts/annotate-md.ts) 单一真源）：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
 
@@ -124,7 +121,7 @@ tsx skills/wechat-typeset-annotate-markdown/scripts/annotate-md.ts \
 
 为什么 v1 不端到端：契约 md 改写比 spec 生成误差成本更高（一个 fence 写错可能让整段隐藏），让 agent 留在决策链路里。
 
-### Step 4 · 应用提议 + 写新 md
+### Step 5 · 应用提议 + 写新 md
 
 agent 拿着 `patches.json` 和原文，按以下顺序应用：
 
@@ -134,20 +131,26 @@ agent 拿着 `patches.json` 和原文，按以下顺序应用：
 4. **行内扩展**：每千字 ≤3 处 `==高亮==` 或 `[.着重.]`；**不**给整段全标
 5. **写完之后**——直接进 Step 5 校验
 
-需要某个容器的最小骨架时，用 `show-snippet.ts`：
+需要某个容器的最小骨架时，用 `show-snippet.ts`（**配合 `--persona` 主题敏感**，跨主题 theme:* 容器会出 warning）：
 
 ```bash
-tsx skills/wechat-typeset-annotate-markdown/scripts/show-snippet.ts quote-card --variant column-rule
+tsx skills/wechat-typeset-annotate-markdown/scripts/show-snippet.ts quote-card --variant column-rule --persona tech-explainer
 # 输出：
 # ::: quote-card variant=column-rule
 # 一段值得突出的引用 …
 # :::
+
+# 列举当前主题下可用的容器（按 pack 分组 / unavailable 标 "· 未启用"）
+tsx skills/wechat-typeset-annotate-markdown/scripts/show-snippet.ts --list --persona swiss-grid
 ```
 
-### Step 5 · 校验
+### Step 6 · 校验（主题敏感）
 
 ```bash
-tsx skills/wechat-typeset-annotate-markdown/scripts/lint-contract.ts <output.md>
+# 推荐：传 --persona 触发主题敏感检查（含 wrong_theme_namespace warning）
+tsx skills/wechat-typeset-annotate-markdown/scripts/lint-contract.ts <output.md> --persona <id>
+
+# 或在 markdown frontmatter 写 `theme: <id>` 让 lint 自动取（frontmatter 优先于 --persona）
 ```
 
 输出 `ok=true` 或 `issues[]`。**典型 issue**：
@@ -160,8 +163,10 @@ tsx skills/wechat-typeset-annotate-markdown/scripts/lint-contract.ts <output.md>
 | `fence_not_closed` | 缺 `:::` | 补 close fence |
 | `nesting_depth` | compare 内层 pros 用了同长度 fence | 外层升级为 `::::`（4 个冒号） |
 | `inline_unclosed` | `[.着重` 没闭合 | 补 `.]` |
+| `wrong_theme_namespace` (warning) | 用了 theme:* 容器但当前主题不是其专属 | 换 base/pack:editorial 替代容器，或切换主题（仅警告，不阻塞） |
+| `frontmatter_invalid` (warning) | frontmatter 内 variant id / theme id 非法 | 改成合法 id 或删除字段（pipeline 会回退） |
 
-issues 全部修完再交付——**不要把 lint 失败的 md 交给 export-richtext**。
+error 全部修完再交付——warning 不阻塞导出，但 LLM 应该解读后告知用户"用了 X 主题专属容器在 Y 主题里没有签名视觉"。**不要把 error 残留的 md 交给 export-richtext**。
 
 ## 8 类典型段落识别（核心规则）
 
@@ -199,9 +204,10 @@ issues 全部修完再交付——**不要把 lint 失败的 md 交给 export-ri
 | 脚本 | 用途 |
 | --- | --- |
 | `scripts/recommend-persona.ts` | 输入标题 + 摘要 + 题材 → 输出 top-3 persona 推荐 + 理由 |
-| `scripts/annotate-md.ts` | 输入原文 + persona → 输出 patches.json（标注提议表，不直接改原文） |
-| `scripts/lint-contract.ts` | 输入 md → 输出 issues[]（fence 名 / 嵌套 / variant / 行内闭合） |
-| `scripts/show-snippet.ts` | 按容器 name + variant 输出最小可用 markdown snippet |
+| `scripts/theme-capabilities.ts` | 输入 persona id → 输出主题能力快照（containers/variants/kickers），开工前先查 |
+| `scripts/annotate-md.ts` | 输入原文 + persona → 输出 patches.json（标注提议表 + capability_snapshot，不直接改原文） |
+| `scripts/lint-contract.ts` | 输入 md + 可选 persona → 输出 issues[]（fence / 嵌套 / variant / 行内闭合 / 主题 namespace 警告） |
+| `scripts/show-snippet.ts` | 按容器 name + variant 输出最小可用 markdown snippet（可选 --persona 主题敏感） |
 
 ## 模板
 

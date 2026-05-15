@@ -15,7 +15,7 @@
  */
 
 import type { Theme, ThemeVariants } from '../core/themes/types'
-import { VARIANT_IDS } from '../core/themes/types'
+import { DEFAULT_VARIANTS, VARIANT_IDS } from '../core/themes/types'
 import type {
   JSONSchema7,
   MotifShape,
@@ -35,6 +35,7 @@ import {
   validateSpec,
 } from '../core/themes/_shared/spec'
 import { render as pipelineRender, type RenderOutput } from '../core/pipeline'
+import { parseFrontmatter } from '../core/pipeline/frontmatter'
 import type { WxPatchOptions } from '../core/pipeline/platforms/wechat'
 import { listPlatforms } from '../core/pipeline/platforms/registry'
 import type { PlatformAdapter, PlatformStatus } from '../core/pipeline/platforms/types'
@@ -45,12 +46,15 @@ import {
   getVariantsForContainer as _getVariantsForContainer,
   getThemeDefaultVariants as _getThemeDefaultVariants,
   getContainerSnippet as _getContainerSnippet,
+  getThemeCapabilitiesView as _getThemeCapabilitiesView,
+  getRecommendedVariantsFor as _getRecommendedVariantsFor,
   type ContainerSpec,
   type ContainerCategory,
   type ContainerPack,
   type AttrSpec,
   type VariantDescriptor,
   type SnippetOptions,
+  type ThemeCapabilitiesView,
 } from '../core/vocabulary'
 
 // ============================================================
@@ -173,6 +177,43 @@ export function getContainerSnippet(
   return _getContainerSnippet(containerName, options)
 }
 
+/**
+ * 主题能力复合查询（"按主题筛容器 + 推荐 variant"一站式）。
+ *
+ * 输入 personaId 后聚合：
+ *   - PersonaSpec.variants / signatureContainers / capabilities
+ *   - ContainerVocabulary 全集（按 namespace 过滤本主题可用容器）
+ *   - 反向索引 themeCompat：哪些 variant 对本主题友好
+ *
+ * 让 LLM / 写作集成方一次拿到"swiss-grid 主题下该用什么、推荐什么、排除什么"。
+ */
+export function getThemeCapabilities(personaId: string): ThemeCapabilitiesView {
+  const spec = getPersona(personaId)
+  return _getThemeCapabilitiesView({
+    themeId: spec.id,
+    variants: { ...DEFAULT_VARIANTS, ...spec.variants },
+    capabilities: spec.capabilities,
+    signatureContainers: spec.signatureContainers,
+  })
+}
+
+/**
+ * 反向索引：列出对指定主题"友好"的 variant 清单（按 kind 分组），
+ * `spec.capabilities.variantOverrides` 中显式推荐的 id 排在最前。
+ *
+ * 与 getVariantsForContainer 的差别：本函数从主题视角枚举所有"对本主题友好"的 variant，
+ * 用于回答"作者切到 swiss-grid 后，admonition 类除了主题默认还推荐用什么"。
+ */
+export function getRecommendedVariantsFor(
+  personaId: string,
+): Record<import('../core/themes/types').VariantKind, string[]> {
+  const spec = getPersona(personaId)
+  return _getRecommendedVariantsFor({
+    themeId: spec.id,
+    capabilities: spec.capabilities,
+  })
+}
+
 // ============================================================
 // 校验
 // ============================================================
@@ -216,9 +257,16 @@ export type PublicRenderOutput = RenderOutput
  *
  * 三选一 persona / theme / spec 必须恰好给一个；都不给时默认 persona="default"。
  * 传 spec 时会先 validatePersona，失败抛 SpecValidationError。
+ *
+ * Frontmatter（L2 页面局部配置）解析：
+ *   - markdown 首部 `---\n theme: <id>\n---` 会**覆盖**入参 persona / theme / spec
+ *     （让一篇 markdown 自带主题声明；集成方读 frontmatter 后即可决定渲染人格）
+ *   - `variants:` 嵌套块作为 L2 优先级生效，介于 attrs.variant 与 theme.variants 之间
+ *   - 未识别的主题 id 静默回退到 input.persona / theme / spec；frontmatterIssues 报告 warning
  */
 export function render(input: PublicRenderInput): PublicRenderOutput {
-  const theme = resolveTheme(input)
+  const { config: fm } = parseFrontmatter(input.md)
+  const theme = resolveTheme(input, fm.theme)
   return pipelineRender({
     md: input.md,
     theme,
@@ -247,12 +295,18 @@ export function listPublishPlatforms(): readonly PublicPlatformInfo[] {
   }))
 }
 
-function resolveTheme(input: PublicRenderInput): Theme {
+function resolveTheme(input: PublicRenderInput, frontmatterTheme?: string): Theme {
   const declared = [input.persona, input.theme, input.spec].filter((v) => v !== undefined).length
   if (declared > 1) {
     throw new Error(
       'render: provide exactly one of `persona` | `theme` | `spec` (got ' + declared + ')',
     )
+  }
+  // L2 frontmatter.theme 优先级最高：让一篇 markdown 自带主题声明，凌驾于调用方的 input.persona / theme / spec。
+  // 未注册的 frontmatter.theme 静默回退到 input（避免 publish 时因小拼写挂掉整篇）；详细 warning 由
+  // pipelineRender 输出的 frontmatterIssues 承担。
+  if (frontmatterTheme && PERSONA_REGISTRY[frontmatterTheme]) {
+    return specToTheme(PERSONA_REGISTRY[frontmatterTheme])
   }
   if (input.theme) return input.theme
   if (input.spec) {
@@ -341,4 +395,5 @@ export type {
   AttrSpec,
   VariantDescriptor,
   SnippetOptions,
+  ThemeCapabilitiesView,
 }

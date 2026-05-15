@@ -16,10 +16,16 @@
 import {
   CONTAINER_VOCABULARY,
   type ContainerSpec,
+  type ContainerPack,
+  type PackNamespace,
+  isContainerEnabledForTheme,
   lookupContainerSpec,
+  namespaceOf,
+  packOf,
 } from './vocabulary'
 import {
   ADMONITION_VARIANTS,
+  ALL_VARIANT_DEFS,
   CODE_BLOCK_VARIANTS,
   COMPARE_VARIANTS,
   DIVIDER_VARIANTS,
@@ -178,4 +184,146 @@ export function getContainerSnippet(
     ? open.replace(/\bvariant=("[^"]*"|'[^']*'|\S+)/, `variant=${options.variantId}`)
     : `${open}${open.endsWith(' ') ? '' : ' '}variant=${options.variantId}`.trimEnd()
   return lines.join('\n')
+}
+
+// ============================================================
+// 5. 主题能力复合查询（"按主题筛容器 + 推荐 variant"一站式）
+// ============================================================
+
+/**
+ * 主题能力快照：把 spec.capabilities + signatureContainers + ContainerPack namespace
+ * + variants + themeCompat 反向索引 join 起来的复合视图。
+ *
+ * 设计意图：让 LLM / 集成方一次拿"swiss-grid 主题下我能用什么、推荐什么"，
+ * 而不是自己 join 4-5 个查询函数。
+ */
+export interface ThemeCapabilitiesView {
+  /** 主题 id（kebab） */
+  themeId: string
+  /** 主题在每个 variant slot 的当前默认选择 */
+  defaultVariants: Record<VariantKind, string>
+  /** 主题在每个 slot 的"额外推荐"——来自 spec.capabilities.variantOverrides */
+  recommendedVariantOverrides: Partial<Record<VariantKind, string>>
+  /** 每个容器在本主题下的能力描述（available / signature / namespace） */
+  containers: ReadonlyArray<{
+    /** fence 名（kebab） */
+    id: string
+    /** 命名空间分类 */
+    namespace: PackNamespace
+    /** 完整 pack 值（'base' / 'pack:editorial' / 'theme:data-brief'） */
+    pack: ContainerPack
+    /** 是否在本主题下"启用"：
+     *   - base / pack:* 任何主题都启用
+     *   - theme:<id> 仅 themeId === id 启用
+     *   - 同时考虑 spec.capabilities.excluded（排除黑名单）
+     *   - 若 spec.capabilities.containers 声明了白名单，未列入 = 未启用 */
+    available: boolean
+    /** 是否在 spec.signatureContainers 内（"主题承诺签名"） */
+    signature: boolean
+    /** 是否被 spec.capabilities.excluded 显式排除 */
+    excluded: boolean
+  }>
+}
+
+/** 内部辅助：列举所有 VariantKind */
+const VARIANT_KINDS: VariantKind[] = [
+  'admonition',
+  'quote',
+  'compare',
+  'steps',
+  'divider',
+  'sectionTitle',
+  'codeBlock',
+  'note',
+]
+
+/**
+ * 复合查询：聚合 vocabulary + theme + spec.capabilities + signatureContainers 给出
+ * 本主题下"哪些容器可用 / 推荐 / 排除"的一站式视图。
+ *
+ * 调用方需要传入主题侧三件源数据（按 src/public 的成熟 API 风格，不让本模块反向依赖 personas）：
+ *   - themeId / variants：来自 Theme.id / Theme.variants
+ *   - capabilities：来自 spec.capabilities（缺省 → 兜底全集）
+ *   - signatureContainers：来自 spec.signatureContainers（styleKey 集合，camelCase）
+ */
+export function getThemeCapabilitiesView(args: {
+  themeId: string
+  variants: ThemeVariants
+  capabilities?: {
+    containers?: readonly string[]
+    variantOverrides?: Partial<ThemeVariants>
+    excluded?: readonly string[]
+  }
+  signatureContainers?: readonly string[]
+}): ThemeCapabilitiesView {
+  const sigSet = new Set<string>()
+  // signatureContainers 是 styleKey camelCase（如 'kpiDashboard'）；map 回 fence name（kebab）
+  for (const spec of CONTAINER_VOCABULARY) {
+    if (spec.styleKey && args.signatureContainers?.includes(spec.styleKey)) {
+      sigSet.add(spec.name)
+    }
+  }
+
+  const whitelist = args.capabilities?.containers
+    ? new Set(args.capabilities.containers)
+    : undefined
+  const excluded = new Set(args.capabilities?.excluded ?? [])
+
+  const containers = CONTAINER_VOCABULARY.map((spec) => {
+    const pack = packOf(spec)
+    const namespace = namespaceOf(pack)
+    const nsEnabled = isContainerEnabledForTheme(spec, args.themeId)
+    const whitelistOk = whitelist ? whitelist.has(spec.name) : true
+    const ex = excluded.has(spec.name)
+    return {
+      id: spec.name,
+      namespace,
+      pack,
+      available: nsEnabled && whitelistOk && !ex,
+      signature: sigSet.has(spec.name),
+      excluded: ex,
+    }
+  })
+
+  const defaultVariants: Record<VariantKind, string> = {} as Record<VariantKind, string>
+  for (const k of VARIANT_KINDS) defaultVariants[k] = args.variants[k]
+
+  return {
+    themeId: args.themeId,
+    defaultVariants,
+    recommendedVariantOverrides: { ...(args.capabilities?.variantOverrides ?? {}) },
+    containers,
+  }
+}
+
+/**
+ * 反向索引：列出 `themeCompat` 包含 themeId 的全部 variant id（按 kind 分组）。
+ *
+ * 与 getVariantsForContainer 的差别：本函数从主题视角枚举所有"对本主题友好"的 variant，
+ * 用于"作者切到 swiss-grid 后，admonition 类除了主题默认还推荐用什么"这类查询。
+ *
+ * `spec.capabilities.variantOverrides` 中显式推荐的 id 会被排在该 kind 列表最前。
+ */
+export function getRecommendedVariantsFor(args: {
+  themeId: string
+  capabilities?: {
+    variantOverrides?: Partial<ThemeVariants>
+  }
+}): Record<VariantKind, string[]> {
+  const overrides = args.capabilities?.variantOverrides ?? {}
+  const out = {} as Record<VariantKind, string[]>
+  for (const kind of VARIANT_KINDS) {
+    const fromCompat: string[] = []
+    for (const def of ALL_VARIANT_DEFS) {
+      if (def.meta.kind !== kind) continue
+      const compat = def.meta.themeCompat
+      if (compat && compat.includes(args.themeId)) fromCompat.push(def.meta.id)
+    }
+    const explicit = overrides[kind] as string | undefined
+    const merged = explicit
+      ? [explicit, ...fromCompat.filter((id) => id !== explicit)]
+      : fromCompat
+    out[kind] = merged
+  }
+  return out
 }
