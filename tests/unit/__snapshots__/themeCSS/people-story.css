@@ -50,6 +50,24 @@
   letter-spacing: 0.5px;
 }
 
+.markdown-body h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #17171a;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.markdown-body h6 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #5d5d63;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
 .markdown-body p {
   font-size: 16px;
   line-height: 1.75;
@@ -212,6 +230,16 @@
 .markdown-body .wx-emphasis {
   color: #1b2330;
   font-weight: 500;
+}
+
+.markdown-body s, .markdown-body del {
+  color: #5d5d63;
+  text-decoration: line-through;
+}
+
+.markdown-body ins {
+  color: #1b2330;
+  text-decoration: underline;
 }
 
 .markdown-body .container-intro {

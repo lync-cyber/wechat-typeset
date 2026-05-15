@@ -79,6 +79,13 @@ export interface ThemeElements {
    * 介于 h3 章节小节与 p 正文之间，和 steps 容器搭配使用。
    */
   h4: CSSObject
+  /**
+   * 五/六级标题。markdown-it 默认解析 `##### / ######` 为 `<h5>/<h6>`,
+   * 早期骨架只到 h4 让 h5/h6 走浏览器默认字号——本字段补齐主题入口。
+   * 主题不显式覆写时由 baseElements 给一个比 h4 更弱的兜底。
+   */
+  h5: CSSObject
+  h6: CSSObject
   p: CSSObject
   blockquote: CSSObject
   ul: CSSObject
@@ -95,6 +102,10 @@ export interface ThemeElements {
   a: CSSObject
   hr: CSSObject
   table: CSSObject
+  /** 表头单元格。旧版硬编码在 themeCSS, 主题无法定制；现下沉到主题槽位。 */
+  th: CSSObject
+  /** 数据单元格。同 th。 */
+  td: CSSObject
   strong: CSSObject
   em: CSSObject
 }
@@ -303,6 +314,15 @@ export interface ThemeInline {
   highlight: CSSObject
   wavy: CSSObject
   emphasis: CSSObject
+  /**
+   * GFM 删除线（`~~text~~` → `<s>`）。早期 ThemeInline 没此槽位,
+   * 浏览器默认 line-through 与主题无关；现给主题作者一个调色 / 调位置的入口。
+   */
+  del: CSSObject
+  /**
+   * 插入（markdown-it-ins `++text++` → `<ins>`）。同 del。
+   */
+  ins: CSSObject
 }
 
 // ============================================================

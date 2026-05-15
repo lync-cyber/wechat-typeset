@@ -58,12 +58,13 @@ export interface ThemeVoiceResult {
  * 本数组同步追加，否则新元素会"无声地"落出 voice 检查范围。
  */
 export const BASE_ELEMENT_KEYS = [
-  'h1', 'h2', 'h3', 'h4',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
   'p', 'blockquote',
   'ul', 'ol', 'li',
   'code', 'kbd', 'pre',
   'img', 'a', 'hr',
-  'table', 'strong', 'em',
+  'table', 'th', 'td',
+  'strong', 'em',
 ] as const satisfies readonly string[]
 
 /**

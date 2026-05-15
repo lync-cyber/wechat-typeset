@@ -159,6 +159,25 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'margin-bottom': '8px',
       'line-height': '1.5',
     },
+    // h5 / h6 比 h4 更弱 —— 公众号正文很少深到 5/6 级,
+    // 默认走"与正文同字号 + textMuted + 600/500 字重"克制处理,
+    // 给作者一个不至于跌进浏览器默认的兜底。
+    h5: {
+      'font-size': `${typography.baseSize}px`,
+      'font-weight': '600',
+      color: colors.text,
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+    },
+    h6: {
+      'font-size': `${typography.baseSize}px`,
+      'font-weight': '500',
+      color: colors.textMuted,
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+    },
     p: {
       'font-size': `${typography.baseSize}px`,
       'line-height': String(typography.lineHeight),
@@ -256,6 +275,18 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'margin-top': '0',
       'margin-bottom': '18px',
       'font-size': '14px',
+    },
+    // th / td 旧版硬编码在 themeCSS 里；下沉到主题槽位后由各主题按 voice 覆写。
+    // 兜底保持与历史 themeCSS 等价行为：border 单色 + 6px/10px padding + bgSoft 表头。
+    th: {
+      border: `1px solid ${colors.border}`,
+      padding: '6px 10px',
+      'background-color': colors.bgSoft,
+      'text-align': 'left',
+    },
+    td: {
+      border: `1px solid ${colors.border}`,
+      padding: '6px 10px',
     },
     strong: { 'font-weight': '700', color: colors.text },
     em: { 'font-style': 'italic', color: colors.text },
@@ -462,6 +493,16 @@ export function baseInline(tokens: ThemeTokens): ThemeInline {
     emphasis: {
       color: tokens.colors.primary,
       'font-weight': '600',
+    },
+    // 删除线 / 插入：让 textMuted 承担"已弃用"语义,主色承担"新增"语义。
+    // 主题作者通过 spec.inline.del / ins 覆写。
+    del: {
+      color: tokens.colors.textMuted,
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: tokens.colors.primary,
+      'text-decoration': 'underline',
     },
   }
 }
