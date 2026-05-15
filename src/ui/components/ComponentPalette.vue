@@ -453,7 +453,7 @@ defineExpose({ openSaveDialog })
 }
 .hidden-input { display: none; }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .head-action { min-height: 44px; padding: 0 var(--sp-3); display: inline-flex; align-items: center; }
   .tabs {
     flex-wrap: nowrap;

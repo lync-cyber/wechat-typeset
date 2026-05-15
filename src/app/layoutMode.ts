@@ -1,0 +1,14 @@
+/**
+ * 单一移动端判定：触屏 + 窄屏 双成立，或纯极窄屏（兜底罕见小机型）。
+ * 桌面笔记本（鼠标 + 高 DPI 缩放）即便 CSS 宽度跌破 767px 也保留双栏。
+ *
+ * 所有 *.vue 文件里的 `@media (max-width: 767px) and (pointer: coarse), (max-width: 540px)`
+ * 必须与本常量字面一致——查找替换前先 grep 这两个字面值。
+ */
+export const MOBILE_MEDIA_QUERY =
+  '(max-width: 767px) and (pointer: coarse), (max-width: 540px)'
+
+export function matchesMobile(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia(MOBILE_MEDIA_QUERY).matches
+}

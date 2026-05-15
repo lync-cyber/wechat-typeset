@@ -100,6 +100,7 @@
   --surface-raised: #ffffff;          /* modals, floating cards */
   --border:         var(--paper-300);
   --border-strong:  var(--paper-400);
+  --preview-frame:  var(--paper-300);
   --text:           var(--paper-800);
   --text-muted:     var(--paper-600);
   --text-subtle:    var(--paper-500);
@@ -279,6 +280,7 @@
   --surface-raised: var(--ink-500);
   --border:         var(--ink-400);
   --border-strong:  var(--ink-300);
+  --preview-frame:  var(--ink-700);
   --text:           var(--ink-50);
   --text-muted:     var(--ink-100);
   --text-subtle:    var(--ink-200);

@@ -260,7 +260,7 @@ function resetToTheme() {
 }
 
 /* ---- 移动端适配 ---- */
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .panel { width: 100%; border-left: none; }
   /* close 按钮 44px 触摸目标已由 PanelHeader 移动端样式承担，此处不再重复 */
   /* 预设网格更宽松 —— 窄屏单列 */

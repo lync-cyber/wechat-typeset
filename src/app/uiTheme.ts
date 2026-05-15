@@ -12,8 +12,8 @@
  *   - 二态枚举：light | dark；想做"跟随系统"可扩 'system' 第三态 + 在 watch 里
  *     根据 matchMedia('(prefers-color-scheme: dark)') 写回 data-theme。
  *
- * 预览栏隔离：Preview.vue 用 iframe srcdoc 重写文档，自带 #ffffff/#ececec 底，
- * 父级 data-theme 不会渗入 .markdown-body —— UI 暗色绝不污染"微信保真"预览。
+ * 预览栏隔离：.phone-viewport 锁死 #ffffff 保持微信保真；data-theme 只通过
+ * iframe 宿主的 var(--preview-frame) 改外圈，不渗入 .markdown-body。
  */
 import { ref, watch } from 'vue'
 import { safeRead, safeWrite } from '../infra/storage/_kv'

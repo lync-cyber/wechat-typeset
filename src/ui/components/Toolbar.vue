@@ -674,7 +674,7 @@ defineExpose({
 @media (max-width: 900px) {
   .stats { display: none; }
 }
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   /* ── 两行工具栏 ──────────────────────────────────────────
      第一行（40px）：品牌名左 / 导入草稿按钮右
      第二行（52px）：工具图标左 / 操作按钮右
@@ -766,6 +766,12 @@ defineExpose({
     padding-bottom: 0;
     border-bottom-color: transparent;
   }
+
+  .popover {
+    max-height: calc(
+      100vh - 93px - var(--mobile-tabs-h, 56px) - env(safe-area-inset-bottom, 0px) - 16px
+    );
+  }
 }
 
 /* 两行工具栏总高约 92px（40px 标题行 + 52px 工具行），品牌名不再需要隐藏 */
@@ -828,6 +834,9 @@ defineExpose({
   box-shadow: var(--shadow-lift);
   z-index: 40;
   min-width: 220px;
+  max-height: calc(100vh - var(--toolbar-h) - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .popover-theme { left: 0; padding: var(--sp-2); width: 320px; }
 

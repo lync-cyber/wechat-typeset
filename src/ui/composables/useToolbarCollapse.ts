@@ -12,8 +12,8 @@
  *   - 没用滚动绝对像素值是为了适配 editor / preview 高度不同（同一比例已归一化）
  */
 import { onBeforeUnmount, ref } from 'vue'
+import { MOBILE_MEDIA_QUERY } from '../../app/layoutMode'
 
-const MOBILE_MQ = '(max-width: 767px)'
 const DELTA_THRESHOLD = 0.01
 const TOP_REVEAL_THRESHOLD = 0.02
 
@@ -29,7 +29,7 @@ export function useToolbarCollapse() {
   }
 
   if (typeof window !== 'undefined') {
-    mq = window.matchMedia(MOBILE_MQ)
+    mq = window.matchMedia(MOBILE_MEDIA_QUERY)
     syncMobile()
     mq.addEventListener('change', syncMobile)
   }

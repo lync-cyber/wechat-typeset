@@ -64,11 +64,12 @@ const SHELL_DOC = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=375, initial-scale=1, maximum-scale=1">
 <style>
-  /* —— 外框层，只作用于容器节点；不染指 .markdown-body —— */
+  /* 外框透明，由宿主 iframe.preview-frame 的 var(--preview-frame) 透出底色；
+   * 不要给 html/body 加背景，否则会盖掉父级亮暗切换。 */
   html, body {
     margin: 0;
     padding: 0;
-    background: #ececec;
+    background: transparent;
   }
   body {
     display: flex;
@@ -180,7 +181,7 @@ watch(() => props.html, () => {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: var(--paper-300);
+  background: var(--preview-frame);
 }
 .preview-meta {
   flex: 0 0 auto;
@@ -206,7 +207,7 @@ watch(() => props.html, () => {
   width: 100%;
   border: none;
   display: block;
-  background: var(--paper-300);
+  background: var(--preview-frame);
 }
 
 /* 透明度面板：只在有 patch log 时显示，默认折叠为单行 */

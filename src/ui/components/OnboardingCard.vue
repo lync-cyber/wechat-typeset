@@ -16,6 +16,7 @@
  * .onboard-spotlight，避免残留高亮。
  */
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { MOBILE_MEDIA_QUERY } from '../../app/layoutMode'
 
 const emit = defineEmits<{
   (e: 'dismiss'): void
@@ -123,7 +124,7 @@ function dismiss() {
 }
 
 onMounted(() => {
-  mq = window.matchMedia('(max-width: 767px)')
+  mq = window.matchMedia(MOBILE_MEDIA_QUERY)
   syncMobile()
   mq.addEventListener('change', syncMobile)
   applySpotlight(current.value.anchor)
@@ -288,7 +289,7 @@ onUnmounted(() => {
   text-decoration-style: dotted;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   /* 移动端把卡贴到屏幕中部偏下，不被底部 tab 遮挡 */
   .onboard {
     right: var(--sp-3);

@@ -15,6 +15,7 @@ import { baseThemeId, editorWidth, md } from './state'
 import { safeRead, safeWrite } from '../infra/storage/_kv'
 import { THEME_STORAGE_KEY, EDITOR_WIDTH_STORAGE_KEY } from '../infra/storage/storageKeys'
 import { useUiTheme } from './uiTheme'
+import { matchesMobile } from './layoutMode'
 import {
   peekComponentShareHash,
   tryImportComponentFromHash,
@@ -104,8 +105,7 @@ export function useBootstrap(deps: BootstrapDeps) {
   // 移动端抽屉/面板打开 → 锁 body 滚动；桌面上抽屉不占满视口，无需锁。
   watch(deps.hasOpenDrawer, (open) => {
     if (typeof document === 'undefined') return
-    const mobile = window.matchMedia('(max-width: 767px)').matches
-    document.body.classList.toggle('drawer-scroll-lock', open && mobile)
+    document.body.classList.toggle('drawer-scroll-lock', open && matchesMobile())
   })
 
   // 编辑栏宽度持久化：变化时写盘；置 null（恢复默认）时主动删除 key，

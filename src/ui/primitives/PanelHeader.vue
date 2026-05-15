@@ -91,7 +91,7 @@ const emit = defineEmits<{
   color: var(--text);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   /* 移动端关闭按钮达到 44px 触摸目标——侧面板（DraftDrawer 等）无 mask 可点，
      必须保证 close 按钮够大；modal 形态有 mask 兜底但同样不亏。 */
   .panel-header__close {

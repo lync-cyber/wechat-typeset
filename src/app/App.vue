@@ -354,9 +354,7 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
   flex: 1 1 auto;
   display: flex;
   min-height: 0;
-  /* 编辑栏 fixed-width 时 splitter 与 preview 之间的"空隙"会显出 .main 底色——
-   * 用与预览栏一致的纸面色，让间隙看起来像预览侧延伸出的版式留白。 */
-  background: var(--paper-300);
+  background: var(--preview-frame);
 }
 .pane {
   flex: 1 1 0;
@@ -365,21 +363,18 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
   flex-direction: column;
   position: relative;
 }
-/* 默认：编辑栏 flex 自适应填充。PaneSplitter 组件自身带 1px border-right 充当分割线，
- * 编辑栏不再重复画。 */
 .pane-editor.fixed-width {
   flex: 0 0 auto;
   width: var(--editor-w);
 }
 .pane-preview {
-  flex: 0 0 auto;
+  /* 容器窄于自然宽时收到 280；iframe 内 @media (max-width:374) 等比缩放 .phone-viewport。 */
+  flex: 0 1 auto;
   width: calc(var(--preview-w) + var(--sp-7));
-  /* 编辑栏 fixed-width 时，flex 容器里剩余空间通过双 auto margin 均分到预览栏
-   * 左右，达成"始终居中"——编辑栏越窄，预览栏左右"纸面留白"越对称。
-   * 默认 flex:1 模式下编辑栏吃满剩余，没有自由空间可分，auto 不产生效果。 */
+  min-width: 280px;
   margin-left: auto;
   margin-right: auto;
-  background: var(--paper-300);
+  background: var(--preview-frame);
 }
 
 /* Mobile drawer mask (hidden on desktop) */
@@ -444,7 +439,7 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
 .mobile-tab-copy:hover { background: var(--accent-hover); }
 .mobile-tab-copy:active { background: var(--accent-press); }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .app {
     --mobile-tabs-h: 56px;
     --toolbar-h: 93px; /* 两行工具栏：40px 标题行 + 1px 分隔线 + 52px 工具行 */

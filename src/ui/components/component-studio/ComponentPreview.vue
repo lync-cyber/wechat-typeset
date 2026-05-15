@@ -110,7 +110,7 @@ const srcdoc = computed(() => {
   flex: 1 1 auto;
   width: 100%;
   border: none;
-  background: var(--paper-300);
+  background: var(--preview-frame);
   min-height: 200px;
 }
 </style>

@@ -168,7 +168,7 @@ function indexOf(cmd: Command): number {
   font-size: var(--fs-15);
   color: var(--text);
 }
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
   .cmd-input { font-size: 16px; height: 40px; }
   .cmd-item { padding: 12px var(--sp-5); min-height: 44px; }
 }
