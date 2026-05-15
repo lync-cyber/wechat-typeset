@@ -662,6 +662,70 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 容器内层 inline-style 覆盖（暗底专属）
+  //
+  // 兜底 baseInnerStyles 假设浅底（textMuted 灰色在浅底可见，primary 在浅底够亮）。
+  // 本主题 bg=#0e1a2b / containers bg=#14263d，textMuted=#a89070 在暗底对比度不足——
+  // 所有 kicker/title 改走 accent 橙金或 textInverse 白，保证暗底上可读。
+  // ============================================================
+  innerStyles: {
+    // abstract 容器：透明底落在文章底 #0e1a2b 上。kicker 走 accent 橙金 + monospace 电台信号感
+    abstractKicker: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '10px',
+      'font-weight': '700',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '6px',
+    },
+    // keyNumber 容器：bg=#14263d 暗底，大数字走 accent 橙金 + monospace 电台数据气质
+    keyNumberValue: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '34px',
+      'font-weight': '700',
+      'line-height': '1.1',
+      'letter-spacing': '-0.5px',
+      'margin-bottom': '4px',
+    },
+    // keyNumber 暗底上小 kicker（"KEY METRIC"）：textMuted 在 #14263d 几乎不可见，改 accent
+    keyNumberKicker: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '11px',
+      'font-weight': '600',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    // seeAlso 容器：bg=#14263d 暗底，title 走 textInverse（暖米白）保持最大对比
+    seeAlsoTitle: {
+      __reset: true,
+      color: '#d9c9a8',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '10px',
+      'font-weight': '700',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+      'margin-bottom': '8px',
+    },
+    // editor-note 容器：bg=#14263d 暗底，kicker（"播后札记 · LATE-NIGHT NOTE"）走 accent 橙金
+    editorNoteKicker: {
+      __reset: true,
+      color: '#d97a3c',
+      'font-family': 'Menlo,Monaco,monospace',
+      'font-size': '10px',
+      'font-weight': '700',
+      'letter-spacing': '1.5px',
+      'margin-bottom': '8px',
+    },
+  },
+
+  // ============================================================
   // 模板片段（作者侧示例 · 不影响 CSS 生成；commonTemplates 隐式合并）
   // ============================================================
   templates: {
