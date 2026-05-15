@@ -386,8 +386,6 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     // footnotes：报刊脚注排印基线。10px → 9px / 1.75 → 1.5 / 加 letter-spacing
     // 把"和正文同款"的体感拉开；padding-left + 负 text-indent 实现 hanging indent
     // ——markdown 段落继承 text-indent 让每条 "[N] 文本" 的编号悬挂在外、正文左缘对齐。
-    // 不加 max-height / overflow-y：公众号沙箱会剥这两个属性，预览侧出现滚动条而成品
-    // 没有 → 体感分裂；契约里建议作者把超长引用走 refs（流式）或拆到正文附录。
     footnotes: {
       'border-top': `1px solid ${tokens.colors.border}`,
       'padding-top': '6px',
@@ -399,17 +397,19 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'letter-spacing': '0.01em',
       color: tokens.colors.textMuted,
     },
-    // refs：footnotes 的流式同胞，给"条目多到一条一行会顶版"的长引用列表。视觉收紧
-    // 同 footnotes（9px / muted / 上分割线），但不做 hanging indent——作者用 `·` / `／`
-    // 在 body 里手动分隔条目，所有条目作为一段 wrap 排列，纵向高度可装 2~3 倍。
+    // refs 带 max-height + overflow-y：公众号 inline overflow 实测保留（参 mdnice .multiquote-1），让长引用列表内部滚动而非顶版。
     refs: {
       'border-top': `1px solid ${tokens.colors.border}`,
       'padding-top': '6px',
+      'padding-right': '4px',
       margin: '14px 0',
       'font-size': '9px',
       'line-height': '1.6',
       'letter-spacing': '0.01em',
       color: tokens.colors.textMuted,
+      'max-height': '320px',
+      'overflow-y': 'auto',
+      '-webkit-overflow-scrolling': 'touch',
     },
     ctaBar: { margin: '22px 0' },
     qrFollow: {

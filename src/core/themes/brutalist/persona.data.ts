@@ -518,16 +518,19 @@ export const spec: PersonaSpec = {
       'line-height': '1.75',
       color: '#a0a0a0',
     },
-    // refs：紧凑流式参考（与 footnotes 同字号 / muted 色 / 上虚线）
     refs: {
       __reset: true,
       'border-top': '1px dashed #f0f0f0',
       'padding-top': '8px',
+      'padding-right': '4px',
       margin: '20px 0',
       'font-size': '10px',
       'line-height': '1.75',
       'letter-spacing': '0.01em',
       color: '#a0a0a0',
+      'max-height': '320px',
+      'overflow-y': 'auto',
+      '-webkit-overflow-scrolling': 'touch',
     },
     // cta-bar：三栏（LIKE / STAR / FWD）—— renderer 已提供 display:table 骨架
     ctaBar: { margin: '24px 0' },
