@@ -186,14 +186,14 @@ export const spec: PersonaSpec = {
   // ============================================================
   variants: {
     admonition: 'news-underline', // ★ 设计稿 multi-callout 母本：实色徽章 + 1px 竖分隔 + 1px 底线（四态独立 ::: 块连续罗列即成一栏，无需 :::: callout-group）
-    quote: 'classic', // pull-quote 走 blockquote element 自定义样式（左 12px 红条 + 25% 偏移）
+    quote: 'editorial-block', // 国际排印 editorial pull-quote：左 6px 主色条 + 大号粗体 + uppercase byline
     compare: 'data-card', // 数据卡（顶 3px 色条 + 大号数字）—— 设计稿少见,保留备用
-    steps: 'number-circle',
+    steps: 'split-row', // 左竖条 + 大号编号，与 Neue Grafik 网格分栏语汇同源
     divider: 'seal-mark', // 设计稿 signoff: 20×20 红方块右对齐（消费 sealMark motif）
-    sectionTitle: 'bordered',
-    codeBlock: 'bare', // pre 元素走主题 voice（黑底白字）
+    sectionTitle: 'kicker-stack', // 上 uppercase letterspaced kicker + 主标题，Swiss 排印典范
+    codeBlock: 'inline-card', // pre 元素走主题 voice（黑底白字）+ inline-card tinted 软底
     note: 'side-bar', // 左 2px 中性线 + 缩进
-    footnotes: 'lined',
+    footnotes: 'top-rule', // 顶 hairline + 11px 密栏，国际排印底栏
   },
 
   // ============================================================

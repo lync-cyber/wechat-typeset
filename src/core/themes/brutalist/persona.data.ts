@@ -172,13 +172,13 @@ export const spec: PersonaSpec = {
     // ctx.info 覆盖 news-row 默认 TIP/INFO/WARN/STOP。
     admonition: 'news-row',
     quote: 'tilted-sticker', // 粗野主义签名：反色 + transform:rotate(-1deg) + 大字 sans 粗体
-    compare: 'column-card',
-    steps: 'number-circle',
+    compare: 'stacked-row', // 粗野主义偏竖叠陈述：先 A 段后 B 段，硬边对照
+    steps: 'split-row', // 左 4px 主色实线 + 左编号，硬边骨架与 news-row 同源
     divider: 'flower', // 用本主题 dividerFlower 的"两线 + primary 方块"
-    sectionTitle: 'bordered',
-    codeBlock: 'bare', // pre 元素直接走主题 voice（白底反色 + 左黄竖线）
+    sectionTitle: 'ribbon-stamp', // 左侧实色印章戳 + 主标题，punk-zine 标题语汇
+    codeBlock: 'inline-card', // tinted 软底 + 左主色窄竖条，与 news-row 同色块语言
     note: 'side-bar', // 左 2px 短线 + 缩进,与"批注"语义一致
-    footnotes: 'lined',
+    footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，punk zine 底栏
   },
 
   // ============================================================

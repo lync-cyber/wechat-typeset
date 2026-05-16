@@ -261,13 +261,13 @@ export const spec: PersonaSpec = {
   variants: {
     admonition: 'report-section', // 全主题签名：顶 3px 底 1px + § 方角标签，研究报告条款感（从圆角胶囊升级到方角标签）
     quote: 'column-rule', // quoteCard：左右双竖线，Benedict Evans 风 pull-quote
-    compare: 'column-card', // 多列矩阵；拒绝 ledger
+    compare: 'data-card', // 数据卡：与 report-section 的研究报告骨架同源（顶色条 + 大号数字）
     steps: 'timeline-dot', // 拒绝 number-circle / ribbon-chain
     divider: 'glyph', // 中央菱形 ◆
     sectionTitle: 'cornered', // 左上 3×3 accent 方块
     codeBlock: 'bare', // code 安静处理；不做 header-bar 语言标签带
     note: 'side-bar', // 左 2px 标线 + 缩进，与 report-section 条款感呼应
-    footnotes: 'lined',
+    footnotes: 'top-rule', // 顶部 hairline + 密栏小字，研究报告参考文献条款感
   },
 
   signatureContainers: [

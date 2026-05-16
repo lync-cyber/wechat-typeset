@@ -210,3 +210,9 @@ interface IndustryObserverInput {
 ::: footer-cta 订阅「某某观察」 cta=扫码订阅 ▸ issue=023 date=2025-04-20 kind=周刊
 每周二清晨送到，30 分钟读完。不追热点，不发快讯，只讲值得下判断的行业变化。
 :::
+
+::: footnotes 参考来源 · References
+[1] CB Insights · 2026 Q1 Tech Industry Report
+[2] 艾瑞咨询 · 中国 SaaS 市场季度数据 2026Q1
+[3] 各公司公开财报，截至 2026-04-15
+:::

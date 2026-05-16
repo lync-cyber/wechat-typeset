@@ -239,13 +239,13 @@ export const spec: PersonaSpec = {
     // 取代泛用 accent-bar——academic-frontier 真正承继的是 Nature/arXiv 的 \begin{theorem} 视觉
     admonition: 'sidenote-latex',
     quote: 'frame-brackets',
-    compare: 'column-card',
+    compare: 'stacked-row', // 学术陈述偏垂直对照：先述 A 再述 B，避免双列拥挤
     steps: 'timeline-dot',
-    divider: 'rule',
-    sectionTitle: 'bordered',
-    codeBlock: 'bare',
+    divider: 'dots', // 极简 · · · 圆点分隔，与 sidenote-latex 的克制语言同源
+    sectionTitle: 'number-prefix', // monospace 章节编号，符合论文 §1 / §2 排印
+    codeBlock: 'line-numbers', // 学术代码偏好行号，便于正文引用"见 line 12"
     note: 'box-callout', // 学术风：1px 边框包裹的 "Remark" 框，与 sidenote-latex 同语调
-    footnotes: 'lined',
+    footnotes: 'dense-academic', // 2px 章节杆 + 深 hanging，论文 bibliography 章
   },
 
   // ============================================================

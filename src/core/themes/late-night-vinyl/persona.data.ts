@@ -208,19 +208,22 @@ export const spec: PersonaSpec = {
     // 与设计稿 multi-callout（cue/b-side/static/off-air）的视觉高度对齐：
     // 仅徽章字 + 色不同，正文紧凑同色族；徽章文字由作者写 `::: info cue` 直接覆盖。
     admonition: 'news-row',
-    // classic：本主题不主推 ::: quote-card；pull-quote 由 markdown `>` 走
-    // elements.blockquote（上下橙线 + 深蓝卡底）担纲。
-    quote: 'classic',
-    compare: 'column-card',
-    steps: 'number-circle',
+    // tilted-sticker：punk-zine 反色贴纸（白底深蓝字 + 微旋）—— 与 elements.blockquote 的橙线卡底协同
+    quote: 'tilted-sticker',
+    // stacked-row：竖叠陈述，符合 vinyl zine 单列纵贯叙事节奏
+    compare: 'stacked-row',
+    // split-row：左 4px 实色 + 大号编号，硬边节奏
+    steps: 'split-row',
     // dots：设计稿 divider-ornament 原型（· · · 圆点分割）
     divider: 'dots',
-    sectionTitle: 'bordered',
-    // bare：pre 元素直接走主题 voice（黑底橙框 + monospace inline）
-    codeBlock: 'bare',
+    // ribbon-stamp：左侧实色戳记 + 主标题，与 news-row 同色块语言
+    sectionTitle: 'ribbon-stamp',
+    // terminal-frame：暗调 vinyl 与 terminal 窗口腔语言匹配
+    codeBlock: 'terminal-frame',
     // side-bar：左 2px 实线 + 缩进 —— 与 editor-note callout 形态错开
     note: 'side-bar',
-    footnotes: 'lined',
+    // boxed-aside：narrative aside 软底卡片，与 zine 内附注同源
+    footnotes: 'boxed-aside',
   },
 
   // ============================================================

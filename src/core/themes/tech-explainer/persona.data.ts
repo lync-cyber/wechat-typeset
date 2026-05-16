@@ -307,15 +307,15 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2 每节开头的 primary variant）
   // ============================================================
   variants: {
-    admonition: 'accent-bar', // §2.10-2.13 tip/warning/info/danger 全部 accent-bar
+    admonition: 'accent-bar', // §2.10-2.13 tip/warning/info/danger 全部 accent-bar（保留默认是教程主题的刻意选择）
     quote: 'column-rule', // §2.5 双侧细竖线夹住段落
-    compare: 'column-card', // §2.15 Do/Don't 双栏
-    steps: 'number-circle', // §2.16 圆圈数字（+ 容器 border-left 形成串珠）
-    divider: 'rule', // §2.17 极简 1px 实线
-    sectionTitle: 'bordered', // §2.4 short-bar-heading
+    compare: 'stacked-row', // §2.15 Do/Don't 偏垂直陈述：先 Do 段后 Don't 段，避免移动端双栏挤压
+    steps: 'step-card', // §2.16 教程偏卡片化分步：每步独立浅底卡片 + uppercase kicker
+    divider: 'dots', // §2.17 · · · 圆点分割，比 1px 实线更"文档章节空隙"
+    sectionTitle: 'number-prefix', // §2.4 monospace 章节编号（"1.2 实现"），教程典型版面
     codeBlock: 'header-bar', // §1.2 signature：顶部语言标签带 + copy icon
     note: 'box-callout', // 文档式"附注框"，与 accent-bar admonition 互补不抢色
-    footnotes: 'lined',
+    footnotes: 'boxed-aside', // 教程文末参考资料：软底卡片 + pill kicker，narrative aside
   },
 
   // ============================================================

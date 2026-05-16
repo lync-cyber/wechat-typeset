@@ -231,13 +231,13 @@ export const spec: PersonaSpec = {
   variants: {
     admonition: 'manpage-log', // 全主题签名：manpage 日志输出块（顶底分隔线 + :: TAG :: 状态条）
     quote: 'frame-brackets', // manpage 四角括号
-    compare: 'column-card', // RFC alternatives
-    steps: 'number-circle', // 方括号脚注号
+    compare: 'stacked-row', // RFC alternatives 垂直堆叠
+    steps: 'split-row', // 左竖条 + 大号编号，与 manpage-log 的"标签栏"同构
     divider: 'wave', // manpage-rule（§ ——— §）
     sectionTitle: 'cornered', // § heading prefix
-    codeBlock: 'bare', // code 与正文同色系，无需 header-bar
+    codeBlock: 'terminal-frame', // terminal window 腔体，与 manpage 主题语言同源
     note: 'side-bar', // // NOTE 风：左侧标线 + 缩进
-    footnotes: 'lined',
+    footnotes: 'dense-academic', // RFC 风密栏 + 深 hanging，更接近 manpage SEE ALSO 段
   },
 
   // ============================================================

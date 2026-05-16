@@ -238,15 +238,14 @@ export const spec: PersonaSpec = {
   // ============================================================
   variants: {
     admonition: 'mook-tag', // 本主题签名——参/編/注/禁 単字 CJK 标签
-    quote: 'classic', // 元素级 blockquote 承担"裸 1px 左竖线"pull-quote；
-    //                          quote-card 仅作 fallback，走 classic 不主推
-    compare: 'column-card',
-    steps: 'number-circle',
+    quote: 'editorial-block', // 编辑部磁砖 pull-quote：左 6px 主色条 + 大号粗体 + uppercase byline
+    compare: 'stacked-row', // mook 偏纵贯陈述：先述 A 再述 B，避免双列拥挤
+    steps: 'timeline-dot', // 慢节奏 mook 偏时序点阵，stepBadge 单列点珠
     divider: 'glyph', // 默认 ❦；作者写 attrs.glyph="❋"/"章末" 切换
-    sectionTitle: 'bordered',
-    codeBlock: 'bare', // 元素级 pre 直接走主题 voice（米卡纸底）
-    note: 'minimal-callout', // 中性补注极简骨架，与 mook 的"克制"统一
-    footnotes: 'lined',
+    sectionTitle: 'ribbon-stamp', // 左侧 CJK 戳记（章/節）+ 主标题，与 mook-tag 同 CJK 语汇
+    codeBlock: 'inline-card', // 米卡纸底 + 左主色窄竖条，与 mook 内嵌排印一致
+    note: 'dotted-margin', // 散文式页边批注：dotted 左竖线 + 缩进，比 minimal-callout 更"手记"
+    footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
   },
 
   // ============================================================
