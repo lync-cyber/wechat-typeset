@@ -42,7 +42,7 @@ function fireAction(cmd: ToolbarAction) {
   <!--
     四段式菜单（命令面板 / 快捷键与帮助 / 主题编辑器 / 外链处理 已迁出，不再重复）：
       1. 抽屉：草稿 / 组件 / 配色 / 发文清单（主题编辑器走主题 popover 底部入口）
-      2. 内容操作：载入示例 / 保存选区 / 中文修复
+      2. 内容操作：故事样张 / 组件参考 / 全功能展示 / 保存选区 / 中文修复
       3. 导出：HTML / Markdown / 长图 / 分享链接（外链处理已前置到"一键复制"split-button）
       4. 危险：清空正文（actions.handleClear 已走 UndoToast 可撤销）
   -->
@@ -64,6 +64,12 @@ function fireAction(cmd: ToolbarAction) {
     <div class="menu-section-head">内容操作</div>
     <button class="menu-item" @click="fireAction('loadSample')">
       <span>载入当前主题示例</span>
+    </button>
+    <button class="menu-item" @click="fireAction('loadReference')">
+      <span>载入当前主题组件参考</span>
+    </button>
+    <button class="menu-item" @click="fireAction('loadShowcase')">
+      <span>载入全功能展示</span>
     </button>
     <button class="menu-item" @click="fireAction('saveSelection')">
       <span>保存选区为组件</span>

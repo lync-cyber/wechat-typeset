@@ -690,7 +690,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'kpi-dashboard',
     styleKey: 'kpiDashboard',
     category: 'data',
-    pack: 'theme:data-brief',
+    pack: 'pack:data-viz',
     fenceLength: 4,
     children: ['kpi-item'],
     attrs: [
@@ -706,7 +706,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'kpi-item',
     styleKey: null,
     category: 'data',
-    pack: 'theme:data-brief',
+    pack: 'pack:data-viz',
     parent: 'kpi-dashboard',
     fenceLength: 3,
     attrs: [
@@ -731,7 +731,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'bar-chart',
     styleKey: 'barChart',
     category: 'data',
-    pack: 'theme:data-brief',
+    pack: 'pack:data-viz',
     fenceLength: 4,
     children: ['bar'],
     attrs: [
@@ -746,7 +746,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'bar',
     styleKey: null,
     category: 'data',
-    pack: 'theme:data-brief',
+    pack: 'pack:data-viz',
     parent: 'bar-chart',
     fenceLength: 3,
     attrs: [

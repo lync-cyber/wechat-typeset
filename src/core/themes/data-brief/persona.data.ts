@@ -210,7 +210,7 @@ export const spec: PersonaSpec = {
   // ============================================================
   variants: {
     admonition: 'news-row', // 数据新闻紧凑单行（左 3px + INFO/TIP/WARN/STOP 徽章）
-    quote: 'classic', // 不主推 ::: quote-card；作者用 markdown > 走 blockquote 元素样式
+    quote: 'editorial-block', // 编辑部磁砖 pull-quote：左 6px 主色条 + 大号粗体 + uppercase 字距 byline，editorial 签名形态
     compare: 'data-card', // 顶 3px 色条 + 大号 monospace 数字（"纸 本 +37% / 屏 读 +210%"）
     steps: 'number-circle',
     divider: 'flower', // 用本主题自定义 dividerFlower 的"两线 + 蓝方块"

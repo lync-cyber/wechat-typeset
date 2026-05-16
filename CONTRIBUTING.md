@@ -8,9 +8,9 @@
 npm ci             # 严格按 package-lock.json 装，避免版本漂移
 npm run dev        # 开发服务器，热更新，http://127.0.0.1:5173
 npm run build      # 生产构建 → dist/
-npm test           # 全量 vitest + sample-full 端到端校验
+npm test           # 全量 vitest + tests/fixtures/all-containers.md 端到端校验
 npm run test:unit  # 只跑 vitest（开发中快速回归）
-npm run test:e2e   # 只跑 sample-full 校验（改 variant/主题后必跑）
+npm run test:e2e   # 只跑 all-containers fixture 校验（改 variant/主题后必跑）
 npm run typecheck  # 单独跑 vue-tsc
 ```
 
@@ -29,7 +29,7 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 ## 提 PR 前的自检清单
 
 - [ ] `npm run build` 无报错（含 `vue-tsc --noEmit`）
-- [ ] `npm test` 全绿（vitest + sample-full 端到端）
+- [ ] `npm test` 全绿（vitest + tests/fixtures/all-containers.md 端到端）
 - [ ] 提交信息用 Conventional Commits（`feat: ...` / `fix: ...` / `refactor: ...` / `docs: ...`）
 - [ ] 不引入任何新网络请求（analytics / 远程字体 / 远程模板一律禁止）
 - [ ] 不引入新依赖，除非能用等量代码替换掉更重的现有依赖
@@ -55,6 +55,25 @@ viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。
 ## 已知未完成模块（欢迎认领）
 
 下列坑位是项目内部已识别但尚未投入的工作。外部贡献者可领其一开 PR——开始前请先建 issue 对齐方案，避免与维护者并行做同一件事。
+
+### 三档样张体系
+
+UI 上"载入示例"分为三档，对应三类作者诉求：
+
+| 档位 | 入口 | 数据源 | 适合场景 |
+| --- | --- | --- | --- |
+| 故事样张 | `更多操作 → 载入当前主题示例` | `src/samples-md/sample-{theme}.md` | 5 秒判断主题气质（短叙事） |
+| 组件参考 | `更多操作 → 载入当前主题组件参考` | `scripts/build-references.ts` 自动生成 | 查阅"本主题怎么渲染 X 容器" |
+| 全功能展示 | `更多操作 → 载入全功能展示` | `tests/fixtures/all-containers.md`（与 e2e fixture 同源） | 高级用户全景看所有容器/变体 |
+
+新增主题时只需 (a) 写一份 ~150 行的故事样张到 `src/samples-md/sample-<id>.md`；后两档自动派生。两条 CI gate 守护"内置主题必须有辨识度"：
+
+| 测试 | 校验 | 失败信号 |
+| --- | --- | --- |
+| [tests/unit/theme-signature-strength.spec.ts](tests/unit/theme-signature-strength.spec.ts) | 内置主题 9 个 variant slot 至少 8 个偏离 `DEFAULT_VARIANTS`（`default` 主题在中立白名单例外） | 主题作者还没给该 slot 挑签名 variant；错误信息会列出 slot 名 + 所有候选 variant id |
+| [tests/unit/sample-variant-coverage.spec.ts](tests/unit/sample-variant-coverage.spec.ts) | 每个非默认 variant 在故事样张里至少出现一次 | 主题"声明了"某签名但样张没演示，读者第一眼看不到 |
+
+合起来确保：每个内置主题既挑了足够多的签名 variant，又把它们都演示给了读者。
 
 - **`src/core/pipeline/highlight.ts` · 主题感知代码块配色**
   当前 fence 代码块的高亮 CSS 固定为 Atom One Dark。期望：让代码块配色跟随当前主题的 `codeBlock` variant（例如 `header-bar` 走文档蓝、`bare` 走主题中性色），与主题 palette 联动。约束：粘贴到公众号后仍需通过 `wxPatch` 校验（不引入 `font-family` / `position` 等被禁用属性）。

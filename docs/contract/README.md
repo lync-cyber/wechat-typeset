@@ -13,8 +13,8 @@
 | 层 | 由什么构成 | 谁负责 | 入口文档 |
 | --- | --- | --- | --- |
 | 1. **基础契约（base）** | CommonMark + GFM + 行内扩展集 + 通用容器全集 | 所有写作者必读 | [base.md](base.md) |
-| 2. **领域扩展包（pack:\*）** | 跨主题共享的领域容器集（当前内置：`pack:editorial`） | 主题声明 signatureContainers 即启用 | [packs/](packs/) |
-| 3. **主题专属扩展（theme:\*）** | 仅该主题渲染下生效的容器（当前内置：`theme:data-brief`） | 切到对应主题再用 | [packs/data-brief.md](packs/data-brief.md) |
+| 2. **领域扩展包（pack:\*）** | 跨主题共享的领域容器集（内置：`pack:editorial` 刊物；`pack:data-viz` 数据可视化） | 主题声明 signatureContainers 即启用 | [packs/](packs/) |
+| 3. **主题专属扩展（theme:\*）** | 仅该主题渲染下生效的私有排版规则（如 data-brief 章节编号） | 切到对应主题再用 | [packs/data-brief.md](packs/data-brief.md) |
 | 4. **自定义扩展** | fork / 集成方在本地追加私有容器 | 进阶集成方 | [custom.md](custom.md) |
 
 > `容器`指 `::: name … :::` 这类 fence 块。通用 fence 语法（info / attrs / 嵌套 / variant 覆盖）和行内扩展见 [syntax.md](syntax.md)。
@@ -28,7 +28,8 @@
 | [syntax.md](syntax.md) | 容器 fence 通用语法、行内扩展、常见错误 | 任何写作者 |
 | [base.md](base.md) | 基础契约的通用容器全集（结构 / 提示 / 内容 / 导航 / 媒体 / 签名 / 兜底） | 任何写作者 |
 | [packs/editorial.md](packs/editorial.md) | `pack:editorial` 领域扩展包：刊头 / 目录 / 问答 / 脚注 / CTA / 订阅卡 / 编辑部注 / 收束栏 等（多主题共享） | 写栏目化深度文 / newsletter |
-| [packs/data-brief.md](packs/data-brief.md) | `theme:data-brief` 主题专属扩展：KPI 仪表盘 / 横向条形图（仅 `data-brief` 主题渲染） | 写数据简报 |
+| [packs/data-viz.md](packs/data-viz.md) | `pack:data-viz` 数据可视化包：KPI 仪表盘 / 横向条形图（多主题共享） | 写数据简报 / 行业报告 |
+| [packs/data-brief.md](packs/data-brief.md) | `data-brief` 主题私有排版说明：章节 monospace 编号等主题专属装饰 | 写数据简报 |
 | [custom.md](custom.md) | 在 fork 里加私有容器的流程，与契约保护范围的边界 | 集成方 / 主题作者 |
 | [platform.md](platform.md) | 公众号平台现实（外链白名单 / footer-cta href / 粘贴责任划分）+ 契约演进规则 | 任何发文的人 |
 | [fallback.md](fallback.md) | 4 级降级合同：容器 / 变体 / 主题 / 样式各层失效行为，集成方 lint 清单 | 集成方 / LLM 协同 |
@@ -38,7 +39,7 @@
 ## 三条阅读路线
 
 **A. 我只想写文章**
-[syntax.md](syntax.md) → [base.md](base.md) → 写。如果选了 data-brief 主题，再翻 [packs/data-brief.md](packs/data-brief.md)。
+[syntax.md](syntax.md) → [base.md](base.md) → 写。写数据简报再翻 [packs/data-viz.md](packs/data-viz.md)；data-brief 主题私有装饰见 [packs/data-brief.md](packs/data-brief.md)。
 
 **B. 我在做 LLM / Agent 集成**
 本目录 + [`dist/api/capabilities.json`](../../dist/api/capabilities.json)（机器可读全集）+ [fallback.md](fallback.md)（4 级降级合同，含 lint 清单）+ [`skills/wechat-typeset/`](../../skills/wechat-typeset/)（密度写法）。

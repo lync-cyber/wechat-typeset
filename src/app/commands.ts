@@ -33,6 +33,8 @@ export interface BuildCommandsDeps {
   /** 本地动作 */
   handleClear: () => void
   handleLoadSample: () => void
+  handleLoadReference: () => void
+  handleLoadShowcase: () => void
   handleSaveSelection: () => void
   handleFixZhTypo: () => void
 }
@@ -46,6 +48,8 @@ export function buildCommands(deps: BuildCommandsDeps): ComputedRef<Command[]> {
     list.push({ id: 'save', title: '保存当前草稿', group: '操作', shortcut: `${modKey} S`, run: deps.handleSave })
     list.push({ id: 'clear', title: '清空正文', group: '操作', run: deps.handleClear })
     list.push({ id: 'load-sample', title: '载入当前主题示例', group: '操作', run: deps.handleLoadSample })
+    list.push({ id: 'load-reference', title: '载入当前主题组件参考', group: '操作', keywords: '参考 reference 组件 全集', run: deps.handleLoadReference })
+    list.push({ id: 'load-showcase', title: '载入全功能展示', group: '操作', keywords: 'showcase 全功能 全部容器 全部变体 高级 advanced', run: deps.handleLoadShowcase })
     list.push({ id: 'save-selection', title: '保存选区为组件', group: '操作', run: deps.handleSaveSelection })
     list.push({ id: 'fix-zh-typo', title: '一键修复中文排版', group: '操作', run: deps.handleFixZhTypo })
 

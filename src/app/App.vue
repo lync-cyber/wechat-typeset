@@ -86,7 +86,7 @@ function onPreviewScroll(ratio: number) {
 }
 
 const {
-  handleClear, handleLoadSample, handleFixZhTypo,
+  handleClear, handleLoadSample, handleLoadReference, handleLoadShowcase, handleFixZhTypo,
   handleApplyPalette, handleResetPalette, handleInsertTemplate, handleSaveSelection,
 } = createAppActions({ showUndo, pingTransient, editorRef, paletteRef, ui })
 
@@ -139,6 +139,8 @@ function onToolbarAction(cmd: ToolbarAction) {
     case 'copy': return handleCopy()
     case 'clear': return handleClear()
     case 'loadSample': return handleLoadSample()
+    case 'loadReference': return handleLoadReference()
+    case 'loadShowcase': return handleLoadShowcase()
     case 'saveSelection': return handleSaveSelection()
     case 'fixZhTypo': return handleFixZhTypo()
     case 'exportHtml': return doExportHtml()
@@ -159,7 +161,7 @@ const commands = buildCommands({
   handleCopy, handleCopyShareLink, doExportHtml, doExportMd, doExportImage,
   doExportCoverHorizontal: () => doExportCover('wechat-horizontal'),
   doExportCoverSquare: () => doExportCover('wechat-square'),
-  handleClear, handleLoadSample, handleSaveSelection, handleFixZhTypo,
+  handleClear, handleLoadSample, handleLoadReference, handleLoadShowcase, handleSaveSelection, handleFixZhTypo,
 })
 
 useKeyboardShortcuts({

@@ -81,7 +81,7 @@ npm run cli -- personas capabilities --id <persona-id>
 **Agent 决策规则**：
 
 - ✅ 只对 `available: true` 的容器做提议
-- ❌ 不要给 `default` 主题写 `kpi-dashboard`（它属于 `theme:data-brief`，跨主题渲染失去签名视觉）
+- ✅ `kpi-dashboard`/`bar-chart` 属于 `pack:data-viz`，多主题可用；只在主题签名了 `kpiDashboard`/`barChart` 时才建议（`signature: true`），否则回退兜底样式
 - ✅ 优先用 `signature: true` 的容器承担"主题 voice"（如 brutalist 的 `masthead`/`colophon`、tech-explainer 的 `note`/`see-also`）
 - ❌ 不要凭记忆写 variant id；从 `recommendedVariants` 里挑
 

@@ -182,10 +182,24 @@ exports[`默认主题 · 每 variant 渲染片段快照 > quote:column-rule 1`] 
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:editorial-block 1`] = `
+"<section class="container-quote-card container-quote-card--editorial-block" style="border-radius: 6px; background-color: #f5f5f3; padding: 18px 20px; margin: 22px 0; border-left: 6px solid #2558b0;">
+<section class="container-quote-card__body" style="font-size:20px;font-weight:700;line-height:1.45;text-align:left;color:#1c1f24;letter-spacing:-0.005em">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > quote:frame-brackets 1`] = `
 "<section class="container-quote-card container-quote-card--frame-brackets" style="background-color: #f5f5f3; border-radius: 6px; padding: 26px 22px; margin: 22px 0;">
 <svg viewBox="0 0 320 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display: block; margin-bottom: -120px"><path d="M0,20 L0,0 L20,0 M300,0 L320,0 L320,20 M0,100 L0,120 L20,120 M300,120 L320,120 L320,100" stroke="#2558b0" stroke-width="2" fill="none"></path></svg>
 <section class="container-quote-card__body" style="font-size:16px;line-height:1.85;text-align:center;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:left-bar 1`] = `
+"<section class="container-quote-card container-quote-card--left-bar" style="background-color: #f5f5f3; border-radius: 6px; padding: 10px 0 10px 18px; margin: 20px 0; border-left: 4px solid #1c1f24;">
+<section class="container-quote-card__body" style="font-size:18px;line-height:1.7;text-align:left;color:#1c1f24">
 <p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
 </section>"
 `;

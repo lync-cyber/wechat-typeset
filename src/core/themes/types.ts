@@ -402,12 +402,16 @@ export type AdmonitionVariantId =
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
   | 'classic'
+  // 左侧 4px 实线竖条 + 左对齐 + 中文双破折号 byline（日常引用,克制版面装饰）
+  | 'left-bar'
   // 首字下沉：第一字放大 2.5x，杂志排风
   | 'magazine-dropcap'
   // 双侧细竖线：左右各一根 1px 长线夹住段落
   | 'column-rule'
   // 四角括号框：四个角各一个 L 形 SVG 装饰
   | 'frame-brackets'
+  // 编辑部磁砖：左 6px 实色条 + 浅底 + 大写字距 byline（editorial 风格 pull-quote）
+  | 'editorial-block'
   // 旋转贴纸：反色卡片 + transform:rotate(-1deg) + 大字号粗体 sans 左对齐
   // （punk-zine / brutalist 撕贴纸语义；与 classic 形成"克制 vs 张力"对立轴）
   | 'tilted-sticker'
@@ -465,12 +469,24 @@ export type CodeBlockVariantId =
   | 'bare'
   // 顶部语言标签带：语言名大写 + 可选 copy 图标；Stripe Docs / MDN 家族 signature
   | 'header-bar'
+  // 左侧行号 gutter + 分隔线；IDE / 技术参考书家族
+  | 'line-numbers'
+  // macOS Terminal 窗口腔（红/黄/绿圆点 + 标题 + 暗腔）；SSH / REPL 家族
+  | 'terminal-frame'
+  // 编辑随文嵌入式：tinted 软底 + 左主色窄竖条 + 紧凑字号；文学/生活向稿件
+  | 'inline-card'
 
 export type FootnotesVariantId =
   // 一条一行 + hanging indent（默认）
   | 'lined'
   // 同段流式排列 + max-height/overflow 内滚动，适合 20+ 条长引用列表
   | 'inline-flow'
+  // 软底卡片 + pill kicker：narrative aside；文学/编辑向尾注
+  | 'boxed-aside'
+  // 顶部 hairline + 11px 灰字密栏：报纸尾注 / 财新简报底栏
+  | 'top-rule'
+  // 2px 章节杆 + 2.4em 深 hanging + 11px：论文 bibliography 章
+  | 'dense-academic'
 
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
@@ -584,9 +600,11 @@ export const VARIANT_IDS = {
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
+    'left-bar',
     'magazine-dropcap',
     'column-rule',
     'frame-brackets',
+    'editorial-block',
     'tilted-sticker',
   ] as const satisfies readonly QuoteVariantId[],
   compare: [
@@ -615,6 +633,9 @@ export const VARIANT_IDS = {
   codeBlock: [
     'bare',
     'header-bar',
+    'line-numbers',
+    'terminal-frame',
+    'inline-card',
   ] as const satisfies readonly CodeBlockVariantId[],
   note: [
     'minimal-callout',
@@ -624,6 +645,9 @@ export const VARIANT_IDS = {
   footnotes: [
     'lined',
     'inline-flow',
+    'boxed-aside',
+    'top-rule',
+    'dense-academic',
   ] as const satisfies readonly FootnotesVariantId[],
 }
 

@@ -16,9 +16,9 @@
  *   - scripts/gen-showcase.ts：把元素 / base 容器 / 扩展签名容器三段分别渲染嵌入
  *   - 其他需要"主题视觉差异基准"的场景都可 import 本模块
  *
- * 与 sample-full.md 的边界：
- *   - sample-full.md 是"作者侧全量演示稿"，含 pack:* / theme:* 容器，会随写作集成方
- *     需求增长；它继续承担 verify-sample-full.ts 的端到端断言。
+ * 与 tests/fixtures/all-containers.md 的边界：
+ *   - all-containers.md 是"端到端渲染回归 fixture"，含 pack:* / theme:* 全集容器，
+ *     由 verify-sample-full.ts 在 default 主题下断言每个容器/variant class 都出现。
  *   - 本 fixture 是"主题契约骨架"，只为 base 命名空间负责；增长由 vocabulary base
  *     新增驱动，不被外部稿件膨胀感染。
  *

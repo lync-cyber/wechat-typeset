@@ -20,7 +20,7 @@ import {
 import { getTheme } from '../core/themes'
 import { applyPalette } from '../core/color/applyPalette'
 import { fixZhTypoWithRanges } from '../core/pipeline/zhTypo'
-import { getSample } from '../domain/samples'
+import { getSample, getReference, getShowcase } from '../domain/samples'
 
 export interface ActionDeps {
   showUndo: (message: string, onUndo: () => void) => void
@@ -57,6 +57,45 @@ export function createAppActions(deps: ActionDeps) {
       showUndo('已载入示例，原正文可撤销', () => { md.value = prev })
     } else {
       pingTransient('已载入示例')
+    }
+  }
+
+  /**
+   * 载入当前主题的"组件参考"文档（由 scripts/build-references.ts 自动生成）。
+   *
+   * 三档载入按写作场景分工，详见 src/domain/samples/index.ts 头注释：
+   *   - handleLoadSample    = 故事样张：~150 行的真文章，主打"决策"
+   *   - handleLoadReference = 组件参考：按 category 分章 + 实渲染示例，主打"查阅"
+   *   - handleLoadShowcase  = 全功能展示：覆盖所有容器/变体的一稿到底，主打"全景"
+   * 三档共享一套撤销 / 提示约定，避免用户切档时丢掉手稿。
+   */
+  function handleLoadReference() {
+    const reference = getReference(baseThemeId.value)
+    if (!reference || md.value === reference) {
+      pingTransient('本主题暂无组件参考')
+      return
+    }
+    const prev = md.value
+    md.value = reference
+    if (prev.trim()) {
+      showUndo('已载入组件参考，原正文可撤销', () => { md.value = prev })
+    } else {
+      pingTransient('已载入组件参考')
+    }
+  }
+
+  function handleLoadShowcase() {
+    const showcase = getShowcase()
+    if (!showcase || md.value === showcase) {
+      pingTransient('全功能展示稿为空')
+      return
+    }
+    const prev = md.value
+    md.value = showcase
+    if (prev.trim()) {
+      showUndo('已载入全功能展示，原正文可撤销', () => { md.value = prev })
+    } else {
+      pingTransient('已载入全功能展示')
     }
   }
 
@@ -126,6 +165,8 @@ export function createAppActions(deps: ActionDeps) {
   return {
     handleClear,
     handleLoadSample,
+    handleLoadReference,
+    handleLoadShowcase,
     handleFixZhTypo,
     handleApplyPalette,
     handleResetPalette,
