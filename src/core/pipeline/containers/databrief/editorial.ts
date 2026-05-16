@@ -15,7 +15,7 @@
  */
 
 import type { ContainerRenderer } from '../types'
-import { escText } from '../types'
+import { escText } from '../_shared/escape'
 import { inlineCss as inline } from '../_shared/cssInline'
 import { makeVariantContainer } from '../_shared/makeVariantContainer'
 import { FOOTNOTES_VARIANTS } from '../../../variants/registry'

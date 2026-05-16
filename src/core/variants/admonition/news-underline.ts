@@ -18,7 +18,7 @@
  */
 
 import type { VariantDef, AdmonitionRenderArgs } from '../_core'
-import { escText } from '../../pipeline/containers/types'
+import { escText } from '../../pipeline/containers/_shared/escape'
 import { svg } from '../_thumb'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {

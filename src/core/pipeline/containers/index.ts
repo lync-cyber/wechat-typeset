@@ -137,4 +137,4 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
 }
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'
-export { parseInfo, escAttr, escText } from './types'
+export { parseInfo } from './types'

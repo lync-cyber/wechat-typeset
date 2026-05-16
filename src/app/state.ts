@@ -6,7 +6,7 @@
  * 读写约定：
  *   - md / baseThemeId / mobileTab：所有 composable + App.vue 都可读写
  *   - hoverThemeId：ThemePicker 写、activeTheme 读
- *   - customTheme / lastSeed：ColorCustomizer 写、activeTheme 读
+ *   - customTheme：ColorCustomizer 写、activeTheme 读
  *   - activeTheme：派生只读 computed，不直接赋值
  */
 import { computed, ref } from 'vue'
@@ -36,9 +36,6 @@ export const hoverThemeId = ref<string | null>(null)
 
 /** 用户在 ColorCustomizer 自定义后派生的 Theme；切 baseThemeId 时重置为 null。 */
 export const customTheme = ref<Theme | null>(null)
-
-/** 上一次 apply 的 seed，用于"还原为主题默认" + undo 路径。 */
-export const lastSeed = ref<Seed | null>(null)
 
 /** 移动端底部 tabs 当前选中的栏目。 */
 export const mobileTab = ref<'editor' | 'preview'>('editor')
@@ -79,7 +76,6 @@ export function __resetForTest(): void {
   baseThemeId.value = 'default'
   hoverThemeId.value = null
   customTheme.value = null
-  lastSeed.value = null
   mobileTab.value = 'editor'
   editorWidth.value = null
 }

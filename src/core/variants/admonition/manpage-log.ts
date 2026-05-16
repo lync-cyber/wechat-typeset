@@ -13,7 +13,7 @@
  */
 
 import type { VariantDef, AdmonitionRenderArgs } from '../_core'
-import { escText } from '../../pipeline/containers/types'
+import { escText } from '../../pipeline/containers/_shared/escape'
 import { mergeThumb, svg } from '../_thumb'
 
 const KIND_TAG: Record<string, string> = {

@@ -10,7 +10,7 @@
  */
 
 import type { ContainerRenderer } from './types'
-import { escText } from './types'
+import { escText } from './_shared/escape'
 import { inlineCss as inline } from './_shared/cssInline'
 
 // abstract · 文首 tl;dr。renderer 只负责结构（section + kicker），样式全由

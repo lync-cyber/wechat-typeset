@@ -5,7 +5,7 @@
  * 不是存储层。后续若加更多 default（如缺省 description、缺省 thumbArgs）也归这里。
  */
 
-import { escapeXml } from '../../core/pipeline/containers/types'
+import { escapeXml } from '../../core/pipeline/containers/_shared/escape'
 
 /**
  * 75×75 首字占位缩略图：取 name 的首字符放在浅灰色方块中央。

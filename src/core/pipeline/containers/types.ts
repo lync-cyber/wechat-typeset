@@ -85,7 +85,3 @@ export function parseInfo(raw: string): ParsedInfo {
   return { title, attrs }
 }
 
-// 转义原语实现在 _shared/escape.ts；此处 re-export 是为了不破坏既有 20+ 处
-// `import { escText } from './types'` / `from './types'` 的消费者。
-// 新代码直接 import from './_shared/escape'。
-export { escAttr, escText, escapeXml } from './_shared/escape'
