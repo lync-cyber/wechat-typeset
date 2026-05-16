@@ -69,8 +69,8 @@ export function createAppActions(deps: ActionDeps) {
    *   - handleLoadShowcase  = 全功能展示：覆盖所有容器/变体的一稿到底，主打"全景"
    * 三档共享一套撤销 / 提示约定，避免用户切档时丢掉手稿。
    */
-  function handleLoadReference() {
-    const reference = getReference(baseThemeId.value)
+  async function handleLoadReference() {
+    const reference = await getReference(baseThemeId.value)
     if (!reference || md.value === reference) {
       pingTransient('本主题暂无组件参考')
       return
@@ -84,8 +84,8 @@ export function createAppActions(deps: ActionDeps) {
     }
   }
 
-  function handleLoadShowcase() {
-    const showcase = getShowcase()
+  async function handleLoadShowcase() {
+    const showcase = await getShowcase()
     if (!showcase || md.value === showcase) {
       pingTransient('全功能展示稿为空')
       return
