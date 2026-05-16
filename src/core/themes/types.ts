@@ -116,6 +116,10 @@ export interface ThemeElements {
  * 有运行时对齐检查（buildTheme + containers/api）；漏加字段会在 baseContainers()
  * 层抛 TS 编译错。
  *
+ * **字段顺序仅为人工分组，不承载渲染语义**——renderer 按 styleKey 字符串查表分派
+ * （vocabulary.ts `STYLE_KEY_TO_CONTAINER_NAME`），跟此处声明顺序无关。下面空行 + 注释
+ * 把字段分块（base / signature / data-brief / editorial）只为方便人眼检索。
+ *
  * 不含 `free` / `pros` / `cons` —— 它们在 vocabulary 里 styleKey=null：
  *   - free：刻意不施加主题样式（escape hatch）
  *   - pros / cons：样式由外层 compare 的 CSS 派生（compare 两栏专属收敛规则）
@@ -757,6 +761,12 @@ export interface Decorations {
   introDropcap?: IntroDropcapDecoration
 }
 
+/**
+ * 运行时主题对象。**字段顺序仅作分组阅读用，不承载任何渲染语义**——
+ * pipeline 按命名查表（renderer 读 theme.tokens / theme.elements.h2 / theme.containers.intro
+ * 等），不依赖此处声明顺序。下方空行只为把"基础信息 / token / 样式 / 资产 / 模板 / 变体 /
+ * kicker / 元数据"分组方便人眼阅读，不要把它误读成"渲染层级"。
+ */
 export interface Theme {
   id: string
   name: string
