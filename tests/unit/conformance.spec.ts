@@ -46,8 +46,10 @@ interface Loaded {
 let LOADED: Loaded[] = []
 
 beforeAll(async () => {
+  // dir 以 `_` 开头是骨架/示例目录（如 _template）——不进运行时也不参与 conformance 校验
   const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
+    .filter((p) => !basename(dirname(p)).startsWith('_'))
     .sort()
   for (const p of paths) {
     const mod = await import(pathToFileURL(p).href)

@@ -33,6 +33,8 @@ export const spec: PersonaSpec = {
     textInverse: '#fefefe', // 纯白用 #fefefe 规避 SVG→PNG 透明化
     border: '#d8d8d4',
     code: '#1c1f24', // default 拒绝让 code 承担颜色
+    preBg: '#2a2d32', // 代码块底色（拒绝 Atom One Dark 默认 #282c34）
+    preText: '#d8d8d4',
   },
 
   // 语义四色（规范 §1.1 语义色表）——"最寡淡的那个版本"
@@ -353,9 +355,8 @@ export const spec: PersonaSpec = {
     em: { 'font-style': 'italic', color: '#1c1f24' },
 
     // 代码块（规范 §3.4：拒绝 Atom One Dark / VSCode Dark+ 原值）
+    // bg/color 通过 palette.preBg / palette.preText 流到 baseElements.pre，再深合并下方 padding/radius 等。
     pre: {
-      'background-color': '#2a2d32',
-      color: '#d8d8d4',
       'padding-top': '14px',
       'padding-right': '16px',
       'padding-bottom': '14px',

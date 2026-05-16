@@ -27,8 +27,10 @@ interface ThemeOnDisk {
 }
 
 async function discoverThemesOnDisk(): Promise<ThemeOnDisk[]> {
+  // dir 以 `_` 开头是骨架/示例目录（如 _template），不进 registry 校验
   const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: REPO_ROOT })
     .map((p) => resolve(REPO_ROOT, p))
+    .filter((p) => !basename(dirname(p)).startsWith('_'))
     .sort()
   const out: ThemeOnDisk[] = []
   for (const p of paths) {

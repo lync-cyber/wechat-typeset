@@ -47,6 +47,15 @@ export interface ThemeTokens {
       info: StatusPair
       danger: StatusPair
     }
+    /**
+     * `<pre>` 代码块底色（buildTheme.baseElements.pre 兜底消费）。
+     * 不声明则用 Atom One Dark 家族常量（'#2a2d32'），即"浅底主题里默认给一个深色代码块"。
+     * 暗底主题（brutalist / late-night-vinyl）想自定义代码块底色，可在 palette 里声明本字段
+     * 而不必整段 __reset elements.pre。
+     */
+    preBg?: string
+    /** `<pre>` 代码块文字色（同 preBg）。不声明则用 '#d8d8d4'。 */
+    preText?: string
   }
   typography: {
     baseSize: number

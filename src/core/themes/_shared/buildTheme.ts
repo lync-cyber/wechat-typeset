@@ -122,6 +122,9 @@ export interface BuildThemeOptions {
 
 export function baseElements(tokens: ThemeTokens): ThemeElements {
   const { colors, typography } = tokens
+  // 见 ThemeTokens.colors.preBg/preText 注释——主题不声明时落到 Atom One Dark 家族常量。
+  const preBg = colors.preBg ?? '#2a2d32'
+  const preText = colors.preText ?? '#d8d8d4'
   return {
     h1: {
       'font-size': `${typography.h1Size}px`,
@@ -227,8 +230,8 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'vertical-align': 'middle',
     },
     pre: {
-      'background-color': '#282c34',
-      color: '#abb2bf',
+      'background-color': preBg,
+      color: preText,
       'padding-top': '14px',
       'padding-right': '16px',
       'padding-bottom': '14px',

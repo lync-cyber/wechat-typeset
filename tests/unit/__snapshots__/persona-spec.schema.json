@@ -96,6 +96,14 @@
         "code": {
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "preBg": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "preText": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
         }
       },
       "additionalProperties": false

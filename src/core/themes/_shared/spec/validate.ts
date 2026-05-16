@@ -48,8 +48,8 @@ export function validateSpec(spec: PersonaSpec): SpecValidationResult {
 
   // id / name / description
   if (!spec.id || typeof spec.id !== 'string') err('id', 'id must be non-empty string')
-  else if (!/^[a-z][a-z0-9-]*$/.test(spec.id))
-    err('id', `id must be kebab-case: "${spec.id}"`)
+  else if (!/^_?[a-z][a-z0-9-]*$/.test(spec.id))
+    err('id', `id must be kebab-case (optional _ prefix for template/example specs): "${spec.id}"`)
 
   if (!spec.name) err('name', 'name is required')
   if (!spec.description) err('description', 'description is required')

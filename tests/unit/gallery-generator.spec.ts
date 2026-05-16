@@ -9,7 +9,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { resolve } from 'node:path'
+import { resolve, basename, dirname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { globSync } from 'node:fs'
 import { generateGallery } from '../../src/domain/gallery/generate'
@@ -18,6 +18,7 @@ import type { PersonaSpec } from '../../src/core/themes/_shared/spec'
 async function loadAllSpecs(): Promise<PersonaSpec[]> {
   const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
+    .filter((p) => !basename(dirname(p)).startsWith('_'))
     .sort()
   const specs: PersonaSpec[] = []
   for (const p of paths) {

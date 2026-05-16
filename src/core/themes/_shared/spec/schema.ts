@@ -66,6 +66,8 @@ const PALETTE_SCHEMA: JSONSchema7 = {
     textInverse: { type: 'string', pattern: HEX_PATTERN },
     border: { type: 'string', pattern: HEX_PATTERN },
     code: { type: 'string', pattern: HEX_PATTERN },
+    preBg: { type: 'string', pattern: HEX_PATTERN },
+    preText: { type: 'string', pattern: HEX_PATTERN },
   },
   additionalProperties: false,
 }
