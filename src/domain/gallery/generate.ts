@@ -68,12 +68,18 @@ function renderPalette(spec: PersonaSpec): string {
     swatch('textInverse', p.textInverse),
     swatch('border', p.border),
     swatch('code', p.code),
-    // preBg / preText 是可选 palette 字段（暗底代码块底色 / 文字色）。
-    // 声明时输出 swatch；不声明则不占位——避免空洞。
+    // 以下是可选 palette 字段（preBg / preText 暗底代码块；textCaption / highlightBg /
+    // codeBg / quoteCardBg / noteBorder 五个语义槽）。声明时输出 swatch；不声明则不占位——
+    // 避免空洞，同时让对照阅读时一眼看出哪些主题用了"非通用"色彩槽。
     ...(p.preBg ? [swatch('preBg', p.preBg)] : []),
     ...(p.preText ? [swatch('preText', p.preText)] : []),
+    ...(p.textCaption ? [swatch('textCaption', p.textCaption)] : []),
+    ...(p.highlightBg ? [swatch('highlightBg', p.highlightBg)] : []),
+    ...(p.codeBg ? [swatch('codeBg', p.codeBg)] : []),
+    ...(p.quoteCardBg ? [swatch('quoteCardBg', p.quoteCardBg)] : []),
+    ...(p.noteBorder ? [swatch('noteBorder', p.noteBorder)] : []),
   ].join('')
-  return `<div class="section-label">Palette · 色板（11 键）</div><div class="swatch-grid">${swatches}</div>`
+  return `<div class="section-label">Palette · 色板（11 核心键 + 可选语义槽）</div><div class="swatch-grid">${swatches}</div>`
 }
 
 function renderStatus(spec: PersonaSpec): string {

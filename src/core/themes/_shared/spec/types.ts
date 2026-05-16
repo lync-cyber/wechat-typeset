@@ -10,6 +10,7 @@
  */
 
 import type {
+  AdmonitionVariantId,
   CSSObject,
   Decorations,
   SvgVariant,
@@ -46,6 +47,41 @@ export interface Palette {
   preBg?: string
   /** `<pre>` 代码块文字色。不声明则用 '#d8d8d4'。 */
   preText?: string
+  // ── 以下为"语义槽"族（可选）：让主题作者把"高亮黄/图注灰/卡片底"这类
+  //    复用色提升为 palette 字面值，让 theme-token-flow lint 不再视之为流失。
+  //    它们不像 preBg/preText 那样由 buildTheme 自动转发——值要再次写到对应
+  //    containers/inline 项上（保持显式），但出现在 palette 即建立"色板成员"
+  //    凭证，使下游 lint 与未来的 applyPalette 都能识别它们是 token 而非裸 hex。
+  /**
+   * 图注 / 脚注 / 方法论小字的正文色（介于 text 与 textMuted 之间）。
+   * 例：swiss-grid 用 '#333333' 给 footnotes / methodology body 一个"比 text 弱、比 textMuted 重"的灰。
+   * 不声明 = 该主题没有这一层语义；正文小字直接走 textMuted 或 text。
+   */
+  textCaption?: string
+  /**
+   * 高亮（`==xx==` / highlight 容器）底色。
+   * 例：default 的 Notion 米黄 '#fff4c8'；swiss-grid 的设计黄 '#ffeb3c'。
+   * 不声明 = 主题不使用专属高亮底色（可走 bgSoft 或不渲染高亮底）。
+   */
+  highlightBg?: string
+  /**
+   * inline `<code>` 的底色（区别于 `code` 文字色）。
+   * 例：life-aesthetic 暖米卡纸主题的 '#f3e4cc'。
+   * 不声明 = 走 bgMuted 或不上底色。
+   */
+  codeBg?: string
+  /**
+   * quote-card 容器底色（pull-quote 与正文分层）。
+   * 例：life-aesthetic 比 bg 更暖的 '#fffaf1'，让 quote-card 在卡纸底上微微"抬"出来。
+   * 不声明 = 走 bgSoft 或保持透明。
+   */
+  quoteCardBg?: string
+  /**
+   * note 容器的边线 / 分隔线色（常用 dashed）。
+   * 例：default '#c8ccd4'，比通用 border 略冷一档。
+   * 不声明 = 走通用 border。
+   */
+  noteBorder?: string
 }
 
 export type StatusKey = 'tip' | 'info' | 'warning' | 'danger'
@@ -408,6 +444,19 @@ export interface PersonaSpec {
    * 不声明则默认空数组（只用通用容器）。
    */
   signatureContainers?: readonly SignatureContainerId[]
+  /**
+   * 作者侧允许在 markdown 中 per-callout 覆盖的 admonition variant 白名单。
+   *
+   * 用法：作者写 `::: tip 要点 variant=pill-tag` 时，`pill-tag` 必须在此列表中，否则
+   * `theme-admonition-overrides.spec.ts` 报错。本字段不声明 = 不允许任何 override，
+   * 想用主题默认 variant 直接 `::: tip 要点` 即可。
+   *
+   * 设计动机：之前 sample 在 callout 上随手写 `variant=card-shadow`、`variant=ticket-notch`
+   * 等 spec 未声明的 id，遮蔽了主题签名 variant；此白名单让 override 必须显式登记，
+   * 而非"任意 admonition variant 都能临时拿来用"。其它 slot（quote/compare/...）暂不开放
+   * per-callout override 路径。
+   */
+  admonitionOverrides?: readonly AdmonitionVariantId[]
   /**
    * 主题能力自描述（**可选**，默认 = 全集兜底）。
    *

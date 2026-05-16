@@ -35,6 +35,8 @@ export const spec: PersonaSpec = {
     code: '#1c1f24', // default 拒绝让 code 承担颜色
     preBg: '#2a2d32', // 代码块底色（拒绝 Atom One Dark 默认 #282c34）
     preText: '#d8d8d4',
+    highlightBg: '#fff4c8', // Notion `<mark>` 浅米黄（inline + container 共用，default 主题最克制的"突出"信号）
+    noteBorder: '#c8ccd4', // note 容器 dashed 边线（比通用 border #d8d8d4 略冷略深一档）
   },
 
   // 语义四色（规范 §1.1 语义色表）——"最寡淡的那个版本"

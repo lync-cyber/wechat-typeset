@@ -23,7 +23,7 @@
 
 - 给出温度系数 *τ* 与坍缩临界值 *τ** 之间的闭式关系
 - 在 ImageNet-100 / CIFAR-10 / STL-10 三个基准上系统验证
-- 提出 *τ*-adaptive 调度策略，推理成本几乎为零
+- 提出 *τ*-adaptive 调度策略，推理成本几乎为零[^1]
 
 ## 2 相关工作
 
@@ -74,27 +74,53 @@ for epoch in range(E):
         loss.backward(); opt.step()
 ```
 
+## 3.1 研究时间线
+
+::::: timeline
+
+:::: timeline-item year=2020
+SimCLR 与 MoCo 同期发表，对比学习进入爆发期；负样本数量被视作核心超参。
+::::
+
+:::: timeline-item year=2022
+BYOL 与 Barlow Twins 展示"无负样本"路径，但坍缩机制的理论解释仍缺失。
+::::
+
+:::: timeline-item year=2024
+温度系数 *τ* 与坍缩的关系开始在若干 workshop 论文中被独立观察到；本文是首篇系统性实证。
+::::
+
+:::::
+
 ::: divider
 :::
 
 ## 4 实验
 
 ::: highlight Key Finding
-在 CIFAR-10 上，*τ*-adaptive 将线性评估准确率从 84.3% 提升至 87.1%，而将 batch size 从 256 翻倍到 512 仅带来 0.4% 提升——**温度的收益显著大于批次的收益**，这与以往"批次越大越好"的主流观点相悖。
+在 CIFAR-10 上，*τ*-adaptive 将线性评估准确率从 84.3% 提升至 87.1%，而将 batch size 从 256 翻倍到 512 仅带来 0.4% 提升——**温度的收益显著大于批次的收益**，这与以往"批次越大越好"的主流观点相悖[^2]。
 :::
+
+### 4.1 消融对比
+
+以下对比固定 batch size = 256，仅改变 τ 调度策略。
 
 :::: compare
 
-::: pros 固定 τ = 0.1
-标准 InfoNCE 配置
-- Top-1 准确率 84.3%
+::: pros 方法 A · 固定 τ = 0.1（baseline）
+标准 InfoNCE 配置，不做调度
+
+- Top-1 准确率（CIFAR-10）：84.3%
+- Top-1 准确率（STL-10）：79.6%
 - 训练曲线抖动较大
 - 对 batch size 敏感
 :::
 
-::: cons τ-adaptive（本文）
-三阶段余弦调度
-- Top-1 准确率 87.1%
+::: cons 方法 B · τ-adaptive（本文）
+三阶段余弦调度，无额外参数
+
+- Top-1 准确率（CIFAR-10）：87.1%
+- Top-1 准确率（STL-10）：83.2%
 - 训练曲线平滑收敛
 - 对 batch size 鲁棒
 :::
@@ -126,4 +152,9 @@ CITE AS — 张三, 李四, 王五. (2026). 关于对比学习中表征坍缩的
 - [3] Grill, J.-B., Strub, F., Altché, F., et al. (2020). Bootstrap your own latent: A new approach to self-supervised learning. *NeurIPS*, 33, 21271–21284.
 - [4] Wang, T., & Isola, P. (2020). Understanding contrastive representation learning through alignment and uniformity on the hypersphere. *ICML*, 9929–9939.
 - [5] Liu, M. (2026). On temperature scaling in contrastive objectives. arXiv: 2604.01234.
+:::
+
+::: footnotes
+[^1]: *τ*-adaptive 调度在推理阶段不引入任何额外计算：调度仅在训练中运行，推理时 τ 已固定为 *τ**。
+[^2]: "批次越大越好"的观点主要来自 Chen et al. (2020) 的 Figure 9，其实验条件固定 τ = 0.07。本文结果在 τ 自适应条件下不再成立。
 :::

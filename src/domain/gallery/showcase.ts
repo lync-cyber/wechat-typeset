@@ -22,10 +22,12 @@ import { esc, PAGE_STYLES, renderPersonaCard } from './generate'
 /**
  * 已渲染好的主题产物片段（由调用方分别调 render({md, theme}) 产出）。
  *
- * 三段拆分对应骨架的三个语义层：
+ * 四段拆分对应骨架的四个语义层：
  *   - elementCatalog        BASE_ELEMENT_FIXTURE_MD（元素 + inline 基线）
  *   - baseContainers        BASE_CONTAINER_FIXTURE_MD（base 容器全集）
  *   - signatureContainers   buildSignatureFixtureMd(spec).md（扩展签名容器）
+ *   - decorationsPreview    DECORATIONS_PREVIEW_MD（装饰契约验证段，主题未声明
+ *                           decorations 时传空串）
  *
  * 为什么不传 markdown 让 showcase 自己渲染：避免本模块持有 pipeline 依赖；
  * 同时也让"渲染失败"的责任完全归调用方，与 verify-sample-full.ts 的模式一致。
@@ -35,6 +37,11 @@ export interface ShowcaseFragments {
   baseContainers: string
   /** 主题无扩展签名时传空串。 */
   signatureContainers: string
+  /**
+   * 装饰预览片段。主题未声明 `spec.decorations` 时传空串——
+   * showcase 会渲染 empty-note 提示"本主题未声明任何 decorations 装饰"。
+   */
+  decorationsPreview: string
 }
 
 export interface GenerateShowcaseInput {
@@ -96,6 +103,17 @@ function renderFragments(fragments: ShowcaseFragments): string {
     blocks.push(
       `<div class="section-label">Rendered · 扩展签名容器</div>` +
         `<div class="empty-note">本主题未声明任何 pack:* / theme:* 扩展签名容器</div>`,
+    )
+  }
+  if (fragments.decorationsPreview && fragments.decorationsPreview.trim().length > 0) {
+    blocks.push(
+      `<div class="section-label">Rendered · Decorations 装饰预览</div>` +
+        `<div class="rendered-wrap">${fragments.decorationsPreview}</div>`,
+    )
+  } else {
+    blocks.push(
+      `<div class="section-label">Rendered · Decorations 装饰预览</div>` +
+        `<div class="empty-note">本主题未声明任何 decorations（headingPrefix / introDropcap）装饰</div>`,
     )
   }
   return blocks.join('\n')
