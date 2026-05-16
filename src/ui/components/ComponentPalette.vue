@@ -53,9 +53,10 @@ const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
     steps: [],
     divider: [],
     sectionTitle: [],
-    // codeBlock 有 snippets,但暂无独立 tab 入口;留空,后续如需再加 tab。
+    // codeBlock / footnotes 有 snippets,但暂无独立 tab 入口;留空,后续如需再加 tab。
     codeBlock: [],
     note: [],
+    footnotes: [],
     none: [],
   }
   for (const c of BUILTIN_COMPONENTS) {
