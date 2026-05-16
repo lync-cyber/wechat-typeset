@@ -7870,7 +7870,8 @@
         "divider",
         "sectionTitle",
         "codeBlock",
-        "note"
+        "note",
+        "footnotes"
       ],
       "properties": {
         "admonition": {
@@ -7947,6 +7948,12 @@
             "minimal-callout",
             "box-callout",
             "side-bar"
+          ]
+        },
+        "footnotes": {
+          "enum": [
+            "lined",
+            "inline-flow"
           ]
         }
       },

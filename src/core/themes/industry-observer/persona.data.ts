@@ -267,6 +267,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'cornered', // 左上 3×3 accent 方块
     codeBlock: 'bare', // code 安静处理；不做 header-bar 语言标签带
     note: 'side-bar', // 左 2px 标线 + 缩进，与 report-section 条款感呼应
+    footnotes: 'lined',
   },
 
   signatureContainers: [

@@ -479,28 +479,11 @@
 
 .markdown-body .container-footnotes {
   border-top: 1px solid #000000;
-  padding-top: 8px;
-  padding-left: 1.6em;
-  text-indent: -1.6em;
   margin: 20px 0;
   font-size: 10px;
   line-height: 1.7;
   letter-spacing: 0.01em;
   color: #333333;
-}
-
-.markdown-body .container-refs {
-  border-top: 1px solid #000000;
-  padding-top: 10px;
-  padding-right: 4px;
-  margin: 24px 0;
-  font-size: 10px;
-  line-height: 1.7;
-  letter-spacing: 0.01em;
-  color: #333333;
-  max-height: 320px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .markdown-body .container-cta-bar {

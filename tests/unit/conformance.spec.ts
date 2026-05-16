@@ -141,9 +141,8 @@ describe('A. spec → Theme 投影保真', () => {
     }
   })
 
-  // R8: ThemeBehavior 接口已删除。所有"主题专属视觉签名"由 spec.decorations 承载。
-  // 此处校验 Theme 实例上既无 behavior 字段、亦无旧 behavior 透传残留。
-  it('Theme 无 behavior 字段（R8 后 ThemeBehavior 接口已删除）', () => {
+  // 所有"主题专属视觉签名"必须走 spec.decorations；Theme 实例上不允许出现 behavior 字段。
+  it('Theme 无 behavior 字段（视觉签名一律走 decorations）', () => {
     for (const { spec, dir } of eachSpec()) {
       const theme = specToTheme(spec)
       expect((theme as { behavior?: unknown }).behavior, dir).toBeUndefined()
@@ -315,8 +314,8 @@ describe('E. Signature Container 注册表闭合性', () => {
     }
   })
 
-  // R2：SUPPORTED_SIGNATURE_CONTAINERS 必须与 STYLED_CONTAINERS.map(s => s.styleKey)
-  // 集合相等。手写数组保留是为了类型字面量联合；这道断言守住二者不漂移。
+  // SUPPORTED_SIGNATURE_CONTAINERS 必须与 STYLED_CONTAINERS.map(s => s.styleKey) 集合相等。
+  // 手写数组保留是为了让 SignatureContainerId 拥有字面量联合类型；本断言守住二者不漂移。
   it('SUPPORTED_SIGNATURE_CONTAINERS ≡ STYLED_CONTAINERS.styleKey 集合（SSoT 派生约束）', () => {
     const fromVocab = new Set<string>(STYLED_CONTAINERS.map((s) => s.styleKey))
     const fromArray = new Set<string>(SUPPORTED_SIGNATURE_CONTAINERS)

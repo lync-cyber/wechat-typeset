@@ -220,6 +220,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare',
     // side-bar：左 2px 实线 + 缩进 —— 与 editor-note callout 形态错开
     note: 'side-bar',
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -622,33 +623,17 @@ export const spec: PersonaSpec = {
       margin: '28px 0',
       'border-radius': '0',
     },
-    // footnotes · 脚注：上方虚线分隔 + 老金小字 + monospace（renderer 已加 hanging indent）
-    // __reset 清除 baseContainers.footnotes 的 1px solid border-top（本主题走 dashed）
+    // footnotes · 两骨架（lined / inline-flow）共用：虚线分隔 + 老金小字。
+    // 替换 baseContainers 的 1px solid border-top（本主题走 dashed）。
+    // 长文献列表写 `::: footnotes variant=inline-flow` 自动获得内滚动。
     footnotes: {
       __reset: true,
       'border-top': '1px dashed #a89070',
-      'padding-top': '10px',
-      'padding-left': '1.6em',
-      'text-indent': '-1.6em',
       margin: '20px 0',
       'font-size': '10px',
       'line-height': '1.85',
       'letter-spacing': '0.03em',
       color: '#a89070',
-    },
-    refs: {
-      __reset: true,
-      'border-top': '1px dashed #a89070',
-      'padding-top': '10px',
-      'padding-right': '4px',
-      margin: '20px 0',
-      'font-size': '10px',
-      'line-height': '1.85',
-      'letter-spacing': '0.03em',
-      color: '#a89070',
-      'max-height': '320px',
-      'overflow-y': 'auto',
-      '-webkit-overflow-scrolling': 'touch',
     },
     ctaBar: {
       margin: '26px 0',

@@ -217,6 +217,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare', // pre 元素直接走主题 voice（黑底）
     note: 'side-bar', // 左 2px 中性线 + 缩进，与简报"直角硬边"语言一致
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -232,8 +233,7 @@ export const spec: PersonaSpec = {
     'kpiDashboard', // KPI 仪表盘
     'barChart', // 条形图
     'qaBlock', // 读者问答
-    'footnotes', // 脚注块（一条一行 + hanging indent）
-    'refs', // 流式参考文献块（同字号紧凑、条目同段流式排列；长引用列表用）
+    'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 用于长列表）
     'ctaBar', // 三栏 CTA（赞同/收藏/转发）
     'qrFollow', // 二维码订阅卡
     'editorNote', // 编辑部注 callout（主色左条 + kicker）
@@ -565,12 +565,11 @@ export const spec: PersonaSpec = {
       margin: '22px 0',
       'border-radius': '0',
     },
+    // footnotes 两骨架共用（layout 由 variants/footnotes/{lined,inline-flow} 注入）
     footnotes: {
       'border-top': '1px solid #e5e7eb',
-      'padding-top': '8px',
       margin: '14px 0',
       'font-size': '10px',
-      'line-height': '1.75',
       color: '#5a6068',
     },
     ctaBar: { margin: '22px 0' },

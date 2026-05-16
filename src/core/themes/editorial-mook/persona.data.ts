@@ -246,6 +246,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare', // 元素级 pre 直接走主题 voice（米卡纸底）
     note: 'minimal-callout', // 中性补注极简骨架，与 mook 的"克制"统一
+    footnotes: 'lined',
   },
 
   // ============================================================

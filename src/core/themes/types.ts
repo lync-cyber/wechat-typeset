@@ -75,13 +75,12 @@ export interface ThemeElements {
   h2: CSSObject
   h3: CSSObject
   /**
-   * 四级小标题。教程主题常用于 "Step 1. 初始化项目" 这类可操作步骤题头。
+   * 四级小标题。教程主题常用于 "Step 1. 初始化项目" 这类可操作步骤题头，
    * 介于 h3 章节小节与 p 正文之间，和 steps 容器搭配使用。
    */
   h4: CSSObject
   /**
-   * 五/六级标题。markdown-it 默认解析 `##### / ######` 为 `<h5>/<h6>`,
-   * 早期骨架只到 h4 让 h5/h6 走浏览器默认字号——本字段补齐主题入口。
+   * 五 / 六级标题。markdown-it 解析 `##### / ######` 为 `<h5>/<h6>`；
    * 主题不显式覆写时由 baseElements 给一个比 h4 更弱的兜底。
    */
   h5: CSSObject
@@ -102,9 +101,9 @@ export interface ThemeElements {
   a: CSSObject
   hr: CSSObject
   table: CSSObject
-  /** 表头单元格。旧版硬编码在 themeCSS, 主题无法定制；现下沉到主题槽位。 */
+  /** 表头单元格。 */
   th: CSSObject
-  /** 数据单元格。同 th。 */
+  /** 数据单元格。 */
   td: CSSObject
   strong: CSSObject
   em: CSSObject
@@ -186,10 +185,14 @@ export interface ThemeContainers {
   barChart: CSSObject
   /** 读者问答（Q/A 头像方块） */
   qaBlock: CSSObject
-  /** 脚注块（上分割线 + 编号引用，一条一行） */
+  /**
+   * 参考文献 / 脚注块。承载两种骨架：
+   *   - `variants.footnotes='lined'`（默认）   一条一行 + hanging indent
+   *   - `variants.footnotes='inline-flow'`    同段流式排列 + max-height/overflow 滚动
+   * 主题 voice 在此槽位写"两种骨架共用的"色 / 字号 / 边框；layout 属性
+   * （padding-left / text-indent / max-height）由 variant inline 注入。
+   */
   footnotes: CSSObject
-  /** 流式参考文献块（footnotes 的 inline run-on 版，长引用列表用） */
-  refs: CSSObject
   /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
   ctaBar: CSSObject
   /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
@@ -322,14 +325,9 @@ export interface ThemeInline {
   highlight: CSSObject
   wavy: CSSObject
   emphasis: CSSObject
-  /**
-   * GFM 删除线（`~~text~~` → `<s>`）。早期 ThemeInline 没此槽位,
-   * 浏览器默认 line-through 与主题无关；现给主题作者一个调色 / 调位置的入口。
-   */
+  /** GFM 删除线（`~~text~~` → `<s>`）。给主题作者一个调色 / 调位置的入口。 */
   del: CSSObject
-  /**
-   * 插入（markdown-it-ins `++text++` → `<ins>`）。同 del。
-   */
+  /** 插入（markdown-it-ins `++text++` → `<ins>`）。 */
   ins: CSSObject
 }
 
@@ -455,6 +453,12 @@ export type CodeBlockVariantId =
   // 顶部语言标签带：语言名大写 + 可选 copy 图标；Stripe Docs / MDN 家族 signature
   | 'header-bar'
 
+export type FootnotesVariantId =
+  // 一条一行 + hanging indent（默认，等价于旧 ::: footnotes）
+  | 'lined'
+  // 同段流式排列 + max-height/overflow 滚动（等价于旧 ::: refs，长引用列表用）
+  | 'inline-flow'
+
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
   admonition: AdmonitionVariantId
@@ -466,6 +470,8 @@ export interface ThemeVariants {
   codeBlock: CodeBlockVariantId
   /** note 第五态独立变体类，与 admonition 4 态解耦。 */
   note: NoteVariantId
+  /** 脚注 / 参考文献骨架（lined / inline-flow）。 */
+  footnotes: FootnotesVariantId
 }
 
 /**
@@ -481,6 +487,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   sectionTitle: 'bordered',
   codeBlock: 'bare',
   note: 'minimal-callout',
+  footnotes: 'lined',
 }
 
 // ============================================================
@@ -601,6 +608,10 @@ export const VARIANT_IDS = {
     'box-callout',
     'side-bar',
   ] as const satisfies readonly NoteVariantId[],
+  footnotes: [
+    'lined',
+    'inline-flow',
+  ] as const satisfies readonly FootnotesVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

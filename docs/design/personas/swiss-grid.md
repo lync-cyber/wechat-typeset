@@ -97,7 +97,7 @@ editorNoteKicker: CSSObject
 | 17 | code-block 黑底白字 | ``` ```javascript ``` ```（elements.pre __reset 黑底白字） |
 | 18 | qa-block Q/A | `::: qa-block READER Q&A q="..."` |
 | 19 | editor-note 黑底头 | `::: editor-note 编 者 按 · 01`（innerStyles.editorNoteKicker 黑 bar） |
-| 20 | footnotes NOTES | `::: refs NOTES` |
+| 20 | footnotes NOTES | `::: footnotes NOTES` 或 `::: footnotes variant=inline-flow REFERENCES` |
 | 22 | cta-bar 三栏 | `::: cta-bar like= star= share=` |
 | 23 | qr-follow SUBSCRIBE | `::: qr-follow NEUE LESE GRAFIK kicker= desc=` |
 | 24 | footer NEXT/VOL | `::: colophon next= issue=` |

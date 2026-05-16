@@ -147,7 +147,6 @@ function computeThemeCSS(theme: Theme): string {
     ['a', theme.elements.a],
     ['hr', theme.elements.hr],
     ['table', theme.elements.table],
-    // th / td 下沉到主题槽位；baseElements 提供与历史等价的兜底。
     ['th', theme.elements.th],
     ['td', theme.elements.td],
     ['strong', theme.elements.strong],

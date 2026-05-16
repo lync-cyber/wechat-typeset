@@ -220,7 +220,7 @@ describe('info / attrs 解析', () => {
 describe('signature containers（note / abstract / key-number / see-also）', () => {
   it('note：第五态 fence + 默认标题"补注" + variant 类后缀', () => {
     const out = run('::: note\n正文\n:::\n')
-    // R8：note 接入 NoteKind 独立变体类，class 含 container-note + variant 后缀
+    // note 走独立 variantKind 池；class 必须同时含 container-note 与 variant 后缀
     expect(out).toMatch(/class="container-note container-note--/)
     expect(out).toContain('补注')
     expect(out).toContain('正文')
@@ -268,7 +268,7 @@ describe('footnotes 条目切分（[N] 行 → 独立 <p>）', () => {
       '[3]　n=1,024。\n' +
       ':::\n',
     )
-    expect(out).toMatch(/class="container-footnotes"/)
+    expect(out).toMatch(/class="container-footnotes(\s|")/)
     // 三个 <p> 各自承载一条
     const ps = out.match(/<p[\s>]/g) ?? []
     expect(ps.length).toBeGreaterThanOrEqual(3)
@@ -285,7 +285,7 @@ describe('footnotes 条目切分（[N] 行 → 独立 <p>）', () => {
       '[1]　仅一条脚注内容。\n' +
       ':::\n',
     )
-    expect(out).toMatch(/class="container-footnotes"/)
+    expect(out).toMatch(/class="container-footnotes(\s|")/)
     const ps = out.match(/<p[\s>]/g) ?? []
     expect(ps.length).toBe(1)
   })
@@ -309,18 +309,32 @@ describe('footnotes 条目切分（[N] 行 → 独立 <p>）', () => {
   })
 })
 
-describe('refs 容器 kicker（info-driven）', () => {
-  it('info 非空时渲染 kicker，使用 primary 色 + letter-spacing', () => {
-    const out = run('::: refs 参 考 文 献\n[1] 来源 A · [2] 来源 B\n:::\n')
-    expect(out).toMatch(/class="container-refs"/)
-    expect(out).toMatch(/class="container-refs__kicker"/)
+describe('footnotes 容器 kicker + 骨架变体（info-driven）', () => {
+  it('info 非空 + variant=inline-flow 时渲染 kicker，使用 primary 色 + letter-spacing', () => {
+    const out = run('::: footnotes variant=inline-flow 参 考 文 献\n[1] 来源 A · [2] 来源 B\n:::\n')
+    expect(out).toMatch(/class="container-footnotes container-footnotes--inline-flow"/)
+    expect(out).toMatch(/class="container-footnotes__title"/)
     expect(out).toContain('参 考 文 献')
-    expect(out).toMatch(/container-refs__kicker[^>]*letter-spacing/)
+    expect(out).toMatch(/container-footnotes__title[^>]*letter-spacing/)
+  })
+
+  it('inline-flow 骨架带 max-height/overflow-y 内滚动参数', () => {
+    const out = run('::: footnotes variant=inline-flow\n[1] 来源 A · [2] 来源 B\n:::\n')
+    expect(out).toMatch(/container-footnotes--inline-flow/)
+    expect(out).toMatch(/max-height:\s*320px/)
+    expect(out).toMatch(/overflow-y:\s*auto/)
+    expect(out).toMatch(/-webkit-overflow-scrolling:\s*touch/)
   })
 
   it('info 缺省时不渲染 kicker（向后兼容）', () => {
-    const out = run('::: refs\n[1] 来源 A · [2] 来源 B\n:::\n')
-    expect(out).toMatch(/class="container-refs"/)
-    expect(out).not.toMatch(/class="container-refs__kicker"/)
+    const out = run('::: footnotes\n[1] 来源 A · [2] 来源 B\n:::\n')
+    expect(out).toMatch(/class="container-footnotes container-footnotes--lined"/)
+    expect(out).not.toMatch(/class="container-footnotes__title"/)
+  })
+
+  it('lined 骨架带 hanging indent (padding-left + 负 text-indent)', () => {
+    const out = run('::: footnotes\n[1] 来源 A\n:::\n')
+    expect(out).toMatch(/padding-left:\s*1\.6em/)
+    expect(out).toMatch(/text-indent:\s*-1\.6em/)
   })
 })

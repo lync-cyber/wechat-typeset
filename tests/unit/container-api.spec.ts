@@ -152,10 +152,10 @@ describe('getVariantsForContainer', () => {
 })
 
 describe('getThemeDefaultVariants', () => {
-  it('返回 8 个 VariantDescriptor（admonition/quote/compare/steps/divider/sectionTitle/codeBlock/note）', () => {
+  it('返回 9 个 VariantDescriptor（admonition/quote/compare/steps/divider/sectionTitle/codeBlock/note/footnotes）', () => {
     const persona = getPersona('default')
     const descriptors = getThemeDefaultVariants(persona.variants)
-    expect(descriptors).toHaveLength(8)
+    expect(descriptors).toHaveLength(9)
   })
 
   it('每个 descriptor 有 id / kind / name / description', () => {

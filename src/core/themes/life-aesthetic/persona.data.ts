@@ -326,6 +326,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare',
     note: 'minimal-callout', // 极简短线，让生活化主题保持柔和不增加视觉负担
+    footnotes: 'lined',
   },
 
   // ============================================================

@@ -33,6 +33,7 @@ import type {
   AdmonitionVariantId,
   CompareVariantId,
   DividerVariantId,
+  FootnotesVariantId,
   NoteVariantId,
   QuoteVariantId,
   SectionTitleVariantId,
@@ -85,6 +86,7 @@ const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'gly
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
+const FOOTNOTES_ORDER: readonly string[] = ['lined', 'inline-flow']
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -95,6 +97,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
+  footnotes: FOOTNOTES_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -116,6 +119,7 @@ import dividerAll from './divider/_all'
 import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
+import footnotesAll from './footnotes/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -127,6 +131,7 @@ function collectDefs(): AnyDef[] {
     ...sectionTitleAll,
     ...codeBlockAll,
     ...noteAll,
+    ...footnotesAll,
   ] as unknown as AnyDef[]
 }
 
@@ -188,6 +193,7 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
   'sectionTitle',
 )
 export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
+export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, 'footnotes')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }

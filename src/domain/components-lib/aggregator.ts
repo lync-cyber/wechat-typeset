@@ -18,7 +18,7 @@ import { getThemeTemplateEntries } from './sources/theme-template-source'
 import { listUserEntries } from './sources/user-source'
 
 export interface LibrarySnapshot {
-  /** 内置 variant snippets（含 codeBlock；P0 后 codeBlock 不再例外）。 */
+  /** 内置 variant snippets（含 codeBlock，与其他 variant 同源）。 */
   builtin: ReadonlyArray<BuiltinEntry>
   /** 当前主题的 templates 字段派生条目。主题不声明任何 template 时为空数组。 */
   themeTemplates: ReadonlyArray<BuiltinEntry>
