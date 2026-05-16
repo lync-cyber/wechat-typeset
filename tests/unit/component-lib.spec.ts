@@ -23,9 +23,9 @@ import {
 } from '../../src/infra/storage/userComponents'
 
 describe('BUILTIN_COMPONENTS', () => {
-  it('每个 variant 都有至少一条预设覆盖（P0 后含 codeBlock）', () => {
-    // P0：闭合 codeBlock 注册逃生口——所有 VARIANT_IDS 内的 id 都必须在 BUILTIN_COMPONENTS
-    // 里有 ≥1 条 snippet，作者能从面板单独插入（codeBlock 通过 fence info 的 variant= 覆盖）。
+  it('每个 variant 都有至少一条预设覆盖', () => {
+    // 所有 VARIANT_IDS 内的 id 都必须在 BUILTIN_COMPONENTS 里有 ≥1 条 snippet，
+    // 作者能从面板单独插入（codeBlock 通过 fence info 的 variant= 覆盖）。
     for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
       for (const id of ids) {
         const found = findPresetByVariant(kind as keyof typeof VARIANT_IDS, id)
