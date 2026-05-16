@@ -123,10 +123,51 @@ export default defineConfig({
     chunkSizeWarningLimit: 1024,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'codemirror': ['codemirror', '@codemirror/lang-markdown', '@codemirror/theme-one-dark', '@codemirror/state', '@codemirror/view'],
-          'markdown': ['markdown-it', 'markdown-it-container', 'markdown-it-mark', 'markdown-it-ins', 'markdown-it-footnote', 'markdown-it-task-lists'],
-          'juice': ['juice'],
+        // 函数形式：除了把第三方按生态成块之外，再把 themes/variants 源码单独成块。
+        // 主题资产是独立增长维度（新增主题 / variant 不应反复挤压 app 骨架预算），
+        // 拆开后主 bundle 的 size budget 只服务 app 骨架，主题侧自己的 budget 服务主题侧。
+        manualChunks(id) {
+          const n = id.replace(/\\/g, '/')
+          if (n.includes('/src/core/themes/') || n.includes('/src/core/variants/')) {
+            return 'themes'
+          }
+          if (!n.includes('/node_modules/')) return undefined
+          const m = n.match(/\/node_modules\/((?:@[^/]+\/)?[^/]+)/)
+          if (!m) return undefined
+          const pkg = m[1]
+          if (
+            pkg === 'codemirror' ||
+            pkg.startsWith('@codemirror/') ||
+            pkg.startsWith('@lezer/') ||
+            pkg.startsWith('@marijn/') ||
+            pkg === 'crelt' ||
+            pkg === 'style-mod' ||
+            pkg === 'w3c-keyname'
+          ) {
+            return 'codemirror'
+          }
+          if (pkg.startsWith('markdown-it')) {
+            return 'markdown'
+          }
+          if (
+            pkg === 'juice' ||
+            pkg.startsWith('cheerio') ||
+            pkg.startsWith('parse5') ||
+            pkg === 'htmlparser2' ||
+            pkg === 'domhandler' ||
+            pkg === 'domutils' ||
+            pkg === 'dom-serializer' ||
+            pkg === 'css-select' ||
+            pkg === 'css-what' ||
+            pkg === 'nth-check' ||
+            pkg === 'boolbase' ||
+            pkg === 'mensch' ||
+            pkg === 'web-resource-inliner' ||
+            pkg === 'slick'
+          ) {
+            return 'juice'
+          }
+          return undefined
         },
       },
     },
