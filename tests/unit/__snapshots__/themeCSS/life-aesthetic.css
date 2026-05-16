@@ -52,19 +52,22 @@
 .markdown-body h5 {
   font-size: 15px;
   font-weight: 600;
-  color: #3a2d20;
-  margin-top: 14px;
+  color: #7a6a58;
+  margin-top: 16px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.6;
+  letter-spacing: 1px;
 }
 
 .markdown-body h6 {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   color: #7a6a58;
   margin-top: 12px;
   margin-bottom: 4px;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {

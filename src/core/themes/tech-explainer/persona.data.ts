@@ -362,6 +362,25 @@ export const spec: PersonaSpec = {
       'line-height': '1.5',
       'letter-spacing': '0.3px',
     },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#1a2233',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.3px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#5c6778',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
+    },
     // 正文：400 字重；行高 1.75
     p: {
       'font-size': '15px',
@@ -515,6 +534,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#0066cc',
       'font-weight': '600',
+    },
+    del: {
+      color: '#5c6778',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#0066cc',
+      'text-decoration': 'underline',
     },
   },
 

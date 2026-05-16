@@ -221,6 +221,26 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 主题级 kicker 文案覆盖（数据简报中英混排母语）
+  //
+  // 简报刊母语 = 短、克制、栏目化；中英 monospace 双轨呼应 decorations 的 "01/02/03"
+  // 序号语言。与 brutalist 的 `// CONTENTS` 终端注释、swiss-grid 的全英 INDEX 形成对比。
+  // ============================================================
+  kickers: {
+    toc: '本期目录 · INDEX',
+    qaBlock: '读者来函 · Q&A',
+    editorNote: '编辑部注',
+    methodology: '方法论 · METHODOLOGY',
+    qrFollowKicker: 'SUBSCRIBE',
+    qrFollowTitle: '订阅本期简报',
+    recommend: '延伸阅读 · FURTHER',
+    footerCTATitle: '关注数据简报',
+    colophonNextLabel: '下 期 ·',
+    colophonIssueLabel: 'VOL ·',
+    mastheadName: '数据简报',
+  },
+
+  // ============================================================
   // 签名容器：声明本主题独有的 7 件 data-brief 家族容器
   // 这些 renderer 在 pipeline/containers/databrief.ts 实现；conformance 测试会校验
   // 注册表里都有对应 markdown 名。
@@ -283,6 +303,25 @@ export const spec: PersonaSpec = {
       'margin-top': '14px',
       'margin-bottom': '6px',
       'line-height': '1.5',
+    },
+    h5: {
+      'font-size': '14px',
+      'font-weight': '600',
+      color: '#111418',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.3px',
+    },
+    h6: {
+      'font-size': '12px',
+      'font-weight': '600',
+      color: '#5a6068',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
     },
     p: {
       'font-size': '14px',
@@ -418,6 +457,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#1756d1',
       'font-weight': '600',
+    },
+    del: {
+      color: '#5a6068',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#1756d1',
+      'text-decoration': 'underline',
     },
   },
 

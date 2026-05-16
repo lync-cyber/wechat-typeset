@@ -49,20 +49,24 @@
 
 .markdown-body h5 {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: #f0f0f0;
   margin-top: 14px;
   margin-bottom: 6px;
   line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .markdown-body h6 {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   color: #a0a0a0;
   margin-top: 12px;
   margin-bottom: 4px;
   line-height: 1.5;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {
@@ -399,19 +403,19 @@
 }
 
 .markdown-body .container-voice-card {
-  background-color: #1a1a1a;
-  border: 1px solid #f0f0f0;
-  border-radius: 0px;
+  background-color: transparent;
+  border: 2px solid #f0f0f0;
+  border-radius: 0;
   padding: 14px 16px;
-  margin: 20px 0;
+  margin: 22px 0;
 }
 
 .markdown-body .container-video-card {
-  background-color: #1a1a1a;
-  border: 1px solid #f0f0f0;
-  border-radius: 0px;
+  background-color: transparent;
+  border: 2px solid #f0f0f0;
+  border-radius: 0;
   padding: 14px 16px;
-  margin: 20px 0;
+  margin: 22px 0;
 }
 
 .markdown-body .container-abstract {

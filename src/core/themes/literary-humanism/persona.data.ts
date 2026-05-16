@@ -480,6 +480,24 @@ export const spec: PersonaSpec = {
       'line-height': '1.6',
       'letter-spacing': '1px',
     },
+    h5: {
+      'font-size': '16px',
+      'font-weight': '600',
+      color: '#1f1b14',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.7',
+      'letter-spacing': '1px',
+    },
+    h6: {
+      'font-size': '16px',
+      'font-weight': '500',
+      color: '#6b5f4a',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.65',
+      'letter-spacing': '1px',
+    },
     // 规范 §1.2：正文 16 / 400 / 字距 1px / 行高 2.0（签名）
     p: {
       'font-size': '16px',
@@ -642,6 +660,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#5a4a3a',
       'font-weight': '500',
+    },
+    del: {
+      color: '#6b5f4a',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#5a4a3a',
+      'text-decoration': 'underline',
     },
   },
 

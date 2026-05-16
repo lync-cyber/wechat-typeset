@@ -250,6 +250,27 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 主题级 kicker 文案覆盖（编集所母语）
+  //
+  // 单字 CJK + 中点的"編集所手感"：与 admonition.mook-tag variant 的"参/編/注/禁"
+  // 单字标签同源。letter-spacing 视觉效果由 innerStyles.*Kicker 撑开；本表只承诺字面值。
+  // 与 data-brief 的"本期目录 · INDEX"中英对仗形成对比——mook 母语不混英文短语。
+  // ============================================================
+  kickers: {
+    toc: '目 · 次',
+    qaBlock: '读 · 者 · 通 · 信',
+    editorNote: '編 · 集 · 後 · 記',
+    methodology: '取 材 · 編 集 笔 记',
+    qrFollowKicker: '訂 · 閱',
+    qrFollowTitle: '订阅这份慢读季刊',
+    recommend: '同 · 期 · 选 · 读',
+    footerCTATitle: '关注 · 慢读编集',
+    colophonNextLabel: '下 · 期 · 预 告',
+    colophonIssueLabel: '卷 · 期',
+    mastheadName: '编 · 集 · 慢 · 读',
+  },
+
+  // ============================================================
   // 签名容器：复用 data-brief 包 + 跨主题通用 abstract
   // ============================================================
   signatureContainers: [
@@ -316,6 +337,25 @@ export const spec: PersonaSpec = {
       'margin-top': '14px',
       'margin-bottom': '6px',
       'line-height': '1.5',
+    },
+    h5: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#2d3a4a',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.55',
+      'letter-spacing': '0.5px',
+    },
+    h6: {
+      'font-size': '11px',
+      'font-weight': '600',
+      color: '#6b7885',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
     },
     // 正文：13/2.0 是 mook 的灵魂——小字 + 宽行距，让阅读慢下来
     p: {
@@ -491,6 +531,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#e85a3c',
       'font-weight': '600',
+    },
+    del: {
+      color: '#6b7885',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#e85a3c',
+      'text-decoration': 'underline',
     },
   },
 

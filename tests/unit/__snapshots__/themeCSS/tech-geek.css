@@ -55,16 +55,19 @@
   color: #ebdfca;
   margin-top: 14px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 0.8px;
 }
 
 .markdown-body h6 {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   color: #9a8f7e;
   margin-top: 12px;
   margin-bottom: 4px;
   line-height: 1.5;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {

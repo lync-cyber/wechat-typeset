@@ -374,6 +374,25 @@ export const spec: PersonaSpec = {
       'line-height': '1.6',
       'letter-spacing': '0.8px',
     },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#7a6a58',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.6',
+      'letter-spacing': '1px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '500',
+      color: '#7a6a58',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.55',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
+    },
     // 正文杂志行高 1.85（书斋是 2.0，这里略收紧）+ 字距 0.8px（不拉开）
     p: {
       'font-size': '15px',
@@ -521,6 +540,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#d98141',
       'font-weight': '600',
+    },
+    del: {
+      color: '#7a6a58',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#d98141',
+      'text-decoration': 'underline',
     },
   },
 

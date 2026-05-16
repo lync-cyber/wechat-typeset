@@ -316,6 +316,24 @@ export const spec: PersonaSpec = {
       'line-height': '1.6',
       'letter-spacing': '0.04em',
     },
+    h5: {
+      'font-size': '14px',
+      'font-weight': '600',
+      color: '#d9c9a8',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.6',
+      'letter-spacing': '0.05em',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '500',
+      color: '#a89070',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.55',
+      'letter-spacing': '1.2px',
+    },
     // P：line-height 2.1 + 0.04em 字距（夜读"慢"的标志组合）
     p: {
       'font-size': '14px',
@@ -482,6 +500,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#d97a3c',
       'font-weight': '600',
+    },
+    del: {
+      color: '#a89070',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#d97a3c',
+      'text-decoration': 'underline',
     },
   },
 
@@ -703,6 +729,26 @@ export const spec: PersonaSpec = {
       padding: '0 0 0 18px',
       margin: '20px 0',
       'background-color': 'transparent',
+    },
+    // voice / video 卡：暗底主题不走 baseContainers 浅卡兜底；
+    // 深蓝卡底 + 1px 冷蓝灰边 + 左 3px 橙竖条，与唱针 / cue 同源
+    voiceCard: {
+      __reset: true,
+      'background-color': '#14263d',
+      border: '1px solid #4a6080',
+      'border-left': '3px solid #d97a3c',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
+    },
+    videoCard: {
+      __reset: true,
+      'background-color': '#14263d',
+      border: '1px solid #4a6080',
+      'border-left': '3px solid #d97a3c',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
     },
   },
 

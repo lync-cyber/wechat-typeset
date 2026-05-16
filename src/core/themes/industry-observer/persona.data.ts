@@ -324,6 +324,25 @@ export const spec: PersonaSpec = {
       'line-height': '1.5',
       'letter-spacing': '0.2px',
     },
+    h5: {
+      'font-size': '16px',
+      'font-weight': '600',
+      color: '#1a2332',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.55',
+      'letter-spacing': '0.2px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#5a6778',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
+    },
     p: {
       'font-size': '16px',
       'line-height': '1.85',
@@ -470,6 +489,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#24364f',
       'font-weight': '600',
+    },
+    del: {
+      color: '#5a6778',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#24364f',
+      'text-decoration': 'underline',
     },
   },
 

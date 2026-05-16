@@ -54,18 +54,21 @@
   font-size: 15px;
   font-weight: 600;
   color: #0f141b;
-  margin-top: 14px;
+  margin-top: 16px;
   margin-bottom: 6px;
   line-height: 1.5;
+  letter-spacing: 0.2px;
 }
 
 .markdown-body h6 {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   color: #56606e;
   margin-top: 12px;
   margin-bottom: 4px;
   line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {

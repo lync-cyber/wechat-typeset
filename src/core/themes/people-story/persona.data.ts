@@ -315,6 +315,24 @@ export const spec: PersonaSpec = {
       'line-height': '1.6',
       'letter-spacing': '0.5px',
     },
+    h5: {
+      'font-size': '16px',
+      'font-weight': '600',
+      color: '#17171a',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.65',
+      'letter-spacing': '0.5px',
+    },
+    h6: {
+      'font-size': '16px',
+      'font-weight': '500',
+      color: '#5d5d63',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.6',
+      'letter-spacing': '0.5px',
+    },
     // p 16/400/0.5px/1.75 —— 红线行高 1.75
     p: {
       'font-size': '16px',
@@ -476,6 +494,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#1b2330',
       'font-weight': '500',
+    },
+    del: {
+      color: '#5d5d63',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#1b2330',
+      'text-decoration': 'underline',
     },
   },
 

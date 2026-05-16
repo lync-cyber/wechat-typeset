@@ -54,9 +54,10 @@
   font-size: 16px;
   font-weight: 600;
   color: #1f1b14;
-  margin-top: 14px;
+  margin-top: 16px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.7;
+  letter-spacing: 1px;
 }
 
 .markdown-body h6 {
@@ -65,7 +66,8 @@
   color: #6b5f4a;
   margin-top: 12px;
   margin-bottom: 4px;
-  line-height: 1.5;
+  line-height: 1.65;
+  letter-spacing: 1px;
 }
 
 .markdown-body p {

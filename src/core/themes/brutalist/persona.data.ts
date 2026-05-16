@@ -265,6 +265,26 @@ export const spec: PersonaSpec = {
       'margin-bottom': '6px',
       'line-height': '1.5',
     },
+    h5: {
+      'font-size': '13px',
+      'font-weight': '700',
+      color: '#f0f0f0',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#a0a0a0',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
+    },
     p: {
       'font-size': '13px',
       'line-height': '1.6',
@@ -395,6 +415,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#ebff00',
       'font-weight': '700',
+    },
+    del: {
+      color: '#a0a0a0',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#ebff00',
+      'text-decoration': 'underline',
     },
   },
 
@@ -639,6 +667,24 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-weight': '700',
       'letter-spacing': '0.05em',
+    },
+    // voice / video 卡：暗底主题不能走 baseContainers 的浅卡兜底；
+    // 走"无底色 + 2px 实线 + 直角"的粗野铁皮箱形态，与本主题刊头双粗线 + masthead 同语汇
+    voiceCard: {
+      __reset: true,
+      'background-color': 'transparent',
+      border: '2px solid #f0f0f0',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
+    },
+    videoCard: {
+      __reset: true,
+      'background-color': 'transparent',
+      border: '2px solid #f0f0f0',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
     },
   },
 
