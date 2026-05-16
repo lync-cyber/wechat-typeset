@@ -18,7 +18,7 @@
  *   - data-brief：数据蓝 #1756d1 + monospace + 数据卡 + sparkline——"数字是论点"
  *   - swiss-grid：国际红 + 大字章号 + 红章 H2 + pull-quote 栏偏移——"栅格是结构"
  *   两者共享 data-brief 家族签名容器（masthead 略弃用 / qa-block / editor-note / footnotes
- *   / refs / cta-bar / qr-follow / colophon / methodology / bar-chart / key-number）,
+ *   / cta-bar / qr-follow / colophon / methodology / bar-chart / key-number）,
  *   仅在 tokens / variants / innerStyles 上分叉视觉个性。
  *
  * 复用策略：
@@ -28,7 +28,7 @@
  *     vertical stack 适配 375px 移动端，比强行 2 栏 layout 更稳
  *   - 编者按（editor-note）走"黑底白字 header bar" —— 通过 innerStyles.editorNoteKicker
  *     的负 margin 把 kicker 撑到 wrapper 边缘；renderer 已下沉到 innerStyles 槽位
- *   - 脚注 NOTES 走 `refs` 容器（自带 kicker info 槽）
+ *   - 脚注 NOTES 走 `footnotes variant=inline-flow`（自带 kicker info 槽，长引用列表内滚动）
  *   - pull-quote 通过 `elements.blockquote` __reset 表达"左 12px 红条 + 25% 左偏移"
  *
  * 不新增容器/变体——所有视觉签名通过 spec 配置实现。
@@ -817,7 +817,7 @@ VOL.IV · 2026—04—22 · CHF 14.—
       '主题 02 苏黎世栅格 · 三条不可妥协：radius=0、primary #e30613、H2 红章徽章。\n' +
       '架构复用：admonition `news-row` variant 直接复刻设计稿 multi-callout；\n' +
       'issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；\n' +
-      'NOTES 脚注用 refs（自带 kicker），editor-note 走"黑底白字 header bar"。\n' +
+      'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker），editor-note 走"黑底白字 header bar"。\n' +
       '已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,\n' +
       '但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
       '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）；\n' +

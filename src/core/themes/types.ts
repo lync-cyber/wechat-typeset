@@ -467,9 +467,9 @@ export type CodeBlockVariantId =
   | 'header-bar'
 
 export type FootnotesVariantId =
-  // 一条一行 + hanging indent（默认，等价于旧 ::: footnotes）
+  // 一条一行 + hanging indent（默认）
   | 'lined'
-  // 同段流式排列 + max-height/overflow 滚动（等价于旧 ::: refs，长引用列表用）
+  // 同段流式排列 + max-height/overflow 内滚动，适合 20+ 条长引用列表
   | 'inline-flow'
 
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */

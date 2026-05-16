@@ -84,8 +84,12 @@ export function motifsToAssets(motifs: MotifSpec): ThemeAssets {
  *
  * 派生规则（与 isContainerEnabledForTheme 平行，但 capabilities 是显式白名单语义）：
  *   - base pack 容器：始终启用（全主题共享的核心契约）
- *   - pack:* 容器：当该容器 styleKey 出现在 signatureContainers 时启用
- *                  （主题"显式承认"自己想演这套刊物形态）
+ *   - pack:* 容器：**按整 pack 借用** —— 当 pack 中任一容器的 styleKey 出现在
+ *                  signatureContainers 时，本主题 capabilities 同时曝光该 pack
+ *                  的所有兄弟容器。设计取舍：pack 内容器互为生态（editorial pack
+ *                  的 toc / footnotes / cta-bar / qr-follow 经常组合使用），
+ *                  半启用会让 LLM / 作者在"为何 footnotes 可用而 cta-bar 不可用"
+ *                  这类边界上踩坑；整 pack 启用与作者心智一致。
  *   - theme:<spec.id> 容器：本主题独有命名空间，始终启用
  *
  * 不与 spec.capabilities 合并：调用方显式声明 = 全权接管，避免"我以为是覆盖结果是叠加"的歧义。

@@ -305,7 +305,7 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px; padd
 <div class="section-label">Owner Notes</div><p class="owner-notes">主题 02 苏黎世栅格 · 三条不可妥协：radius=0、primary #e30613、H2 红章徽章。
 架构复用：admonition `news-row` variant 直接复刻设计稿 multi-callout；
 issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；
-NOTES 脚注用 refs（自带 kicker），editor-note 走&quot;黑底白字 header bar&quot;。
+NOTES 脚注用 footnotes variant=inline-flow（自带 kicker），editor-note 走&quot;黑底白字 header bar&quot;。
 已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,
 但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。
 新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）；

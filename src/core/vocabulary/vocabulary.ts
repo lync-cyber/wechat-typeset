@@ -41,7 +41,7 @@ export type ContainerCategory =
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
   | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
-  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes / refs / qa-block
+  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes
   | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
   | 'free' // 兜底 escape hatch：free
 
