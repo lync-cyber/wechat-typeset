@@ -267,6 +267,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'cornered', // 左上 3×3 accent 方块
     codeBlock: 'bare', // code 安静处理；不做 header-bar 语言标签带
     note: 'side-bar', // 左 2px 标线 + 缩进，与 report-section 条款感呼应
+    footnotes: 'lined',
   },
 
   signatureContainers: [
@@ -322,6 +323,25 @@ export const spec: PersonaSpec = {
       'margin-bottom': '8px',
       'line-height': '1.5',
       'letter-spacing': '0.2px',
+    },
+    h5: {
+      'font-size': '16px',
+      'font-weight': '600',
+      color: '#1a2332',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.55',
+      'letter-spacing': '0.2px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#5a6778',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
     },
     p: {
       'font-size': '16px',
@@ -470,6 +490,14 @@ export const spec: PersonaSpec = {
       color: '#24364f',
       'font-weight': '600',
     },
+    del: {
+      color: '#5a6778',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#24364f',
+      'text-decoration': 'underline',
+    },
   },
 
   // ============================================================
@@ -498,6 +526,8 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
+    // side-bar variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
+    note: {},
     quoteCard: {
       'background-color': '#f5efe1',
       padding: '20px 28px',

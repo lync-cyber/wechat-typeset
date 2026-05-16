@@ -1,14 +1,10 @@
 /**
- * 组件库注册表
+ * 组件库注册表（对外 facade）。
  *
- * 汇总所有内置预设，供 ComponentPalette.vue 消费。
- * 数据源：src/domain/components-lib/sources/builtin-source.ts（P0 后从 core/variants 派生）。
- * 用户自创组件通过 storage/userComponents.ts 独立管理，
- * UI 展示时在"我的组件"分类里叠加呈现。
- *
- * P0 后本文件只剩"对外 facade"职责——派生在 sources/ 下，
- * 这里仅做 tab 元数据 / 查找函数。BUILTIN_COMPONENTS 直接 re-export 同一引用，
- * 避免冗余 deep-clone（builtin-source 出来的 BuiltinEntry 本就是 ComponentEntry 的子集）。
+ * 派生在 sources/builtin-source.ts（从 core/variants 取 snippets）；本文件只做
+ * tab 元数据 + 查找函数。BUILTIN_COMPONENTS 直接 re-export 同一引用，避免冗余
+ * deep-clone（builtin-source 出来的 BuiltinEntry 本就是 ComponentEntry 的子集）。
+ * 用户自创组件由 storage/userComponents.ts 管理，UI 在"我的组件"分类叠加展示。
  */
 
 import type { ComponentEntry, ComponentKind } from './types'
@@ -29,6 +25,7 @@ export const COMPONENT_TABS: ReadonlyArray<{
   { kind: 'divider', label: '分隔' },
   { kind: 'sectionTitle', label: '章节' },
   { kind: 'note', label: '补注' },
+  { kind: 'footnotes', label: '脚注' },
   { kind: 'none', label: '其它' },
   { kind: 'user', label: '我的组件' },
 ]

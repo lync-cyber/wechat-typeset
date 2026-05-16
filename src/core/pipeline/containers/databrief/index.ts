@@ -38,7 +38,6 @@ export {
 export {
   qaBlockContainer,
   footnotesContainer,
-  refsContainer,
   editorNoteContainer,
   methodologyContainer,
 } from './editorial'

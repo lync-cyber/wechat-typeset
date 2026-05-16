@@ -245,6 +245,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare',
     note: 'box-callout', // 学术风：1px 边框包裹的 "Remark" 框，与 sidenote-latex 同语调
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -288,6 +289,24 @@ export const spec: PersonaSpec = {
       'margin-bottom': '8px',
       'line-height': '1.6',
       'letter-spacing': '0',
+    },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#16181d',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.55',
+      'letter-spacing': '0.5px',
+    },
+    h6: {
+      'font-size': '15px',
+      'font-weight': '500',
+      color: '#5a5d64',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '0.5px',
     },
     p: {
       'font-size': '15px',
@@ -443,6 +462,14 @@ export const spec: PersonaSpec = {
       'font-weight': '500',
       color: '#16181d',
     },
+    del: {
+      color: '#5a5d64',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#1e2c4a',
+      'text-decoration': 'underline',
+    },
   },
 
   // ============================================================
@@ -479,6 +506,8 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
+    // box-callout variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
+    note: {},
     // 规范 §2.6 quoteCard = 定理声明框（本主题签名）
     quoteCard: {
       'background-color': '#fefefe',

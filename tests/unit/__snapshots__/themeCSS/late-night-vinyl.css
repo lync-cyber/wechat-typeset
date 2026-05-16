@@ -53,16 +53,18 @@
   color: #d9c9a8;
   margin-top: 14px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
 }
 
 .markdown-body h6 {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: #a89070;
   margin-top: 12px;
   margin-bottom: 4px;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 1.2px;
 }
 
 .markdown-body p {
@@ -407,17 +409,19 @@
 .markdown-body .container-voice-card {
   background-color: #14263d;
   border: 1px solid #4a6080;
-  border-radius: 0px;
+  border-left: 3px solid #d97a3c;
+  border-radius: 0;
   padding: 14px 16px;
-  margin: 20px 0;
+  margin: 22px 0;
 }
 
 .markdown-body .container-video-card {
   background-color: #14263d;
   border: 1px solid #4a6080;
-  border-radius: 0px;
+  border-left: 3px solid #d97a3c;
+  border-radius: 0;
   padding: 14px 16px;
-  margin: 20px 0;
+  margin: 22px 0;
 }
 
 .markdown-body .container-abstract {
@@ -461,28 +465,11 @@
 
 .markdown-body .container-footnotes {
   border-top: 1px dashed #a89070;
-  padding-top: 10px;
-  padding-left: 1.6em;
-  text-indent: -1.6em;
   margin: 20px 0;
   font-size: 10px;
   line-height: 1.85;
   letter-spacing: 0.03em;
   color: #a89070;
-}
-
-.markdown-body .container-refs {
-  border-top: 1px dashed #a89070;
-  padding-top: 10px;
-  padding-right: 4px;
-  margin: 20px 0;
-  font-size: 10px;
-  line-height: 1.85;
-  letter-spacing: 0.03em;
-  color: #a89070;
-  max-height: 320px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .markdown-body .container-cta-bar {

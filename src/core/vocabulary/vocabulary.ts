@@ -41,7 +41,7 @@ export type ContainerCategory =
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
   | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
-  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes / refs / qa-block
+  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes
   | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
   | 'free' // 兜底 escape hatch：free
 
@@ -524,7 +524,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
   {
     name: 'qa-block',
     styleKey: 'qaBlock',
-    category: 'signature',
+    category: 'content',
     pack: 'pack:editorial',
     fenceLength: 3,
     attrs: [
@@ -763,21 +763,21 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'footnotes',
     category: 'signature',
     pack: 'pack:editorial',
+    variantKind: 'footnotes',
     fenceLength: 3,
+    attrs: [
+      {
+        key: 'variant',
+        description: '覆盖主题默认的 footnotes 骨架（lined = 一条一行；inline-flow = 同段流式）',
+        enum: VARIANT_IDS.footnotes,
+      },
+    ],
     description:
-      '脚注块：上分割线 + 小字编号引用（一条一行，hanging indent）。body 通常为 `[1] 文本 / [2] 文本` 或有序列表，渲染器只加外框。',
+      '脚注 / 参考文献块。两骨架可选：' +
+      'lined（默认，一条一行 + hanging indent）适合 5~10 条短引用；' +
+      'inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。' +
+      'info 非空时渲染主色 kicker（如 "NOTES" / "参考文献"），与 editor-note / qa-block 同源。',
     example: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
-  },
-  {
-    name: 'refs',
-    styleKey: 'refs',
-    category: 'signature',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    description:
-      '流式参考文献块：与 footnotes 同源，但所有条目同段流式排列（条目间作者自行用 `·` / `／` 分隔），同样高度可装 2~3 倍条目，适合长文献列表。公众号沙箱不支持滚动，长引用建议走 refs。',
-    example:
-      '::: refs\n[1] 全国国民阅读调查 2015–2024 · [2] 样本 n=1,432，CI=95% · [3] 详见方法论 §3.2\n:::\n',
   },
   {
     name: 'cta-bar',

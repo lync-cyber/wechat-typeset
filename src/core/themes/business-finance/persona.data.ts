@@ -293,6 +293,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'cornered', // 左上 L 形角标
     codeBlock: 'bare', // 安静处理
     note: 'box-callout', // 1px 边框的"附注"块，与 ledger-cell 硬边框语言一致
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -339,6 +340,25 @@ export const spec: PersonaSpec = {
       'margin-top': '18px',
       'margin-bottom': '8px',
       'line-height': '1.5',
+    },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#0f141b',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.2px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#56606e',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
     },
     p: {
       'font-size': '15px',
@@ -487,6 +507,14 @@ export const spec: PersonaSpec = {
       color: '#2a1a14',
       'font-weight': '600',
     },
+    del: {
+      color: '#56606e',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#2a1a14',
+      'text-decoration': 'underline',
+    },
   },
 
   // ============================================================
@@ -523,6 +551,8 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
+    // box-callout variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
+    note: {},
     // 规范 §2.6 quoteCard：核心判断 —— frame-brackets + bgSoft 底 + radius 2
     quoteCard: {
       'background-color': '#f3f1ec',

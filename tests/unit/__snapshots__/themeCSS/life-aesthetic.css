@@ -52,19 +52,22 @@
 .markdown-body h5 {
   font-size: 15px;
   font-weight: 600;
-  color: #3a2d20;
-  margin-top: 14px;
+  color: #7a6a58;
+  margin-top: 16px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.6;
+  letter-spacing: 1px;
 }
 
 .markdown-body h6 {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   color: #7a6a58;
   margin-top: 12px;
   margin-bottom: 4px;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {
@@ -229,10 +232,10 @@
 }
 
 .markdown-body mark {
-  background-color: #efb758;
-  color: #faf6f0;
-  padding: 0 3px;
-  border-radius: 2px;
+  background-color: #fcf1dc;
+  color: #3a2d20;
+  padding: 0 4px;
+  border-radius: 3px;
 }
 
 .markdown-body .wx-wavy {
@@ -290,9 +293,9 @@
 }
 
 .markdown-body .container-section-title {
-  margin: 24px 0 12px;
-  border-bottom: 2px solid #d98141;
+  margin: 32px 0 16px;
   padding-bottom: 6px;
+  border-bottom: 2px solid #d98141;
 }
 
 .markdown-body .container-masthead {
@@ -385,11 +388,11 @@
 }
 
 .markdown-body .container-compare {
-  margin: 16px 0;
+  margin: 24px 0;
 }
 
 .markdown-body .container-steps {
-  margin: 16px 0;
+  margin: 24px 0;
 }
 
 .markdown-body .container-image-caption {
@@ -403,7 +406,7 @@
 }
 
 .markdown-body .container-timeline {
-  margin: 20px 0;
+  margin: 24px 0;
 }
 
 .markdown-body .container-qa-block {
@@ -491,28 +494,10 @@
 
 .markdown-body .container-footnotes {
   border-top: 1px solid #e0d1ba;
-  padding-top: 6px;
-  padding-left: 1.6em;
-  text-indent: -1.6em;
   margin: 14px 0;
   font-size: 9px;
-  line-height: 1.5;
   letter-spacing: 0.01em;
   color: #7a6a58;
-}
-
-.markdown-body .container-refs {
-  border-top: 1px solid #e0d1ba;
-  padding-top: 6px;
-  padding-right: 4px;
-  margin: 14px 0;
-  font-size: 9px;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-  color: #7a6a58;
-  max-height: 320px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .markdown-body .container-cta-bar {

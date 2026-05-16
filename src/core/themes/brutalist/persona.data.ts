@@ -178,6 +178,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare', // pre 元素直接走主题 voice（白底反色 + 左黄竖线）
     note: 'side-bar', // 左 2px 短线 + 缩进,与"批注"语义一致
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -263,6 +264,26 @@ export const spec: PersonaSpec = {
       'margin-top': '14px',
       'margin-bottom': '6px',
       'line-height': '1.5',
+    },
+    h5: {
+      'font-size': '13px',
+      'font-weight': '700',
+      color: '#f0f0f0',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#a0a0a0',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '2px',
+      'text-transform': 'uppercase',
     },
     p: {
       'font-size': '13px',
@@ -394,6 +415,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#ebff00',
       'font-weight': '700',
+    },
+    del: {
+      color: '#a0a0a0',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#ebff00',
+      'text-decoration': 'underline',
     },
   },
 
@@ -568,29 +597,14 @@ export const spec: PersonaSpec = {
       margin: '24px 0',
       'border-radius': '0',
     },
-    // footnotes：上虚线 + 灰小字 + 等宽节奏（fn[] 编号靠作者写 markdown 段达成）
+    // footnotes：上虚线 + 灰小字（两骨架共用；长列表写 variant=inline-flow 内滚动）
     footnotes: {
       __reset: true,
       'border-top': '1px dashed #f0f0f0',
-      'padding-top': '8px',
       margin: '20px 0',
       'font-size': '10px',
       'line-height': '1.75',
       color: '#a0a0a0',
-    },
-    refs: {
-      __reset: true,
-      'border-top': '1px dashed #f0f0f0',
-      'padding-top': '8px',
-      'padding-right': '4px',
-      margin: '20px 0',
-      'font-size': '10px',
-      'line-height': '1.75',
-      'letter-spacing': '0.01em',
-      color: '#a0a0a0',
-      'max-height': '320px',
-      'overflow-y': 'auto',
-      '-webkit-overflow-scrolling': 'touch',
     },
     // cta-bar：三栏（LIKE / STAR / FWD）—— renderer 已提供 display:table 骨架
     ctaBar: { margin: '24px 0' },
@@ -653,6 +667,24 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
       'font-weight': '700',
       'letter-spacing': '0.05em',
+    },
+    // voice / video 卡：暗底主题不能走 baseContainers 的浅卡兜底；
+    // 走"无底色 + 2px 实线 + 直角"的粗野铁皮箱形态，与本主题刊头双粗线 + masthead 同语汇
+    voiceCard: {
+      __reset: true,
+      'background-color': 'transparent',
+      border: '2px solid #f0f0f0',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
+    },
+    videoCard: {
+      __reset: true,
+      'background-color': 'transparent',
+      border: '2px solid #f0f0f0',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
     },
   },
 

@@ -111,7 +111,7 @@ const reading = (book) =>
 
 读者若有心，不妨 [分享你今夜读的那一页](#)。
 
-::: refs NOTES
+::: footnotes NOTES
 [1]　出自帕慕克《别样的色彩》，略有改动。
 :::
 

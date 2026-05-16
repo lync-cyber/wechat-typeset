@@ -1,7 +1,7 @@
 # 主题作者指南
 
 写给两类人：
-1. **想新增一套内置主题**的贡献者（目标：PR 合入 `src/themes/<slug>/`）。
+1. **想新增一套内置主题**的贡献者（目标：PR 合入 `src/core/themes/<slug>/`）。
 2. **想在 fork 里自用定制**、或通过 LLM 动态生成主题喂给 `render()` 的集成方。
 
 微信公众号的平台约束不是"最佳实践"——**是硬红线**。校验器 `validatePersona` 在构造期把违反约束的 spec 挡下；试图在运行时绕过（手改 `Theme` 对象）会在粘贴到后台时塌掉。按本文档走，默认就是稳的。
@@ -29,14 +29,14 @@ persona.data.ts  ──┬─► specToTheme(spec)   → 运行时 Theme（渲�
 ### 1. 起个目录，复制最简骨架
 
 ```bash
-cp -r src/themes/default src/themes/your-slug
+cp -r src/core/themes/default src/core/themes/your-slug
 ```
 
 `id` 用 kebab-case，与目录名一致（e.g. `urban-diary`）。
 
 ### 2. 编辑 `persona.data.ts`
 
-必填字段（[完整类型](../src/themes/_shared/spec/types.ts)）：
+必填字段（[完整类型](../src/core/themes/_shared/spec/types.ts)）：
 
 ```ts
 import type { PersonaSpec } from '../_shared/spec'
@@ -64,9 +64,20 @@ export const spec: PersonaSpec = {
   radius:     { sm: 4, md: 8, lg: 12 },
 
   motifs: { /* 见下节「Motif AST」 */ },
-  variants: { admonition: 'accent-bar', quote: 'serif-mark', compare: 'two-column',
-              steps: 'numbered-badge', divider: 'flower', sectionTitle: 'prefix-bar',
-              codeBlock: 'plain' },
+  variants: {
+    // 9 个骨架槽位的合法 id 清单：`getVariantIds()` / VARIANT_IDS（src/core/themes/types.ts）。
+    // 主题不声明的槽位由 buildTheme 注入 DEFAULT_VARIANTS 兜底，但 PersonaSpec.variants
+    // 类型上是全量 ThemeVariants —— 一处填，全数declare。
+    admonition: 'accent-bar',
+    quote: 'classic',
+    compare: 'column-card',
+    steps: 'number-circle',
+    divider: 'rule',
+    sectionTitle: 'bordered',
+    codeBlock: 'bare',
+    note: 'minimal-callout',
+    footnotes: 'lined',
+  },
 
   meta: { createdAt: '2026-04-20' },
 }
@@ -81,7 +92,7 @@ import { spec } from './persona.data'
 export const urbanDiaryTheme = specToTheme(spec)
 ```
 
-`src/themes/index.ts` 用 `import.meta.glob` 自动发现——**不需要**去注册表里登记。想调主题在 UI 里的显示顺序，改 `DISPLAY_ORDER` 数组。
+`src/core/themes/registry.ts` 维护显式 `ALL_SPECS` 列表（tsx / Node 直跑 pipeline 不认 `import.meta.glob`，故走显式 import）。新增主题：在 `ALL_SPECS` 追加 import + 加进 `DISPLAY_ORDER`（不进 DISPLAY_ORDER 时按 id 字典序落到末尾）。
 
 ### 4. 跑校验 → 预览 → 测试
 
@@ -104,7 +115,7 @@ npm test                  # 全量单测（含 voice / showcase / rendered-snaps
 | ② TokenSwatches | 11 色板 + 4 态 status | 没有色差冲突，textInverse 不是纯白 |
 | ③ Typography | h1–h3 + p + pull-quote 行 | 字号/字距与定位一致（编辑刊 ≠ 终端） |
 | ④ Motifs | 全部声明的 SVG 母题 | 装饰强度与"签名动作"匹配 |
-| ⑤ Rendered · 元素 | 渲染产物：h1-h4 / p / list / table / pre / blockquote | 元素 voice 表达正确，不是 default 兜底 |
+| ⑤ Rendered · 元素 | 渲染产物：h1-h6 / p / blockquote / list (ul/ol/li) / code / kbd / pre / img / a / hr / table+th+td / strong / em | 元素 voice 表达正确，不是 default 兜底 |
 | ⑥ Rendered · Base 容器 | 渲染产物：tip/warning/info/danger/note/quote-card/highlight/compare/steps/divider/footer-cta/recommend/qrcode 等 | base 容器有可辨识 voice |
 | ⑦ Rendered · 扩展签名容器 | 渲染产物：pack:editorial / theme:* 中声明的签名容器 | 想演刊物形态的主题在此区块发挥；声明=必有产物 |
 
@@ -175,7 +186,8 @@ motifs: {
 }
 ```
 
-图元类型：`rect` / `circle` / `path` / `text` / `line` / `polyline` / `polygon`。
+图元类型（MotifPrimitive 联合）：`rect` / `circle` / `ellipse` / `path` / `text` / `line` / `group`。
+`group` 含 `transform` 字符串（SVG 标准语法 `translate(...) rotate(...) scale(...)`）与子元素数组，用于成组移动 / 旋转。
 校验器会把 `placeholders` 列表与 `primitives` 内实际出现的 `{name}` 交叉对账——漏声明或漏使用都会 error。
 
 **要手动渲染某个 motif**（比如文档页、独立卡片）：
@@ -192,19 +204,95 @@ const badge = renderMotifWithValues(motifs.stepBadge!, { N: 3 })  // 模板
 
 ## 容器变体（variants）
 
-同一个容器（比如 `tip`）可以有若干视觉骨架。主题在 spec 里为每个类目挑一个默认 variant：
+同一个容器（比如 `tip`）可以有若干视觉骨架。主题在 spec 里为每个类目挑一个默认 variant。
 
-| 类目 | 可选 variant | 常见选法 |
-| --- | --- | --- |
-| `admonition` | `accent-bar` / `pill-tag` / `ticket-notch` / `card-shadow` / `minimal-underline` / `terminal` | default 用 `accent-bar`；`tech-geek` 用 `terminal` |
-| `quote` | `serif-mark` / `left-rule` / `pullquote-card` | `people-story` 的巨号引号走 `pullquote-card` |
-| `compare` | `two-column` / `ledger` / `matrix` | `business-finance` 用 `ledger`（账本感） |
-| `steps` | `numbered-badge` / `vertical-rule` / `terminal-prompt` | |
-| `divider` | `line` / `wave` / `dots` / `flower` / `glyph` | `business-finance` 禁 `wave` 以避免与 K 线冲突 |
-| `sectionTitle` | `prefix-bar` / `centered-rule` / `roman-numeral` | `people-story` 用罗马数字 |
-| `codeBlock` | `plain` / `header-bar` / `terminal` | `tech-explainer` 用 `header-bar`（Stripe Docs 签名） |
+合法 id 是单一真源 —— **不要手抄**，永远从这两个入口取：
 
-完整列表：`src/variants/` 下各目录。获取合法 id 清单用 `getVariantIds()`。
+```ts
+import { VARIANT_IDS } from 'wechat-typeset'        // const，类型即字面量联合
+import { getVariantIds } from 'wechat-typeset'     // 函数，按 kind 返回 string[]
+
+getVariantIds('admonition')   // ['accent-bar', 'pill-tag', 'ticket-notch', ...]
+getVariantIds('footnotes')    // ['lined', 'inline-flow']
+```
+
+骨架槽位（9 个）一览：
+
+| 类目 | 谁消费 | 默认 | 一句话定位 |
+| --- | --- | --- | --- |
+| `admonition` | tip / warning / info / danger（4 态共享池） | `accent-bar` | 提示类视觉骨架（左色条 / 胶囊 / 卡片 / 终端 / 报告条款 ...） |
+| `note` | note（第五态独立池） | `minimal-callout` | 中性补注，textMuted 不抢色 |
+| `quote` | quote-card | `classic` | 引用块骨架（装饰引号 / 杂志首字 / 双线 / 四角 / 撕贴纸） |
+| `compare` | compare（pros/cons 嵌内） | `column-card` | 双栏对比骨架（两栏卡 / 上下堆叠 / 账本双色 / 数据卡） |
+| `steps` | steps | `number-circle` | 编号步骤骨架（圆圈 / 飘带链 / 时间轴点） |
+| `divider` | divider | `rule` | 分隔线骨架（线 / 波 / 点 / 花 / 字符 / 印章） |
+| `sectionTitle` | section-title | `bordered` | 章节标题骨架（底边线 / 左上角装饰） |
+| `codeBlock` | 代码 fence | `bare` | 代码块骨架（裸 pre / 顶部语言标签带） |
+| `footnotes` | footnotes（脚注 / 参考文献） | `lined` | 脚注骨架（一条一行 hanging indent / 同段流式 + 内滚动） |
+
+完整 variant 模块在 `src/core/variants/<kind>/<id>.ts`。
+
+作者在 Markdown 正文也能显式覆盖：
+
+```markdown
+::: tip variant=pill-tag 小贴士
+主题默认是 accent-bar，这一处我想要 pill-tag
+:::
+
+::: footnotes variant=inline-flow 参 考 文 献
+[1] A · [2] B · [3] C
+:::
+```
+
+---
+
+## 可选样式接口（Optional surface）
+
+PersonaSpec 在必填字段（palette / status / typography / spacing / radius / motifs / variants / meta）之外，还提供 4 个可选槽位用于精细化 voice。**所有 4 个都不写也合法**——buildTheme 提供 token-driven 兜底。
+
+| 字段 | 类型 | 用途 | 不声明的兜底 |
+| --- | --- | --- | --- |
+| `innerStyles` | `StylePatch<ThemeInnerStyles>` | 容器内层子元素 inline-style：abstract / key-number / see-also / editor-note 的 kicker 与 value 字号、字距、大写转换 | `baseInnerStyles(tokens)` —— primary / textMuted 派生的中性小字 |
+| `kickers` | `Partial<ThemeKickers>` | renderer 默认 kicker 文案的主题级覆盖：toc/qa-block/editor-note/methodology/qr-follow/recommend/footer-cta/colophon/masthead 共 11 个字面量 | `DEFAULT_KICKERS`（如 toc → "目录 · CONTENTS"） |
+| `decorations` | `Decorations` | 声明式装饰规则：`headingPrefix`（h2/h3 编号 + 色块徽章 + 后缀）/ `introDropcap`（首段首字下沉色 + 字号 + 字重） | 不应用任何装饰；标题与正文按 elements 兜底渲染 |
+| `capabilities` | `ThemeCapabilities` | LLM / 写作集成的"本主题愿意演什么"自描述：`containers`（白名单）/ `variantOverrides`（额外推荐 variant）/ `excluded`（排除项） | 全集兜底 = `base + pack:* + 本主题 theme:* 全集` |
+
+声明示例（节选自 swiss-grid）：
+
+```ts
+innerStyles: {
+  abstractKicker: { color: 'primary', 'font-size': '11px', 'letter-spacing': '2px',
+                    'text-transform': 'uppercase' },
+  editorNoteKicker: { __reset: true, display: 'block',
+                      'background-color': '#000000', color: '#ffffff',
+                      'margin-left': '-16px', 'margin-right': '-16px' },
+},
+kickers: {
+  editorNote: '编 者 按 · 01',
+  methodology: '方法论 · 04',
+  colophonNextLabel: '下 期',
+  colophonIssueLabel: 'Nº · 卷',
+},
+decorations: {
+  headingPrefix: [
+    {
+      level: 2,
+      autoNumber: 'arabic-padded',
+      style: { color: 'textInverse', backgroundColor: 'primary',
+               fontFamily: 'monospace', fontWeight: 700,
+               paddingX: 8, paddingY: 2, marginRight: 10 },
+    },
+  ],
+},
+capabilities: {
+  // 显式排除：本主题不演 tilted-sticker（撕贴纸 punk 风）
+  excluded: ['tilted-sticker'],
+},
+```
+
+`StylePatch<T>` 支持 `__reset: true` sentinel：把整段 baseline 替换为补丁；不带 `__reset` 时走属性级深合并。详见 `src/core/themes/_shared/buildTheme.ts`。
+
+兜底降级表见 [`docs/contract/fallback.md`](contract/fallback.md)：哪些槽位不声明走什么 baseline、哪些 hard-fail、哪些 silent-degrade。
 
 作者在 Markdown 正文也能显式覆盖：
 
@@ -260,7 +348,8 @@ npm run gen:schema       # 重新导出 JSON Schema（用于 LLM 结构化输出
 npm test                 # 全量：vitest + sample-full 端到端
 ```
 
-- **完整示例**：[`src/themes/default/persona.data.ts`](../src/themes/default/persona.data.ts) 是最干净的参照；[`tech-geek/persona.data.ts`](../src/themes/tech-geek/persona.data.ts) 展示了深色主题 + 复杂 motif 的用法。
-- **类型定义**：[`src/themes/_shared/spec/types.ts`](../src/themes/_shared/spec/types.ts)
-- **校验器源码**：[`src/themes/_shared/spec/validate.ts`](../src/themes/_shared/spec/validate.ts)
+- **完整示例**：[`src/core/themes/default/persona.data.ts`](../src/core/themes/default/persona.data.ts) 是最干净的参照；[`tech-geek/persona.data.ts`](../src/core/themes/tech-geek/persona.data.ts) 展示了深色主题 + 复杂 motif 的用法。
+- **类型定义**：[`src/core/themes/_shared/spec/types.ts`](../src/core/themes/_shared/spec/types.ts) · [`src/core/themes/types.ts`](../src/core/themes/types.ts)
+- **校验器源码**：[`src/core/themes/_shared/spec/validate.ts`](../src/core/themes/_shared/spec/validate.ts)
+- **降级合同**：[`docs/contract/fallback.md`](contract/fallback.md)
 - **设计笔记范本**：[`docs/design/personas/`](design/personas/)

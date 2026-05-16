@@ -24,7 +24,7 @@
 | 主视觉媒介 | KPI dashboard + sparkline | 巨号 Nº 期号 + 红章 H2 |
 | 排印气质 | 数据报表 | 栅格构成 |
 
-两者共享 data-brief 家族容器（toc / qa-block / editor-note / footnotes / refs / cta-bar / qr-follow /
+两者共享 data-brief 家族容器（toc / qa-block / editor-note / footnotes / cta-bar / qr-follow /
 colophon / methodology / bar-chart / key-number），仅在 tokens / variants / innerStyles 上分叉视觉个性。
 
 ## 复用与扩展的边界
@@ -32,7 +32,7 @@ colophon / methodology / bar-chart / key-number），仅在 tokens / variants / 
 ### 复用 (zero new container)
 - `news-row` admonition variant —— 设计稿 multi-callout (INFO/TIP/WARN/STOP) 1:1 复刻
 - `key-number` 容器承担 issue-banner —— kicker / value / body 三段堆叠适配 375px 移动端
-- `refs` 容器承担 NOTES 脚注 —— 自带 kicker info 槽
+- `footnotes variant=inline-flow` 承担 NOTES 脚注 —— 自带 kicker info 槽 + 长引用列表内滚动
 - `bar-chart` + `bar` 承担 FIG.01 条形图
 - 全部 data-brief 家族容器（除 masthead / methodology 略弱化）
 
@@ -97,7 +97,7 @@ editorNoteKicker: CSSObject
 | 17 | code-block 黑底白字 | ``` ```javascript ``` ```（elements.pre __reset 黑底白字） |
 | 18 | qa-block Q/A | `::: qa-block READER Q&A q="..."` |
 | 19 | editor-note 黑底头 | `::: editor-note 编 者 按 · 01`（innerStyles.editorNoteKicker 黑 bar） |
-| 20 | footnotes NOTES | `::: refs NOTES` |
+| 20 | footnotes NOTES | `::: footnotes NOTES` 或 `::: footnotes variant=inline-flow REFERENCES` |
 | 22 | cta-bar 三栏 | `::: cta-bar like= star= share=` |
 | 23 | qr-follow SUBSCRIBE | `::: qr-follow NEUE LESE GRAFIK kicker= desc=` |
 | 24 | footer NEXT/VOL | `::: colophon next= issue=` |

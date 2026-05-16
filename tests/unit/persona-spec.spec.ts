@@ -94,6 +94,7 @@ const fixture: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare',
     note: 'minimal-callout',
+    footnotes: 'lined',
   },
   meta: { createdAt: '2026-04-20' },
 }

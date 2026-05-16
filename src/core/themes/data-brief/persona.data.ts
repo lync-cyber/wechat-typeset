@@ -217,6 +217,27 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare', // pre 元素直接走主题 voice（黑底）
     note: 'side-bar', // 左 2px 中性线 + 缩进，与简报"直角硬边"语言一致
+    footnotes: 'lined',
+  },
+
+  // ============================================================
+  // 主题级 kicker 文案覆盖（数据简报中英混排母语）
+  //
+  // 简报刊母语 = 短、克制、栏目化；中英 monospace 双轨呼应 decorations 的 "01/02/03"
+  // 序号语言。与 brutalist 的 `// CONTENTS` 终端注释、swiss-grid 的全英 INDEX 形成对比。
+  // ============================================================
+  kickers: {
+    toc: '本期目录 · INDEX',
+    qaBlock: '读者来函 · Q&A',
+    editorNote: '编辑部注',
+    methodology: '方法论 · METHODOLOGY',
+    qrFollowKicker: 'SUBSCRIBE',
+    qrFollowTitle: '订阅本期简报',
+    recommend: '延伸阅读 · FURTHER',
+    footerCTATitle: '关注数据简报',
+    colophonNextLabel: '下 期 ·',
+    colophonIssueLabel: 'VOL ·',
+    mastheadName: '数据简报',
   },
 
   // ============================================================
@@ -232,8 +253,7 @@ export const spec: PersonaSpec = {
     'kpiDashboard', // KPI 仪表盘
     'barChart', // 条形图
     'qaBlock', // 读者问答
-    'footnotes', // 脚注块（一条一行 + hanging indent）
-    'refs', // 流式参考文献块（同字号紧凑、条目同段流式排列；长引用列表用）
+    'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 用于长列表）
     'ctaBar', // 三栏 CTA（赞同/收藏/转发）
     'qrFollow', // 二维码订阅卡
     'editorNote', // 编辑部注 callout（主色左条 + kicker）
@@ -283,6 +303,25 @@ export const spec: PersonaSpec = {
       'margin-top': '14px',
       'margin-bottom': '6px',
       'line-height': '1.5',
+    },
+    h5: {
+      'font-size': '14px',
+      'font-weight': '600',
+      color: '#111418',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.3px',
+    },
+    h6: {
+      'font-size': '12px',
+      'font-weight': '600',
+      color: '#5a6068',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
     },
     p: {
       'font-size': '14px',
@@ -418,6 +457,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#1756d1',
       'font-weight': '600',
+    },
+    del: {
+      color: '#5a6068',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#1756d1',
+      'text-decoration': 'underline',
     },
   },
 
@@ -565,12 +612,11 @@ export const spec: PersonaSpec = {
       margin: '22px 0',
       'border-radius': '0',
     },
+    // footnotes 两骨架共用（layout 由 variants/footnotes/{lined,inline-flow} 注入）
     footnotes: {
       'border-top': '1px solid #e5e7eb',
-      'padding-top': '8px',
       margin: '14px 0',
       'font-size': '10px',
-      'line-height': '1.75',
       color: '#5a6068',
     },
     ctaBar: { margin: '22px 0' },

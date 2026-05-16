@@ -53,15 +53,18 @@
   margin-top: 14px;
   margin-bottom: 6px;
   line-height: 1.5;
+  letter-spacing: 0.3px;
 }
 
 .markdown-body h6 {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   color: #5a6068;
   margin-top: 12px;
   margin-bottom: 4px;
   line-height: 1.5;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {
@@ -450,28 +453,10 @@
 
 .markdown-body .container-footnotes {
   border-top: 1px solid #e5e7eb;
-  padding-top: 8px;
   margin: 14px 0;
   font-size: 10px;
-  line-height: 1.75;
   color: #5a6068;
-  padding-left: 1.6em;
-  text-indent: -1.6em;
   letter-spacing: 0.01em;
-}
-
-.markdown-body .container-refs {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 6px;
-  padding-right: 4px;
-  margin: 14px 0;
-  font-size: 9px;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-  color: #5a6068;
-  max-height: 320px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .markdown-body .container-cta-bar {

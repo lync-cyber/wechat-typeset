@@ -39,6 +39,13 @@ export interface Palette {
   textInverse: string
   border: string
   code: string
+  /**
+   * `<pre>` 代码块底色（buildTheme 兜底消费）。不声明则用 '#2a2d32'。
+   * 暗底主题想自定义代码块底色时声明此字段，避免整段 __reset elements.pre。
+   */
+  preBg?: string
+  /** `<pre>` 代码块文字色。不声明则用 '#d8d8d4'。 */
+  preText?: string
 }
 
 export type StatusKey = 'tip' | 'info' | 'warning' | 'danger'
@@ -318,7 +325,6 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'barChart',
   'qaBlock',
   'footnotes',
-  'refs',
   'ctaBar',
   'qrFollow',
   'editorNote',

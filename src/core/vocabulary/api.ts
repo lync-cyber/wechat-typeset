@@ -31,6 +31,7 @@ import {
   COMPARE_VARIANTS,
   DIVIDER_VARIANTS,
   NOTE_VARIANTS,
+  FOOTNOTES_VARIANTS,
   QUOTE_VARIANTS,
   SECTION_TITLE_VARIANTS,
   STEPS_VARIANTS,
@@ -78,6 +79,7 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
     sectionTitle: SECTION_TITLE_VARIANTS as unknown as MetaTable,
     codeBlock: CODE_BLOCK_VARIANTS as unknown as MetaTable,
     note: NOTE_VARIANTS as unknown as MetaTable,
+    footnotes: FOOTNOTES_VARIANTS as unknown as MetaTable,
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
@@ -111,6 +113,7 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     sectionTitle: SECTION_TITLE_VARIANTS,
     codeBlock: CODE_BLOCK_VARIANTS,
     note: NOTE_VARIANTS,
+    footnotes: FOOTNOTES_VARIANTS,
   }
   return Object.keys(table[kind] ?? {})
 }
@@ -138,6 +141,7 @@ export function getThemeDefaultVariants(variants: ThemeVariants): VariantDescrip
     'sectionTitle',
     'codeBlock',
     'note',
+    'footnotes',
   ]
   const out: VariantDescriptor[] = []
   for (const kind of kinds) {
@@ -236,6 +240,7 @@ const VARIANT_KINDS: VariantKind[] = [
   'sectionTitle',
   'codeBlock',
   'note',
+  'footnotes',
 ]
 
 /**

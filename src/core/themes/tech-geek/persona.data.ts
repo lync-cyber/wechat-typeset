@@ -237,6 +237,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'cornered', // § heading prefix
     codeBlock: 'bare', // code 与正文同色系，无需 header-bar
     note: 'side-bar', // // NOTE 风：左侧标线 + 缩进
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -284,6 +285,25 @@ export const spec: PersonaSpec = {
       'margin-bottom': '8px',
       'line-height': '1.55',
       'letter-spacing': '0.8px',
+    },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#ebdfca',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.55',
+      'letter-spacing': '0.8px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#9a8f7e',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
     },
     // 深底纪律：正文字重 500 / 行高 1.85 / 字距 0.6px
     p: {
@@ -439,6 +459,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#c89759',
       'font-weight': '600',
+    },
+    del: {
+      color: '#9a8f7e',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#c89759',
+      'text-decoration': 'underline',
     },
   },
 

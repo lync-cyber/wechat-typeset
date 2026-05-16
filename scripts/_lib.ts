@@ -17,10 +17,15 @@ export interface LoadedSpec {
   spec: PersonaSpec
 }
 
-/** 扫描 src/core/themes/*\/persona.data.ts，按目录名字典序返回所有内置 persona spec。 */
+/**
+ * 扫描 src/core/themes/*\/persona.data.ts，按目录名字典序返回所有内置 persona spec。
+ *
+ * dir 以 `_` 开头是骨架/示例目录（如 _template），不进运行时也不参与派生产物生成。
+ */
 export async function loadAllSpecs(): Promise<LoadedSpec[]> {
   const paths = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
     .map((p) => resolve(process.cwd(), p))
+    .filter((p) => !basename(dirname(p)).startsWith('_'))
     .sort()
   const out: LoadedSpec[] = []
   for (const p of paths) {

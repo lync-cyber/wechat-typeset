@@ -13,6 +13,8 @@ import { render } from '../../src/core/pipeline'
 import { defaultTheme } from '../../src/core/themes/default'
 import { generateThemeCSS } from '../../src/core/pipeline/themeCSS'
 import { ThemeAuthoringError, type Theme } from '../../src/core/themes/types'
+import { specToTheme } from '../../src/core/themes/_shared/spec'
+import { spec as defaultSpec } from '../../src/core/themes/default/persona.data'
 
 function run(md: string, theme: Theme = defaultTheme): string {
   return render({ md, theme }).html
@@ -183,5 +185,47 @@ describe('themeCSS display:flex 守卫', () => {
       return base
     })
     expect(() => generateThemeCSS(ok)).not.toThrow()
+  })
+})
+
+// specToTheme 派生 capabilities：spec.capabilities 缺省时为运行时填充 base + 自家 theme:* 全集，
+// 让 LLM / 推荐 API 不必再做"未声明 → 兜底"分支。spec 显式声明则原样透传（不合并）。
+describe('specToTheme · capabilities 自动派生', () => {
+  it('default spec.capabilities 缺省 → Theme.capabilities 自动填充 base 容器', () => {
+    expect(defaultSpec.capabilities).toBeUndefined()
+    const theme = specToTheme(defaultSpec)
+    expect(theme.capabilities).toBeDefined()
+    const containers = theme.capabilities!.containers!
+    expect(containers).toContain('intro')
+    expect(containers).toContain('cover')
+    expect(containers).toContain('tip')
+    expect(containers).toContain('warning')
+    expect(containers).toContain('info')
+    expect(containers).toContain('danger')
+    // pack:editorial 不在 default 的 signatureContainers，故不应被纳入
+    expect(containers).not.toContain('masthead')
+    // theme:data-brief 容器只属 data-brief 主题
+    expect(containers).not.toContain('kpi-dashboard')
+    // 排序稳定
+    expect([...containers]).toEqual([...containers].sort())
+  })
+
+  it('Theme.capabilities.variantOverrides 等同 spec.variants', () => {
+    const theme = specToTheme(defaultSpec)
+    expect(theme.capabilities!.variantOverrides).toEqual(defaultSpec.variants)
+  })
+
+  it('Theme.capabilities.excluded 自动派生为空数组', () => {
+    const theme = specToTheme(defaultSpec)
+    expect(theme.capabilities!.excluded).toEqual([])
+  })
+
+  it('spec.capabilities 显式声明 → 原样透传（不与派生结果合并）', () => {
+    const custom = {
+      ...defaultSpec,
+      capabilities: { containers: ['intro'], excluded: ['tip'] },
+    }
+    const theme = specToTheme(custom)
+    expect(theme.capabilities).toEqual({ containers: ['intro'], excluded: ['tip'] })
   })
 })

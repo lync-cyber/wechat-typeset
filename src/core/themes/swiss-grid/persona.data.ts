@@ -18,7 +18,7 @@
  *   - data-brief：数据蓝 #1756d1 + monospace + 数据卡 + sparkline——"数字是论点"
  *   - swiss-grid：国际红 + 大字章号 + 红章 H2 + pull-quote 栏偏移——"栅格是结构"
  *   两者共享 data-brief 家族签名容器（masthead 略弃用 / qa-block / editor-note / footnotes
- *   / refs / cta-bar / qr-follow / colophon / methodology / bar-chart / key-number）,
+ *   / cta-bar / qr-follow / colophon / methodology / bar-chart / key-number）,
  *   仅在 tokens / variants / innerStyles 上分叉视觉个性。
  *
  * 复用策略：
@@ -28,7 +28,7 @@
  *     vertical stack 适配 375px 移动端，比强行 2 栏 layout 更稳
  *   - 编者按（editor-note）走"黑底白字 header bar" —— 通过 innerStyles.editorNoteKicker
  *     的负 margin 把 kicker 撑到 wrapper 边缘；renderer 已下沉到 innerStyles 槽位
- *   - 脚注 NOTES 走 `refs` 容器（自带 kicker info 槽）
+ *   - 脚注 NOTES 走 `footnotes variant=inline-flow`（自带 kicker info 槽，长引用列表内滚动）
  *   - pull-quote 通过 `elements.blockquote` __reset 表达"左 12px 红条 + 25% 左偏移"
  *
  * 不新增容器/变体——所有视觉签名通过 spec 配置实现。
@@ -191,6 +191,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare', // pre 元素走主题 voice（黑底白字）
     note: 'side-bar', // 左 2px 中性线 + 缩进
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -226,8 +227,7 @@ export const spec: PersonaSpec = {
     'keyNumber', // 期号横幅（Nº04 全幅红，attrs.meta 切到双栏 issue-banner）
     'qaBlock', // 读者 Q&A
     'editorNote', // 编辑部注（黑底白字 header bar 形态）
-    'footnotes', // 脚注
-    'refs', // 流式参考文献块（带 kicker → 承担"NOTES"标签）
+    'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 承担"NOTES"长文献列表）
     'calloutGroup', // 四态 callout 联表外框（multi-callout 母本）
     'ctaBar', // 三栏 CTA（attrs.info 切到 "IF YOU LIKED THIS" header bar 模式）
     'qrFollow', // 二维码订阅卡
@@ -336,6 +336,25 @@ export const spec: PersonaSpec = {
       'margin-top': '12px',
       'margin-bottom': '6px',
       'line-height': '1.5',
+    },
+    h5: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#000000',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.3px',
+    },
+    h6: {
+      'font-size': '11px',
+      'font-weight': '700',
+      color: '#888888',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
     },
     p: {
       'font-size': '13px',
@@ -497,6 +516,14 @@ export const spec: PersonaSpec = {
       'font-weight': '600',
       'text-emphasis': 'dot #e30613',
       'text-emphasis-position': 'under',
+    },
+    del: {
+      color: '#888888',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#e30613',
+      'text-decoration': 'underline',
     },
   },
 
@@ -703,33 +730,17 @@ export const spec: PersonaSpec = {
       margin: '26px 0',
       'border-radius': '0',
     },
-    // footnotes：设计稿"NOTES kicker + 等宽小字" —— renderer 不支持 kicker;
-    // 这里走纯 wrapper 样式; "NOTES" 标签由作者用 `refs` 容器 + info kicker 承担。
+    // footnotes：两骨架共用的色 / 字号 / 边框；padding-left / text-indent / max-height
+    // 由 variants/footnotes/{lined, inline-flow}.ts inline 注入。
+    // "NOTES" kicker 由作者写 info: `::: footnotes variant=inline-flow NOTES`。
     footnotes: {
       __reset: true,
       'border-top': '1px solid #000000',
-      'padding-top': '8px',
-      'padding-left': '1.6em',
-      'text-indent': '-1.6em',
       margin: '20px 0',
       'font-size': '10px',
       'line-height': '1.7',
       'letter-spacing': '0.01em',
       color: '#333333',
-    },
-    refs: {
-      __reset: true,
-      'border-top': '1px solid #000000',
-      'padding-top': '10px',
-      'padding-right': '4px',
-      margin: '24px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      'letter-spacing': '0.01em',
-      color: '#333333',
-      'max-height': '320px',
-      'overflow-y': 'auto',
-      '-webkit-overflow-scrolling': 'touch',
     },
     // cta-bar：设计稿"IF YOU LIKED THIS 黑底头 + 三栏 (描边/实色/描边)"
     // renderer 固定 table 三栏: 描边 / fill / 描边; fill 走 primary=red, 与设计稿一致
@@ -833,7 +844,7 @@ VOL.IV · 2026—04—22 · CHF 14.—
       '主题 02 苏黎世栅格 · 三条不可妥协：radius=0、primary #e30613、H2 红章徽章。\n' +
       '架构复用：admonition `news-row` variant 直接复刻设计稿 multi-callout；\n' +
       'issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；\n' +
-      'NOTES 脚注用 refs（自带 kicker），editor-note 走"黑底白字 header bar"。\n' +
+      'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker），editor-note 走"黑底白字 header bar"。\n' +
       '已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,\n' +
       '但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
       '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）；\n' +

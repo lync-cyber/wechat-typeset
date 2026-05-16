@@ -160,6 +160,28 @@ export function analyzeThemeVoice(
     }
   }
 
+  // variant 驱动的容器（admonition/note/quoteCard/compare/steps/sectionTitle/divider/footnotes 等）
+  // 其 wrapper CSS 归 variant 模块所有，spec.containers.<key> 留空属于"按契约不重复表达"——
+  // 不在此告警，否则与 variant 拥有 wrapper 这层契约打架。
+  const variantDrivenStyleKeys = new Set(
+    STYLED_CONTAINERS.filter((s) => s.variantKind).map((s) => s.styleKey),
+  )
+
+  // 签名容器登记但缺独有 voice 覆盖：spec.containers 缺该 key 或仅为空对象时，
+  // 视觉回退到 baseContainers，与 default 主题接近，未体现签名身份。
+  for (const styleKey of sigContainers) {
+    if (variantDrivenStyleKeys.has(styleKey)) continue
+    const slot = (spec.containers as Record<string, unknown> | undefined)?.[styleKey]
+    const empty = !slot || (typeof slot === 'object' && Object.keys(slot as object).length === 0)
+    if (empty) {
+      issues.push({
+        path: `signatureContainers.${styleKey}`,
+        message: `签名容器 "${styleKey}" 已登记但 spec.containers.${styleKey} 缺失或为空——视觉走 baseContainers 兜底，与 default 主题接近，未体现签名 voice`,
+        level: 'warning',
+      })
+    }
+  }
+
   // 覆盖率
   const coveredContainers = expectedContainers.filter((k) => containerKeys.has(k)).length
   const coveredElements = expectedElements.filter((k) => elementKeys.has(k)).length

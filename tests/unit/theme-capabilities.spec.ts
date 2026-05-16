@@ -84,10 +84,10 @@ describe('getRecommendedVariantsFor · themeCompat 反向索引', () => {
 })
 
 describe('defaultVariants 结构', () => {
-  it('包含 8 个 kind', () => {
+  it('包含 9 个 kind（含 footnotes 骨架槽）', () => {
     const v = getThemeCapabilities('default')
     expect(Object.keys(v.defaultVariants).sort()).toEqual(
-      ['admonition', 'codeBlock', 'compare', 'divider', 'note', 'quote', 'sectionTitle', 'steps'].sort(),
+      ['admonition', 'codeBlock', 'compare', 'divider', 'footnotes', 'note', 'quote', 'sectionTitle', 'steps'].sort(),
     )
   })
 })

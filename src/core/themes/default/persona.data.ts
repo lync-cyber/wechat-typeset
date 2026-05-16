@@ -33,6 +33,8 @@ export const spec: PersonaSpec = {
     textInverse: '#fefefe', // 纯白用 #fefefe 规避 SVG→PNG 透明化
     border: '#d8d8d4',
     code: '#1c1f24', // default 拒绝让 code 承担颜色
+    preBg: '#2a2d32', // 代码块底色（拒绝 Atom One Dark 默认 #282c34）
+    preText: '#d8d8d4',
   },
 
   // 语义四色（规范 §1.1 语义色表）——"最寡淡的那个版本"
@@ -223,6 +225,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered', // 底部 2px primary 下划线
     codeBlock: 'bare', // 拒绝 header-bar（那是 tech-explainer 签名）
     note: 'minimal-callout', // 顶端 1px 短分隔线 + textMuted 标题（保留迁移前视觉）
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -266,6 +269,23 @@ export const spec: PersonaSpec = {
       'margin-bottom': '6px',
       'line-height': '1.5',
       'letter-spacing': '0.2px',
+    },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#1c1f24',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.2px',
+    },
+    h6: {
+      'font-size': '15px',
+      'font-weight': '500',
+      color: '#636870',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
     },
     p: {
       'font-size': '15px',
@@ -352,9 +372,8 @@ export const spec: PersonaSpec = {
     em: { 'font-style': 'italic', color: '#1c1f24' },
 
     // 代码块（规范 §3.4：拒绝 Atom One Dark / VSCode Dark+ 原值）
+    // bg/color 通过 palette.preBg / palette.preText 流到 baseElements.pre，再深合并下方 padding/radius 等。
     pre: {
-      'background-color': '#2a2d32',
-      color: '#d8d8d4',
       'padding-top': '14px',
       'padding-right': '16px',
       'padding-bottom': '14px',
@@ -397,6 +416,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#2558b0',
       'font-weight': '600',
+    },
+    del: {
+      color: '#636870',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#2558b0',
+      'text-decoration': 'underline',
     },
   },
 

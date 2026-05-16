@@ -96,6 +96,14 @@
         "code": {
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "preBg": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "preText": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
         }
       },
       "additionalProperties": false
@@ -7870,7 +7878,8 @@
         "divider",
         "sectionTitle",
         "codeBlock",
-        "note"
+        "note",
+        "footnotes"
       ],
       "properties": {
         "admonition": {
@@ -7947,6 +7956,12 @@
             "minimal-callout",
             "box-callout",
             "side-bar"
+          ]
+        },
+        "footnotes": {
+          "enum": [
+            "lined",
+            "inline-flow"
           ]
         }
       },

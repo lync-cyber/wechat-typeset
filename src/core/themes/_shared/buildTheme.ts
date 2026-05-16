@@ -122,6 +122,9 @@ export interface BuildThemeOptions {
 
 export function baseElements(tokens: ThemeTokens): ThemeElements {
   const { colors, typography } = tokens
+  // 见 ThemeTokens.colors.preBg/preText 注释——主题不声明时落到 Atom One Dark 家族常量。
+  const preBg = colors.preBg ?? '#2a2d32'
+  const preText = colors.preText ?? '#d8d8d4'
   return {
     h1: {
       'font-size': `${typography.h1Size}px`,
@@ -227,8 +230,8 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'vertical-align': 'middle',
     },
     pre: {
-      'background-color': '#282c34',
-      color: '#abb2bf',
+      'background-color': preBg,
+      color: preText,
       'padding-top': '14px',
       'padding-right': '16px',
       'padding-bottom': '14px',
@@ -276,8 +279,7 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'margin-bottom': '18px',
       'font-size': '14px',
     },
-    // th / td 旧版硬编码在 themeCSS 里；下沉到主题槽位后由各主题按 voice 覆写。
-    // 兜底保持与历史 themeCSS 等价行为：border 单色 + 6px/10px padding + bgSoft 表头。
+    // th / td 兜底：border 单色 + 6px/10px padding + bgSoft 表头。主题按 voice 覆写。
     th: {
       border: `1px solid ${colors.border}`,
       padding: '6px 10px',
@@ -452,33 +454,17 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       padding: '14px 0',
       margin: '22px 0',
     },
-    // footnotes：报刊脚注排印基线。10px → 9px / 1.75 → 1.5 / 加 letter-spacing
-    // 把"和正文同款"的体感拉开；padding-left + 负 text-indent 实现 hanging indent
-    // ——markdown 段落继承 text-indent 让每条 "[N] 文本" 的编号悬挂在外、正文左缘对齐。
+    // footnotes：两骨架共用的中性基线（色 / 字号 / 边框）。layout 维度
+    // （padding-left / text-indent / max-height / overflow-y）由 variants/footnotes/
+    // {lined, inline-flow}.ts 的 inline style 注入——避免外层 themeCSS 把 lined 的
+    // padding-left 灌进 inline-flow 骨架。主题 voice 通过 spec.containers.footnotes
+    // 深合并继续接管色 / 字号 / 边框宽度。
     footnotes: {
       'border-top': `1px solid ${tokens.colors.border}`,
-      'padding-top': '6px',
-      'padding-left': '1.6em',
-      'text-indent': '-1.6em',
       margin: '14px 0',
       'font-size': '9px',
-      'line-height': '1.5',
       'letter-spacing': '0.01em',
       color: tokens.colors.textMuted,
-    },
-    // refs 带 max-height + overflow-y：公众号 inline overflow 实测保留（参 mdnice .multiquote-1），让长引用列表内部滚动而非顶版。
-    refs: {
-      'border-top': `1px solid ${tokens.colors.border}`,
-      'padding-top': '6px',
-      'padding-right': '4px',
-      margin: '14px 0',
-      'font-size': '9px',
-      'line-height': '1.6',
-      'letter-spacing': '0.01em',
-      color: tokens.colors.textMuted,
-      'max-height': '320px',
-      'overflow-y': 'auto',
-      '-webkit-overflow-scrolling': 'touch',
     },
     ctaBar: { margin: '22px 0' },
     qrFollow: {

@@ -68,6 +68,10 @@ function renderPalette(spec: PersonaSpec): string {
     swatch('textInverse', p.textInverse),
     swatch('border', p.border),
     swatch('code', p.code),
+    // preBg / preText 是可选 palette 字段（暗底代码块底色 / 文字色）。
+    // 声明时输出 swatch；不声明则不占位——避免空洞。
+    ...(p.preBg ? [swatch('preBg', p.preBg)] : []),
+    ...(p.preText ? [swatch('preText', p.preText)] : []),
   ].join('')
   return `<div class="section-label">Palette · 色板（11 键）</div><div class="swatch-grid">${swatches}</div>`
 }

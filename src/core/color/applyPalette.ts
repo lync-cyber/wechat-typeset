@@ -36,9 +36,15 @@ type CSSMap = Record<string, CSSObject>
 export function applyPalette(opts: ApplyPaletteOptions): Theme {
   const { base, seed } = opts
   const newColors = derivePalette(seed)
+  // preBg / preText 是 optional palette 字段，derivePalette 不输出；
+  // 把 base 主题声明过的值挂回去，免得自定义代码块底色被悄悄丢回 Atom One Dark 兜底。
   const newTokens: ThemeTokens = {
     ...base.tokens,
-    colors: newColors,
+    colors: {
+      ...newColors,
+      ...(base.tokens.colors.preBg ? { preBg: base.tokens.colors.preBg } : {}),
+      ...(base.tokens.colors.preText ? { preText: base.tokens.colors.preText } : {}),
+    },
   }
   const variant: SvgVariant = opts.variant ?? base.svgVariant ?? 'geometric'
 
@@ -148,6 +154,10 @@ function collectColorPairs(
     [a.status.danger.accent, b.status.danger.accent],
     [a.status.danger.soft, b.status.danger.soft],
   ]
+  // preBg / preText 是 optional palette 字段；只有 base 主题真正声明了才进 recolor 表，
+  // 避免 undefined 触发 toLowerCase 报错。
+  if (a.preBg && b.preBg) raw.push([a.preBg, b.preBg])
+  if (a.preText && b.preText) raw.push([a.preText, b.preText])
   // 每个 pair 再展开一份"短 hex → 新色"的别名，提升命中率
   const expanded: Array<[string, string]> = []
   for (const [from, to] of raw) {

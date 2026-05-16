@@ -54,16 +54,19 @@
   color: #2d3a4a;
   margin-top: 14px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 0.5px;
 }
 
 .markdown-body h6 {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   color: #6b7885;
   margin-top: 12px;
   margin-bottom: 4px;
   line-height: 1.5;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {
@@ -489,20 +492,6 @@
   line-height: 1.8;
   color: #6b7885;
   letter-spacing: 0.2px;
-}
-
-.markdown-body .container-refs {
-  border-top: 1px solid #c7bfb0;
-  padding-top: 6px;
-  padding-right: 4px;
-  margin: 14px 0;
-  font-size: 9px;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-  color: #6b7885;
-  max-height: 320px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .markdown-body .container-cta-bar {

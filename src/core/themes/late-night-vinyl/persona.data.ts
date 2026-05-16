@@ -220,6 +220,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare',
     // side-bar：左 2px 实线 + 缩进 —— 与 editor-note callout 形态错开
     note: 'side-bar',
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -314,6 +315,24 @@ export const spec: PersonaSpec = {
       'margin-bottom': '6px',
       'line-height': '1.6',
       'letter-spacing': '0.04em',
+    },
+    h5: {
+      'font-size': '14px',
+      'font-weight': '600',
+      color: '#d9c9a8',
+      'margin-top': '14px',
+      'margin-bottom': '6px',
+      'line-height': '1.6',
+      'letter-spacing': '0.05em',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '500',
+      color: '#a89070',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.55',
+      'letter-spacing': '1.2px',
     },
     // P：line-height 2.1 + 0.04em 字距（夜读"慢"的标志组合）
     p: {
@@ -482,6 +501,14 @@ export const spec: PersonaSpec = {
       color: '#d97a3c',
       'font-weight': '600',
     },
+    del: {
+      color: '#a89070',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#d97a3c',
+      'text-decoration': 'underline',
+    },
   },
 
   // ============================================================
@@ -622,33 +649,17 @@ export const spec: PersonaSpec = {
       margin: '28px 0',
       'border-radius': '0',
     },
-    // footnotes · 脚注：上方虚线分隔 + 老金小字 + monospace（renderer 已加 hanging indent）
-    // __reset 清除 baseContainers.footnotes 的 1px solid border-top（本主题走 dashed）
+    // footnotes · 两骨架（lined / inline-flow）共用：虚线分隔 + 老金小字。
+    // 替换 baseContainers 的 1px solid border-top（本主题走 dashed）。
+    // 长文献列表写 `::: footnotes variant=inline-flow` 自动获得内滚动。
     footnotes: {
       __reset: true,
       'border-top': '1px dashed #a89070',
-      'padding-top': '10px',
-      'padding-left': '1.6em',
-      'text-indent': '-1.6em',
       margin: '20px 0',
       'font-size': '10px',
       'line-height': '1.85',
       'letter-spacing': '0.03em',
       color: '#a89070',
-    },
-    refs: {
-      __reset: true,
-      'border-top': '1px dashed #a89070',
-      'padding-top': '10px',
-      'padding-right': '4px',
-      margin: '20px 0',
-      'font-size': '10px',
-      'line-height': '1.85',
-      'letter-spacing': '0.03em',
-      color: '#a89070',
-      'max-height': '320px',
-      'overflow-y': 'auto',
-      '-webkit-overflow-scrolling': 'touch',
     },
     ctaBar: {
       margin: '26px 0',
@@ -718,6 +729,26 @@ export const spec: PersonaSpec = {
       padding: '0 0 0 18px',
       margin: '20px 0',
       'background-color': 'transparent',
+    },
+    // voice / video 卡：暗底主题不走 baseContainers 浅卡兜底；
+    // 深蓝卡底 + 1px 冷蓝灰边 + 左 3px 橙竖条，与唱针 / cue 同源
+    voiceCard: {
+      __reset: true,
+      'background-color': '#14263d',
+      border: '1px solid #4a6080',
+      'border-left': '3px solid #d97a3c',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
+    },
+    videoCard: {
+      __reset: true,
+      'background-color': '#14263d',
+      border: '1px solid #4a6080',
+      'border-left': '3px solid #d97a3c',
+      'border-radius': '0',
+      padding: '14px 16px',
+      margin: '22px 0',
     },
   },
 

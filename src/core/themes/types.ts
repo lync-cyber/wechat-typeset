@@ -47,6 +47,15 @@ export interface ThemeTokens {
       info: StatusPair
       danger: StatusPair
     }
+    /**
+     * `<pre>` 代码块底色（buildTheme.baseElements.pre 兜底消费）。
+     * 不声明则用 Atom One Dark 家族常量（'#2a2d32'），即"浅底主题里默认给一个深色代码块"。
+     * 暗底主题（brutalist / late-night-vinyl）想自定义代码块底色，可在 palette 里声明本字段
+     * 而不必整段 __reset elements.pre。
+     */
+    preBg?: string
+    /** `<pre>` 代码块文字色（同 preBg）。不声明则用 '#d8d8d4'。 */
+    preText?: string
   }
   typography: {
     baseSize: number
@@ -75,13 +84,12 @@ export interface ThemeElements {
   h2: CSSObject
   h3: CSSObject
   /**
-   * 四级小标题。教程主题常用于 "Step 1. 初始化项目" 这类可操作步骤题头。
+   * 四级小标题。教程主题常用于 "Step 1. 初始化项目" 这类可操作步骤题头，
    * 介于 h3 章节小节与 p 正文之间，和 steps 容器搭配使用。
    */
   h4: CSSObject
   /**
-   * 五/六级标题。markdown-it 默认解析 `##### / ######` 为 `<h5>/<h6>`,
-   * 早期骨架只到 h4 让 h5/h6 走浏览器默认字号——本字段补齐主题入口。
+   * 五 / 六级标题。markdown-it 解析 `##### / ######` 为 `<h5>/<h6>`；
    * 主题不显式覆写时由 baseElements 给一个比 h4 更弱的兜底。
    */
   h5: CSSObject
@@ -102,9 +110,9 @@ export interface ThemeElements {
   a: CSSObject
   hr: CSSObject
   table: CSSObject
-  /** 表头单元格。旧版硬编码在 themeCSS, 主题无法定制；现下沉到主题槽位。 */
+  /** 表头单元格。 */
   th: CSSObject
-  /** 数据单元格。同 th。 */
+  /** 数据单元格。 */
   td: CSSObject
   strong: CSSObject
   em: CSSObject
@@ -116,6 +124,10 @@ export interface ThemeElements {
  * 约束：字段集必须与 STYLED_CONTAINERS 的 styleKey 集合一致；新增容器时两边同步。
  * 有运行时对齐检查（buildTheme + containers/api）；漏加字段会在 baseContainers()
  * 层抛 TS 编译错。
+ *
+ * **字段顺序仅为人工分组，不承载渲染语义**——renderer 按 styleKey 字符串查表分派
+ * （vocabulary.ts `STYLE_KEY_TO_CONTAINER_NAME`），跟此处声明顺序无关。下面空行 + 注释
+ * 把字段分块（base / signature / data-brief / editorial）只为方便人眼检索。
  *
  * 不含 `free` / `pros` / `cons` —— 它们在 vocabulary 里 styleKey=null：
  *   - free：刻意不施加主题样式（escape hatch）
@@ -186,10 +198,14 @@ export interface ThemeContainers {
   barChart: CSSObject
   /** 读者问答（Q/A 头像方块） */
   qaBlock: CSSObject
-  /** 脚注块（上分割线 + 编号引用，一条一行） */
+  /**
+   * 参考文献 / 脚注块。承载两种骨架：
+   *   - `variants.footnotes='lined'`（默认）   一条一行 + hanging indent
+   *   - `variants.footnotes='inline-flow'`    同段流式排列 + max-height/overflow 滚动
+   * 主题 voice 在此槽位写"两种骨架共用的"色 / 字号 / 边框；layout 属性
+   * （padding-left / text-indent / max-height）由 variant inline 注入。
+   */
   footnotes: CSSObject
-  /** 流式参考文献块（footnotes 的 inline run-on 版，长引用列表用） */
-  refs: CSSObject
   /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
   ctaBar: CSSObject
   /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
@@ -322,14 +338,9 @@ export interface ThemeInline {
   highlight: CSSObject
   wavy: CSSObject
   emphasis: CSSObject
-  /**
-   * GFM 删除线（`~~text~~` → `<s>`）。早期 ThemeInline 没此槽位,
-   * 浏览器默认 line-through 与主题无关；现给主题作者一个调色 / 调位置的入口。
-   */
+  /** GFM 删除线（`~~text~~` → `<s>`）。给主题作者一个调色 / 调位置的入口。 */
   del: CSSObject
-  /**
-   * 插入（markdown-it-ins `++text++` → `<ins>`）。同 del。
-   */
+  /** 插入（markdown-it-ins `++text++` → `<ins>`）。 */
   ins: CSSObject
 }
 
@@ -455,6 +466,12 @@ export type CodeBlockVariantId =
   // 顶部语言标签带：语言名大写 + 可选 copy 图标；Stripe Docs / MDN 家族 signature
   | 'header-bar'
 
+export type FootnotesVariantId =
+  // 一条一行 + hanging indent（默认）
+  | 'lined'
+  // 同段流式排列 + max-height/overflow 内滚动，适合 20+ 条长引用列表
+  | 'inline-flow'
+
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
   admonition: AdmonitionVariantId
@@ -466,6 +483,8 @@ export interface ThemeVariants {
   codeBlock: CodeBlockVariantId
   /** note 第五态独立变体类，与 admonition 4 态解耦。 */
   note: NoteVariantId
+  /** 脚注 / 参考文献骨架（lined / inline-flow）。 */
+  footnotes: FootnotesVariantId
 }
 
 /**
@@ -481,6 +500,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   sectionTitle: 'bordered',
   codeBlock: 'bare',
   note: 'minimal-callout',
+  footnotes: 'lined',
 }
 
 // ============================================================
@@ -601,6 +621,10 @@ export const VARIANT_IDS = {
     'box-callout',
     'side-bar',
   ] as const satisfies readonly NoteVariantId[],
+  footnotes: [
+    'lined',
+    'inline-flow',
+  ] as const satisfies readonly FootnotesVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants
@@ -746,6 +770,12 @@ export interface Decorations {
   introDropcap?: IntroDropcapDecoration
 }
 
+/**
+ * 运行时主题对象。**字段顺序仅作分组阅读用，不承载任何渲染语义**——
+ * pipeline 按命名查表（renderer 读 theme.tokens / theme.elements.h2 / theme.containers.intro
+ * 等），不依赖此处声明顺序。下方空行只为把"基础信息 / token / 样式 / 资产 / 模板 / 变体 /
+ * kicker / 元数据"分组方便人眼阅读，不要把它误读成"渲染层级"。
+ */
 export interface Theme {
   id: string
   name: string

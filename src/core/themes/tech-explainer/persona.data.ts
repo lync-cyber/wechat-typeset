@@ -313,6 +313,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered', // §2.4 short-bar-heading
     codeBlock: 'header-bar', // §1.2 signature：顶部语言标签带 + copy icon
     note: 'box-callout', // 文档式"附注框"，与 accent-bar admonition 互补不抢色
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -361,6 +362,25 @@ export const spec: PersonaSpec = {
       'line-height': '1.5',
       'letter-spacing': '0.3px',
     },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#1a2233',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.5',
+      'letter-spacing': '0.3px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '600',
+      color: '#5c6778',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.5',
+      'letter-spacing': '1px',
+      'text-transform': 'uppercase',
+    },
     // 正文：400 字重；行高 1.75
     p: {
       'font-size': '15px',
@@ -368,6 +388,15 @@ export const spec: PersonaSpec = {
       color: '#1a2233',
       'margin-top': '0',
       'margin-bottom': '18px',
+      'letter-spacing': '0.3px',
+    },
+    // 教程列表：略紧 padding + 行间收窄，逐字跟做的步骤感
+    ul: { 'padding-left': '22px', 'margin-top': '0', 'margin-bottom': '18px' },
+    ol: { 'padding-left': '22px', 'margin-top': '0', 'margin-bottom': '18px' },
+    li: {
+      'margin-bottom': '6px',
+      'line-height': '1.65',
+      color: '#1a2233',
       'letter-spacing': '0.3px',
     },
     // blockquote：走 column-rule variant；这里保留克制的 base 兜底
@@ -506,6 +535,14 @@ export const spec: PersonaSpec = {
       color: '#0066cc',
       'font-weight': '600',
     },
+    del: {
+      color: '#5c6778',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#0066cc',
+      'text-decoration': 'underline',
+    },
   },
 
   // ============================================================
@@ -605,6 +642,14 @@ export const spec: PersonaSpec = {
       padding: '10px 0 4px 0',
       margin: '18px 0',
       'border-radius': '0',
+    },
+    // MDN / Stripe Docs "See Also" 学术引用块：bgSoft 底 + primary 左条 + 文档圆角
+    seeAlso: {
+      'background-color': '#f3f5f8',
+      'border-left': '3px solid #0066cc',
+      padding: '14px 16px',
+      margin: '22px 0',
+      'border-radius': '0 6px 6px 0',
     },
     // "Figure N: ..." 数字编号注脚风 — 居中 textMuted + 1px 顶线（Stripe Docs 图说）
     imageCaption: {

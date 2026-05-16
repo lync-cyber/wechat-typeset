@@ -5,7 +5,7 @@
  *
  * 包含 4 个容器：
  *   - qa-block       读者问答（Q/A 头像方块）
- *   - footnotes      脚注块（上分割线 + 编号引用）
+ *   - footnotes      脚注 / 参考文献块（variantKind=footnotes：lined / inline-flow）
  *   - editor-note    编辑部注 callout（主色左条 + kicker + 正文）
  *   - methodology    方法论小字注释（浅底 + 粗体标签 + 10px 紧凑正文）
  *
@@ -17,6 +17,8 @@
 import type { ContainerRenderer } from '../types'
 import { escText } from '../types'
 import { inlineCss as inline } from '../_shared/cssInline'
+import { makeVariantContainer } from '../_shared/makeVariantContainer'
+import { FOOTNOTES_VARIANTS } from '../../../variants/registry'
 
 // ============================================================
 // qa-block · 读者问答（Q方块/A方块 头像）
@@ -83,58 +85,33 @@ export const qaBlockContainer: ContainerRenderer = {
 }
 
 // ============================================================
-// footnotes · 脚注块
+// footnotes · 脚注 / 参考文献块（variantKind=footnotes）
+//
+// 两骨架共用一个容器，作者用 `variant=lined / inline-flow` 切换；info 非空时
+// 渲染主色 kicker（如 "NOTES" / "参考文献"），与 editor-note / qa-block 同源。
+//
+// 主题 voice：spec.containers.footnotes 承担两骨架共用的色 / 字号 / 边框；
+// layout 维度（padding-left / text-indent / max-height）由 variant inline 注入。
 // ============================================================
 
-export const footnotesContainer: ContainerRenderer = {
-  open: (ctx) => {
-    // wrapper 完全由 ctx.containers.footnotes 决定（小字号 / muted 色由
-    // baseContainers 提供，主题可在 spec.containers.footnotes 覆盖）。
-    const wrapperCSS = inline(ctx.containers.footnotes)
-    return `<section class="container-footnotes" style="${wrapperCSS}">\n`
+export const footnotesContainer: ContainerRenderer = makeVariantContainer({
+  name: 'footnotes',
+  themeSlot: 'footnotes',
+  table: FOOTNOTES_VARIANTS,
+  fallbackId: 'lined',
+  title: {
+    // 不设 defaultText：info 为空时不渲染 kicker（保留旧 ::: footnotes 行为）。
+    defaultCSS: (ctx) =>
+      [
+        `color:${ctx.tokens.colors.primary}`,
+        'font-size:10px',
+        'font-weight:700',
+        'letter-spacing:0.15em',
+        'margin-bottom:6px',
+        'text-indent:0',
+      ].join(';'),
   },
-  close: '</section>\n',
-}
-
-// ============================================================
-// refs · 流式参考文献块（footnotes 的「inline run-on」版）
-//
-// 与 footnotes 的取舍：footnotes 一条一行（hanging indent），refs 让所有条目同段流式
-// 排列——参考学术期刊和新闻周刊的 references 段落写法（条目间作者自行用 `·` / `／`
-// 分隔）。同样的纵向高度可以装下 2~3 倍条目，适合"长文献列表 + 公众号沙箱不支持
-// 滚动"的现实约束。
-//
-// 渲染只负责外壳；body 的"流式感"靠作者把内容写成单段落（无空行）+ markdown-it 把
-// 短软换行折成一段达成。也可写成有空行分段，每段一组——视觉密度由作者决定。
-//
-// kicker（参考文献标签头）：与 editorNote / qaBlock 同源——`ctx.info` 非空时按 primary
-// 色 + letter-spacing 渲染；缺省不渲染（保持向后兼容：未指定 info 的现有内容渲染不变）。
-// 作者写法：`::: refs 参考文献` 或 `::: refs REFERENCES`。
-// ============================================================
-
-export const refsContainer: ContainerRenderer = {
-  open: (ctx) => {
-    const wrapperCSS = inline(ctx.containers.refs)
-    const kicker = ctx.info.trim()
-    if (!kicker) {
-      return `<section class="container-refs" style="${wrapperCSS}">\n`
-    }
-    const c = ctx.tokens.colors
-    const kickerCSS = [
-      `color:${c.primary}`,
-      'font-size:10px',
-      'font-weight:700',
-      'letter-spacing:0.15em',
-      'margin-bottom:6px',
-      'text-indent:0',
-    ].join(';')
-    return (
-      `<section class="container-refs" style="${wrapperCSS}">\n` +
-      `<section class="container-refs__kicker" style="${kickerCSS}">${escText(kicker)}</section>\n`
-    )
-  },
-  close: '</section>\n',
-}
+})
 
 // editor-note · 编辑部注 callout：主色左竖条 + kicker（标签头）+ body。
 // 区别于通用 note——note 走 textMuted 中性色调；editor-note 是"被点名"

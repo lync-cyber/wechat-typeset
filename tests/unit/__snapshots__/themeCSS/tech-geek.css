@@ -55,16 +55,19 @@
   color: #ebdfca;
   margin-top: 14px;
   margin-bottom: 6px;
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: 0.8px;
 }
 
 .markdown-body h6 {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   color: #9a8f7e;
   margin-top: 12px;
   margin-bottom: 4px;
   line-height: 1.5;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .markdown-body p {
@@ -462,28 +465,10 @@
 
 .markdown-body .container-footnotes {
   border-top: 1px solid #4a4034;
-  padding-top: 6px;
-  padding-left: 1.6em;
-  text-indent: -1.6em;
   margin: 14px 0;
   font-size: 9px;
-  line-height: 1.5;
   letter-spacing: 0.01em;
   color: #9a8f7e;
-}
-
-.markdown-body .container-refs {
-  border-top: 1px solid #4a4034;
-  padding-top: 6px;
-  padding-right: 4px;
-  margin: 14px 0;
-  font-size: 9px;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
-  color: #9a8f7e;
-  max-height: 320px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .markdown-body .container-cta-bar {

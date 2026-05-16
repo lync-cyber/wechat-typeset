@@ -235,6 +235,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'cornered', // 左上肖像 silhouette
     codeBlock: 'bare', // 拒绝 header-bar（那是 tech-explainer）
     note: 'minimal-callout', // 与 magazine-pull 的"细线 + 空气感"语言一致
+    footnotes: 'lined',
   },
 
   // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）。
@@ -311,6 +312,24 @@ export const spec: PersonaSpec = {
       color: '#17171a',
       'margin-top': '18px',
       'margin-bottom': '8px',
+      'line-height': '1.6',
+      'letter-spacing': '0.5px',
+    },
+    h5: {
+      'font-size': '16px',
+      'font-weight': '600',
+      color: '#17171a',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.65',
+      'letter-spacing': '0.5px',
+    },
+    h6: {
+      'font-size': '16px',
+      'font-weight': '500',
+      color: '#5d5d63',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
       'line-height': '1.6',
       'letter-spacing': '0.5px',
     },
@@ -475,6 +494,14 @@ export const spec: PersonaSpec = {
     emphasis: {
       color: '#1b2330',
       'font-weight': '500',
+    },
+    del: {
+      color: '#5d5d63',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#1b2330',
+      'text-decoration': 'underline',
     },
   },
 

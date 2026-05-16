@@ -148,7 +148,7 @@ const reading = (book) =>
 [2]　"深度理解得分"取自阅读后 24h 回忆测试，满分 100。
 :::
 
-::: refs 参 考 文 献
+::: footnotes variant=inline-flow 参 考 文 献
 [1] 全国国民阅读调查 2015–2024 · [2] 中国互联网络信息中心 第 53 次报告 · [3] OECD Reading Habits Survey 2023 · [4] 国家图书馆 全民阅读数据简报 2024 · [5] 作者调研 n=1,024，2025 年春
 :::
 

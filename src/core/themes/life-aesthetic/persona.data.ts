@@ -326,6 +326,7 @@ export const spec: PersonaSpec = {
     sectionTitle: 'bordered',
     codeBlock: 'bare',
     note: 'minimal-callout', // 极简短线，让生活化主题保持柔和不增加视觉负担
+    footnotes: 'lined',
   },
 
   // ============================================================
@@ -372,6 +373,25 @@ export const spec: PersonaSpec = {
       'margin-bottom': '8px',
       'line-height': '1.6',
       'letter-spacing': '0.8px',
+    },
+    h5: {
+      'font-size': '15px',
+      'font-weight': '600',
+      color: '#7a6a58',
+      'margin-top': '16px',
+      'margin-bottom': '6px',
+      'line-height': '1.6',
+      'letter-spacing': '1px',
+    },
+    h6: {
+      'font-size': '13px',
+      'font-weight': '500',
+      color: '#7a6a58',
+      'margin-top': '12px',
+      'margin-bottom': '4px',
+      'line-height': '1.55',
+      'letter-spacing': '1.5px',
+      'text-transform': 'uppercase',
     },
     // 正文杂志行高 1.85（书斋是 2.0，这里略收紧）+ 字距 0.8px（不拉开）
     p: {
@@ -500,6 +520,38 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 内联强调：暖米底 + 主色调，避开 default 的 #fff4c8 黄
+  // ============================================================
+  inline: {
+    // 暖奶油 highlight：复用 warning.soft 米黄，与 bgSoft 同体温不刺眼
+    highlight: {
+      'background-color': '#fcf1dc',
+      color: '#3a2d20',
+      padding: '0 4px',
+      'border-radius': '3px',
+    },
+    // 波浪线走 accent 暖黄
+    wavy: {
+      'text-decoration': 'underline wavy',
+      'text-decoration-color': '#efb758',
+      'text-underline-offset': '3px',
+    },
+    // 着重：primary 暖橙 + 600 字重，比 strong 更亮但仍不刺眼
+    emphasis: {
+      color: '#d98141',
+      'font-weight': '600',
+    },
+    del: {
+      color: '#7a6a58',
+      'text-decoration': 'line-through',
+    },
+    ins: {
+      color: '#d98141',
+      'text-decoration': 'underline',
+    },
+  },
+
+  // ============================================================
   // 容器视觉
   // ============================================================
   containers: {
@@ -527,6 +579,17 @@ export const spec: PersonaSpec = {
     cover: {
       margin: '0 0 32px 0',
     },
+    // §章节标题（bordered variant）：variant 接管 2px primary 底线，这里给宽松外边距
+    sectionTitle: {
+      margin: '32px 0 16px',
+      'padding-bottom': '6px',
+    },
+    // Do/Don't 对照（column-card variant 接管列卡形态）
+    compare: { margin: '24px 0' },
+    // 步骤（number-circle variant 接管圆圈数字）
+    steps: { margin: '24px 0' },
+    // 时间线：长日子记账感，留宽外边距让节奏舒缓
+    timeline: { margin: '24px 0' },
     // 提示四件套：variant 接管外壳，此处仅声明以计入 voice 覆盖
     // 各自 soft 底色由 status token 驱动，靠 variant 形状差异区分
     tip: {
