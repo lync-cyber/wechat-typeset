@@ -9,6 +9,8 @@ test-results/
 .vscode/
 .idea/
 
-# 本地 Claude Code 设置不发布；但 .claude/skill/ 里是给 LLM 使用的公开扩展指引
+# 本地 Claude Code 设置不发布；但下列子路径是给 LLM / 云端 sandbox 使用的公开扩展指引
 .claude/*
 !.claude/skill/
+!.claude/hooks/
+!.claude/settings.json
