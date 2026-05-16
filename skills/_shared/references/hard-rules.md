@@ -97,13 +97,14 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 
 ```ts
 admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag'
-quote:         'classic' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'tilted-sticker'
+quote:         'classic' | 'left-bar' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'editorial-block' | 'tilted-sticker'
 compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
 steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot'
 divider:       'wave' | 'dots' | 'flower' | 'rule' | 'glyph' | 'seal-mark'
 sectionTitle:  'bordered' | 'cornered'
-codeBlock:     'bare' | 'header-bar'
+codeBlock:     'bare' | 'header-bar' | 'line-numbers' | 'terminal-frame' | 'inline-card'
 note:          'minimal-callout' | 'box-callout' | 'side-bar'
+footnotes:     'lined' | 'inline-flow' | 'boxed-aside' | 'top-rule' | 'dense-academic'
 ```
 
 <!-- generated:variant-whitelist:end -->

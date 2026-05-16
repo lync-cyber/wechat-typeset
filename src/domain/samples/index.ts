@@ -15,27 +15,35 @@
  */
 
 import { SAMPLE_BY_THEME, SAMPLE_BUILD_ID } from './_generated'
-import { REFERENCE_BY_THEME, REFERENCE_BUILD_ID } from './_references'
-import { SHOWCASE_MARKDOWN, SHOWCASE_BUILD_ID } from './_showcase'
 
-export {
-  SAMPLE_BY_THEME, SAMPLE_BUILD_ID,
-  REFERENCE_BY_THEME, REFERENCE_BUILD_ID,
-  SHOWCASE_MARKDOWN, SHOWCASE_BUILD_ID,
-}
+export { SAMPLE_BY_THEME, SAMPLE_BUILD_ID }
 
 /** 主题 id → story 样张；未知 id 回退到 default。 */
 export function getSample(themeId: string): string {
   return SAMPLE_BY_THEME[themeId] ?? SAMPLE_BY_THEME.default ?? ''
 }
 
-/** 主题 id → 自动生成的组件参考文档；未知 id 回退到 default。 */
-export function getReference(themeId: string): string {
+/**
+ * 主题 id → 组件参考文档（动态加载）。
+ *
+ * `_references.ts` 是 build-references.ts 生成的字典型字符串包（14 主题 × 全容器
+ * 示例），体积 230kB 左右。它只在用户点 "载入组件参考" 时才需要——eager 装进主
+ * bundle 会把启动期下载量推到 size-budget 之外。改成 dynamic import：首次调用时
+ * vite 把 `_references` 切成独立 chunk 异步取，后续命中浏览器 module cache。
+ */
+export async function getReference(themeId: string): Promise<string> {
+  const { REFERENCE_BY_THEME } = await import('./_references')
   return REFERENCE_BY_THEME[themeId] ?? REFERENCE_BY_THEME.default ?? ''
 }
 
-/** 全功能展示稿：与主题无关——所有 14 主题共享同一份字符串，差异由 voice 渲染表达。 */
-export function getShowcase(): string {
+/**
+ * 全功能展示稿：与主题无关——所有 14 主题共享同一份字符串，差异由 voice 渲染表达。
+ *
+ * 与 getReference 同理走 dynamic import：_showcase 只在 "载入全功能展示" 入口被消费，
+ * eager 引入会让 _generated（也走同一 barrel）连带把 _references 模块图也拽进 main bundle。
+ */
+export async function getShowcase(): Promise<string> {
+  const { SHOWCASE_MARKDOWN } = await import('./_showcase')
   return SHOWCASE_MARKDOWN
 }
 

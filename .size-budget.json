@@ -53,6 +53,22 @@
       "ext": "js",
       "limit": 260000,
       "gzipLimit": 60000
+    },
+    {
+      "$comment": "组件参考字典（14 主题 × 全容器示例）的 lazy chunk。只在用户点 '载入组件参考' 时由 src/domain/samples/index.ts dynamic import 拉取，主 bundle 启动期不付费。源文件来自 scripts/build-references.ts → src/domain/samples/_references.ts；增长维度是容器词汇表 + 主题 capabilities，预算 ~13% headroom。如果这里被挤涨，先怀疑 vocabulary 新增容器示例膨胀，再调阈值。",
+      "name": "references chunk (lazy)",
+      "prefix": "_references",
+      "ext": "js",
+      "limit": 260000,
+      "gzipLimit": 12000
+    },
+    {
+      "$comment": "全功能展示稿的 lazy chunk。只在用户点 '载入全功能展示' 时取；源文件 tests/fixtures/all-containers.md → src/domain/samples/_showcase.ts。预算给紧 ~20% headroom；fixture 是端到端测试母本，理应稳定。",
+      "name": "showcase chunk (lazy)",
+      "prefix": "_showcase",
+      "ext": "js",
+      "limit": 18000,
+      "gzipLimit": 10000
     }
   ]
 }
