@@ -7,5 +7,8 @@
 
 import bordered from './bordered'
 import cornered from './cornered'
+import numberPrefix from './number-prefix'
+import kickerStack from './kicker-stack'
+import ribbonStamp from './ribbon-stamp'
 
-export default [bordered, cornered]
+export default [bordered, cornered, numberPrefix, kickerStack, ribbonStamp]

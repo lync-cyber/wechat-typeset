@@ -433,6 +433,10 @@ export type StepsVariantId =
   | 'ribbon-chain'
   // 时间轴点：左侧单列点阵 + 正文
   | 'timeline-dot'
+  // 卡片化分步：每步独立浅底卡片（适合长说明步骤 / SOP）
+  | 'step-card'
+  // 左右分栏：左侧大号编号 + 右侧正文（学术 / 调研主题骨架）
+  | 'split-row'
 
 export type DividerVariantId =
   | 'wave'
@@ -449,6 +453,12 @@ export type SectionTitleVariantId =
   | 'bordered'
   // 左上角装饰 SVG（当前 assets.sectionCorner 对应）
   | 'cornered'
+  // 大号 monospace 前缀编号 + 标题（人物特稿 / 数据简报）
+  | 'number-prefix'
+  // 上小字 kicker + 下主标题（学术前沿 / 行业观察）
+  | 'kicker-stack'
+  // 右上印章戳 + 主标题（人文札记 / 慢生活）
+  | 'ribbon-stamp'
 
 /**
  * Note 第五态独立 variant 类。命名空间与 admonition 故意分离：
@@ -463,6 +473,12 @@ export type NoteVariantId =
   | 'box-callout'
   // 左 2px 实线 + 缩进：经典"标记此处有补充"批注式
   | 'side-bar'
+  // 悬挂缩进 + 上标编号：学术 / 论文风脚注块
+  | 'hanging-indent'
+  // 左 dotted rule + 缩进：人文札记 / 散文式旁批
+  | 'dotted-margin'
+  // 小型大写 kicker + 正文：粗野主义 / 数据简报骨架
+  | 'smallcaps-kicker'
 
 export type CodeBlockVariantId =
   // 裸 <pre><code>（默认）
@@ -617,6 +633,8 @@ export const VARIANT_IDS = {
     'number-circle',
     'ribbon-chain',
     'timeline-dot',
+    'step-card',
+    'split-row',
   ] as const satisfies readonly StepsVariantId[],
   divider: [
     'wave',
@@ -629,6 +647,9 @@ export const VARIANT_IDS = {
   sectionTitle: [
     'bordered',
     'cornered',
+    'number-prefix',
+    'kicker-stack',
+    'ribbon-stamp',
   ] as const satisfies readonly SectionTitleVariantId[],
   codeBlock: [
     'bare',
@@ -641,6 +662,9 @@ export const VARIANT_IDS = {
     'minimal-callout',
     'box-callout',
     'side-bar',
+    'hanging-indent',
+    'dotted-margin',
+    'smallcaps-kicker',
   ] as const satisfies readonly NoteVariantId[],
   footnotes: [
     'lined',

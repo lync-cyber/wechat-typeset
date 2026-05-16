@@ -83,9 +83,21 @@ const QUOTE_ORDER: readonly string[] = [
   'tilted-sticker',
 ]
 const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
-const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeline-dot']
+const STEPS_ORDER: readonly string[] = [
+  'number-circle',
+  'ribbon-chain',
+  'timeline-dot',
+  'step-card',
+  'split-row',
+]
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
-const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
+const SECTION_TITLE_ORDER: readonly string[] = [
+  'bordered',
+  'cornered',
+  'number-prefix',
+  'kicker-stack',
+  'ribbon-stamp',
+]
 const CODE_BLOCK_ORDER: readonly string[] = [
   'bare',
   'header-bar',
@@ -93,7 +105,14 @@ const CODE_BLOCK_ORDER: readonly string[] = [
   'terminal-frame',
   'inline-card',
 ]
-const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
+const NOTE_ORDER: readonly string[] = [
+  'minimal-callout',
+  'box-callout',
+  'side-bar',
+  'hanging-indent',
+  'dotted-margin',
+  'smallcaps-kicker',
+]
 const FOOTNOTES_ORDER: readonly string[] = [
   'lined',
   'inline-flow',

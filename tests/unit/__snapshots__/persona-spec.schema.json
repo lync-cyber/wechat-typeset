@@ -7928,7 +7928,9 @@
           "enum": [
             "number-circle",
             "ribbon-chain",
-            "timeline-dot"
+            "timeline-dot",
+            "step-card",
+            "split-row"
           ]
         },
         "divider": {
@@ -7944,7 +7946,10 @@
         "sectionTitle": {
           "enum": [
             "bordered",
-            "cornered"
+            "cornered",
+            "number-prefix",
+            "kicker-stack",
+            "ribbon-stamp"
           ]
         },
         "codeBlock": {
@@ -7960,7 +7965,10 @@
           "enum": [
             "minimal-callout",
             "box-callout",
-            "side-bar"
+            "side-bar",
+            "hanging-indent",
+            "dotted-margin",
+            "smallcaps-kicker"
           ]
         },
         "footnotes": {

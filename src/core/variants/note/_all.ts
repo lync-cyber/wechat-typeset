@@ -10,5 +10,8 @@
 import minimalCallout from './minimal-callout'
 import boxCallout from './box-callout'
 import sideBar from './side-bar'
+import hangingIndent from './hanging-indent'
+import dottedMargin from './dotted-margin'
+import smallcapsKicker from './smallcaps-kicker'
 
-export default [minimalCallout, boxCallout, sideBar]
+export default [minimalCallout, boxCallout, sideBar, hangingIndent, dottedMargin, smallcapsKicker]
