@@ -13,7 +13,6 @@ import type { Ref } from 'vue'
 import {
   baseThemeId,
   customTheme,
-  lastSeed,
   md,
   type Seed,
 } from './state'
@@ -131,13 +130,11 @@ export function createAppActions(deps: ActionDeps) {
       id: `${base.id}--custom`,
       name: `${base.name} · 自定义`,
     })
-    lastSeed.value = { ...seed }
   }
 
   function handleResetPalette() {
     if (!customTheme.value) return
     customTheme.value = null
-    lastSeed.value = null
     pingTransient('已还原主题配色')
   }
 

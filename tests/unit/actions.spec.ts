@@ -12,7 +12,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { createAppActions } from '../../src/app/actions'
-import { baseThemeId, customTheme, lastSeed, md } from '../../src/app/state'
+import { baseThemeId, customTheme, md } from '../../src/app/state'
 import { getSample } from '../../src/domain/samples'
 
 function makeDeps() {
@@ -102,12 +102,11 @@ describe('handleFixZhTypo', () => {
 })
 
 describe('handleApplyPalette / handleResetPalette', () => {
-  it('apply 后 customTheme + lastSeed 写入；id 形如 {base}--custom', () => {
+  it('apply 后 customTheme 写入；id 形如 {base}--custom', () => {
     const d = makeDeps()
     d.handleApplyPalette({ primary: '#ff0000', secondary: '#00ff00', accent: '#0000ff', dark: false })
     expect(customTheme.value).not.toBeNull()
     expect(customTheme.value?.id).toBe('default--custom')
-    expect(lastSeed.value?.primary).toBe('#ff0000')
   })
 
   it('reset 在无 customTheme 时是 noop', () => {
@@ -116,12 +115,11 @@ describe('handleApplyPalette / handleResetPalette', () => {
     expect(d.pingTransient).not.toHaveBeenCalled()
   })
 
-  it('reset 后 customTheme + lastSeed 双双清空 + ping 文案', () => {
+  it('reset 后 customTheme 清空 + ping 文案', () => {
     const d = makeDeps()
     d.handleApplyPalette({ primary: '#ff0000', secondary: '#00ff00', accent: '#0000ff', dark: false })
     d.handleResetPalette()
     expect(customTheme.value).toBeNull()
-    expect(lastSeed.value).toBeNull()
     expect(d.pingTransient).toHaveBeenCalledWith('已还原主题配色')
   })
 })

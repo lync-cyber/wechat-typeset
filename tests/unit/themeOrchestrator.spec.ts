@@ -3,7 +3,7 @@
  *
  * baseThemeId 变化时 4 条副作用：
  *   1. persistThemeId → localStorage 写 'wechat-typeset:theme:last'
- *   2. resetCustomThemeWithUndo → 清 customTheme + lastSeed + 挂 undo
+ *   2. resetCustomThemeWithUndo → 清 customTheme + 挂 undo
  *   3. autoSwapPristineSample → md 仍为某主题 sample 时跟随切换
  *   4. persistDraftTheme → activeDraftId 存在时把草稿 themeId 字段同步
  *
@@ -18,7 +18,7 @@ import {
   useThemeOrchestrator,
   type UseThemeOrchestratorDeps,
 } from '../../src/app/themeOrchestrator'
-import { baseThemeId, customTheme, lastSeed, md } from '../../src/app/state'
+import { baseThemeId, customTheme, md } from '../../src/app/state'
 import { createDraft, readDraft } from '../../src/infra/storage/drafts'
 import { THEME_STORAGE_KEY } from '../../src/infra/storage/storageKeys'
 import { SAMPLE_BY_THEME, getSample } from '../../src/domain/samples'
@@ -65,11 +65,9 @@ describe('persistThemeId', () => {
 describe('resetCustomThemeWithUndo', () => {
   it('有 customTheme 时切主题 → 清空 + 挂 undo', async () => {
     customTheme.value = markRaw({ ...mockTheme(), id: 'default--custom' }) as never
-    lastSeed.value = { primary: '#f00', secondary: '#0f0', accent: '#00f', dark: false }
     baseThemeId.value = 'tech-geek'
     await nextTick()
     expect(customTheme.value).toBeNull()
-    expect(lastSeed.value).toBeNull()
     expect(mounted!.deps.showUndo).toHaveBeenCalledOnce()
   })
 
@@ -80,19 +78,16 @@ describe('resetCustomThemeWithUndo', () => {
     expect(mounted!.deps.showUndo).not.toHaveBeenCalled()
   })
 
-  it('undo restore 能恢复主题 + customTheme + seed', async () => {
+  it('undo restore 能恢复主题 + customTheme', async () => {
     // markRaw 避免 Vue ref 把 plain object 包成 Proxy，让 toBe 引用相等成立
     const prevCustom = markRaw({ ...mockTheme(), id: 'default--custom' }) as never
-    const prevSeed = markRaw({ primary: '#abc', secondary: '#def', accent: '#012', dark: false })
     customTheme.value = prevCustom
-    lastSeed.value = prevSeed
     baseThemeId.value = 'tech-geek'
     await nextTick()
     const restore = mounted!.deps.showUndo.mock.calls[0][1] as () => void
     restore()
     expect(baseThemeId.value).toBe('default')
     expect(customTheme.value).toBe(prevCustom)
-    expect(lastSeed.value).toBe(prevSeed)
   })
 })
 
@@ -153,7 +148,6 @@ describe('suppressOnce · undo 不重入', () => {
     // 准备：md 是 default 的 pristine sample，并有 customTheme 让 reset 流程能挂 undo
     md.value = getSample('default')
     customTheme.value = markRaw({ ...mockTheme(), id: 'default--custom' }) as never
-    lastSeed.value = markRaw({ primary: '#f00', secondary: '#0f0', accent: '#00f', dark: false })
     const created = createDraft({ title: 't', body: 'x', themeId: 'default' })
     mounted!.deps.activeDraftId.value = created.id
 

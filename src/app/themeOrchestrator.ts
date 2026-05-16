@@ -9,7 +9,7 @@
  * 否则切完之后 md 已更新就永远命中不到。除 persist 外都仅在 `val !== prev` 执行。
  */
 import { watch, type Ref } from 'vue'
-import { baseThemeId, customTheme, lastSeed, md } from './state'
+import { baseThemeId, customTheme, md } from './state'
 import { safeWrite } from '../infra/storage/_kv'
 import { THEME_STORAGE_KEY } from '../infra/storage/storageKeys'
 import { SAMPLE_BY_THEME, getSample } from '../domain/samples'
@@ -20,7 +20,7 @@ function persistThemeId(val: string) {
 }
 
 /**
- * 切主题时若 customTheme 存在，把它和 seed 清空并挂 undo——用户可以一键回到上一个
+ * 切主题时若 customTheme 存在，把它清空并挂 undo——用户可以一键回到上一个
  * 主题 + 上一份自定义配色。Toast 文案显式说"已重置自定义配色"，避免暗箱。
  *
  * undo restore 里要先置 suppressOnce=true 再写 baseThemeId.value=prev——否则本
@@ -36,14 +36,11 @@ function resetCustomThemeWithUndo(
 ) {
   if (!customTheme.value) return
   const prevCustom = customTheme.value
-  const prevSeed = lastSeed.value
   customTheme.value = null
-  lastSeed.value = null
   showUndo('已切换主题并重置自定义配色', () => {
     suppressOnce = true
     baseThemeId.value = prev
     customTheme.value = prevCustom
-    lastSeed.value = prevSeed
   })
 }
 
