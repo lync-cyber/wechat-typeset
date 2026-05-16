@@ -32,6 +32,17 @@ export interface VariantRenderResult {
   titleCSS?: string
   bodyCSS?: string
   svgSlot?: string
+  /**
+   * quote-card byline 行 inline style。仅 quote.ts 消费,其余容器忽略。
+   * undefined = 走默认（居中 textMuted 13px）;非空 = 变体自定义。
+   * 给印刷体 pull-quote / editorial 风格变体一个手柄,让 byline 字号/字距/对齐能跟主视一致。
+   */
+  bylineCSS?: string
+  /**
+   * quote-card byline 前缀字符。仅 quote.ts 消费。
+   * undefined = 走默认 "— "（U+2014 + 空格）。常见替换:"—— "(中文双破折号) / ""(无前缀)。
+   */
+  bylinePrefix?: string
 }
 
 export type AdmonitionKind = 'tip' | 'warning' | 'info' | 'danger'

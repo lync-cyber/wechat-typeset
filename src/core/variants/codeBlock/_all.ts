@@ -7,5 +7,8 @@
 
 import bare from './bare'
 import headerBar from './header-bar'
+import lineNumbers from './line-numbers'
+import terminalFrame from './terminal-frame'
+import inlineCard from './inline-card'
 
-export default [bare, headerBar]
+export default [bare, headerBar, lineNumbers, terminalFrame, inlineCard]

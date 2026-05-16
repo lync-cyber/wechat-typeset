@@ -764,7 +764,6 @@ export const spec: PersonaSpec = {
     abstractKicker: {
       __reset: true,
       color: '#d97a3c',
-      'font-family': 'Menlo,Monaco,monospace',
       'font-size': '10px',
       'font-weight': '700',
       'letter-spacing': '2px',
@@ -775,7 +774,6 @@ export const spec: PersonaSpec = {
     keyNumberValue: {
       __reset: true,
       color: '#d97a3c',
-      'font-family': 'Menlo,Monaco,monospace',
       'font-size': '34px',
       'font-weight': '700',
       'line-height': '1.1',
@@ -786,7 +784,6 @@ export const spec: PersonaSpec = {
     keyNumberKicker: {
       __reset: true,
       color: '#d97a3c',
-      'font-family': 'Menlo,Monaco,monospace',
       'font-size': '11px',
       'font-weight': '600',
       'letter-spacing': '1.5px',
@@ -797,7 +794,6 @@ export const spec: PersonaSpec = {
     seeAlsoTitle: {
       __reset: true,
       color: '#d9c9a8',
-      'font-family': 'Menlo,Monaco,monospace',
       'font-size': '10px',
       'font-weight': '700',
       'letter-spacing': '2px',
@@ -808,7 +804,6 @@ export const spec: PersonaSpec = {
     editorNoteKicker: {
       __reset: true,
       color: '#d97a3c',
-      'font-family': 'Menlo,Monaco,monospace',
       'font-size': '10px',
       'font-weight': '700',
       'letter-spacing': '1.5px',

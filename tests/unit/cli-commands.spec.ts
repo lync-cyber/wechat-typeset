@@ -113,10 +113,10 @@ describe('validate', () => {
 })
 
 describe('lint · 主题敏感', () => {
-  const themeOnlyMd =
+  const dataVizMd =
     ':::: kpi-dashboard KEY METRICS\n::: kpi-item label="x" value="42"\n:::\n::::\n'
 
-  it('persona=default + theme:* 容器 → wrong_theme_namespace warning，仍 ok=true', async () => {
+  it('persona=default + pack:data-viz 容器 → 无 wrong_theme_namespace（pack 跨主题可用）', async () => {
     const cmd = get<
       { md: string; persona: string },
       {
@@ -126,16 +126,14 @@ describe('lint · 主题敏感', () => {
         errorCount: number
       }
     >('lint')
-    const out = await cmd.run({ md: themeOnlyMd, persona: 'default' })
+    const out = await cmd.run({ md: dataVizMd, persona: 'default' })
     expect(out.ok).toBe(true)
     expect(out.errorCount).toBe(0)
-    expect(out.warningCount).toBeGreaterThanOrEqual(2)
     const wrongNs = out.issues.filter((i) => i.kind === 'wrong_theme_namespace')
-    expect(wrongNs.length).toBeGreaterThanOrEqual(2)
-    expect(wrongNs[0].severity).toBe('warning')
+    expect(wrongNs.length).toBe(0)
   })
 
-  it('persona=data-brief + theme:* → 0 warning', async () => {
+  it('persona=data-brief + pack:data-viz → 0 warning', async () => {
     const cmd = get<
       { md: string; persona: string },
       {
@@ -145,7 +143,7 @@ describe('lint · 主题敏感', () => {
         personaSource: string
       }
     >('lint')
-    const out = await cmd.run({ md: themeOnlyMd, persona: 'data-brief' })
+    const out = await cmd.run({ md: dataVizMd, persona: 'data-brief' })
     expect(out.ok).toBe(true)
     expect(out.warningCount).toBe(0)
     expect(out.effectivePersona).toBe('data-brief')
@@ -153,7 +151,7 @@ describe('lint · 主题敏感', () => {
   })
 
   it('frontmatter theme: 覆盖 --persona', async () => {
-    const md = `---\ntheme: data-brief\n---\n${themeOnlyMd}`
+    const md = `---\ntheme: data-brief\n---\n${dataVizMd}`
     const cmd = get<
       { md: string; persona: string },
       { effectivePersona?: string; personaSource: string; warningCount: number }
@@ -173,7 +171,7 @@ describe('lint · 主题敏感', () => {
         issues: Array<{ kind: string }>
       }
     >('lint')
-    const out = await cmd.run({ md: themeOnlyMd })
+    const out = await cmd.run({ md: dataVizMd })
     expect(out.effectivePersona).toBeUndefined()
     expect(out.personaSource).toBe('none')
     const wrongNs = out.issues.filter((i) => i.kind === 'wrong_theme_namespace')
@@ -226,10 +224,10 @@ describe('annotate', () => {
     expect(out.capabilitySnapshot.defaultVariants.admonition).toBe('accent-bar')
     expect(Array.isArray(out.capabilitySnapshot.containers)).toBe(true)
     const kpi = out.capabilitySnapshot.containers.find((c) => c.id === 'kpi-dashboard')
-    expect(kpi?.available).toBe(false)
+    expect(kpi?.available).toBe(true)
   })
 
-  it('default 主题下 patches 不含 theme:data-brief 容器', async () => {
+  it('default 主题下 patches 不含 data-viz 容器（heuristic 无该容器的匹配规则）', async () => {
     const cmd = get<
       { md: string; persona: string },
       { patches: Array<{ container: string }> }
@@ -279,9 +277,9 @@ describe('personas list / get / capabilities / recommend', () => {
     expect(out.recommendedVariants).toHaveProperty('admonition')
     expect(out.kickers).toHaveProperty('qaBlock')
     const kpi = out.containers.find((c) => c.id === 'kpi-dashboard')
-    expect(kpi?.available).toBe(false)
-    expect(kpi?.namespace).toBe('theme')
-    expect(kpi?.pack).toBe('theme:data-brief')
+    expect(kpi?.available).toBe(true)
+    expect(kpi?.namespace).toBe('pack')
+    expect(kpi?.pack).toBe('pack:data-viz')
   })
 
   it('personas recommend 强匹配返回 top-1 满分', async () => {

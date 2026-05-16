@@ -1,15 +1,16 @@
 /**
- * sample-full.md 端到端渲染校验
+ * tests/fixtures/all-containers.md 端到端渲染校验
  *
- * 目的：确保 src/samples-md/sample-full.md 在默认主题下
+ * 目的：确保全量 fixture 在默认主题下
  *   - pipeline 不抛异常
  *   - 各 variantKind 的 variant class 全部出现（admonition / quote / compare /
- *     steps / divider / sectionTitle / note；codeBlock 独立检查）
- *   - 所有无 variant 的基础容器 class 也都出现（intro / cover / author /
- *     highlight / footer-cta / recommend / qrcode / voice-card / video-card /
- *     abstract / key-number / see-also / free 等）
+ *     steps / divider / sectionTitle / note / footnotes；codeBlock 独立检查）
+ *   - 所有无 variant 的基础容器 class 也都出现（base + pack:editorial + pack:data-viz）
  *
  * 具体清单从 vocabulary + VARIANT_IDS 派生，新增容器/variant 时不需要手改这里。
+ *
+ * fixture 位置：tests/fixtures/all-containers.md（不在 src/samples-md/，确保
+ * 不会被打包进 SAMPLE_BY_THEME 误入用户态预览）。
  *
  * 运行：npx tsx tests/verify-sample-full.ts
  */
@@ -35,7 +36,7 @@ import { defaultTheme } from '../src/core/themes/default'
 import { VARIANT_IDS } from '../src/core/themes/types'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
-const SAMPLE = resolve(HERE, '../src/samples-md/sample-full.md')
+const SAMPLE = resolve(HERE, 'fixtures/all-containers.md')
 
 const md = readFileSync(SAMPLE, 'utf8')
 const { html, wordCount } = render({ md, theme: defaultTheme })
@@ -47,10 +48,8 @@ function check(label: string, predicate: () => boolean, detail = ''): void {
   results.push({ label, ok: predicate(), detail })
 }
 
-// 1. 23 个容器 variant class 枚举（codeBlock 走独立命名，下面单独检查）
+// 1. 容器 variant class 枚举（codeBlock 走独立命名，下面单独检查）
 for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
-  // codeBlock 不是 `:::` 容器，产物不带 container- 前缀；sample 渲染下只会出现主题选中的
-  // 那一个 variant（默认主题 codeBlock=bare → 产物是裸 <pre><code>）。单独在下面断言。
   if (kind === 'codeBlock') continue
   for (const id of ids as readonly string[]) {
     // admonition 的 kind 对应多个容器名（tip/warning/info/danger），任何一个出现即算过
@@ -72,28 +71,54 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
   }
 }
 
-// 1b. codeBlock 单独检查：默认主题 variant=bare，产物应含 <pre><code class="... hljs">，
-// 且不应残留 wx-code-block wrapper（wrapper 是 header-bar 专属）。
-check('codeBlock:bare(default theme)', () => /<pre[^>]*>\s*<code[^>]*hljs/.test(html), '<pre><code class="...hljs">')
-check('codeBlock:no-wrapper-on-bare', () => !html.includes('wx-code-block'), '不含 wx-code-block')
+// 1b. codeBlock 5 variant —— fixture Part 5 写了 5 个显式 variant fence。
+//   - bare 不带外层 wrapper，但必须出现 <pre><code class="... hljs">
+//   - 其余 4 个（header-bar / line-numbers / terminal-frame / inline-card）必须
+//     出现各自的 wx-code-block--{id} class
+check('codeBlock:bare-has-pre-code', () => /<pre[^>]*>\s*<code[^>]*hljs/.test(html), '<pre><code class="...hljs">')
+for (const id of VARIANT_IDS.codeBlock) {
+  if (id === 'bare') continue
+  const cls = `wx-code-block--${id}`
+  check(`codeBlock:${id}`, () => html.includes(cls), cls)
+}
 
-// 2. 无 variant 容器 class 出现（含补齐的 5 个：note + abstract / key-number / see-also + free）
+// 2. 无 variant 容器 class 出现（base + pack:editorial + pack:data-viz 全量）
 const plainContainers = [
+  // base
   'container-intro',
   'container-cover',
   'container-author',
+  'container-author-bio',
+  'container-announcement',
   'container-highlight',
+  'container-image-caption',
+  'container-timeline',
   'container-footer-cta',
   'container-recommend',
   'container-qrcode',
   'container-voice-card',
   'container-video-card',
-  // 补齐五档：note（第五态）+ signature（abstract/key-number/see-also）+ free（escape hatch）
   'container-note',
   'container-abstract',
   'container-key-number',
   'container-see-also',
   'container-free',
+  // pack:editorial
+  'container-masthead',
+  'container-section-tag',
+  'container-byline',
+  'container-editorial-header',
+  'container-toc',
+  'container-qa-block',
+  'container-callout-group',
+  'container-editor-note',
+  'container-methodology',
+  'container-cta-bar',
+  'container-qr-follow',
+  'container-colophon',
+  // pack:data-viz
+  'container-kpi-dashboard',
+  'container-bar-chart',
 ]
 for (const c of plainContainers) {
   check(`plain:${c}`, () => html.includes(c), c)

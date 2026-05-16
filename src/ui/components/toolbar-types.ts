@@ -17,6 +17,8 @@ export type ToolbarAction =
   | 'copy'
   | 'clear'
   | 'loadSample'
+  | 'loadReference'
+  | 'loadShowcase'
   | 'saveSelection'
   | 'fixZhTypo'
   | 'exportHtml'

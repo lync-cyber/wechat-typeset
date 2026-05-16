@@ -121,7 +121,7 @@ function insertContainer(spec: ContainerSpec) {
         </li>
         <li class="icon-item">
           <span class="icon-glyph">···</span>
-          <span class="icon-desc"><strong>更多操作</strong> — 导出、清空、载入示例等</span>
+          <span class="icon-desc"><strong>更多操作</strong> — 导出、清空、三档样张（故事 / 组件参考 / 全功能展示）等</span>
         </li>
       </ul>
     </section>

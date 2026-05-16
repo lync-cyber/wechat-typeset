@@ -7908,9 +7908,11 @@
         "quote": {
           "enum": [
             "classic",
+            "left-bar",
             "magazine-dropcap",
             "column-rule",
             "frame-brackets",
+            "editorial-block",
             "tilted-sticker"
           ]
         },
@@ -7948,7 +7950,10 @@
         "codeBlock": {
           "enum": [
             "bare",
-            "header-bar"
+            "header-bar",
+            "line-numbers",
+            "terminal-frame",
+            "inline-card"
           ]
         },
         "note": {
@@ -7961,7 +7966,10 @@
         "footnotes": {
           "enum": [
             "lined",
-            "inline-flow"
+            "inline-flow",
+            "boxed-aside",
+            "top-rule",
+            "dense-academic"
           ]
         }
       },

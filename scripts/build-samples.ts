@@ -8,13 +8,14 @@
  *
  * 映射规则：
  *   src/samples-md/sample-{themeId}.md  →  SAMPLE_BY_THEME[themeId]
- *   特殊：sample-full.md 不映射到任何 themeId，只作为 tests/verify-sample-full.ts
- *        的全量回归 fixture；也会导出为 FULL_SAMPLE 便于按需使用。
+ *
+ * 全量容器回归 fixture（旧 sample-full.md）已迁出 src/samples-md/，现位于
+ * tests/fixtures/all-containers.md。tests/verify-sample-full.ts 直接从磁盘读取，
+ * 不再走 _generated.ts —— 这样 fixture 只服务测试，不可能误入用户态预览。
  *
  * 产物规则：
- *   - _generated.ts 是派生文件，纳入 git（像 capabilities.json 一样），
- *     避免开发启动阶段依赖生成器；CI 可额外校验 `npm run build:samples` 后
- *     工作区无 diff。
+ *   - _generated.ts 是派生文件，纳入 git，避免开发启动阶段依赖生成器；CI 额外
+ *     校验 `npm run build:samples` 后工作区无 diff。
  *   - 生成内容头部加 `@generated` 标签，便于 IDE / linter 识别。
  *
  * 运行：`npm run build:samples`（也会串进 build 链）
@@ -22,17 +23,15 @@
 
 import { createHash } from 'node:crypto'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { basename, resolve } from 'node:path'
+import { resolve } from 'node:path'
 
 const SAMPLES_DIR = resolve(process.cwd(), 'src/samples-md')
 const OUT = resolve(process.cwd(), 'src/domain/samples/_generated.ts')
 
 const FILE_RE = /^sample-(.+)\.md$/
-const FULL_SAMPLE_THEMEID = 'full' // sample-full.md 是专用 fixture，不是主题样本
 
 function buildOutput(): string {
   const entries: Array<[string, string]> = []
-  let fullSample: string | undefined
 
   for (const file of readdirSync(SAMPLES_DIR).sort()) {
     const m = FILE_RE.exec(file)
@@ -42,18 +41,9 @@ function buildOutput(): string {
     // 归一为 LF，导致 App.vue 里"是否 pristine sample"的等值比较永远 false，
     // 切主题时不会自动换 sample。生成器规范化为 LF 是最上游的修复点。
     const content = readFileSync(resolve(SAMPLES_DIR, file), 'utf8').replace(/\r\n/g, '\n')
-    if (id === FULL_SAMPLE_THEMEID) {
-      fullSample = content
-    } else {
-      entries.push([id, content])
-    }
+    entries.push([id, content])
   }
 
-  if (!fullSample) {
-    throw new Error(
-      `[build-samples] src/samples-md/sample-full.md 缺失——这是 verify-sample-full 测试的 fixture，必须存在。`,
-    )
-  }
   if (entries.length === 0) {
     throw new Error(
       `[build-samples] src/samples-md/ 下没有 sample-{theme}.md 文件。`,
@@ -61,13 +51,12 @@ function buildOutput(): string {
   }
 
   // SAMPLE_BUILD_ID：所有样本内容的稳定哈希。
-  //   - 输入只依赖 entries / fullSample，与时间无关 —— 相同样本永远是同一个 id（git 可复现）
+  //   - 输入只依赖 entries，与时间无关 —— 相同样本永远是同一个 id（git 可复现）
   //   - 长度 12 字节 hex 足够区分（碰撞概率 1e-14）
   //   - 用途：dev 模式 useDraftLifecycle 在 init 期间对照 localStorage 存的上次值，
   //     不一致即视为"样本已更新"，把活跃草稿正文重置为当前主题最新 sample。
   const fingerprint = createHash('sha1')
   for (const [id, content] of entries) fingerprint.update(`${id}:${content}\n`)
-  fingerprint.update(`full:${fullSample}\n`)
   const buildId = fingerprint.digest('hex').slice(0, 12)
 
   const lines: string[] = []
@@ -81,10 +70,6 @@ function buildOutput(): string {
     lines.push(`  ${JSON.stringify(id)}: ${JSON.stringify(content)},`)
   }
   lines.push(`}`)
-  lines.push(``)
-  lines.push(`/** 全量容器回归 fixture（对应 src/samples-md/sample-full.md）；`)
-  lines.push(` *  tests/verify-sample-full.ts 与 @wechat-typeset/cli render 子命令消费。 */`)
-  lines.push(`export const FULL_SAMPLE: string = ${JSON.stringify(fullSample)}`)
   lines.push(``)
   lines.push(`/** 样本指纹（sha1 截断 12 字）。dev 模式检测样本重建用，详见 useDraftLifecycle。 */`)
   lines.push(`export const SAMPLE_BUILD_ID: string = ${JSON.stringify(buildId)}`)

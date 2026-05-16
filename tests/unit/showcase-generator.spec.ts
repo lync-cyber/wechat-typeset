@@ -22,6 +22,7 @@ import { readFileSync, existsSync, globSync } from 'node:fs'
 import {
   BASE_ELEMENT_FIXTURE_MD,
   BASE_CONTAINER_FIXTURE_MD,
+  DECORATIONS_PREVIEW_MD,
   buildSignatureFixtureMd,
 } from '../../src/domain/gallery/baseFixture'
 import { generateShowcase } from '../../src/domain/gallery/showcase'
@@ -58,10 +59,13 @@ function buildShowcaseHtml(spec: PersonaSpec): string {
   const baseContainers = render({ md: BASE_CONTAINER_FIXTURE_MD, theme }).html
   const sig = buildSignatureFixtureMd(spec)
   const signatureContainers = sig.md ? render({ md: sig.md, theme }).html : ''
+  const decorationsPreview = spec.decorations
+    ? render({ md: DECORATIONS_PREVIEW_MD, theme }).html
+    : ''
   const voice = analyzeThemeVoice(spec)
   return generateShowcase({
     spec,
-    fragments: { elementCatalog, baseContainers, signatureContainers },
+    fragments: { elementCatalog, baseContainers, signatureContainers, decorationsPreview },
     voice,
   })
 }
@@ -117,6 +121,7 @@ describe('showcase generator · 形状合约', () => {
       expect(html).toContain('Rendered · 元素 + Inline 基线')
       expect(html).toContain('Rendered · Base 容器陈列')
       expect(html).toContain('Rendered · 扩展签名容器')
+      expect(html).toContain('Rendered · Decorations 装饰预览')
       expect(html).toContain('Voice · 覆盖度报告')
     }
   })
@@ -128,5 +133,24 @@ describe('showcase generator · 形状合约', () => {
       'utf8',
     )
     expect(html).toContain('本主题未声明任何 pack:* / theme:* 扩展签名容器')
+  })
+
+  it('Decorations 装饰预览在主题未声明 decorations 时显示空提示', () => {
+    // default 主题无 decorations —— 应渲染 empty-note 而非真实预览段
+    const html = readFileSync(
+      resolve(process.cwd(), 'docs/generated/showcase/default.html'),
+      'utf8',
+    )
+    expect(html).toContain('本主题未声明任何 decorations（headingPrefix / introDropcap）装饰')
+  })
+
+  it('Decorations 装饰预览在声明 decorations 的主题中真实渲染', () => {
+    // swiss-grid 有 decorations.headingPrefix（红章 H2 编号）—— 应渲染 rendered-wrap
+    const html = readFileSync(
+      resolve(process.cwd(), 'docs/generated/showcase/swiss-grid.html'),
+      'utf8',
+    )
+    expect(html).toContain('装饰预览 · 第一节')
+    expect(html).toContain('装饰预览 · 第二节')
   })
 })

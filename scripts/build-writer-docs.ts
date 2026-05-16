@@ -8,8 +8,8 @@
  * 工作方式：
  *   - 容器按 vocabulary 的 `spec.pack` 字段分组（缺省 = 'base'）
  *   - 各包的速查表分别写进对应文档的 `<!-- generated:container-quick-ref:<pack>:start/end -->` 标记之间
- *     - base       → docs/contract/base.md
- *     - data-brief → docs/contract/packs/data-brief.md
+ *     - base          → docs/contract/base.md
+ *     - pack:data-viz → docs/contract/packs/data-viz.md
  *   - 其余手写段落保留不动
  *
  * 命令：
@@ -52,11 +52,11 @@ const PACK_TARGETS: Partial<Record<ContainerPack, PackTarget>> = {
       '为刊物 / 栏目化深度文 / newsletter 设计的领域容器集（多主题可借用）。' +
       '在未声明 signatureContainers 的主题里语法仍合法，但会回退到中性兜底样式（不塌版，少签名）。带 ★ 是可登记的**签名容器**。',
   },
-  'theme:data-brief': {
-    docPath: resolve(process.cwd(), 'docs/contract/packs/data-brief.md'),
+  'pack:data-viz': {
+    docPath: resolve(process.cwd(), 'docs/contract/packs/data-viz.md'),
     intro:
-      '`data-brief` 主题专属：KPI 仪表盘 / 横向条形图等数据可视化容器。' +
-      '只在 `data-brief` 主题渲染时给出签名视觉；其他主题里属于"主题专属扩展"未启用范畴。',
+      '数据可视化容器集（多主题可借用）：KPI 仪表盘 / 横向条形图。' +
+      '在 `signatureContainers` 里声明 `kpiDashboard` 或 `barChart` 即启用整包签名视觉。带 ★ 是可登记的**签名容器**。',
   },
 }
 
@@ -67,6 +67,7 @@ const CATEGORY_LABEL: Record<string, string> = {
   navigation: '导航',
   media: '媒体',
   signature: '签名',
+  data: '数据',
   free: '兜底',
 }
 
@@ -77,6 +78,7 @@ const CATEGORY_ORDER = [
   'navigation',
   'media',
   'signature',
+  'data',
   'free',
 ] as const
 

@@ -138,8 +138,6 @@
 }
 
 .markdown-body pre {
-  background-color: #1e2533;
-  color: #e8ebf0;
   padding-top: 14px;
   padding-right: 16px;
   padding-bottom: 14px;
@@ -154,6 +152,8 @@
   margin-bottom: 20px;
   font-size: 13px;
   line-height: 1.6;
+  background-color: #1e2533;
+  color: #e8ebf0;
 }
 
 .markdown-body pre code {

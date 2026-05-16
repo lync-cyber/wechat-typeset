@@ -204,7 +204,7 @@ describe('specToTheme · capabilities 自动派生', () => {
     expect(containers).toContain('danger')
     // pack:editorial 不在 default 的 signatureContainers，故不应被纳入
     expect(containers).not.toContain('masthead')
-    // theme:data-brief 容器只属 data-brief 主题
+    // pack:data-viz 容器未被 default 签名，故不展开到 capabilities
     expect(containers).not.toContain('kpi-dashboard')
     // 排序稳定
     expect([...containers]).toEqual([...containers].sort())

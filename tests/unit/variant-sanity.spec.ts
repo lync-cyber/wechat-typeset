@@ -158,12 +158,12 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 39 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
+  it('6 kind × 41 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
       admonition: 19, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook)
-      quote: 5, // +1: tilted-sticker (brutalist 家族 punk-zine 撕贴纸)
+      quote: 7, // +1: tilted-sticker (brutalist) +1: editorial-block (editorial pull-quote) +1: left-bar (日常引用)
       compare: 4, // +1: data-card (data-brief 家族)
       steps: 3,
       divider: 6, // +1: seal-mark (swiss-grid 家族收束印章)
@@ -171,8 +171,14 @@ describe('枚举完整性', () => {
     })
   })
 
-  it('codeBlock 的 2 个 variant 全部在 VARIANT_IDS 登记', () => {
-    expect([...VARIANT_IDS.codeBlock]).toEqual(['bare', 'header-bar'])
+  it('codeBlock 的 5 个 variant 全部在 VARIANT_IDS 登记', () => {
+    expect([...VARIANT_IDS.codeBlock]).toEqual([
+      'bare',
+      'header-bar',
+      'line-numbers',
+      'terminal-frame',
+      'inline-card',
+    ])
   })
 
   it('全部已注册主题都进入矩阵', () => {
@@ -234,7 +240,7 @@ const CODE_BLOCK_MD = [
   '',
 ].join('\n')
 
-describe('codeBlock variant · 5 主题 × 2 variant', () => {
+describe('codeBlock variant · 14 主题 × 5 variant', () => {
   for (const theme of themeList) {
     for (const id of VARIANT_IDS.codeBlock) {
       const label = `${theme.id} · codeBlock:${id}`
@@ -253,15 +259,26 @@ describe('codeBlock variant · 5 主题 × 2 variant', () => {
         expect(html, `${label} 缺 <pre><code>`).toMatch(/<pre[^>]*>[\s\S]*<code[^>]*>/)
 
         if (id === 'bare') {
-          // bare 零 wrapper
+          // bare 零 wrapper —— 与其余 4 个 variant 的差异化识别面
           expect(html, `${label} bare 不应出现 wrapper`).not.toMatch(/wx-code-block/)
         } else {
-          // header-bar 应有双 class wrapper + 大写语言标签
-          expect(html, `${label} 缺 wrapper`).toMatch(
-            /class="wx-code-block wx-code-block--header-bar"/,
-          )
-          expect(html, `${label} 缺语言标签`).toMatch(/>JAVASCRIPT</)
+          // 其余 variant 必须有 wx-code-block--{id} 双 class wrapper
+          const wrapperRe = new RegExp(`class="wx-code-block wx-code-block--${id}"`)
+          expect(html, `${label} 缺 wrapper`).toMatch(wrapperRe)
         }
+
+        // variant 专属签名特征：避免不同 variant 渲染产物互相退化
+        if (id === 'header-bar') {
+          expect(html, `${label} header-bar 缺语言标签`).toMatch(/>JAVASCRIPT</)
+        } else if (id === 'line-numbers') {
+          // 行号 gutter 列存在 + 出现行号 "1" / "2"（CODE_BLOCK_MD 是 2 行）
+          expect(html, `${label} line-numbers 缺 gutter`).toMatch(/wx-code-block__gutter/)
+        } else if (id === 'terminal-frame') {
+          // 窗口腔出现 traffic-light SVG（3 个 circle r="6"）+ 居中标题区
+          expect(html, `${label} terminal-frame 缺窗口腔`).toMatch(/wx-code-block__chrome/)
+          expect(html, `${label} terminal-frame 缺 traffic-light`).toMatch(/<circle[^>]*r="6"/)
+        }
+        // inline-card 只断言 wrapper 双 class —— 它的设计语言就是"克制无装饰"
 
         // 共同约束：CSS 禁用字清零、SVG 安全、无 <style> 残留
         assertNoForbiddenCss(html, label)

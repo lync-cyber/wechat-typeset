@@ -10,5 +10,15 @@ import magazineDropcap from './magazine-dropcap'
 import columnRule from './column-rule'
 import frameBrackets from './frame-brackets'
 import tiltedSticker from './tilted-sticker'
+import editorialBlock from './editorial-block'
+import leftBar from './left-bar'
 
-export default [classic, magazineDropcap, columnRule, frameBrackets, tiltedSticker]
+export default [
+  classic,
+  magazineDropcap,
+  columnRule,
+  frameBrackets,
+  tiltedSticker,
+  editorialBlock,
+  leftBar,
+]

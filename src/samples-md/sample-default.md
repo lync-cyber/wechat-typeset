@@ -1,153 +1,122 @@
-# wechat-typeset · 上手样稿
+# 工具的工具 · 关于写作辅助软件的克制观
 
-::: intro 一份可直接上手的 Markdown 样稿
-这篇文档里用到的容器、行内扩展、代码块和表格都能被 wechat-typeset 识别并按
-当前主题渲染——照着样子改，就是你自己的公众号文章。
-:::
-
-::: cover 封面
-![封面占位图](https://placehold.co/1200x630?text=wechat-typeset)
+::: intro
+一个工具好不好用，往往不在它能做多少，而在它愿意 ==不做== 多少。排版工具应当像好的字体——存在感越低，越尊重内容。
 :::
 
 ::: author 编辑部 role=主笔
-负责全栈内容生产，关注工具、写作与研究方法。
+长期写作，偶尔折腾工具。记录关于写、读、做的真心话。
 :::
 
-::: divider variant=wave
+::: announcement
+本文内容已同步更新，修订说明见文末。
 :::
 
-## 一、段落与行内扩展
+## 为什么默认主题应该克制
 
-本工具把 Markdown 映射到公众号约束之上。==高亮==、~~波浪~~、*斜体*、**加粗**、`inline code` 在 4 套主题下都会跟着 tokens 走。
+每多一个装饰，作者就少一分自由。这话听上去像句空话，但凡用过那种"主题切了一圈，文字反而没法看"的编辑器，都会立刻明白。
 
-> 一个普通引用块：用来引出观点，不抢焦点。
+==真正成熟的工具==，是在你**不需要**的时候安静下来，在你**需要**的时候恰好就位。
 
-::: divider variant=dots
+::: quote-card 王小波
+把复杂写简单，是一种对读者的尊重；把简单写复杂，是对自己的谄媚。
 :::
 
-## 二、四色提示
+### 三个克制原则
 
-::: tip 小贴士
-高亮 `ctx.tokens` 里的色值——主题切换时会自然同步。
+::: tip 色彩稀缺
+全篇只一个主色（编辑蓝），accent 与 primary 合一。一篇文章里超过两个强色就开始打架。
 :::
 
-::: warning 注意
-`:::: compare` 必须用 4 个冒号，内层 pros/cons 用 3 个。
+::: info 字重不滥用
+正文 15px / h2 19px / h3 16px——三档已够，再细分就是装饰过载。
 :::
 
-::: info 说明
-公众号不支持 `<style>` 块与 `class`——所有样式在导出阶段内联。
-:::
-
-::: danger 警告
-禁止在主题里写 `font-family`；`themeCSS` 会抛出 `ThemeAuthoringError`。
+::: warning 装饰不抢戏
+分隔线只用单根色线，不上花纹；引号回退到 Unicode 字符，不导出额外 SVG。
 :::
 
 ::: note 第五态补注
-note 不抢色、走 textMuted + noteIcon —— 用于"不构成警示、但读者可能错过"的旁注。
-:::
-
-::: divider variant=flower
-:::
-
-## 三、金句与高亮
-
-::: quote-card 王小波
-一个人的成熟不是年纪的加法，而是欲望的减法。
-:::
-
-::: highlight
-把复杂写简单，是一种对读者的尊重；
-把简单写复杂，是对自己的谄媚。
+note 不抢色——这是中性补注：题外话、补遗、不构成警示但读者可能错过的旁注。和 tip / warning / info / danger 四态形成互补。
 :::
 
 ::: divider
 :::
 
-## 四、对比与步骤
+## 当你确实需要色彩
 
-:::: compare
+也有些信息**必须**靠色彩区分。比如 ⌘ + K 这种键位提示、比如代码段、比如一个本周关键数字。
 
-::: pros 为什么选 wechat-typeset
-- 一个工具打穿 "写、排、发" 全链
-- 主题与内容解耦，换色不改结构
-- 容器语法无 HTML 依赖，可版本化
-:::
-
-::: cons 暂时不适合
-- 需要复杂交互的长图文（SVG 只做轻装饰）
-- 强调动效（公众号本身剥离所有动画）
-- 短平快营销号（风格更偏严谨）
-:::
-
-::::
-
-::: steps 实战流程
-### 写初稿
-把素材粘到左侧编辑器，先保证结构。
-
-### 套主题
-上方下拉切换主题，右侧实时 375px 预览。
-
-### 一键复制
-点右上角"一键复制"，粘贴到公众号后台。
-:::
-
-::: divider variant=wave
-:::
-
-## 五、代码与数据
+按 <kbd>Ctrl</kbd>（或 <kbd>⌘</kbd>） + <kbd>K</kbd> 把富文本复制到公众号后台——一个键位完成"写 → 排 → 发"。
 
 ```ts
 import { renderPipeline } from './pipeline'
 import { getTheme } from './themes'
 
-const theme = getTheme('tech-geek')
+const theme = getTheme('default')
 const { html, wordCount } = renderPipeline({
   md: '# Hello wechat-typeset',
   theme,
 })
 ```
 
-| 主题 | 基调 | 适用栏目 |
-| --- | --- | --- |
-| 极客夜行 | 深色 | 技术 / 产品 |
-| 慢生活 | 暖米 | 生活 / 旅行 |
-| 硬核财经 | 锐利 | 商业 / 财经 |
-| 人文札记 | 素雅 | 散文 / 书评 |
+### 何时取舍
 
-::: divider variant=dots
+:::: compare
+
+::: pros 选择 default
+- 任何题材都不抢戏
+- 切到其他主题后整体结构平移
+- 用色仅一根主色，阅读疲劳低
 :::
 
-## 六、媒体占位
-
-::: voice-card 开篇语 fileid=placeholder-fileid
+::: cons 暂不适合
+- 强视觉签名需求（看封面就要识别 IP）
+- 重符号语言的栏目（terminal / mook 风）
+- 需要醒目数据卡的简报家族
 :::
 
-::: video-card 产品演示 qqvid=placeholder-vid
+::::
+
+::: highlight
+中立不是没有立场，是把舞台让给文字本身。
 :::
 
-::: divider variant=flower
+::: divider
 :::
 
-## 七、文末引导
+## 实战流程
+
+::: steps 三步出稿
+### 写初稿
+左侧编辑器粘 Markdown，先保证结构。
+
+### 套主题
+顶部下拉切换；右侧 375px 实时预览。
+
+### 一键复制
+Ctrl / ⌘ + K 复制富文本到公众号后台。
+:::
+
+::: image-caption src="https://placehold.co/600x400?text=workflow" alt="工作流" 图 1 · 三步出稿流程
+左侧 Markdown 编辑、中间主题切换、右侧 375px 实时预览。
+:::
+
+::: divider
+:::
+
+## 文末
 
 ::: footer-cta 如果对你有启发 cta=关注我
-每周一篇深度，愿意被慢慢读。
+每周一篇深度，愿意被细细读完。
 :::
 
-::: see-also 看完本文还可以
-- 切到 `tech-geek` 主题看这段代码在琥珀终端里的样子
+::: recommend 看完本文还可以
+- 切到 `tech-geek` 主题看代码段在琥珀终端里的样子
 - 切到 `literary-humanism` 主题看引言与按语如何被素雅化
-- 切到 `business-finance` 主题看 compare / key-number 的报告感
+- 切到 `data-brief` 主题看数据卡如何替你说话
 :::
 
-::: recommend 延伸阅读
-- [从零开始的 wechat-typeset](https://example.com/a)
-- [主题工程的五个误区](https://example.com/b)
-- [LCH 色彩生成手册](https://example.com/c)
-:::
-
-::: qrcode 扫码加入读者群
-![二维码占位](https://placehold.co/240x240?text=QR)
+::: qrcode text="https://github.com/lync-cyber/wechat-typeset"
+扫码访问项目首页
 :::

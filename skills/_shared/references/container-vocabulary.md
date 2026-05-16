@@ -63,7 +63,7 @@
 |  | `methodology` | ★ | 方法论小字注释 |
 |  | `colophon` | ★ | 刊物收束栏 |
 
-## data-brief 主题专属（theme:data-brief）
+## 数据可视化（pack:data-viz）
 
 | 类 | fence 名 | ★ | 用途 |
 | --- | --- | :-: | --- |

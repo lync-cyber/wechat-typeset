@@ -58,6 +58,8 @@ export const spec: PersonaSpec = {
     textInverse: '#ffffff', // 反白（红章上的白色数字 / cta 中格）
     border: '#000000', // hairline 黑实线（Swiss 风的核心分隔语言）
     code: '#000000', // inline code 黑字
+    textCaption: '#333333', // 脚注 / 方法论小字（比 text 弱、比 textMuted 重的过渡灰）
+    highlightBg: '#ffeb3c', // Swiss 设计黄高亮（inline `==xx==` 的招牌饱和色）
   },
 
   // 语义四色（与设计稿 multi-callout INFO/TIP/WARN/STOP 一致）

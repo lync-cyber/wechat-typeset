@@ -2,7 +2,7 @@
  * 主题能力复合查询 API（P1.3）。
  *
  * 守卫：
- *   - 容器 namespace 过滤：theme:data-brief 容器仅在 data-brief 主题 available
+ *   - 容器 namespace 过滤：pack:data-viz 容器（kpi-dashboard 等）在所有主题 available
  *   - signatureContainers / excluded / capabilities.containers 白名单语义
  *   - getRecommendedVariantsFor 反向索引 themeCompat + variantOverrides 排序
  */
@@ -15,15 +15,15 @@ import {
 } from '../../src/public'
 
 describe('getThemeCapabilities · namespace 过滤', () => {
-  it('default 主题：theme:data-brief 容器 not available', () => {
+  it('pack:data-viz 容器在所有主题 available（多主题共享）', () => {
     const v = getThemeCapabilities('default')
     const kpi = v.containers.find((c) => c.id === 'kpi-dashboard')!
-    expect(kpi.namespace).toBe('theme')
-    expect(kpi.pack).toBe('theme:data-brief')
-    expect(kpi.available).toBe(false)
+    expect(kpi.namespace).toBe('pack')
+    expect(kpi.pack).toBe('pack:data-viz')
+    expect(kpi.available).toBe(true)
   })
 
-  it('data-brief 主题：theme:data-brief 容器 available', () => {
+  it('data-brief 主题：pack:data-viz 容器 available', () => {
     const v = getThemeCapabilities('data-brief')
     const kpi = v.containers.find((c) => c.id === 'kpi-dashboard')!
     expect(kpi.available).toBe(true)

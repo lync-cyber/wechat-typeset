@@ -31,6 +31,9 @@ export const spec: PersonaSpec = {
     textInverse: '#faf6f0',
     border: '#e0d1ba',
     code: '#b96234',
+    preBg: '#fffaef', // 暖米卡纸的代码块底（比 bg 再亮一档）
+    codeBg: '#f3e4cc', // inline code 暖米底（饱和度低于 bgMuted，配 code 主色 #b96234 形成"做旧标签纸"感）
+    quoteCardBg: '#fffaf1', // quote-card 引用卡背景（最亮的一层，让 pull-quote 在卡纸底上微"抬"）
   },
 
   // 语义四色

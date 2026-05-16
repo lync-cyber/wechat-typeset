@@ -33,6 +33,7 @@ const { render } = await import('../src/core/pipeline')
 import {
   BASE_ELEMENT_FIXTURE_MD,
   BASE_CONTAINER_FIXTURE_MD,
+  DECORATIONS_PREVIEW_MD,
   buildSignatureFixtureMd,
 } from '../src/domain/gallery/baseFixture'
 import { generateShowcase } from '../src/domain/gallery/showcase'
@@ -59,11 +60,15 @@ async function main() {
     const baseContainers = render({ md: BASE_CONTAINER_FIXTURE_MD, theme }).html
     const sig = buildSignatureFixtureMd(spec)
     const signatureContainers = sig.md ? render({ md: sig.md, theme }).html : ''
+    // C7 装饰预览：主题声明 spec.decorations 才渲染；否则传空串，showcase 显示 empty-note
+    const decorationsPreview = spec.decorations
+      ? render({ md: DECORATIONS_PREVIEW_MD, theme }).html
+      : ''
     const voice = analyzeThemeVoice(spec)
 
     const html = generateShowcase({
       spec,
-      fragments: { elementCatalog, baseContainers, signatureContainers },
+      fragments: { elementCatalog, baseContainers, signatureContainers, decorationsPreview },
       voice,
     })
 

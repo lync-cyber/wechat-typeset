@@ -7,18 +7,16 @@
 :::
 
 ::: cover 教程说明
-![封面占位](https://placehold.co/1200x630?text=tech-explainer)
-
 **前置知识：** `JavaScript 基础` `HTTP 协议` `Base64 编码`
 
-📖 预计阅读 12 分钟 · 最后更新 2026-04-20
+_预计阅读 12 分钟 · 最后更新 2026-04-20_
 :::
 
 ::: author 陈朗 role=后端工程师
 最后更新：**2026-04-20** · 阅读时长约 12 分钟
 :::
 
-::: divider variant=rule
+::: divider
 :::
 
 ## 1. JWT 的结构
@@ -26,7 +24,6 @@
 JWT（JSON Web Token）由三段 Base64url 编码字符串拼成，用 `.` 分隔：
 
 ```text
-TYPESCRIPT · 结构示意
 eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIn0.SIGNATURE
     ↑ Header           ↑ Payload           ↑ Signature
 ```
@@ -35,11 +32,15 @@ eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIn0.SIGNATURE
 Header 和 Payload 只是 Base64url 编码，**没有加密**——任何人都能解码读到内容。密码、手机号绝对不能放在 Payload 里。
 :::
 
-::: info Note · 注意事项
+::: info Info · 延伸知识
 JWT 常被误称为"加密 Token"，正确叫法是"签名 Token"——它保证数据**未被篡改**，不保证数据**保密**。
 :::
 
-::: divider variant=dots
+::: image-caption src="https://placehold.co/600x300?text=JWT+Structure" alt="JWT 结构示意图" 图 1 · JWT 三段式结构示意
+Header 声明算法，Payload 携带声明，Signature 保证完整性。三段均为 Base64url 编码，用点号连接。
+:::
+
+::: divider
 :::
 
 ## 2. 分步实现
@@ -50,14 +51,12 @@ JWT 常被误称为"加密 Token"，正确叫法是"签名 Token"——它保证
 只需 Node.js 18+ 内置的 `crypto`，无需任何 npm 依赖：
 
 ```typescript
-TYPESCRIPT · src/auth/jwt.ts
 import { createHmac, timingSafeEqual } from 'node:crypto'
 ```
 
 ### Step 2. 实现 HMAC-SHA256 签名
 
 ```typescript
-TYPESCRIPT · src/auth/jwt.ts
 function hmacSign(data: string, secret: string): string {
   return createHmac('sha256', secret)
     .update(data)
@@ -68,7 +67,6 @@ function hmacSign(data: string, secret: string): string {
 ### Step 3. 签发 Token
 
 ```typescript
-TYPESCRIPT · src/auth/jwt.ts
 function sign(payload: object, secret: string): string {
   const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
   const body   = btoa(JSON.stringify(payload))
@@ -80,11 +78,9 @@ function sign(payload: object, secret: string): string {
 ### Step 4. 验签并检查过期
 
 ```typescript
-TYPESCRIPT · src/auth/jwt.ts
 function verify(token: string, secret: string): object {
   const [header, payload, sig] = token.split('.')
   const expected = hmacSign(`${header}.${payload}`, secret)
-  // 必须用时序安全比对，普通 === 存在时序攻击风险
   if (!timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) {
     throw new Error('invalid signature')
   }
@@ -97,7 +93,7 @@ function verify(token: string, secret: string): object {
 ```
 :::
 
-::: divider variant=rule
+::: divider
 :::
 
 ## 3. 正确与错误对比
@@ -129,10 +125,10 @@ function verify(token: string, secret: string): object {
 :::
 
 ::: note Node.js 版本
-本文所有示例需要 Node.js 18+（依赖原生 `btoa` / `atob` / `base64url`）。若仍在 Node 16 线上，请用 `Buffer.from(x).toString('base64url')` 替代。tech-explainer 的 note 用于标注"环境与兼容性"这类非核心但绕不开的脚注。
+本文所有示例需要 Node.js 18+（依赖原生 `btoa` / `atob` / `base64url`）。若仍在 Node 16 线上，请用 `Buffer.from(x).toString('base64url')` 替代。
 :::
 
-::: divider variant=dots
+::: divider
 :::
 
 ## 4. 设计纲领与进阶
@@ -149,7 +145,7 @@ JWT 是信任契约，不是加密容器。签名确保"数据未被篡改"，�
 手把手厘清 OAuth 为何要用 JWT，JWT 又解决了 OAuth 的哪些麻烦。
 :::
 
-::: divider variant=dots
+::: divider
 :::
 
 ## 5. 视频 / 语音版

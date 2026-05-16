@@ -50,8 +50,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run build:samples && vite",
-    "build": "npm run build:samples && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run build:lib && npm run check:size && npm run gen:schema && npm run build:capabilities && npm run build:covers && npm run build:writer-docs -- --check && npm run build:skill-refs -- --check && npm run gen:showcase -- --check && npm run smoke:lib",
+    "dev": "npm run build:samples && npm run build:references && npm run build:showcase && vite",
+    "build": "npm run build:samples && npm run build:references && npm run build:showcase && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run build:lib && npm run check:size && npm run gen:schema && npm run build:capabilities && npm run build:covers && npm run build:writer-docs -- --check && npm run build:skill-refs -- --check && npm run gen:showcase -- --check && npm run smoke:lib",
     "lint:core": "eslint src/core --max-warnings 0",
     "typecheck:core": "tsc -p tsconfig.core.json --noEmit",
     "check:registry": "tsx scripts/check-theme-registry.ts",
@@ -59,6 +59,8 @@
     "build:capabilities": "tsx scripts/build-capabilities.ts",
     "build:covers": "tsx scripts/build-cover-placeholders.ts",
     "build:samples": "tsx scripts/build-samples.ts",
+    "build:references": "tsx scripts/build-references.ts",
+    "build:showcase": "tsx scripts/build-showcase.ts",
     "build:writer-docs": "tsx scripts/build-writer-docs.ts",
     "build:skill-refs": "tsx scripts/build-skill-refs.ts",
     "build:lib": "vite build -c vite.lib.config.ts && tsc -p tsconfig.lib.json",

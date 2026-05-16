@@ -16,9 +16,9 @@
  *   - scripts/gen-showcase.ts：把元素 / base 容器 / 扩展签名容器三段分别渲染嵌入
  *   - 其他需要"主题视觉差异基准"的场景都可 import 本模块
  *
- * 与 sample-full.md 的边界：
- *   - sample-full.md 是"作者侧全量演示稿"，含 pack:* / theme:* 容器，会随写作集成方
- *     需求增长；它继续承担 verify-sample-full.ts 的端到端断言。
+ * 与 tests/fixtures/all-containers.md 的边界：
+ *   - all-containers.md 是"端到端渲染回归 fixture"，含 pack:* / theme:* 全集容器，
+ *     由 verify-sample-full.ts 在 default 主题下断言每个容器/variant class 都出现。
  *   - 本 fixture 是"主题契约骨架"，只为 base 命名空间负责；增长由 vocabulary base
  *     新增驱动，不被外部稿件膨胀感染。
  *
@@ -94,6 +94,35 @@ export const BASE_CONTAINER_FIXTURE_MD: string =
 /** 完整骨架（元素 catalog + base 容器）—— 14 主题渲染快照基线。 */
 export const BASE_FIXTURE_MD: string =
   BASE_ELEMENT_FIXTURE_MD + '\n' + BASE_CONTAINER_FIXTURE_MD
+
+/**
+ * 装饰预览 fixture：两个 h2 + 一个 h3 + 一个 intro 段，专门让 `decorations.*`
+ * 在 showcase 里有视觉证据。
+ *
+ * 设计意图：
+ *   - 两个 h2 → 验证 `headingPrefix` 的 autoNumber 是否递增（circled / arabic-padded /
+ *     roman 都靠"连续两个"才能看出顺序）
+ *   - 一个 h3 → 验证 `arabic-section` 复合编号（如 `01.1`）
+ *   - intro 首段 → 验证 `introDropcap` 首字下沉
+ *
+ * 该 fixture 不放进 BASE_FIXTURE_MD 也不进 sample-*.md：
+ *   - 它是"装饰契约验证段"而非"主题骨架"，只在 showcase 的装饰预览区出现一次
+ *   - 主题若未声明任何 decorations，showcase 跳过本段（empty-note 兜底）
+ *
+ * 本段刻意带"装饰预览 · 第一节"这种自指文案——读者看到 showcase 就知道这是
+ * 调试 / 验证区，不会与 sample 文本混淆。
+ */
+export const DECORATIONS_PREVIEW_MD = `## 装饰预览 · 第一节
+
+## 装饰预览 · 第二节
+
+### 子节示意 · 用于复合编号
+
+::: intro
+装饰预览段。装饰层（decorations）由主题声明、共享层一次性按声明执行：若 introDropcap 启用，首字会自动拆出并放大；上方两个二级标题由 headingPrefix 注入编号、红章或 kicker。
+:::
+`
+
 
 /**
  * 为单个主题派生"签名容器 fixture"：把 spec.signatureContainers 中**不在 base 骨架**

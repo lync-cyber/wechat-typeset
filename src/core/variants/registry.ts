@@ -75,18 +75,32 @@ const ADMONITION_ORDER: readonly string[] = [
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
+  'left-bar',
   'magazine-dropcap',
   'column-rule',
   'frame-brackets',
+  'editorial-block',
   'tilted-sticker',
 ]
 const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
 const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeline-dot']
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
-const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
+const CODE_BLOCK_ORDER: readonly string[] = [
+  'bare',
+  'header-bar',
+  'line-numbers',
+  'terminal-frame',
+  'inline-card',
+]
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
-const FOOTNOTES_ORDER: readonly string[] = ['lined', 'inline-flow']
+const FOOTNOTES_ORDER: readonly string[] = [
+  'lined',
+  'inline-flow',
+  'boxed-aside',
+  'top-rule',
+  'dense-academic',
+]
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,

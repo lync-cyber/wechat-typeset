@@ -1,132 +1,157 @@
-# 苏黎世栅格 · 主题示例
+::: key-number NEUE GRAFIK REVUE value="Nº09"
+VOL.IX · 2026—05—16 · CHF 14.—
+:::
 
-> 本篇用于在 swiss-grid 主题下肉眼校验 **国际红 + 12 栏铁律 + 直角硬边** 的版面气质。
->
-> 设计原型：docs/themes-specs/themes/02-swiss-grid.html · 1958 Neue Grafik 04 苏黎世对开页。
-> 气质关键词：**Josef Müller-Brockmann · 红铅笔辅助线 · hairline · 红章 H2**。
+::: section-tag ESSAY · 01
+:::
 
-::: key-number NEUE LESE GRAFIK value="Nº04" meta="VOL.IV / 2026—04—22 / CHF 14.—"
+::: editorial-header 12 栏作为 / 版面的 / 呼吸节奏 chip="ESSAY · 01" pp="PP.04–19" subtitle="论 Neue Grafik 体系中的网格约束与编辑设计" topRule="6" titleDot="primary"
+:::
+
+::: byline cells="AUTHOR:顾栏白 | EDITOR:徐间距 | SET:09·2026" monospaceLast="true"
+:::
+
+::: abstract INDEX · 副刊导读
+网格不是牢笼，是自由的前提。Müller-Brockmann 在 1958 年苏黎世的那套 12 栏体系，至今仍是编辑设计者无法绕过的基础坐标。本文从栏位分配、行长约束、视觉节奏三个维度，重新丈量这套系统的内在逻辑。
+:::
+
+::: announcement tone="danger"
+本期取消订阅奖励活动，专注内容本身。感谢读者理解。
 :::
 
 :::: toc INDEX layout="split" meta="目次排布采用 12 栏 / 1/3 : 2/3 比例"
-::: toc-item no="01" page="04" 失去耐心的结构
+::: toc-item no="01" page="04" 网格作为版面呼吸
 :::
-::: toc-item no="02" page="08" 慢读三练习
+::: toc-item no="02" page="08" 三款无衬线字体比较
 :::
-::: toc-item no="03" page="14" 夜晚作为阅读时区
+::: toc-item no="03" page="14" Müller-Brockmann 之后
 :::
 ::: toc-item no="附" page="18" Q&A · 方法论注
 :::
 ::::
 
-::: editorial-header 在无人深夜， / 重新学习 / 如何阅读一本书 chip="ESSAY · 01" pp="PP.04–19" subtitle="论慢读在算法时代的价值" topRule="6" titleDot="primary"
-:::
-
-::: byline cells="AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026" monospaceLast="true"
-:::
-
-::: abstract INDEX · 副刊导读
-我们并非失去了阅读的能力，而是失去了为阅读腾出一整段连续时间的勇气。算法只做分发，不做阅读；一本书要求的是完整的自己。慢读是对时间主权的重新申明。
-:::
-
 ::: intro
-We did not lose the ability to read. 我们失去的是——为阅读腾出一整段连续时间的勇气。
+Grid systems are not a guarantee of good design. 网格不担保好设计——它只是给设计者一个可供背离的理性基础。
 :::
 
-## 为什么我们失去了阅读的耐心
+## 网格作为版面的呼吸节奏
 
-每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在 ==主动获取信息==，实际上是 *被信息反向喂养*。
+12 栏系统的核心洞见并非"把页面切成 12 份"，而是通过 ==栏位比例关系== 让版面获得内在节奏。留白栏与实栏同等重要，这一点在 *Neue Grafik* 第 2 期即已被申明。
 
-算法并不阅读，它只是分发。一本书要求你交出的是完整的自己——**完整的自己**。
+Karl Gerstner 在《Designing Programmes》中将网格定义为"尽可能多的可能性中最小的公分母"——这个描述精准捕捉了栅格设计的本质：**约束即自由**。
 
-:::: bar-chart FIG.01 · 按年龄 · 日均连续阅读 subtitle="n=1024 · 单位：分钟 · 数据来源：作者调研"
-::: bar label="60+" pct="84" value="42 分"
+:::: bar-chart FIG.01 · 按栏数 · 瑞士设计年鉴版面栏位分布 subtitle="n=240 · 单位：出版物页数占比 · 数据来源：样本调研 1955–1975"
+::: bar label="12 栏" pct="62" value="62%"
 :::
-::: bar label="45–59" pct="58" value="29 分"
+::: bar label="8 栏" pct="21" value="21%"
 :::
-::: bar label="30–44" pct="34" value="17 分"
+::: bar label="6 栏" pct="10" value="10%"
 :::
-::: bar label="18–29" pct="16" value="8 分"
+::: bar label="4 栏" pct="5" value="5%"
 :::
-::: bar label="<18" pct="10" value="5 分" tone="warn"
+::: bar label="自由版" pct="2" value="2%" tone="warn"
 :::
 ::::
 
-## 慢读的三种练习
+::: image-caption src="https://placehold.co/900x400?text=FIG.01"
+FIG.01 · 12 本瑞士设计年鉴（1955–1975）版面栏位分布。样本覆盖 240 个对开页，按主栏数分类统计。
+:::
 
-### 纸质之必要
+## 三款无衬线字体的编辑学比较
 
-纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的锚定。
+### Akzidenz-Grotesk：实用主义的基底
 
-> 凡我所是，皆因我读。
+1896 年由柏林 H. Berthold 铸字行发行的 Akzidenz-Grotesk，是 20 世纪国际排印运动的字体起点。其 x 高度适中，字间负空间均匀，在正文 10–13px 区间表现稳健。
+
+> 字体选择是一种立场声明。选择 Akzidenz-Grotesk 意味着选择了实用主义传统而非个性主张。
 >
-> — J. L. BORGES · 1960
+> — HELMUT SCHMID · *Typography Today*, 2003
 
-### 每日有定数
+### Univers：系统化的野心
 
-1. 每日只读 20 页
-2. 读完合眼默想——记住一个词，记住一处停顿
-3. 纸质笔记本记录三句话
+01. Adrian Frutiger 在 1957 年为 Deberny & Peignot 设计，21 个字重与字宽的完整矩阵
+02. 数字命名法（55 Regular / 65 Bold / 75 Black）将字体设计变成可量化的工程学
+03. Univers 首次证明：一个字体家族可以被当作模块化系统来构建
 
-### 手的参与
+### Helvetica：中立性的两面
 
-- [x] 铅笔轻划，不用荧光笔
-- [x] 书页一角折痕做记
-- [ ] 读完抄录一段于扉页
+- [x] x 高度高于 Akzidenz-Grotesk，移动端小字号可读性更佳
+- [x] 字重范围完整，从 Thin 到 Black 覆盖编辑设计全场景
+- [ ] 过度使用导致视觉疲劳——在信息密集页面应控制字重层级不超过三级
 
 :::: callout-group
 ::: info INFO
-深夜读书请保持光源在书后侧 45°。
+12 栏网格不等于 12 列内容——留白栏与实栏的比例关系，决定版面是否有呼吸感。
 :::
 ::: tip TIP
-配温水一盏。茶易醒脑，咖啡断连续。
+正文行长以 60–75 字符为宜（约 9–11em）；移动端单栏适配后控制在 40 字符以内。
 :::
 ::: warning WARN
-手机应在另一房间充电，非床头。
+将 Helvetica 与 Neue Haas Grotesk 混排时，x 高度差异在 12px 以下明显，需逐级校对。
 :::
 ::: danger STOP
-勿在短视频毕后方翻书。
+切勿在正文中使用三级以上字重层级——层级过多等于没有层级，视觉权重归零。
 :::
 ::::
 
-以一行函数表达：`read(book, slowly)`。
+以一行伪代码表达栏位逻辑：`grid(12, gutter=20px)`。
 
 ```javascript
-// READING.JS
-const reading = (book) =>
-  book.read(slowly);
+// GRID.JS · 12-column Swiss system
+const column = (total, gutter) =>
+  (pageWidth - gutter * (total - 1)) / total;
 ```
 
-::: qa-block READER Q&A q="周末仅余两小时，能读完一本书吗？"
-不能。能读完的不是书，是书的大意。两小时只够与一章 **相处**——已足矣。
+:::: compare CONTRAST
+::: pros GRID · 有网格
+- 比例关系内在一致，版面节奏可预期
+- 留白由系统分配，不依赖设计师直觉
+- 跨页展开时视觉连贯性有保障
+:::
+::: cons FREE · 自由版
+- 每次决策都是从零出发，认知成本高
+- 局部精彩，但全局缺乏结构性呼吸
+- 版式复刻时难以维护一致性
+:::
+::::
+
+::: note RANDNOTIZ
+栏位制并非要求页面"满"——白栏的存在让黑栏更可阅读。Tschichold 在《Asymmetric Typography》第三章专论留白的积极功能，称其为"版面的沉默发言人"。
 :::
 
-::: editor-note 编 者 按 · 01
-慢读并非复古姿态，而是一种对自己时间主权的重新申明。
+## Müller-Brockmann 之后：承继与背叛
+
+1981 年，Müller-Brockmann 在《Grid Systems in Graphic Design》中将 *Neue Grafik* 体系系统化。此后 40 年，这套框架经历了数字化的冲击与重构。
+
+当代设计师的困境在于：网格提供的是纸张对开页的节奏方案，而屏幕是无边界的流动媒介。[响应式网格](#) 是对这一矛盾的工程学妥协，但它丧失了原版系统中对"物理页面绝对尺寸"的依赖。
+
+::: qa-block READER Q&A q="数字编辑刊是否还需要严格的 12 栏系统？"
+需要，但方式变了。移动端的"12 栏"更接近一套比例约定而非像素精确值。核心不变的是：*版面的每一个决策都应能在网格坐标系中被解释*。Jedes Element muss im Raster begründbar sein.
 :::
 
-## 夜晚作为最后的阅读时区
-
-白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的 **连续时间**。
-
-读者若有心，不妨 [分享你今夜读的那一页](#)。
+::: editor-note EDITOR'S NOTE
+*Neue Grafik* 1958–1965 共出版 18 期，每期均以英、德、法三语平行排印。其本身就是国际主义排印的实践现场，而非仅是理论宣言。本栏目的视觉系统直接取法于 Nº04 内页的红色辅助线与 12 栏铅笔草图。
+:::
 
 ::: footnotes NOTES
-[1]　出自帕慕克《别样的色彩》，略有改动。
+[1] Josef Müller-Brockmann, *Grid Systems in Graphic Design*, Niggli Verlag, 1981, p.10.
+[2] Jan Tschichold, *Asymmetric Typography*, Reinhold Publishing, 1967.
+[3] Karl Gerstner, *Designing Programmes*, Arthur Niggli, 1964, p.22.
+[4] 样本调研：取 12 本瑞士设计年鉴（1955–1975），逐页记录主栏数，共 240 对开页，排除广告版。
 :::
 
 ::: divider
 :::
 
+::: methodology METHODOLOGY
+本文数据取样自 12 本瑞士设计年鉴（1955–1975），逐页人工记录主栏数，共计 240 个对开页；广告版与折页不计入统计。"自由版"定义为无可辨识栏位参考线的版面。条形图按占比降序排列，满分 100 对应单一栏数全覆盖。
+:::
+
 ::: cta-bar IF YOU LIKED THIS like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
 :::
 
-::: qr-follow NEUE LESE GRAFIK desc="每双周四出版 · 栏位制设计评论" kicker="SUBSCRIBE"
+::: qr-follow NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"
 :::
 
-::: methodology 方法论
-本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者；"连续阅读"定义为不被通知或切屏中断、持续 5 分钟以上的阅读行为。
-:::
-
-::: colophon next="纸本之必要：论书脊与手指的记忆" issue="Nº04 / 2026 / ZÜRICH"
+::: colophon next="字距作为空间：Univers 55 在正文中的间距实验" issue="Nº09 / 2026 / ZÜRICH"
 :::

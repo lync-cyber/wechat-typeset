@@ -345,7 +345,7 @@ if (!validation.ok) console.warn(validation.errors)  // [{ path, message, severi
 npm run validate:spec    # 只跑 spec 校验，改主题时最快反馈
 npm run gen:gallery      # 重新生成 docs/generated/personas-spec-gallery.html
 npm run gen:schema       # 重新导出 JSON Schema（用于 LLM 结构化输出）
-npm test                 # 全量：vitest + sample-full 端到端
+npm test                 # 全量：vitest + tests/fixtures/all-containers.md 端到端
 ```
 
 - **完整示例**：[`src/core/themes/default/persona.data.ts`](../src/core/themes/default/persona.data.ts) 是最干净的参照；[`tech-geek/persona.data.ts`](../src/core/themes/tech-geek/persona.data.ts) 展示了深色主题 + 复杂 motif 的用法。

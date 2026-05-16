@@ -100,7 +100,7 @@ export const footnotesContainer: ContainerRenderer = makeVariantContainer({
   table: FOOTNOTES_VARIANTS,
   fallbackId: 'lined',
   title: {
-    // 不设 defaultText：info 为空时不渲染 kicker（保留旧 ::: footnotes 行为）。
+    // 不设 defaultText：info 为空时不渲染 kicker。
     defaultCSS: (ctx) =>
       [
         `color:${ctx.tokens.colors.primary}`,

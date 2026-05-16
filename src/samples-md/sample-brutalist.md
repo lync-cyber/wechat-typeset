@@ -1,113 +1,140 @@
-::: masthead 慢读 issue="04" date="2026.04.22" kicker="第 04 期"
+# 粗野主义 · brutalist 主题示例
+
+::: masthead INK issue="07" date="2026.05.16" kicker="第 07 期"
 :::
 
 :::: toc // CONTENTS
-::: toc-item no="01" page="// p.04" 为什么我们失去了阅读的耐心
+::: toc-item no="01" page="// p.03" 撕掉订阅
 :::
-::: toc-item no="02" page="// p.08" 慢读的三种练习
+::: toc-item no="02" page="// p.07" 印刷不死
 :::
-::: toc-item no="03" page="// p.14" 夜晚作为最后的阅读时区
+::: toc-item no="03" page="// p.12" 反 FEED 宣言
 :::
-::: toc-item no="APX" page="// p.18" Q&A / CTA / fn[]
+::: toc-item no="04" page="// p.17" Q&A / CTA / fn[]
 :::
 ::::
 
-# 在无人深夜，重新学习如何阅读一本书
-
-::: highlight
-论慢读在算法时代的价值
+::: announcement 重要
+// HALT / 本期停止数字分发 / 只印 200 份 / 邮购自取
 :::
 
-::: author
-撰文　何已阅
+# INK · 当所有内容都在滚动，纸是唯一不动的东西
 
-日期　2026.04.22
+::: author
+撰文　何印制
+
+日期　2026.05.16
+:::
+
+::: abstract // TL;DR
+推送不会停。算法不会停。==唯一能停下来的是你==——拿一份纸，把它握在手里，==不要让它变成 feed==。
 :::
 
 ::: intro
-我们 ==并非失去了阅读的能力==，而是失去了为阅读 ==腾出一整段连续时间== 的勇气。
+你打开手机的那一秒，有人已经替你决定了接下来看什么。这不是推荐，这是饲养。
 :::
 
-## 为什么我们失去了阅读的耐心
+## 撕掉订阅
 
-每一则推送、每一次震动，都在训练我们把注意力切成更小的碎片。我们以为自己在 **主动获取信息**，实际上是 *被信息反向喂养*。算法并不阅读，它只是分发。
+每一次「关注」都是一次授权。你授权一个算法替你筛选世界。
 
-一本书要求你交出的是 **完整的自己**——不是五分钟、不是通勤时间、也不是临睡前滑手机的余光。
+撕掉。现在。
 
-![深夜三点四十一分的书桌](https://placehold.co/800x600/1a1a1a/ebff00?text=image)
+拿一把美工刀，把你觉得"迟早会取关"的全取关了。今天。不是下周。
 
-## 慢读的三种练习
+Black Flag 在 1981 年自己印 *Damaged*，因为主厂商说"太负面，不发"。他们没有去求别的厂牌。他们印。
 
-### 纸质之必要
-
-纸张的阻力是一种保护。翻页需要手的动作，这动作本身就是对注意力的 **锚定**。
-
-::: quote-card BORGES, J.L.
-"凡我所是，皆因我读。"
+::: image-caption src="https://placehold.co/800x600/1a1a1a/ebff00?text=PRINT+OR+DIE" alt="凌晨三点印刷厂" // FIG.01 · 凌晨三点四十一分 · 油墨还没干
+照片作者自摄 // CC-BY-NC
 :::
 
-### 每日有定数
+## 印刷不死
 
-1. 每日只读 20 页
-2. 读完合眼默想
-3. 纸质笔记本记录三句话
+### 纸的物理性
 
-### 手的参与
+纸张有重量。有气味。有摩擦。这些都是**抵抗力**。
 
-- 铅笔轻划，不用荧光笔
-- 书页一角折痕做记
-- 读完抄录一段于扉页
+屏幕没有阻力，所以你从来停不下来。纸要求你**翻页**——一个物理动作，一次注意力的锚定。
 
-若以程序语言比拟：`book.read(slowly)`。
+::: quote-card AARON LAKE SMITH · *BRIG* ZINE · 2019
+印刷让文字变成物体。物体不会被 mute，不会被算法折叠，不会消失在 feed 底部。
+:::
 
-```javascript
-const reading = (book) =>
-  book.read(slowly);
+### 独立印刷的三条命
+
+1. Dischord Records：1980 年起，自建发行，从不卖给大厂
+2. Bill Daniel：*Who Is Bozo Texino?* 拍了 20 年，手工复制，邮寄给陌生人
+3. Crass：每张 EP 附赠一份 A4 折叠 zine，比唱片说的话更多
+
+用代码说：`zine.distribute(method="mail", copies=200, price="cost")`。
+
+```
+// print run 200
+cut_stencil()
+run_risograph(color="#ebff00")
+fold()
+staple()
+ship_to(address=reader.po_box)
+// done. no algorithm involved.
 ```
 
 ::: editor-note 编 · 者 · 按
-慢读并非复古姿态，而是一种对自己时间主权的重新申明。
+印一份纸。找到 200 个人。把它塞进信封。这是行动，不是比喻。我们下期只邮寄，不上线。
 :::
 
-## 夜晚作为最后的阅读时区
+## 反 FEED 宣言
 
-白日属于他人，夜晚才真正属于自己。那一盏台灯下的半小时，是这个时代里所剩不多的 ==连续时间==。
+内容不等于信息。信息不等于知识。推送不等于选择。
 
-读者若有心，[分享你今夜读的那一页](#)。
+当你在 feed 里"发现"一篇文章，那不是发现——那是投喂。
 
-::: qa-block // Q&A q="时间真的不够怎么办？"
-不是不够，是没被声明。把 30min 写进日历，它就存在了。
+分享你手上的那份纸：[#](#)
+
+::: qa-block // Q&A q="没有读者怎么办？"
+200 份已经够了。Crass 第一张单曲只卖了几百张。没有人一开始就有读者。先印，再找人。
 :::
 
 ::: info NOTE
-深夜读书，光源须在书后侧四十五度。
+risograph 印刷：单色每张成本约 0.3 元，200 份起印，最低门槛。
 :::
 
 ::: tip TIP
-配温水一盏。茶易醒脑，咖啡断连续。
+用 A4 折三折，不用装订。读完可以撕开当书签。
 :::
 
 ::: warning WARN
-手机应在别屋充电，非床头。
+不要把 zine 的 PDF 版挂到公众平台。印刷物的稀缺性是它的力量。
 :::
 
 ::: danger HALT
-忌在短片毕后翻书。
+禁止把本期内容拆条发短视频。拆了就死了。
+:::
+
+::: note SIDE NOTE
+"独立"不是美学标签——是拒绝让别人替你决定谁能看到你。
+:::
+
+::: divider
 :::
 
 ::: cta-bar like="LIKE" star="STAR ★" share="FWD →"
 :::
 
-::: qr-follow 慢读 // slow.read desc="每周四夜更新 · CC-BY-NC" kicker="// SCAN & FOLLOW"
+::: qr-follow INK // ink.press desc="双月刊 · 纸本邮寄 · CC-BY-NC" kicker="// SCAN & ORDER"
+:::
+
+::: recommend [READ_NEXT]
+- [Dischord Records 四十年：不妥协的发行模型](#)
+- [risograph 入门：200 份 zine 的完整成本清单](#)
 :::
 
 ::: footnotes
-fn[1]　参见 Postman 1985, *Amusing Ourselves to Death*, ch.3
+fn[1]　Black Flag, *Damaged*, SST Records 1981 —— 原定 MCA 发行，因内容被拒后自建 SST 独立发行
 
-fn[2]　"连续时间"之定义：不被切断超过 60s 的单一注意力窗口
+fn[2]　Aaron Lake Smith 编辑 *BRIG* zine，记录美国监狱系统；仅纸本发行，拒绝数字版
 :::
 
 ---
 
-::: colophon next="纸本之必要：论书脊与手指的记忆" issue="第 04 期 · 2026"
+::: colophon next="risograph 入门：200 份 zine 的完整成本清单" issue="第 07 期 · 2026"
 :::

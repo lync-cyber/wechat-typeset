@@ -107,6 +107,18 @@ export function validateSpec(spec: PersonaSpec): SpecValidationResult {
     })
   }
 
+  // admonitionOverrides 白名单内 id 必须是合法 AdmonitionVariantId
+  if (spec.admonitionOverrides) {
+    const allowed = new Set<string>(VARIANT_IDS.admonition as readonly string[])
+    spec.admonitionOverrides.forEach((id, i) => {
+      if (!allowed.has(id))
+        err(
+          `admonitionOverrides[${i}]`,
+          `"${id}" not in VARIANT_IDS.admonition (legal admonition variant ids)`,
+        )
+    })
+  }
+
   // motifs 硬约束
   if (spec.motifs) {
     validateMotifs(spec.motifs, err, warn)

@@ -39,6 +39,8 @@ export const spec: PersonaSpec = {
     textInverse: '#fefefe', // 反白（规避 #fff 透明化）
     border: '#d9dee5', // 边框灰蓝（融入主色家族的 1px 实线）
     code: '#0066cc', // inline code 字色 = primary（Stripe Docs 标志性）
+    preBg: '#1e2533', // 代码块深底（冷蓝深灰，与 bg 清凉白形成"夜里发光屏幕"对比）
+    preText: '#e8ebf0', // 代码块文字（亮蓝灰，在 preBg 上 ~13.4:1 对比，AAA 级）
   },
 
   // 语义四色（规范 §1.1）——note 在 tech-explainer 里是第五态，走 motifs.noteIcon + textMuted 表达
@@ -483,8 +485,6 @@ export const spec: PersonaSpec = {
     // box-shadow 用浅色 inset：深底上深 rgba 看不见，导致用户以为不能横滑；
     // 改 rgba(255,255,255,0.18) 让右侧"渐变白雾"在深底可见，提示"还能往右滑"。
     pre: {
-      'background-color': '#1e2533',
-      color: '#e8ebf0',
       'padding-top': '14px',
       'padding-right': '16px',
       'padding-bottom': '14px',
