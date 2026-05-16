@@ -80,3 +80,35 @@ describe('主题 voice · warnings / infos 报告（不阻断）', () => {
     expect(RESULTS.length).toBeGreaterThan(0)
   })
 })
+
+describe('主题 voice · 签名容器缺独有 voice 告警', () => {
+  it('signatureContainer 已登记但 spec.containers.<key> 缺失 → warning', () => {
+    // tech-explainer 派生 spec：剥掉 seeAlso 槽位以验证规则触发面。
+    // 通过克隆而非依赖某主题"恰好缺槽"——保证规则契约不被未来主题补全悄悄掩盖。
+    const techExplainer = LOADED.find((l) => l.dir === 'tech-explainer')!.spec
+    const stripped: PersonaSpec = {
+      ...techExplainer,
+      containers: Object.fromEntries(
+        Object.entries(techExplainer.containers ?? {}).filter(([k]) => k !== 'seeAlso'),
+      ),
+    }
+    const r = analyzeThemeVoice(stripped)
+    const hit = r.warnings.find((w) => /signatureContainers\.seeAlso/.test(w.path))
+    expect(hit, JSON.stringify(r.warnings.map((w) => w.path), null, 2)).toBeDefined()
+    expect(hit!.message).toMatch(/缺失或为空/)
+  })
+
+  it('variant 驱动的签名容器（如 note）缺槽时不告警', () => {
+    // note 的 wrapper CSS 由 note variant 模块拥有；空 slot 是契约同步，非缺失
+    const techExplainer = LOADED.find((l) => l.dir === 'tech-explainer')!.spec
+    const stripped: PersonaSpec = {
+      ...techExplainer,
+      containers: Object.fromEntries(
+        Object.entries(techExplainer.containers ?? {}).filter(([k]) => k !== 'note'),
+      ),
+    }
+    const r = analyzeThemeVoice(stripped)
+    const hit = r.warnings.find((w) => /signatureContainers\.note/.test(w.path))
+    expect(hit).toBeUndefined()
+  })
+})

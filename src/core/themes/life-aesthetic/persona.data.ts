@@ -501,6 +501,30 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
+  // 内联强调：暖米底 + 主色调，避开 default 的 #fff4c8 黄
+  // ============================================================
+  inline: {
+    // 暖奶油 highlight：复用 warning.soft 米黄，与 bgSoft 同体温不刺眼
+    highlight: {
+      'background-color': '#fcf1dc',
+      color: '#3a2d20',
+      padding: '0 4px',
+      'border-radius': '3px',
+    },
+    // 波浪线走 accent 暖黄
+    wavy: {
+      'text-decoration': 'underline wavy',
+      'text-decoration-color': '#efb758',
+      'text-underline-offset': '3px',
+    },
+    // 着重：primary 暖橙 + 600 字重，比 strong 更亮但仍不刺眼
+    emphasis: {
+      color: '#d98141',
+      'font-weight': '600',
+    },
+  },
+
+  // ============================================================
   // 容器视觉
   // ============================================================
   containers: {
@@ -528,6 +552,17 @@ export const spec: PersonaSpec = {
     cover: {
       margin: '0 0 32px 0',
     },
+    // §章节标题（bordered variant）：variant 接管 2px primary 底线，这里给宽松外边距
+    sectionTitle: {
+      margin: '32px 0 16px',
+      'padding-bottom': '6px',
+    },
+    // Do/Don't 对照（column-card variant 接管列卡形态）
+    compare: { margin: '24px 0' },
+    // 步骤（number-circle variant 接管圆圈数字）
+    steps: { margin: '24px 0' },
+    // 时间线：长日子记账感，留宽外边距让节奏舒缓
+    timeline: { margin: '24px 0' },
     // 提示四件套：variant 接管外壳，此处仅声明以计入 voice 覆盖
     // 各自 soft 底色由 status token 驱动，靠 variant 形状差异区分
     tip: {

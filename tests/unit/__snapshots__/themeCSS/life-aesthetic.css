@@ -229,10 +229,10 @@
 }
 
 .markdown-body mark {
-  background-color: #efb758;
-  color: #faf6f0;
-  padding: 0 3px;
-  border-radius: 2px;
+  background-color: #fcf1dc;
+  color: #3a2d20;
+  padding: 0 4px;
+  border-radius: 3px;
 }
 
 .markdown-body .wx-wavy {
@@ -290,9 +290,9 @@
 }
 
 .markdown-body .container-section-title {
-  margin: 24px 0 12px;
-  border-bottom: 2px solid #d98141;
+  margin: 32px 0 16px;
   padding-bottom: 6px;
+  border-bottom: 2px solid #d98141;
 }
 
 .markdown-body .container-masthead {
@@ -385,11 +385,11 @@
 }
 
 .markdown-body .container-compare {
-  margin: 16px 0;
+  margin: 24px 0;
 }
 
 .markdown-body .container-steps {
-  margin: 16px 0;
+  margin: 24px 0;
 }
 
 .markdown-body .container-image-caption {
@@ -403,7 +403,7 @@
 }
 
 .markdown-body .container-timeline {
-  margin: 20px 0;
+  margin: 24px 0;
 }
 
 .markdown-body .container-qa-block {

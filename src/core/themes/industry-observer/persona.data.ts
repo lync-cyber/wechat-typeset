@@ -499,6 +499,8 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
+    // side-bar variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
+    note: {},
     quoteCard: {
       'background-color': '#f5efe1',
       padding: '20px 28px',

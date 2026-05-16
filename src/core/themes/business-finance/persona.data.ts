@@ -524,6 +524,8 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
+    // box-callout variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
+    note: {},
     // 规范 §2.6 quoteCard：核心判断 —— frame-brackets + bgSoft 底 + radius 2
     quoteCard: {
       'background-color': '#f3f1ec',
