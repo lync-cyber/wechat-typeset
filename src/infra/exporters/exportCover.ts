@@ -13,20 +13,7 @@
  *   4. canvas.toBlob('image/png') → URL.createObjectURL → 下载
  */
 
-/**
- * Blob 下载（exportFile 里同名函数接收 string，这里直接接 PNG Blob，不再二次包装）。
- * 简洁起见复制一份，不引 exportFile 的 string-only API。
- */
-function downloadPngBlob(filename: string, blob: Blob): void {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
+import { triggerBlobDownload } from './exportFile'
 
 export interface ExportCoverOptions {
   /** 输出 PNG 宽度 */
@@ -81,7 +68,7 @@ export async function exportCoverImage(
 
     const blob = await canvasToBlob(canvas)
     if (!blob) return { ok: false, error: 'canvas.toBlob 返回 null（浏览器不支持 PNG 编码？）' }
-    downloadPngBlob(filename, blob)
+    triggerBlobDownload(filename, blob)
     return { ok: true }
   } catch (err) {
     return { ok: false, error: (err as Error)?.message ?? '封面导出失败' }

@@ -20,7 +20,7 @@
  */
 
 import type { ContainerRenderer, ContainerRenderContext } from '../types'
-import { escText } from '../types'
+import { escText } from '../_shared/escape'
 import { inlineCss as inline } from '../_shared/cssInline'
 
 // ============================================================

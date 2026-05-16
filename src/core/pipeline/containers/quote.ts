@@ -11,7 +11,7 @@
 
 import type { QuoteVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
-import { escText } from './types'
+import { escText } from './_shared/escape'
 import { QUOTE_VARIANTS } from '../../variants/registry'
 import { resolveVariantId } from './_shared/resolveVariant'
 

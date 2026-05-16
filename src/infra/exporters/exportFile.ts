@@ -8,9 +8,12 @@
  */
 
 import { WECHAT_PREVIEW_WIDTH } from '../../core/pipeline/constants'
+import { escAttr } from '../../core/pipeline/containers/_shared/escape'
 
-export function downloadBlob(filename: string, text: string, mime: string): void {
-  const blob = new Blob([text], { type: mime })
+export { escAttr as escapeHtml } from '../../core/pipeline/containers/_shared/escape'
+
+/** 把任意 Blob 触发为浏览器下载——封装 createObjectURL / <a>.click / revoke 的三步组合。 */
+export function triggerBlobDownload(filename: string, blob: Blob): void {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
@@ -21,6 +24,10 @@ export function downloadBlob(filename: string, text: string, mime: string): void
   URL.revokeObjectURL(url)
 }
 
+export function downloadBlob(filename: string, text: string, mime: string): void {
+  triggerBlobDownload(filename, new Blob([text], { type: mime }))
+}
+
 export interface ExportHtmlOptions {
   /** 外层 wrapper 背景色（主题 tokens.colors.bg） */
   background?: string
@@ -29,7 +36,7 @@ export interface ExportHtmlOptions {
 }
 
 export function exportHtml(filename: string, html: string, opts: ExportHtmlOptions = {}): void {
-  const title = escapeHtml(stripExt(filename))
+  const title = escAttr(stripExt(filename))
   const bg = opts.background ?? '#ffffff'
   const fg = opts.color ?? '#222222'
   const wrapped =
@@ -72,14 +79,7 @@ export async function exportImage(
           resolve({ ok: false, error: 'toBlob 返回 null' })
           return
         }
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = filename
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        URL.revokeObjectURL(url)
+        triggerBlobDownload(filename, blob)
         resolve({ ok: true })
       }, 'image/png')
     })
@@ -113,12 +113,4 @@ function resolveBackground(el: HTMLElement, hint: string | null | undefined): st
 function stripExt(filename: string): string {
   const idx = filename.lastIndexOf('.')
   return idx > 0 ? filename.slice(0, idx) : filename
-}
-
-export function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
 }

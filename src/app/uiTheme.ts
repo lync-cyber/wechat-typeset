@@ -41,8 +41,3 @@ export function useUiTheme(): void {
     safeWrite(STORAGE_KEY, mode)
   })
 }
-
-/** 二态翻转，给 Toolbar / 快捷键直接调用 */
-export function toggleUiTheme(): void {
-  uiThemeMode.value = uiThemeMode.value === 'dark' ? 'light' : 'dark'
-}

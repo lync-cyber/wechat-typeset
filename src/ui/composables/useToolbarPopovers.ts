@@ -15,45 +15,24 @@
 
 import { onBeforeUnmount, ref, watch } from 'vue'
 
+const KEYS = ['theme', 'overflow', 'outlink', 'draft'] as const
+type Key = (typeof KEYS)[number]
+
 export function useToolbarPopovers() {
-  const theme = ref(false)
-  const overflow = ref(false)
-  const outlink = ref(false)
-  const draft = ref(false)
-
-  function toggleTheme() {
-    theme.value = !theme.value
-    overflow.value = false
-    outlink.value = false
-    draft.value = false
+  const refs: Record<Key, ReturnType<typeof ref<boolean>>> = {
+    theme: ref(false),
+    overflow: ref(false),
+    outlink: ref(false),
+    draft: ref(false),
   }
 
-  function toggleOverflow() {
-    overflow.value = !overflow.value
-    theme.value = false
-    outlink.value = false
-    draft.value = false
-  }
-
-  function toggleOutlink() {
-    outlink.value = !outlink.value
-    theme.value = false
-    overflow.value = false
-    draft.value = false
-  }
-
-  function toggleDraft() {
-    draft.value = !draft.value
-    theme.value = false
-    overflow.value = false
-    outlink.value = false
+  // 互斥开关：翻转 target，其余强制关闭——保证同时只有一个 popover 在屏。
+  function toggle(target: Key) {
+    for (const k of KEYS) refs[k].value = k === target ? !refs[k].value : false
   }
 
   function closeAll() {
-    theme.value = false
-    overflow.value = false
-    outlink.value = false
-    draft.value = false
+    for (const k of KEYS) refs[k].value = false
   }
 
   function onOutside(ev: MouseEvent) {
@@ -66,15 +45,18 @@ export function useToolbarPopovers() {
     if (ev.key === 'Escape') closeAll()
   }
 
-  watch([theme, overflow, outlink, draft], ([t, o, l, d]) => {
-    if (t || o || l || d) {
-      window.addEventListener('mousedown', onOutside)
-      window.addEventListener('keydown', onEsc)
-    } else {
-      window.removeEventListener('mousedown', onOutside)
-      window.removeEventListener('keydown', onEsc)
-    }
-  })
+  watch(
+    [refs.theme, refs.overflow, refs.outlink, refs.draft],
+    ([t, o, l, d]) => {
+      if (t || o || l || d) {
+        window.addEventListener('mousedown', onOutside)
+        window.addEventListener('keydown', onEsc)
+      } else {
+        window.removeEventListener('mousedown', onOutside)
+        window.removeEventListener('keydown', onEsc)
+      }
+    },
+  )
 
   onBeforeUnmount(() => {
     window.removeEventListener('mousedown', onOutside)
@@ -82,7 +64,14 @@ export function useToolbarPopovers() {
   })
 
   return {
-    theme, overflow, outlink, draft,
-    toggleTheme, toggleOverflow, toggleOutlink, toggleDraft, closeAll,
+    theme: refs.theme,
+    overflow: refs.overflow,
+    outlink: refs.outlink,
+    draft: refs.draft,
+    toggleTheme: () => toggle('theme'),
+    toggleOverflow: () => toggle('overflow'),
+    toggleOutlink: () => toggle('outlink'),
+    toggleDraft: () => toggle('draft'),
+    closeAll,
   }
 }

@@ -11,7 +11,7 @@
  */
 
 import type { ContainerRenderer } from './types'
-import { escAttr, escText } from './types'
+import { escAttr, escText } from './_shared/escape'
 import { inlineCss as inline } from './_shared/cssInline'
 
 export const announcementContainer: ContainerRenderer = {

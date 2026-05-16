@@ -7,6 +7,7 @@
 
 import { onBeforeUnmount, ref, watch, type Ref } from 'vue'
 import { render as pipelineRender, type RenderInput, type RenderOutput } from '../../core/pipeline'
+import { escText } from '../../core/pipeline/containers/_shared/escape'
 
 export interface UseDebouncedRenderOptions {
   delayMs?: number
@@ -39,7 +40,7 @@ export function useDebouncedRender(
       // eslint-disable-next-line no-console
       console.error('[useDebouncedRender] render failed:', err)
       rendered.value = {
-        html: `<pre style="color:#c00;padding:16px;white-space:pre-wrap">渲染失败：${escapeHtml(String(err))}</pre>`,
+        html: `<pre style="color:#c00;padding:16px;white-space:pre-wrap">渲染失败：${escText(String(err))}</pre>`,
         wordCount: 0,
         readingTime: 1,
         patchLog: { entries: [], total: 0 },
@@ -84,8 +85,4 @@ export function useDebouncedRender(
   })
 
   return { rendered, flush }
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }

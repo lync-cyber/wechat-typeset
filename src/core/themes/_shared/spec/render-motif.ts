@@ -14,7 +14,7 @@ import type {
 } from './types'
 
 /**
- * 本地 escAttr / escText：为何不复用 pipeline/containers/types.ts 的同名函数？
+ * 本地 escAttr / escText：为何不复用 pipeline/containers/_shared/escape.ts 的同名函数？
  * —— 这里的 escAttr 接 `string | number`（motif 的 x / y / width / stroke-width 常是数值），
  * 直接 number → String 走短路。pipeline 侧只处理 HTML 字符串属性，类型窄化更严格。
  * 7 行复制换来的是跨模块零依赖与 number 短路，权衡后保持分离。

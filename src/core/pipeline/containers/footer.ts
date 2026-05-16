@@ -9,7 +9,7 @@
  */
 
 import type { ContainerRenderer } from './types'
-import { escAttr, escText } from './types'
+import { escAttr, escText } from './_shared/escape'
 import { encodeQrSvg } from '../qr/encodeQrSvg'
 
 // 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）

@@ -10,7 +10,7 @@
 
 import type { SectionTitleVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
-import { escText } from './types'
+import { escText } from './_shared/escape'
 import { SECTION_TITLE_VARIANTS } from '../../variants/registry'
 import { resolveVariantId } from './_shared/resolveVariant'
 
