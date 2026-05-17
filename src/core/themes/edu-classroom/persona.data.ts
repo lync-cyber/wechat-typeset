@@ -610,13 +610,6 @@ export const spec: PersonaSpec = {
       'text-align': 'center',
     },
 
-    calloutGroup: {
-      margin: '20px 0',
-      'border-radius': '14px',
-      overflow: 'hidden',
-      border: '1px solid #c8d5c9',
-    },
-
     // dialogue：问答课堂核心，轻底色区分问与答
     dialogue: {
       margin: '22px 0',

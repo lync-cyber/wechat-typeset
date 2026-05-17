@@ -40,6 +40,10 @@ export const spec: PersonaSpec = {
     textInverse: '#262019', // = bg
     border: '#4a4034', // 暖深棕灰
     code: '#c89759', // = primary（签名：inline code 与正文同家族）
+    // note side-bar 差异化：1px 琥珀 dashed（manpage / VT220 注释行的 ` --` 笔触）
+    noteBorder: '#c89759',
+    noteBorderStyle: 'dashed',
+    noteBorderWidth: 1,
   },
 
   // 语义四色（规范 §1.1）——终端语境里**不走交通灯**：
@@ -563,13 +567,11 @@ export const spec: PersonaSpec = {
       'background-color': 'transparent',
       'border-radius': '0',
     },
-    // note = manpage aside：左 1px dashed primary + 透明底，与正文同字色 textMuted
+    // note = manpage aside：左条由 side-bar variant 自 noteBorder* tokens 注入（1px dashed primary）
     // 区别于 admonition 的"边框 + 状态色" —— note 是"工程附注"，不是状态信号
     note: {
       __reset: true,
       'background-color': 'transparent',
-      'border-left': '1px dashed #c89759',
-      padding: '4px 0 4px 16px',
       margin: '20px 0',
       'border-radius': '0',
     },

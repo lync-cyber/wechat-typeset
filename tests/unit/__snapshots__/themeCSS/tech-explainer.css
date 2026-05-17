@@ -322,10 +322,6 @@
   border-radius: 3px;
 }
 
-.markdown-body .container-callout-group {
-  margin: 20px 0;
-}
-
 .markdown-body .container-note {
   background-color: transparent;
   border-top: 1px solid #d9dee5;

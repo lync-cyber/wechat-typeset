@@ -125,14 +125,14 @@ export function makeCoverPlaceholder(opts: CoverBuilderOptions): MotifShape {
   const swatchY = 580
   const swatchSize = 14
   const swatchGap = 6
-  const swatchKeys: Array<keyof Palette> = [
+  const swatchKeys = [
     'primary',
     'secondary',
     'accent',
     'bgSoft',
     'border',
     'textMuted',
-  ]
+  ] as const
   swatchKeys.forEach((key, i) => {
     primitives.push({
       type: 'rect',

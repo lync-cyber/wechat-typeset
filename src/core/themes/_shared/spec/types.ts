@@ -82,6 +82,21 @@ export interface Palette {
    * 不声明 = 走通用 border。
    */
   noteBorder?: string
+  /**
+   * note · side-bar variant 左侧标线**线型**。不声明 = 'solid'。
+   *
+   * 6 个共用 side-bar 的主题靠此字段差异化（同骨架不同笔触）：
+   *   - solid（默认）: 中性补注
+   *   - dashed: 工程/手记式
+   *   - double: 公文/学术显眼
+   *   - dotted: 慢调散文/夜间柔光
+   */
+  noteBorderStyle?: 'solid' | 'dashed' | 'double' | 'dotted'
+  /**
+   * note · side-bar variant 左侧标线**线宽**（px）。不声明 = 2。
+   * 与 noteBorderStyle 协同：double 风格自动 ≥ 3px 才能看到双线。
+   */
+  noteBorderWidth?: number
 }
 
 export type StatusKey = 'tip' | 'info' | 'warning' | 'danger'
@@ -358,7 +373,6 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'sectionTag',
   'byline',
   'editorialHeader',
-  'calloutGroup',
   'toc',
   'kpiDashboard',
   'barChart',

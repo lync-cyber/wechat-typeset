@@ -341,13 +341,6 @@
   letter-spacing: 0.05em;
 }
 
-.markdown-body .container-callout-group {
-  border-top: 1px solid #000000;
-  border-bottom: 1px solid #000000;
-  padding: 0;
-  margin: 24px 0;
-}
-
 .markdown-body .container-note {
   background-color: transparent;
   margin: 16px 0;

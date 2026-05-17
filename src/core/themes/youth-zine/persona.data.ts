@@ -47,6 +47,10 @@ export const spec: PersonaSpec = {
     preText: '#d8d8d4',
     highlightBg: '#ffd54f',
     codeBg: '#fce4ec',
+    // note side-bar 差异化：3px 粉色实色条（青年感招贴语言，比成人主题的 2px 更醒目）
+    noteBorder: '#e91e63',
+    noteBorderStyle: 'solid',
+    noteBorderWidth: 3,
   },
 
   // 语义四色——全部 accent/soft 对比 ≥ 4.5:1（已自查）
@@ -528,12 +532,12 @@ export const spec: PersonaSpec = {
     danger: { margin: '16px 0' },
 
     // note：侧竖条补注，低调不抢色
+    // 左条由 side-bar variant 自 noteBorder*=粉色 3px solid 注入；此处只携带 bg/padding/字号等"非边线"voice
     note: {
       __reset: true,
       'background-color': '#fdf6f8',
       padding: '10px 14px',
       margin: '16px 0',
-      'border-left': '3px solid #e0b4c4',
       'font-size': '13px',
       'line-height': '1.75',
       color: '#6d4c5e',
@@ -660,14 +664,6 @@ export const spec: PersonaSpec = {
       margin: '22px 0',
       'padding-left': '8px',
       'border-left': '3px solid #e91e63',
-    },
-
-    // calloutGroup：四态联表外框
-    calloutGroup: {
-      'border-radius': '14px',
-      border: '1px solid #e0b4c4',
-      overflow: 'hidden',
-      margin: '22px 0',
     },
 
     // abstract：tl;dr 摘要

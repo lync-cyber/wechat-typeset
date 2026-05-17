@@ -76,6 +76,8 @@ const PALETTE_SCHEMA: JSONSchema7 = {
     codeBg: { type: 'string', pattern: HEX_PATTERN },
     quoteCardBg: { type: 'string', pattern: HEX_PATTERN },
     noteBorder: { type: 'string', pattern: HEX_PATTERN },
+    noteBorderStyle: { type: 'string', enum: ['solid', 'dashed', 'double', 'dotted'] },
+    noteBorderWidth: { type: 'integer', minimum: 1, maximum: 8 },
   },
   additionalProperties: false,
 }

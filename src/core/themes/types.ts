@@ -72,6 +72,13 @@ export interface ThemeTokens {
     quoteCardBg?: string
     /** note 容器的边线 / 分隔线色（常用 dashed）。例：default '#c8ccd4'。 */
     noteBorder?: string
+    /**
+     * note · side-bar variant 左侧标线线型。不声明 = 'solid'。
+     * 6 主题共用 side-bar 时靠此字段做"同骨架不同笔触"差异化。
+     */
+    noteBorderStyle?: 'solid' | 'dashed' | 'double' | 'dotted'
+    /** note · side-bar variant 左侧标线宽度（px）。不声明 = 2；double 风格建议 ≥ 3。 */
+    noteBorderWidth?: number
   }
   typography: {
     baseSize: number
@@ -191,11 +198,6 @@ export interface ThemeContainers {
   imageCaption: CSSObject
   /** 时间线：左侧年份 + 右侧事件的时序列表。 */
   timeline: CSSObject
-  /**
-   * 四态 callout 联表外框（callout-group）。承担"上/下/左/右 hairline"，
-   * 子项 (tip/warning/info/danger) 在内串联。设计稿 multi-callout 母本。
-   */
-  calloutGroup: CSSObject
   /** 文首 tl;dr 摘要块（signature 容器） */
   abstract: CSSObject
   /** 大数字 + 说明（signature 容器） */

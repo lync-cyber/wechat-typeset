@@ -337,13 +337,6 @@
   border-radius: 0 10px 10px 0;
 }
 
-.markdown-body .container-callout-group {
-  margin: 20px 0;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid #c8d5c9;
-}
-
 .markdown-body .container-note {
   background-color: transparent;
   border-top: 1px dashed #c8d5c9;

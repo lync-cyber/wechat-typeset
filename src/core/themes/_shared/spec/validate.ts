@@ -58,12 +58,22 @@ export function validateSpec(spec: PersonaSpec): SpecValidationResult {
   if (!spec.description) err('description', 'description is required')
   if (!spec.audience) err('audience', 'audience is required')
 
-  // palette hex
+  // palette hex（noteBorderStyle / noteBorderWidth 是非颜色结构槽，单列校验）
   if (!spec.palette) {
     err('palette', 'palette is required')
   } else {
+    const NON_HEX_KEYS = new Set(['noteBorderStyle', 'noteBorderWidth'])
     for (const [k, v] of Object.entries(spec.palette)) {
+      if (NON_HEX_KEYS.has(k)) continue
       if (!isHex(v)) err(`palette.${k}`, `"${v}" is not a valid hex color`)
+    }
+    const style = spec.palette.noteBorderStyle
+    if (style !== undefined && !['solid', 'dashed', 'double', 'dotted'].includes(style)) {
+      err('palette.noteBorderStyle', `"${style}" not in {solid|dashed|double|dotted}`)
+    }
+    const width = spec.palette.noteBorderWidth
+    if (width !== undefined && (!Number.isInteger(width) || width < 1 || width > 8)) {
+      err('palette.noteBorderWidth', `${width} must be integer in [1, 8]`)
     }
   }
 

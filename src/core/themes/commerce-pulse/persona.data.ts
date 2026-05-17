@@ -585,12 +585,6 @@ export const spec: PersonaSpec = {
       padding: '12px 14px 12px 18px',
       'border-radius': '0 8px 8px 0',
     },
-    calloutGroup: {
-      border: '1px solid #e0d0d0',
-      'border-radius': '8px',
-      margin: '18px 0',
-      overflow: 'hidden',
-    },
     abstract: {
       __reset: true,
       'border-left': '4px solid #c4310e',

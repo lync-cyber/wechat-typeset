@@ -644,7 +644,6 @@ export const spec: PersonaSpec = {
     kpiDashboard: { margin: '20px 0' },
     barChart: { margin: '20px 0' },
     qaBlock: { margin: '20px 0', 'background-color': 'transparent' },
-    calloutGroup: { margin: '20px 0' },
     keyNumber: { 'background-color': '#f5f3ec', 'border-top': '2px solid #1c3a6e', padding: '12px 14px', margin: '16px 0', 'border-radius': '0' },
   },
 

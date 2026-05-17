@@ -56,7 +56,6 @@ import {
   qaBlockContainer,
   footnotesContainer,
   colophonContainer,
-  calloutGroupContainer,
 } from './databrief'
 import { pullQuoteContainer } from './pull-quote'
 import { tableCardContainer, tableRowContainer } from './table-card'
@@ -124,7 +123,6 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   'qa-block': qaBlockContainer,
   footnotes: footnotesContainer,
   colophon: colophonContainer,
-  'callout-group': calloutGroupContainer,
   'pull-quote': pullQuoteContainer,
   'table-card': tableCardContainer,
   'table-row': tableRowContainer,

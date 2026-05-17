@@ -59,6 +59,10 @@ export const spec: PersonaSpec = {
     textInverse: '#0e1a2b', // 反白 = bg（橙底胶囊上的深色字）
     border: '#4a6080', // 暗夜冷蓝灰分割线（footer 收束色）
     code: '#d97a3c', // inline code 橙字
+    // note side-bar 差异化：老金 dotted 点线，深夜电台"低频小播报"的柔光质感
+    noteBorder: '#a89070',
+    noteBorderStyle: 'dotted',
+    noteBorderWidth: 2,
   },
 
   // 语义四色：对位电台广播母语 cue / b-side / static / off-air —— 与设计稿

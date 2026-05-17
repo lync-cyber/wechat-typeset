@@ -24,13 +24,13 @@
 | `literary-humanism` | 人文札记 | 人文非虚构（散文 / 书评 / 长评 / 札记） | `marginalia` | `magazine-dropcap` | `timeline-dot` | `flower` | `inline-card` | `dotted-margin` | imageCaption、authorBio |
 | `people-story` | 人物特稿 | 人物特稿 / 人文非虚构 / 杂志 Profile | `magazine-pull` | `magazine-dropcap` | `timeline-dot` | `glyph` | `inline-card` | `minimal-callout` | cover、author、intro、quoteCard、sectionTitle、footerCTA、recommend、qrcode、imageCaption、authorBio、announcement |
 | `editorial-mook` | 编辑刊 | 慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物 | `mook-tag` | `editorial-block` | `timeline-dot` | `glyph` | `inline-card` | `dotted-margin` | abstract、masthead、toc、qaBlock、footnotes、colophon、imageCaption、authorBio、announcement |
-| `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `news-row` | `tilted-sticker` | `split-row` | `dots` | `terminal-frame` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、footnotes、colophon、imageCaption、authorBio、timeline |
+| `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `pill-tag` | `tilted-sticker` | `split-row` | `dots` | `terminal-frame` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、footnotes、colophon、imageCaption、authorBio、timeline |
 | `life-aesthetic` | 慢生活 | 生活写作 / 非虚构随笔 | `bubble-organic` | `magazine-dropcap` | `step-card` | `flower` | `inline-card` | `dotted-margin` | imageCaption、authorBio |
 | `edu-classroom` | 教室课堂 | K-12 教育 / 亲子科普 / 童书推荐 / 兴趣启蒙 / 知识自习 / 家长读物 | `card-shadow` | `classic` | `number-circle` | `wave` | `bare` | `hanging-indent` | steps、tip、info、recommend、dialogue、announcement、intro |
 | `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `sidenote-latex` | `frame-brackets` | `timeline-dot` | `dots` | `line-numbers` | `box-callout` | abstract |
 | `official-gazette` | 公文公报 | 政务通告 / 企业公告 / 监管声明 / 招股说明书 / 严肃通报 / 公开信 | `top-bottom-rule` | `frame-brackets` | `number-circle` | `rule` | `bare` | `editorial-stripe` | announcement、footnotes、sectionTitle、colophon、byline |
-| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `editorial-block` | `split-row` | `seal-mark` | `inline-card` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、footnotes、calloutGroup、colophon、barChart、imageCaption、announcement |
-| `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `news-row` | `tilted-sticker` | `split-row` | `flower` | `inline-card` | `side-bar` | masthead、toc、qaBlock、footnotes、colophon、imageCaption、announcement |
+| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `editorial-block` | `split-row` | `seal-mark` | `inline-card` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、footnotes、colophon、barChart、imageCaption、announcement |
+| `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `slab-corner` | `tilted-sticker` | `split-row` | `flower` | `inline-card` | `side-bar` | masthead、toc、qaBlock、footnotes、colophon、imageCaption、announcement |
 | `youth-zine` | 青年潮志 | 青年文化 / Gen-Z / 小红书博主 / B 站 UP 主 / 潮流安利 / 二次元周边 | `pill-tag` | `column-rule` | `number-circle` | `dots` | `bare` | `side-bar` | intro、highlight、pullQuote、gallery、dialogue、recommend、tip、warning、info、danger、announcement |
 
 <!-- generated:personas-table:end -->
@@ -143,7 +143,7 @@
 
 **描述**：深夜蓝 + 暖米白 + 橙色唱针 · 03:41 AM 黑胶播客慢读感
 
-**视觉签名**：admonition=`news-row` · quote=`tilted-sticker` · steps=`split-row` · divider=`dots` · codeBlock=`terminal-frame` · note=`side-bar`
+**视觉签名**：admonition=`pill-tag` · quote=`tilted-sticker` · steps=`split-row` · divider=`dots` · codeBlock=`terminal-frame` · note=`side-bar`
 
 **signatureContainers**：`intro`、`cover`、`author`、`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`authorBio`、`timeline`
 
@@ -195,7 +195,7 @@
 
 **视觉签名**：admonition=`news-underline` · quote=`editorial-block` · steps=`split-row` · divider=`seal-mark` · codeBlock=`inline-card` · note=`side-bar`
 
-**signatureContainers**：`abstract`、`sectionTag`、`editorialHeader`、`byline`、`toc`、`keyNumber`、`qaBlock`、`footnotes`、`calloutGroup`、`colophon`、`barChart`、`imageCaption`、`announcement`
+**signatureContainers**：`abstract`、`sectionTag`、`editorialHeader`、`byline`、`toc`、`keyNumber`、`qaBlock`、`footnotes`、`colophon`、`barChart`、`imageCaption`、`announcement`
 
 ### brutalist · 粗野主义报刊
 
@@ -203,7 +203,7 @@
 
 **描述**：近黑底 + 荧光黄 + 直角硬边：punk-zine / 终端 / 凌晨三点印刷厂
 
-**视觉签名**：admonition=`news-row` · quote=`tilted-sticker` · steps=`split-row` · divider=`flower` · codeBlock=`inline-card` · note=`side-bar`
+**视觉签名**：admonition=`slab-corner` · quote=`tilted-sticker` · steps=`split-row` · divider=`flower` · codeBlock=`inline-card` · note=`side-bar`
 
 **signatureContainers**：`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`announcement`
 

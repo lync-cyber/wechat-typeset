@@ -49,6 +49,10 @@ export const spec: PersonaSpec = {
     textInverse: '#0a0a0a',
     border: '#f0f0f0', // 双粗线刊头 / 横分割线（与 text 同源，强对比）
     code: '#ebff00', // inline code 黄字
+    // note side-bar 差异化：黄色虚线左条（与暗底直角语言一致，零圆角硬边气质）
+    noteBorder: '#ebff00',
+    noteBorderStyle: 'dashed',
+    noteBorderWidth: 2,
   },
 
   // 语义四色（设计稿 multi-callout 四联词表 NOTE / TIP / WARN / HALT）
@@ -468,12 +472,10 @@ export const spec: PersonaSpec = {
     info: {},
     danger: {},
 
-    // note：左 2px 黄色虚线 + 缩进（"批注"语义,与 admonition 区别）
+    // note：side-bar variant 自取 noteBorder* tokens（黄色 2px dashed），此处只补 reset
     note: {
       __reset: true,
       'background-color': 'transparent',
-      'border-left': '2px dashed #ebff00',
-      padding: '4px 0 4px 14px',
       margin: '16px 0',
       'border-radius': '0',
     },

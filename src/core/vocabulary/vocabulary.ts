@@ -37,7 +37,7 @@ import { VARIANT_IDS } from '../themes/types'
  */
 export type ContainerCategory =
   | 'structure' // 骨架：intro / cover / author / section-title / author-bio / masthead / byline / editorial-header
-  | 'admonition' // 五态提示：tip / warning / info / danger / note / announcement / callout-group
+  | 'admonition' // 五态提示：tip / warning / info / danger / note / announcement
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
   | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
@@ -395,20 +395,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: 'danger：高风险警告／错误示范。',
     example: '::: danger 警告\n内容 …\n:::\n',
-  },
-  {
-    name: 'callout-group',
-    styleKey: 'calloutGroup',
-    category: 'admonition',
-    pack: 'pack:editorial',
-    nestable: true,
-    children: ['tip', 'warning', 'info', 'danger'],
-    fenceLength: 4,
-    description:
-      '四态 callout 联表：外框承担"上/下/左/右 hairline"，子项 (tip/warning/info/danger) 在内串联。' +
-      '设计稿 multi-callout 母本——配合 admonition variant=news-row 用最佳。外层用 4 个冒号。',
-    example:
-      ':::: callout-group\n::: info INFO variant=news-row\n说明一。\n:::\n::: tip TIP variant=news-row\n小贴士。\n:::\n::::\n',
   },
   {
     name: 'note',

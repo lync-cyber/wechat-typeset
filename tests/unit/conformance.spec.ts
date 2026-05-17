@@ -176,9 +176,14 @@ describe('B. spec → Gallery 投影保真', () => {
   })
 
   it('gallery 含每份 spec 的 11 个 palette hex', () => {
+    // palette 现支持非颜色键（noteBorderStyle 枚举字符串 / noteBorderWidth 整数）；
+    // gallery 仅展示色板 swatch，这里仅断言"颜色键"全部出现在 HTML。
+    const isHex = (v: unknown): v is string =>
+      typeof v === 'string' && /^#[0-9a-f]{3,8}$/i.test(v)
     for (const { spec, dir } of eachSpec()) {
-      for (const [key, hex] of Object.entries(spec.palette)) {
-        expect(HTML, `${dir}.palette.${key}=${hex}`).toContain(hex)
+      for (const [key, value] of Object.entries(spec.palette)) {
+        if (!isHex(value)) continue
+        expect(HTML, `${dir}.palette.${key}=${value}`).toContain(value)
       }
     }
   })

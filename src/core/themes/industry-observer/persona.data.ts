@@ -44,6 +44,10 @@ export const spec: PersonaSpec = {
     textInverse: '#fefefe', // 反白：胶囊字色，规避 #fff 平台透明化
     border: '#e0d6c0', // 米纸边：暖灰，与米底同族
     code: '#24364f', // inline code 字色 = primary（observer 稿里 code 极少，冷静即可）
+    // note side-bar 差异化：晚点橙金 double 双线，archival 卡纸的"双栏栏注"质感
+    noteBorder: '#b86f2a',
+    noteBorderStyle: 'double',
+    noteBorderWidth: 4,
   },
 
   // 语义四色（规范 §1.1）：色相均匀分布在色轮，newsletter 胶囊语言本就轻

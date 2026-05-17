@@ -60,6 +60,10 @@ export const spec: PersonaSpec = {
     code: '#000000', // inline code 黑字
     textCaption: '#333333', // 脚注 / 方法论小字（比 text 弱、比 textMuted 重的过渡灰）
     highlightBg: '#ffeb3c', // Swiss 设计黄高亮（inline `==xx==` 的招牌饱和色）
+    // note side-bar 差异化：1px 黑 hairline 实线（直角栅格的"最细分隔"系统语言）
+    noteBorder: '#000000',
+    noteBorderStyle: 'solid',
+    noteBorderWidth: 1,
   },
 
   // 语义四色（与设计稿 multi-callout INFO/TIP/WARN/STOP 一致，accent 加深以守 WCAG AA）
@@ -229,7 +233,6 @@ export const spec: PersonaSpec = {
     'keyNumber', // 期号横幅（Nº04 全幅红，attrs.meta 切到双栏 issue-banner）
     'qaBlock', // 读者 Q&A
     'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 承担"NOTES"长文献列表）
-    'calloutGroup', // 四态 callout 联表外框（multi-callout 母本）
     'colophon', // 刊物收束栏（NEXT · VOL 双栏）
     'barChart', // 条形图（FIG.01 按年龄）
     'imageCaption', // 图注（居左 monospace 极小字 + letter-spacing）
@@ -646,15 +649,6 @@ export const spec: PersonaSpec = {
       __reset: true,
       margin: '0 0 14px 0',
       padding: '0',
-    },
-    // callout-group：四态 callout 联表外框。上下 1px 黑实线 + 无 padding,
-    // 子项 (news-row variant) 自带 border-left:3px 与左对齐徽章——视觉就是设计稿 multi-callout
-    calloutGroup: {
-      __reset: true,
-      'border-top': '1px solid #000000',
-      'border-bottom': '1px solid #000000',
-      padding: '0',
-      margin: '24px 0',
     },
     // toc：设计稿"双栏压满 · INDEX 标签 + 带页码"; toc-item renderer 固定 30px/1fr/auto 三栏
     // 这里 wrapper 走 hairline 上下分隔 + 直角硬边

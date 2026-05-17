@@ -357,18 +357,10 @@
   margin: 16px 0;
 }
 
-.markdown-body .container-callout-group {
-  border-radius: 14px;
-  border: 1px solid #e0b4c4;
-  overflow: hidden;
-  margin: 22px 0;
-}
-
 .markdown-body .container-note {
   background-color: #fdf6f8;
   padding: 10px 14px;
   margin: 16px 0;
-  border-left: 3px solid #e0b4c4;
   font-size: 13px;
   line-height: 1.75;
   color: #6d4c5e;
