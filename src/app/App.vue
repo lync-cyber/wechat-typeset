@@ -25,7 +25,7 @@ import { useExportActions } from '../ui/composables/useExportActions'
 import { useKeyboardShortcuts } from '../ui/composables/useKeyboardShortcuts'
 import { useToolbarCollapse } from '../ui/composables/useToolbarCollapse'
 import { getSample } from '../domain/samples'
-import { safeRead, safeWrite } from '../infra/storage/_kv'
+import { safeRead, safeRemove, safeWrite } from '../infra/storage/_kv'
 import { createDraft } from '../infra/storage/drafts'
 import { md, baseThemeId, hoverThemeId, customTheme, mobileTab, activeTheme, editorWidth } from './state'
 import { uiThemeMode } from './uiTheme'
@@ -113,6 +113,17 @@ const onboardDismissed = ref<boolean>(safeRead(ONBOARD_STORAGE_KEY) === '1')
 function dismissOnboard() {
   onboardDismissed.value = true
   safeWrite(ONBOARD_STORAGE_KEY, '1')
+}
+/**
+ * "重新打开新手引导" 入口（HelpPanel 触发）：清持久化 + 关闭帮助 + 关闭其它浮层，
+ * 让 showOnboard computed 自动重新为 true。
+ */
+function restartOnboard() {
+  safeRemove(ONBOARD_STORAGE_KEY)
+  onboardDismissed.value = false
+  ui.helpOpen = false
+  ui.commandOpen = false
+  closeAll()
 }
 const showOnboard = computed(() =>
   !onboardDismissed.value && !ui.commandOpen && !ui.helpOpen
@@ -301,6 +312,7 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
         :commands="commands"
         @close="ui.helpOpen = false"
         @insert="handleInsertTemplate"
+        @restart-onboard="restartOnboard"
       />
     </ErrorBoundary>
     <UndoToast v-if="undo" :message="undo.message" @undo="onUndo" @expire="onUndoExpire" />

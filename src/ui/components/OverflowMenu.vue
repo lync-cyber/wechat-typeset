@@ -40,8 +40,9 @@ function fireAction(cmd: ToolbarAction) {
 
 <template>
   <!--
-    四段式菜单（命令面板 / 快捷键与帮助 / 主题编辑器 / 外链处理 已迁出，不再重复）：
-      1. 抽屉：草稿 / 组件 / 配色 / 发文清单（主题编辑器走主题 popover 底部入口）
+    四段式菜单（命令面板 / 主题编辑器 / 外链处理 仍在工具栏直达；本菜单容纳低频项）：
+      1. 抽屉 / 浮层：草稿 / 组件 / 配色 / 发文清单 / 快捷键与帮助
+         （主题编辑器走主题 popover 底部入口）
       2. 内容操作：故事样张 / 组件参考 / 全功能展示 / 保存选区 / 中文修复
       3. 导出：HTML / Markdown / 长图 / 分享链接（外链处理已前置到"一键复制"split-button）
       4. 危险：清空正文（actions.handleClear 已走 UndoToast 可撤销）
@@ -59,6 +60,10 @@ function fireAction(cmd: ToolbarAction) {
     </button>
     <button class="menu-item" @click="fireToggle('checklist')">
       <span>{{ drawer.checklist ? '关闭发文清单' : '发文清单' }}</span>
+    </button>
+    <button class="menu-item" @click="fireAction('openHelp')">
+      <span>快捷键与帮助</span>
+      <span class="menu-kbd">?</span>
     </button>
     <div class="menu-sep" />
     <div class="menu-section-head">内容操作</div>

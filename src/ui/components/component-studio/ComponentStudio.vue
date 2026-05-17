@@ -2,14 +2,13 @@
 /**
  * ComponentStudio —— 新建 / 编辑 / 派生组件的 split view。
  *
+ * 由 ComponentPalette teleport 到 body 后渲染为全屏工作台（90vw×90vh），
+ * ≥900px 视口左右两栏：左侧表单 + 高级模式编辑，右侧大尺寸预览；窄屏自动
+ * 退化为单列纵向堆叠。
+ *
  * 三种 init.mode 决定保存路径:
  *   - new / derive  → mutations.createComponent (新落 storage)
  *   - edit          → mutations.updateComponent (按 id 更新)
- *
- * 两种 layout：
- *   - 'drawer'：340px 右抽屉内垂直堆叠（向后兼容；移动端/小屏走这条）
- *   - 'modal'：被 ComponentPalette teleport 到 body 后的全屏工作台，
- *      左右两栏 split——左侧表单 + 高级模式编辑，右侧大尺寸预览
  *
  * 校验: ComponentEditor 实时跑 validateSnippet 显示 diagnostics,
  * 保存时统一走 mutations,失败 inline error 显示在底部 actions 旁。
@@ -51,21 +50,10 @@ export interface StudioInit {
   source?: ComponentEntry
 }
 
-/**
- * 渲染上下文：
- *   - 'drawer'：内嵌在 340px 抽屉里，垂直堆叠
- *   - 'modal'：teleport 到 body 的全屏工作台，左右两栏 split
- */
-export type StudioLayout = 'drawer' | 'modal'
-
-const props = withDefaults(
-  defineProps<{
-    init: StudioInit
-    theme: Theme
-    layout?: StudioLayout
-  }>(),
-  { layout: 'drawer' },
-)
+const props = defineProps<{
+  init: StudioInit
+  theme: Theme
+}>()
 
 const emit = defineEmits<{
   /** 保存成功;参数是新落地或更新后的 entry id */
@@ -276,12 +264,8 @@ defineExpose({ attemptCancel: onCancel })
 </script>
 
 <template>
-  <section
-    class="studio"
-    :class="`studio--${props.layout}`"
-    aria-label="组件 Studio"
-  >
-    <header v-if="props.layout === 'modal'" class="modal-head">
+  <section class="studio" aria-label="组件 Studio">
+    <header class="modal-head">
       <span class="modal-head-label">{{ headerLabel }}</span>
       <span v-if="dirty" class="modal-head-dirty" aria-label="有未保存改动">·已改动</span>
       <button
@@ -292,7 +276,6 @@ defineExpose({ attemptCancel: onCancel })
         @click="onCancel"
       >×</button>
     </header>
-    <div v-else class="mode-banner">{{ headerLabel }}</div>
 
     <div class="content">
       <div class="col col-editor">
@@ -336,61 +319,37 @@ defineExpose({ attemptCancel: onCancel })
 </template>
 
 <style scoped>
+/* ComponentStudio 永远以全屏 modal 形态渲染（由 ComponentPalette teleport 到 body）。
+ * ≥900px 视口左右两栏 grid；窄屏单列纵向。 */
 .studio {
   flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-
-/* ── drawer 模式（向后兼容）：垂直堆叠，与改版前一致 ────────────────────────── */
-.studio--drawer .content {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-}
-.studio--drawer .col-editor,
-.studio--drawer .col-preview {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-.studio--drawer .col-preview {
-  padding: 0 var(--sp-4) var(--sp-4);
-  min-height: 240px;
-}
-
-/* ── modal 模式：左右两栏 split ──────────────────────────────────────────── *
- * 窄屏（< 900px）退回单列纵向堆叠，避免 380+420 最小宽度被挤溢出；
- * 一旦宽度允许，2-col grid 让编辑器和预览同屏可见。 */
-.studio--modal {
-  width: 100%;
-  height: 100%;
-}
-.studio--modal .content {
+.content {
   flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
-.studio--modal .col-editor,
-.studio--modal .col-preview {
+.col-editor,
+.col-preview {
   background: var(--surface-raised);
   min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
 }
-.studio--modal .col-preview {
+.col-preview {
   padding: var(--sp-4);
   background: var(--surface);
 }
-.studio--modal .preview-wrap {
+.preview-wrap {
   flex: 1 1 auto;
   min-height: 280px;
   display: flex;
@@ -398,34 +357,23 @@ defineExpose({ attemptCancel: onCancel })
 }
 
 @media (min-width: 900px) {
-  .studio--modal .content {
+  .content {
     display: grid;
     grid-template-columns: minmax(380px, 1fr) minmax(420px, 1.4fr);
     gap: 1px;
     background: var(--border);
     overflow: hidden;
   }
-  .studio--modal .col-editor,
-  .studio--modal .col-preview {
+  .col-editor,
+  .col-preview {
     overflow-y: auto;
   }
-  .studio--modal .preview-wrap {
+  .preview-wrap {
     min-height: 0;
   }
 }
 
-/* drawer 模式下用的小 banner */
-.mode-banner {
-  flex: 0 0 auto;
-  padding: var(--sp-3) var(--sp-4);
-  font-size: var(--fs-12);
-  letter-spacing: var(--ls-wide);
-  color: var(--text-muted);
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-}
-
-/* modal 模式 header：左侧标签 + 右侧关闭 × */
+/* Studio 顶栏：左侧标题 + dirty 提示，右侧关闭 × */
 .modal-head {
   flex: 0 0 auto;
   display: flex;

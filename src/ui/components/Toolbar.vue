@@ -251,43 +251,8 @@ defineExpose({
           <span class="saving-text">{{ props.savingLabel }}</span>
         </span>
       </div>
-      <!-- 保存错误的独立角标：≤900px 时 .stats 整块隐藏，但 error 态必须可见。
-       * pingTransient 的 4 秒提示太短，作者关掉页面可能就丢稿——给个常驻的
-       * 红色 pill 直到下次保存成功（savingState 自然回归 saved/idle）。 -->
-      <button
-        v-if="props.savingState === 'error'"
-        class="saving-error-pill"
-        type="button"
-        :title="props.savingLabel || '草稿写盘失败 · 存储已满'"
-        :aria-label="props.savingLabel || '草稿写盘失败 · 存储已满'"
-        @click="emit('toggle', 'drafts')"
-      >
-        <span class="saving-error-glyph" aria-hidden="true">!</span>
-        <span class="saving-error-text">写盘失败</span>
-      </button>
-
-      <button
-        class="btn btn-ghost btn-checklist"
-        :class="{ active: props.drawer.checklist }"
-        title="发文清单：发文前自检"
-        aria-label="发文清单"
-        @click="emit('toggle', 'checklist')"
-      >
-        <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="8" cy="8" r="6.5" />
-          <polyline points="5 8.2 7 10.2 11 6" />
-        </svg>
-        <span class="btn-checklist-label">发文清单</span>
-      </button>
       <button class="btn btn-ghost icon btn-cmd" :title="`命令面板  ${modKey}+K`" :aria-label="`命令面板 ${modKey}+K`" @click="emit('action', 'openCommand')">
         <span class="kbd">{{ modKey }}K</span>
-      </button>
-      <button class="btn btn-ghost icon btn-help" title="快捷键与帮助  ?" aria-label="快捷键与帮助" @click="emit('action', 'openHelp')">
-        <svg class="btn-icon-svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="8" cy="8" r="6.5" />
-          <path d="M6.1 6.2a1.9 1.9 0 1 1 2.85 1.65c-.55.32-.95.8-.95 1.45v.3" />
-          <circle cx="8" cy="11.6" r="0.5" fill="currentColor" stroke="none" />
-        </svg>
       </button>
       <button
         class="btn btn-ghost icon btn-ui-theme"
@@ -379,11 +344,34 @@ defineExpose({
       </div>
     </div>
 
-    <!-- Persistent error banner -->
-    <div v-if="props.error" class="error-banner" role="alert">
-      <span class="error-icon">!</span>
-      <span class="error-text">{{ props.error }}</span>
-      <button class="error-close" @click="emit('action', 'dismissError')">知道了</button>
+    <!-- Banner stack：常驻红条悬浮在工具栏正下方，flex 列堆叠避免两条 banner
+     * 同时出现时重叠。每条 banner 各自决定显示条件。 -->
+    <div
+      v-if="props.error || props.savingState === 'error'"
+      class="toolbar-banners"
+      role="region"
+      aria-label="工具栏提示"
+    >
+      <div v-if="props.error" class="error-banner" role="alert">
+        <span class="error-icon">!</span>
+        <span class="error-text">{{ props.error }}</span>
+        <button class="error-close" @click="emit('action', 'dismissError')">知道了</button>
+      </div>
+
+      <!-- 草稿写盘失败：常驻红条直到下次保存成功（savingState 自然回归 saved/idle）。
+       * 点击右侧按钮打开草稿抽屉，让作者清理存储。 -->
+      <div
+        v-if="props.savingState === 'error'"
+        class="error-banner saving-error-banner"
+        role="alert"
+        :title="props.savingLabel || '草稿写盘失败 · 存储已满'"
+      >
+        <span class="error-icon">!</span>
+        <span class="error-text">{{ props.savingLabel || '草稿写盘失败 · 存储已满' }}</span>
+        <button class="error-close" type="button" @click="emit('toggle', 'drafts')">
+          查看草稿
+        </button>
+      </div>
     </div>
   </header>
 </template>
@@ -591,21 +579,10 @@ defineExpose({
   background: var(--accent); display: inline-block;
 }
 
-/* 发文清单（zone-right）—— SVG 勾选圆 + 文字标签。
- * 文字在 <1100px 时隐藏退化为 icon-only，移动端断点（<768px）下完全隐去（避免与
- * 紧凑 grid 工具栏冲突；移动端清单仍能从 ··· 菜单 / 命令面板进入）。 */
-.btn-checklist { gap: var(--sp-2); }
-.btn-checklist .btn-icon-svg { color: var(--text-subtle); }
-.btn-checklist.active .btn-icon-svg { color: var(--accent); }
-.btn-checklist-label { font-size: var(--fs-13); }
-@media (max-width: 1100px) {
-  .btn-checklist .btn-checklist-label { display: none; }
-  .btn-checklist { padding: 0 var(--sp-3); min-width: 28px; justify-content: center; }
-}
-
 /* 工具栏 zone-right 的 icon 按钮统一走 SVG 实物图标。
- * 每个按钮形态语义独立：✓ 圆=发文清单 / ? 圆=帮助 / 太阳·月亮=亮暗切换 / 三点=溢出菜单。
- * 颜色继承 .btn 当前 color；active 态走 ghost.active accent。 */
+ * 每个按钮形态语义独立：太阳·月亮=亮暗切换 / 三点=溢出菜单。
+ * 颜色继承 .btn 当前 color；active 态走 ghost.active accent。
+ * 发文清单 / 快捷键帮助 已收纳到 ⋯ 溢出菜单（OverflowMenu）；? 快捷键仍直达。 */
 .btn-icon-svg {
   display: inline-block;
   flex: 0 0 auto;
@@ -731,7 +708,7 @@ defineExpose({
     gap: 4px;
   }
 
-  .btn-cmd, .btn-help, .btn-checklist { display: none; }
+  .btn-cmd { display: none; }
 
   /* 中区：44×44 图标按钮 */
   .zone-center .btn { min-width: 44px; height: 44px; padding: 0; justify-content: center; }
@@ -783,41 +760,6 @@ defineExpose({
 .saving.error .saving-text { color: var(--danger); font-weight: var(--fw-medium); }
 .saving.idle .saving-text { color: transparent; }
 
-/* 写盘失败 pill —— 始终可见的"红色！+ 写盘失败"按钮，点击打开草稿抽屉（让用户查
- * 看存储用量 / 删除老草稿）。颜色用 danger token；点击区域 28px 高，与 ghost btn 一致。 */
-.saving-error-pill {
-  display: inline-flex; align-items: center; gap: 4px;
-  height: 28px;
-  padding: 0 var(--sp-3);
-  border-radius: var(--radius-2);
-  border: 1px solid var(--danger);
-  background: var(--danger-soft);
-  color: var(--danger);
-  font-family: var(--font-text);
-  font-size: var(--fs-12);
-  font-weight: var(--fw-medium);
-  cursor: pointer;
-  transition: var(--t-quick);
-  flex: 0 0 auto;
-}
-.saving-error-pill:hover { background: var(--danger); color: var(--accent-on); }
-.saving-error-glyph {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 14px; height: 14px;
-  border-radius: var(--radius-pill);
-  background: var(--danger);
-  color: var(--accent-on);
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-11);
-}
-.saving-error-pill:hover .saving-error-glyph {
-  background: var(--accent-on);
-  color: var(--danger);
-}
-@media (max-width: 600px) {
-  .saving-error-text { display: none; }
-  .saving-error-pill { padding: 0 var(--sp-2); }
-}
 
 .pop-wrap { position: relative; }
 .popover {
@@ -949,18 +891,24 @@ defineExpose({
 .theme-foot-label { letter-spacing: var(--ls-tight); }
 /* popover-menu 与其内部 .menu-* 样式见 OverflowMenu.vue */
 
-/* Error banner sits as a full-width sliver under the toolbar */
-.error-banner {
+/* Banner stack —— 工具栏正下方的常驻提示条容器
+ * absolute 定位让 banners 浮在编辑器/预览顶端，不占工具栏内部 grid 空间；
+ * flex 列让多条 banner 自然堆叠，z-index 30 保证盖过 splitter / 抽屉边缘。 */
+.toolbar-banners {
   position: absolute;
   top: 100%;
   left: 0; right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+}
+.error-banner {
   display: flex; align-items: center; gap: var(--sp-3);
   padding: var(--sp-3) var(--sp-5);
   background: var(--danger-soft);
   color: var(--danger);
   border-bottom: 1px solid var(--border);
   font-size: var(--fs-13);
-  z-index: 30;
 }
 .error-icon {
   width: 18px; height: 18px;
