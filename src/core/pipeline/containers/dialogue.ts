@@ -80,12 +80,12 @@ export const dialogueTurnContainer: ContainerRenderer = {
         return renderQARowOpen(ctx, name, role, idx)
     }
   },
-  close: (ctx) => {
+  close: () => {
     const top = DIALOGUE_STACK[DIALOGUE_STACK.length - 1]
     if (!top) return ''
     switch (top.variantId) {
       case 'chat-bubbles':
-        return renderChatBubbleClose(ctx)
+        return renderChatBubbleClose()
       case 'name-prefix':
         return renderNamePrefixClose()
       case 'interview-column':
@@ -179,6 +179,10 @@ function renderQARowClose(): string {
 // chat-bubbles · 左右气泡 + 头像圆 + inline SVG 尾巴
 // ============================================================
 
+// chat-bubbles close 需要在 body 之后补"尾巴 + 右 avatar"——但 close 不感知 attrs。
+// 栈在 open 时把"close 段所需 HTML"提前算好塞进来，close 直接弹出拼接。
+const CHAT_TURN_STATE: Array<{ tailAfter: string; rightAvatarHtml: string }> = []
+
 function renderChatBubbleOpen(
   ctx: ContainerRenderContext,
   name: string,
@@ -188,79 +192,76 @@ function renderChatBubbleOpen(
   const isRight = side === 'right'
   const initial = (name || '?').slice(0, 1)
   const avatarBg = isRight ? c.primary : c.textMuted
-  const bubbleBg = isRight ? c.bgSoft : c.bgSoft
-  const bubbleColor = c.text
+  const bubbleBg = c.bgSoft
+  const slotCSS = 'display:table-cell;vertical-align:top;width:36px'
+  // 头像：inline SVG circle + 首字母（避开 border-radius 在公众号粘贴里被剥的风险）
+  const avatarSvg =
+    `<svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:top">` +
+    `<circle cx="14" cy="14" r="14" fill="${avatarBg}"/>` +
+    `<text x="14" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${escText(initial)}</text>` +
+    `</svg>`
+  CHAT_TURN_STATE.push({
+    tailAfter: isRight ? renderChatTail(bubbleBg, 'right') : '',
+    rightAvatarHtml: isRight
+      ? `<span style="${slotCSS}">${avatarSvg}</span>`
+      : `<span style="${slotCSS}"></span>`,
+  })
   const rowCSS = [
     'display:table',
     'width:100%',
     'table-layout:fixed',
     'margin-top:14px',
   ].join(';')
-  const slotCSS = 'display:table-cell;vertical-align:top;width:36px'
-  const bodyCellCSS = 'display:table-cell;vertical-align:top;padding:0 8px'
-  // 头像：inline SVG circle + 首字母（避免 ::before/::after 与 border-radius 在公众号的失败案例）
-  const avatarSvg =
-    `<svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:top">` +
-    `<circle cx="14" cy="14" r="14" fill="${avatarBg}"/>` +
-    `<text x="14" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${escText(initial)}</text>` +
-    `</svg>`
+  const bodyCellCSS = [
+    'display:table-cell',
+    'vertical-align:top',
+    'padding:0 8px',
+    isRight ? 'text-align:right' : 'text-align:left',
+  ].join(';')
   const nameCSS = [
     'display:block',
     `color:${c.textMuted}`,
     'font-size:11px',
     'margin-bottom:3px',
-    isRight ? 'text-align:right' : 'text-align:left',
   ].join(';')
   const bubbleCSS = [
     'display:inline-block',
     `background-color:${bubbleBg}`,
-    `color:${bubbleColor}`,
+    `color:${c.text}`,
     'padding:10px 14px',
     'border-radius:12px',
     'font-size:14px',
     'line-height:1.65',
     'max-width:84%',
     'vertical-align:top',
-    'position:static',
+    'text-align:left',
   ].join(';')
-  // 三角尾巴：与 bubble 同 bgSoft，禁 ::before/::after，inline SVG path
-  const tailSvg =
-    `<svg width="8" height="10" viewBox="0 0 8 10" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:bottom">` +
-    `<path d="${isRight ? 'M8,0 L0,5 L8,10 Z' : 'M0,0 L8,5 L0,10 Z'}" fill="${bubbleBg}"/>` +
-    `</svg>`
   const nameRow = name ? `<span style="${nameCSS}">${escText(name)}</span>` : ''
-  const leftAvatar = isRight
+  const tailBefore = isRight ? '' : renderChatTail(bubbleBg, 'left')
+  const leftCell = isRight
     ? `<span style="${slotCSS}"></span>`
     : `<span style="${slotCSS}">${avatarSvg}</span>`
-  const rightAvatar = isRight
-    ? `<span style="${slotCSS}">${avatarSvg}</span>`
-    : `<span style="${slotCSS}"></span>`
-  const bodyAlign = isRight ? 'text-align:right' : 'text-align:left'
-  // 右侧时尾巴在气泡右；左侧时尾巴在气泡左。用一段紧贴气泡的小 inline 块承担。
-  const tailBeforeBubble = isRight ? '' : tailSvg
-  const tailAfterBubble = isRight ? tailSvg : ''
   return (
     `<section class="container-dialogue-turn" style="${rowCSS}">` +
-    leftAvatar +
-    `<span style="${bodyCellCSS};${bodyAlign}">${nameRow}${tailBeforeBubble}<span style="${bubbleCSS}">`
+    leftCell +
+    `<span style="${bodyCellCSS}">${nameRow}${tailBefore}<span style="${bubbleCSS}">`
   )
 }
 
-function renderChatBubbleClose(ctx: ContainerRenderContext): string {
-  const top = DIALOGUE_STACK[DIALOGUE_STACK.length - 1]
-  if (!top) return '</span></span></section>\n'
-  // 复算 isRight / bubbleBg 重建尾巴：close 不感知 attrs，但顺序绑定保证 close 紧跟其 open。
-  // 这里只能输出"统一收尾"——尾巴 SVG 已经在 open 之前/之后插入了一侧，close 不再补；
-  // 但为了视觉对称（右侧尾巴需在气泡之后），我们在 close 输出额外 SVG 占位段不可行。
-  // 决议：把右侧尾巴也放进 open（紧跟 bubble 起始之前的 wrapper），close 只闭气泡 + cell + section。
-  void ctx
-  return `</span>` + tailIfPending() + `</span><span style="display:table-cell;vertical-align:top;width:36px"></span></section>\n`
+function renderChatBubbleClose(): string {
+  const state = CHAT_TURN_STATE.pop()
+  if (!state) return '</span></span></section>\n'
+  return `</span>${state.tailAfter}</span>${state.rightAvatarHtml}</section>\n`
 }
 
-// 当前 chat-bubbles close 不需要补尾巴（open 已把尾巴落在气泡同侧），返回空。
-// 留 helper 是为了未来可能的 close-side 装饰扩展接缝。
-function tailIfPending(): string {
-  return ''
+function renderChatTail(fill: string, dir: 'left' | 'right'): string {
+  // 公众号后台剥 ::before/::after，唯一稳妥是 DOM 真插 inline SVG 画三角
+  const path = dir === 'left' ? 'M8,0 L0,5 L8,10 Z' : 'M0,0 L8,5 L0,10 Z'
+  return (
+    `<svg width="8" height="10" viewBox="0 0 8 10" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:bottom">` +
+    `<path d="${path}" fill="${fill}"/>` +
+    `</svg>`
+  )
 }
 
 // ============================================================

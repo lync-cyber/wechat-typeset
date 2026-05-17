@@ -58,6 +58,10 @@ import {
   colophonContainer,
   calloutGroupContainer,
 } from './databrief'
+import { pullQuoteContainer } from './pull-quote'
+import { tableCardContainer, tableRowContainer } from './table-card'
+import { galleryContainer, imageItemContainer } from './gallery'
+import { dialogueContainer, dialogueTurnContainer } from './dialogue'
 
 /**
  * free · 自由容器（escape hatch）
@@ -121,6 +125,14 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   footnotes: footnotesContainer,
   colophon: colophonContainer,
   'callout-group': calloutGroupContainer,
+  // M-5 / M-4 / M-2 / M-1 review 实施
+  'pull-quote': pullQuoteContainer,
+  'table-card': tableCardContainer,
+  'table-row': tableRowContainer,
+  gallery: galleryContainer,
+  'image-item': imageItemContainer,
+  dialogue: dialogueContainer,
+  'dialogue-turn': dialogueTurnContainer,
 }
 
 export type { ContainerRenderer, ContainerRenderContext } from './types'

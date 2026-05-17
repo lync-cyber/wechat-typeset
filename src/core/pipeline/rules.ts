@@ -62,7 +62,11 @@ export const FORBIDDEN_CSS_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = 
   [/@keyframes\b/i, '@keyframes 动画不被微信支持'],
   [/:hover\b/i, ':hover 伪类在微信无效'],
   [/:active\b/i, ':active 伪类在微信无效'],
-  [/-webkit-(?!print-color-adjust)/i, '-webkit- 前缀会被剥离（print-color-adjust 为 juice 注入例外）'],
+  // -webkit- 例外：
+  //   - print-color-adjust    juice 注入
+  //   - overflow-scrolling    iOS momentum scroll，footnotes/inline-flow 与 gallery/ribbon-strip
+  //                            实测在公众号 webview 保留，提升触摸滚动手感
+  [/-webkit-(?!print-color-adjust|overflow-scrolling)/i, '-webkit- 前缀会被剥离（仅 print-color-adjust 与 overflow-scrolling 例外）'],
 ]
 
 // --------------------------------------------------------------------------

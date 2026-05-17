@@ -13,14 +13,13 @@ function thumb(args?: { accent?: string; soft?: string; text?: string }): string
   const { accent, text } = mergeThumb(args ?? {})
   return svg(
     `<rect x="8" y="16" width="14" height="3" fill="${accent}"/>` +
-      `<rect x="24" y="16" width="40" height="3" fill="${text}"/>` +
-      `<rect x="24" y="22" width="34" height="3" fill="${text}"/>` +
-      `<rect x="8" y="34" width="12" height="3" fill="${accent}"/>` +
-      `<rect x="22" y="34" width="42" height="3" fill="${text}"/>` +
-      `<rect x="22" y="40" width="36" height="3" fill="${text}"/>` +
-      `<rect x="8" y="52" width="14" height="3" fill="${accent}"/>` +
-      `<rect x="24" y="52" width="38" height="3" fill="${text}"/>` +
-      `<rect x="24" y="58" width="28" height="3" fill="${text}"/>`,
+      `<rect x="24" y="16" width="42" height="3" fill="${text}"/>` +
+      `<rect x="8" y="24" width="50" height="3" fill="${text}"/>` +
+      `<rect x="8" y="38" width="12" height="3" fill="${accent}"/>` +
+      `<rect x="22" y="38" width="44" height="3" fill="${text}"/>` +
+      `<rect x="8" y="46" width="40" height="3" fill="${text}"/>` +
+      `<rect x="8" y="58" width="14" height="3" fill="${accent}"/>` +
+      `<rect x="24" y="58" width="38" height="3" fill="${text}"/>`,
   )
 }
 
