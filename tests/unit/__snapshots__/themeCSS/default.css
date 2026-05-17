@@ -459,25 +459,6 @@
   margin: 22px 0;
 }
 
-.markdown-body .container-editor-note {
-  border-left: 3px solid #2558b0;
-  background-color: #f5f5f3;
-  padding: 14px 16px 14px 18px;
-  margin: 22px 0;
-  border-radius: 4px;
-}
-
-.markdown-body .container-methodology {
-  background-color: #f5f5f3;
-  border: 1px solid #d8d8d4;
-  padding: 10px 12px;
-  margin: 16px 0;
-  border-radius: 4px;
-  font-size: 10px;
-  line-height: 1.75;
-  color: #636870;
-}
-
 .markdown-body .container-colophon {
   border-top: 1px solid #1c1f24;
   padding-top: 12px;

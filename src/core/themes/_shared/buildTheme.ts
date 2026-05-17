@@ -473,26 +473,8 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       padding: '14px',
       margin: '22px 0',
     },
-    // editor-note / methodology / colophon：wrapper CSS 兜底由 token 驱动，
-    // renderer 只在 ctx.containers.<x> 之上做 inline 合并。非 data-brief 主题
-    // 不主动声明时也能得到一个克制的中性骨架。
-    editorNote: {
-      'border-left': `3px solid ${tokens.colors.primary}`,
-      'background-color': tokens.colors.bgSoft,
-      padding: '14px 16px 14px 18px',
-      margin: '22px 0',
-      'border-radius': `${tokens.radius.sm}px`,
-    },
-    methodology: {
-      'background-color': tokens.colors.bgSoft,
-      border: `1px solid ${tokens.colors.border}`,
-      padding: '10px 12px',
-      margin: '16px 0',
-      'border-radius': `${tokens.radius.sm}px`,
-      'font-size': '10px',
-      'line-height': '1.75',
-      color: tokens.colors.textMuted,
-    },
+    // colophon：wrapper CSS 兜底由 token 驱动；renderer 只在 ctx.containers.colophon
+    // 之上做 inline 合并。非 data-brief 主题不主动声明时也能得到一个克制的中性骨架。
     colophon: {
       'border-top': `1px solid ${tokens.colors.text}`,
       'padding-top': '12px',
@@ -569,16 +551,6 @@ export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
       'letter-spacing': '2px',
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
-    },
-    // editor-note kicker 兜底：primary 色小字 + 粗体 + 0.1em letter-spacing。
-    // 主题作者可通过 spec.innerStyles.editorNoteKicker 深合并覆盖（如全幅黑底
-    // 白字 header-bar 形态、或反色避免与 wrapper 同色）。
-    editorNoteKicker: {
-      color: c.primary,
-      'font-size': '11px',
-      'font-weight': '700',
-      'letter-spacing': '0.1em',
-      'margin-bottom': '6px',
     },
   }
 }

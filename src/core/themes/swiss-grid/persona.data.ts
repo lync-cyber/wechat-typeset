@@ -17,8 +17,8 @@
  * 与 data-brief（数据简报）的边界：
  *   - data-brief：数据蓝 #1756d1 + monospace + 数据卡 + sparkline——"数字是论点"
  *   - swiss-grid：国际红 + 大字章号 + 红章 H2 + pull-quote 栏偏移——"栅格是结构"
- *   两者共享 data-brief 家族签名容器（masthead 略弃用 / qa-block / editor-note / footnotes
- *   / cta-bar / qr-follow / colophon / methodology / bar-chart / key-number）,
+ *   两者共享 data-brief 家族签名容器（masthead 略弃用 / qa-block / footnotes
+ *   / cta-bar / qr-follow / colophon / bar-chart / key-number）,
  *   仅在 tokens / variants / innerStyles 上分叉视觉个性。
  *
  * 复用策略：
@@ -26,8 +26,8 @@
  *     设计稿 multi-callout 母本；四态独立 ::: 块连续罗列时下划线自然贴合成一栏
  *   - 期号横幅（issue-banner）走 `key-number` 容器 —— kicker / value / body 三段
  *     vertical stack 适配 375px 移动端，比强行 2 栏 layout 更稳
- *   - 编者按（editor-note）走"黑底白字 header bar" —— 通过 innerStyles.editorNoteKicker
- *     的负 margin 把 kicker 撑到 wrapper 边缘；renderer 已下沉到 innerStyles 槽位
+ *   - 编辑部按走 `note variant=editorial-stripe`（主色左条 + bgSoft）；
+ *     调研口径栏走 `note variant=research-dense`（10px 紧凑 + 粗体 label）
  *   - 脚注 NOTES 走 `footnotes variant=inline-flow`（自带 kicker info 槽，长引用列表内滚动）
  *   - pull-quote 通过 `elements.blockquote` __reset 表达"左 12px 红条 + 25% 左偏移"
  *
@@ -171,14 +171,6 @@ export const spec: PersonaSpec = {
       primitives: [{ type: 'rect', x: 0, y: 0, w: 20, h: 20, fill: '#e30613' }],
     },
 
-    // editorNoteKickerIcon：8×8 国际红方块,editor-note 黑底白字 header bar 的红 ▮
-    //   （对位设计稿 #19 editor-note kicker 行最左侧的红色 ▮ 字符）
-    editorNoteKickerIcon: {
-      viewBox: [0, 0, 8, 8],
-      width: 8,
-      height: 8,
-      primitives: [{ type: 'rect', x: 0, y: 0, w: 8, h: 8, fill: '#e30613' }],
-    },
   },
 
   // ============================================================
@@ -205,8 +197,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: 'INDEX',
     qaBlock: 'Q & A',
-    editorNote: "EDITOR'S NOTE",
-    methodology: 'METHODOLOGY',
     qrFollowKicker: 'SUBSCRIBE',
     qrFollowTitle: 'NEUE LESE GRAFIK',
     recommend: 'FURTHER READING',
@@ -228,13 +218,11 @@ export const spec: PersonaSpec = {
     'toc', // 目录（layout=split 双栏）
     'keyNumber', // 期号横幅（Nº04 全幅红，attrs.meta 切到双栏 issue-banner）
     'qaBlock', // 读者 Q&A
-    'editorNote', // 编辑部注（黑底白字 header bar 形态）
     'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 承担"NOTES"长文献列表）
     'calloutGroup', // 四态 callout 联表外框（multi-callout 母本）
     'ctaBar', // 三栏 CTA（attrs.info 切到 "IF YOU LIKED THIS" header bar 模式）
     'qrFollow', // 二维码订阅卡
     'colophon', // 刊物收束栏（NEXT · VOL 双栏）
-    'methodology', // 方法论小字注释
     'barChart', // 条形图（FIG.01 按年龄）
     'imageCaption', // 图注（居左 monospace 极小字 + letter-spacing）
     'announcement', // 强警示横幅（国际红块 + 黑实线全框）
@@ -244,7 +232,6 @@ export const spec: PersonaSpec = {
   // - abstractKicker：红色 9px letter-spacing 0.2em（INDEX 风的栏位标签）
   // - keyNumberValue：56px 白色巨号 Nº04（issue-banner 主视觉）
   // - keyNumberKicker：9px 白色全大写 letter-spacing 0.3em（NEUE LESE GRAFIK）
-  // - editorNoteKicker：全幅黑底白字 header bar——负 margin 撑到 wrapper 内边
   innerStyles: {
     abstractKicker: {
       color: '#e30613',
@@ -279,18 +266,6 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.2em',
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
-    },
-    // editor-note kicker：全幅黑色 header bar (5px 10px 黑底白字 + 负 margin 撑到边)
-    editorNoteKicker: {
-      display: 'block',
-      'background-color': '#000000',
-      color: '#ffffff',
-      padding: '5px 10px',
-      // 负 margin 把 kicker 撑到 wrapper 的内边（wrapper padding:12px 时正好抵消）
-      margin: '-12px -12px 10px -12px',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '0.15em',
     },
   },
 
@@ -762,26 +737,6 @@ export const spec: PersonaSpec = {
       border: '1px solid #000000',
       'border-radius': '0',
     },
-    // editor-note：黑底白字 header bar 形态 (kicker 通过 innerStyles.editorNoteKicker 的
-    // 负 margin 撑到 wrapper 边). 12px wrapper padding 与 kicker margin:-12px -12px 12px -12px 严格抵消。
-    editorNote: {
-      __reset: true,
-      border: '1px solid #000000',
-      padding: '12px',
-      margin: '22px 0',
-      'background-color': '#ffffff',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#f0f0f0',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      color: '#333333',
-      'border-radius': '0',
-    },
     // colophon：设计稿"NEXT · VOL 双栏 monospace, 上 3px 黑分隔" —— renderer 走 display:table
     colophon: {
       __reset: true,
@@ -846,11 +801,11 @@ VOL.IV · 2026—04—22 · CHF 14.—
       '主题 02 苏黎世栅格 · 三条不可妥协：radius=0、primary #e30613、H2 红章徽章。\n' +
       '架构复用：admonition `news-row` variant 直接复刻设计稿 multi-callout；\n' +
       'issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；\n' +
-      'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker），editor-note 走"黑底白字 header bar"。\n' +
+      'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker）；编辑部按 / 方法论\n' +
+      '走 note variant=editorial-stripe / research-dense（容器层 R-1 合并后统一接口）。\n' +
       '已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,\n' +
       '但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
-      '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）；\n' +
-      'ThemeInnerStyles 增 editorNoteKicker（黑底 header bar 核心）。两处扩展全局可用,非主题专属。',
+      '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）。',
   },
 }
 

@@ -191,8 +191,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '// CONTENTS',
     qaBlock: '// Q&A',
-    editorNote: '// EDITOR_NOTE',
-    methodology: '// METHOD',
     qrFollowKicker: '// SCAN & FOLLOW',
     qrFollowTitle: '慢读 // slow.read',
     recommend: '[READ_NEXT]',
@@ -213,7 +211,6 @@ export const spec: PersonaSpec = {
     'footnotes', // fn[] 等宽脚注
     'ctaBar', // LIKE / STAR / FWD 三栏 CTA
     'qrFollow', // 二维码关注
-    'editorNote', // 编 者 按 callout（荧光黄整块）
     'colophon', // 下期预告 + 卷·期
     'imageCaption', // 图注（// CAPTION 注释风 + 荧光黄）
     'announcement', // 强警示横幅（荧光黄整块反色）
@@ -618,27 +615,6 @@ export const spec: PersonaSpec = {
       margin: '24px 0',
       'border-radius': '0',
     },
-    // editor-note · 编 者 按：荧光黄整块 + 反色文字（粗野主义签名 callout）
-    // kicker 颜色由 innerStyles.editorNoteKicker 接管（textInverse 反色）
-    editorNote: {
-      __reset: true,
-      'background-color': '#ebff00',
-      color: '#0a0a0a',
-      padding: '14px 16px',
-      margin: '24px 0',
-      'border-left': 'none',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#1a1a1a',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      color: '#a0a0a0',
-      'border-radius': '0',
-    },
     // colophon：上 2px 双粗线 + "下期 / 卷·期"（与 masthead 头尾呼应）
     colophon: {
       __reset: true,
@@ -732,16 +708,6 @@ export const spec: PersonaSpec = {
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
     },
-    // editor-note kicker（"编 者 按"）：黄底 callout 上不能用 primary（同色不可见）,
-    // 走 textInverse 反色 + letter-spacing 拉开"被点名"气质
-    editorNoteKicker: {
-      __reset: true,
-      color: '#0a0a0a',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '0.2em',
-      'margin-bottom': '8px',
-    },
   },
 
   // ============================================================
@@ -773,8 +739,8 @@ export const spec: PersonaSpec = {
       '主题 07 粗野主义报刊：荧光黄 + 暗底 + 直角硬边。复用现有 admonition.news-row、' +
       'data-brief 家族签名容器（masthead 增 kicker 三栏 ribbon 模式）；唯一新增 variant 为' +
       ' quote.tilted-sticker（punk-zine 撕贴纸语义,可复用）。' +
-      'editor-note kicker 通过 innerStyles.editorNoteKicker（R-brutalist 新增内层槽位）' +
-      '调成反色,解决荧光黄整块上 kicker 与 bg 同色不可见的问题。',
+      '编辑部按 / 方法论收编进 note variant（editorial-stripe / research-dense），' +
+      '本主题不再签名两者，按需在样张里写 `::: note variant=editorial-stripe` 即可。',
   },
 }
 

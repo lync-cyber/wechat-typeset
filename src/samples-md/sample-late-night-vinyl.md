@@ -101,7 +101,7 @@ now_playing = {
 
 吉村弘（Hiroshi Yoshimura）的 *Organica* 来自他 1993 年的同名专辑，水声与合成器纹理交织，比 *Music for Plants* 更晚期，也更沉。Floating Points 的 *LesAlpx* 则走另一条路：jazz 底色，但织体像 ambient，弦乐渐入时有一种克制的尖锐感。
 
-::: editor-note
+::: note variant=editorial-stripe
 凌晨三点录音和下午三点录音，说出来的话不一样。不是因为疲惫，是因为这个时段会让人诚实一些。这四首曲子都是我在某个无法入睡的夜晚里找到的，当时都没想着要放进节目。
 :::
 

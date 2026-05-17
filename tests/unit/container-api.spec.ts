@@ -59,7 +59,7 @@ describe('getContainerVocabulary', () => {
       'masthead', 'section-tag', 'toc', 'toc-item',
       'kpi-dashboard', 'kpi-item', 'bar-chart', 'bar',
       'qa-block', 'footnotes', 'cta-bar', 'qr-follow',
-      'editor-note', 'methodology', 'colophon',
+      'colophon',
     ]) {
       expect(names).toContain(name)
     }

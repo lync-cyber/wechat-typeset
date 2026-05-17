@@ -111,8 +111,6 @@ const plainContainers = [
   'container-toc',
   'container-qa-block',
   'container-callout-group',
-  'container-editor-note',
-  'container-methodology',
   'container-cta-bar',
   'container-qr-follow',
   'container-colophon',

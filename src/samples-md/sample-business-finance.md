@@ -152,7 +152,7 @@ def spread_pressure(cost_of_liab, asset_pricing, non_interest):
     return 0.45 * cost_of_liab + 0.38 * asset_pricing + 0.17 * non_interest
 ```
 
-::: methodology 方法论
+::: note variant=research-dense 方法论
 数据来源：中国人民银行 2026Q1 货币政策执行报告；A 股 42 家上市银行 2026Q1 季报。加权利率按各银行贷款余额加权，剔除城商行非标口径后与央行口径偏差 ≤ 5bp。三因子模型以 OLS 回归拟合 2020Q1–2025Q4 共 24 个季度数据，样本内 R² = 0.87。
 :::
 

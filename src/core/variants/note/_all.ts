@@ -13,5 +13,16 @@ import sideBar from './side-bar'
 import hangingIndent from './hanging-indent'
 import dottedMargin from './dotted-margin'
 import smallcapsKicker from './smallcaps-kicker'
+import editorialStripe from './editorial-stripe'
+import researchDense from './research-dense'
 
-export default [minimalCallout, boxCallout, sideBar, hangingIndent, dottedMargin, smallcapsKicker]
+export default [
+  minimalCallout,
+  boxCallout,
+  sideBar,
+  hangingIndent,
+  dottedMargin,
+  smallcapsKicker,
+  editorialStripe,
+  researchDense,
+]

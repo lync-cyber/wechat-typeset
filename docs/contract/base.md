@@ -25,7 +25,7 @@
 |  | `warning` | ★ | warning：需要读者注意的提醒。 |
 |  | `info` | ★ | info：中性说明／补充信息。 |
 |  | `danger` | ★ | danger：高风险警告／错误示范。 |
-|  | `note` | ★ | note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。与 editor-note 的边界：note 是"作者**自己**附在正文边上的注脚"（题外话 / 题中题外）；editor-note 是"**编辑部**以机构身份对全文加按语"（主色左条 + 强 kicker）。语气主体不同。 |
+|  | `note` | ★ | note：作者旁批 + 编辑部按 + 调研口径的统一容器。variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到"编辑部以机构身份按语"；research-dense 切到"调研方法论小字栏"。 |
 | 内容 | `quote-card` | ★ | 大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。 |
 |  | `highlight` | ★ | 行内高亮段（bgMuted 底色块，无 variant）。与 quote-card 的边界：quote-card 是"成段引用"（外部话语、有 variant 骨架），highlight 是"作者自己想强调的一段话"（无骨架切换、视觉更轻）。想强调一句"我要让读者停下来"用 highlight；想引用一段他人话用 quote-card。 |
 |  | `compare` | ★ | 双列对比（外层 4 个冒号，内层 pros/cons 用 3 个）。 |

@@ -112,6 +112,8 @@ const NOTE_ORDER: readonly string[] = [
   'hanging-indent',
   'dotted-margin',
   'smallcaps-kicker',
+  'editorial-stripe',
+  'research-dense',
 ]
 const FOOTNOTES_ORDER: readonly string[] = [
   'lined',

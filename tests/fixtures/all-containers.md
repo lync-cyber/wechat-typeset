@@ -251,11 +251,11 @@ MIT License。
 :::
 ::::
 
-::: editor-note 编 者 按
+::: note variant=editorial-stripe 编 者 按
 慢读并非复古姿态，而是一种对自己时间主权的重新申明。
 :::
 
-::: methodology 方法论
+::: note variant=research-dense 方法论
 本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者；"连续阅读"定义为不被通知或切屏中断、持续 5 分钟以上的阅读行为。
 :::
 

@@ -147,7 +147,7 @@ const column = (total, gutter) =>
 需要，但方式变了。移动端的"12 栏"更接近一套比例约定而非像素精确值。核心不变的是：*版面的每一个决策都应能在网格坐标系中被解释*。Jedes Element muss im Raster begründbar sein.
 :::
 
-::: editor-note EDITOR'S NOTE
+::: note variant=editorial-stripe EDITOR'S NOTE
 *Neue Grafik* 1958–1965 共出版 18 期，每期均以英、德、法三语平行排印。其本身就是国际主义排印的实践现场，而非仅是理论宣言。本栏目的视觉系统直接取法于 Nº04 内页的红色辅助线与 12 栏铅笔草图。
 :::
 
@@ -161,7 +161,7 @@ const column = (total, gutter) =>
 ::: divider
 :::
 
-::: methodology METHODOLOGY
+::: note variant=research-dense METHODOLOGY
 本文数据取样自 12 本瑞士设计年鉴（1955–1975），逐页人工记录主栏数，共计 240 个对开页；广告版与折页不计入统计。"自由版"定义为无可辨识栏位参考线的版面。条形图按占比降序排列，满分 100 对应单一栏数全覆盖。
 :::
 

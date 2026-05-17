@@ -105,7 +105,7 @@ ship_to(address=reader.po_box)
 // done. no algorithm involved.
 ```
 
-::: editor-note 编 · 者 · 按
+::: note variant=editorial-stripe 编 · 者 · 按
 印一份纸。找到 200 个人。把它塞进信封。这是行动，不是比喻。我们下期只邮寄，不上线。
 :::
 

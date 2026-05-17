@@ -189,8 +189,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '— tracklist · 节目单 —',
     qaBlock: '听 · 众 · 连 · 线',
-    editorNote: '播 · 后 · 札记',
-    methodology: '制作手记 · LINER NOTES',
     qrFollowKicker: 'tune · in',
     qrFollowTitle: '夜读电台',
     recommend: '深 夜 选 听',
@@ -244,7 +242,7 @@ export const spec: PersonaSpec = {
   //   12 unordered-list → markdown -（li 元素样式）
   //   13 inline-code    → markdown `code`（code 元素样式：橙字 monospace）
   //   14 code-block     → markdown ``` block（pre 元素样式：黑底橙框）
-  //   15 callout 播后札记 → editor-note 容器（kicker 由 spec.kickers.editorNote 提供，作者写 `::: editor-note` 即可）
+  //   15 callout 播后札记 → ::: note variant=editorial-stripe（kicker 走 info 行）
   //   16 qa-block       → qa-block 容器（kicker 由 spec.kickers.qaBlock 提供）
   //   17 multi-callout  → tip / info / warning / danger × news-row variant；徽章文字 cue/b-side/static/off-air
   //                       由作者写在 info 位（作者侧的"语义标注 + 视觉徽章合一"，仍是写作契约的一部分）
@@ -262,7 +260,6 @@ export const spec: PersonaSpec = {
     'masthead',
     'toc',
     'qaBlock',
-    'editorNote',
     'footnotes',
     'ctaBar',
     'qrFollow',
@@ -676,26 +673,6 @@ export const spec: PersonaSpec = {
       margin: '26px 0',
       'border-radius': '0',
     },
-    // editor-note · 播后札记 callout：深蓝卡底（无左竖条，设计稿 callout 原型）
-    // __reset 清除 baseContainers.editorNote 的 border-left 3px primary —— 本主题
-    // callout 形态是"裸卡 + kicker + 正文"，与 qaBlock 的"左条 + 卡"形态错开。
-    editorNote: {
-      __reset: true,
-      'background-color': '#14263d',
-      padding: '14px 16px',
-      margin: '24px 0',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#14263d',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.8',
-      color: '#a89070',
-      'border-radius': '0',
-    },
     // colophon · 刊物收束栏（设计稿 footer 原型）：上方 1px text 实色分隔线 +
     // 双栏 monospace（"下期 ｜ 卷·期"）。renderer 强制 display:table。
     colophon: {
@@ -801,15 +778,6 @@ export const spec: PersonaSpec = {
       'font-weight': '700',
       'letter-spacing': '2px',
       'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    // editor-note 容器：bg=#14263d 暗底，kicker（"播后札记 · LATE-NIGHT NOTE"）走 accent 橙金
-    editorNoteKicker: {
-      __reset: true,
-      color: '#d97a3c',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '1.5px',
       'margin-bottom': '8px',
     },
   },

@@ -210,10 +210,6 @@ export interface ThemeContainers {
   ctaBar: CSSObject
   /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
   qrFollow: CSSObject
-  /** 编辑部注 callout：主色左条 + kicker 小标题 + 正文（data-brief / industry-observer 等深度刊家族） */
-  editorNote: CSSObject
-  /** 方法论小字注释：浅底紧凑 + 粗体标签头 + 10px 小字（调研 / 数据栏目使用） */
-  methodology: CSSObject
   /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
   colophon: CSSObject
 }
@@ -240,24 +236,12 @@ export interface ThemeContainers {
  *   - keyNumberValue     大数字本体（数字字号 / 颜色 / 字距）
  *   - keyNumberKicker    大数字上方 kicker（小标题）
  *   - seeAlsoTitle       延伸阅读列表的标题
- *   - editorNoteKicker   编辑部注容器的 kicker 行（默认 primary 小字 + letter-spacing；
- *                        swiss-grid 用全幅黑底白字 header bar 形态——负 margin 撑到 wrapper 边缘）
  */
 export interface ThemeInnerStyles {
   abstractKicker: CSSObject
   keyNumberValue: CSSObject
   keyNumberKicker: CSSObject
   seeAlsoTitle: CSSObject
-  /**
-   * 编辑部注（editor-note）容器顶部 kicker（如 "编 者 按"）的样式。
-   *
-   * 为什么开此槽位：数据简报家族默认走 `color: primary`（主色文字 + 浅底）。
-   * 想重塑 kicker 形态的主题作者无需改 renderer：
-   *   - swiss-grid: 全幅黑底白字 header bar（display:block + 负 margin 撑到 wrapper 边缘）
-   *   - brutalist: editor-note bg 涂满 primary 后,kicker 走 textInverse 反色避免色/底同色
-   * 与 abstractKicker / keyNumberKicker 同构。
-   */
-  editorNoteKicker: CSSObject
 }
 
 export interface ThemeAssets {
@@ -300,18 +284,6 @@ export interface ThemeAssets {
    * （如 literary-humanism 的藏经朱）——其他主题留空即可，renderer 不做默认兜底。
    */
   sealMark?: SVGString
-  /**
-   * editor-note kicker 行最左侧的装饰图标（典型 8×8 实色方块）。
-   *
-   * 渲染契约：editor-note renderer 检测到此 asset 存在时，在 kicker 文字前 prepend
-   *   `<span style="display:inline-block;vertical-align:middle;margin-right:6px;">${svg}</span>`
-   * 主题不提供则不渲染图标，kicker 仅含文本。
-   *
-   * 设计动机：swiss-grid 设计稿的 editor-note 黑底白字 header bar 以红色 ▮ 字符开头,
-   * 跨主题做 SVG 装饰更可控（字符 ▮ 在 iOS / Android 渲染粗细不一）。
-   * 走 motifs AST 而非硬编码 SVG, 让色随 token 流动。
-   */
-  editorNoteKickerIcon?: SVGString
   /**
    * 期号印章（newsletter 期刊戳）。当主题提供 + markdown 容器上声明了 issue/date/kind
    * 任一 attr 时，cover / author / footerCTA renderer 会在各自配置的位置注入该 SVG。
@@ -479,6 +451,10 @@ export type NoteVariantId =
   | 'dotted-margin'
   // 小型大写 kicker + 正文：粗野主义 / 数据简报骨架
   | 'smallcaps-kicker'
+  // 左 3px 主色条 + bgSoft + kicker：编辑部按（承接原 ::: editor-note）
+  | 'editorial-stripe'
+  // bgSoft + 10px 紧凑 + 粗体 label：调研方法论栏（承接原 ::: methodology）
+  | 'research-dense'
 
 export type CodeBlockVariantId =
   // 裸 <pre><code>（默认）
@@ -550,10 +526,6 @@ export interface ThemeKickers {
   toc: string
   /** ::: qa-block 容器无 info 时的 kicker 兜底（renderer 默认 "读者问答 · Q&A"） */
   qaBlock: string
-  /** ::: editor-note 容器无 info 时的 kicker 兜底（renderer 默认 "编 者 按"） */
-  editorNote: string
-  /** ::: methodology 容器无 info 时的 label 兜底（renderer 默认 "方法论"） */
-  methodology: string
   /** ::: qr-follow attrs.kicker 兜底（renderer 默认 "SUBSCRIBE"） */
   qrFollowKicker: string
   /** ::: qr-follow 容器无 info 时的 title 兜底（renderer 默认 "订阅本刊"） */
@@ -577,8 +549,6 @@ export interface ThemeKickers {
 export const DEFAULT_KICKERS: ThemeKickers = {
   toc: '目录 · CONTENTS',
   qaBlock: '读者问答 · Q&A',
-  editorNote: '编 者 按',
-  methodology: '方法论',
   qrFollowKicker: 'SUBSCRIBE',
   qrFollowTitle: '订阅本刊',
   recommend: '推荐阅读',
@@ -665,6 +635,8 @@ export const VARIANT_IDS = {
     'hanging-indent',
     'dotted-margin',
     'smallcaps-kicker',
+    'editorial-stripe',
+    'research-dense',
   ] as const satisfies readonly NoteVariantId[],
   footnotes: [
     'lined',

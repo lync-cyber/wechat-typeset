@@ -13,7 +13,7 @@
  *   3. 代码块黑底 #111418 + 浅字 #e5e7eb —— 与正文白底形成"终端 vs 报告"对照
  *
  * 签名容器 10 件：masthead / sectionTag / toc / kpiDashboard / barChart / qaBlock /
- *                  footnotes / editorNote / methodology / colophon
+ *                  footnotes / colophon
  * 这些 renderer 在 src/pipeline/containers/databrief.ts 实现。
  */
 
@@ -33,7 +33,7 @@ export const spec: PersonaSpec = {
     secondary: '#111418', // 近黑（masthead 下划线 / quote 左条 / section-tag bg）
     accent: '#1756d1', // = primary（data-brief 视觉里 accent 不独立）
     bg: '#ffffff', // 纯白底（外层 body 走 bgMuted）
-    bgSoft: '#f5f7fa', // 卡片底面（toc / methodology / data-card）
+    bgSoft: '#f5f7fa', // 卡片底面（toc / note.research-dense / data-card）
     bgMuted: '#eef0f2', // 外层衬底色（bar track / 外层 body bg）
     text: '#111418', // 近黑文字
     textMuted: '#5a6068', // 辅助文字（monospace 标注 / 副标题）
@@ -69,8 +69,8 @@ export const spec: PersonaSpec = {
   // 渲染层自动按出现顺序生成 "01/02/03" 和 "2.1/2.2" 蓝色 monospace 前缀。
   //   - level 2 → arabic-padded（01, 02, 03…）
   //   - level 3 → arabic-section（与父 h2 序号联动；如父是 02，第一节为 02.1）
-  // 想列"附录/方法论"这类非数字段时,用专用容器（::: methodology / ::: footnotes
-  // / ::: appendix）即可，不要写到 h2——h2 全部走 autoNumber 不留豁免位。
+  // 想列"附录/方法论"这类非数字段时,用专用容器（::: note variant=research-dense
+  // / ::: footnotes / ::: appendix）即可，不要写到 h2——h2 全部走 autoNumber 不留豁免位。
   // ============================================================
   decorations: {
     headingPrefix: [
@@ -229,8 +229,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '本期目录 · INDEX',
     qaBlock: '读者来函 · Q&A',
-    editorNote: '编辑部注',
-    methodology: '方法论 · METHODOLOGY',
     qrFollowKicker: 'SUBSCRIBE',
     qrFollowTitle: '订阅本期简报',
     recommend: '延伸阅读 · FURTHER',
@@ -256,8 +254,6 @@ export const spec: PersonaSpec = {
     'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 用于长列表）
     'ctaBar', // 三栏 CTA（赞同/收藏/转发）
     'qrFollow', // 二维码订阅卡
-    'editorNote', // 编辑部注 callout（主色左条 + kicker）
-    'methodology', // 方法论小字注释（浅底紧凑 + 粗体标签）
     'colophon', // 刊物收束栏（"下期 / 卷·期"双栏 monospace）
   ],
 
@@ -496,9 +492,9 @@ export const spec: PersonaSpec = {
     info: {},
     danger: {},
     // note 在 data-brief 里映射为"灰底小字补注"：浅底 + 10px 紧凑字号 + textMuted。
-    // 与 methodology 容器的区别：methodology 的标签头走粗体 textPrimary（"方法论"
-    // 之类的口径声明），note 整段走 textMuted，是更轻量的脚注气质。
-    // 「编 者 按」由 editorNote 容器承载（主色左条 + kicker，参见 containers.editorNote）。
+    // 主题级 voice。各 variant 在此基础上覆盖：
+    //   - research-dense（= 旧 methodology 容器）：标签头走粗体 textPrimary
+    //   - editorial-stripe（= 旧 editor-note 容器）：主色左条 + kicker（"编 者 按"）
     note: {
       __reset: true,
       'background-color': '#f5f7fa',
@@ -627,27 +623,6 @@ export const spec: PersonaSpec = {
       'border-left': '3px solid #1756d1',
       'border-radius': '0',
     },
-    // editor-note · 编辑部注：主色左竖条 + 浅底 + kicker（"编 者 按"）+ 正文
-    editorNote: {
-      __reset: true,
-      'background-color': '#f5f7fa',
-      'border-left': '3px solid #1756d1',
-      padding: '14px 16px',
-      margin: '22px 0',
-      'border-radius': '0',
-    },
-    // methodology · 方法论小字注释：浅底 + 10px textMuted + 行间 1.7
-    // 标签头走 textPrimary 粗体（在 renderer 里由 token 取色）
-    methodology: {
-      __reset: true,
-      'background-color': '#f5f7fa',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      color: '#5a6068',
-      'border-radius': '0',
-    },
     // colophon · 刊物收束栏："下期 / 卷·期"双栏，上分割线 1px 近黑（强分隔）
     // renderer 自带 display:table，spec 这里仅承诺分隔线 + 间距
     colophon: {
@@ -665,7 +640,7 @@ export const spec: PersonaSpec = {
       color: '#5a6068',
       'letter-spacing': '0.5px',
     },
-    // 事件 / 期号时间线：左 3px 数据蓝竖条 + bgSoft 底（与 editorNote 同语汇）
+    // 事件 / 期号时间线：左 3px 数据蓝竖条 + bgSoft 底（与 note.editorial-stripe 同语汇）
     timeline: {
       margin: '20px 0',
       'border-left': '3px solid #1756d1',

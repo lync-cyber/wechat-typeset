@@ -41,7 +41,7 @@ export type ContainerCategory =
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
   | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
-  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes
+  | 'signature' // 签名块：abstract / key-number / see-also / colophon / footnotes
   | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
   | 'free' // 兜底 escape hatch：free
 
@@ -408,14 +408,18 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     attrs: [
       {
         key: 'variant',
-        description: '覆盖主题默认的 note 骨架（中性补注池，色彩走 textMuted 不抢色）',
+        description:
+          '覆盖主题默认的 note 骨架。8 个 variant 覆盖三档语气：' +
+          '中性（minimal-callout / box-callout / side-bar / hanging-indent / dotted-margin / smallcaps-kicker）；' +
+          '编辑部按（editorial-stripe，主色左条 + bgSoft）；' +
+          '调研口径（research-dense，10px 紧凑 + bold label）。',
         enum: VARIANT_IDS.note,
       },
     ],
     description:
-      'note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。' +
-      '与 editor-note 的边界：note 是"作者**自己**附在正文边上的注脚"（题外话 / 题中题外）；' +
-      'editor-note 是"**编辑部**以机构身份对全文加按语"（主色左条 + 强 kicker）。语气主体不同。',
+      'note：作者旁批 + 编辑部按 + 调研口径的统一容器。' +
+      'variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到"编辑部以机构身份按语"；' +
+      'research-dense 切到"调研方法论小字栏"。',
     example: '::: note 补注\n内容 …\n:::\n',
   },
 
@@ -808,26 +812,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     description:
       '二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。',
     example: '::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n',
-  },
-  {
-    name: 'editor-note',
-    styleKey: 'editorNote',
-    category: 'signature',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    description:
-      '编辑部注：主色左竖条 callout + kicker 小标题 + 正文。data-brief / industry-observer 等深度刊家族常用，区别于中性的 note。',
-    example: '::: editor-note 编 者 按\n慢读并非复古姿态，而是一种对自己时间主权的重新申明。\n:::\n',
-  },
-  {
-    name: 'methodology',
-    styleKey: 'methodology',
-    category: 'signature',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    description:
-      '方法论小字注释：浅底 + 10px textMuted + 粗体标签头。调研类主题的脚注本，与中性 note 的区别在排印密度（更紧、更小、更"说明栏"）。',
-    example: '::: methodology 方法论\n本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者。\n:::\n',
   },
   {
     name: 'colophon',

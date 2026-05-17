@@ -258,8 +258,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '目 · 次',
     qaBlock: '读 · 者 · 通 · 信',
-    editorNote: '編 · 集 · 後 · 記',
-    methodology: '取 材 · 編 集 笔 记',
     qrFollowKicker: '訂 · 閱',
     qrFollowTitle: '订阅这份慢读季刊',
     recommend: '同 · 期 · 选 · 读',
@@ -280,7 +278,6 @@ export const spec: PersonaSpec = {
     'footnotes', // 脚注
     'ctaBar', // CTA 三栏（喜欢 / 收藏 / 分享）
     'qrFollow', // 二维码订阅
-    'editorNote', // 编辑手记单色块（callout #15）
     'colophon', // 下期预告
     'imageCaption', // mook 图注（极小字 + letter-spacing）
     'authorBio', // mook 番外编辑栏（极简 hairline）
@@ -726,26 +723,6 @@ export const spec: PersonaSpec = {
       border: '1px solid #2d3a4a',
       'border-radius': '0',
     },
-    // editor-note · 设计稿"编辑手记"单色块（米卡纸底 + accent kicker + 正文）
-    editorNote: {
-      __reset: true,
-      'background-color': '#f0ebe0',
-      'border-left': 'none',
-      padding: '20px',
-      margin: '36px 0',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#f0ebe0',
-      border: 'none',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      color: '#6b7885',
-      'border-radius': '0',
-    },
     // mook 图注极小字 + letter-spacing + textMuted——
     // 对应 04-japanese-mook.html image-with-caption 图注："10px / textMuted / letter-spacing:0.05em"，
     // 圈号 ❶ 前导由 renderer 内层控制，wrapper 只管字号 / 颜色 / 字距 / 对齐。
@@ -858,21 +835,6 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.25em',
       'text-transform': 'uppercase',
       'margin-bottom': '10px',
-      display: 'block',
-    },
-    // editor-note kicker · 最权威的"機構按語"
-    // 对位设计稿 component 15（callout 编辑手记）：
-    //   "❹　编辑手记"用 10px / letter-spacing:0.2em / color:#e85a3c。
-    // 在 abstractKicker 基础上加 border-bottom 1px solid #e85a3c（朱橙线，而非 border 灰线）——
-    // 用 accent 色线条把 kicker 本身做成"红批"视觉，区别于 abstractKicker 的灰底线。
-    editorNoteKicker: {
-      color: '#e85a3c',
-      'font-size': '10px',
-      'font-weight': '600',
-      'letter-spacing': '0.2em',
-      'padding-bottom': '5px',
-      'border-bottom': '1px solid #e85a3c',
-      'margin-bottom': '12px',
       display: 'block',
     },
   },

@@ -475,25 +475,6 @@
   margin: 22px 0;
 }
 
-.markdown-body .container-editor-note {
-  border-left: 3px solid #2a1a14;
-  background-color: #f3f1ec;
-  padding: 14px 16px 14px 18px;
-  margin: 22px 0;
-  border-radius: 0px;
-}
-
-.markdown-body .container-methodology {
-  background-color: #f3f1ec;
-  border: 1px solid #d0cec8;
-  padding: 10px 12px;
-  margin: 16px 0;
-  border-radius: 0px;
-  font-size: 10px;
-  line-height: 1.75;
-  color: #56606e;
-}
-
 .markdown-body .container-colophon {
   border-top: 1px solid #0f141b;
   padding-top: 12px;
