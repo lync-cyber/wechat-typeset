@@ -125,7 +125,6 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   footnotes: footnotesContainer,
   colophon: colophonContainer,
   'callout-group': calloutGroupContainer,
-  // M-5 / M-4 / M-2 / M-1 review 实施
   'pull-quote': pullQuoteContainer,
   'table-card': tableCardContainer,
   'table-row': tableRowContainer,

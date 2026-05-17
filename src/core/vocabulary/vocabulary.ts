@@ -844,13 +844,12 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: colophon next="纸本之必要" issue="第 004 期 · 2026"\n:::\n',
   },
 
-  // ── M-5 pull-quote（拉引） ───────────────────────────────
+  // ── 拉引 / 横幅 / 表格 / 多图 / 对话 ───────────────────
   {
-    // pull-quote 与 quote-card / highlight / admonition.magazine-pull 边界：
-    //   - quote-card        外部话语成段引用（attrs.byline 标外部来源）
-    //   - highlight         作者自我强调整段（bgMuted 无骨架）
-    //   - pull-quote        作者中段把已写过的句子放大重申（与原文同源）
-    //   - admonition.magazine-pull (deprecated) 历史错位，已迁至本容器
+    // pull-quote 与 quote-card / highlight 的边界：
+    //   - quote-card  外部话语成段引用（attrs.byline 标外部来源）
+    //   - highlight   作者自我强调整段（bgMuted 无骨架）
+    //   - pull-quote  作者中段把已写过的句子放大重申（与原文同源）
     name: 'pull-quote',
     styleKey: 'pullQuote',
     category: 'content',
@@ -873,9 +872,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: pull-quote\n我们以为在阅读，其实只是在滑动。\n:::\n',
   },
 
-  // ── M-3 announcement variants（已在 announcement entry 上接入 variantKind） ──
-
-  // ── M-4 table-card（结构化表格） ────────────────────────
   {
     name: 'table-card',
     styleKey: 'tableCard',
@@ -923,7 +919,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: table-row header=true cells="型号 | 容量 | 价格"\n:::\n',
   },
 
-  // ── M-2 gallery（多图组合） ─────────────────────────────
   {
     name: 'gallery',
     styleKey: 'gallery',
@@ -961,7 +956,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     example: '::: image-item src="cover.jpg" alt="封面" 城市夜景\n:::\n',
   },
 
-  // ── M-1 dialogue（多轮对话） ────────────────────────────
   {
     name: 'dialogue',
     styleKey: 'dialogue',

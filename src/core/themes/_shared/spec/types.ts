@@ -355,7 +355,6 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'qaBlock',
   'footnotes',
   'colophon',
-  // 五个新签名容器（M-1 ~ M-5 review 实施）
   'pullQuote',
   'tableCard',
   'gallery',

@@ -590,3 +590,167 @@ $ git push --force-with-lease
 // inline-card —— 软底 + 左主色窄竖条 + 紧凑字号（文学/生活向稿件）
 const greet = (name) => `Hello, ${name}`
 ```
+
+### pull-quote · 4 variants
+
+::: pull-quote variant=giant-mark
+我们以为在阅读，其实只是在滑动。
+:::
+
+::: pull-quote variant=centered-rule
+慢读不是怀旧姿态，是对自己时间主权的重新申明。
+:::
+
+::: pull-quote variant=stamp-quote
+夜晚不该是被算法瓜分的剩余时区。
+:::
+
+::: pull-quote variant=margin-pull
+书脊与手指的记忆，比屏幕的光更持久。
+:::
+
+### announcement · 4 variants
+
+::: announcement variant=danger-bar tone=danger 重要通知
+本期推送涉及账号迁移说明，请阅后转发给同事知悉。
+:::
+
+::: announcement variant=mono-disclaimer tone=primary 免责声明
+本文涉及个人投资判断，不构成任何投资建议；据此操作风险自担。
+:::
+
+::: announcement variant=ai-notice 本文部分内容由 AI 生成
+为提高编辑效率，本期数据图表与段落初稿由模型辅助生成，已经过编辑部人工校对。
+:::
+
+::: announcement variant=stamped-banner tone=accent 编辑部通告
+《慢读简报》自本期起改为隔周四出刊；订阅用户邮件提醒同步调整。
+:::
+
+### table-card · 4 variants
+
+:::: table-card 设备规格 variant=rule-grid
+::: table-row header=true cells="型号 | 容量 | 价格"
+:::
+::: table-row cells="A · 256G · ¥6999"
+:::
+::: table-row cells="B · 512G · ¥8999"
+:::
+::::
+
+:::: table-card 月度数据 variant=zebra-rows
+::: table-row header=true cells="月份 | 销量 | 同比"
+:::
+::: table-row cells="01 | 1024 | +12%"
+:::
+::: table-row cells="02 | 1180 | +18%"
+:::
+::: table-row cells="03 | 1320 | +24%"
+:::
+::::
+
+:::: table-card 关键参数 variant=key-value
+::: table-row cells="芯片 | M4 Pro"
+:::
+::: table-row cells="内存 | 24GB"
+:::
+::: table-row cells="续航 | 22 小时"
+:::
+::::
+
+:::: table-card 订阅档位 variant=price-tier
+::: table-row header=true cells="基础 | *专业 | 旗舰"
+:::
+::: table-row cells="¥39 | ¥99 | ¥199"
+:::
+::: table-row cells="单端 | 三端 | 团队"
+:::
+::::
+
+### gallery · 4 variants
+
+:::: gallery 双图对照 variant=duo
+::: image-item src="https://placehold.co/400" alt="前" 改版前
+:::
+::: image-item src="https://placehold.co/400" alt="后" 改版后
+:::
+::::
+
+:::: gallery 三幕 variant=triptych
+::: image-item src="https://placehold.co/400" alt="春" 春
+:::
+::: image-item src="https://placehold.co/400" alt="夏" 夏
+:::
+::: image-item src="https://placehold.co/400" alt="秋" 秋
+:::
+::::
+
+:::: gallery 城市九宫 variant=nine-grid
+::: image-item src="https://placehold.co/400" alt="01"
+:::
+::: image-item src="https://placehold.co/400" alt="02"
+:::
+::: image-item src="https://placehold.co/400" alt="03"
+:::
+::: image-item src="https://placehold.co/400" alt="04"
+:::
+::: image-item src="https://placehold.co/400" alt="05"
+:::
+::: image-item src="https://placehold.co/400" alt="06"
+:::
+::::
+
+:::: gallery 移动横滚 variant=ribbon-strip
+::: image-item src="https://placehold.co/400" alt="01" 第一站
+:::
+::: image-item src="https://placehold.co/400" alt="02" 第二站
+:::
+::: image-item src="https://placehold.co/400" alt="03" 第三站
+:::
+::: image-item src="https://placehold.co/400" alt="04" 第四站
+:::
+::::
+
+### dialogue · 4 variants
+
+:::: dialogue 主编访谈 variant=qa-rows
+::: dialogue-turn name="主持人" role="Q"
+你怎么看这次行业转向？
+:::
+::: dialogue-turn name="张三" role="A"
+转向是必然的，但节奏会比想象慢。
+:::
+::: dialogue-turn name="主持人" role="Q"
+"慢"是相对什么参照？
+:::
+::: dialogue-turn name="张三" role="A"
+相对 2020 年的 AI hype。
+:::
+::::
+
+:::: dialogue 客服对话 variant=chat-bubbles
+::: dialogue-turn name="顾客" side="left"
+请问续费有学生优惠吗？
+:::
+::: dialogue-turn name="客服" side="right"
+有的，凭学生证认证后享 5 折，全年只需 ¥99。
+:::
+::::
+
+:::: dialogue 剧本片段 variant=name-prefix
+::: dialogue-turn name="李四"
+今晚的会议改到八点了。
+:::
+::: dialogue-turn name="王五"
+那我去订咖啡。
+:::
+::::
+
+:::: dialogue 长访谈 variant=interview-column
+::: dialogue-turn name="编辑" role="ED"
+你怎么看慢读这件事？
+:::
+::: dialogue-turn name="作者" role="A"
+慢读的对立面不是快读，而是被打断；只要不被打断，慢自然发生。
+:::
+::::
