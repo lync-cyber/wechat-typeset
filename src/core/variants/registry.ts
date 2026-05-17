@@ -35,6 +35,7 @@ import type {
   DividerVariantId,
   FootnotesVariantId,
   NoteVariantId,
+  QrcodeVariantId,
   QuoteVariantId,
   RecommendVariantId,
   SectionTitleVariantId,
@@ -124,6 +125,7 @@ const FOOTNOTES_ORDER: readonly string[] = [
   'dense-academic',
 ]
 const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
+const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card']
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -136,6 +138,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   note: NOTE_ORDER,
   footnotes: FOOTNOTES_ORDER,
   recommend: RECOMMEND_ORDER,
+  qrcode: QRCODE_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -159,6 +162,7 @@ import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
 import footnotesAll from './footnotes/_all'
 import recommendAll from './recommend/_all'
+import qrcodeAll from './qrcode/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -172,6 +176,7 @@ function collectDefs(): AnyDef[] {
     ...noteAll,
     ...footnotesAll,
     ...recommendAll,
+    ...qrcodeAll,
   ] as unknown as AnyDef[]
 }
 
@@ -235,6 +240,7 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
 export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
 export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, 'footnotes')
 export const RECOMMEND_VARIANTS = asRecord<RecommendVariantId, void>(ALL_DEFS, 'recommend')
+export const QRCODE_VARIANTS = asRecord<QrcodeVariantId, void>(ALL_DEFS, 'qrcode')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }

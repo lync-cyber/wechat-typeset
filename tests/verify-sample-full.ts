@@ -111,8 +111,9 @@ const plainContainers = [
   'container-qa-block',
   'container-callout-group',
   'container-cta-bar',
-  'container-qr-follow',
   'container-colophon',
+  // qrcode follow-card variant：刊物订阅卡（左 QR + 右 kicker/title/desc）
+  'container-qrcode container-qrcode--follow-card',
   // pack:data-viz
   'container-kpi-dashboard',
   'container-bar-chart',

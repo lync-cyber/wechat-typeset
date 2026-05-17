@@ -147,7 +147,7 @@ risograph 印刷：单色每张成本约 0.3 元，200 份起印，最低门槛�
 ::: cta-bar like="LIKE" star="STAR ★" share="FWD →"
 :::
 
-::: qr-follow INK // ink.press desc="双月刊 · 纸本邮寄 · CC-BY-NC" kicker="// SCAN & ORDER"
+::: qrcode variant=follow-card INK // ink.press desc="双月刊 · 纸本邮寄 · CC-BY-NC" kicker="// SCAN & ORDER"
 :::
 
 ::: recommend [READ_NEXT]

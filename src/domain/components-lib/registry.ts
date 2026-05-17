@@ -26,6 +26,8 @@ export const COMPONENT_TABS: ReadonlyArray<{
   { kind: 'sectionTitle', label: '章节' },
   { kind: 'note', label: '补注' },
   { kind: 'footnotes', label: '脚注' },
+  { kind: 'recommend', label: '推荐' },
+  { kind: 'qrcode', label: '二维码' },
   { kind: 'none', label: '其它' },
   { kind: 'user', label: '我的组件' },
 ]

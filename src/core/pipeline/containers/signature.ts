@@ -6,9 +6,6 @@
  * 如把 keyNumber 数字字号从 32px 调到 28px）。
  *   - abstract：文章头部 tl;dr。kicker（"Abstract / 摘要"）+ body markdown。
  *   - key-number：大字号数字 + 说明。attrs.value 放数字本体，info 放 kicker，body 放详解。
- *
- * 历史合并：原 ::: see-also 已收编为 recommend 的 academic-refs variant
- * （R-7），不再作为独立 fence 存在。
  */
 
 import type { ContainerRenderer } from './types'

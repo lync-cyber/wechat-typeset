@@ -603,8 +603,16 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'qrcode',
     styleKey: 'qrcode',
     category: 'navigation',
+    variantKind: 'qrcode',
     fenceLength: 3,
     attrs: [
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 qrcode 骨架。bare（默认）= 居中 QR + 下方 caption（任意 QR 场景）；' +
+          'follow-card = 左 QR + 右 kicker/title/desc 三行（刊物订阅卡）。',
+        enum: VARIANT_IDS.qrcode,
+      },
       {
         key: 'text',
         description:
@@ -622,11 +630,26 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
         description: 'SVG 像素尺寸（width=height）。未提供则按 viewBox + CSS 缩放。',
         example: '160',
       },
+      {
+        key: 'kicker',
+        description: 'follow-card 右上角 kicker 文字（缺省走 ctx.kickers.qrFollowKicker）',
+        example: 'SUBSCRIBE',
+      },
+      {
+        key: 'desc',
+        description: 'follow-card 右下角描述文字（小字 textMuted）',
+        example: '每周四，一封邮件，一组数据',
+      },
+      {
+        key: 'qr',
+        description: 'follow-card 模式下，外链 QR 图 URL（与 attrs.text 互斥；都没有走占位 SVG）',
+        example: 'https://…/qr.png',
+      },
     ],
     description:
-      '通用二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。' +
-      '与 qr-follow 的边界：qrcode 是"任意场景的 QR"（赞赏码 / 活动链接 / 小程序），布局极简；' +
-      'qr-follow 是 pack:editorial 的"订阅二维码栏"（左 QR + 右 kicker+title+desc 三行版式），刊物收尾专用。',
+      '二维码块。两态骨架：bare（默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；' +
+      'follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。' +
+      '带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。',
     example: '::: qrcode text="https://mp.weixin.qq.com/s/xxx"\n扫码关注\n:::\n',
   },
   {
@@ -795,21 +818,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     description:
       'CTA 三栏：左/右描边格 + 中实色格。data-brief 签名（赞同 / 收藏 / 转发）。body 忽略。',
     example: '::: cta-bar\n:::\n',
-  },
-  {
-    name: 'qr-follow',
-    styleKey: 'qrFollow',
-    category: 'navigation',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    attrs: [
-      { key: 'kicker', description: '左上小字 kicker（默认 SUBSCRIBE）', example: 'SUBSCRIBE' },
-      { key: 'desc', description: '副标题（小字说明）', example: '每周四，一封邮件，一组数据' },
-      { key: 'qr', description: 'QR 图地址（缺省时画占位 SVG）', example: 'https://…/qr.png' },
-    ],
-    description:
-      '二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。',
-    example: '::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n',
   },
   {
     name: 'colophon',

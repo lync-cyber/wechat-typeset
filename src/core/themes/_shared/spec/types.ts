@@ -355,7 +355,6 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'qaBlock',
   'footnotes',
   'ctaBar',
-  'qrFollow',
   'colophon',
 ] as const
 

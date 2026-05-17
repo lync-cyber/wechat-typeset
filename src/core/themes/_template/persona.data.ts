@@ -92,6 +92,7 @@ export const spec: PersonaSpec = {
     note: 'minimal-callout',
     footnotes: 'lined',
     recommend: 'card-list',
+    qrcode: 'bare',
   },
 
   // ------------------------------------------------------------

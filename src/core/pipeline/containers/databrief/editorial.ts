@@ -10,9 +10,6 @@
  * 与 metrics 的差异：本组容器**有 body 内容**（markdown-it 渲染的内文），
  * 渲染器 open 留段 wrapper 给 markdown 流式注入；metrics 多为"声明型"
  * （attrs 决定全部，body 忽略）。
- *
- * 历史合并：原 editor-note / methodology 已收编为 note 的两个 variant
- * （editorial-stripe / research-dense），不再作为独立 fence 存在。
  */
 
 import type { ContainerRenderer } from '../types'

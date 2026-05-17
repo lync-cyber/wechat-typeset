@@ -223,6 +223,7 @@ export const spec: PersonaSpec = {
     // boxed-aside：narrative aside 软底卡片，与 zine 内附注同源
     footnotes: 'boxed-aside',
     recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
   },
 
   // ============================================================
@@ -263,7 +264,6 @@ export const spec: PersonaSpec = {
     'qaBlock',
     'footnotes',
     'ctaBar',
-    'qrFollow',
     'colophon',
     'imageCaption', // monospace 橙金时间戳图注
     'authorBio', // 电台主播卡（深蓝卡底 + 橙顶线）
@@ -659,14 +659,6 @@ export const spec: PersonaSpec = {
       margin: '26px 0',
     },
     // qr-follow · tune·in 牌：1px 橙边框 + 深蓝卡底（设计稿 qr-follow 原型）
-    qrFollow: {
-      __reset: true,
-      border: '1px solid #d97a3c',
-      'background-color': '#14263d',
-      padding: '14px',
-      margin: '26px 0',
-      'border-radius': '0',
-    },
     // colophon · 刊物收束栏（设计稿 footer 原型）：上方 1px text 实色分隔线 +
     // 双栏 monospace（"下期 ｜ 卷·期"）。renderer 强制 display:table。
     colophon: {

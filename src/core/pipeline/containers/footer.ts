@@ -3,16 +3,19 @@
  *
  * - footerCTA：文末关注卡。info 作为主文案；attrs.cta 作为按钮文字（以 span 样式渲染）。
  * - recommend：推荐阅读块（variantKind=recommend，card-list / academic-refs）。
- * - qrcode：二维码卡。info 作为说明文字；内容通常是一张图（![](url)）。
+ * - qrcode：二维码卡（variantKind=qrcode，bare 默认 / follow-card 刊物订阅卡）。
  *
  * 所有色值从 ctx.tokens.colors 读取，确保 4 套主题下的按钮/说明色都跟着主色走。
  */
 
-import type { ContainerRenderer } from './types'
+import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escAttr, escText } from './_shared/escape'
 import { encodeQrSvg } from '../qr/encodeQrSvg'
 import { RECOMMEND_VARIANTS } from '../../variants/registry'
 import { makeVariantContainer } from './_shared/makeVariantContainer'
+import { resolveVariantId } from './_shared/resolveVariant'
+import type { QrcodeVariantId } from '../../themes/types'
+import { QRCODE_VARIANTS } from '../../variants/registry'
 
 // 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）
 function resolveIssueStampForFooter(
@@ -73,7 +76,7 @@ export const footerCTAContainer: ContainerRenderer = {
 /**
  * recommend · 两态 variant 容器：
  *   - card-list（默认）= 面向读者的"延伸阅读"，粗体大标题 + bullet 链接
- *   - academic-refs    = 面向论证的"参考引用"（承接原 ::: see-also），uppercase 小字 kicker
+ *   - academic-refs    = 面向论证的"参考引用"，uppercase 小字 kicker + textMuted 列表
  *
  * info 优先（作者写 `::: recommend 自定义标题`），缺省走 ctx.kickers.recommend。
  * variant 切骨架；主题级 voice（ctx.containers.recommend）仍由 themeCSS 注入。
@@ -122,14 +125,106 @@ function renderInlineQr(
   return `<section class="container-qrcode__qr" style="display:inline-block;margin-bottom:8px">${svg}</section>\n`
 }
 
+/**
+ * follow-card variant 的 left QR + right kicker/title/desc layout。
+ * 走 display:table + table-cell，避开 flex 被微信粘贴剥。占位 QR：作者提供 attrs.text
+ * 时复用 renderInlineQr 内置编码；attrs.qr=URL 时走 <img>；都没有则画占位 SVG。
+ */
+function renderFollowCardQr(ctx: ContainerRenderContext): string {
+  const c = ctx.tokens.colors
+  const qrUrl = ctx.attrs.qr ?? ''
+  const qrImgCSS = 'display:block;width:64px;height:64px'
+  if (ctx.attrs.text) {
+    return renderInlineQr(ctx).replace(/margin-bottom:8px/, qrImgCSS)
+  }
+  if (qrUrl) {
+    return `<img src="${escAttr(qrUrl)}" alt="QR" style="${qrImgCSS}"/>`
+  }
+  // 占位 QR SVG：仿真三角眼 + 数据点（不承诺扫码功能，仅占位）
+  return (
+    `<svg viewBox="0 0 60 60" width="64" height="64" style="${qrImgCSS}">` +
+    `<g fill="${c.text}">` +
+    `<rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="#fff"/><rect x="9" y="9" width="4" height="4"/>` +
+    `<rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="#fff"/><rect x="47" y="9" width="4" height="4"/>` +
+    `<rect x="3" y="41" width="16" height="16"/><rect x="6" y="44" width="10" height="10" fill="#fff"/><rect x="9" y="47" width="4" height="4"/>` +
+    `<rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/><rect x="36" y="27" width="3" height="3"/>` +
+    `<rect x="24" y="30" width="3" height="3"/><rect x="33" y="30" width="3" height="3"/><rect x="27" y="36" width="3" height="3"/>` +
+    `<rect x="36" y="36" width="3" height="3"/><rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/>` +
+    `<rect x="39" y="45" width="3" height="3"/><rect x="27" y="48" width="3" height="3"/>` +
+    `</g></svg>`
+  )
+}
+
+/**
+ * qrcode 容器：variant 分派 bare（默认，居中 QR + caption）与 follow-card
+ * （刊物订阅卡：左 QR + 右 kicker/title/desc 三行）。
+ * 主题 voice 由 ctx.containers.qrcode 注入 wrapper 装饰（边框 / 底色 / 边距）。
+ * 设计纪律：layout 走 display:table（避开 flex 被微信剥）；font-family 仅在 renderer
+ * inline 出现（主题层 elements/containers CSS 禁 font-family）。
+ */
 export const qrcodeContainer: ContainerRenderer = {
   open: (ctx) => {
+    const id = resolveVariantId<QrcodeVariantId>(ctx, 'qrcode', QRCODE_VARIANTS, 'bare')
+    if (id === 'follow-card') {
+      const c = ctx.tokens.colors
+      const kicker = ctx.attrs.kicker ?? ctx.kickers.qrFollowKicker
+      const title = ctx.info.trim() || ctx.kickers.qrFollowTitle
+      const desc = ctx.attrs.desc ?? ''
+      const wrapperCSS = `display:table;width:100%;table-layout:auto;border-collapse:collapse`
+      const qrCellCSS = [
+        'display:table-cell',
+        'vertical-align:middle',
+        'padding:12px',
+        `border-right:1px solid ${c.text}`,
+        `background-color:${c.bg}`,
+      ].join(';')
+      const textCellCSS = 'display:table-cell;vertical-align:middle;padding:10px 14px'
+      const kickerCSS = [
+        'font-family:Menlo,Monaco,monospace',
+        'font-size:9px',
+        'font-weight:700',
+        `color:${c.primary}`,
+        'letter-spacing:0.2em',
+      ].join(';')
+      const titleCSS = [
+        'font-size:14px',
+        'font-weight:700',
+        `color:${c.text}`,
+        'margin-top:4px',
+        'letter-spacing:-0.01em',
+      ].join(';')
+      const descCSS = [
+        'font-size:10px',
+        `color:${c.textMuted}`,
+        'margin-top:4px',
+        'line-height:1.5',
+      ].join(';')
+      const descEl = desc
+        ? `<section style="${descCSS}">${escText(desc)}</section>`
+        : ''
+      const qrEl = renderFollowCardQr(ctx)
+      return (
+        `<section class="container-qrcode container-qrcode--follow-card" style="${wrapperCSS}">` +
+        `<span style="${qrCellCSS}">${qrEl}</span>` +
+        `<span style="${textCellCSS}">` +
+        `<section style="${kickerCSS}">${escText(kicker)}</section>` +
+        `<section style="${titleCSS}">${escText(title)}</section>` +
+        descEl +
+        `</span>` +
+        `</section>\n`
+      )
+    }
+    // bare variant：居中 QR + 居中 caption（默认形态）
     const caption = ctx.info.trim()
     const cap = caption
       ? `<section class="container-qrcode__caption" style="text-align:center;color:${ctx.tokens.colors.textMuted};margin-bottom:8px">${escText(caption)}</section>`
       : ''
     const qr = renderInlineQr(ctx)
-    return `<section class="container-qrcode" style="text-align:center">\n${qr}${cap}\n`
+    return `<section class="container-qrcode container-qrcode--bare" style="text-align:center">\n${qr}${cap}\n`
   },
-  close: '</section>\n',
+  close: (ctx) => {
+    // follow-card 已经在 open 里自闭合；bare 走标准 close
+    const id = resolveVariantId<QrcodeVariantId>(ctx, 'qrcode', QRCODE_VARIANTS, 'bare')
+    return id === 'follow-card' ? '' : '</section>\n'
+  },
 }

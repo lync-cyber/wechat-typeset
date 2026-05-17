@@ -331,6 +331,7 @@ export const spec: PersonaSpec = {
     note: 'dotted-margin', // dotted 左竖线 + 缩进，散文页边批注，比 minimal-callout 更"手记"
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
     recommend: 'card-list',
+    qrcode: 'bare',
   },
 
   // ============================================================

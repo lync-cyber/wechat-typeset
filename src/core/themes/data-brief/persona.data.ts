@@ -219,6 +219,7 @@ export const spec: PersonaSpec = {
     note: 'smallcaps-kicker', // 顶 2px 主色条 + uppercase kicker，与签名容器同源
     footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，财新简报底栏语言
     recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
   },
 
   // ============================================================
@@ -254,7 +255,6 @@ export const spec: PersonaSpec = {
     'qaBlock', // 读者问答
     'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 用于长列表）
     'ctaBar', // 三栏 CTA（赞同/收藏/转发）
-    'qrFollow', // 二维码订阅卡
     'colophon', // 刊物收束栏（"下期 / 卷·期"双栏 monospace）
   ],
 
@@ -610,13 +610,6 @@ export const spec: PersonaSpec = {
       color: '#5a6068',
     },
     ctaBar: { margin: '22px 0' },
-    qrFollow: {
-      margin: '22px 0',
-      padding: '14px',
-      'background-color': '#f5f7fa',
-      'border-left': '3px solid #1756d1',
-      'border-radius': '0',
-    },
     // colophon · 刊物收束栏："下期 / 卷·期"双栏，上分割线 1px 近黑（强分隔）
     // renderer 自带 display:table，spec 这里仅承诺分隔线 + 间距
     colophon: {

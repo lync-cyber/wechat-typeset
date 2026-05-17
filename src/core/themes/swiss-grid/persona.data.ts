@@ -187,6 +187,7 @@ export const spec: PersonaSpec = {
     note: 'side-bar', // 左 2px 中性线 + 缩进
     footnotes: 'top-rule', // 顶 hairline + 11px 密栏，国际排印底栏
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
   },
 
   // ============================================================
@@ -222,7 +223,6 @@ export const spec: PersonaSpec = {
     'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 承担"NOTES"长文献列表）
     'calloutGroup', // 四态 callout 联表外框（multi-callout 母本）
     'ctaBar', // 三栏 CTA（attrs.info 切到 "IF YOU LIKED THIS" header bar 模式）
-    'qrFollow', // 二维码订阅卡
     'colophon', // 刊物收束栏（NEXT · VOL 双栏）
     'barChart', // 条形图（FIG.01 按年龄）
     'imageCaption', // 图注（居左 monospace 极小字 + letter-spacing）
@@ -713,14 +713,6 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
     },
     // qr-follow：设计稿"左 QR + 右三行文字 (SUBSCRIBE/标题/说明)" hairline 全边框 + 直角
-    qrFollow: {
-      __reset: true,
-      margin: '20px 0',
-      padding: '0',
-      'background-color': '#ffffff',
-      border: '1px solid #000000',
-      'border-radius': '0',
-    },
     // colophon：设计稿"NEXT · VOL 双栏 monospace, 上 3px 黑分隔" —— renderer 走 display:table
     colophon: {
       __reset: true,
@@ -786,7 +778,7 @@ VOL.IV · 2026—04—22 · CHF 14.—
       '架构复用：admonition `news-row` variant 直接复刻设计稿 multi-callout；\n' +
       'issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；\n' +
       'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker）；编辑部按 / 方法论\n' +
-      '走 note variant=editorial-stripe / research-dense（容器层 R-1 合并后统一接口）。\n' +
+      '走 note variant=editorial-stripe / research-dense。\n' +
       '已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,\n' +
       '但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
       '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）。',

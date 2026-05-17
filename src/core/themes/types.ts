@@ -206,8 +206,6 @@ export interface ThemeContainers {
   footnotes: CSSObject
   /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
   ctaBar: CSSObject
-  /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
-  qrFollow: CSSObject
   /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
   colophon: CSSObject
 }
@@ -447,9 +445,9 @@ export type NoteVariantId =
   | 'dotted-margin'
   // 小型大写 kicker + 正文：粗野主义 / 数据简报骨架
   | 'smallcaps-kicker'
-  // 左 3px 主色条 + bgSoft + kicker：编辑部按（承接原 ::: editor-note）
+  // 左 3px 主色条 + bgSoft + kicker：编辑部按语气（主色介入的栏目编辑发声块）
   | 'editorial-stripe'
-  // bgSoft + 10px 紧凑 + 粗体 label：调研方法论栏（承接原 ::: methodology）
+  // bgSoft + 10px 紧凑 + 粗体 label：调研口径栏（图注/方法论旁附小字栏）
   | 'research-dense'
 
 export type CodeBlockVariantId =
@@ -465,10 +463,16 @@ export type CodeBlockVariantId =
   | 'inline-card'
 
 export type RecommendVariantId =
-  // 默认：列表式标题 + bullet 链接（当前 recommend 视觉）
+  // 默认：列表式标题 + bullet 链接（面向读者的"延伸阅读"）
   | 'card-list'
-  // 学术引用：uppercase letter-spaced kicker + textMuted 小字（承接原 ::: see-also）
+  // 学术引用：uppercase letter-spaced kicker + textMuted 小字（面向论证的"参考引用"）
   | 'academic-refs'
+
+export type QrcodeVariantId =
+  // 默认：居中 QR + 居中 caption（"任意场景的 QR"，赞赏码/活动链接/小程序）
+  | 'bare'
+  // 订阅卡：左 QR + 右 kicker/title/desc 三行（刊物收尾专用）
+  | 'follow-card'
 
 export type FootnotesVariantId =
   // 一条一行 + hanging indent（默认）
@@ -497,6 +501,8 @@ export interface ThemeVariants {
   footnotes: FootnotesVariantId
   /** 推荐阅读骨架（card-list 默认 / academic-refs = 原 see-also）。 */
   recommend: RecommendVariantId
+  /** 二维码骨架（bare 默认 / follow-card = 原 qr-follow）。 */
+  qrcode: QrcodeVariantId
 }
 
 /**
@@ -514,6 +520,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   note: 'minimal-callout',
   footnotes: 'lined',
   recommend: 'card-list',
+  qrcode: 'bare',
 }
 
 // ============================================================
@@ -531,9 +538,9 @@ export interface ThemeKickers {
   toc: string
   /** ::: qa-block 容器无 info 时的 kicker 兜底（renderer 默认 "读者问答 · Q&A"） */
   qaBlock: string
-  /** ::: qr-follow attrs.kicker 兜底（renderer 默认 "SUBSCRIBE"） */
+  /** qrcode variant=follow-card 的 attrs.kicker 兜底（renderer 默认 "SUBSCRIBE"） */
   qrFollowKicker: string
-  /** ::: qr-follow 容器无 info 时的 title 兜底（renderer 默认 "订阅本刊"） */
+  /** qrcode variant=follow-card 容器无 info 时的 title 兜底（renderer 默认 "订阅本刊"） */
   qrFollowTitle: string
   /** ::: recommend 容器无 info 时的 title 兜底（renderer 默认 "推荐阅读"） */
   recommend: string
@@ -654,6 +661,10 @@ export const VARIANT_IDS = {
     'card-list',
     'academic-refs',
   ] as const satisfies readonly RecommendVariantId[],
+  qrcode: [
+    'bare',
+    'follow-card',
+  ] as const satisfies readonly QrcodeVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

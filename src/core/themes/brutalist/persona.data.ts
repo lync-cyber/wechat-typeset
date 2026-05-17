@@ -11,11 +11,11 @@
  *   3. status 四态打破交通灯：NOTE 蓝 / TIP 绿 / WARN 黄 / HALT 红
  *      —— "STOP" 太工业平淡，"HALT" 更 brutalist-aggressive 的终端 / 汇编传统
  *
- * 复用关系：除签名变体 `tilted-sticker` 与 masthead 的 `kicker` ribbon 模式
- * （两者均为 R-brutalist 落地的通用增强）外，全部容器 / 变体 / 装饰均复用现有词汇：
+ * 复用关系：除签名变体 `tilted-sticker` 与 masthead 的 `kicker` ribbon 模式外，
+ * 全部容器 / 变体 / 装饰均复用现有词汇：
  *   - admonition · news-row（"四态共骨架 + 色相 + 标签字"）—— data-brief 同源
- *   - masthead / toc / qa-block / cta-bar / qr-follow / footnotes / editor-note /
- *     colophon —— data-brief 家族 7 件签名容器
+ *   - masthead / toc / qa-block / cta-bar / footnotes / colophon —— data-brief 家族签名容器
+ *   - note variant=editorial-stripe（编 者 按）/ qrcode variant=follow-card（订阅卡）
  *   - decorations.headingPrefix · arabic-padded / arabic-section —— 章节序号
  *
  * 平台兼容：transform:rotate 不在 wxPatch 删除列表（FORBIDDEN_POSITION_PROPS 不含），
@@ -180,6 +180,7 @@ export const spec: PersonaSpec = {
     note: 'side-bar', // 左 2px 短线 + 缩进,与"批注"语义一致
     footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，punk zine 底栏
     recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
   },
 
   // ============================================================
@@ -211,7 +212,6 @@ export const spec: PersonaSpec = {
     'qaBlock', // 终端 Q&A 风
     'footnotes', // fn[] 等宽脚注
     'ctaBar', // LIKE / STAR / FWD 三栏 CTA
-    'qrFollow', // 二维码关注
     'colophon', // 下期预告 + 卷·期
     'imageCaption', // 图注（// CAPTION 注释风 + 荧光黄）
     'announcement', // 强警示横幅（荧光黄整块反色）
@@ -598,15 +598,6 @@ export const spec: PersonaSpec = {
     // cta-bar：三栏（LIKE / STAR / FWD）—— renderer 已提供 display:table 骨架
     ctaBar: { margin: '24px 0' },
     // qr-follow：左 QR + 右 SUBSCRIBE / 标题 / 说明（黄边框 + 黑底）
-    qrFollow: {
-      __reset: true,
-      'background-color': 'transparent',
-      border: '1px solid #f0f0f0',
-      'border-left': '1px solid #f0f0f0',
-      padding: '12px',
-      margin: '24px 0',
-      'border-radius': '0',
-    },
     // colophon：上 2px 双粗线 + "下期 / 卷·期"（与 masthead 头尾呼应）
     colophon: {
       __reset: true,
@@ -721,8 +712,7 @@ export const spec: PersonaSpec = {
       '主题 07 粗野主义报刊：荧光黄 + 暗底 + 直角硬边。复用现有 admonition.news-row、' +
       'data-brief 家族签名容器（masthead 增 kicker 三栏 ribbon 模式）；唯一新增 variant 为' +
       ' quote.tilted-sticker（punk-zine 撕贴纸语义,可复用）。' +
-      '编辑部按 / 方法论收编进 note variant（editorial-stripe / research-dense），' +
-      '本主题不再签名两者，按需在样张里写 `::: note variant=editorial-stripe` 即可。',
+      '编辑部按 / 调研口径走 note variant=editorial-stripe / research-dense。',
   },
 }
 

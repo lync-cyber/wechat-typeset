@@ -247,6 +247,7 @@ export const spec: PersonaSpec = {
     note: 'box-callout', // 学术风：1px 边框包裹的 "Remark" 框，与 sidenote-latex 同语调
     footnotes: 'dense-academic', // 2px 章节杆 + 深 hanging，论文 bibliography 章
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
+    qrcode: 'bare',
   },
 
   // ============================================================
@@ -584,8 +585,8 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // 签名容器：abstract（文首 tl;dr，学术综述自然入口）。参考文献块走 ::: recommend
-  // variant=academic-refs（R-7 合并：原 see-also 收编为 recommend 的 variant）。
+  // 签名容器：abstract（文首 tl;dr，学术综述自然入口）。参考文献块走
+  // ::: recommend variant=academic-refs（uppercase 小字 kicker + textMuted 列表）。
   signatureContainers: ['abstract'],
 
   // ============================================================

@@ -239,6 +239,7 @@ export const spec: PersonaSpec = {
     note: 'side-bar', // // NOTE 风：左侧标线 + 缩进
     footnotes: 'dense-academic', // RFC 风密栏 + 深 hanging，更接近 manpage SEE ALSO 段
     recommend: 'card-list',
+    qrcode: 'bare',
   },
 
   // ============================================================

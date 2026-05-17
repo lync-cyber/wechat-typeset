@@ -168,7 +168,7 @@ const column = (total, gutter) =>
 ::: cta-bar IF YOU LIKED THIS like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
 :::
 
-::: qr-follow NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"
+::: qrcode variant=follow-card NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"
 :::
 
 ::: recommend FURTHER READING

@@ -137,7 +137,7 @@
 ::: cta-bar
 :::
 
-::: qr-follow 数字阅读观察 desc="每季度发布 · CNNIC 合作数据 · 订阅可获原始数据集"
+::: qrcode variant=follow-card 数字阅读观察 desc="每季度发布 · CNNIC 合作数据 · 订阅可获原始数据集"
 :::
 
 ::: note variant=research-dense 方法论 · METHODOLOGY

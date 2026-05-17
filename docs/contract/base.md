@@ -38,7 +38,7 @@
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。 |
 |  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。 |
 |  | `recommend` | ★ | 推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。 |
-|  | `qrcode` | ★ | 通用二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。与 qr-follow 的边界：qrcode 是"任意场景的 QR"（赞赏码 / 活动链接 / 小程序），布局极简；qr-follow 是 pack:editorial 的"订阅二维码栏"（左 QR + 右 kicker+title+desc 三行版式），刊物收尾专用。 |
+|  | `qrcode` | ★ | 二维码块。两态骨架：bare（默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。 |
 | 媒体 | `voice-card` | ★ | 公众号语音占位卡（粘贴后由微信识别为真 mpvoice 节点）。 |
 |  | `video-card` | ★ | 公众号视频占位卡（带 qqvid 时直出 v.qq.com iframe；其余为占位）。 |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |

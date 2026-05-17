@@ -49,8 +49,10 @@ const PROBES: Record<VariantKind, RegExp> = {
   note: /^:{3,}\s*note\b/m,
   // footnotes 容器 或 markdown-it-footnote 的 [^id]
   footnotes: /^:{3,}\s*footnotes\b|\[\^[^\]]+\]/m,
-  // recommend 容器（含 R-7 合并后承接的"参考引用"语义）
+  // recommend 容器（card-list 默认 / academic-refs 参考引用 variant）
   recommend: /^:{3,}\s*recommend\b/m,
+  // qrcode 容器（bare 默认 / follow-card 订阅卡 variant）
+  qrcode: /^:{3,}\s*qrcode\b/m,
 }
 
 const SLOT_LABELS: Record<VariantKind, string> = {
@@ -64,6 +66,7 @@ const SLOT_LABELS: Record<VariantKind, string> = {
   note: '注解（note）',
   footnotes: '脚注（footnotes / [^id]）',
   recommend: '推荐阅读（recommend）',
+  qrcode: '二维码（qrcode）',
 }
 
 describe('故事样张 variant 覆盖', () => {

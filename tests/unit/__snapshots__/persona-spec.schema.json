@@ -7501,7 +7501,8 @@
         "codeBlock",
         "note",
         "footnotes",
-        "recommend"
+        "recommend",
+        "qrcode"
       ],
       "properties": {
         "admonition": {
@@ -7608,6 +7609,12 @@
           "enum": [
             "card-list",
             "academic-refs"
+          ]
+        },
+        "qrcode": {
+          "enum": [
+            "bare",
+            "follow-card"
           ]
         }
       },

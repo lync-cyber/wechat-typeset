@@ -170,17 +170,23 @@ describe('footer-cta / recommend / qrcode', () => {
     expect(out).toContain('href="https://a.com?x=1&amp;y=2"')
   })
 
-  it('recommend 块识别', () => {
+  it('recommend 块识别（默认 card-list variant）', () => {
     const out = run('::: recommend 推荐阅读\n- [A](http://a.com)\n:::\n')
-    // R-7 合并：recommend 升为 variantKind 容器，默认 card-list variant
     expect(out).toMatch(/class="container-recommend container-recommend--card-list"/)
     expect(out).toContain('推荐阅读')
   })
 
-  it('qrcode 块识别', () => {
+  it('qrcode 块识别（默认 bare variant）', () => {
     const out = run('::: qrcode 扫码关注\n:::\n')
-    expect(out).toMatch(/class="container-qrcode"/)
+    expect(out).toMatch(/class="container-qrcode container-qrcode--bare"/)
     expect(out).toContain('扫码关注')
+  })
+
+  it('qrcode variant=follow-card：左 QR + 右 kicker/title/desc 三行刊物订阅卡', () => {
+    const out = run('::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n')
+    expect(out).toMatch(/class="container-qrcode container-qrcode--follow-card"/)
+    expect(out).toContain('慢读简报')
+    expect(out).toContain('每周四')
   })
 })
 
@@ -249,9 +255,8 @@ describe('signature containers（note / abstract / key-number）', () => {
     expect(out).toContain('SaaS 企业版拉动')
   })
 
-  it('recommend variant=academic-refs：承接原 ::: see-also 语义', () => {
+  it('recommend variant=academic-refs：uppercase 小字 kicker + textMuted 列表', () => {
     const out = run('::: recommend variant=academic-refs\n- [相关 A](https://example.com/a)\n- [相关 B](https://example.com/b)\n:::\n')
-    // R-7 合并：see-also 收编为 recommend 的 academic-refs variant
     expect(out).toMatch(/class="container-recommend container-recommend--academic-refs"/)
     expect(out).toMatch(/<a[^>]*href="https:\/\/example\.com\/a"/)
   })

@@ -269,6 +269,7 @@ export const spec: PersonaSpec = {
     note: 'side-bar', // 左 2px 标线 + 缩进，与 report-section 条款感呼应
     footnotes: 'top-rule', // 顶部 hairline + 密栏小字，研究报告参考文献条款感
     recommend: 'card-list',
+    qrcode: 'bare',
   },
 
   signatureContainers: [

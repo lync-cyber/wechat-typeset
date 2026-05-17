@@ -317,6 +317,7 @@ export const spec: PersonaSpec = {
     note: 'box-callout', // 文档式"附注框"，与 accent-bar admonition 互补不抢色
     footnotes: 'boxed-aside', // 教程文末参考资料：软底卡片 + pill kicker，narrative aside
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
+    qrcode: 'bare',
   },
 
   // ============================================================
@@ -677,8 +678,8 @@ _15 分钟阅读 · 最后更新 2026-04-20_
 `,
   },
 
-  // note（motifs.noteIcon 承载第五态）。参考链接块走 ::: recommend variant=academic-refs
-  // （R-7 合并：原 see-also 收编为 recommend 的 variant）。
+  // note（motifs.noteIcon 承载第五态）。教程文末参考链接块走
+  // ::: recommend variant=academic-refs（uppercase 小字 kicker + textMuted 列表）。
   signatureContainers: ['note'],
 
   meta: {

@@ -247,6 +247,7 @@ export const spec: PersonaSpec = {
     note: 'dotted-margin', // 散文式页边批注：dotted 左竖线 + 缩进，比 minimal-callout 更"手记"
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
     recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
   },
 
   // ============================================================
@@ -278,7 +279,6 @@ export const spec: PersonaSpec = {
     'qaBlock', // 读者问答
     'footnotes', // 脚注
     'ctaBar', // CTA 三栏（喜欢 / 收藏 / 分享）
-    'qrFollow', // 二维码订阅
     'colophon', // 下期预告
     'imageCaption', // mook 图注（极小字 + letter-spacing）
     'authorBio', // mook 番外编辑栏（极简 hairline）
@@ -708,15 +708,6 @@ export const spec: PersonaSpec = {
     },
     ctaBar: { margin: '30px 0' },
     // qr-follow · 1px text 色实线包裹（设计稿原型，非常克制）
-    qrFollow: {
-      __reset: true,
-      margin: '30px 0',
-      padding: '14px',
-      'background-color': 'transparent',
-      'border-left': 'none',
-      border: '1px solid #2d3a4a',
-      'border-radius': '0',
-    },
     // mook 图注极小字 + letter-spacing + textMuted——
     // 对应 04-japanese-mook.html image-with-caption 图注："10px / textMuted / letter-spacing:0.05em"，
     // 圈号 ❶ 前导由 renderer 内层控制，wrapper 只管字号 / 颜色 / 字距 / 对齐。

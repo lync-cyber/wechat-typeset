@@ -152,7 +152,7 @@
 ::: cta-bar like="❤  喜欢" star="★  收藏" share="↗  分享"
 :::
 
-::: qr-follow slow reading desc="隔周四夜刊行"
+::: qrcode variant=follow-card slow reading desc="隔周四夜刊行"
 :::
 
 ::: author-bio name=沈听雨 role=编集人

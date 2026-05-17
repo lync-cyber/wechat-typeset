@@ -58,7 +58,7 @@ describe('getContainerVocabulary', () => {
       // data-brief 家族（12 styled + 3 nested children = 15 件）
       'masthead', 'section-tag', 'toc', 'toc-item',
       'kpi-dashboard', 'kpi-item', 'bar-chart', 'bar',
-      'qa-block', 'footnotes', 'cta-bar', 'qr-follow',
+      'qa-block', 'footnotes', 'cta-bar',
       'colophon',
     ]) {
       expect(names).toContain(name)
