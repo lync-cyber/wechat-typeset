@@ -45,9 +45,9 @@ export const spec: PersonaSpec = {
 
   // 语义四色（规范 §1.1）——note 在 tech-explainer 里是第五态，走 motifs.noteIcon + textMuted 表达
   status: {
-    tip: { accent: '#0d9f7f', soft: '#e6f5f0' }, // Mint 绿
+    tip: { accent: '#0a705a', soft: '#e6f5f0' }, // Mint 绿（5.37:1 守 AA）
     info: { accent: '#0066cc', soft: '#e6f0fb' }, // = primary（info = "延伸知识点"）
-    warning: { accent: '#b87614', soft: '#fdf4e2' }, // 琥珀文字色版（AA on 清凉白）
+    warning: { accent: '#985a0a', soft: '#fdf4e2' }, // 琥珀文字色版（5.05:1）
     danger: { accent: '#c8322d', soft: '#fce9e7' }, // 陶土红
   },
 
@@ -97,12 +97,12 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,2 C5.5,2 3.8,4 3.8,6.4 C3.8,8 4.6,9.2 5.6,10 L5.6,11.5 L10.4,11.5 L10.4,10 C11.4,9.2 12.2,8 12.2,6.4 C12.2,4 10.5,2 8,2 Z',
-          stroke: '#0d9f7f',
+          stroke: '#0a705a',
           strokeWidth: 1.5,
           strokeLinejoin: 'round',
         },
-        { type: 'line', x1: 6, y1: 12.5, x2: 10, y2: 12.5, stroke: '#0d9f7f', strokeWidth: 1.5 },
-        { type: 'line', x1: 6.5, y1: 14, x2: 9.5, y2: 14, stroke: '#0d9f7f', strokeWidth: 1.5 },
+        { type: 'line', x1: 6, y1: 12.5, x2: 10, y2: 12.5, stroke: '#0a705a', strokeWidth: 1.5 },
+        { type: 'line', x1: 6.5, y1: 14, x2: 9.5, y2: 14, stroke: '#0a705a', strokeWidth: 1.5 },
       ],
     },
 
@@ -591,7 +591,7 @@ export const spec: PersonaSpec = {
     // §2.6 quoteCard → Key Takeaway 核心要点；mint 绿 border-left + bgSoft 底
     quoteCard: {
       'background-color': '#f3f5f8',
-      'border-left': '3px solid #0d9f7f',
+      'border-left': '3px solid #0a705a',
       padding: '16px 18px',
       margin: '20px 0',
       'border-radius': '0 6px 6px 0',

@@ -42,12 +42,12 @@ export const spec: PersonaSpec = {
     code: '#1756d1', // inline code 蓝字（数据感）
   },
 
-  // 语义四色（与设计稿 multi-callout INFO/TIP/WARN/STOP 一致）
+  // 语义四色（与设计稿 multi-callout INFO/TIP/WARN/STOP 同色相，accent 加深至 WCAG AA 4.5:1 达标）
   status: {
-    tip: { accent: '#1e9c5a', soft: '#dff1e6' }, // TIP 绿
-    info: { accent: '#1756d1', soft: '#dfe9fa' }, // INFO 蓝（= primary）
-    warning: { accent: '#e09030', soft: '#faecd9' }, // WARN 橙
-    danger: { accent: '#d4381f', soft: '#fbdcd6' }, // STOP 红
+    tip: { accent: '#147a44', soft: '#dff1e6' }, // TIP 绿（4.58:1）
+    info: { accent: '#1756d1', soft: '#dfe9fa' }, // INFO 蓝（= primary，5.5:1）
+    warning: { accent: '#9e5c10', soft: '#faecd9' }, // WARN 橙（4.53:1）
+    danger: { accent: '#b22d18', soft: '#fbdcd6' }, // STOP 红（4.97:1）
   },
 
   // ============================================================
@@ -132,11 +132,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#1e9c5a', strokeWidth: 1.5 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#147a44', strokeWidth: 1.5 },
         {
           type: 'path',
           d: 'M4,8 L7,11 L12,5',
-          stroke: '#1e9c5a',
+          stroke: '#147a44',
           strokeWidth: 1.8,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
@@ -160,9 +160,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#e09030', strokeWidth: 1.5 },
-        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: '#e09030' },
-        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#e09030' },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#9e5c10', strokeWidth: 1.5 },
+        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: '#9e5c10' },
+        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#9e5c10' },
       ],
     },
     dangerIcon: {
@@ -171,11 +171,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#d4381f', strokeWidth: 1.5 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#b22d18', strokeWidth: 1.5 },
         {
           type: 'path',
           d: 'M4,4 L12,12 M12,4 L4,12',
-          stroke: '#d4381f',
+          stroke: '#b22d18',
           strokeWidth: 1.8,
           strokeLinecap: 'round',
         },

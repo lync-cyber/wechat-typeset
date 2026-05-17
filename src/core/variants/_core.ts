@@ -108,6 +108,15 @@ export interface VariantMeta {
   description: string
   /** 推荐主题 id 列表；空/缺省等价于全兼容 */
   themeCompat?: readonly string[]
+  /**
+   * 实验性变体：当前无任何主题以默认骨架使用、也无 themeCompat 关联。
+   * 出现在 VARIANT_IDS 主表里是为了"骨架已就绪、等首个采用方"；
+   * `getRecommendedVariantsFor` 会把它们排到列表末尾且不算"推荐"。
+   *
+   * conformance: 每个 VARIANT_IDS 成员必须满足 "≥1 主题采用" OR "experimental === true"。
+   * 移除流程：让某主题把它升级为默认骨架，或加入该主题的 themeCompat → 删 experimental 标。
+   */
+  experimental?: boolean
 }
 
 /**

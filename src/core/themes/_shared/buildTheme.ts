@@ -120,8 +120,30 @@ export interface BuildThemeOptions {
   }
 }
 
+/**
+ * 二级 typography token 默认值。spec.typography 仅必填 baseSize / h1-h3 / lineHeight /
+ * letterSpacing，其余 5 槽从基础值派生。集中在此一处而非各 caller（spec-to-theme /
+ * applyPalette）各自填值，避免派生规则双写漂移。
+ *
+ * 返回类型：把 5 个 optional 字段断言为 required；baseElements 内部按 required 读，
+ * TypeScript 不再警告 `possibly undefined`。
+ */
+type FilledTypography = Required<ThemeTokens['typography']>
+
+function fillTypographyDefaults(t: ThemeTokens['typography']): FilledTypography {
+  return {
+    ...t,
+    h4Size: t.h4Size ?? t.baseSize + 1,
+    h5Size: t.h5Size ?? t.baseSize,
+    h6Size: t.h6Size ?? t.baseSize,
+    monoSize: t.monoSize ?? 14,
+    captionSize: t.captionSize ?? 12,
+  }
+}
+
 export function baseElements(tokens: ThemeTokens): ThemeElements {
-  const { colors, typography } = tokens
+  const { colors } = tokens
+  const typography = fillTypographyDefaults(tokens.typography)
   // 见 ThemeTokens.colors.preBg/preText 注释——主题不声明时落到 Atom One Dark 家族常量。
   const preBg = colors.preBg ?? '#2a2d32'
   const preText = colors.preText ?? '#d8d8d4'
@@ -155,7 +177,7 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
     // h4 介于 h3 和 p 之间，默认不带装饰、只靠字重拉开。
     // 教程向主题（tech-explainer）会覆盖为主色 + 600 字重的"Step 小标题"。
     h4: {
-      'font-size': `${typography.baseSize + 1}px`,
+      'font-size': `${typography.h4Size}px`,
       'font-weight': '600',
       color: colors.text,
       'margin-top': '18px',
@@ -166,7 +188,7 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
     // 默认走"与正文同字号 + textMuted + 600/500 字重"克制处理,
     // 给作者一个不至于跌进浏览器默认的兜底。
     h5: {
-      'font-size': `${typography.baseSize}px`,
+      'font-size': `${typography.h5Size}px`,
       'font-weight': '600',
       color: colors.text,
       'margin-top': '14px',
@@ -174,7 +196,7 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'line-height': '1.5',
     },
     h6: {
-      'font-size': `${typography.baseSize}px`,
+      'font-size': `${typography.h6Size}px`,
       'font-weight': '500',
       color: colors.textMuted,
       'margin-top': '12px',
@@ -209,11 +231,11 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       color: colors.text,
     },
     code: {
-      'background-color': colors.bgMuted,
+      'background-color': colors.codeBg ?? colors.bgMuted,
       color: colors.code,
       padding: '2px 6px',
       'border-radius': '3px',
-      'font-size': '14px',
+      'font-size': `${typography.monoSize}px`,
     },
     // 键帽：不对称边框（底边 2px 比其他三边 1px 更深）模拟微小立体感。
     // 微信粘贴剥 box-shadow，只能这样"借边框"实现键帽感。
@@ -225,7 +247,7 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'border-bottom-width': '2px',
       'border-radius': '3px',
       padding: '1px 6px',
-      'font-size': '12px',
+      'font-size': `${typography.captionSize}px`,
       'line-height': '1.4',
       'vertical-align': 'middle',
     },
@@ -252,7 +274,8 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       'box-shadow': 'inset -14px 0 10px -10px rgba(0,0,0,0.28)',
       'margin-top': '0',
       'margin-bottom': '20px',
-      'font-size': '13px',
+      // pre 比 inline code 略小一档（设计语言：代码块密度大于内联）。
+      'font-size': `${typography.monoSize - 1}px`,
       'line-height': '1.6',
     },
     img: {
@@ -277,7 +300,7 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
       width: '100%',
       'margin-top': '0',
       'margin-bottom': '18px',
-      'font-size': '14px',
+      'font-size': `${typography.monoSize}px`,
     },
     // th / td 兜底：border 单色 + 6px/10px padding + bgSoft 表头。主题按 voice 覆写。
     th: {

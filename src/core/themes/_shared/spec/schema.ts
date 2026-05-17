@@ -34,6 +34,7 @@ export type JSONSchema7 = {
 
 import { VARIANT_IDS } from '../../types'
 import { ALLOWED_FONT_FAMILIES, HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from './validate'
+import { LETTER_SPACING_MAX, LINE_HEIGHT_MAX, LINE_HEIGHT_MIN } from './typography-rules'
 
 const HEX_PATTERN = HEX_RE.source
 const FONT_FAMILY_ENUM = [...ALLOWED_FONT_FAMILIES]
@@ -68,6 +69,13 @@ const PALETTE_SCHEMA: JSONSchema7 = {
     code: { type: 'string', pattern: HEX_PATTERN },
     preBg: { type: 'string', pattern: HEX_PATTERN },
     preText: { type: 'string', pattern: HEX_PATTERN },
+    // 语义槽族（详见 Palette 接口）：声明 = 入 ThemeTokens.colors，
+    // 下游 baseElements / variants / theme-token-flow lint 据此识别它们是 token 而非裸 hex。
+    textCaption: { type: 'string', pattern: HEX_PATTERN },
+    highlightBg: { type: 'string', pattern: HEX_PATTERN },
+    codeBg: { type: 'string', pattern: HEX_PATTERN },
+    quoteCardBg: { type: 'string', pattern: HEX_PATTERN },
+    noteBorder: { type: 'string', pattern: HEX_PATTERN },
   },
   additionalProperties: false,
 }
@@ -365,12 +373,20 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
         'letterSpacing',
       ],
       properties: {
-        baseSize: { type: 'number' },
-        lineHeight: { type: 'number' },
-        h1Size: { type: 'number' },
-        h2Size: { type: 'number' },
-        h3Size: { type: 'number' },
-        letterSpacing: { type: 'number' },
+        baseSize: { type: 'number', minimum: MIN_FONT_SIZE },
+        lineHeight: { type: 'number', minimum: LINE_HEIGHT_MIN, maximum: LINE_HEIGHT_MAX },
+        h1Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        h2Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        h3Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        letterSpacing: { type: 'number', maximum: LETTER_SPACING_MAX },
+        // 以下五个可选字段：spec 不声明时由 spec-to-theme 派生默认；声明值要 >= 14（h4/h5/h6 同样
+        // 受 WeChat 光栅化下限约束）。monoSize / captionSize 是 CSS 字号（不光栅化），仍保留
+        // 12 下限避免可读性灾难。
+        h4Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        h5Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        h6Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        monoSize: { type: 'number', minimum: 12 },
+        captionSize: { type: 'number', minimum: 11 },
       },
       additionalProperties: false,
     },

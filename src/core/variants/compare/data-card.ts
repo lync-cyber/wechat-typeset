@@ -27,7 +27,7 @@ function thumb(): string {
     `<rect x="6" y="14" width="29" height="46" fill="#f5f7fa"/>` +
       `<rect x="38" y="14" width="29" height="46" fill="#f5f7fa"/>` +
       `<rect x="6" y="14" width="29" height="3" fill="#1756d1"/>` +
-      `<rect x="38" y="14" width="29" height="3" fill="#d4381f"/>` +
+      `<rect x="38" y="14" width="29" height="3" fill="#b22d18"/>` +
       `<rect x="11" y="22" width="10" height="2" fill="#5a6068"/>` +
       `<rect x="43" y="22" width="10" height="2" fill="#5a6068"/>` +
       `<rect x="11" y="32" width="18" height="6" fill="#111418"/>` +

@@ -3,12 +3,12 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~8% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。Phase-4 后 18 主题 registry 索引微增 → gz 195kB（自然增长）。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 525000,
-      "gzipLimit": 196000,
+      "limit": 540000,
+      "gzipLimit": 205000,
       "mustNotEmbed": ["html2canvas"]
     },
     {
@@ -19,12 +19,12 @@
       "gzipLimit": 14000
     },
     {
-      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。这是主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~13% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。",
+      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~10% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。Phase-4 后 18 主题（+4 from 14）→ raw 381kB。",
       "name": "themes chunk",
       "prefix": "themes",
       "ext": "js",
-      "limit": 380000,
-      "gzipLimit": 80000
+      "limit": 420000,
+      "gzipLimit": 92000
     },
     {
       "name": "codemirror chunk",
@@ -55,11 +55,11 @@
       "gzipLimit": 60000
     },
     {
-      "$comment": "组件参考字典（14 主题 × 全容器示例）的 lazy chunk。只在用户点 '载入组件参考' 时由 src/domain/samples/index.ts dynamic import 拉取，主 bundle 启动期不付费。源文件来自 scripts/build-references.ts → src/domain/samples/_references.ts；增长维度是容器词汇表 + 主题 capabilities，预算 ~13% headroom。如果这里被挤涨，先怀疑 vocabulary 新增容器示例膨胀，再调阈值。",
+      "$comment": "组件参考字典（18 主题 × 全容器示例）的 lazy chunk。只在用户点 '载入组件参考' 时由 src/domain/samples/index.ts dynamic import 拉取，主 bundle 启动期不付费。源文件来自 scripts/build-references.ts → src/domain/samples/_references.ts；增长维度是容器词汇表 + 主题 capabilities，预算 ~10% headroom。Phase-4 后 18 主题 → raw 297kB；预算 325kB 给 ~10% headroom。",
       "name": "references chunk (lazy)",
       "prefix": "_references",
       "ext": "js",
-      "limit": 260000,
+      "limit": 325000,
       "gzipLimit": 12000
     },
     {

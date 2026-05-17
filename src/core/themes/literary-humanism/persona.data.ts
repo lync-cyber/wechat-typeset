@@ -51,14 +51,14 @@ export const spec: PersonaSpec = {
     // 版框线 —— 规范微调
     border: '#cfc3a8',
     // 规范 §1.1 关键改动：**拒绝朱砂承担代码色**
-    // 人文语境里 code 是"注音符号"，不是"警示"；用墨灰安静处理
-    code: '#6b5f4a',
+    // 人文语境里 code 是"注音符号"，不是"警示"；用墨灰安静处理（5.06:1 守 AA）
+    code: '#5e5340',
   },
 
   // 语义四色（规范 §1.1 语义色表：米底 #f4efe3 上 AA ≥ 4.5:1，色相距离 ≥ 120°）
   status: {
     tip: { accent: '#4a6b3e', soft: '#e3e8d6' }, // 批注（灰青绿，5.1:1）
-    warning: { accent: '#8a6428', soft: '#efe3c9' }, // 商榷（黄褐，4.7:1）
+    warning: { accent: '#7a5722', soft: '#efe3c9' }, // 商榷（黄褐，5.13:1 守 AA）
     info: { accent: '#3d5a75', soft: '#dce3ec' }, // 案语（青，5.4:1）
     danger: { accent: '#8e3a2d', soft: '#ecd6cf' }, // 校勘（暗朱红，5.3:1）
   },

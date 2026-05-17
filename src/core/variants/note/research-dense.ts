@@ -28,6 +28,7 @@ const researchDense: VariantDef = {
     kind: 'note',
     name: '方法论小字',
     description: '紧凑 10px + 粗体 label + bgSoft',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

@@ -144,7 +144,7 @@ const SHOWCASE_STYLES = `
 .voice-group li { line-height: 1.5; margin-bottom: 2px; }
 .voice-group code { font-size: 11px; }
 .voice-error   { background: #fbecea; color: #b42318; }
-.voice-warning { background: #f7f0df; color: #9a6b1a; }
+.voice-warning { background: #f7f0df; color: #825a14; }
 .voice-info    { background: #eef2f9; color: #2558b0; }
 `.trim()
 

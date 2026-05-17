@@ -39,9 +39,10 @@ describe('gallery generator', () => {
     )
   })
 
-  it('覆盖全部 14 份 spec 且 id/name 都嵌入 HTML', async () => {
+  it('覆盖全部内置 spec 且 id/name 都嵌入 HTML', async () => {
     const specs = await loadAllSpecs()
-    expect(specs).toHaveLength(14)
+    // 数量随主题新增而长，不在此处硬编码；只断言"至少 14"作为下限保护
+    expect(specs.length).toBeGreaterThanOrEqual(14)
     const html = generateGallery(specs)
     for (const s of specs) {
       expect(html).toContain(`data-persona="${s.id}"`)

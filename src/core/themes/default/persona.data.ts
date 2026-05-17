@@ -39,11 +39,11 @@ export const spec: PersonaSpec = {
     noteBorder: '#c8ccd4', // note 容器 dashed 边线（比通用 border #d8d8d4 略冷略深一档）
   },
 
-  // 语义四色（规范 §1.1 语义色表）——"最寡淡的那个版本"
+  // 语义四色（规范 §1.1 语义色表）——"最寡淡的那个版本"；accent 守 WCAG AA 4.5:1
   status: {
-    tip: { accent: '#1f8a4c', soft: '#eef6ef' },
+    tip: { accent: '#147a44', soft: '#eef6ef' }, // 4.89:1
     info: { accent: '#2558b0', soft: '#eef2f9' }, // = primary
-    warning: { accent: '#9a6b1a', soft: '#f7f0df' },
+    warning: { accent: '#825a14', soft: '#f7f0df' }, // 5.40:1
     danger: { accent: '#b42318', soft: '#fbecea' },
   },
 
@@ -142,9 +142,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: '#1f8a4c', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#1f8a4c' },
-        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#1f8a4c' },
+        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: '#147a44', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#147a44' },
+        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#147a44' },
       ],
     },
 
@@ -171,12 +171,12 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,2 L14.5,13.5 L1.5,13.5 Z',
-          stroke: '#9a6b1a',
+          stroke: '#825a14',
           strokeWidth: 1.5,
           strokeLinejoin: 'round',
         },
-        { type: 'rect', x: 7.25, y: 6, w: 1.5, h: 4, rx: 0.4, fill: '#9a6b1a' },
-        { type: 'circle', cx: 8, cy: 11.5, r: 0.9, fill: '#9a6b1a' },
+        { type: 'rect', x: 7.25, y: 6, w: 1.5, h: 4, rx: 0.4, fill: '#825a14' },
+        { type: 'circle', cx: 8, cy: 11.5, r: 0.9, fill: '#825a14' },
       ],
     },
 

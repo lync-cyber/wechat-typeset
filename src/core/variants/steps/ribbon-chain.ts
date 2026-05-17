@@ -28,6 +28,7 @@ const ribbonChain: VariantDef = {
     kind: 'steps',
     name: '飘带链式',
     description: '左侧色条贯穿，胶囊标题',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

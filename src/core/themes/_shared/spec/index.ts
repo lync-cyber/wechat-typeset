@@ -23,6 +23,15 @@ export {
   DEFAULT_MIN_COVERAGE_RATE,
   LOW_VOICE_TEMPORARY_GRACE,
 } from './voice'
+export { wcagRatio, relativeLuminance, WCAG_AA_NORMAL, WCAG_AA_LARGE, WCAG_AAA_NORMAL } from './wcag'
+export { analyzeContrast, A11Y_TEMPORARY_GRACE } from './a11y'
+export {
+  validateTypography,
+  TYPOGRAPHY_TEMPORARY_GRACE,
+  LINE_HEIGHT_MIN,
+  LINE_HEIGHT_MAX,
+  LETTER_SPACING_MAX,
+} from './typography-rules'
 export type { ThemeVoiceResult, ThemeVoiceCoverage, VoiceIssue } from './voice'
 export { PERSONA_SPEC_SCHEMA, getPersonaSpecSchema } from './schema'
 export type { JSONSchema7 } from './schema'

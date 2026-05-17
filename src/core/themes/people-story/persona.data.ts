@@ -39,9 +39,9 @@ export const spec: PersonaSpec = {
 
   // 语义四色（规范 §1.1）
   status: {
-    tip: { accent: '#4a6a7a', soft: '#d9dfe2' }, // 钢笔蓝灰（采访手记）
-    info: { accent: '#556170', soft: '#d6d9dd' }, // 灰铅笔（背景说明）
-    warning: { accent: '#7a6b3a', soft: '#e2ddc8' }, // 档案黄（FACT CHECK）
+    tip: { accent: '#3f5e6e', soft: '#d9dfe2' }, // 钢笔蓝灰（采访手记，5.14:1）
+    info: { accent: '#4d5868', soft: '#d6d9dd' }, // 灰铅笔（背景说明，5.09:1）
+    warning: { accent: '#6c5e30', soft: '#e2ddc8' }, // 档案黄（FACT CHECK，4.70:1）
     danger: { accent: '#6b3a32', soft: '#dccdc7' }, // 暗铁锈浅（官方回应）
   },
 

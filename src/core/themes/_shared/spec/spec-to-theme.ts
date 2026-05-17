@@ -25,6 +25,10 @@ import type { MotifSpec, PersonaSpec, ThemeCapabilities } from './types'
 
 /** PersonaSpec.palette + status + typography + spacing + radius → ThemeTokens */
 function toThemeTokens(spec: PersonaSpec): ThemeTokens {
+  // 5 个语义色（textCaption/highlightBg/codeBg/quoteCardBg/noteBorder）通过 ...spread
+  // 自动透传——它们在 ThemeTokens.colors 是 optional，spec.palette 不声明则不存在。
+  // typography 二级 token 默认值（h4Size 等）的填充统一在 buildTheme.fillTypographyDefaults,
+  // 避免与 applyPalette 路径走两份相同逻辑。
   return {
     colors: {
       ...spec.palette,

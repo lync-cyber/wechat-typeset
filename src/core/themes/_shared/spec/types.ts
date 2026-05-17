@@ -100,6 +100,16 @@ export interface Typography {
   h2Size: number
   h3Size: number
   letterSpacing: number
+  /** 四级标题字号。默认 `baseSize + 1`（spec-to-theme 补值）。 */
+  h4Size?: number
+  /** 五级标题字号。默认 `baseSize`。 */
+  h5Size?: number
+  /** 六级标题字号。默认 `baseSize`。 */
+  h6Size?: number
+  /** 等宽字字号（inline `<code>` / `<table>`）。默认 14。 */
+  monoSize?: number
+  /** 图注 / `<kbd>` / 小注字号。默认 12。 */
+  captionSize?: number
 }
 
 export interface Spacing {

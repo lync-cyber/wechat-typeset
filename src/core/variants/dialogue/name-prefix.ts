@@ -29,6 +29,7 @@ const namePrefix: VariantDef = {
     kind: 'dialogue',
     name: '名字前缀',
     description: '"**名字**：内容" 行内排版，剧本 / 对谈最 dense',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [
