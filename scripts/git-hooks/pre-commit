@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 #
-# Pre-commit guard：仅在暂存了影响 bundle 体积的文件时跑 check:size。
-#
-# 触发条件（任一即触发）：
-#   - src/ 下任意源码（主题 / variant / pipeline / ui / domain / public）
-#   - vite.config.ts（manualChunks / 优化配置）
-#   - .size-budget.json（预算表自身）
-#   - package.json（依赖增删可能改变 bundle 形态）
-#
-# 触发后流程：
-#   1. dist/ 缺失或晚于任一相关源码 → 先 vite build + 重建样本/refs（这两步会写入 src/domain/samples/_*.ts，
-#      若已被 stage 则不变；若未 stage，提示作者补 stage 后再 commit）
-#   2. node_modules/.bin/tsx scripts/check-size.ts 校验各 chunk 在预算内
+# Pre-commit guard：
+#   1. 注释纪律检查 —— 扫描暂存的新增行，拦截 CLAUDE.md 禁止的注释形态
+#   2. Bundle 体积检查 —— 仅在暂存了影响 bundle 体积的文件时跑 check:size
 #
 # 退出码：0 = 通过 / 非零 = 阻止 commit
-# 跳过：SKIP_SIZE_CHECK=1 git commit ...（仅紧急情况用，PR 必须修）
+# 跳过（紧急）：SKIP_COMMENT_CHECK=1 / SKIP_SIZE_CHECK=1 git commit ...（PR 内必须补修）
 
 set -e
 
 STAGED=$(git diff --cached --name-only --diff-filter=ACM)
-HAS_SIZE_RELEVANT=$(echo "$STAGED" | grep -E '^(src/|vite\.config\.ts$|\.size-budget\.json$|package\.json$|package-lock\.json$)' || true)
+
+# ── 1. 注释纪律检查 ───────────────────────────────────────────────
+HAS_SOURCE=$(echo "$STAGED" | grep -E '\.(ts|tsx|vue|js|mjs)$' || true)
+if [ -n "$HAS_SOURCE" ]; then
+  node scripts/check-comments.mjs --staged
+fi
+
+# ── 2. Bundle 体积检查 ───────────────────────────────────────────
+HAS_SIZE_RELEVANT=$(echo "$STAGED" | grep -E '^(src/|vite\.config\.ts$|\.size-budget\.json$|package\.json$|pnpm-lock\.yaml$)' || true)
 
 if [ -z "$HAS_SIZE_RELEVANT" ]; then
   exit 0
