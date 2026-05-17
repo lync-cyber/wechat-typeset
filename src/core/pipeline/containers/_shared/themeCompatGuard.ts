@@ -11,6 +11,7 @@
 import type { VariantMeta } from '../../../variants/_core'
 
 const warned = new Set<string>()
+let silent = false
 
 export interface CompatCheckResult {
   /** 是否允许当前 variant 被使用 */
@@ -26,7 +27,7 @@ export function checkVariantCompat(
   if (compat.includes(themeId)) return { ok: true }
 
   const key = `${themeId}::${meta!.id}`
-  if (!warned.has(key)) {
+  if (!silent && !warned.has(key)) {
     warned.add(key)
     console.warn(
       `[wechat-typeset] variant "${meta!.id}" 的 themeCompat 不含当前主题 "${themeId}"，` +
@@ -40,4 +41,13 @@ export function checkVariantCompat(
 /** 测试钩子：只在 spec 测试里清理 warn dedupe 集合。生产代码勿用。 */
 export function __resetCompatWarnedForTest(): void {
   warned.clear()
+}
+
+/**
+ * 测试钩子：静音 warn 输出。variant-sanity 全矩阵 / e2e fixture 覆盖会故意穿越
+ * 所有 (variant, theme) 组合（fallback 路径正是被测对象），生产期 warn 在测试日志
+ * 里变成数百行噪声。spec 在 beforeAll 打开、afterAll 关掉。生产代码勿用。
+ */
+export function __setCompatSilentForTest(v: boolean): void {
+  silent = v
 }

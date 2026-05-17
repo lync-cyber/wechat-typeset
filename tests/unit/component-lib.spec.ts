@@ -9,11 +9,12 @@
  *   - localStorage CRUD 正常
  */
 
-import { describe, it, expect, beforeEach } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { BUILTIN_COMPONENTS, findPresetByVariant } from '../../src/domain/components-lib'
 import { VARIANT_IDS } from '../../src/core/themes/types'
 import { render } from '../../src/core/pipeline'
 import { defaultTheme } from '../../src/core/themes/default'
+import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import {
   listUserComponents,
   createUserComponent,
@@ -23,6 +24,11 @@ import {
 } from '../../src/infra/storage/userComponents'
 
 describe('BUILTIN_COMPONENTS', () => {
+  // BUILTIN_COMPONENTS 覆盖全 variant，markdownSnippet 渲染会穿越 themeCompat
+  // fallback；静音 warn 避免日志噪声
+  beforeAll(() => __setCompatSilentForTest(true))
+  afterAll(() => __setCompatSilentForTest(false))
+
   it('每个 variant 都有至少一条预设覆盖', () => {
     // 所有 VARIANT_IDS 内的 id 都必须在 BUILTIN_COMPONENTS 里有 ≥1 条 snippet，
     // 作者能从面板单独插入（codeBlock 通过 fence info 的 variant= 覆盖）。

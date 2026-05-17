@@ -16,15 +16,20 @@
  * assertNoForbiddenCss / assertSvgSafe；新增主题时务必两份都跟着切分点更新。
  */
 
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { render } from '../../src/core/pipeline'
 import { themeList } from '../../src/core/themes'
+import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import { CASES, assertNoForbiddenCss, assertSvgSafe, isCompatBlocked } from '../helpers/variantCases'
 
 const HALF = Math.ceil(themeList.length / 2)
 const HEAD = themeList.slice(0, HALF)
 
 describe('variant sanity · 主矩阵（前半）', () => {
+  // 全笛卡尔积故意穿越 themeCompat fallback；静音 warn 避免 ~250 行日志噪声
+  beforeAll(() => __setCompatSilentForTest(true))
+  afterAll(() => __setCompatSilentForTest(false))
+
   for (const theme of HEAD) {
     it(`${theme.id}`, () => {
       for (const c of CASES) {

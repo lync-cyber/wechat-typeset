@@ -36,9 +36,14 @@ import { defaultTheme } from '../src/core/themes/default'
 import { themeRegistry } from '../src/core/themes'
 import { VARIANT_IDS } from '../src/core/themes/types'
 import { ALL_VARIANT_DEFS } from '../src/core/variants/registry'
+import { __setCompatSilentForTest } from '../src/core/pipeline/containers/_shared/themeCompatGuard'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
 const SAMPLE = resolve(HERE, 'fixtures/all-containers.md')
+
+// fixture 跨多主题渲染会穿越 themeCompat fallback；本 e2e 校验的是 class 出现/类型
+// 完整性，warn 在这里只是噪声。静音以保持 [verify] 输出干净。
+__setCompatSilentForTest(true)
 
 const md = readFileSync(SAMPLE, 'utf8')
 const { html, wordCount } = render({ md, theme: defaultTheme })
@@ -162,6 +167,8 @@ check('video-card-iframe', () => html.includes('<iframe'), 'v.qq.com iframe')
 
 // 4. 基本健康：有字数
 check('word-count>0', () => wordCount > 0, `words=${wordCount}`)
+
+__setCompatSilentForTest(false)
 
 // ---- 报告 ----
 const pass = results.filter((r) => r.ok).length

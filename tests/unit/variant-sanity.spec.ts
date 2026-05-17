@@ -12,10 +12,11 @@
  * 补录快照：npx vitest run tests/unit/variant-sanity.spec.ts -u
  */
 
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { render } from '../../src/core/pipeline'
 import { defaultTheme, themeList } from '../../src/core/themes'
 import { VARIANT_IDS } from '../../src/core/themes/types'
+import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import { CASES, isCompatBlocked } from '../helpers/variantCases'
 
 describe('枚举完整性', () => {
@@ -88,6 +89,10 @@ function sliceVariantChunk(html: string, containerName: string, variantId: strin
 }
 
 describe('默认主题 · 每 variant 渲染片段快照', () => {
+  // 故意穿越 themeCompat fallback 给 default 主题取快照；静音 warn 避免日志噪声
+  beforeAll(() => __setCompatSilentForTest(true))
+  afterAll(() => __setCompatSilentForTest(false))
+
   for (const c of CASES) {
     it(`${c.kind}:${c.id}`, () => {
       const { html } = render({ md: c.md, theme: defaultTheme })

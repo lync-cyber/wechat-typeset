@@ -5,15 +5,20 @@
  * 与 matrix（前半）共同构成全主题矩阵。
  */
 
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { render } from '../../src/core/pipeline'
 import { themeList } from '../../src/core/themes'
+import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import { CASES, assertNoForbiddenCss, assertSvgSafe, isCompatBlocked } from '../helpers/variantCases'
 
 const HALF = Math.ceil(themeList.length / 2)
 const TAIL = themeList.slice(HALF)
 
 describe('variant sanity · 主矩阵（后半）', () => {
+  // 全笛卡尔积故意穿越 themeCompat fallback；静音 warn 避免 ~250 行日志噪声
+  beforeAll(() => __setCompatSilentForTest(true))
+  afterAll(() => __setCompatSilentForTest(false))
+
   for (const theme of TAIL) {
     it(`${theme.id}`, () => {
       for (const c of CASES) {
