@@ -27,17 +27,22 @@ import { fail } from '../errors'
 import {
   ADMONITION_VARIANTS,
   ALL_VARIANT_DEFS,
+  ANNOUNCEMENT_VARIANTS,
   CODE_BLOCK_VARIANTS,
   COMPARE_VARIANTS,
+  DIALOGUE_VARIANTS,
   DIVIDER_VARIANTS,
+  GALLERY_VARIANTS,
   NOTE_VARIANTS,
   FOOTNOTES_VARIANTS,
   FOOTER_CTA_VARIANTS,
+  PULL_QUOTE_VARIANTS,
   QRCODE_VARIANTS,
   QUOTE_VARIANTS,
   RECOMMEND_VARIANTS,
   SECTION_TITLE_VARIANTS,
   STEPS_VARIANTS,
+  TABLE_CARD_VARIANTS,
 } from '../variants/registry'
 import type { VariantKind, ThemeVariants } from '../themes/types'
 
@@ -86,6 +91,11 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
     recommend: RECOMMEND_VARIANTS as unknown as MetaTable,
     qrcode: QRCODE_VARIANTS as unknown as MetaTable,
     footerCTA: FOOTER_CTA_VARIANTS as unknown as MetaTable,
+    pullQuote: PULL_QUOTE_VARIANTS as unknown as MetaTable,
+    announcement: ANNOUNCEMENT_VARIANTS as unknown as MetaTable,
+    tableCard: TABLE_CARD_VARIANTS as unknown as MetaTable,
+    gallery: GALLERY_VARIANTS as unknown as MetaTable,
+    dialogue: DIALOGUE_VARIANTS as unknown as MetaTable,
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
@@ -123,6 +133,11 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     recommend: RECOMMEND_VARIANTS,
     qrcode: QRCODE_VARIANTS,
     footerCTA: FOOTER_CTA_VARIANTS,
+    pullQuote: PULL_QUOTE_VARIANTS,
+    announcement: ANNOUNCEMENT_VARIANTS,
+    tableCard: TABLE_CARD_VARIANTS,
+    gallery: GALLERY_VARIANTS,
+    dialogue: DIALOGUE_VARIANTS,
   }
   return Object.keys(table[kind] ?? {})
 }

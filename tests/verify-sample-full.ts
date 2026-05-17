@@ -71,7 +71,11 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
           ? 'quote-card'
           : kind === 'footerCTA'
             ? 'footer-cta'
-            : kind
+            : kind === 'pullQuote'
+              ? 'pull-quote'
+              : kind === 'tableCard'
+                ? 'table-card'
+                : kind
     const cls = `container-${containerName}--${id}`
     check(`${kind}:${id}`, () => html.includes(cls), cls)
   }

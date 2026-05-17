@@ -94,6 +94,64 @@ function buildCases(): VariantCase[] {
       md: `::: section-title 章节标题 variant=${id}\n:::\n`,
     })
   }
+  // M-5 pull-quote
+  for (const id of VARIANT_IDS.pullQuote) {
+    out.push({
+      kind: 'pullQuote',
+      id,
+      containerName: 'pull-quote',
+      md: `::: pull-quote variant=${id}\n我们以为在阅读，其实只是在滑动。\n:::\n`,
+    })
+  }
+  // M-3 announcement
+  for (const id of VARIANT_IDS.announcement) {
+    out.push({
+      kind: 'announcement',
+      id,
+      containerName: 'announcement',
+      md: `::: announcement tone=danger variant=${id} 测试通告\n本期推送涉及账号迁移说明。\n:::\n`,
+    })
+  }
+  // M-4 table-card：嵌套 4 冒号外，3 冒号内 table-row
+  for (const id of VARIANT_IDS.tableCard) {
+    out.push({
+      kind: 'tableCard',
+      id,
+      containerName: 'table-card',
+      md:
+        `:::: table-card 规格对比 variant=${id}\n` +
+        `::: table-row header=true cells="型号 | 容量 | 价格"\n:::\n` +
+        `::: table-row cells="A | 256G | ¥6999"\n:::\n` +
+        `::: table-row cells="B | 512G | ¥8999"\n:::\n` +
+        `::::\n`,
+    })
+  }
+  // M-2 gallery：嵌套 image-item
+  for (const id of VARIANT_IDS.gallery) {
+    out.push({
+      kind: 'gallery',
+      id,
+      containerName: 'gallery',
+      md:
+        `:::: gallery 春夏秋冬 variant=${id}\n` +
+        `::: image-item src="https://placehold.co/400" alt="A" 春\n:::\n` +
+        `::: image-item src="https://placehold.co/400" alt="B" 夏\n:::\n` +
+        `::::\n`,
+    })
+  }
+  // M-1 dialogue：嵌套 dialogue-turn
+  for (const id of VARIANT_IDS.dialogue) {
+    out.push({
+      kind: 'dialogue',
+      id,
+      containerName: 'dialogue',
+      md:
+        `:::: dialogue 主编访谈 variant=${id}\n` +
+        `::: dialogue-turn name="主持人" role="Q"\n你怎么看这次转向？\n:::\n` +
+        `::: dialogue-turn name="张三" role="A"\n转向是必然的，但节奏会更慢。\n:::\n` +
+        `::::\n`,
+    })
+  }
   return out
 }
 
@@ -158,7 +216,7 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 46 variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
+  it('11 kind × N variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
@@ -168,6 +226,11 @@ describe('枚举完整性', () => {
       steps: 5, // +2 P0-A: step-card / split-row（卡片化分步 / 学术分栏）
       divider: 6, // +1: seal-mark (swiss-grid 家族收束印章)
       sectionTitle: 5, // +3 P0-A: number-prefix / kicker-stack / ribbon-stamp
+      pullQuote: 4, // M-5: giant-mark / centered-rule / stamp-quote / margin-pull
+      announcement: 4, // M-3: danger-bar / mono-disclaimer / ai-notice / stamped-banner
+      tableCard: 4, // M-4: rule-grid / zebra-rows / key-value / price-tier
+      gallery: 4, // M-2: duo / triptych / nine-grid / ribbon-strip
+      dialogue: 4, // M-1: qa-rows / chat-bubbles / name-prefix / interview-column
     })
   })
 

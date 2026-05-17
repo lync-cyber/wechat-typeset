@@ -99,12 +99,20 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag'
 quote:         'classic' | 'left-bar' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'editorial-block' | 'tilted-sticker'
 compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
-steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot'
+steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot' | 'step-card' | 'split-row'
 divider:       'wave' | 'dots' | 'flower' | 'rule' | 'glyph' | 'seal-mark'
-sectionTitle:  'bordered' | 'cornered'
+sectionTitle:  'bordered' | 'cornered' | 'number-prefix' | 'kicker-stack' | 'ribbon-stamp'
 codeBlock:     'bare' | 'header-bar' | 'line-numbers' | 'terminal-frame' | 'inline-card'
-note:          'minimal-callout' | 'box-callout' | 'side-bar'
+note:          'minimal-callout' | 'box-callout' | 'side-bar' | 'hanging-indent' | 'dotted-margin' | 'smallcaps-kicker' | 'editorial-stripe' | 'research-dense'
 footnotes:     'lined' | 'inline-flow' | 'boxed-aside' | 'top-rule' | 'dense-academic'
+recommend:     'card-list' | 'academic-refs'
+qrcode:        'bare' | 'follow-card'
+footerCTA:     'button-led' | 'triptych-actions'
+pullQuote:     'giant-mark' | 'centered-rule' | 'stamp-quote' | 'margin-pull'
+announcement:  'danger-bar' | 'mono-disclaimer' | 'ai-notice' | 'stamped-banner'
+tableCard:     'rule-grid' | 'zebra-rows' | 'key-value' | 'price-tier'
+gallery:       'duo' | 'triptych' | 'nine-grid' | 'ribbon-strip'
+dialogue:      'qa-rows' | 'chat-bubbles' | 'name-prefix' | 'interview-column'
 ```
 
 <!-- generated:variant-whitelist:end -->

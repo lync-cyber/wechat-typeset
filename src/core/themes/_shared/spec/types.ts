@@ -355,6 +355,10 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'qaBlock',
   'footnotes',
   'colophon',
+  'pullQuote',
+  'tableCard',
+  'gallery',
+  'dialogue',
 ] as const
 
 export type SignatureContainerId = (typeof SUPPORTED_SIGNATURE_CONTAINERS)[number]

@@ -249,6 +249,11 @@ export const spec: PersonaSpec = {
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
     qrcode: 'bare',
     footerCTA: 'button-led',
+    pullQuote: 'giant-mark',
+    announcement: 'danger-bar',
+    tableCard: 'rule-grid',
+    gallery: 'duo',
+    dialogue: 'qa-rows',
   },
 
   // ============================================================

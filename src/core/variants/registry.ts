@@ -31,16 +31,21 @@ import type {
 } from './_core'
 import type {
   AdmonitionVariantId,
+  AnnouncementVariantId,
   CompareVariantId,
+  DialogueVariantId,
   DividerVariantId,
   FooterCTAVariantId,
   FootnotesVariantId,
+  GalleryVariantId,
   NoteVariantId,
+  PullQuoteVariantId,
   QrcodeVariantId,
   QuoteVariantId,
   RecommendVariantId,
   SectionTitleVariantId,
   StepsVariantId,
+  TableCardVariantId,
   VariantKind,
 } from '../themes/types'
 
@@ -128,6 +133,36 @@ const FOOTNOTES_ORDER: readonly string[] = [
 const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
 const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card']
 const FOOTER_CTA_ORDER: readonly string[] = ['button-led', 'triptych-actions']
+const PULL_QUOTE_ORDER: readonly string[] = [
+  'giant-mark',
+  'centered-rule',
+  'stamp-quote',
+  'margin-pull',
+]
+const ANNOUNCEMENT_ORDER: readonly string[] = [
+  'danger-bar',
+  'mono-disclaimer',
+  'ai-notice',
+  'stamped-banner',
+]
+const TABLE_CARD_ORDER: readonly string[] = [
+  'rule-grid',
+  'zebra-rows',
+  'key-value',
+  'price-tier',
+]
+const GALLERY_ORDER: readonly string[] = [
+  'duo',
+  'triptych',
+  'nine-grid',
+  'ribbon-strip',
+]
+const DIALOGUE_ORDER: readonly string[] = [
+  'qa-rows',
+  'chat-bubbles',
+  'name-prefix',
+  'interview-column',
+]
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -142,6 +177,11 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   recommend: RECOMMEND_ORDER,
   qrcode: QRCODE_ORDER,
   footerCTA: FOOTER_CTA_ORDER,
+  pullQuote: PULL_QUOTE_ORDER,
+  announcement: ANNOUNCEMENT_ORDER,
+  tableCard: TABLE_CARD_ORDER,
+  gallery: GALLERY_ORDER,
+  dialogue: DIALOGUE_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -167,6 +207,11 @@ import footnotesAll from './footnotes/_all'
 import recommendAll from './recommend/_all'
 import qrcodeAll from './qrcode/_all'
 import footerCTAAll from './footer-cta/_all'
+import pullQuoteAll from './pull-quote/_all'
+import announcementAll from './announcement/_all'
+import tableCardAll from './table-card/_all'
+import galleryAll from './gallery/_all'
+import dialogueAll from './dialogue/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -182,6 +227,11 @@ function collectDefs(): AnyDef[] {
     ...recommendAll,
     ...qrcodeAll,
     ...footerCTAAll,
+    ...pullQuoteAll,
+    ...announcementAll,
+    ...tableCardAll,
+    ...galleryAll,
+    ...dialogueAll,
   ] as unknown as AnyDef[]
 }
 
@@ -247,6 +297,11 @@ export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, '
 export const RECOMMEND_VARIANTS = asRecord<RecommendVariantId, void>(ALL_DEFS, 'recommend')
 export const QRCODE_VARIANTS = asRecord<QrcodeVariantId, void>(ALL_DEFS, 'qrcode')
 export const FOOTER_CTA_VARIANTS = asRecord<FooterCTAVariantId, void>(ALL_DEFS, 'footerCTA')
+export const PULL_QUOTE_VARIANTS = asRecord<PullQuoteVariantId, void>(ALL_DEFS, 'pullQuote')
+export const ANNOUNCEMENT_VARIANTS = asRecord<AnnouncementVariantId, void>(ALL_DEFS, 'announcement')
+export const TABLE_CARD_VARIANTS = asRecord<TableCardVariantId, void>(ALL_DEFS, 'tableCard')
+export const GALLERY_VARIANTS = asRecord<GalleryVariantId, void>(ALL_DEFS, 'gallery')
+export const DIALOGUE_VARIANTS = asRecord<DialogueVariantId, void>(ALL_DEFS, 'dialogue')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }

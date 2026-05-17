@@ -231,6 +231,11 @@ export const spec: PersonaSpec = {
     recommend: 'card-list',
     qrcode: 'bare',
     footerCTA: 'button-led',
+    pullQuote: 'giant-mark',
+    announcement: 'danger-bar',
+    tableCard: 'rule-grid',
+    gallery: 'duo',
+    dialogue: 'qa-rows',
   },
 
   // ============================================================

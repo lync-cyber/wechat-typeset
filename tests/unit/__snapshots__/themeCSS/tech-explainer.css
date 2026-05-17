@@ -464,6 +464,22 @@
   margin: 20px 0 0;
 }
 
+.markdown-body .container-pull-quote {
+  margin: 24px 0;
+}
+
+.markdown-body .container-table-card {
+  margin: 20px 0;
+}
+
+.markdown-body .container-gallery {
+  margin: 20px 0;
+}
+
+.markdown-body .container-dialogue {
+  margin: 20px 0;
+}
+
 .markdown-body .container-pros, .markdown-body .container-cons {
   letter-spacing: 0;
 }

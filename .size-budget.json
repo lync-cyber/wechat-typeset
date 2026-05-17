@@ -23,8 +23,8 @@
       "name": "themes chunk",
       "prefix": "themes",
       "ext": "js",
-      "limit": 320000,
-      "gzipLimit": 72000
+      "limit": 380000,
+      "gzipLimit": 80000
     },
     {
       "name": "codemirror chunk",
@@ -67,8 +67,8 @@
       "name": "showcase chunk (lazy)",
       "prefix": "_showcase",
       "ext": "js",
-      "limit": 18000,
-      "gzipLimit": 10000
+      "limit": 24000,
+      "gzipLimit": 12000
     }
   ]
 }

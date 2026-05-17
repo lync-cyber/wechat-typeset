@@ -326,9 +326,11 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     // announcement：通用全宽强警示横幅。与 tip/warning 的边界：
     //   - tip/warning 是段落级（多见于正文内"穿插提示"）
     //   - announcement 是文章级"置顶通告"（活动告知 / 紧急公告 / 改版说明），视觉强度更高
+    // tone 与 variant 正交：tone 控色（danger/primary/accent），variant 控骨架（4 种语言）。
     name: 'announcement',
     styleKey: 'announcement',
     category: 'admonition',
+    variantKind: 'announcement',
     fenceLength: 3,
     attrs: [
       {
@@ -336,10 +338,19 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
         description: '语义色调（默认 danger 强警示；可选 primary 中性告知 / accent 喜庆通告）',
         enum: ['danger', 'primary', 'accent'],
       },
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 announcement 骨架。danger-bar（默认）= 左色条 + soft 底；' +
+          'mono-disclaimer = 法律声明监 monospace 边框无填充；' +
+          'ai-notice = AI 生成内容合规告知（含徽章）；' +
+          'stamped-banner = 右侧 SVG 印章戳。',
+        enum: VARIANT_IDS.announcement,
+      },
     ],
     description:
       '强警示横幅：文章顶部 / 中部"置顶通告"块，比 tip/warning 视觉强度更高。' +
-      'info 为标题，body 为说明文本。',
+      'info 为标题，body 为说明文本。4 种 variant 覆盖：常规警示 / 法律免责 / AI 合规 / 印章公告。',
     example: '::: announcement tone=danger 重要通知\n本期推送涉及账号迁移说明 …\n:::\n',
   },
   {
@@ -831,6 +842,163 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     description:
       '刊物收束栏：上分割线 + 左右双栏 monospace 元数据（下期预告 / 卷·期）。data-brief 等刊物化主题的"尾签名"。',
     example: '::: colophon next="纸本之必要" issue="第 004 期 · 2026"\n:::\n',
+  },
+
+  // ── 拉引 / 横幅 / 表格 / 多图 / 对话 ───────────────────
+  {
+    // pull-quote 与 quote-card / highlight 的边界：
+    //   - quote-card  外部话语成段引用（attrs.byline 标外部来源）
+    //   - highlight   作者自我强调整段（bgMuted 无骨架）
+    //   - pull-quote  作者中段把已写过的句子放大重申（与原文同源）
+    name: 'pull-quote',
+    styleKey: 'pullQuote',
+    category: 'content',
+    pack: 'pack:editorial',
+    variantKind: 'pullQuote',
+    fenceLength: 3,
+    attrs: [
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 pull-quote 骨架。giant-mark（默认）= 装饰巨号引号；' +
+          'centered-rule = 上下细线居中夹；stamp-quote = 右侧印章 + 大字；' +
+          'margin-pull = 左悬挂 monospace kicker + 大字。',
+        enum: VARIANT_IDS.pullQuote,
+      },
+    ],
+    description:
+      '拉引：正文中段把作者已写过的句子放大重申。info 为引用文字，body 可选为署名 / 上下文。' +
+      '与 quote-card 正交（quote-card 是引用他人外部话语）。',
+    example: '::: pull-quote\n我们以为在阅读，其实只是在滑动。\n:::\n',
+  },
+
+  {
+    name: 'table-card',
+    styleKey: 'tableCard',
+    category: 'content',
+    variantKind: 'tableCard',
+    nestable: true,
+    children: ['table-row'],
+    fenceLength: 4,
+    attrs: [
+      {
+        key: 'variant',
+        description:
+          '骨架：rule-grid（默认 1px 全网格）/ zebra-rows（斑马底）/ ' +
+          'key-value（双栏 KV）/ price-tier（价格档位卡）',
+        enum: VARIANT_IDS.tableCard,
+      },
+    ],
+    description:
+      '结构化表格：弥补 markdown 原生 table 在公众号字号小 / 列宽不可控的缺陷。' +
+      '外层 4 冒号，内部 table-row 列条目。与 compare 正交（compare 限 2 列 pros/cons）。',
+    example:
+      ':::: table-card 规格对比\n::: table-row header=true cells="型号 | 容量 | 价格"\n:::\n::: table-row cells="A · 256G · ￥6999"\n:::\n::::\n',
+  },
+  {
+    name: 'table-row',
+    styleKey: null,
+    category: 'content',
+    parent: 'table-card',
+    fenceLength: 3,
+    attrs: [
+      {
+        key: 'cells',
+        description:
+          '本行单元格内容，竖线 `|` 分隔；列数由首行决定，后续行多余列被忽略 / 缺失列留空。' +
+          '示例：`cells="型号 | 容量 | 价格"`',
+        example: '型号 | 容量 | 价格',
+      },
+      {
+        key: 'header',
+        description: '是否为表头行（粗体 + 顶部 hairline + monospace label）',
+        enum: ['true', 'false'],
+      },
+    ],
+    description: 'table-card 内单行。attrs.cells 必填，body 内容被忽略。',
+    example: '::: table-row header=true cells="型号 | 容量 | 价格"\n:::\n',
+  },
+
+  {
+    name: 'gallery',
+    styleKey: 'gallery',
+    category: 'content',
+    variantKind: 'gallery',
+    nestable: true,
+    children: ['image-item'],
+    fenceLength: 4,
+    attrs: [
+      {
+        key: 'variant',
+        description:
+          '布局：duo（默认 2 联）/ triptych（3 联）/ nine-grid（3×3 自动换行）/ ' +
+          'ribbon-strip（横滚条带 overflow-x:auto）',
+        enum: VARIANT_IDS.gallery,
+      },
+    ],
+    description:
+      '多图组合：弥补 image-caption 只能单图、markdown 多图串联无版式的缺陷。' +
+      '外层 4 冒号，内部 image-item 列单图。',
+    example:
+      ':::: gallery variant=triptych\n::: image-item src="a.jpg" alt="A" 春\n:::\n::: image-item src="b.jpg" alt="B" 夏\n:::\n::: image-item src="c.jpg" alt="C" 秋\n:::\n::::\n',
+  },
+  {
+    name: 'image-item',
+    styleKey: null,
+    category: 'content',
+    parent: 'gallery',
+    fenceLength: 3,
+    attrs: [
+      { key: 'src', description: '图片 URL', example: 'cover.jpg' },
+      { key: 'alt', description: '替代文本（默认取 info）' },
+    ],
+    description: 'gallery 内单图。info 为该图的图注（小字），body 内容被忽略。',
+    example: '::: image-item src="cover.jpg" alt="封面" 城市夜景\n:::\n',
+  },
+
+  {
+    name: 'dialogue',
+    styleKey: 'dialogue',
+    category: 'content',
+    pack: 'pack:editorial',
+    variantKind: 'dialogue',
+    nestable: true,
+    children: ['dialogue-turn'],
+    fenceLength: 4,
+    attrs: [
+      {
+        key: 'variant',
+        description:
+          '骨架：qa-rows（默认 Q/A 行）/ chat-bubbles（左右气泡）/ ' +
+          'name-prefix（"名字：内容"行内）/ interview-column（杂志体 N Yorker 风）',
+        enum: VARIANT_IDS.dialogue,
+      },
+    ],
+    description:
+      '多轮访谈 / 对谈。与 qa-block 正交：qa-block 是单 Q + 单 A 签名格式，' +
+      'dialogue 承载 ≥2 轮 Q&A 或多人对谈。外层 4 冒号，内部 dialogue-turn 列单轮。',
+    example:
+      ':::: dialogue 主编访谈\n::: dialogue-turn name="主持人" role="Q"\n你怎么看这次行业转向？\n:::\n::: dialogue-turn name="张三" role="A"\n转向是必然的，但节奏会比想象慢。\n:::\n::::\n',
+  },
+  {
+    name: 'dialogue-turn',
+    styleKey: null,
+    category: 'content',
+    parent: 'dialogue',
+    fenceLength: 3,
+    attrs: [
+      { key: 'name', description: '发言者姓名（必填）', example: '张三' },
+      { key: 'role', description: '角色标识（"Q" / "A" / "主持人" / "嘉宾"）', example: 'Q' },
+      {
+        key: 'side',
+        description:
+          'chat-bubbles 骨架下的气泡侧（left = textMuted 左气泡 / right = primary 右气泡）。' +
+          '其他骨架忽略此 attr。',
+        enum: ['left', 'right'],
+      },
+    ],
+    description: 'dialogue 内单轮发言。attrs.name 必填，body 为发言内容。',
+    example: '::: dialogue-turn name="张三" role="A"\n你说的没错。\n:::\n',
   },
 
   // ── free（1） ────────────────────────────────────────────

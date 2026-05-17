@@ -20,7 +20,7 @@
 |  | `author` | ★ | 作者栏：单行署名块（名字 + 日期/期号）。与 author-bio 的边界见 author-bio.description。 |
 |  | `author-bio` | ★ | 多行作者简介卡：头像 + 名字 + 身份 + 多行简介。与 author 的边界：author 单行署名，author-bio 是独立块（头像 + 多行 bio + 社交链接），通常用在文末"关于作者"。 |
 |  | `section-title` | ★ | 章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。 |
-| 提示 | `announcement` | ★ | 强警示横幅：文章顶部 / 中部"置顶通告"块，比 tip/warning 视觉强度更高。info 为标题，body 为说明文本。 |
+| 提示 | `announcement` | ★ | 强警示横幅：文章顶部 / 中部"置顶通告"块，比 tip/warning 视觉强度更高。info 为标题，body 为说明文本。4 种 variant 覆盖：常规警示 / 法律免责 / AI 合规 / 印章公告。 |
 |  | `tip` | ★ | tip：小贴士／正向提示。 |
 |  | `warning` | ★ | warning：需要读者注意的提醒。 |
 |  | `info` | ★ | info：中性说明／补充信息。 |
@@ -35,6 +35,11 @@
 |  | `image-caption` | ★ | 图 + 居中小字灰说明的图注块。声明 attrs.src 时自动渲染 img；info 为图注文本。body 内容（如长描述 / 数据来源）作为副说明跟在 caption 下方。 |
 |  | `timeline` | ★ | 时间线：左侧年份 + 右侧事件。外层 4 个冒号，内部 timeline-item 列条目。 |
 |  | `timeline-item` |  | timeline 内单条；info 为事件标题，body 为详述。 |
+|  | `table-card` | ★ | 结构化表格：弥补 markdown 原生 table 在公众号字号小 / 列宽不可控的缺陷。外层 4 冒号，内部 table-row 列条目。与 compare 正交（compare 限 2 列 pros/cons）。 |
+|  | `table-row` |  | table-card 内单行。attrs.cells 必填，body 内容被忽略。 |
+|  | `gallery` | ★ | 多图组合：弥补 image-caption 只能单图、markdown 多图串联无版式的缺陷。外层 4 冒号，内部 image-item 列单图。 |
+|  | `image-item` |  | gallery 内单图。info 为该图的图注（小字），body 内容被忽略。 |
+|  | `dialogue-turn` |  | dialogue 内单轮发言。attrs.name 必填，body 为发言内容。 |
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。 |
 |  | `footer-cta` | ★ | 文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。href 支持公众号内链白名单。 |
 |  | `recommend` | ★ | 推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。 |

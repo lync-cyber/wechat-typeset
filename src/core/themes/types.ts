@@ -206,6 +206,18 @@ export interface ThemeContainers {
   footnotes: CSSObject
   /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
   colophon: CSSObject
+  /**
+   * 拉引（pull-quote）容器外壳。与 quote-card 正交：
+   * quote-card = 外部话语成段引用；pull-quote = 作者中段放大重申已写过的句子。
+   * variants/pullQuote/<id>.ts 按骨架注入 wrapperCSS（4 种语言互不重叠）。
+   */
+  pullQuote: CSSObject
+  /** 结构化表格外框（table-card）。内部 table-row 子项渲染单元格。 */
+  tableCard: CSSObject
+  /** 多图组合外框（gallery）。内部 image-item 子项渲染单图 + caption。 */
+  gallery: CSSObject
+  /** 多轮对话外框（dialogue）。内部 dialogue-turn 子项渲染单轮对话。 */
+  dialogue: CSSObject
 }
 
 /**
@@ -490,6 +502,61 @@ export type FootnotesVariantId =
   // 2px 章节杆 + 2.4em 深 hanging + 11px：论文 bibliography 章
   | 'dense-academic'
 
+// pull-quote 与 quote-card / highlight 的边界：
+//   - quote-card        外部话语成段引用（attrs.byline 标外部来源）
+//   - highlight         作者自我强调的整段（bgMuted 无骨架切换）
+//   - pull-quote        正文中段把已写过的句子放大重申（与原文同源，记忆点强化）
+// 设计语言上 4 个 variant 互不重叠：装饰巨号 / 居中夹线 / 印章压字 / 悬挂拉引
+export type PullQuoteVariantId =
+  // 巨号 inline-SVG 引号在文前 + 左对齐居中段（人物特稿、杂志拉引母本）
+  | 'giant-mark'
+  // 上下 1px 实线居中夹 + textMuted 大写小字 kicker（gallery placard 体）
+  | 'centered-rule'
+  // 右侧 inline-SVG 印章 + 左侧大字（粗野压字、brutalist）
+  | 'stamp-quote'
+  // 左侧深 padding + 顶部 monospace "QUOTE" kicker + 右大字（NYT Sunday pull-quote）
+  | 'margin-pull'
+
+export type AnnouncementVariantId =
+  // 默认：左 4px 色条 + soft 底 + 主色粗标题（与原 announcement 行为等价）
+  | 'danger-bar'
+  // 全 1px 边框无填充 + monospace uppercase 小字标题（法律声明气质）
+  | 'mono-disclaimer'
+  // 左竖条 + 内联 AI 徽章（小芯片 SVG + "AI"）+ 副标题，2026 合规告知
+  | 'ai-notice'
+  // 双栏 table：左大字标题/body + 右内联 SVG 印章戳（官方公告气质）
+  | 'stamped-banner'
+
+export type TableCardVariantId =
+  // 全网格：每格 1px 边框（数据库表 / 规格清单）
+  | 'rule-grid'
+  // 斑马底：奇偶行底色 + 顶部 hairline header（电子表格）
+  | 'zebra-rows'
+  // 双栏 key-value：左列加粗 textMuted + 右列正文，行间 hairline（spec sheet）
+  | 'key-value'
+  // 价格档位：每列独立卡 + 顶部 3px 主色条 + 居中（pricing tier comparison）
+  | 'price-tier'
+
+export type GalleryVariantId =
+  // 双联：display:table 50/50（左右对比图）
+  | 'duo'
+  // 三联：display:table 33/33/33（panorama / 横向同主题）
+  | 'triptych'
+  // 九宫格：inline-block 32% 自动换行（Instagram-style）
+  | 'nine-grid'
+  // 横滚条带：overflow-x:auto + inline-block 64% + 内阴影提示滑动（移动端 carousel）
+  | 'ribbon-strip'
+
+export type DialogueVariantId =
+  // Q/A 行：每轮 kicker 头 + 正文，访谈整理稿
+  | 'qa-rows'
+  // 气泡：内联 SVG 尾巴 + 左右交替（chat app 体；不依赖 ::before/::after）
+  | 'chat-bubbles'
+  // 名字前缀：每段 "**名字**：内容" 行内排版，剧本 / 对谈
+  | 'name-prefix'
+  // 杂志栏：左 fixed 列大写名字 + 右长答（New Yorker interview）
+  | 'interview-column'
+
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
   admonition: AdmonitionVariantId
@@ -509,6 +576,16 @@ export interface ThemeVariants {
   qrcode: QrcodeVariantId
   /** 文末 CTA 骨架（button-led 默认 / triptych-actions = 原 cta-bar）。 */
   footerCTA: FooterCTAVariantId
+  /** 拉引骨架：pull-quote 容器专属（与 quote-card 正交：作者自我重申）。 */
+  pullQuote: PullQuoteVariantId
+  /** 强警示横幅骨架：announcement 容器（与 tone= 正交）。 */
+  announcement: AnnouncementVariantId
+  /** 结构化表格骨架：table-card 容器（外层 4 冒号，内嵌 table-row）。 */
+  tableCard: TableCardVariantId
+  /** 多图组合骨架：gallery 容器（外层 4 冒号，内嵌 image-item）。 */
+  gallery: GalleryVariantId
+  /** 多轮对话骨架：dialogue 容器（外层 4 冒号，内嵌 dialogue-turn）。 */
+  dialogue: DialogueVariantId
 }
 
 /**
@@ -528,6 +605,11 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   recommend: 'card-list',
   qrcode: 'bare',
   footerCTA: 'button-led',
+  pullQuote: 'giant-mark',
+  announcement: 'danger-bar',
+  tableCard: 'rule-grid',
+  gallery: 'duo',
+  dialogue: 'qa-rows',
 }
 
 // ============================================================
@@ -676,6 +758,36 @@ export const VARIANT_IDS = {
     'button-led',
     'triptych-actions',
   ] as const satisfies readonly FooterCTAVariantId[],
+  pullQuote: [
+    'giant-mark',
+    'centered-rule',
+    'stamp-quote',
+    'margin-pull',
+  ] as const satisfies readonly PullQuoteVariantId[],
+  announcement: [
+    'danger-bar',
+    'mono-disclaimer',
+    'ai-notice',
+    'stamped-banner',
+  ] as const satisfies readonly AnnouncementVariantId[],
+  tableCard: [
+    'rule-grid',
+    'zebra-rows',
+    'key-value',
+    'price-tier',
+  ] as const satisfies readonly TableCardVariantId[],
+  gallery: [
+    'duo',
+    'triptych',
+    'nine-grid',
+    'ribbon-strip',
+  ] as const satisfies readonly GalleryVariantId[],
+  dialogue: [
+    'qa-rows',
+    'chat-bubbles',
+    'name-prefix',
+    'interview-column',
+  ] as const satisfies readonly DialogueVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

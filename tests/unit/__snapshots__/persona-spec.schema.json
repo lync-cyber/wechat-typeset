@@ -7503,7 +7503,12 @@
         "footnotes",
         "recommend",
         "qrcode",
-        "footerCTA"
+        "footerCTA",
+        "pullQuote",
+        "announcement",
+        "tableCard",
+        "gallery",
+        "dialogue"
       ],
       "properties": {
         "admonition": {
@@ -7622,6 +7627,46 @@
           "enum": [
             "button-led",
             "triptych-actions"
+          ]
+        },
+        "pullQuote": {
+          "enum": [
+            "giant-mark",
+            "centered-rule",
+            "stamp-quote",
+            "margin-pull"
+          ]
+        },
+        "announcement": {
+          "enum": [
+            "danger-bar",
+            "mono-disclaimer",
+            "ai-notice",
+            "stamped-banner"
+          ]
+        },
+        "tableCard": {
+          "enum": [
+            "rule-grid",
+            "zebra-rows",
+            "key-value",
+            "price-tier"
+          ]
+        },
+        "gallery": {
+          "enum": [
+            "duo",
+            "triptych",
+            "nine-grid",
+            "ribbon-strip"
+          ]
+        },
+        "dialogue": {
+          "enum": [
+            "qa-rows",
+            "chat-bubbles",
+            "name-prefix",
+            "interview-column"
           ]
         }
       },

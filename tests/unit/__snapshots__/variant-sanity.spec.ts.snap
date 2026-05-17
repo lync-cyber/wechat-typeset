@@ -107,6 +107,26 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:top-bottom-
 <section class="container-tip__title" style="font-size:14px;font-weight:600;color:#1f8a4c;margin-bottom:8px;letter-spacing:1.2px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#1f8a4c" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#1f8a4c"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#1f8a4c"></rect> </svg>测试标题</section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > announcement:ai-notice 1`] = `
+"<section class="container-announcement container-announcement--ai-notice" style="border-left: 4px solid #b42318; color: #1c1f24; background-color: #eceae4; border: 1.5px solid #b42318; border-radius: 12px; padding: 10px 16px; margin: 18px 0;">
+<section style="display:table;width:100%"><span style="display:table-cell;vertical-align:middle;width:32px;padding-right:10px"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#b42318" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="5" width="14" height="14" rx="2" fill="#eceae4"></rect><rect x="8.5" y="8.5" width="3" height="3" fill="#b42318" stroke="none"></rect><rect x="12.5" y="8.5" width="3" height="3" fill="#b42318" stroke="none"></rect><rect x="8.5" y="12.5" width="3" height="3" fill="#b42318" stroke="none"></rect><rect x="12.5" y="12.5" width="3" height="3" fill="#b42318" stroke="none"></rect><path d="M9 5 V2 M15 5 V2 M9 22 V19 M15 22 V19 M5 9 H2 M5 15 H2 M22 9 H19 M22 15 H19"></path></svg></span><span style="display:table-cell;vertical-align:middle"><section style="font-weight:700;font-size:13px;color:#636870;letter-spacing:0.3px;line-height:1.4">测试通告</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > announcement:danger-bar 1`] = `
+"<section class="container-announcement container-announcement--danger-bar" style="border: 1px solid #b42318; color: #1c1f24; background-color: #fbecea; border-left: 4px solid #b42318; border-radius: 6px; padding: 14px 16px; margin: 20px 0;">
+<section class="container-announcement__title" style="color:#b42318;font-weight:700;font-size:15px;letter-spacing:0.5px;margin-bottom:6px">测试通告</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > announcement:mono-disclaimer 1`] = `
+"<section class="container-announcement container-announcement--mono-disclaimer" style="border-left: 4px solid #b42318; color: #1c1f24; background-color: transparent; border: 1px solid #b42318; padding: 12px 16px; margin: 18px 0; border-radius: 0;">
+<section class="container-announcement__title" style="color:#636870;font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;border-bottom:1px solid #d8d8d4;padding-bottom:6px;margin-bottom:8px">测试通告</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > announcement:stamped-banner 1`] = `
+"<section class="container-announcement container-announcement--stamped-banner" style="border-left: 4px solid #b42318; border: 1px solid #b42318; color: #1c1f24; background-color: #fbecea; border-top: 3px solid #b42318; padding: 14px 16px; margin: 20px 0; border-radius: 0 0 4px 4px;">
+<section style="display:table;width:100%;table-layout:fixed;margin-bottom:8px"><span style="display:table-cell;vertical-align:middle;width:78%"><section style="font-weight:700;font-size:16px;color:#b42318;margin-bottom:6px;line-height:1.4">测试通告</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > compare:column-card 1`] = `
 "<section class="container-compare container-compare--column-card" style="display: table; width: 100%; table-layout: fixed; border-spacing: 4px 0; border-collapse: separate; margin: 16px 0;">
 <section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
@@ -129,6 +149,26 @@ exports[`默认主题 · 每 variant 渲染片段快照 > compare:stacked-row 1`
 "<section class="container-compare container-compare--stacked-row" style="margin: 16px 0;">
 <section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
 <section class="container-pros__title" style="font-size:14px;font-weight:700;color:#1f8a4c;margin-bottom:8px;letter-spacing:0;line-height:1.4">正方</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:chat-bubbles 1`] = `
+"<section class="container-dialogue container-dialogue--chat-bubbles" style="margin: 20px 0; margin: 20px 0; padding: 14px 16px; background-color: transparent;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:interview-column 1`] = `
+"<section class="container-dialogue container-dialogue--interview-column" style="margin: 20px 0; margin: 24px 0; padding: 0; background-color: transparent;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:name-prefix 1`] = `
+"<section class="container-dialogue container-dialogue--name-prefix" style="margin: 20px 0; margin: 20px 0; background-color: transparent;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:qa-rows 1`] = `
+"<section class="container-dialogue container-dialogue--qa-rows" style="margin: 20px 0; margin: 20px 0; padding: 14px 16px; background-color: transparent;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > divider:dots 1`] = `
@@ -165,6 +205,46 @@ exports[`默认主题 · 每 variant 渲染片段快照 > divider:wave 1`] = `
 "<section class="container-divider container-divider--wave" style="text-align:center;margin:24px 0">
 <svg viewBox="0 0 240 12" width="220" height="12" xmlns="http://www.w3.org/2000/svg"> <path d="M0,6 Q15,0 30,6 T60,6 T90,6 T120,6 T150,6 T180,6 T210,6 T240,6" fill="none" stroke="#d8d8d4" stroke-width="1.2"></path> </svg>
 </section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > gallery:duo 1`] = `
+"<section class="container-gallery container-gallery--duo" style="margin: 20px 0;">
+<section class="container-gallery__title" style="font-weight:700;color:#1c1f24;font-size:13px;letter-spacing:0.5px;margin-bottom:8px">春夏秋冬</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > gallery:nine-grid 1`] = `
+"<section class="container-gallery container-gallery--nine-grid" style="margin: 20px 0;">
+<section class="container-gallery__title" style="font-weight:700;color:#1c1f24;font-size:13px;letter-spacing:0.5px;margin-bottom:8px">春夏秋冬</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > gallery:ribbon-strip 1`] = `
+"<section class="container-gallery container-gallery--ribbon-strip" style="margin: 20px 0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; box-shadow: inset -14px 0 10px -10px rgba(0,0,0,0.28); border-radius: 4px;">
+<section class="container-gallery__title" style="font-weight:700;color:#1c1f24;font-size:13px;letter-spacing:0.5px;margin-bottom:8px">春夏秋冬</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > gallery:triptych 1`] = `
+"<section class="container-gallery container-gallery--triptych" style="margin: 20px 0;">
+<section class="container-gallery__title" style="font-weight:700;color:#1c1f24;font-size:13px;letter-spacing:0.5px;margin-bottom:8px">春夏秋冬</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:centered-rule 1`] = `
+"<section class="container-pull-quote container-pull-quote--centered-rule" style="margin: 28px 0; border-top: 1px solid #2558b0; border-bottom: 1px solid #2558b0; padding: 24px 12px; text-align: center; border-radius: 0; background-color: transparent;">
+<section style="text-align:center;margin-bottom:10px"><span style="display:inline-block;color:#636870;font-size:11px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;line-height:1.4">QUOTE · 引言</span></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:giant-mark 1`] = `
+"<section class="container-pull-quote container-pull-quote--giant-mark" style="margin: 28px 0; padding: 8px 4px 8px 16px; text-align: left;">
+<section style="line-height:0;margin-bottom:4px"><svg width="64" height="48" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2558b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 40 C14 22 22 14 32 12 M14 40 L14 50 L26 50 L26 36 L18 36 L18 40 Z"></path><path d="M44 40 C44 22 52 14 62 12 M44 40 L44 50 L56 50 L56 36 L48 36 L48 40 Z"></path></svg></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:margin-pull 1`] = `
+"<section class="container-pull-quote container-pull-quote--margin-pull" style="margin: 28px 0; padding: 14px 4px 14px 0; border-left: 1px solid #d8d8d4; background-color: transparent;">
+<section style="display:table;width:100%"><section style="display:table-cell;vertical-align:top;width:56px;padding-top:2px"><svg width="24" height="72" viewBox="0 0 24 72" xmlns="http://www.w3.org/2000/svg"><text x="12" y="64" font-size="11" font-weight="700" fill="#2558b0" text-anchor="start" transform="rotate(-90 12 64)" font-family="monospace" letter-spacing="3">QUOTE</text></svg></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:stamp-quote 1`] = `
+"<section class="container-pull-quote container-pull-quote--stamp-quote" style="margin: 28px 0; border-top: 2px solid #1c1f24; border-bottom: 2px solid #1c1f24; padding: 18px 4px; background-color: transparent;">
+<section style="display:table;width:100%"><section style="display:table-cell;vertical-align:middle;color:#1c1f24;font-size:19px;line-height:1.5;font-weight:700;letter-spacing:0.2px;text-align:left">——</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > quote:classic 1`] = `
@@ -268,4 +348,24 @@ exports[`默认主题 · 每 variant 渲染片段快照 > steps:timeline-dot 1`]
 "<section class="container-steps container-steps--timeline-dot" style="margin: 18px 0; padding: 4px 0 4px 20px; border-left: 2px dotted #2558b0;">
 <svg viewBox="0 0 10 10" width="10" height="10" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 8px; margin-left: -16px"><circle cx="5" cy="5" r="4" fill="#2558b0"></circle></svg>
 <section class="container-steps__title" style="font-weight:700;color:#2558b0;margin-bottom:10px">操作步骤</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:key-value 1`] = `
+"<section class="container-table-card container-table-card--key-value" style="margin: 20px 0; border-top: 1px solid #d8d8d4; margin: 18px 0;">
+<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:price-tier 1`] = `
+"<section class="container-table-card container-table-card--price-tier" style="margin: 20px 0; margin: 18px 0;">
+<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:rule-grid 1`] = `
+"<section class="container-table-card container-table-card--rule-grid" style="margin: 20px 0; border: 1px solid #d8d8d4; border-radius: 4px; overflow: hidden; margin: 18px 0;">
+<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:zebra-rows 1`] = `
+"<section class="container-table-card container-table-card--zebra-rows" style="margin: 20px 0; border-top: 1px solid #1c1f24; border-bottom: 1px solid #1c1f24; margin: 18px 0;">
+<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>"
 `;
