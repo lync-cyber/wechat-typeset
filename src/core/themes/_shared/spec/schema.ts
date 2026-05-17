@@ -267,7 +267,6 @@ const SHAPE_KEYS = [
   'externalLinkIcon',
   'terminalPrompt',
   'sealMark',
-  'editorNoteKickerIcon',
 ] as const
 
 const MOTIF_SPEC_SCHEMA: JSONSchema7 = {

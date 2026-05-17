@@ -322,14 +322,17 @@ export const spec: PersonaSpec = {
   // ============================================================
   variants: {
     admonition: 'bubble-organic', // 全主题签名：大圆角气泡 + 单侧柔软阴影，手绘信笺气质（取代工业网格矩阵的 accent-bar）
-    quote: 'classic',
-    compare: 'column-card',
-    steps: 'number-circle',
-    divider: 'rule',
-    sectionTitle: 'bordered',
-    codeBlock: 'bare',
-    note: 'minimal-callout', // 极简短线，让生活化主题保持柔和不增加视觉负担
-    footnotes: 'lined',
+    quote: 'magazine-dropcap', // 散文体首字下沉引号，与生活化叙事节奏匹配
+    compare: 'stacked-row', // 慢生活偏陈述：先 A 再 B，避免双列拥挤
+    steps: 'step-card', // 浅底卡片化分步，手绘信笺式分章
+    divider: 'flower', // 装饰叶片分隔，与 bubble-organic 同手绘语汇
+    sectionTitle: 'ribbon-stamp', // 左侧手绘戳记 + 标题，慢生活刊物章名
+    codeBlock: 'inline-card', // 偶引代码用 tinted 软底卡，与正文同色族
+    note: 'dotted-margin', // dotted 左竖线 + 缩进，散文页边批注，比 minimal-callout 更"手记"
+    footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
+    recommend: 'card-list',
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

@@ -189,8 +189,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '— tracklist · 节目单 —',
     qaBlock: '听 · 众 · 连 · 线',
-    editorNote: '播 · 后 · 札记',
-    methodology: '制作手记 · LINER NOTES',
     qrFollowKicker: 'tune · in',
     qrFollowTitle: '夜读电台',
     recommend: '深 夜 选 听',
@@ -208,19 +206,25 @@ export const spec: PersonaSpec = {
     // 与设计稿 multi-callout（cue/b-side/static/off-air）的视觉高度对齐：
     // 仅徽章字 + 色不同，正文紧凑同色族；徽章文字由作者写 `::: info cue` 直接覆盖。
     admonition: 'news-row',
-    // classic：本主题不主推 ::: quote-card；pull-quote 由 markdown `>` 走
-    // elements.blockquote（上下橙线 + 深蓝卡底）担纲。
-    quote: 'classic',
-    compare: 'column-card',
-    steps: 'number-circle',
+    // tilted-sticker：punk-zine 反色贴纸（白底深蓝字 + 微旋）—— 与 elements.blockquote 的橙线卡底协同
+    quote: 'tilted-sticker',
+    // stacked-row：竖叠陈述，符合 vinyl zine 单列纵贯叙事节奏
+    compare: 'stacked-row',
+    // split-row：左 4px 实色 + 大号编号，硬边节奏
+    steps: 'split-row',
     // dots：设计稿 divider-ornament 原型（· · · 圆点分割）
     divider: 'dots',
-    sectionTitle: 'bordered',
-    // bare：pre 元素直接走主题 voice（黑底橙框 + monospace inline）
-    codeBlock: 'bare',
+    // ribbon-stamp：左侧实色戳记 + 主标题，与 news-row 同色块语言
+    sectionTitle: 'ribbon-stamp',
+    // terminal-frame：暗调 vinyl 与 terminal 窗口腔语言匹配
+    codeBlock: 'terminal-frame',
     // side-bar：左 2px 实线 + 缩进 —— 与 editor-note callout 形态错开
     note: 'side-bar',
-    footnotes: 'lined',
+    // boxed-aside：narrative aside 软底卡片，与 zine 内附注同源
+    footnotes: 'boxed-aside',
+    recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -241,7 +245,7 @@ export const spec: PersonaSpec = {
   //   12 unordered-list → markdown -（li 元素样式）
   //   13 inline-code    → markdown `code`（code 元素样式：橙字 monospace）
   //   14 code-block     → markdown ``` block（pre 元素样式：黑底橙框）
-  //   15 callout 播后札记 → editor-note 容器（kicker 由 spec.kickers.editorNote 提供，作者写 `::: editor-note` 即可）
+  //   15 callout 播后札记 → ::: note variant=editorial-stripe（kicker 走 info 行）
   //   16 qa-block       → qa-block 容器（kicker 由 spec.kickers.qaBlock 提供）
   //   17 multi-callout  → tip / info / warning / danger × news-row variant；徽章文字 cue/b-side/static/off-air
   //                       由作者写在 info 位（作者侧的"语义标注 + 视觉徽章合一"，仍是写作契约的一部分）
@@ -259,10 +263,7 @@ export const spec: PersonaSpec = {
     'masthead',
     'toc',
     'qaBlock',
-    'editorNote',
     'footnotes',
-    'ctaBar',
-    'qrFollow',
     'colophon',
     'imageCaption', // monospace 橙金时间戳图注
     'authorBio', // 电台主播卡（深蓝卡底 + 橙顶线）
@@ -633,13 +634,6 @@ export const spec: PersonaSpec = {
       'border-top': '3px solid #d97a3c',
       'border-radius': '0',
     },
-    seeAlso: {
-      margin: '20px 0',
-      padding: '14px 16px',
-      'background-color': '#14263d',
-      'border-left': '3px solid #d97a3c',
-      'border-radius': '0',
-    },
     // qa-block · 听众连线：左 2px 橙竖线 + 深蓝卡底（设计稿 qa-block 原型）
     qaBlock: {
       __reset: true,
@@ -661,38 +655,7 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.03em',
       color: '#a89070',
     },
-    ctaBar: {
-      margin: '26px 0',
-    },
     // qr-follow · tune·in 牌：1px 橙边框 + 深蓝卡底（设计稿 qr-follow 原型）
-    qrFollow: {
-      __reset: true,
-      border: '1px solid #d97a3c',
-      'background-color': '#14263d',
-      padding: '14px',
-      margin: '26px 0',
-      'border-radius': '0',
-    },
-    // editor-note · 播后札记 callout：深蓝卡底（无左竖条，设计稿 callout 原型）
-    // __reset 清除 baseContainers.editorNote 的 border-left 3px primary —— 本主题
-    // callout 形态是"裸卡 + kicker + 正文"，与 qaBlock 的"左条 + 卡"形态错开。
-    editorNote: {
-      __reset: true,
-      'background-color': '#14263d',
-      padding: '14px 16px',
-      margin: '24px 0',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#14263d',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.8',
-      color: '#a89070',
-      'border-radius': '0',
-    },
     // colophon · 刊物收束栏（设计稿 footer 原型）：上方 1px text 实色分隔线 +
     // 双栏 monospace（"下期 ｜ 卷·期"）。renderer 强制 display:table。
     colophon: {
@@ -788,25 +751,6 @@ export const spec: PersonaSpec = {
       'font-weight': '600',
       'letter-spacing': '1.5px',
       'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    // seeAlso 容器：bg=#14263d 暗底，title 走 textInverse（暖米白）保持最大对比
-    seeAlsoTitle: {
-      __reset: true,
-      color: '#d9c9a8',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '2px',
-      'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    // editor-note 容器：bg=#14263d 暗底，kicker（"播后札记 · LATE-NIGHT NOTE"）走 accent 橙金
-    editorNoteKicker: {
-      __reset: true,
-      color: '#d97a3c',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '1.5px',
       'margin-bottom': '8px',
     },
   },

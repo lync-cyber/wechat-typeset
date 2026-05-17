@@ -1,13 +1,11 @@
 /**
  * data-brief 家族 · 编辑文案块（editorial）
  *
- * 承担"读者互动 / 编辑发声 / 数据口径 / 引用脚注"这类文字向的支撑容器。
+ * 承担"读者互动 + 脚注引用"两个文字向的支撑容器。
  *
- * 包含 4 个容器：
+ * 包含 2 个容器：
  *   - qa-block       读者问答（Q/A 头像方块）
  *   - footnotes      脚注 / 参考文献块（variantKind=footnotes：lined / inline-flow）
- *   - editor-note    编辑部注 callout（主色左条 + kicker + 正文）
- *   - methodology    方法论小字注释（浅底 + 粗体标签 + 10px 紧凑正文）
  *
  * 与 metrics 的差异：本组容器**有 body 内容**（markdown-it 渲染的内文），
  * 渲染器 open 留段 wrapper 给 markdown 流式注入；metrics 多为"声明型"
@@ -113,67 +111,3 @@ export const footnotesContainer: ContainerRenderer = makeVariantContainer({
   },
 })
 
-// editor-note · 编辑部注 callout：主色左竖条 + kicker（标签头）+ body。
-// 区别于通用 note——note 走 textMuted 中性色调；editor-note 是"被点名"
-// 的栏目编辑发声块，主色调介入。
-
-export const editorNoteContainer: ContainerRenderer = {
-  open: (ctx) => {
-    const kicker = ctx.info.trim() || ctx.kickers.editorNote
-    const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.editorNote)
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      `border-left:3px solid ${c.primary}`,
-      'padding:14px 16px',
-      'margin:22px 0',
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
-    // kicker CSS 由主题 innerStyles.editorNoteKicker 决定（baseInnerStyles 兜底 +
-    // spec.innerStyles 深合并），允许主题作者重塑 kicker 形态而无需改 renderer。
-    const kickerCSS = inline(ctx.innerStyles.editorNoteKicker)
-    // 主题声明 assets.editorNoteKickerIcon 时，在 kicker 文字前 prepend 装饰图标。
-    // 不声明则仅渲染文本——保持现有主题（data-brief / industry-observer 等）兼容。
-    const icon = ctx.assets.editorNoteKickerIcon
-    const iconSpan = icon
-      ? `<span style="display:inline-block;vertical-align:middle;margin-right:6px;">${icon}</span>`
-      : ''
-    return (
-      `<section class="container-editor-note" style="${wrapperCSS}">\n` +
-      `<section class="container-editor-note__kicker" style="${kickerCSS}">${iconSpan}${escText(kicker)}</section>\n`
-    )
-  },
-  close: '</section>\n',
-}
-
-// methodology · 方法论小字注释：浅底 + 粗体标签头 + 紧凑小字正文。
-// 是"图注 / 调研口径"的脚注栏——与 note 的差别：methodology 排印更紧密
-// （10px、padding 10px 12px），note 是叙事性补注（13px、行距更松）。
-
-export const methodologyContainer: ContainerRenderer = {
-  open: (ctx) => {
-    const label = ctx.info.trim() || ctx.kickers.methodology
-    const c = ctx.tokens.colors
-    const themeStyle = inline(ctx.containers.methodology)
-    const fallback = [
-      `background-color:${c.bgSoft}`,
-      'padding:10px 12px',
-      'margin:16px 0',
-      'font-size:10px',
-      'line-height:1.7',
-      `color:${c.textMuted}`,
-    ].join(';')
-    const wrapperCSS = themeStyle || fallback
-    // 标签头与正文同行——renderer 在 open 末尾闭合 b 之前留一个空格，让正文紧贴在后面
-    const labelCSS = [
-      `color:${c.text}`,
-      'font-weight:700',
-      'margin-right:6px',
-    ].join(';')
-    return (
-      `<section class="container-methodology" style="${wrapperCSS}">` +
-      `<b class="container-methodology__label" style="${labelCSS}">${escText(label)}</b>`
-    )
-  },
-  close: '</section>\n',
-}

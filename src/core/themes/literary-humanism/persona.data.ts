@@ -425,11 +425,15 @@ export const spec: PersonaSpec = {
     divider: 'flower',
     // 规范 §2.4：sectionTitle 走 cornered —— 左上书角折页
     sectionTitle: 'cornered',
-    // 规范 §1.1 code 安静处理：bare 不用 header-bar
-    codeBlock: 'bare',
-    // 书页批注：minimal-callout 的无框短线最贴近宋版书"按"语调
-    note: 'minimal-callout',
-    footnotes: 'lined',
+    // 文学主题代码偏古书内嵌式：tinted 软底 + 左主色窄竖条
+    codeBlock: 'inline-card',
+    // 散文式页边批注：dotted 左竖线 + 缩进，比 minimal-callout 更"页边书"
+    note: 'dotted-margin',
+    // 书后注："boxed-aside" 软底卡片 + pill kicker，narrative aside
+    footnotes: 'boxed-aside',
+    recommend: 'card-list',
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

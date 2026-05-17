@@ -19,6 +19,9 @@ _预计阅读 12 分钟 · 最后更新 2026-04-20_
 ::: divider
 :::
 
+::: section-title 01 · JWT 的结构
+:::
+
 ## 1. JWT 的结构
 
 JWT（JSON Web Token）由三段 Base64url 编码字符串拼成，用 `.` 分隔：
@@ -162,7 +165,7 @@ JWT 是信任契约，不是加密容器。签名确保"数据未被篡改"，�
 ![二维码占位](https://placehold.co/240x240?text=QR)
 :::
 
-::: see-also 下一篇会讲什么
+::: recommend variant=academic-refs 下一篇会讲什么
 - **OAuth 2.0 与 JWT 的协作关系**：授权码流程里，JWT 扮演什么角色
 - **Refresh Token 的正确实现**：为什么不能把它当 Access Token 用
 - **JWK Set 与密钥轮转**：从 kid 到完整轮转链路的工程化
@@ -172,4 +175,9 @@ JWT 是信任契约，不是加密容器。签名确保"数据未被篡改"，�
 - [RFC 7519：JWT 规范原文](https://example.com/rfc7519)
 - [OWASP：JWT 安全最佳实践](https://example.com/owasp)
 - [Node.js crypto 官方文档](https://example.com/crypto)
+:::
+
+::: footnotes 参考资料
+[1] RFC 7519 · JSON Web Token (JWT) · IETF 2015。
+[2] OWASP JWT Cheatsheet · 2024 最新版。
 :::

@@ -8,5 +8,7 @@
 import numberCircle from './number-circle'
 import ribbonChain from './ribbon-chain'
 import timelineDot from './timeline-dot'
+import stepCard from './step-card'
+import splitRow from './split-row'
 
-export default [numberCircle, ribbonChain, timelineDot]
+export default [numberCircle, ribbonChain, timelineDot, stepCard, splitRow]

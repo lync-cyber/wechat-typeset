@@ -34,7 +34,34 @@
 你打开手机的那一秒，有人已经替你决定了接下来看什么。这不是推荐，这是饲养。
 :::
 
+::: section-title 撕 · 撕掉订阅 stamp=撕 variant=ribbon-stamp
+:::
+
 ## 撕掉订阅
+
+::: compare // 算法 vs 纸本
+::: pros 纸本
+- 单向阅读，无算法回路
+- 没有点赞机制
+- 留下后会被翻第二次
+:::
+::: cons 算法
+- 双向回路，反复重赋权
+- 数据驱动推荐
+- 滑走就消失
+:::
+:::
+
+::: steps // 退订流程 variant=split-row
+### 01 // 取消关注
+打开订阅列表，逐个取关。
+
+### 02 // 清空消息
+关闭所有推送通知。
+
+### 03 // 留三个
+只留对你最重要的三个。
+:::
 
 每一次「关注」都是一次授权。你授权一个算法替你筛选世界。
 
@@ -78,7 +105,7 @@ ship_to(address=reader.po_box)
 // done. no algorithm involved.
 ```
 
-::: editor-note 编 · 者 · 按
+::: note variant=editorial-stripe 编 · 者 · 按
 印一份纸。找到 200 个人。把它塞进信封。这是行动，不是比喻。我们下期只邮寄，不上线。
 :::
 
@@ -117,10 +144,10 @@ risograph 印刷：单色每张成本约 0.3 元，200 份起印，最低门槛�
 ::: divider
 :::
 
-::: cta-bar like="LIKE" star="STAR ★" share="FWD →"
+::: footer-cta variant=triptych-actions like="LIKE" star="STAR ★" share="FWD →"
 :::
 
-::: qr-follow INK // ink.press desc="双月刊 · 纸本邮寄 · CC-BY-NC" kicker="// SCAN & ORDER"
+::: qrcode variant=follow-card INK // ink.press desc="双月刊 · 纸本邮寄 · CC-BY-NC" kicker="// SCAN & ORDER"
 :::
 
 ::: recommend [READ_NEXT]

@@ -440,14 +440,6 @@
   border-radius: 0;
 }
 
-.markdown-body .container-see-also {
-  margin: 20px 0;
-  padding: 14px 16px;
-  background-color: #14263d;
-  border-left: 3px solid #d97a3c;
-  border-radius: 0;
-}
-
 .markdown-body .container-kpi-dashboard {
   background-color: #14263d;
   border-top: 1px solid #d9c9a8;
@@ -470,35 +462,6 @@
   line-height: 1.85;
   letter-spacing: 0.03em;
   color: #a89070;
-}
-
-.markdown-body .container-cta-bar {
-  margin: 26px 0;
-}
-
-.markdown-body .container-qr-follow {
-  border: 1px solid #d97a3c;
-  background-color: #14263d;
-  padding: 14px;
-  margin: 26px 0;
-  border-radius: 0;
-}
-
-.markdown-body .container-editor-note {
-  background-color: #14263d;
-  padding: 14px 16px;
-  margin: 24px 0;
-  border-radius: 0;
-}
-
-.markdown-body .container-methodology {
-  background-color: #14263d;
-  padding: 10px 12px;
-  margin: 16px 0;
-  font-size: 10px;
-  line-height: 1.8;
-  color: #a89070;
-  border-radius: 0;
 }
 
 .markdown-body .container-colophon {

@@ -79,6 +79,15 @@ export function hello(name: string): string {
 ::: section-title 章节标题（cornered 备选） variant=cornered
 :::
 
+::: section-title 01 · 编号前缀 variant=number-prefix
+:::
+
+::: section-title 学术前沿 kicker="CHAPTER ONE" variant=kicker-stack
+:::
+
+::: section-title 缘起 stamp=章 variant=ribbon-stamp
+:::
+
 ### admonition 五态 + announcement
 
 ::: announcement tone=danger 重要通知
@@ -187,7 +196,7 @@ MIT License。
 覆盖 admonition / quote / compare / steps / divider / sectionTitle / codeBlock / note / footnotes 九类 variant。
 :::
 
-::: see-also 延伸阅读
+::: recommend variant=academic-refs 延伸阅读
 - [Headless 容器契约设计](https://example.com/headless)
 - [微信硬约束清单](https://example.com/hard-rules)
 :::
@@ -242,11 +251,11 @@ MIT License。
 :::
 ::::
 
-::: editor-note 编 者 按
+::: note variant=editorial-stripe 编 者 按
 慢读并非复古姿态，而是一种对自己时间主权的重新申明。
 :::
 
-::: methodology 方法论
+::: note variant=research-dense 方法论
 本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者；"连续阅读"定义为不被通知或切屏中断、持续 5 分钟以上的阅读行为。
 :::
 
@@ -274,10 +283,10 @@ MIT License。
 [2] He, K., et al. (2020). Momentum contrast for unsupervised visual representation learning. *CVPR*, 9729-9738.
 :::
 
-::: cta-bar like="♡ 赞同" star="★ 收藏" share="↗ 转发"
+::: footer-cta variant=triptych-actions like="♡ 赞同" star="★ 收藏" share="↗ 转发"
 :::
 
-::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"
+::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"
 :::
 
 ::: colophon next="纸本之必要：论书脊与手指的记忆" issue="第 004 期 · 2026"
@@ -458,7 +467,7 @@ editorial-block 骨架 —— 左 6px 实色条 + 浅底 + 大写字距 byline�
 :::
 ::::
 
-### steps · 3 variants
+### steps · 5 variants
 
 ::: steps 使用流程 variant=number-circle
 ### 写
@@ -487,6 +496,24 @@ wxPatch 改造不兼容语法。
 公众号后台粘贴富文本。
 :::
 
+::: steps 上线 SOP variant=step-card
+### 灰度发布
+按 5% / 25% / 100% 三档逐级放量。
+### 监控告警
+关键指标接告警，p95 延迟 + 错误率双指标。
+### 应急预案
+回滚脚本与值班联系人提前到位。
+:::
+
+::: steps 调研流程 variant=split-row
+### 01 收集
+阅读 5 篇文献，提炼共识与争议点。
+### 02 假设
+基于共识与争议点形成可验证假设。
+### 03 实验
+选择对照组、自变量与样本量。
+:::
+
 ### divider · 6 variants
 
 ::: divider variant=wave
@@ -507,7 +534,7 @@ wxPatch 改造不兼容语法。
 ::: divider variant=seal-mark
 :::
 
-### note · 3 variants
+### note · 6 variants
 
 ::: note 第五态补注 variant=minimal-callout
 minimal-callout —— 顶端 1px 短分隔线 + textMuted 标题。
@@ -519,6 +546,18 @@ box-callout —— 单色 1px 全边框 + textMuted 标题。
 
 ::: note variant=side-bar 旁注
 side-bar —— 左 2px 实线 + 缩进。
+:::
+
+::: note variant=hanging-indent REMARK
+hanging-indent —— uppercase 小标题 + 悬挂缩进，学术 / 论文风。
+:::
+
+::: note variant=dotted-margin 旁批
+dotted-margin —— 左 dotted rule + 缩进，散文页边批注。
+:::
+
+::: note variant=smallcaps-kicker NOTE
+smallcaps-kicker —— 顶 2px 主色条 + uppercase kicker，数据简报骨架。
 :::
 
 ### codeBlock · 5 variants

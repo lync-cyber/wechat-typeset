@@ -228,6 +228,9 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare', // 拒绝 header-bar（那是 tech-explainer 签名）
     note: 'minimal-callout', // 顶端 1px 短分隔线 + textMuted 标题（保留迁移前视觉）
     footnotes: 'lined',
+    recommend: 'card-list',
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

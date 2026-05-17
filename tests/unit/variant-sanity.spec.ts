@@ -158,16 +158,16 @@ for (const theme of themeList) {
 // -------------------- 跨主题覆盖验证（防止漏跑） --------------------
 
 describe('枚举完整性', () => {
-  it('6 kind × 41 variant 全部进入容器测试矩阵（codeBlock 走独立组）', () => {
+  it('6 kind × 46 variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
       admonition: 19, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook)
       quote: 7, // +1: tilted-sticker (brutalist) +1: editorial-block (editorial pull-quote) +1: left-bar (日常引用)
       compare: 4, // +1: data-card (data-brief 家族)
-      steps: 3,
+      steps: 5, // +2 P0-A: step-card / split-row（卡片化分步 / 学术分栏）
       divider: 6, // +1: seal-mark (swiss-grid 家族收束印章)
-      sectionTitle: 2,
+      sectionTitle: 5, // +3 P0-A: number-prefix / kicker-stack / ribbon-stamp
     })
   })
 

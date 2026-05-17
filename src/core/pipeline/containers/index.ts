@@ -41,11 +41,7 @@ import {
   timelineContainer,
   timelineItemContainer,
 } from './extras'
-import {
-  abstractContainer,
-  keyNumberContainer,
-  seeAlsoContainer,
-} from './signature'
+import { abstractContainer, keyNumberContainer } from './signature'
 import {
   mastheadContainer,
   sectionTagContainer,
@@ -59,10 +55,6 @@ import {
   barContainer,
   qaBlockContainer,
   footnotesContainer,
-  ctaBarContainer,
-  qrFollowContainer,
-  editorNoteContainer,
-  methodologyContainer,
   colophonContainer,
   calloutGroupContainer,
 } from './databrief'
@@ -111,10 +103,9 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   timeline: timelineContainer,
   'timeline-item': timelineItemContainer,
   free: freeContainer,
-  // 签名容器（abstract / key-number / see-also）
+  // 签名容器（abstract / key-number）
   abstract: abstractContainer,
   'key-number': keyNumberContainer,
-  'see-also': seeAlsoContainer,
   // data-brief 家族（masthead / section-tag / byline / editorial-header / toc / kpi-dashboard / bar-chart / qa-block / footnotes）
   masthead: mastheadContainer,
   'section-tag': sectionTagContainer,
@@ -128,10 +119,6 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   bar: barContainer,
   'qa-block': qaBlockContainer,
   footnotes: footnotesContainer,
-  'cta-bar': ctaBarContainer,
-  'qr-follow': qrFollowContainer,
-  'editor-note': editorNoteContainer,
-  methodology: methodologyContainer,
   colophon: colophonContainer,
   'callout-group': calloutGroupContainer,
 }

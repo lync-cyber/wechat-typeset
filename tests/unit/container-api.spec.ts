@@ -51,15 +51,15 @@ describe('getContainerVocabulary', () => {
       'quote-card', 'highlight', 'key-number',
       'compare', 'pros', 'cons', 'steps',
       'divider',
-      'footer-cta', 'recommend', 'qrcode', 'see-also',
+      'footer-cta', 'recommend', 'qrcode',
       'voice-card', 'video-card',
       'announcement', 'author-bio', 'image-caption', 'timeline', 'timeline-item',
       'free',
       // data-brief 家族（12 styled + 3 nested children = 15 件）
       'masthead', 'section-tag', 'toc', 'toc-item',
       'kpi-dashboard', 'kpi-item', 'bar-chart', 'bar',
-      'qa-block', 'footnotes', 'cta-bar', 'qr-follow',
-      'editor-note', 'methodology', 'colophon',
+      'qa-block', 'footnotes',
+      'colophon',
     ]) {
       expect(names).toContain(name)
     }

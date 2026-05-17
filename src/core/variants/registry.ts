@@ -33,9 +33,12 @@ import type {
   AdmonitionVariantId,
   CompareVariantId,
   DividerVariantId,
+  FooterCTAVariantId,
   FootnotesVariantId,
   NoteVariantId,
+  QrcodeVariantId,
   QuoteVariantId,
+  RecommendVariantId,
   SectionTitleVariantId,
   StepsVariantId,
   VariantKind,
@@ -83,9 +86,21 @@ const QUOTE_ORDER: readonly string[] = [
   'tilted-sticker',
 ]
 const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
-const STEPS_ORDER: readonly string[] = ['number-circle', 'ribbon-chain', 'timeline-dot']
+const STEPS_ORDER: readonly string[] = [
+  'number-circle',
+  'ribbon-chain',
+  'timeline-dot',
+  'step-card',
+  'split-row',
+]
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
-const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
+const SECTION_TITLE_ORDER: readonly string[] = [
+  'bordered',
+  'cornered',
+  'number-prefix',
+  'kicker-stack',
+  'ribbon-stamp',
+]
 const CODE_BLOCK_ORDER: readonly string[] = [
   'bare',
   'header-bar',
@@ -93,7 +108,16 @@ const CODE_BLOCK_ORDER: readonly string[] = [
   'terminal-frame',
   'inline-card',
 ]
-const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
+const NOTE_ORDER: readonly string[] = [
+  'minimal-callout',
+  'box-callout',
+  'side-bar',
+  'hanging-indent',
+  'dotted-margin',
+  'smallcaps-kicker',
+  'editorial-stripe',
+  'research-dense',
+]
 const FOOTNOTES_ORDER: readonly string[] = [
   'lined',
   'inline-flow',
@@ -101,6 +125,9 @@ const FOOTNOTES_ORDER: readonly string[] = [
   'top-rule',
   'dense-academic',
 ]
+const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
+const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card']
+const FOOTER_CTA_ORDER: readonly string[] = ['button-led', 'triptych-actions']
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -112,6 +139,9 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
   footnotes: FOOTNOTES_ORDER,
+  recommend: RECOMMEND_ORDER,
+  qrcode: QRCODE_ORDER,
+  footerCTA: FOOTER_CTA_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -134,6 +164,9 @@ import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
 import footnotesAll from './footnotes/_all'
+import recommendAll from './recommend/_all'
+import qrcodeAll from './qrcode/_all'
+import footerCTAAll from './footer-cta/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -146,6 +179,9 @@ function collectDefs(): AnyDef[] {
     ...codeBlockAll,
     ...noteAll,
     ...footnotesAll,
+    ...recommendAll,
+    ...qrcodeAll,
+    ...footerCTAAll,
   ] as unknown as AnyDef[]
 }
 
@@ -208,6 +244,9 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
 )
 export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
 export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, 'footnotes')
+export const RECOMMEND_VARIANTS = asRecord<RecommendVariantId, void>(ALL_DEFS, 'recommend')
+export const QRCODE_VARIANTS = asRecord<QrcodeVariantId, void>(ALL_DEFS, 'qrcode')
+export const FOOTER_CTA_VARIANTS = asRecord<FooterCTAVariantId, void>(ALL_DEFS, 'footerCTA')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }

@@ -41,7 +41,7 @@ export type ContainerCategory =
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
   | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
-  | 'signature' // 签名块：abstract / key-number / see-also / editor-note / methodology / colophon / footnotes
+  | 'signature' // 签名块：abstract / key-number / colophon / footnotes
   | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
   | 'free' // 兜底 escape hatch：free
 
@@ -408,14 +408,18 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     attrs: [
       {
         key: 'variant',
-        description: '覆盖主题默认的 note 骨架（中性补注池，色彩走 textMuted 不抢色）',
+        description:
+          '覆盖主题默认的 note 骨架。8 个 variant 覆盖三档语气：' +
+          '中性（minimal-callout / box-callout / side-bar / hanging-indent / dotted-margin / smallcaps-kicker）；' +
+          '编辑部按（editorial-stripe，主色左条 + bgSoft）；' +
+          '调研口径（research-dense，10px 紧凑 + bold label）。',
         enum: VARIANT_IDS.note,
       },
     ],
     description:
-      'note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。' +
-      '与 editor-note 的边界：note 是"作者**自己**附在正文边上的注脚"（题外话 / 题中题外）；' +
-      'editor-note 是"**编辑部**以机构身份对全文加按语"（主色左条 + 强 kicker）。语气主体不同。',
+      'note：作者旁批 + 编辑部按 + 调研口径的统一容器。' +
+      'variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到"编辑部以机构身份按语"；' +
+      'research-dense 切到"调研方法论小字栏"。',
     example: '::: note 补注\n内容 …\n:::\n',
   },
 
@@ -557,19 +561,33 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'footer-cta',
     styleKey: 'footerCTA',
     category: 'navigation',
+    variantKind: 'footerCTA',
     fenceLength: 3,
     attrs: [
-      { key: 'cta', description: '按钮文字（visual only）', example: '点此关注' },
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 footerCTA 骨架。button-led（默认）= 居中标题 + 主色胶囊按钮；' +
+          'triptych-actions = 三栏 CTA（赞同 / 收藏 / 转发，display:table 等宽）。',
+        enum: VARIANT_IDS.footerCTA,
+      },
+      { key: 'cta', description: 'button-led 按钮文字（visual only）', example: '点此关注' },
       {
         key: 'href',
         description:
-          '按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：' +
+          'button-led 按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：' +
           'https://mp.weixin.qq.com/s/*（同域文章）/ weixin://dl/*（小程序协议）/ ' +
           'tel:* / mailto:* / 页内锚点 #*。非白名单 URL 会触发 diagnose warning。',
         example: 'https://mp.weixin.qq.com/s/xxx',
       },
+      { key: 'like', description: 'triptych-actions 左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
+      { key: 'star', description: 'triptych-actions 中格文字（实色，默认 ★ 收藏）', example: '★ 收藏' },
+      { key: 'share', description: 'triptych-actions 右格文字（默认 ↗ 转发）', example: '↗ 转发' },
     ],
-    description: '文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。',
+    description:
+      '文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；' +
+      'triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。' +
+      'href 支持公众号内链白名单。',
     example:
       '::: footer-cta 觉得有用？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/xxx\n如果这篇对你有启发，欢迎关注。\n:::\n',
   },
@@ -577,12 +595,20 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'recommend',
     styleKey: 'recommend',
     category: 'navigation',
+    variantKind: 'recommend',
     fenceLength: 3,
+    attrs: [
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 recommend 骨架。card-list（默认）= 粗体大标题 + bullet 链接列表，面向"延伸阅读"；' +
+          'academic-refs = uppercase letter-spaced 小字 kicker + textMuted 列表，面向论证"参考引用"。',
+        enum: VARIANT_IDS.recommend,
+      },
+    ],
     description:
-      '推荐阅读链接列表（"看完这篇还可以读"）。与 see-also 的边界：' +
-      'recommend 是面向**读者**的"延伸阅读"（同一作者/账号的其他文章、相关公众号推送）；' +
-      'see-also 是面向**论证**的学术性"参考引用"（论文 / 原始数据 / 二次研究）。' +
-      '一般文章用 recommend；学术 / 调研类文章用 see-also。',
+      '推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；' +
+      'academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。',
     example: '::: recommend\n- [前作](url)\n- [续篇](url)\n:::\n',
   },
 
@@ -591,8 +617,16 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'qrcode',
     styleKey: 'qrcode',
     category: 'navigation',
+    variantKind: 'qrcode',
     fenceLength: 3,
     attrs: [
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 qrcode 骨架。bare（默认）= 居中 QR + 下方 caption（任意 QR 场景）；' +
+          'follow-card = 左 QR + 右 kicker/title/desc 三行（刊物订阅卡）。',
+        enum: VARIANT_IDS.qrcode,
+      },
       {
         key: 'text',
         description:
@@ -610,11 +644,26 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
         description: 'SVG 像素尺寸（width=height）。未提供则按 viewBox + CSS 缩放。',
         example: '160',
       },
+      {
+        key: 'kicker',
+        description: 'follow-card 右上角 kicker 文字（缺省走 ctx.kickers.qrFollowKicker）',
+        example: 'SUBSCRIBE',
+      },
+      {
+        key: 'desc',
+        description: 'follow-card 右下角描述文字（小字 textMuted）',
+        example: '每周四，一封邮件，一组数据',
+      },
+      {
+        key: 'qr',
+        description: 'follow-card 模式下，外链 QR 图 URL（与 attrs.text 互斥；都没有走占位 SVG）',
+        example: 'https://…/qr.png',
+      },
     ],
     description:
-      '通用二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。' +
-      '与 qr-follow 的边界：qrcode 是"任意场景的 QR"（赞赏码 / 活动链接 / 小程序），布局极简；' +
-      'qr-follow 是 pack:editorial 的"订阅二维码栏"（左 QR + 右 kicker+title+desc 三行版式），刊物收尾专用。',
+      '二维码块。两态骨架：bare（默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；' +
+      'follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。' +
+      '带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。',
     example: '::: qrcode text="https://mp.weixin.qq.com/s/xxx"\n扫码关注\n:::\n',
   },
   {
@@ -675,16 +724,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       '大数字 + 说明（研究报告 / 内参版面 / issue-banner）。' +
       'attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。',
     example: '::: key-number value="42%" 同比涨幅\n占全年营收 12pp …\n:::\n',
-  },
-  {
-    name: 'see-also',
-    styleKey: 'seeAlso',
-    category: 'signature',
-    fenceLength: 3,
-    description:
-      '学术参考引用列表（"本文论证依据"）。与 recommend 的边界见 recommend.description；' +
-      '此容器走 textMuted 小字 + uppercase kicker，视觉上比 recommend 更克制，意图强调"凭证"而非"延伸娱乐"。',
-    example: '::: see-also 延伸阅读\n- [相关论文](url)\n:::\n',
   },
   {
     name: 'kpi-dashboard',
@@ -778,56 +817,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       'inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。' +
       'info 非空时渲染主色 kicker（如 "NOTES" / "参考文献"），与 editor-note / qa-block 同源。',
     example: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
-  },
-  {
-    name: 'cta-bar',
-    styleKey: 'ctaBar',
-    category: 'navigation',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    attrs: [
-      { key: 'like', description: '左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
-      { key: 'star', description: '中格文字（实色，默认 ★ 收藏）', example: '★ 收藏' },
-      { key: 'share', description: '右格文字（默认 ↗ 转发）', example: '↗ 转发' },
-    ],
-    description:
-      'CTA 三栏：左/右描边格 + 中实色格。data-brief 签名（赞同 / 收藏 / 转发）。body 忽略。',
-    example: '::: cta-bar\n:::\n',
-  },
-  {
-    name: 'qr-follow',
-    styleKey: 'qrFollow',
-    category: 'navigation',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    attrs: [
-      { key: 'kicker', description: '左上小字 kicker（默认 SUBSCRIBE）', example: 'SUBSCRIBE' },
-      { key: 'desc', description: '副标题（小字说明）', example: '每周四，一封邮件，一组数据' },
-      { key: 'qr', description: 'QR 图地址（缺省时画占位 SVG）', example: 'https://…/qr.png' },
-    ],
-    description:
-      '二维码订阅卡：左 60×60 QR + 右 SUBSCRIBE/标题/说明三行。info 作为主标题。',
-    example: '::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n',
-  },
-  {
-    name: 'editor-note',
-    styleKey: 'editorNote',
-    category: 'signature',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    description:
-      '编辑部注：主色左竖条 callout + kicker 小标题 + 正文。data-brief / industry-observer 等深度刊家族常用，区别于中性的 note。',
-    example: '::: editor-note 编 者 按\n慢读并非复古姿态，而是一种对自己时间主权的重新申明。\n:::\n',
-  },
-  {
-    name: 'methodology',
-    styleKey: 'methodology',
-    category: 'signature',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    description:
-      '方法论小字注释：浅底 + 10px textMuted + 粗体标签头。调研类主题的脚注本，与中性 note 的区别在排印密度（更紧、更小、更"说明栏"）。',
-    example: '::: methodology 方法论\n本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者。\n:::\n',
   },
   {
     name: 'colophon',

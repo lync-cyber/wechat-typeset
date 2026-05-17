@@ -239,13 +239,16 @@ export const spec: PersonaSpec = {
     // 取代泛用 accent-bar——academic-frontier 真正承继的是 Nature/arXiv 的 \begin{theorem} 视觉
     admonition: 'sidenote-latex',
     quote: 'frame-brackets',
-    compare: 'column-card',
+    compare: 'stacked-row', // 学术陈述偏垂直对照：先述 A 再述 B，避免双列拥挤
     steps: 'timeline-dot',
-    divider: 'rule',
-    sectionTitle: 'bordered',
-    codeBlock: 'bare',
+    divider: 'dots', // 极简 · · · 圆点分隔，与 sidenote-latex 的克制语言同源
+    sectionTitle: 'number-prefix', // monospace 章节编号，符合论文 §1 / §2 排印
+    codeBlock: 'line-numbers', // 学术代码偏好行号，便于正文引用"见 line 12"
     note: 'box-callout', // 学术风：1px 边框包裹的 "Remark" 框，与 sidenote-latex 同语调
-    footnotes: 'lined',
+    footnotes: 'dense-academic', // 2px 章节杆 + 深 hanging，论文 bibliography 章
+    recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================
@@ -558,13 +561,6 @@ export const spec: PersonaSpec = {
       margin: '18px 0 24px',
       'border-radius': '2px',
     },
-    seeAlso: {
-      'background-color': '#f6f6f4',
-      'border-top': '1px solid #d8d8d4',
-      padding: '12px 16px',
-      margin: '20px 0',
-      'border-radius': '0',
-    },
     // 规范 §2.9 qrcode = 通讯地址块（Correspondence）
     qrcode: {
       margin: '32px 0 0 0',
@@ -590,8 +586,9 @@ export const spec: PersonaSpec = {
     },
   },
 
-  // 签名容器：abstract（文首 tl;dr，学术综述自然入口）+ seeAlso（参考文献列表）
-  signatureContainers: ['abstract', 'seeAlso'],
+  // 签名容器：abstract（文首 tl;dr，学术综述自然入口）。参考文献块走
+  // ::: recommend variant=academic-refs（uppercase 小字 kicker + textMuted 列表）。
+  signatureContainers: ['abstract'],
 
   // ============================================================
   // 模板片段（仅声明相对 commonTemplates 的覆盖键）

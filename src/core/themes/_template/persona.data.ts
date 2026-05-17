@@ -91,6 +91,9 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare',
     note: 'minimal-callout',
     footnotes: 'lined',
+    recommend: 'card-list',
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ------------------------------------------------------------

@@ -30,7 +30,38 @@
 这期节目，我想说的不多——让歌自己说。
 :::
 
+::: section-title B · BPM 60 stamp=B variant=ribbon-stamp
+:::
+
 ## 为什么是 BPM 60
+
+::: quote-card Brian Eno · *Music for Airports* sleeve · 1978
+我做的不是背景音乐，是一种允许你不去听的东西——但它会一直在那里，等你回过头来。
+:::
+
+::: compare 白天 vs 深夜
+::: pros 白天歌单
+- BPM 90+，推你向前
+- 多人混音，群体共鸣
+- 旋律带钩，方便记忆
+:::
+::: cons 深夜歌单
+- BPM 60-，与心跳同步
+- 多为独奏 / 环境音
+- 没有钩，留下气氛
+:::
+:::
+
+::: steps 选曲方法 variant=split-row
+### 01 测心率
+确定听者夜间静息心率（多数 55–65）。
+
+### 02 匹配 BPM
+首曲 BPM 60 附近，后续逐渐 ±5。
+
+### 03 留呼吸
+每两曲之间留 8–12 秒静默。
+:::
 
 人在睡前心率下降到每分钟六十次左右。BPM 60 的音乐不是在"放松"你，是在和你的身体对齐。
 
@@ -70,7 +101,7 @@ now_playing = {
 
 吉村弘（Hiroshi Yoshimura）的 *Organica* 来自他 1993 年的同名专辑，水声与合成器纹理交织，比 *Music for Plants* 更晚期，也更沉。Floating Points 的 *LesAlpx* 则走另一条路：jazz 底色，但织体像 ambient，弦乐渐入时有一种克制的尖锐感。
 
-::: editor-note
+::: note variant=editorial-stripe
 凌晨三点录音和下午三点录音，说出来的话不一样。不是因为疲惫，是因为这个时段会让人诚实一些。这四首曲子都是我在某个无法入睡的夜晚里找到的，当时都没想着要放进节目。
 :::
 
@@ -131,10 +162,10 @@ Ryuichi Sakamoto 曾说，他晚年最喜欢录下窗外的雨声，因为那是
 ::: divider
 :::
 
-::: cta-bar like="♡ 喜欢" star="★ 收藏" share="↗ 分享"
+::: footer-cta variant=triptych-actions like="♡ 喜欢" star="★ 收藏" share="↗ 分享"
 :::
 
-::: qr-follow desc="每周四 · 03:41 AM 准时上线" kicker="tune · in"
+::: qrcode variant=follow-card desc="每周四 · 03:41 AM 准时上线" kicker="tune · in"
 :::
 
 ::: recommend 深 夜 选 听

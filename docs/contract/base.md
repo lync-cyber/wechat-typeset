@@ -25,7 +25,7 @@
 |  | `warning` | ★ | warning：需要读者注意的提醒。 |
 |  | `info` | ★ | info：中性说明／补充信息。 |
 |  | `danger` | ★ | danger：高风险警告／错误示范。 |
-|  | `note` | ★ | note：第五态补注（中性，不抢色，走 textMuted + noteIcon）。与 editor-note 的边界：note 是"作者**自己**附在正文边上的注脚"（题外话 / 题中题外）；editor-note 是"**编辑部**以机构身份对全文加按语"（主色左条 + 强 kicker）。语气主体不同。 |
+|  | `note` | ★ | note：作者旁批 + 编辑部按 + 调研口径的统一容器。variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到"编辑部以机构身份按语"；research-dense 切到"调研方法论小字栏"。 |
 | 内容 | `quote-card` | ★ | 大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。 |
 |  | `highlight` | ★ | 行内高亮段（bgMuted 底色块，无 variant）。与 quote-card 的边界：quote-card 是"成段引用"（外部话语、有 variant 骨架），highlight 是"作者自己想强调的一段话"（无骨架切换、视觉更轻）。想强调一句"我要让读者停下来"用 highlight；想引用一段他人话用 quote-card。 |
 |  | `compare` | ★ | 双列对比（外层 4 个冒号，内层 pros/cons 用 3 个）。 |
@@ -36,14 +36,13 @@
 |  | `timeline` | ★ | 时间线：左侧年份 + 右侧事件。外层 4 个冒号，内部 timeline-item 列条目。 |
 |  | `timeline-item` |  | timeline 内单条；info 为事件标题，body 为详述。 |
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。 |
-|  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。 |
-|  | `recommend` | ★ | 推荐阅读链接列表（"看完这篇还可以读"）。与 see-also 的边界：recommend 是面向**读者**的"延伸阅读"（同一作者/账号的其他文章、相关公众号推送）；see-also 是面向**论证**的学术性"参考引用"（论文 / 原始数据 / 二次研究）。一般文章用 recommend；学术 / 调研类文章用 see-also。 |
-|  | `qrcode` | ★ | 通用二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。与 qr-follow 的边界：qrcode 是"任意场景的 QR"（赞赏码 / 活动链接 / 小程序），布局极简；qr-follow 是 pack:editorial 的"订阅二维码栏"（左 QR + 右 kicker+title+desc 三行版式），刊物收尾专用。 |
+|  | `footer-cta` | ★ | 文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。href 支持公众号内链白名单。 |
+|  | `recommend` | ★ | 推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。 |
+|  | `qrcode` | ★ | 二维码块。两态骨架：bare（默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。 |
 | 媒体 | `voice-card` | ★ | 公众号语音占位卡（粘贴后由微信识别为真 mpvoice 节点）。 |
 |  | `video-card` | ★ | 公众号视频占位卡（带 qqvid 时直出 v.qq.com iframe；其余为占位）。 |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |
 |  | `key-number` | ★ | 大数字 + 说明（研究报告 / 内参版面 / issue-banner）。attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。 |
-|  | `see-also` | ★ | 学术参考引用列表（"本文论证依据"）。与 recommend 的边界见 recommend.description；此容器走 textMuted 小字 + uppercase kicker，视觉上比 recommend 更克制，意图强调"凭证"而非"延伸娱乐"。 |
 | 兜底 | `free` |  | 兜底容器：渲染器刻意不施加主题样式，写不归类内容。 |
 
 > 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。

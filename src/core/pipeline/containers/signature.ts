@@ -1,12 +1,11 @@
 /**
- * 签名容器渲染器（abstract / key-number / see-also）—— 这三个容器**有内容
- * 结构约定**（abstract 有 kicker、key-number 有 value 显示层级），不走
- * admonition 的 variant 分派（避免把 variant 模块污染成模板引擎），改读
- * ctx.containers.<x>（主题 CSS 槽位）+ ctx.innerStyles.<x>（内层 inline style，
- * 主题可深合并接管，如把 keyNumber 数字字号从 32px 调到 28px）。
+ * 签名容器渲染器（abstract / key-number）—— 两者都**有内容结构约定**
+ * （abstract 有 kicker、key-number 有 value 显示层级），不走 admonition 的
+ * variant 分派（避免把 variant 模块污染成模板引擎），改读 ctx.containers.<x>
+ * （主题 CSS 槽位）+ ctx.innerStyles.<x>（内层 inline style，主题可深合并接管，
+ * 如把 keyNumber 数字字号从 32px 调到 28px）。
  *   - abstract：文章头部 tl;dr。kicker（"Abstract / 摘要"）+ body markdown。
  *   - key-number：大字号数字 + 说明。attrs.value 放数字本体，info 放 kicker，body 放详解。
- *   - see-also：相关阅读链接列表（academic-frontier / tech-explainer 等专用）。
  */
 
 import type { ContainerRenderer } from './types'
@@ -84,18 +83,3 @@ export const keyNumberContainer: ContainerRenderer = {
   close: '</section>\n',
 }
 
-// see-also · 相关阅读。wrapper / title 样式由 ctx.containers.seeAlso /
-// ctx.innerStyles.seeAlsoTitle 接管。
-
-export const seeAlsoContainer: ContainerRenderer = {
-  open: (ctx) => {
-    const title = ctx.info.trim() || '延伸阅读'
-    const wrapperCSS = inline(ctx.containers.seeAlso)
-    const titleCSS = inline(ctx.innerStyles.seeAlsoTitle)
-    return (
-      `<section class="container-see-also" style="${wrapperCSS}">\n` +
-      `<section class="container-see-also__title" style="${titleCSS}">${escText(title)}</section>\n`
-    )
-  },
-  close: '</section>\n',
-}

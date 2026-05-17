@@ -34,7 +34,25 @@ VOL.IX · 2026—05—16 · CHF 14.—
 Grid systems are not a guarantee of good design. 网格不担保好设计——它只是给设计者一个可供背离的理性基础。
 :::
 
+::: section-title 网格作为版面的呼吸节奏 kicker="ESSAY · 01 — THE GRID" variant=kicker-stack
+:::
+
 ## 网格作为版面的呼吸节奏
+
+::: quote-card Karl Gerstner
+约束即自由——网格不是把可能性减少，而是让可能性变得可控。
+:::
+
+::: steps 一份版面的诞生 variant=split-row
+### 01 框定
+12 栏 + 8 行 + 4 mm 沟距，先确定容器骨架。
+
+### 02 分配
+按内容权重分配栏宽：1/3 留白、2/3 实体，黄金切割比恒定。
+
+### 03 编辑
+最后把每一段文字放进对应栏，行长不超过 60 字符。
+:::
 
 12 栏系统的核心洞见并非"把页面切成 12 份"，而是通过 ==栏位比例关系== 让版面获得内在节奏。留白栏与实栏同等重要，这一点在 *Neue Grafik* 第 2 期即已被申明。
 
@@ -129,7 +147,7 @@ const column = (total, gutter) =>
 需要，但方式变了。移动端的"12 栏"更接近一套比例约定而非像素精确值。核心不变的是：*版面的每一个决策都应能在网格坐标系中被解释*。Jedes Element muss im Raster begründbar sein.
 :::
 
-::: editor-note EDITOR'S NOTE
+::: note variant=editorial-stripe EDITOR'S NOTE
 *Neue Grafik* 1958–1965 共出版 18 期，每期均以英、德、法三语平行排印。其本身就是国际主义排印的实践现场，而非仅是理论宣言。本栏目的视觉系统直接取法于 Nº04 内页的红色辅助线与 12 栏铅笔草图。
 :::
 
@@ -143,14 +161,20 @@ const column = (total, gutter) =>
 ::: divider
 :::
 
-::: methodology METHODOLOGY
+::: note variant=research-dense METHODOLOGY
 本文数据取样自 12 本瑞士设计年鉴（1955–1975），逐页人工记录主栏数，共计 240 个对开页；广告版与折页不计入统计。"自由版"定义为无可辨识栏位参考线的版面。条形图按占比降序排列，满分 100 对应单一栏数全覆盖。
 :::
 
-::: cta-bar IF YOU LIKED THIS like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
+::: footer-cta variant=triptych-actions IF YOU LIKED THIS like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
 :::
 
-::: qr-follow NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"
+::: qrcode variant=follow-card NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"
+:::
+
+::: recommend FURTHER READING
+- Müller-Brockmann, *Grid Systems in Graphic Design*, Niggli 1981
+- Karl Gerstner, *Designing Programmes*, Arthur Niggli 1964
+- Jan Tschichold, *Asymmetric Typography*, Reinhold 1967
 :::
 
 ::: colophon next="字距作为空间：Univers 55 在正文中的间距实验" issue="Nº09 / 2026 / ZÜRICH"

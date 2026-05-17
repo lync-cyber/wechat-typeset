@@ -459,14 +459,6 @@
   border-radius: 0;
 }
 
-.markdown-body .container-see-also {
-  margin: 24px 0;
-  padding: 14px 16px;
-  background-color: transparent;
-  border-left: 1px solid #c7bfb0;
-  border-radius: 0;
-}
-
 .markdown-body .container-kpi-dashboard {
   background-color: #f0ebe0;
   border-top: 1px solid #2d3a4a;
@@ -492,38 +484,6 @@
   line-height: 1.8;
   color: #6b7885;
   letter-spacing: 0.2px;
-}
-
-.markdown-body .container-cta-bar {
-  margin: 30px 0;
-}
-
-.markdown-body .container-qr-follow {
-  margin: 30px 0;
-  padding: 14px;
-  background-color: transparent;
-  border-left: none;
-  border: 1px solid #2d3a4a;
-  border-radius: 0;
-}
-
-.markdown-body .container-editor-note {
-  background-color: #f0ebe0;
-  border-left: none;
-  padding: 20px;
-  margin: 36px 0;
-  border-radius: 0;
-}
-
-.markdown-body .container-methodology {
-  background-color: #f0ebe0;
-  border: none;
-  padding: 10px 12px;
-  margin: 16px 0;
-  font-size: 10px;
-  line-height: 1.7;
-  color: #6b7885;
-  border-radius: 0;
 }
 
 .markdown-body .container-colophon {

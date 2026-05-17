@@ -53,8 +53,8 @@ export interface Palette {
   //    containers/inline 项上（保持显式），但出现在 palette 即建立"色板成员"
   //    凭证，使下游 lint 与未来的 applyPalette 都能识别它们是 token 而非裸 hex。
   /**
-   * 图注 / 脚注 / 方法论小字的正文色（介于 text 与 textMuted 之间）。
-   * 例：swiss-grid 用 '#333333' 给 footnotes / methodology body 一个"比 text 弱、比 textMuted 重"的灰。
+   * 图注 / 脚注 / 紧凑小字栏的正文色（介于 text 与 textMuted 之间）。
+   * 例：swiss-grid 用 '#333333' 给 footnotes / note.research-dense body 一个"比 text 弱、比 textMuted 重"的灰。
    * 不声明 = 该主题没有这一层语义；正文小字直接走 textMuted 或 text。
    */
   textCaption?: string
@@ -283,12 +283,6 @@ export interface MotifSpec {
   externalLinkIcon?: MotifShape
   terminalPrompt?: MotifShape
   sealMark?: MotifShape
-  /**
-   * editor-note kicker 装饰图标（与 ThemeAssets.editorNoteKickerIcon 对位）。
-   * 典型尺寸 8×8 实色方块；spec-to-theme 投影到 SVG 字符串后由 editor-note renderer
-   * 在 kicker 前 prepend。设计稿:swiss-grid 黑底白字 header bar 上的红 ▮。
-   */
-  editorNoteKickerIcon?: MotifShape
   /** 模板：`{N}` 占位 step 序号 */
   stepBadge?: MotifTemplate
   /** 模板：`{issue}` `{date}` `{kind}` 占位 */
@@ -346,10 +340,9 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'authorBio',
   'imageCaption',
   'timeline',
-  // 跨主题通用签名（abstract / keyNumber / seeAlso）
+  // 跨主题通用签名（abstract / keyNumber）
   'abstract',
   'keyNumber',
-  'seeAlso',
   // data-brief 家族（数据简报：晚点 / 财新数据 / Morning Brew）
   'masthead',
   'sectionTag',
@@ -361,10 +354,6 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'barChart',
   'qaBlock',
   'footnotes',
-  'ctaBar',
-  'qrFollow',
-  'editorNote',
-  'methodology',
   'colophon',
 ] as const
 

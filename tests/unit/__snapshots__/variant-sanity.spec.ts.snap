@@ -229,6 +229,21 @@ exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:cornered 
 <section class="container-section-title__label" style="font-weight:700;font-size:20px;color:#1c1f24"><svg viewBox="0 0 14 14" width="12" height="12" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <path d="M1,1 L13,1 M1,1 L1,13" fill="none" stroke="#2558b0" stroke-width="2" stroke-linecap="square"></path> </svg>章节标题</section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:kicker-stack 1`] = `
+"<section class="container-section-title container-section-title--kicker-stack" style="padding-bottom: 6px; border-bottom: 2px solid #2558b0; margin: 26px 0 12px; padding: 0;">
+<section class="container-section-title__label" style="font-weight:700;font-size:20px;color:#1c1f24;line-height:1.35"><span style="display:block;width:24px;height:2px;background:#2558b0;margin-bottom:8px"></span>章节标题</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:number-prefix 1`] = `
+"<section class="container-section-title container-section-title--number-prefix" style="padding-bottom: 6px; margin: 28px 0 14px; padding: 0 0 6px; border-bottom: 1px solid #d8d8d4;">
+<section class="container-section-title__label" style="font-weight: 700; font-size: 21px; color: #1c1f24; letter-spacing: -0.2px">章节标题</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:ribbon-stamp 1`] = `
+"<section class="container-section-title container-section-title--ribbon-stamp" style="padding-bottom: 6px; border-bottom: 2px solid #2558b0; margin: 24px 0 12px; padding: 0;">
+<section class="container-section-title__label" style="font-weight:700;font-size:20px;color:#1c1f24;vertical-align:middle;line-height:1.4"><span style="display:inline-block;min-width:20px;padding:1px 6px;margin-right:10px;background:#2558b0;color:#fefefe;font-weight:700;font-size:14px;text-align:center;vertical-align:middle">§</span>章节标题</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > steps:number-circle 1`] = `
 "<section class="container-steps container-steps--number-circle" style="margin: 16px 0;">
 <section class="container-steps__title" style="font-weight:700;margin-bottom:12px">操作步骤</section>"
@@ -237,6 +252,16 @@ exports[`默认主题 · 每 variant 渲染片段快照 > steps:number-circle 1`
 exports[`默认主题 · 每 variant 渲染片段快照 > steps:ribbon-chain 1`] = `
 "<section class="container-steps container-steps--ribbon-chain" style="margin: 18px 0; padding: 8px 0 8px 18px; border-left: 4px solid #2558b0;">
 <section class="container-steps__title" style="display:inline-block;padding:4px 12px;background-color:#2558b0;color:#fefefe;border-radius:12px;font-weight:700;font-size:13px;margin:0 0 12px -30px;letter-spacing:0.4px">操作步骤</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > steps:split-row 1`] = `
+"<section class="container-steps container-steps--split-row" style="margin: 18px 0; padding: 8px 0 8px 16px; border-left: 4px solid #2558b0; box-shadow: inset 1px 0 0 #d8d8d4;">
+<section class="container-steps__title" style="font-weight:700;font-size:14px;color:#636870;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">操作步骤</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > steps:step-card 1`] = `
+"<section class="container-steps container-steps--step-card" style="margin: 18px 0; padding: 14px 0 4px; border-top: 1px solid #d8d8d4;">
+<section class="container-steps__title" style="font-weight:700;font-size:14px;color:#636870;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px">操作步骤</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > steps:timeline-dot 1`] = `

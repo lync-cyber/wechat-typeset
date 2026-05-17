@@ -11,11 +11,12 @@
  *   3. status 四态打破交通灯：NOTE 蓝 / TIP 绿 / WARN 黄 / HALT 红
  *      —— "STOP" 太工业平淡，"HALT" 更 brutalist-aggressive 的终端 / 汇编传统
  *
- * 复用关系：除签名变体 `tilted-sticker` 与 masthead 的 `kicker` ribbon 模式
- * （两者均为 R-brutalist 落地的通用增强）外，全部容器 / 变体 / 装饰均复用现有词汇：
+ * 复用关系：除签名变体 `tilted-sticker` 与 masthead 的 `kicker` ribbon 模式外，
+ * 全部容器 / 变体 / 装饰均复用现有词汇：
  *   - admonition · news-row（"四态共骨架 + 色相 + 标签字"）—— data-brief 同源
- *   - masthead / toc / qa-block / cta-bar / qr-follow / footnotes / editor-note /
- *     colophon —— data-brief 家族 7 件签名容器
+ *   - masthead / toc / qa-block / footnotes / colophon —— data-brief 家族签名容器
+ *   - note variant=editorial-stripe（编 者 按）/ qrcode variant=follow-card（订阅卡）
+ *   - footer-cta variant=triptych-actions（LIKE / STAR / FWD 三栏）
  *   - decorations.headingPrefix · arabic-padded / arabic-section —— 章节序号
  *
  * 平台兼容：transform:rotate 不在 wxPatch 删除列表（FORBIDDEN_POSITION_PROPS 不含），
@@ -172,13 +173,16 @@ export const spec: PersonaSpec = {
     // ctx.info 覆盖 news-row 默认 TIP/INFO/WARN/STOP。
     admonition: 'news-row',
     quote: 'tilted-sticker', // 粗野主义签名：反色 + transform:rotate(-1deg) + 大字 sans 粗体
-    compare: 'column-card',
-    steps: 'number-circle',
+    compare: 'stacked-row', // 粗野主义偏竖叠陈述：先 A 段后 B 段，硬边对照
+    steps: 'split-row', // 左 4px 主色实线 + 左编号，硬边骨架与 news-row 同源
     divider: 'flower', // 用本主题 dividerFlower 的"两线 + primary 方块"
-    sectionTitle: 'bordered',
-    codeBlock: 'bare', // pre 元素直接走主题 voice（白底反色 + 左黄竖线）
+    sectionTitle: 'ribbon-stamp', // 左侧实色印章戳 + 主标题，punk-zine 标题语汇
+    codeBlock: 'inline-card', // tinted 软底 + 左主色窄竖条，与 news-row 同色块语言
     note: 'side-bar', // 左 2px 短线 + 缩进,与"批注"语义一致
-    footnotes: 'lined',
+    footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，punk zine 底栏
+    recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -191,8 +195,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '// CONTENTS',
     qaBlock: '// Q&A',
-    editorNote: '// EDITOR_NOTE',
-    methodology: '// METHOD',
     qrFollowKicker: '// SCAN & FOLLOW',
     qrFollowTitle: '慢读 // slow.read',
     recommend: '[READ_NEXT]',
@@ -203,17 +205,14 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
-  // 签名容器：复用 data-brief 家族（masthead / toc / cta-bar / qr-follow /
-  // footnotes / qa-block / editor-note / colophon）。粗野主义不引入新签名容器。
+  // 签名容器：复用 data-brief 家族（masthead / toc / footnotes / qa-block /
+  // colophon）。粗野主义不引入新签名容器。
   // ============================================================
   signatureContainers: [
     'masthead', // 三栏 ribbon 刊头（kicker / 期名 / 日期）
     'toc', // 目录（虚线框 + // CONTENTS kicker）
     'qaBlock', // 终端 Q&A 风
     'footnotes', // fn[] 等宽脚注
-    'ctaBar', // LIKE / STAR / FWD 三栏 CTA
-    'qrFollow', // 二维码关注
-    'editorNote', // 编 者 按 callout（荧光黄整块）
     'colophon', // 下期预告 + 卷·期
     'imageCaption', // 图注（// CAPTION 注释风 + 荧光黄）
     'announcement', // 强警示横幅（荧光黄整块反色）
@@ -540,15 +539,6 @@ export const spec: PersonaSpec = {
       'border-top': '3px solid #ebff00',
       'border-radius': '0',
     },
-    seeAlso: {
-      __reset: true,
-      margin: '20px 0',
-      padding: '14px',
-      'background-color': '#1a1a1a',
-      'border-left': '3px solid #ebff00',
-      'border-radius': '0',
-    },
-
     // ── data-brief 家族签名容器：粗野主义版本的视觉收紧 ──
     // masthead：上下双 2px 实线 + 三栏 ribbon（attrs.kicker 触发）
     masthead: {
@@ -607,38 +597,7 @@ export const spec: PersonaSpec = {
       color: '#a0a0a0',
     },
     // cta-bar：三栏（LIKE / STAR / FWD）—— renderer 已提供 display:table 骨架
-    ctaBar: { margin: '24px 0' },
     // qr-follow：左 QR + 右 SUBSCRIBE / 标题 / 说明（黄边框 + 黑底）
-    qrFollow: {
-      __reset: true,
-      'background-color': 'transparent',
-      border: '1px solid #f0f0f0',
-      'border-left': '1px solid #f0f0f0',
-      padding: '12px',
-      margin: '24px 0',
-      'border-radius': '0',
-    },
-    // editor-note · 编 者 按：荧光黄整块 + 反色文字（粗野主义签名 callout）
-    // kicker 颜色由 innerStyles.editorNoteKicker 接管（textInverse 反色）
-    editorNote: {
-      __reset: true,
-      'background-color': '#ebff00',
-      color: '#0a0a0a',
-      padding: '14px 16px',
-      margin: '24px 0',
-      'border-left': 'none',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#1a1a1a',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      color: '#a0a0a0',
-      'border-radius': '0',
-    },
     // colophon：上 2px 双粗线 + "下期 / 卷·期"（与 masthead 头尾呼应）
     colophon: {
       __reset: true,
@@ -722,26 +681,6 @@ export const spec: PersonaSpec = {
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
     },
-    // seeAlso 容器底色 #1a1a1a（暗底），title 走荧光黄 primary 保持可读性
-    seeAlsoTitle: {
-      __reset: true,
-      color: '#ebff00',
-      'font-size': '11px',
-      'font-weight': '700',
-      'letter-spacing': '0.2em',
-      'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    // editor-note kicker（"编 者 按"）：黄底 callout 上不能用 primary（同色不可见）,
-    // 走 textInverse 反色 + letter-spacing 拉开"被点名"气质
-    editorNoteKicker: {
-      __reset: true,
-      color: '#0a0a0a',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '0.2em',
-      'margin-bottom': '8px',
-    },
   },
 
   // ============================================================
@@ -773,8 +712,7 @@ export const spec: PersonaSpec = {
       '主题 07 粗野主义报刊：荧光黄 + 暗底 + 直角硬边。复用现有 admonition.news-row、' +
       'data-brief 家族签名容器（masthead 增 kicker 三栏 ribbon 模式）；唯一新增 variant 为' +
       ' quote.tilted-sticker（punk-zine 撕贴纸语义,可复用）。' +
-      'editor-note kicker 通过 innerStyles.editorNoteKicker（R-brutalist 新增内层槽位）' +
-      '调成反色,解决荧光黄整块上 kicker 与 bg 同色不可见的问题。',
+      '编辑部按 / 调研口径走 note variant=editorial-stripe / research-dense。',
   },
 }
 

@@ -142,11 +142,19 @@ describe('steps / divider', () => {
 })
 
 describe('footer-cta / recommend / qrcode', () => {
-  it('footer-cta 读取 info 与 cta attr', () => {
+  it('footer-cta 读取 info 与 cta attr（默认 button-led variant）', () => {
     const out = run('::: footer-cta 欢迎关注 cta=点此关注\n描述文案\n:::\n')
-    expect(out).toMatch(/class="container-footer-cta"/)
+    expect(out).toMatch(/class="container-footer-cta container-footer-cta--button-led"/)
     expect(out).toContain('欢迎关注')
     expect(out).toContain('点此关注')
+  })
+
+  it('footer-cta variant=triptych-actions：display:table 三栏（赞同 / 收藏 / 转发）', () => {
+    const out = run('::: footer-cta variant=triptych-actions like="♡ 赞同" star="★ 收藏" share="↗ 转发"\n:::\n')
+    expect(out).toMatch(/class="container-footer-cta container-footer-cta--triptych-actions"/)
+    expect(out).toContain('♡ 赞同')
+    expect(out).toContain('★ 收藏')
+    expect(out).toContain('↗ 转发')
   })
 
   it('footer-cta 仅 cta 无 href：渲染为 <span>', () => {
@@ -170,16 +178,23 @@ describe('footer-cta / recommend / qrcode', () => {
     expect(out).toContain('href="https://a.com?x=1&amp;y=2"')
   })
 
-  it('recommend 块识别', () => {
+  it('recommend 块识别（默认 card-list variant）', () => {
     const out = run('::: recommend 推荐阅读\n- [A](http://a.com)\n:::\n')
-    expect(out).toMatch(/class="container-recommend"/)
+    expect(out).toMatch(/class="container-recommend container-recommend--card-list"/)
     expect(out).toContain('推荐阅读')
   })
 
-  it('qrcode 块识别', () => {
+  it('qrcode 块识别（默认 bare variant）', () => {
     const out = run('::: qrcode 扫码关注\n:::\n')
-    expect(out).toMatch(/class="container-qrcode"/)
+    expect(out).toMatch(/class="container-qrcode container-qrcode--bare"/)
     expect(out).toContain('扫码关注')
+  })
+
+  it('qrcode variant=follow-card：左 QR + 右 kicker/title/desc 三行刊物订阅卡', () => {
+    const out = run('::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据"\n:::\n')
+    expect(out).toMatch(/class="container-qrcode container-qrcode--follow-card"/)
+    expect(out).toContain('慢读简报')
+    expect(out).toContain('每周四')
   })
 })
 
@@ -217,7 +232,7 @@ describe('info / attrs 解析', () => {
   })
 })
 
-describe('signature containers（note / abstract / key-number / see-also）', () => {
+describe('signature containers（note / abstract / key-number）', () => {
   it('note：第五态 fence + 默认标题"补注" + variant 类后缀', () => {
     const out = run('::: note\n正文\n:::\n')
     // note 走独立 variantKind 池；class 必须同时含 container-note 与 variant 后缀
@@ -248,10 +263,9 @@ describe('signature containers（note / abstract / key-number / see-also）', ()
     expect(out).toContain('SaaS 企业版拉动')
   })
 
-  it('see-also：默认标题"延伸阅读"', () => {
-    const out = run('::: see-also\n- [相关 A](https://example.com/a)\n- [相关 B](https://example.com/b)\n:::\n')
-    expect(out).toMatch(/class="container-see-also"/)
-    expect(out).toContain('延伸阅读')
+  it('recommend variant=academic-refs：uppercase 小字 kicker + textMuted 列表', () => {
+    const out = run('::: recommend variant=academic-refs\n- [相关 A](https://example.com/a)\n- [相关 B](https://example.com/b)\n:::\n')
+    expect(out).toMatch(/class="container-recommend container-recommend--academic-refs"/)
     expect(out).toMatch(/<a[^>]*href="https:\/\/example\.com\/a"/)
   })
 })

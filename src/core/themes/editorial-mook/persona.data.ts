@@ -238,15 +238,17 @@ export const spec: PersonaSpec = {
   // ============================================================
   variants: {
     admonition: 'mook-tag', // 本主题签名——参/編/注/禁 単字 CJK 标签
-    quote: 'classic', // 元素级 blockquote 承担"裸 1px 左竖线"pull-quote；
-    //                          quote-card 仅作 fallback，走 classic 不主推
-    compare: 'column-card',
-    steps: 'number-circle',
+    quote: 'editorial-block', // 编辑部磁砖 pull-quote：左 6px 主色条 + 大号粗体 + uppercase byline
+    compare: 'stacked-row', // mook 偏纵贯陈述：先述 A 再述 B，避免双列拥挤
+    steps: 'timeline-dot', // 慢节奏 mook 偏时序点阵，stepBadge 单列点珠
     divider: 'glyph', // 默认 ❦；作者写 attrs.glyph="❋"/"章末" 切换
-    sectionTitle: 'bordered',
-    codeBlock: 'bare', // 元素级 pre 直接走主题 voice（米卡纸底）
-    note: 'minimal-callout', // 中性补注极简骨架，与 mook 的"克制"统一
-    footnotes: 'lined',
+    sectionTitle: 'ribbon-stamp', // 左侧 CJK 戳记（章/節）+ 主标题，与 mook-tag 同 CJK 语汇
+    codeBlock: 'inline-card', // 米卡纸底 + 左主色窄竖条，与 mook 内嵌排印一致
+    note: 'dotted-margin', // 散文式页边批注：dotted 左竖线 + 缩进，比 minimal-callout 更"手记"
+    footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
+    recommend: 'card-list',
+    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -259,8 +261,6 @@ export const spec: PersonaSpec = {
   kickers: {
     toc: '目 · 次',
     qaBlock: '读 · 者 · 通 · 信',
-    editorNote: '編 · 集 · 後 · 記',
-    methodology: '取 材 · 編 集 笔 记',
     qrFollowKicker: '訂 · 閱',
     qrFollowTitle: '订阅这份慢读季刊',
     recommend: '同 · 期 · 选 · 读',
@@ -279,9 +279,6 @@ export const spec: PersonaSpec = {
     'toc', // 目录（圈号 + 标题 + 页码）
     'qaBlock', // 读者问答
     'footnotes', // 脚注
-    'ctaBar', // CTA 三栏（喜欢 / 收藏 / 分享）
-    'qrFollow', // 二维码订阅
-    'editorNote', // 编辑手记单色块（callout #15）
     'colophon', // 下期预告
     'imageCaption', // mook 图注（极小字 + letter-spacing）
     'authorBio', // mook 番外编辑栏（极简 hairline）
@@ -651,13 +648,6 @@ export const spec: PersonaSpec = {
       'border-top': '2px solid #e85a3c',
       'border-radius': '0',
     },
-    seeAlso: {
-      margin: '24px 0',
-      padding: '14px 16px',
-      'background-color': 'transparent',
-      'border-left': '1px solid #c7bfb0',
-      'border-radius': '0',
-    },
 
     // ── data-brief 家族签名容器（设计稿对位） ──────────────────
     // masthead · 设计稿"slow reading" + "issue 04" 双栏
@@ -716,37 +706,7 @@ export const spec: PersonaSpec = {
       color: '#6b7885',
       'letter-spacing': '0.2px',
     },
-    ctaBar: { margin: '30px 0' },
     // qr-follow · 1px text 色实线包裹（设计稿原型，非常克制）
-    qrFollow: {
-      __reset: true,
-      margin: '30px 0',
-      padding: '14px',
-      'background-color': 'transparent',
-      'border-left': 'none',
-      border: '1px solid #2d3a4a',
-      'border-radius': '0',
-    },
-    // editor-note · 设计稿"编辑手记"单色块（米卡纸底 + accent kicker + 正文）
-    editorNote: {
-      __reset: true,
-      'background-color': '#f0ebe0',
-      'border-left': 'none',
-      padding: '20px',
-      margin: '36px 0',
-      'border-radius': '0',
-    },
-    methodology: {
-      __reset: true,
-      'background-color': '#f0ebe0',
-      border: 'none',
-      padding: '10px 12px',
-      margin: '16px 0',
-      'font-size': '10px',
-      'line-height': '1.7',
-      color: '#6b7885',
-      'border-radius': '0',
-    },
     // mook 图注极小字 + letter-spacing + textMuted——
     // 对应 04-japanese-mook.html image-with-caption 图注："10px / textMuted / letter-spacing:0.05em"，
     // 圈号 ❶ 前导由 renderer 内层控制，wrapper 只管字号 / 颜色 / 字距 / 对齐。
@@ -845,36 +805,6 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.18em',
       'text-transform': 'uppercase',
       'margin-bottom': '4px',
-    },
-    // see-also "延伸阅读" 栏头 · 番外栏感
-    // 对位设计稿 component 02 toc 的"contents · 目次"kicker：
-    //   10px / letter-spacing:0.2em / textMuted 灰蓝。
-    // 比 abstractKicker 更退场（用 textMuted 而非 primary），
-    // letter-spacing 0.25em（全篇最大字距值）——用"最稀疏"的字间距
-    // 把 seeAlso 的"别册附录"感与主栏正文彻底拉开。
-    seeAlsoTitle: {
-      color: '#6b7885',
-      'font-size': '10px',
-      'font-weight': '400',
-      'letter-spacing': '0.25em',
-      'text-transform': 'uppercase',
-      'margin-bottom': '10px',
-      display: 'block',
-    },
-    // editor-note kicker · 最权威的"機構按語"
-    // 对位设计稿 component 15（callout 编辑手记）：
-    //   "❹　编辑手记"用 10px / letter-spacing:0.2em / color:#e85a3c。
-    // 在 abstractKicker 基础上加 border-bottom 1px solid #e85a3c（朱橙线，而非 border 灰线）——
-    // 用 accent 色线条把 kicker 本身做成"红批"视觉，区别于 abstractKicker 的灰底线。
-    editorNoteKicker: {
-      color: '#e85a3c',
-      'font-size': '10px',
-      'font-weight': '600',
-      'letter-spacing': '0.2em',
-      'padding-bottom': '5px',
-      'border-bottom': '1px solid #e85a3c',
-      'margin-bottom': '12px',
-      display: 'block',
     },
   },
 

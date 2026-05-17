@@ -172,8 +172,6 @@ export interface ThemeContainers {
   abstract: CSSObject
   /** 大数字 + 说明（signature 容器） */
   keyNumber: CSSObject
-  /** 相关阅读（signature 容器） */
-  seeAlso: CSSObject
   // ── data-brief 家族（数据简报）签名容器 ──────────────────
   /** 刊头（刊名 + 期号·日期，下划线分隔） */
   masthead: CSSObject
@@ -206,14 +204,6 @@ export interface ThemeContainers {
    * （padding-left / text-indent / max-height）由 variant inline 注入。
    */
   footnotes: CSSObject
-  /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
-  ctaBar: CSSObject
-  /** 二维码订阅卡（SUBSCRIBE 标签 + QR + 标题/说明，data-brief 签名） */
-  qrFollow: CSSObject
-  /** 编辑部注 callout：主色左条 + kicker 小标题 + 正文（data-brief / industry-observer 等深度刊家族） */
-  editorNote: CSSObject
-  /** 方法论小字注释：浅底紧凑 + 粗体标签头 + 10px 小字（调研 / 数据栏目使用） */
-  methodology: CSSObject
   /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
   colophon: CSSObject
 }
@@ -239,25 +229,11 @@ export interface ThemeContainers {
  *   - abstractKicker     文首 tl;dr 块的小标题色 / 字距 / 大写转换
  *   - keyNumberValue     大数字本体（数字字号 / 颜色 / 字距）
  *   - keyNumberKicker    大数字上方 kicker（小标题）
- *   - seeAlsoTitle       延伸阅读列表的标题
- *   - editorNoteKicker   编辑部注容器的 kicker 行（默认 primary 小字 + letter-spacing；
- *                        swiss-grid 用全幅黑底白字 header bar 形态——负 margin 撑到 wrapper 边缘）
  */
 export interface ThemeInnerStyles {
   abstractKicker: CSSObject
   keyNumberValue: CSSObject
   keyNumberKicker: CSSObject
-  seeAlsoTitle: CSSObject
-  /**
-   * 编辑部注（editor-note）容器顶部 kicker（如 "编 者 按"）的样式。
-   *
-   * 为什么开此槽位：数据简报家族默认走 `color: primary`（主色文字 + 浅底）。
-   * 想重塑 kicker 形态的主题作者无需改 renderer：
-   *   - swiss-grid: 全幅黑底白字 header bar（display:block + 负 margin 撑到 wrapper 边缘）
-   *   - brutalist: editor-note bg 涂满 primary 后,kicker 走 textInverse 反色避免色/底同色
-   * 与 abstractKicker / keyNumberKicker 同构。
-   */
-  editorNoteKicker: CSSObject
 }
 
 export interface ThemeAssets {
@@ -300,18 +276,6 @@ export interface ThemeAssets {
    * （如 literary-humanism 的藏经朱）——其他主题留空即可，renderer 不做默认兜底。
    */
   sealMark?: SVGString
-  /**
-   * editor-note kicker 行最左侧的装饰图标（典型 8×8 实色方块）。
-   *
-   * 渲染契约：editor-note renderer 检测到此 asset 存在时，在 kicker 文字前 prepend
-   *   `<span style="display:inline-block;vertical-align:middle;margin-right:6px;">${svg}</span>`
-   * 主题不提供则不渲染图标，kicker 仅含文本。
-   *
-   * 设计动机：swiss-grid 设计稿的 editor-note 黑底白字 header bar 以红色 ▮ 字符开头,
-   * 跨主题做 SVG 装饰更可控（字符 ▮ 在 iOS / Android 渲染粗细不一）。
-   * 走 motifs AST 而非硬编码 SVG, 让色随 token 流动。
-   */
-  editorNoteKickerIcon?: SVGString
   /**
    * 期号印章（newsletter 期刊戳）。当主题提供 + markdown 容器上声明了 issue/date/kind
    * 任一 attr 时，cover / author / footerCTA renderer 会在各自配置的位置注入该 SVG。
@@ -433,6 +397,10 @@ export type StepsVariantId =
   | 'ribbon-chain'
   // 时间轴点：左侧单列点阵 + 正文
   | 'timeline-dot'
+  // 卡片化分步：每步独立浅底卡片（适合长说明步骤 / SOP）
+  | 'step-card'
+  // 左右分栏：左侧大号编号 + 右侧正文（学术 / 调研主题骨架）
+  | 'split-row'
 
 export type DividerVariantId =
   | 'wave'
@@ -449,6 +417,12 @@ export type SectionTitleVariantId =
   | 'bordered'
   // 左上角装饰 SVG（当前 assets.sectionCorner 对应）
   | 'cornered'
+  // 大号 monospace 前缀编号 + 标题（人物特稿 / 数据简报）
+  | 'number-prefix'
+  // 上小字 kicker + 下主标题（学术前沿 / 行业观察）
+  | 'kicker-stack'
+  // 右上印章戳 + 主标题（人文札记 / 慢生活）
+  | 'ribbon-stamp'
 
 /**
  * Note 第五态独立 variant 类。命名空间与 admonition 故意分离：
@@ -463,6 +437,16 @@ export type NoteVariantId =
   | 'box-callout'
   // 左 2px 实线 + 缩进：经典"标记此处有补充"批注式
   | 'side-bar'
+  // 悬挂缩进 + 上标编号：学术 / 论文风脚注块
+  | 'hanging-indent'
+  // 左 dotted rule + 缩进：人文札记 / 散文式旁批
+  | 'dotted-margin'
+  // 小型大写 kicker + 正文：粗野主义 / 数据简报骨架
+  | 'smallcaps-kicker'
+  // 左 3px 主色条 + bgSoft + kicker：编辑部按语气（主色介入的栏目编辑发声块）
+  | 'editorial-stripe'
+  // bgSoft + 10px 紧凑 + 粗体 label：调研口径栏（图注/方法论旁附小字栏）
+  | 'research-dense'
 
 export type CodeBlockVariantId =
   // 裸 <pre><code>（默认）
@@ -475,6 +459,24 @@ export type CodeBlockVariantId =
   | 'terminal-frame'
   // 编辑随文嵌入式：tinted 软底 + 左主色窄竖条 + 紧凑字号；文学/生活向稿件
   | 'inline-card'
+
+export type RecommendVariantId =
+  // 默认：列表式标题 + bullet 链接（面向读者的"延伸阅读"）
+  | 'card-list'
+  // 学术引用：uppercase letter-spaced kicker + textMuted 小字（面向论证的"参考引用"）
+  | 'academic-refs'
+
+export type QrcodeVariantId =
+  // 默认：居中 QR + 居中 caption（"任意场景的 QR"，赞赏码/活动链接/小程序）
+  | 'bare'
+  // 订阅卡：左 QR + 右 kicker/title/desc 三行（刊物收尾专用）
+  | 'follow-card'
+
+export type FooterCTAVariantId =
+  // 默认：单按钮 + 引导文案（粗体大标题 + 主色胶囊按钮）
+  | 'button-led'
+  // 三栏 CTA：左/右描边格 + 中实色格（赞同 / 收藏 / 转发），可选顶部黑底白字 header bar
+  | 'triptych-actions'
 
 export type FootnotesVariantId =
   // 一条一行 + hanging indent（默认）
@@ -501,6 +503,12 @@ export interface ThemeVariants {
   note: NoteVariantId
   /** 脚注 / 参考文献骨架（lined / inline-flow）。 */
   footnotes: FootnotesVariantId
+  /** 推荐阅读骨架（card-list 默认 / academic-refs = 原 see-also）。 */
+  recommend: RecommendVariantId
+  /** 二维码骨架（bare 默认 / follow-card = 原 qr-follow）。 */
+  qrcode: QrcodeVariantId
+  /** 文末 CTA 骨架（button-led 默认 / triptych-actions = 原 cta-bar）。 */
+  footerCTA: FooterCTAVariantId
 }
 
 /**
@@ -517,6 +525,9 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   codeBlock: 'bare',
   note: 'minimal-callout',
   footnotes: 'lined',
+  recommend: 'card-list',
+  qrcode: 'bare',
+  footerCTA: 'button-led',
 }
 
 // ============================================================
@@ -534,13 +545,9 @@ export interface ThemeKickers {
   toc: string
   /** ::: qa-block 容器无 info 时的 kicker 兜底（renderer 默认 "读者问答 · Q&A"） */
   qaBlock: string
-  /** ::: editor-note 容器无 info 时的 kicker 兜底（renderer 默认 "编 者 按"） */
-  editorNote: string
-  /** ::: methodology 容器无 info 时的 label 兜底（renderer 默认 "方法论"） */
-  methodology: string
-  /** ::: qr-follow attrs.kicker 兜底（renderer 默认 "SUBSCRIBE"） */
+  /** qrcode variant=follow-card 的 attrs.kicker 兜底（renderer 默认 "SUBSCRIBE"） */
   qrFollowKicker: string
-  /** ::: qr-follow 容器无 info 时的 title 兜底（renderer 默认 "订阅本刊"） */
+  /** qrcode variant=follow-card 容器无 info 时的 title 兜底（renderer 默认 "订阅本刊"） */
   qrFollowTitle: string
   /** ::: recommend 容器无 info 时的 title 兜底（renderer 默认 "推荐阅读"） */
   recommend: string
@@ -561,8 +568,6 @@ export interface ThemeKickers {
 export const DEFAULT_KICKERS: ThemeKickers = {
   toc: '目录 · CONTENTS',
   qaBlock: '读者问答 · Q&A',
-  editorNote: '编 者 按',
-  methodology: '方法论',
   qrFollowKicker: 'SUBSCRIBE',
   qrFollowTitle: '订阅本刊',
   recommend: '推荐阅读',
@@ -617,6 +622,8 @@ export const VARIANT_IDS = {
     'number-circle',
     'ribbon-chain',
     'timeline-dot',
+    'step-card',
+    'split-row',
   ] as const satisfies readonly StepsVariantId[],
   divider: [
     'wave',
@@ -629,6 +636,9 @@ export const VARIANT_IDS = {
   sectionTitle: [
     'bordered',
     'cornered',
+    'number-prefix',
+    'kicker-stack',
+    'ribbon-stamp',
   ] as const satisfies readonly SectionTitleVariantId[],
   codeBlock: [
     'bare',
@@ -641,6 +651,11 @@ export const VARIANT_IDS = {
     'minimal-callout',
     'box-callout',
     'side-bar',
+    'hanging-indent',
+    'dotted-margin',
+    'smallcaps-kicker',
+    'editorial-stripe',
+    'research-dense',
   ] as const satisfies readonly NoteVariantId[],
   footnotes: [
     'lined',
@@ -649,6 +664,18 @@ export const VARIANT_IDS = {
     'top-rule',
     'dense-academic',
   ] as const satisfies readonly FootnotesVariantId[],
+  recommend: [
+    'card-list',
+    'academic-refs',
+  ] as const satisfies readonly RecommendVariantId[],
+  qrcode: [
+    'bare',
+    'follow-card',
+  ] as const satisfies readonly QrcodeVariantId[],
+  footerCTA: [
+    'button-led',
+    'triptych-actions',
+  ] as const satisfies readonly FooterCTAVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

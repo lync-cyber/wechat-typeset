@@ -76,7 +76,7 @@ describe('getSchema / getSupportedSignatureContainers / getVariantIds', () => {
 
   it('getSupportedSignatureContainers 包含已知 id', () => {
     const ids = getSupportedSignatureContainers()
-    for (const id of ['intro', 'tip', 'quoteCard', 'abstract', 'keyNumber', 'seeAlso']) {
+    for (const id of ['intro', 'tip', 'quoteCard', 'abstract', 'keyNumber']) {
       expect(ids).toContain(id)
     }
   })

@@ -307,15 +307,18 @@ export const spec: PersonaSpec = {
   // 骨架变体（规范 §2 每节开头的 primary variant）
   // ============================================================
   variants: {
-    admonition: 'accent-bar', // §2.10-2.13 tip/warning/info/danger 全部 accent-bar
+    admonition: 'accent-bar', // §2.10-2.13 tip/warning/info/danger 全部 accent-bar（保留默认是教程主题的刻意选择）
     quote: 'column-rule', // §2.5 双侧细竖线夹住段落
-    compare: 'column-card', // §2.15 Do/Don't 双栏
-    steps: 'number-circle', // §2.16 圆圈数字（+ 容器 border-left 形成串珠）
-    divider: 'rule', // §2.17 极简 1px 实线
-    sectionTitle: 'bordered', // §2.4 short-bar-heading
+    compare: 'stacked-row', // §2.15 Do/Don't 偏垂直陈述：先 Do 段后 Don't 段，避免移动端双栏挤压
+    steps: 'step-card', // §2.16 教程偏卡片化分步：每步独立浅底卡片 + uppercase kicker
+    divider: 'dots', // §2.17 · · · 圆点分割，比 1px 实线更"文档章节空隙"
+    sectionTitle: 'number-prefix', // §2.4 monospace 章节编号（"1.2 实现"），教程典型版面
     codeBlock: 'header-bar', // §1.2 signature：顶部语言标签带 + copy icon
     note: 'box-callout', // 文档式"附注框"，与 accent-bar admonition 互补不抢色
-    footnotes: 'lined',
+    footnotes: 'boxed-aside', // 教程文末参考资料：软底卡片 + pill kicker，narrative aside
+    recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================
@@ -643,14 +646,6 @@ export const spec: PersonaSpec = {
       margin: '18px 0',
       'border-radius': '0',
     },
-    // MDN / Stripe Docs "See Also" 学术引用块：bgSoft 底 + primary 左条 + 文档圆角
-    seeAlso: {
-      'background-color': '#f3f5f8',
-      'border-left': '3px solid #0066cc',
-      padding: '14px 16px',
-      margin: '22px 0',
-      'border-radius': '0 6px 6px 0',
-    },
     // "Figure N: ..." 数字编号注脚风 — 居中 textMuted + 1px 顶线（Stripe Docs 图说）
     imageCaption: {
       margin: '4px 0 18px 0',
@@ -684,8 +679,9 @@ _15 分钟阅读 · 最后更新 2026-04-20_
 `,
   },
 
-  // note（motifs.noteIcon 承载第五态）+ seeAlso（教程向参考链接块）
-  signatureContainers: ['note', 'seeAlso'],
+  // note（motifs.noteIcon 承载第五态）。教程文末参考链接块走
+  // ::: recommend variant=academic-refs（uppercase 小字 kicker + textMuted 列表）。
+  signatureContainers: ['note'],
 
   meta: {
     createdAt: '2026-04-20',

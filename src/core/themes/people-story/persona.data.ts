@@ -229,13 +229,16 @@ export const spec: PersonaSpec = {
   variants: {
     admonition: 'magazine-pull', // 全主题签名：上下细线 + 浮空小字标签，《人物》拉引框（取代左竖线的 minimal-underline）
     quote: 'magazine-dropcap', // quoteCard：巨号 serif 引号 + 金句 + byline
-    compare: 'column-card',
+    compare: 'stacked-row', // 人物特稿对比偏陈述式：先一段 A 再一段 B，避免双列拥挤
     steps: 'timeline-dot', // stepBadge 走本主题罗马徽章
-    divider: 'rule', // 最枯的 1px 横线
-    sectionTitle: 'cornered', // 左上肖像 silhouette
-    codeBlock: 'bare', // 拒绝 header-bar（那是 tech-explainer）
+    divider: 'glyph', // 中性 ◆ glyph，与 magazine-pull 的"刊物体"装饰语言一致
+    sectionTitle: 'number-prefix', // 大号 monospace 编号，《人物》刊号风
+    codeBlock: 'inline-card', // 人物特稿偶引代码（采访技术人物），inline-card 不抢正文
     note: 'minimal-callout', // 与 magazine-pull 的"细线 + 空气感"语言一致
-    footnotes: 'lined',
+    footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside 适合刊物体
+    recommend: 'card-list',
+    qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）。

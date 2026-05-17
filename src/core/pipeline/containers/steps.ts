@@ -17,4 +17,6 @@ export const stepsContainer: ContainerRenderer = makeVariantContainer({
     // 无 defaultText：steps 标题仅在 markdown info 写了内容时才出现
     defaultCSS: 'font-weight:700;margin-bottom:12px',
   },
+  // bodyCSS truthy 时（如 step-card 的浅底卡片）包一层 body；其余 variant 留空 bodyCSS 即跳过。
+  body: { mode: 'optional' },
 })

@@ -442,14 +442,6 @@
   border-top: 3px solid #5a4a3a;
 }
 
-.markdown-body .container-see-also {
-  background-color: #ece5d1;
-  padding: 14px 16px;
-  margin: 20px 0;
-  border-radius: 0px;
-  border-left: 3px solid #3d4a3d;
-}
-
 .markdown-body .container-kpi-dashboard {
   background-color: #ece5d1;
   border-top: 1px solid #1f1b14;
@@ -470,36 +462,6 @@
   margin: 14px 0;
   font-size: 9px;
   letter-spacing: 0.01em;
-  color: #6b5f4a;
-}
-
-.markdown-body .container-cta-bar {
-  margin: 22px 0;
-}
-
-.markdown-body .container-qr-follow {
-  background-color: #ece5d1;
-  border-left: 3px solid #5a4a3a;
-  padding: 14px;
-  margin: 22px 0;
-}
-
-.markdown-body .container-editor-note {
-  border-left: 3px solid #5a4a3a;
-  background-color: #ece5d1;
-  padding: 14px 16px 14px 18px;
-  margin: 22px 0;
-  border-radius: 0px;
-}
-
-.markdown-body .container-methodology {
-  background-color: #ece5d1;
-  border: 1px solid #cfc3a8;
-  padding: 10px 12px;
-  margin: 16px 0;
-  border-radius: 0px;
-  font-size: 10px;
-  line-height: 1.75;
   color: #6b5f4a;
 }
 
