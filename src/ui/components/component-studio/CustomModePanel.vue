@@ -1,20 +1,7 @@
 <script setup lang="ts">
 /**
- * CustomModePanel —— UV custom 档源码编辑面板（步骤 7）。
- *
- * 与 SourceModePanel 的区别：
- *   - SourceModePanel：基底 variant + 3 个 CSS slot 覆盖（patch 档）
- *   - 本面板：完全自由的 HTML template + 4 个 CSS slot（custom 档）
- *
- * Tab 结构：5 个 tab，template (HTML) + wrapperCSS/titleCSS/bodyCSS (CSS) + svgSlot (HTML)。
- * lint：每个 tab 喂对应 linter——template/svgSlot 走 lintTemplateHTML，三 css slot 走
- *       createUserVariantCSSLinter()。Lint 失败不阻断编辑，仅画波浪并在面板底部列差异；
- *       保存期是否硬闸由 ComponentStudio 决定（参见 onSave）。
- *
- * 预览：与 SourceModePanel 同型——构造一个 ephemeral UserVariantCustom（id = PREVIEW_UV_ID
- *   for new mode，或 originalLinkedUvId for edit mode），喂给 IsolatedPreview。
- *   placeholder markdown 形态 `::: uc-<previewId> 标题 attr=v\n正文\n:::`，保证 fence
- *   能命中 markdown.ts 注册的 uc-<id> 容器。
+ * UV custom 档源码面板。5 tab（template / wrapperCSS / titleCSS / bodyCSS / svgSlot）。
+ * Lint 失败仅画波浪 + 底部 summary，不阻断编辑；保存期硬闸由 ComponentStudio 决定。
  */
 import { computed, nextTick, ref } from 'vue'
 import type { Theme } from '../../../core/themes/types'
@@ -36,7 +23,7 @@ import PatchInspector from './PatchInspector.vue'
 const props = defineProps<{
   custom: DraftCustom
   theme: Theme
-  /** edit 模式传入原 UV id；preview 时复用它让 markdown 引用不需 rewrite。 */
+  /** edit 模式复用此 id 让 preview 的 markdown 引用不需 rewrite。 */
   originalLinkedUvId: string | null
 }>()
 
@@ -60,7 +47,7 @@ const TAB_LANG: Record<Tab, 'html' | 'css'> = {
 
 const activeTab = ref<Tab>('template')
 
-/** 不重复构造 linter：CM Extension 对象身份变化会触发 reconfigure，频繁重建浪费。 */
+// linter 引用稳定：Extension 对象身份变化会触发 CM6 reconfigure
 const linterByTab = {
   template: createUserVariantHTMLLinter('template'),
   wrapperCSS: createUserVariantCSSLinter('wrapperCSS'),
@@ -82,13 +69,8 @@ const hasUvContent = computed<boolean>(
   () => !!(props.custom.template.trim() && props.custom.wrapperCSS.trim()),
 )
 
-/**
- * 预览用 UV id：edit 模式复用 originalLinkedUvId（markdown 不需重写），new 模式用 'NEW'
- * 与 CUSTOM_FENCE_PLACEHOLDER 对齐。
- *
- * 注意：preview id 不带 uv_ 前缀也能工作——custom 走 fence 注册路径（uc-<id>），不依赖
- * attrs.variant=uv_xxx 的前缀判别。
- */
+// new 模式的 id 'NEW' 与 CUSTOM_FENCE_PLACEHOLDER 'uc-NEW' 对齐；custom 走 fence 注册
+// 路径不依赖 uv_ 前缀，任意字符串都能作 id
 const PREVIEW_NEW_ID = 'NEW'
 
 const previewUvId = computed<string>(() => props.originalLinkedUvId ?? PREVIEW_NEW_ID)
@@ -137,7 +119,6 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
   activeCmRef.value?.jumpToSubstring(sample.before)
 }
 
-/** 全档 lint 汇总：底部 diagnostics 面板显示。保存期硬闸由调用方实现。 */
 const allDiagnostics = computed(() => {
   const out: Array<{ slot: Tab; message: string }> = []
   for (const slot of ['template', 'wrapperCSS', 'titleCSS', 'bodyCSS', 'svgSlot'] as Tab[]) {

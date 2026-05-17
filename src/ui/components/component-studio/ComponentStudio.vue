@@ -69,11 +69,7 @@ const { draft, dirty, editingId, originalLinkedUvId, reset } = useComponentDraft
 
 const error = ref<string>('')
 
-// ─────────────────────────────────────────────────────────────
-// 用户 token 覆盖：预览期临时 UV + 保存期真实落仓
-// ─────────────────────────────────────────────────────────────
-
-/** 预览用的固定 ephemeral id；与真实仓 id 池隔离（真实 id 由 createUserVariant 生成）。 */
+// tokens/patch 预览 id 固定不变（与真实仓 id 池隔离，避免与 createUserVariant 产物冲突）
 const PREVIEW_UV_ID = 'uv_preview_draft'
 
 const tokenCount = computed(() => Object.keys(draft.userVariantTokens).length)
@@ -88,7 +84,6 @@ const hasCustomContent = computed<boolean>(() => {
 
 const baseValid = computed<boolean>(() => draft.kind !== 'none' && !!draft.variantId)
 
-/** 当前是否有可保存的 UV 草稿（按 mode 区分）。custom 不依赖 base。 */
 const hasUvContent = computed<boolean>(() => {
   if (draft.userVariantMode === 'custom') return hasCustomContent.value
   if (!baseValid.value) return false
@@ -97,16 +92,12 @@ const hasUvContent = computed<boolean>(() => {
   return false
 })
 
-/**
- * custom 档预览 UV id：edit 模式复用原 id（markdown 已含 `uc-<orig.id>`，无需 rewrite）；
- * new 模式用 CUSTOM_FENCE_PLACEHOLDER 去掉 `uc-` 前缀剩 'NEW'——markdown 里写 `uc-NEW`，
- * 预览也用 id='NEW'，fence 注册自动生成 `uc-NEW`，配对成功。
- */
+// custom 预览 id 必须与 markdown 里的 fence 名（`uc-${id}`）匹配：
+// edit 模式复用原 id；new 模式用 'NEW'，与作者写的 CUSTOM_FENCE_PLACEHOLDER 对齐
 const PREVIEW_CUSTOM_ID = computed<string>(
   () => originalLinkedUvId ?? CUSTOM_FENCE_PLACEHOLDER.replace(/^uc-/, ''),
 )
 
-/** 预览期的临时 UV（不入仓），让 ComponentPreview 即时反映 token / patch / custom 改动。 */
 const previewUserVariants = computed<readonly UserVariant[]>(() => {
   if (!hasUvContent.value) return []
   if (draft.userVariantMode === 'custom') {
@@ -159,11 +150,6 @@ const previewUserVariants = computed<readonly UserVariant[]>(() => {
   return [preview]
 })
 
-/**
- * 预览期 markdown 改写：tokens/patch 改写 `variant=<base>` → `variant=<PREVIEW_UV_ID>`；
- * custom 改写 `uc-NEW` → `uc-<PREVIEW_CUSTOM_ID>`（仅 new 模式生效，edit 模式 id 不变
- * 故 rewriteCustomFenceInMarkdown 静默 no-op）。
- */
 const previewMarkdown = computed<string>(() => {
   if (!hasUvContent.value) return draft.markdownSnippet
   if (draft.userVariantMode === 'custom') {
@@ -194,8 +180,6 @@ const canSave = computed(() => {
   if (!draft.markdownSnippet.trim()) return false
   return true
 })
-
-// dispatchUserVariant 抽到 userVariantSave.ts；本组件只持有 reactive draft 的访问壳。
 
 function onSave() {
   error.value = ''

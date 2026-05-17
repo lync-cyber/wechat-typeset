@@ -117,22 +117,6 @@ export function lintInlineCSS(css: string, path: string): Diagnostic[] {
   return out
 }
 
-// ─────────────────────────────────────────────────────────────
-// 步骤 7：UserVariantCustom.template HTML 白名单
-// ─────────────────────────────────────────────────────────────
-
-/**
- * 允许在 custom template 里出现的占位符。任何 `{{...}}` 未匹配此白名单将报警；
- * `{{body}}` 必须恰好出现 1 次（renderer 据此把模板劈成 open / close 两段）。
- *
- * - title / body：来自 fence info（标题文本 + markdown 子内容）
- * - attr.<name>：来自 fence info 的 key=value attrs
- * - wrapperCSS / titleCSS / bodyCSS / svgSlot：来自 uv.css.* 槽位
- *
- * 不上完整模板引擎：custom 是单一可信输入（用户自己写的变体），正则替换够用；
- * 引入 Mustache / Handlebars 等会带来 helper / partial 等"超出 trusted-input 假设"
- * 的攻击面。
- */
 const PLACEHOLDER_RE = /\{\{\s*([\w.]+)\s*\}\}/g
 const ATTR_PLACEHOLDER_RE = /^attr\.[a-zA-Z_][\w-]*$/
 const KNOWN_PLACEHOLDERS: ReadonlySet<string> = new Set([
@@ -145,11 +129,8 @@ const KNOWN_PLACEHOLDERS: ReadonlySet<string> = new Set([
 ])
 
 /**
- * 标签禁区。HARD_REMOVE_TAGS 已经收了 style/script/link/meta/noscript；
- * 在此基础上扩 object/embed/form/iframe（iframe 单独走 src 白名单）。
- *
- * 同步纪律：HARD_REMOVE_TAGS 变更时这里要跟着对齐——它们都是"微信沙箱必剥"集合，
- * 写两份是因为 wxPatch 的目标是清洗，本 lint 的目标是阻止保存；语义同源，行为分离。
+ * 与 HARD_REMOVE_TAGS 语义同源（"微信沙箱必剥"集合），但目标不同：wxPatch 用前者
+ * 清洗 DOM，本 lint 用后者阻止保存。两边都需独立扩展集——iframe 在此走 src 白名单。
  */
 const TEMPLATE_FORBIDDEN_TAGS: ReadonlySet<string> = new Set([
   ...HARD_REMOVE_TAGS,
@@ -158,7 +139,6 @@ const TEMPLATE_FORBIDDEN_TAGS: ReadonlySet<string> = new Set([
   'form',
 ])
 
-/** 提取每个标签的"名 + 属性串"。不解析嵌套属性引号——保守扫一遍触发风险即可。 */
 const TAG_RE = /<\s*\/?\s*([a-zA-Z][\w-]*)\b([^>]*)>/g
 const EVENT_ATTR_RE = /\bon[a-z]+\s*=/gi
 const JS_HREF_RE = /\b(?:href|src|formaction|action)\s*=\s*("|')?\s*javascript:/i
@@ -166,34 +146,21 @@ const IFRAME_SRC_RE = /\bsrc\s*=\s*("([^"]*)"|'([^']*)'|(\S+))/i
 const STYLE_ATTR_RE = /\bstyle\s*=\s*("([^"]*)"|'([^']*)')/gi
 
 /**
- * 校验 UserVariantCustom.template 的 HTML 与占位符。返回所有命中的 diagnostic（不短路）。
- *
- * 规则：
- *   1. 任何 TEMPLATE_FORBIDDEN_TAGS 中的标签 → forbidden-tag
- *   2. iframe 且 src 不在 IFRAME_SRC_ALLOW → iframe-src-not-allowed
- *   3. 任何 `on*=` 事件属性 → forbidden-attr
- *   4. 任何 `href|src|formaction|action="javascript:..."` → forbidden-attr
- *   5. `style="..."` 内嵌 CSS → 委托 lintInlineCSS
- *   6. `{{body}}` 必须恰好 1 个；0 个 → missing-body；≥2 → duplicate-body
- *   7. `{{...}}` 未识别 → unknown-placeholder（不致命，警告级）
- *
- * 不做的事：
- *   - 不构造 DOM（vite-ssr 友好，Node 环境无 happy-dom 依赖）
- *   - 不修复 / 不剥离 —— 仅诊断；调用方决定是否阻止保存
- *   - 不解析嵌套 `<` / `>` —— 注释 / CDATA 等极端情况留给后续升级
+ * 校验 UserVariantCustom.template 的 HTML 与占位符。聚合所有命中（不短路），
+ * 让 UI 一次性把全部问题画出来。不构造 DOM（Node 环境无 happy-dom 依赖），仅诊断
+ * 不修复。
  */
 export function lintTemplateHTML(template: string, path: string): Diagnostic[] {
   const out: Diagnostic[] = []
 
-  // 1-4. 扫标签。close tag（`</tag>`）跳过——属性检查无意义，forbidden-tag 报一次足够
   TAG_RE.lastIndex = 0
   let m: RegExpExecArray | null
   while ((m = TAG_RE.exec(template)) !== null) {
     const tagName = m[1].toLowerCase()
     const attrs = m[2] ?? ''
     const fragment = m[0]
-    const isClose = /^<\s*\//.test(fragment)
-    if (isClose) continue
+    // close tag 无属性可查，且 forbidden-tag 报一次足够
+    if (/^<\s*\//.test(fragment)) continue
 
     if (TEMPLATE_FORBIDDEN_TAGS.has(tagName)) {
       out.push({
@@ -222,7 +189,6 @@ export function lintTemplateHTML(template: string, path: string): Diagnostic[] {
       }
     }
 
-    // on*= 事件属性
     EVENT_ATTR_RE.lastIndex = 0
     let evt: RegExpExecArray | null
     while ((evt = EVENT_ATTR_RE.exec(attrs)) !== null) {
@@ -236,7 +202,6 @@ export function lintTemplateHTML(template: string, path: string): Diagnostic[] {
       })
     }
 
-    // javascript: 协议
     if (JS_HREF_RE.test(attrs)) {
       out.push({
         severity: 'error',
@@ -248,20 +213,19 @@ export function lintTemplateHTML(template: string, path: string): Diagnostic[] {
       })
     }
 
-    // 5. style="..." 委托 lintInlineCSS
     STYLE_ATTR_RE.lastIndex = 0
     let sm: RegExpExecArray | null
     while ((sm = STYLE_ATTR_RE.exec(attrs)) !== null) {
       const styleBody = sm[2] ?? sm[3] ?? ''
       if (!styleBody) continue
-      // 跳过仅含占位符的 style（如 style="{{wrapperCSS}}"）——内容由运行时注入并已分别 lint
+      // 纯占位符的 style（如 style="{{wrapperCSS}}"）由运行时填充并已分别 lint，
+      // 这里 lint 会把 `{{wrapperCSS}}` 当成 CSS 字面量误报
       const stripped = styleBody.replace(PLACEHOLDER_RE, '').trim()
       if (!stripped) continue
       out.push(...lintInlineCSS(styleBody, `${path}.style@<${tagName}>`))
     }
   }
 
-  // 6-7. 扫占位符
   let bodyCount = 0
   PLACEHOLDER_RE.lastIndex = 0
   let pm: RegExpExecArray | null

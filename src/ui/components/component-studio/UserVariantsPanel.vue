@@ -1,15 +1,8 @@
 <script setup lang="ts">
 /**
- * UserVariantsPanel —— "我的样式"管理面板（步骤 4-6 遗留）。
- *
- * 职责：列出本地仓所有 UserVariant，支持重命名 / 删除。不做编辑（编辑入口走
- * ComponentStudio 的 tokens / patch / custom 三档面板）——直接编辑 UV 而不关联具体
- * 用户组件会让 markdown 引用悬空，所以 UV 编辑必须通过组件 Studio 入口（绑 linkedUserVariantId）。
- *
- * 删除语义：直接调用 deleteUserVariant，会留下"悬空 linkedUserVariantId"在引用此 UV 的
- * 用户组件上——下次 ComponentStudio.useComponentDraft.loadLinkedUv 检测到 UV 已删则
- * 静默回退到 fresh 路径，并在保存时把 linkedUserVariantId 清掉。本面板不主动级联清理
- * 组件引用，避免"管理面板悄悄改动组件"的违反预期。
+ * UV 仓的"列表 / 重命名 / 删除"管理。编辑必须走 ComponentStudio（绑 linkedUserVariantId），
+ * 否则 markdown 引用与 UV 字段会失同步。
+ * 删除不级联清组件引用：loadLinkedUv 已能检测悬空并在保存时清掉。
  */
 import { computed, ref } from 'vue'
 import {
@@ -19,9 +12,9 @@ import {
 } from '../../../infra/storage/userVariants.repo'
 import type { UserVariant } from '../../../core/variants/userVariant'
 
+// repo 是 localStorage 非 reactive，靠 refreshTick 手动触发重读
 const refreshTick = ref(0)
 const variants = computed<UserVariant[]>(() => {
-  // 借 refreshTick 触发重新读仓——repo 是 localStorage，没有 reactive
   void refreshTick.value
   return listUserVariants()
 })
@@ -57,7 +50,6 @@ function cancelRename() {
 }
 
 function confirmDelete(uv: UserVariant) {
-  // window.confirm 在 Studio 抽屉里足够；不引入 Modal 系统让面板保持轻量
   const ok = window.confirm(
     `确定删除「${uv.name}」？引用此样式的组件会保留但失去样式覆盖（下次打开组件时回退）。`,
   )

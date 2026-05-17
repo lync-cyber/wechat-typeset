@@ -1,13 +1,7 @@
 /**
- * UserVariantCustom 渲染路径（步骤 7）—— 集成测试覆盖 markdown → fence → HTML 全流程。
- *
- * 守护：
- *   - 注册 custom UV 后，markdown `::: uc-<uvid> ... :::` 命中其 template 路径
- *   - {{title}} / {{body}} / {{attr.X}} / {{wrapperCSS}} 等占位符正确替换
- *   - svgSlot 原样注入（不 escape）
- *   - 未注册 UV 的 fence 退化为普通文本（markdown-it 默认行为）
- *   - splitTemplateOnBody 边界：缺 body / 多 body
- *   - customFenceName 一致
+ * UserVariantCustom markdown → fence → HTML 集成测试。
+ * 守护：fence 注册命中 template；占位符替换（含 svgSlot 原样注入）；未注册退化；
+ *       splitTemplateOnBody 边界；customFenceName 契约；mdCache 按 updatedAt 失效。
  */
 
 import { describe, expect, it } from 'vitest'

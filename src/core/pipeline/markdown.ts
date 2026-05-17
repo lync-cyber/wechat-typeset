@@ -51,10 +51,9 @@ interface ContainerEnv {
    */
   __wxUserVariants?: ReadonlyMap<string, UserVariant>
   /**
-   * 步骤 7：custom fence 的 open/close 配对栈（按 fence name 分桶）。
-   * open 时 push ParsedInfo（title + attrs），close 时 pop 并喂给 close 渲染器，
-   * 确保 close 段的 `{{title}}` 占位符能拿到原 info（markdown-it-container 在 close
-   * 时只给 token，不带 info）。
+   * custom fence 的 open/close 配对栈。markdown-it-container 在 close 时只给 token
+   * 不带 info，但 close 段的 `{{title}}`/`{{attr.X}}` 占位符需要原 info；用 stack
+   * 把 open 时的 info 暂存供 close 取回。
    */
   __wxCustomInfoStacks?: Record<string, Array<{ title: string; attrs: Record<string, string> }>>
 }
@@ -89,16 +88,10 @@ function popCustomInfo(
 export interface CreateMarkdownOptions {
   theme?: Theme
   /**
-   * 步骤 7：UserVariantCustom 实例集合。每条 UV 在 createMarkdown 期被注册成一个
-   * 独立 fence（name = `uc-${uv.id}`），渲染时直接走 _user.ts 的占位符替换路径，
-   * 完全绕过 makeVariantContainer。
-   *
-   * 与 tokens / patch UV 的语义区分：tokens/patch 走 env.__wxUserVariants Map 派发，
-   * 不进 createMarkdown 闭包；custom 必须进闭包才能注册 fence 名。所以调用方需要
-   * 按 level 把 UV 集合切成两部分。
-   *
-   * 缓存影响：customVariants 变化会让 mdCache key 变（见 pipeline/index.ts:customsSig），
-   * 触发新实例构造；tokens/patch 变化不会。
+   * Custom UV 必须在 createMarkdown 闭包里注册 fence（`uc-${uv.id}`）才能命中；
+   * 与 tokens/patch（走 env.__wxUserVariants Map）的分派路径正交。调用方按 level
+   * 切分 UV 集合，custom 喂这里，其余走 env。
+   * 任一 custom UV 变化都需新建 MarkdownIt 实例（mdCache key 必须含 customsSig）。
    */
   customVariants?: readonly UserVariantCustom[]
 }
@@ -160,8 +153,7 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
     })
   }
 
-  // 步骤 7：用户自定义容器（L3 custom）—— `::: uc-<uvid> title="..." attr=v`
-  // 渲染走 _user.ts 占位符替换，不复用 makeVariantContainer 链路。
+  // Custom UV 走独立 fence + 占位符替换，不挂 makeVariantContainer 三段骨架
   for (const uv of customVariants) {
     const fence = customFenceName(uv.id)
     ;(md as any).use(markdownItContainer, fence, {

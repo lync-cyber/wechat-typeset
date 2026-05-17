@@ -24,14 +24,9 @@ import {
 } from '../../../infra/storage/userVariants.repo'
 
 /**
- * 步骤 6.2：PatchInspector 点击 sample → 路由到 cssPatch 的 slot。
- *
- * 在三个 slot 草稿里 substring 查找 needle；返回首个命中的 slot，或 null。
- * 顺序与 SourceModePanel 的 SLOT_LABELS 一致：wrapper → title → body。
- *
- * 不做模糊匹配：lintInlineCSS 输出的 sample.before（如 `font-family: 'Source Han Serif'`）
- * 通常与作者写的源串严格相等；若 inline css 已被 juice 重组导致 sample 与源不一致，
- * 返回 null 让调用方静默 fallback（跳到任意位置反而误导用户）。
+ * 三 slot substring 查找：顺序与 SourceModePanel.SLOT_LABELS 一致（wrapper → title → body）。
+ * 不做模糊匹配——sample.before 与作者源串通常逐字相等；查不到时返回 null 让调用方
+ * 静默 fallback（跳到任意位置反而误导用户）。
  */
 export type CssPatchSlot = 'wrapperCSS' | 'titleCSS' | 'bodyCSS'
 
@@ -72,16 +67,9 @@ export function rewriteVariantInMarkdown(md: string, baseId: string, newId: stri
 }
 
 /**
- * 步骤 7：把 markdown fence opener `::: uc-<oldFence>` 重写为 `::: uc-<newFence>`。
- *
- * 用途：custom UV 新建后，需要把作者写在 markdown 里的占位 fence 名（约定 `uc-NEW`）
- * 替换为真实 uv.id 派生的 fence 名（`uc-<uv.id>`）；不然 markdown-it 找不到 fence
- * 渲染会退化为字面文本。
- *
- * 仅匹配"3+ 个冒号 + 空白 + 完整 fence 名 + 词边界"——避免误伤代码段 / inline text。
- * close fence `:::` 不带 name 所以自然无需重写。
- *
- * 与 rewriteVariantInMarkdown 形态对偶：前者改 attrs.variant=<id>，后者改 fence 名本身。
+ * 重写 fence opener `::: <oldFence>` → `::: <newFence>`。custom UV 新建时把作者
+ * 的占位 `uc-NEW` 改成真实 `uc-<uv.id>`，否则 markdown-it 找不到 fence 退化为字面文本。
+ * 仅匹配"3+ 冒号 + 空白 + 完整词边界"，避免误伤代码段 / inline text。
  */
 export const CUSTOM_FENCE_PLACEHOLDER = 'uc-NEW'
 
@@ -101,8 +89,7 @@ function hasPatchContent(draft: DraftFields): boolean {
 }
 
 function hasCustomContent(draft: DraftFields): boolean {
-  // custom 档不依赖 base.kind/variantId；只要 template + wrapperCSS 有内容即可入仓
-  // （wrapperCSS 是 css 中唯一必填字段，参见 UserVariantCustom.css 类型）
+  // template + wrapperCSS 是 UserVariantCustom 的必填两字段
   const c = draft.userVariantCustom
   return !!(c.template.trim() && c.wrapperCSS.trim())
 }
@@ -180,15 +167,9 @@ export function dispatchUserVariant(
   // case 3 里再次猜测 baseId 与 origId 的关系。
   let mdAfterDriftReset = draft.markdownSnippet
 
-  // orig 已链接但 base 已改 / level 已改 → 视为重建：删旧 + 走 fresh 路径
-  //
-  // 跨档语义（步骤 7 扩展）：custom 没有 base.kind/variantId，drift 仅看 levelDrifted。
-  //   - tokens/patch-orig → custom-draft：custom 的 draft.variantId 为空，重写
-  //     `variant=<orig.id> → variant=` 会破坏 markdown，所以这条路径**不重写**，
-  //     让 case 3 创建 UV 后让用户手动改 markdown 引用（custom 的 fence 是
-  //     `::: uc-<uvid>` 形态，与 `variant=` 完全不同的 token，无法机械重写）
-  //   - custom-orig → tokens/patch-draft：原 markdown 里没有 `variant=<orig.id>`
-  //     而是 `::: uc-<orig.id>`，rewriteVariantInMarkdown 静默 no-op，安全
+  // base / level 漂移视为重建：删旧 + 走 fresh 路径。custom 的 fence 是
+  // `::: uc-<uvid>`（非 `variant=<id>`），无法被 rewriteVariantInMarkdown 机械改写——
+  // 涉及 custom 的跨档转换不重写 markdown，由用户手动修复 fence 引用
   if (effectiveOrig && (isBaseValid(draft) || draft.userVariantMode === 'custom')) {
     const cur = getUserVariant(effectiveOrig)
     if (cur) {
@@ -198,7 +179,6 @@ export function dispatchUserVariant(
         (cur.base.kind !== draft.kind || cur.base.variantId !== draft.variantId)
       const levelDrifted = cur.level !== draft.userVariantMode
       if (baseDrifted || levelDrifted) {
-        // 仅当源/目标都不是 custom 时才重写 markdown variant=token；其它跨档静默放过
         if (cur.level !== 'custom' && draft.userVariantMode !== 'custom') {
           mdAfterDriftReset = rewriteVariantInMarkdown(
             mdAfterDriftReset,

@@ -47,19 +47,14 @@ export interface RenderOutput {
   frontmatterIssues: readonly FrontmatterParseIssue[]
 }
 
-// 缓存 MarkdownIt 实例：容器渲染器在 createMarkdown 闭包里绑定了 theme 引用，主题切换必须换新实例。
-// 容量与 themeCSS 缓存对齐。
-//
-// 步骤 7：cache key 由 `theme.id` 升级为 `theme.id:<customSig>`——
-//   custom UV 在 createMarkdown 期注册成独立 fence，UV 集合 / template / css 变化
-//   都需要换实例。<customSig> 由 id+updatedAt 拼接保证"任何字段改动 → cache miss"。
-//   tokens/patch UV 不进 createMarkdown（走 env.__wxUserVariants 派发），不影响 key。
+// 容器渲染器在 createMarkdown 闭包里绑了 theme + customVariants 引用，任一变化必须
+// 换新实例；key 由 theme.id + customsSig 拼成。tokens/patch UV 走 env 派发不影响 key。
 const MD_CACHE_MAX = 12
 const mdCache = createLRU<string, MarkdownIt>(MD_CACHE_MAX)
 
 function customsSig(uvs: readonly UserVariantCustom[]): string {
   if (uvs.length === 0) return ''
-  // id+updatedAt 足够鉴别"哪条 custom UV 改了"；按 id 排序避免数组顺序差异制造的 cache thrash
+  // 按 id 排序：数组顺序差异不应制造 cache thrash
   return [...uvs]
     .sort((a, b) => a.id.localeCompare(b.id))
     .map((uv) => `${uv.id}@${uv.updatedAt}`)
@@ -90,23 +85,8 @@ function getMarkdown(theme: Theme, customVariants: readonly UserVariantCustom[])
   return md
 }
 
-// ---------- 渲染结果级 memoize（步骤 4-6 遗留：CSS-only 快路径） ----------
-//
-// 设计意图：Studio 编辑场景里"换个 tab → 切回来"会重复触发同输入的 render；
-// 此前 markdown-it + juice + wxPatch 全跑一遍。给 render() 输出加一个轻量 LRU
-// 让"相同入参 → 直接返回缓存结果"，避免重做。
-//
-// 不替代真正的 CSS-only DOM patch（编辑期每按一键都改 UV 内容，cache 必 miss）；
-// 但它免费收下"切 tab / 切回来 / 主题切回"这类重复 invoke 的成本。
-//
-// key 字段：
-//   - theme.id              主题切换必触发新 key
-//   - md 全文 hash          frontmatter 与 body 都进 key
-//   - platform + wxPatch    平台 / 选项变化触发重渲染
-//   - userVariants 签名     任一 UV 的 id 或 updatedAt 改 → 新 key
-//
-// 不缓存的字段：函数引用 / Theme 对象（按 id 唯一标识够用，对象内容变 = theme.id 已变）。
-// hash 用累加 djb2，纯字符串运算无 crypto 依赖。
+// 渲染结果级 memoize：免费收下"切 tab / 切回来"类重复 invoke 的成本。
+// 编辑期每键改 UV 会 cache miss——那是真 DOM patch 才能省的成本，不在此层覆盖。
 const RENDER_OUTPUT_CACHE_MAX = 16
 const renderCache = createLRU<string, RenderOutput>(RENDER_OUTPUT_CACHE_MAX)
 
@@ -147,8 +127,7 @@ export function render(input: RenderInput): RenderOutput {
 
   const { config: pageConfig, body, issues: frontmatterIssues } = parseFrontmatter(source)
 
-  // 步骤 7：custom UV 必须在 createMarkdown 期注册 fence；tokens/patch 走 env Map。
-  // 按 level 切分一次，custom 喂 getMarkdown（影响 cache key），其余喂 env。
+  // custom UV 注册 fence（影响 mdCache key），其余 UV 走 env Map 派发
   const allUvs = input.userVariants ?? []
   const customUvs = allUvs.filter(
     (uv): uv is UserVariantCustom => uv.level === 'custom',

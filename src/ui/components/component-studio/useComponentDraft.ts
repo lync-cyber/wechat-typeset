@@ -25,32 +25,19 @@ import { getUserVariant } from '../../../infra/storage/userVariants.repo'
 export type StudioMode = 'new' | 'edit' | 'derive'
 
 /**
- * 用户态变体的"编辑模式"。决定保存路径与 UI 显示哪个面板。
- *   - null      未启用任何 UV（保存不创建 UV）
- *   - 'tokens'  L1：tokens 面板（每字段一个 color/size 控件）
- *   - 'patch'   L2：源码模式（CSS 三 slot 直接写 inline css 片段）
- *   - 'custom'  L3：完全自定义 HTML 骨架（template 字符串 + 4 个 CSS slot）
- *
- * 同时只有一档生效——切档相当于切换 base 的"自由度阶梯"。custom 与 tokens/patch
- * 的关键差异：custom 不依赖 base.kind/variantId（基底 = null），它注册独立 fence
- * （`uc-<uvid>`）走 _user.ts 的占位符替换路径。
+ * tokens/patch/custom 三档互斥——切档清掉另两档的草稿数据，避免保存路径歧义。
+ * custom 与 tokens/patch 的关键差异：base=null，靠独立 fence `uc-<uvid>` 路由，
+ * 不需要 kind/variantId 锚定基底。
  */
 export type UserVariantMode = 'tokens' | 'patch' | 'custom' | null
 
-/**
- * patch 档草稿：三个 inline css slot。所有 string 字段未填即视为"不追加"。
- * 与 UserVariantPatch.cssPatch 同形，但所有字段必填（draft 永远持有 string，便于 v-model 绑 CM6）。
- */
+/** 草稿字段必填 string（v-model 不接受 undefined）；空串 = 未填。 */
 export interface DraftCssPatch {
   wrapperCSS: string
   titleCSS: string
   bodyCSS: string
 }
 
-/**
- * custom 档草稿：完整 HTML template + 4 个 CSS slot（含 svgSlot）。
- * 与 UserVariantCustom.template / .css 同形，所有字段必填便于 v-model。
- */
 export interface DraftCustom {
   template: string
   wrapperCSS: string
@@ -66,22 +53,9 @@ export interface DraftFields {
   variantId: string
   markdownSnippet: string
   thumbnailSvg: string
-  /**
-   * 用户态变体的 token 覆盖（步骤 4）。key 与 variant 的 tokenSchema key 对齐，
-   * 空 string 视为"未覆盖"（UI 占位符显示主题默认）。
-   *
-   * 仅当 variantId 对应的内置 variant 暴露 tokenSchema 时才有意义；不暴露的 variant
-   * 字段值会被 ComponentStudio 保存逻辑忽略。
-   *
-   * 保存路径：非空时 ComponentStudio 创建 UserVariantTokens 入仓，并把 markdown
-   * 的 `variant=<base>` 改写为 `variant=<uv_xxx>`。
-   */
   userVariantTokens: Record<string, string>
-  /** 步骤 5：当前激活的 UV 模式；切档清掉另一档的草稿数据（避免保存时歧义）。 */
   userVariantMode: UserVariantMode
-  /** 步骤 5：patch 档草稿——SourceModePanel 三个 CodeMirrorPane 的 v-model 目标。 */
   userVariantCssPatch: DraftCssPatch
-  /** 步骤 7：custom 档草稿——CustomModePanel 的 template + 4 个 css slot 的 v-model 目标。 */
   userVariantCustom: DraftCustom
 }
 
@@ -147,16 +121,9 @@ interface LoadedLink {
 }
 
 /**
- * edit 模式：若 user 组件挂着 linkedUserVariantId，反查 UV 并按 level 把数据回填到对应草稿字段。
- *
- * 严格要求 base.kind/variantId 与组件 entry 一致（仅 tokens/patch）——不一致说明数据被外部
- * 改坏（或用户在另一会话改过组件 kind）；降级为"无 UV 覆盖"重新走 fresh 路径，保存时若用户
- * 没填任何字段会被识别为"主动清空"流程（详见 ComponentStudio.onSave）。
- *
- * custom 档不挂 base.kind/variantId，跳过 base 校验直接回填 template + css 槽位。
- *
- * 失败（UV 已删 / base 不匹配）都返回 mode=null + 空草稿，但 originalLinkedUvId 仍透出
- * 原值让 onSave 决定是清空 link 还是覆盖。
+ * tokens/patch 严格要求 base.kind/variantId 与 entry 一致——不一致即被外部改坏，
+ * 降级为空草稿走 fresh 路径。custom 不挂 base，跳过此校验。
+ * 失败时 originalLinkedUvId 仍透出原值让 onSave 决定 clear 还是覆盖。
  */
 function loadLinkedUv(entry: UserComponent): LoadedLink {
   const blank: LoadedLink = {

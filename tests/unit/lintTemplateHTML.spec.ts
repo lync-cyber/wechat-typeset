@@ -1,13 +1,7 @@
 /**
- * lintTemplateHTML · UserVariantCustom.template 白名单守护（步骤 7.1）。
- *
- * 测试覆盖矩阵：
- *   - 标签禁区：script / style / link / meta / object / embed / form / noscript
- *   - iframe：白名单内（v.qq.com）放行；其它一律 iframe-src-not-allowed
- *   - 属性禁区：onclick / onmouseover 等 on*= 事件；href="javascript:..."
- *   - 占位符：缺 {{body}} / 多 {{body}} / 未识别 {{xxx}} → 各自 diagnostic
- *   - 嵌入 style="..." 委托 lintInlineCSS（forbidden-prop 透传）
- *   - happy path：合法骨架返回 []
+ * lintTemplateHTML · UserVariantCustom.template 白名单守护。
+ * 覆盖：标签禁区 / iframe src 白名单 / on*= 与 javascript: 协议 / 占位符 /
+ *       嵌入 style 委托 lintInlineCSS / happy path。
  */
 
 import { describe, expect, it } from 'vitest'

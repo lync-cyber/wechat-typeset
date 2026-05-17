@@ -59,9 +59,8 @@ export function createUserVariantCSSLinter(path = 'editor'): Extension {
 }
 
 /**
- * 把 lintTemplateHTML（步骤 7）包成 CM6 linter，供 CustomModePanel 的 template /
- * svgSlot pane 使用。定位策略：根据 diagnostic.value（命中片段）substring 反查；
- * `missing-body-placeholder` 等"全文范围"问题统一画在 [0, length) 全篇。
+ * lintTemplateHTML 的 CM6 包装。靠 diagnostic.value（命中片段）substring 反查 from/to；
+ * "全文范围"问题（missing-body 等）画在 [0, length)。
  */
 export function createUserVariantHTMLLinter(path = 'template'): Extension {
   return linter((view) => {
