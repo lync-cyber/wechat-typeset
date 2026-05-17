@@ -66,6 +66,36 @@ const FOOTNOTES_ORDER: readonly string[] = ['lined', 'inline-flow']
 const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
 const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card']
 const FOOTER_CTA_ORDER: readonly string[] = ['button-led', 'triptych-actions']
+const PULL_QUOTE_ORDER: readonly string[] = [
+  'giant-mark',
+  'centered-rule',
+  'stamp-quote',
+  'margin-pull',
+]
+const ANNOUNCEMENT_ORDER: readonly string[] = [
+  'danger-bar',
+  'mono-disclaimer',
+  'ai-notice',
+  'stamped-banner',
+]
+const TABLE_CARD_ORDER: readonly string[] = [
+  'rule-grid',
+  'zebra-rows',
+  'key-value',
+  'price-tier',
+]
+const GALLERY_ORDER: readonly string[] = [
+  'duo',
+  'triptych',
+  'nine-grid',
+  'ribbon-strip',
+]
+const DIALOGUE_ORDER: readonly string[] = [
+  'qa-rows',
+  'chat-bubbles',
+  'name-prefix',
+  'interview-column',
+]
 const BUILTIN_SNIPPET_ORDER: readonly string[] = [
   'intro',
   'author',
@@ -88,6 +118,11 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
   recommend: RECOMMEND_ORDER,
   qrcode: QRCODE_ORDER,
   footerCTA: FOOTER_CTA_ORDER,
+  pullQuote: PULL_QUOTE_ORDER,
+  announcement: ANNOUNCEMENT_ORDER,
+  tableCard: TABLE_CARD_ORDER,
+  gallery: GALLERY_ORDER,
+  dialogue: DIALOGUE_ORDER,
   none: BUILTIN_SNIPPET_ORDER,
 }
 
@@ -138,6 +173,11 @@ function buildBuiltinComponents(): BuiltinEntry[] {
     'recommend',
     'qrcode',
     'footerCTA',
+    'pullQuote',
+    'announcement',
+    'tableCard',
+    'gallery',
+    'dialogue',
     'none',
   ]
   for (const k of kinds) {

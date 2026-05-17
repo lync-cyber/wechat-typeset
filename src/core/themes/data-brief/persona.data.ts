@@ -221,6 +221,11 @@ export const spec: PersonaSpec = {
     recommend: 'card-list',
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
     footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
+    pullQuote: 'giant-mark',
+    announcement: 'danger-bar',
+    tableCard: 'rule-grid',
+    gallery: 'duo',
+    dialogue: 'qa-rows',
   },
 
   // ============================================================

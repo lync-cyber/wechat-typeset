@@ -53,10 +53,19 @@ const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
     steps: [],
     divider: [],
     sectionTitle: [],
-    // codeBlock / footnotes 有 snippets,但暂无独立 tab 入口;留空,后续如需再加 tab。
+    // codeBlock / footnotes / recommend / qrcode / footerCTA / 五个新 variant kind
+    // 有 snippets,但暂无独立 tab 入口;留空,后续如需再加 tab。
     codeBlock: [],
     note: [],
     footnotes: [],
+    recommend: [],
+    qrcode: [],
+    footerCTA: [],
+    pullQuote: [],
+    announcement: [],
+    tableCard: [],
+    gallery: [],
+    dialogue: [],
     none: [],
   }
   for (const c of BUILTIN_COMPONENTS) {

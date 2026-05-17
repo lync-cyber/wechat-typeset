@@ -466,6 +466,12 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'padding-top': '12px',
       margin: '20px 0 0',
     },
+    // pull-quote / table-card / gallery / dialogue：variantKind 容器的 wrapper 兜底。
+    // 4 个 variant 内部各自注入差异化 wrapperCSS，这里只承载"主题无关的 margin 框"。
+    pullQuote: { margin: '24px 0' },
+    tableCard: { margin: '20px 0' },
+    gallery: { margin: '20px 0' },
+    dialogue: { margin: '20px 0' },
   }
 }
 

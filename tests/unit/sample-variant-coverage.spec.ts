@@ -55,6 +55,16 @@ const PROBES: Record<VariantKind, RegExp> = {
   qrcode: /^:{3,}\s*qrcode\b/m,
   // footer-cta 容器（button-led 默认 / triptych-actions 三栏 variant）
   footerCTA: /^:{3,}\s*footer-cta\b/m,
+  // pull-quote 容器（拉引，作者自我重申）
+  pullQuote: /^:{3,}\s*pull-quote\b/m,
+  // announcement 容器（强警示横幅，4 个骨架）
+  announcement: /^:{3,}\s*announcement\b/m,
+  // table-card 容器（结构化表格）
+  tableCard: /^:{4,}\s*table-card\b/m,
+  // gallery 容器（多图组合）
+  gallery: /^:{4,}\s*gallery\b/m,
+  // dialogue 容器（多轮对话）
+  dialogue: /^:{4,}\s*dialogue\b/m,
 }
 
 const SLOT_LABELS: Record<VariantKind, string> = {
@@ -70,6 +80,11 @@ const SLOT_LABELS: Record<VariantKind, string> = {
   recommend: '推荐阅读（recommend）',
   qrcode: '二维码（qrcode）',
   footerCTA: '文末 CTA（footer-cta）',
+  pullQuote: '拉引（pull-quote）',
+  announcement: '强警示横幅（announcement）',
+  tableCard: '结构化表格（table-card）',
+  gallery: '多图组合（gallery）',
+  dialogue: '多轮对话（dialogue）',
 }
 
 describe('故事样张 variant 覆盖', () => {

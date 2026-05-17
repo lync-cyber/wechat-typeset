@@ -239,6 +239,11 @@ export const spec: PersonaSpec = {
     recommend: 'card-list',
     qrcode: 'bare',
     footerCTA: 'button-led',
+    pullQuote: 'giant-mark',
+    announcement: 'danger-bar',
+    tableCard: 'rule-grid',
+    gallery: 'duo',
+    dialogue: 'qa-rows',
   },
 
   // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）。
