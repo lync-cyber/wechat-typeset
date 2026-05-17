@@ -186,6 +186,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'inline-card', // pre 元素走主题 voice（黑底白字）+ inline-card tinted 软底
     note: 'side-bar', // 左 2px 中性线 + 缩进
     footnotes: 'top-rule', // 顶 hairline + 11px 密栏，国际排印底栏
+    recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
   },
 
   // ============================================================
@@ -258,14 +259,6 @@ export const spec: PersonaSpec = {
       'text-transform': 'uppercase',
       'margin-bottom': '4px',
       opacity: '0.85',
-    },
-    seeAlsoTitle: {
-      color: '#888888',
-      'font-size': '9px',
-      'font-weight': '700',
-      'letter-spacing': '0.2em',
-      'text-transform': 'uppercase',
-      'margin-bottom': '8px',
     },
   },
 
@@ -624,15 +617,6 @@ export const spec: PersonaSpec = {
       'border-top': 'none',
       'border-radius': '0',
     },
-    seeAlso: {
-      __reset: true,
-      margin: '20px 0',
-      padding: '14px 16px',
-      'background-color': '#f0f0f0',
-      'border-left': '3px solid #000000',
-      'border-radius': '0',
-    },
-
     // ── data-brief 家族容器：spec 仅做"Swiss 化"细节调整 ──────
     masthead: {
       __reset: true,

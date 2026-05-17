@@ -4,7 +4,7 @@
  * 在 pipeline/containers/{file}.ts（headline / footer / media / quote）。
  *
  * 用途：给 ComponentPalette 的"其它"分类提供可一键插入的 markdown 片段
- * （intro / cover / author / footer-cta / recommend / qrcode / voice-card / video-card / highlight）。
+ * （intro / cover / author / footer-cta / qrcode / voice-card / video-card / highlight）。
  *
  * 新增 snippet 源：本目录下新建 `<id>.ts`（default export 一个 VariantDef，kind:'none'，
  * 含 snippets），在此文件 import 并追加到数组。
@@ -15,9 +15,8 @@ import author from './author'
 import cover from './cover'
 import highlight from './highlight'
 import footerCta from './footer-cta'
-import recommend from './recommend'
 import qrcode from './qrcode'
 import voiceCard from './voice-card'
 import videoCard from './video-card'
 
-export default [intro, author, cover, highlight, footerCta, recommend, qrcode, voiceCard, videoCard]
+export default [intro, author, cover, highlight, footerCta, qrcode, voiceCard, videoCard]

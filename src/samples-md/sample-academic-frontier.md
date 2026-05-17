@@ -143,7 +143,7 @@ BYOL 与 Barlow Twins 展示"无负样本"路径，但坍缩机制的理论解�
 CITE AS — 张三, 李四, 王五. (2026). 关于对比学习中表征坍缩的一个新观察. 公众号《学术前沿》, 第 42 期. DOI: 10.48550/arXiv.2604.12345
 :::
 
-::: see-also SEE ALSO · 相关工作导览
+::: recommend variant=academic-refs SEE ALSO · 相关工作导览
 - *Wang & Isola, 2020* 的 alignment–uniformity 视角与本文温度主导观点互补
 - *Dubois et al., 2022* 对小批次场景的分析可参照本文 §4.2
 - OpenReview 上本文预印本：arxiv.org/abs/2604.12345v2 含扩展附录

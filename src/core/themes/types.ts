@@ -172,8 +172,6 @@ export interface ThemeContainers {
   abstract: CSSObject
   /** 大数字 + 说明（signature 容器） */
   keyNumber: CSSObject
-  /** 相关阅读（signature 容器） */
-  seeAlso: CSSObject
   // ── data-brief 家族（数据简报）签名容器 ──────────────────
   /** 刊头（刊名 + 期号·日期，下划线分隔） */
   masthead: CSSObject
@@ -235,13 +233,11 @@ export interface ThemeContainers {
  *   - abstractKicker     文首 tl;dr 块的小标题色 / 字距 / 大写转换
  *   - keyNumberValue     大数字本体（数字字号 / 颜色 / 字距）
  *   - keyNumberKicker    大数字上方 kicker（小标题）
- *   - seeAlsoTitle       延伸阅读列表的标题
  */
 export interface ThemeInnerStyles {
   abstractKicker: CSSObject
   keyNumberValue: CSSObject
   keyNumberKicker: CSSObject
-  seeAlsoTitle: CSSObject
 }
 
 export interface ThemeAssets {
@@ -468,6 +464,12 @@ export type CodeBlockVariantId =
   // 编辑随文嵌入式：tinted 软底 + 左主色窄竖条 + 紧凑字号；文学/生活向稿件
   | 'inline-card'
 
+export type RecommendVariantId =
+  // 默认：列表式标题 + bullet 链接（当前 recommend 视觉）
+  | 'card-list'
+  // 学术引用：uppercase letter-spaced kicker + textMuted 小字（承接原 ::: see-also）
+  | 'academic-refs'
+
 export type FootnotesVariantId =
   // 一条一行 + hanging indent（默认）
   | 'lined'
@@ -493,6 +495,8 @@ export interface ThemeVariants {
   note: NoteVariantId
   /** 脚注 / 参考文献骨架（lined / inline-flow）。 */
   footnotes: FootnotesVariantId
+  /** 推荐阅读骨架（card-list 默认 / academic-refs = 原 see-also）。 */
+  recommend: RecommendVariantId
 }
 
 /**
@@ -509,6 +513,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   codeBlock: 'bare',
   note: 'minimal-callout',
   footnotes: 'lined',
+  recommend: 'card-list',
 }
 
 // ============================================================
@@ -645,6 +650,10 @@ export const VARIANT_IDS = {
     'top-rule',
     'dense-academic',
   ] as const satisfies readonly FootnotesVariantId[],
+  recommend: [
+    'card-list',
+    'academic-refs',
+  ] as const satisfies readonly RecommendVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

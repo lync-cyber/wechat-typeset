@@ -196,7 +196,7 @@ MIT License。
 覆盖 admonition / quote / compare / steps / divider / sectionTitle / codeBlock / note / footnotes 九类 variant。
 :::
 
-::: see-also 延伸阅读
+::: recommend variant=academic-refs 延伸阅读
 - [Headless 容器契约设计](https://example.com/headless)
 - [微信硬约束清单](https://example.com/hard-rules)
 :::

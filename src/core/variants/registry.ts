@@ -36,6 +36,7 @@ import type {
   FootnotesVariantId,
   NoteVariantId,
   QuoteVariantId,
+  RecommendVariantId,
   SectionTitleVariantId,
   StepsVariantId,
   VariantKind,
@@ -122,6 +123,7 @@ const FOOTNOTES_ORDER: readonly string[] = [
   'top-rule',
   'dense-academic',
 ]
+const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -133,6 +135,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
   footnotes: FOOTNOTES_ORDER,
+  recommend: RECOMMEND_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -155,6 +158,7 @@ import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
 import footnotesAll from './footnotes/_all'
+import recommendAll from './recommend/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -167,6 +171,7 @@ function collectDefs(): AnyDef[] {
     ...codeBlockAll,
     ...noteAll,
     ...footnotesAll,
+    ...recommendAll,
   ] as unknown as AnyDef[]
 }
 
@@ -229,6 +234,7 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
 )
 export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
 export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, 'footnotes')
+export const RECOMMEND_VARIANTS = asRecord<RecommendVariantId, void>(ALL_DEFS, 'recommend')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }

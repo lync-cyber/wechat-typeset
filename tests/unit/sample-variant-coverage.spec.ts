@@ -49,6 +49,8 @@ const PROBES: Record<VariantKind, RegExp> = {
   note: /^:{3,}\s*note\b/m,
   // footnotes 容器 或 markdown-it-footnote 的 [^id]
   footnotes: /^:{3,}\s*footnotes\b|\[\^[^\]]+\]/m,
+  // recommend 容器（含 R-7 合并后承接的"参考引用"语义）
+  recommend: /^:{3,}\s*recommend\b/m,
 }
 
 const SLOT_LABELS: Record<VariantKind, string> = {
@@ -61,6 +63,7 @@ const SLOT_LABELS: Record<VariantKind, string> = {
   codeBlock: '代码块（``` fence）',
   note: '注解（note）',
   footnotes: '脚注（footnotes / [^id]）',
+  recommend: '推荐阅读（recommend）',
 }
 
 describe('故事样张 variant 覆盖', () => {

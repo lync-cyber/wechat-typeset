@@ -246,6 +246,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'inline-card', // 米卡纸底 + 左主色窄竖条，与 mook 内嵌排印一致
     note: 'dotted-margin', // 散文式页边批注：dotted 左竖线 + 缩进，比 minimal-callout 更"手记"
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
+    recommend: 'card-list',
   },
 
   // ============================================================
@@ -647,13 +648,6 @@ export const spec: PersonaSpec = {
       'border-top': '2px solid #e85a3c',
       'border-radius': '0',
     },
-    seeAlso: {
-      margin: '24px 0',
-      padding: '14px 16px',
-      'background-color': 'transparent',
-      'border-left': '1px solid #c7bfb0',
-      'border-radius': '0',
-    },
 
     // ── data-brief 家族签名容器（设计稿对位） ──────────────────
     // masthead · 设计稿"slow reading" + "issue 04" 双栏
@@ -821,21 +815,6 @@ export const spec: PersonaSpec = {
       'letter-spacing': '0.18em',
       'text-transform': 'uppercase',
       'margin-bottom': '4px',
-    },
-    // see-also "延伸阅读" 栏头 · 番外栏感
-    // 对位设计稿 component 02 toc 的"contents · 目次"kicker：
-    //   10px / letter-spacing:0.2em / textMuted 灰蓝。
-    // 比 abstractKicker 更退场（用 textMuted 而非 primary），
-    // letter-spacing 0.25em（全篇最大字距值）——用"最稀疏"的字间距
-    // 把 seeAlso 的"别册附录"感与主栏正文彻底拉开。
-    seeAlsoTitle: {
-      color: '#6b7885',
-      'font-size': '10px',
-      'font-weight': '400',
-      'letter-spacing': '0.25em',
-      'text-transform': 'uppercase',
-      'margin-bottom': '10px',
-      display: 'block',
     },
   },
 

@@ -222,6 +222,7 @@ export const spec: PersonaSpec = {
     note: 'side-bar',
     // boxed-aside：narrative aside 软底卡片，与 zine 内附注同源
     footnotes: 'boxed-aside',
+    recommend: 'card-list',
   },
 
   // ============================================================
@@ -633,13 +634,6 @@ export const spec: PersonaSpec = {
       'border-top': '3px solid #d97a3c',
       'border-radius': '0',
     },
-    seeAlso: {
-      margin: '20px 0',
-      padding: '14px 16px',
-      'background-color': '#14263d',
-      'border-left': '3px solid #d97a3c',
-      'border-radius': '0',
-    },
     // qa-block · 听众连线：左 2px 橙竖线 + 深蓝卡底（设计稿 qa-block 原型）
     qaBlock: {
       __reset: true,
@@ -767,16 +761,6 @@ export const spec: PersonaSpec = {
       'font-size': '11px',
       'font-weight': '600',
       'letter-spacing': '1.5px',
-      'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    // seeAlso 容器：bg=#14263d 暗底，title 走 textInverse（暖米白）保持最大对比
-    seeAlsoTitle: {
-      __reset: true,
-      color: '#d9c9a8',
-      'font-size': '10px',
-      'font-weight': '700',
-      'letter-spacing': '2px',
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
     },

@@ -63,13 +63,13 @@ const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
 const FOOTNOTES_ORDER: readonly string[] = ['lined', 'inline-flow']
+const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
 const BUILTIN_SNIPPET_ORDER: readonly string[] = [
   'intro',
   'author',
   'cover',
   'highlight',
   'footer-cta',
-  'recommend',
   'qrcode',
   'voice-card',
   'video-card',
@@ -85,6 +85,7 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
   footnotes: FOOTNOTES_ORDER,
+  recommend: RECOMMEND_ORDER,
   none: BUILTIN_SNIPPET_ORDER,
 }
 
@@ -132,6 +133,7 @@ function buildBuiltinComponents(): BuiltinEntry[] {
     'codeBlock',
     'note',
     'footnotes',
+    'recommend',
     'none',
   ]
   for (const k of kinds) {

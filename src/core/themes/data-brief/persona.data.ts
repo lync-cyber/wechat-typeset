@@ -218,6 +218,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare', // pre 元素直接走主题 voice（黑底）
     note: 'smallcaps-kicker', // 顶 2px 主色条 + uppercase kicker，与签名容器同源
     footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，财新简报底栏语言
+    recommend: 'card-list',
   },
 
   // ============================================================
@@ -563,13 +564,6 @@ export const spec: PersonaSpec = {
       padding: '16px 18px',
       'background-color': '#f5f7fa',
       'border-top': '3px solid #1756d1',
-      'border-radius': '0',
-    },
-    seeAlso: {
-      margin: '20px 0',
-      padding: '14px 16px',
-      'background-color': '#f5f7fa',
-      'border-left': '3px solid #1756d1',
       'border-radius': '0',
     },
 

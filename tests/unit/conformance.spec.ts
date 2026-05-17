@@ -310,8 +310,8 @@ describe('E. Signature Container 注册表闭合性', () => {
     }
   })
 
-  it('签名与第五态 renderer 都已注册（note / abstract / key-number / see-also）', () => {
-    for (const name of ['note', 'abstract', 'key-number', 'see-also']) {
+  it('签名与第五态 renderer 都已注册（note / abstract / key-number）', () => {
+    for (const name of ['note', 'abstract', 'key-number']) {
       expect(CONTAINER_REGISTRY[name], `renderer ${name}`).toBeTruthy()
     }
   })

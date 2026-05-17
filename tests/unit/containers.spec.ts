@@ -172,7 +172,8 @@ describe('footer-cta / recommend / qrcode', () => {
 
   it('recommend 块识别', () => {
     const out = run('::: recommend 推荐阅读\n- [A](http://a.com)\n:::\n')
-    expect(out).toMatch(/class="container-recommend"/)
+    // R-7 合并：recommend 升为 variantKind 容器，默认 card-list variant
+    expect(out).toMatch(/class="container-recommend container-recommend--card-list"/)
     expect(out).toContain('推荐阅读')
   })
 
@@ -217,7 +218,7 @@ describe('info / attrs 解析', () => {
   })
 })
 
-describe('signature containers（note / abstract / key-number / see-also）', () => {
+describe('signature containers（note / abstract / key-number）', () => {
   it('note：第五态 fence + 默认标题"补注" + variant 类后缀', () => {
     const out = run('::: note\n正文\n:::\n')
     // note 走独立 variantKind 池；class 必须同时含 container-note 与 variant 后缀
@@ -248,10 +249,10 @@ describe('signature containers（note / abstract / key-number / see-also）', ()
     expect(out).toContain('SaaS 企业版拉动')
   })
 
-  it('see-also：默认标题"延伸阅读"', () => {
-    const out = run('::: see-also\n- [相关 A](https://example.com/a)\n- [相关 B](https://example.com/b)\n:::\n')
-    expect(out).toMatch(/class="container-see-also"/)
-    expect(out).toContain('延伸阅读')
+  it('recommend variant=academic-refs：承接原 ::: see-also 语义', () => {
+    const out = run('::: recommend variant=academic-refs\n- [相关 A](https://example.com/a)\n- [相关 B](https://example.com/b)\n:::\n')
+    // R-7 合并：see-also 收编为 recommend 的 academic-refs variant
+    expect(out).toMatch(/class="container-recommend container-recommend--academic-refs"/)
     expect(out).toMatch(/<a[^>]*href="https:\/\/example\.com\/a"/)
   })
 })

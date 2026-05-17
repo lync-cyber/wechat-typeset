@@ -187,7 +187,7 @@ interface IndustryObserverInput {
 
 ## 六、延伸阅读与参考
 
-::: see-also 参考来源
+::: recommend variant=academic-refs 参考来源
 - [平台越权：行业边界的历史演化](https://example.com/platform-overreach)
 - [Benedict Evans: Retail, Amazon and Apple](https://benedict.evans/retail-2024)
 - [Stratechery: The Aggregation Theory](https://stratechery.com/aggregation-theory)

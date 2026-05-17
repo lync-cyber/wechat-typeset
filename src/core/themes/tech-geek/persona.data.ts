@@ -238,6 +238,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'terminal-frame', // terminal window 腔体，与 manpage 主题语言同源
     note: 'side-bar', // // NOTE 风：左侧标线 + 缩进
     footnotes: 'dense-academic', // RFC 风密栏 + 深 hanging，更接近 manpage SEE ALSO 段
+    recommend: 'card-list',
   },
 
   // ============================================================

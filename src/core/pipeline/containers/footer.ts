@@ -2,7 +2,7 @@
  * 文末引导类容器：footerCTA / recommend / qrcode
  *
  * - footerCTA：文末关注卡。info 作为主文案；attrs.cta 作为按钮文字（以 span 样式渲染）。
- * - recommend：推荐阅读块。内容为列表项，每项 [标题](链接)；markdown-it 正常渲染。
+ * - recommend：推荐阅读块（variantKind=recommend，card-list / academic-refs）。
  * - qrcode：二维码卡。info 作为说明文字；内容通常是一张图（![](url)）。
  *
  * 所有色值从 ctx.tokens.colors 读取，确保 4 套主题下的按钮/说明色都跟着主色走。
@@ -11,6 +11,8 @@
 import type { ContainerRenderer } from './types'
 import { escAttr, escText } from './_shared/escape'
 import { encodeQrSvg } from '../qr/encodeQrSvg'
+import { RECOMMEND_VARIANTS } from '../../variants/registry'
+import { makeVariantContainer } from './_shared/makeVariantContainer'
 
 // 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）
 function resolveIssueStampForFooter(
@@ -68,16 +70,24 @@ export const footerCTAContainer: ContainerRenderer = {
   },
 }
 
-export const recommendContainer: ContainerRenderer = {
-  open: (ctx) => {
-    const title = ctx.info.trim() || ctx.kickers.recommend
-    return (
-      `<section class="container-recommend">\n` +
-      `<section class="container-recommend__title" style="font-weight:700;margin-bottom:10px">${escText(title)}</section>\n`
-    )
+/**
+ * recommend · 两态 variant 容器：
+ *   - card-list（默认）= 面向读者的"延伸阅读"，粗体大标题 + bullet 链接
+ *   - academic-refs    = 面向论证的"参考引用"（承接原 ::: see-also），uppercase 小字 kicker
+ *
+ * info 优先（作者写 `::: recommend 自定义标题`），缺省走 ctx.kickers.recommend。
+ * variant 切骨架；主题级 voice（ctx.containers.recommend）仍由 themeCSS 注入。
+ */
+export const recommendContainer: ContainerRenderer = makeVariantContainer({
+  name: 'recommend',
+  themeSlot: 'recommend',
+  table: RECOMMEND_VARIANTS,
+  fallbackId: 'card-list',
+  title: {
+    defaultText: (ctx) => ctx.kickers.recommend,
+    defaultCSS: 'font-weight:700;margin-bottom:10px',
   },
-  close: '</section>\n',
-}
+})
 
 /**
  * QR 码内联渲染：attrs.text 提供时直接生成 SVG，避免外链。

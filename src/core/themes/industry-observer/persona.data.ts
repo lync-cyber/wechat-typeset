@@ -268,6 +268,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare', // code 安静处理；不做 header-bar 语言标签带
     note: 'side-bar', // 左 2px 标线 + 缩进，与 report-section 条款感呼应
     footnotes: 'top-rule', // 顶部 hairline + 密栏小字，研究报告参考文献条款感
+    recommend: 'card-list',
   },
 
   signatureContainers: [
@@ -276,7 +277,6 @@ export const spec: PersonaSpec = {
     'footerCTA',
     'abstract',
     'keyNumber',
-    'seeAlso',
     'imageCaption', // italic 居左图注，Stratechery 风
     'authorBio', // newsletter 作者卡（作者 + bio + 期号）
     'timeline', // newsletter 期号时间线
@@ -574,13 +574,6 @@ export const spec: PersonaSpec = {
       'border-top': '3px solid #b86f2a',
       padding: '14px 16px',
       margin: '18px 0',
-      'border-radius': '2px',
-    },
-    seeAlso: {
-      'background-color': '#f5efe1',
-      'border-left': '3px solid #3d5063',
-      padding: '14px 16px',
-      margin: '20px 0',
       'border-radius': '2px',
     },
     qrcode: {

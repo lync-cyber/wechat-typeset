@@ -330,6 +330,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'inline-card', // 偶引代码用 tinted 软底卡，与正文同色族
     note: 'dotted-margin', // dotted 左竖线 + 缩进，散文页边批注，比 minimal-callout 更"手记"
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
+    recommend: 'card-list',
   },
 
   // ============================================================

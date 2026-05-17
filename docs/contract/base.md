@@ -37,13 +37,12 @@
 |  | `timeline-item` |  | timeline 内单条；info 为事件标题，body 为详述。 |
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。 |
 |  | `footer-cta` | ★ | 文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。 |
-|  | `recommend` | ★ | 推荐阅读链接列表（"看完这篇还可以读"）。与 see-also 的边界：recommend 是面向**读者**的"延伸阅读"（同一作者/账号的其他文章、相关公众号推送）；see-also 是面向**论证**的学术性"参考引用"（论文 / 原始数据 / 二次研究）。一般文章用 recommend；学术 / 调研类文章用 see-also。 |
+|  | `recommend` | ★ | 推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。 |
 |  | `qrcode` | ★ | 通用二维码块（图 + 说明文案）。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。与 qr-follow 的边界：qrcode 是"任意场景的 QR"（赞赏码 / 活动链接 / 小程序），布局极简；qr-follow 是 pack:editorial 的"订阅二维码栏"（左 QR + 右 kicker+title+desc 三行版式），刊物收尾专用。 |
 | 媒体 | `voice-card` | ★ | 公众号语音占位卡（粘贴后由微信识别为真 mpvoice 节点）。 |
 |  | `video-card` | ★ | 公众号视频占位卡（带 qqvid 时直出 v.qq.com iframe；其余为占位）。 |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |
 |  | `key-number` | ★ | 大数字 + 说明（研究报告 / 内参版面 / issue-banner）。attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。 |
-|  | `see-also` | ★ | 学术参考引用列表（"本文论证依据"）。与 recommend 的边界见 recommend.description；此容器走 textMuted 小字 + uppercase kicker，视觉上比 recommend 更克制，意图强调"凭证"而非"延伸娱乐"。 |
 | 兜底 | `free` |  | 兜底容器：渲染器刻意不施加主题样式，写不归类内容。 |
 
 > 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。

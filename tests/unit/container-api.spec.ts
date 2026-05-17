@@ -51,7 +51,7 @@ describe('getContainerVocabulary', () => {
       'quote-card', 'highlight', 'key-number',
       'compare', 'pros', 'cons', 'steps',
       'divider',
-      'footer-cta', 'recommend', 'qrcode', 'see-also',
+      'footer-cta', 'recommend', 'qrcode',
       'voice-card', 'video-card',
       'announcement', 'author-bio', 'image-caption', 'timeline', 'timeline-item',
       'free',

@@ -81,7 +81,7 @@ export interface BuildThemeOptions {
   containers?: StylePatch<ThemeContainers>
   /**
    * 容器内层元素样式（同 elements 语义）。承载 abstract kicker / key-number 数字 /
-   * see-also 标题等"renderer 内部子元素"样式槽位; renderer 通过 ctx.innerStyles 消费,
+   * 大数字 kicker 等"renderer 内部子元素"样式槽位; renderer 通过 ctx.innerStyles 消费,
    * 不进 themeCSS 生成器。
    */
   innerStyles?: StylePatch<ThemeInnerStyles>
@@ -408,13 +408,6 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'border-radius': `${tokens.radius.md}px`,
       'border-top': `3px solid ${tokens.colors.primary}`,
     },
-    seeAlso: {
-      'background-color': tokens.colors.bgSoft,
-      padding: '14px 16px',
-      margin: '20px 0',
-      'border-radius': `${tokens.radius.md}px`,
-      'border-left': `3px solid ${tokens.colors.secondary}`,
-    },
     // data-brief 家族 wrapper CSS 兜底。非 data-brief 主题得到 token 驱动的中性兜底
     // （bgSoft / border 色），不继承 renderer 的"数据简报几何审美"——遵守
     // packs/data-brief.md 的可移植性承诺。
@@ -541,14 +534,6 @@ export function baseInnerStyles(tokens: ThemeTokens): ThemeInnerStyles {
       'font-size': '12px',
       'font-weight': '600',
       'letter-spacing': '1px',
-      'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    seeAlsoTitle: {
-      color: c.textMuted,
-      'font-size': '11px',
-      'font-weight': '700',
-      'letter-spacing': '2px',
       'text-transform': 'uppercase',
       'margin-bottom': '8px',
     },

@@ -45,8 +45,11 @@ import { escText } from './escape'
 // ─────────────────────────────────────────────────────────────
 
 export interface VariantContainerTitleOptions {
-  /** info 为空时的兜底文本（如 admonition 的 '小贴士'）。省略 = 无 fallback，info 为空就不渲染标题。 */
-  defaultText?: string
+  /**
+   * info 为空时的兜底文本（如 admonition 的 '小贴士'）。省略 = 无 fallback，info 为空就不渲染标题。
+   * 支持函数形式以读 ctx.kickers / ctx.tokens 等（如 recommend 走 ctx.kickers.recommend）。
+   */
+  defaultText?: string | ((ctx: ContainerRenderContext) => string)
   /** result.titleCSS undefined 时使用的兜底 CSS。**空串保留 SPI 暗号语义**——不要传空串。 */
   defaultCSS: string | ((ctx: ContainerRenderContext) => string)
   /** 从 ctx.assets 取 icon HTML，前置在标题文本之前（HTML 不转义）。 */
@@ -141,10 +144,15 @@ export function makeVariantContainer<Args = void>(
     open: (ctx) => {
       const { id, result } = resolveVariant(ctx)
 
-      // 标题文本：info 优先，否则用 fallback。无 fallback 且 info 为空 → 空串（后续判定不渲染）。
-      const titleText = title
-        ? ctx.info.trim() || title.defaultText || ''
-        : ''
+      // 标题文本：info 优先，否则用 fallback（支持函数形式读 ctx）。
+      // 无 fallback 且 info 为空 → 空串（后续判定不渲染）。
+      const resolveDefaultText = (): string => {
+        if (!title?.defaultText) return ''
+        return typeof title.defaultText === 'function'
+          ? title.defaultText(ctx)
+          : title.defaultText
+      }
+      const titleText = title ? ctx.info.trim() || resolveDefaultText() : ''
       const willEmitTitle = !!title && titleText !== '' && result.titleCSS !== ''
 
       const parts: string[] = []

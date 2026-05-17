@@ -340,10 +340,9 @@ export const SUPPORTED_SIGNATURE_CONTAINERS = [
   'authorBio',
   'imageCaption',
   'timeline',
-  // 跨主题通用签名（abstract / keyNumber / seeAlso）
+  // 跨主题通用签名（abstract / keyNumber）
   'abstract',
   'keyNumber',
-  'seeAlso',
   // data-brief 家族（数据简报：晚点 / 财新数据 / Morning Brew）
   'masthead',
   'sectionTag',

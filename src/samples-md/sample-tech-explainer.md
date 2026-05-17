@@ -165,7 +165,7 @@ JWT 是信任契约，不是加密容器。签名确保"数据未被篡改"，�
 ![二维码占位](https://placehold.co/240x240?text=QR)
 :::
 
-::: see-also 下一篇会讲什么
+::: recommend variant=academic-refs 下一篇会讲什么
 - **OAuth 2.0 与 JWT 的协作关系**：授权码流程里，JWT 扮演什么角色
 - **Refresh Token 的正确实现**：为什么不能把它当 Access Token 用
 - **JWK Set 与密钥轮转**：从 kid 到完整轮转链路的工程化

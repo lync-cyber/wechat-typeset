@@ -33,6 +33,7 @@ import {
   NOTE_VARIANTS,
   FOOTNOTES_VARIANTS,
   QUOTE_VARIANTS,
+  RECOMMEND_VARIANTS,
   SECTION_TITLE_VARIANTS,
   STEPS_VARIANTS,
 } from '../variants/registry'
@@ -80,6 +81,7 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
     codeBlock: CODE_BLOCK_VARIANTS as unknown as MetaTable,
     note: NOTE_VARIANTS as unknown as MetaTable,
     footnotes: FOOTNOTES_VARIANTS as unknown as MetaTable,
+    recommend: RECOMMEND_VARIANTS as unknown as MetaTable,
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
@@ -114,6 +116,7 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     codeBlock: CODE_BLOCK_VARIANTS,
     note: NOTE_VARIANTS,
     footnotes: FOOTNOTES_VARIANTS,
+    recommend: RECOMMEND_VARIANTS,
   }
   return Object.keys(table[kind] ?? {})
 }

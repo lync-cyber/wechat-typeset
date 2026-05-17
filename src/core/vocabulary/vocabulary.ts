@@ -41,7 +41,7 @@ export type ContainerCategory =
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
   | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
-  | 'signature' // 签名块：abstract / key-number / see-also / colophon / footnotes
+  | 'signature' // 签名块：abstract / key-number / colophon / footnotes
   | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
   | 'free' // 兜底 escape hatch：free
 
@@ -581,12 +581,20 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'recommend',
     styleKey: 'recommend',
     category: 'navigation',
+    variantKind: 'recommend',
     fenceLength: 3,
+    attrs: [
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 recommend 骨架。card-list（默认）= 粗体大标题 + bullet 链接列表，面向"延伸阅读"；' +
+          'academic-refs = uppercase letter-spaced 小字 kicker + textMuted 列表，面向论证"参考引用"。',
+        enum: VARIANT_IDS.recommend,
+      },
+    ],
     description:
-      '推荐阅读链接列表（"看完这篇还可以读"）。与 see-also 的边界：' +
-      'recommend 是面向**读者**的"延伸阅读"（同一作者/账号的其他文章、相关公众号推送）；' +
-      'see-also 是面向**论证**的学术性"参考引用"（论文 / 原始数据 / 二次研究）。' +
-      '一般文章用 recommend；学术 / 调研类文章用 see-also。',
+      '推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；' +
+      'academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。',
     example: '::: recommend\n- [前作](url)\n- [续篇](url)\n:::\n',
   },
 
@@ -679,16 +687,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       '大数字 + 说明（研究报告 / 内参版面 / issue-banner）。' +
       'attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。',
     example: '::: key-number value="42%" 同比涨幅\n占全年营收 12pp …\n:::\n',
-  },
-  {
-    name: 'see-also',
-    styleKey: 'seeAlso',
-    category: 'signature',
-    fenceLength: 3,
-    description:
-      '学术参考引用列表（"本文论证依据"）。与 recommend 的边界见 recommend.description；' +
-      '此容器走 textMuted 小字 + uppercase kicker，视觉上比 recommend 更克制，意图强调"凭证"而非"延伸娱乐"。',
-    example: '::: see-also 延伸阅读\n- [相关论文](url)\n:::\n',
   },
   {
     name: 'kpi-dashboard',

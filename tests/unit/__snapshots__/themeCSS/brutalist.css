@@ -434,14 +434,6 @@
   border-radius: 0;
 }
 
-.markdown-body .container-see-also {
-  margin: 20px 0;
-  padding: 14px;
-  background-color: #1a1a1a;
-  border-left: 3px solid #ebff00;
-  border-radius: 0;
-}
-
 .markdown-body .container-kpi-dashboard {
   background-color: #1a1a1a;
   border-top: 1px solid #f0f0f0;

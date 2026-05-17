@@ -101,7 +101,6 @@ const plainContainers = [
   'container-note',
   'container-abstract',
   'container-key-number',
-  'container-see-also',
   'container-free',
   // pack:editorial
   'container-masthead',

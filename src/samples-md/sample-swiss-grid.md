@@ -171,5 +171,11 @@ const column = (total, gutter) =>
 ::: qr-follow NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"
 :::
 
+::: recommend FURTHER READING
+- Müller-Brockmann, *Grid Systems in Graphic Design*, Niggli 1981
+- Karl Gerstner, *Designing Programmes*, Arthur Niggli 1964
+- Jan Tschichold, *Asymmetric Typography*, Reinhold 1967
+:::
+
 ::: colophon next="字距作为空间：Univers 55 在正文中的间距实验" issue="Nº09 / 2026 / ZÜRICH"
 :::

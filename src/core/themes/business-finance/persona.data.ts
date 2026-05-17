@@ -294,6 +294,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'bare', // 安静处理
     note: 'box-callout', // 1px 边框的"附注"块，与 ledger-cell 硬边框语言一致
     footnotes: 'top-rule', // 财新简报式：顶部 hairline + 密栏小字，与 ledger 账本表语言一致
+    recommend: 'card-list',
   },
 
   // ============================================================

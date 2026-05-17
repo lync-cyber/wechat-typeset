@@ -7500,7 +7500,8 @@
         "sectionTitle",
         "codeBlock",
         "note",
-        "footnotes"
+        "footnotes",
+        "recommend"
       ],
       "properties": {
         "admonition": {
@@ -7601,6 +7602,12 @@
             "boxed-aside",
             "top-rule",
             "dense-academic"
+          ]
+        },
+        "recommend": {
+          "enum": [
+            "card-list",
+            "academic-refs"
           ]
         }
       },

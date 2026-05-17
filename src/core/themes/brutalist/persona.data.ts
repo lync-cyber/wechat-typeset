@@ -179,6 +179,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'inline-card', // tinted 软底 + 左主色窄竖条，与 news-row 同色块语言
     note: 'side-bar', // 左 2px 短线 + 缩进,与"批注"语义一致
     footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，punk zine 底栏
+    recommend: 'card-list',
   },
 
   // ============================================================
@@ -537,15 +538,6 @@ export const spec: PersonaSpec = {
       'border-top': '3px solid #ebff00',
       'border-radius': '0',
     },
-    seeAlso: {
-      __reset: true,
-      margin: '20px 0',
-      padding: '14px',
-      'background-color': '#1a1a1a',
-      'border-left': '3px solid #ebff00',
-      'border-radius': '0',
-    },
-
     // ── data-brief 家族签名容器：粗野主义版本的视觉收紧 ──
     // masthead：上下双 2px 实线 + 三栏 ribbon（attrs.kicker 触发）
     masthead: {
@@ -690,16 +682,6 @@ export const spec: PersonaSpec = {
     },
     // keyNumber 暗底上的小 kicker 走荧光黄 primary，与 abstractKicker 语言统一
     keyNumberKicker: {
-      __reset: true,
-      color: '#ebff00',
-      'font-size': '11px',
-      'font-weight': '700',
-      'letter-spacing': '0.2em',
-      'text-transform': 'uppercase',
-      'margin-bottom': '8px',
-    },
-    // seeAlso 容器底色 #1a1a1a（暗底），title 走荧光黄 primary 保持可读性
-    seeAlsoTitle: {
       __reset: true,
       color: '#ebff00',
       'font-size': '11px',

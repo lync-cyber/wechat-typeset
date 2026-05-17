@@ -236,6 +236,7 @@ export const spec: PersonaSpec = {
     codeBlock: 'inline-card', // 人物特稿偶引代码（采访技术人物），inline-card 不抢正文
     note: 'minimal-callout', // 与 magazine-pull 的"细线 + 空气感"语言一致
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside 适合刊物体
+    recommend: 'card-list',
   },
 
   // Decorations（规范 §1.2 / §1.3 ③ / §3.7：intro 首字下沉 + h2 自动罗马数字前缀）。
