@@ -26,7 +26,6 @@ const cardShadow: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '悬浮卡',
     description: '白底 + 顶部色条 + 单层柔和阴影',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

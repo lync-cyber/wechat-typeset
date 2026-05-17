@@ -75,19 +75,23 @@
 > 代码：各 `src/core/variants/<kind>/<id>.ts`
 > 报告：`pnpm variant:usage --orphans`
 
-25 个 variant 当前无主题以默认骨架使用、无 `themeCompat` 推荐，仍保留在
+11 个 variant 当前无主题以默认骨架使用、无 `themeCompat` 推荐，仍保留在
 `VARIANT_IDS` 主表中是因为"骨架已就绪、等首个采用方"。**按 kind 分布**：
 
-- admonition (4): `pill-tag`, `ticket-notch`, `card-shadow`, `minimal-underline`
+- admonition (2): `ticket-notch`, `minimal-underline`
 - quote (1): `left-bar`
 - steps (1): `ribbon-chain`
-- note (3): `hanging-indent`, `editorial-stripe`, `research-dense`
+- note (1): `research-dense`
 - footnotes (1): `inline-flow`
-- pullQuote (3): `centered-rule`, `stamp-quote`, `margin-pull`
-- announcement (3): `mono-disclaimer`, `ai-notice`, `stamped-banner`
-- tableCard (3): `zebra-rows`, `key-value`, `price-tier`
-- gallery (3): `triptych`, `nine-grid`, `ribbon-strip`
-- dialogue (3): `chat-bubbles`, `name-prefix`, `interview-column`
+- pullQuote (1): `margin-pull`
+- tableCard (1): `price-tier`
+- gallery (2): `nine-grid`, `ribbon-strip`
+- dialogue (1): `name-prefix`
+
+**Phase-4 偿还纪录**：原 25 个 orphan，4 个新主题（youth-zine / commerce-pulse /
+edu-classroom / official-gazette）共消化 14 个升级为默认骨架。
+
+详见 `pnpm variant:usage --orphans` 实时报告。
 
 **偿还路径**：
 
@@ -119,7 +123,9 @@ default ∨ themeCompat ∨ experimental。
 
 ## 已偿还（changelog）
 
-无（首版）
+**Phase-4 (2026-05)** —— 4 个新主题（commerce-pulse / youth-zine / official-gazette /
+edu-classroom）填补"电商 / 青年潮 / 政务 / 教育"四档场景缺口；连带消化 14 个 orphan
+variant 升级为默认骨架（详见 D 段）。
 
 ---
 

@@ -33,7 +33,6 @@ const zebraRows: VariantDef = {
     kind: 'tableCard',
     name: '斑马表',
     description: '奇偶行底色 + 顶底 hairline，无垂直边框',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

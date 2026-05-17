@@ -28,7 +28,6 @@ const chatBubbles: VariantDef = {
     kind: 'dialogue',
     name: '聊天气泡',
     description: '左右交替气泡 + 头像，IM 风',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

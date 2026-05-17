@@ -32,7 +32,6 @@ const stampQuote: VariantDef = {
     kind: 'pullQuote',
     name: '印章压字',
     description: '左粗体大字 + 右 SVG 旋转印章（brutalist）',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

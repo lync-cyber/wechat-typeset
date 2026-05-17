@@ -36,7 +36,6 @@ const keyValue: VariantDef = {
     kind: 'tableCard',
     name: '规格表',
     description: '双栏 key-value，spec sheet 风',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

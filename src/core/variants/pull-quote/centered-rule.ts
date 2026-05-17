@@ -30,7 +30,6 @@ const centeredRule: VariantDef = {
     kind: 'pullQuote',
     name: '居中夹线',
     description: '上下细线 + 居中 kicker，gallery placard 体',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

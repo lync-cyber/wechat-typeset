@@ -21,6 +21,11 @@ import { spec as editorialMookSpec } from './editorial-mook/persona.data'
 import { spec as swissGridSpec } from './swiss-grid/persona.data'
 import { spec as brutalistSpec } from './brutalist/persona.data'
 import { spec as lateNightVinylSpec } from './late-night-vinyl/persona.data'
+// Phase 4 通用性补档：填补"电商 / 青年潮文化 / 政务公告 / 教育亲子"四档场景缺口
+import { spec as commercePulseSpec } from './commerce-pulse/persona.data'
+import { spec as youthZineSpec } from './youth-zine/persona.data'
+import { spec as officialGazetteSpec } from './official-gazette/persona.data'
+import { spec as eduClassroomSpec } from './edu-classroom/persona.data'
 
 const ALL_SPECS: readonly PersonaSpec[] = [
   defaultSpec,
@@ -37,23 +42,38 @@ const ALL_SPECS: readonly PersonaSpec[] = [
   swissGridSpec,
   brutalistSpec,
   lateNightVinylSpec,
+  commercePulseSpec,
+  youthZineSpec,
+  officialGazetteSpec,
+  eduClassroomSpec,
 ]
 
 export const DISPLAY_ORDER: readonly string[] = [
   'default',
+  // 技术档
   'tech-geek',
   'tech-explainer',
-  'life-aesthetic',
+  // 商业/数据档
   'business-finance',
   'data-brief',
-  'literary-humanism',
   'industry-observer',
+  'commerce-pulse',
+  // 人文档
+  'literary-humanism',
   'people-story',
-  'academic-frontier',
   'editorial-mook',
+  'late-night-vinyl',
+  // 生活/教育档
+  'life-aesthetic',
+  'edu-classroom',
+  // 学术/严肃档
+  'academic-frontier',
+  'official-gazette',
+  // 设计/实验档
   'swiss-grid',
   'brutalist',
-  'late-night-vinyl',
+  // 青年/亚文化档
+  'youth-zine',
 ]
 
 function order<T extends { id: string }>(arr: readonly T[], priority: readonly string[]): T[] {
