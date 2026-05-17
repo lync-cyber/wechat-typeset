@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Pre-commit guard：仅在暂存了影响 bundle 体积的文件时跑 check:size。
+#
+# 触发条件（任一即触发）：
+#   - src/ 下任意源码（主题 / variant / pipeline / ui / domain / public）
+#   - vite.config.ts（manualChunks / 优化配置）
+#   - .size-budget.json（预算表自身）
+#   - package.json（依赖增删可能改变 bundle 形态）
+#
+# 触发后流程：
+#   1. dist/ 缺失或晚于任一相关源码 → 先 vite build + 重建样本/refs（这两步会写入 src/domain/samples/_*.ts，
+#      若已被 stage 则不变；若未 stage，提示作者补 stage 后再 commit）
+#   2. node_modules/.bin/tsx scripts/check-size.ts 校验各 chunk 在预算内
+#
+# 退出码：0 = 通过 / 非零 = 阻止 commit
+# 跳过：SKIP_SIZE_CHECK=1 git commit ...（仅紧急情况用，PR 必须修）
+
+set -e
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+HAS_SIZE_RELEVANT=$(echo "$STAGED" | grep -E '^(src/|vite\.config\.ts$|\.size-budget\.json$|package\.json$|package-lock\.json$)' || true)
+
+if [ -z "$HAS_SIZE_RELEVANT" ]; then
+  exit 0
+fi
+
+if [ "$SKIP_SIZE_CHECK" = "1" ]; then
+  echo "[pre-commit] SKIP_SIZE_CHECK=1，跳过 bundle 预算校验（请在 PR 中尽快补救）"
+  exit 0
+fi
+
+echo "[pre-commit] 暂存包含影响 bundle 体积的源码（${HAS_SIZE_RELEVANT})"
+echo "[pre-commit] 跑 vite build + check:size 防止 CI 红"
+
+# 用 node_modules/.bin 直接调，绕开 pnpm/npm 选择
+TSX=node_modules/.bin/tsx
+VITE=node_modules/.bin/vite
+
+# dist 缺失 → 必须重建；存在 → 看是否有更新的源码再决定
+NEED_REBUILD=1
+if [ -d dist/assets ]; then
+  NEWER=$(find src vite.config.ts -newer dist/assets -print -quit 2>/dev/null || true)
+  if [ -z "$NEWER" ]; then NEED_REBUILD=0; fi
+fi
+
+if [ "$NEED_REBUILD" = "1" ]; then
+  echo "[pre-commit] dist/ 缺失或过期，先重建产物..."
+  "$TSX" scripts/build-samples.ts >/dev/null
+  "$TSX" scripts/build-references.ts >/dev/null
+  "$TSX" scripts/build-showcase.ts >/dev/null
+  "$VITE" build >/dev/null 2>&1 || { echo "[pre-commit] vite build 失败"; exit 1; }
+fi
+
+"$TSX" scripts/check-size.ts

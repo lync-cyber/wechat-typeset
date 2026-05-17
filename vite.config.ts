@@ -132,7 +132,12 @@ export default defineConfig({
             return 'themes'
           }
           if (!n.includes('/node_modules/')) return undefined
-          const m = n.match(/\/node_modules\/((?:@[^/]+\/)?[^/]+)/)
+          // 取**最后一个** /node_modules/ 之后的包名——兼容 pnpm 的
+          // `node_modules/.pnpm/<pkg>@<ver>/node_modules/<pkg>` 嵌套；
+          // 用第一个 match 会捕获 `.pnpm` 而漏拆 codemirror/juice/markdown。
+          const idx = n.lastIndexOf('/node_modules/')
+          const after = n.slice(idx + '/node_modules/'.length)
+          const m = after.match(/^((?:@[^/]+\/)?[^/]+)/)
           if (!m) return undefined
           const pkg = m[1]
           if (
