@@ -29,7 +29,7 @@
 | `edu-classroom` | 教室课堂 | K-12 教育 / 亲子科普 / 童书推荐 / 兴趣启蒙 / 知识自习 / 家长读物 | `card-shadow` | `classic` | `number-circle` | `wave` | `bare` | `hanging-indent` | steps、tip、info、recommend、dialogue、announcement、intro |
 | `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `sidenote-latex` | `frame-brackets` | `timeline-dot` | `dots` | `line-numbers` | `box-callout` | abstract |
 | `official-gazette` | 公文公报 | 政务通告 / 企业公告 / 监管声明 / 招股说明书 / 严肃通报 / 公开信 | `top-bottom-rule` | `frame-brackets` | `number-circle` | `rule` | `bare` | `editorial-stripe` | announcement、footnotes、sectionTitle、colophon、byline |
-| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `editorial-block` | `split-row` | `seal-mark` | `inline-card` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、footnotes、colophon、barChart、imageCaption、announcement |
+| `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `editorial-block` | `split-row` | `flower` | `inline-card` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、footnotes、colophon、barChart、imageCaption、announcement |
 | `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `slab-corner` | `tilted-sticker` | `split-row` | `flower` | `inline-card` | `side-bar` | masthead、toc、qaBlock、footnotes、colophon、imageCaption、announcement |
 | `youth-zine` | 青年潮志 | 青年文化 / Gen-Z / 小红书博主 / B 站 UP 主 / 潮流安利 / 二次元周边 | `pill-tag` | `column-rule` | `number-circle` | `dots` | `bare` | `side-bar` | intro、highlight、pullQuote、gallery、dialogue、recommend、tip、warning、info、danger、announcement |
 
@@ -193,7 +193,7 @@
 
 **描述**：国际红 + 12 栏铁律 + 直角硬边：1958 Neue Grafik 苏黎世对开页
 
-**视觉签名**：admonition=`news-underline` · quote=`editorial-block` · steps=`split-row` · divider=`seal-mark` · codeBlock=`inline-card` · note=`side-bar`
+**视觉签名**：admonition=`news-underline` · quote=`editorial-block` · steps=`split-row` · divider=`flower` · codeBlock=`inline-card` · note=`side-bar`
 
 **signatureContainers**：`abstract`、`sectionTag`、`editorialHeader`、`byline`、`toc`、`keyNumber`、`qaBlock`、`footnotes`、`colophon`、`barChart`、`imageCaption`、`announcement`
 
