@@ -15,5 +15,3 @@ export const themeRegistry: Readonly<Record<string, Theme>> = Object.freeze(
 export function getTheme(id: string): Theme {
   return themeRegistry[id] ?? themeRegistry.default
 }
-
-export { defaultTheme } from './default'

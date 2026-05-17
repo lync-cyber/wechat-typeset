@@ -11,7 +11,8 @@
 import { describe, it, expect } from 'vitest'
 import { render } from '../../src/core/pipeline'
 import { generateThemeCSS } from '../../src/core/pipeline/themeCSS'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import { ThemeAuthoringError } from '../../src/core/themes/types'
 
 describe('render (Step 1 最小管线)', () => {

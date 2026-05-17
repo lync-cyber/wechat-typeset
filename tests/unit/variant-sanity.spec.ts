@@ -14,7 +14,8 @@
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { render } from '../../src/core/pipeline'
-import { defaultTheme, themeList } from '../../src/core/themes'
+import { themeList, themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import { VARIANT_IDS } from '../../src/core/themes/types'
 import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import { CASES, isCompatBlocked } from '../helpers/variantCases'

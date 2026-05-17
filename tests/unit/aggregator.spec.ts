@@ -15,7 +15,8 @@ import {
   flattenSnapshot,
   BUILTIN_COMPONENTS,
 } from '../../src/domain/components-lib'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import {
   createUserComponent,
   listUserComponents,

@@ -10,7 +10,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 import { useDebouncedRender } from '../../src/ui/composables/useDebouncedRender'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import type { RenderInput, RenderOutput } from '../../src/core/pipeline'
 
 // 用 fake timer 精确控制 80ms 防抖窗口

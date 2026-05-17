@@ -11,7 +11,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 import { useExportActions } from '../../src/ui/composables/useExportActions'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import type { RenderOutput } from '../../src/core/pipeline'
 import type { Theme } from '../../src/core/themes/types'
 

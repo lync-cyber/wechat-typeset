@@ -18,7 +18,7 @@ import markdownItIns from 'markdown-it-ins'
 import markdownItFootnote from 'markdown-it-footnote'
 import markdownItTaskLists from 'markdown-it-task-lists'
 
-import { defaultTheme } from '../themes/default'
+import { themeRegistry } from '../themes'
 import type { Theme, ThemeVariants } from '../themes/types'
 import { CONTAINER_REGISTRY } from './containers'
 import type { ContainerRenderContext } from './containers'
@@ -54,7 +54,7 @@ export interface CreateMarkdownOptions {
 }
 
 export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt {
-  const theme = options.theme ?? defaultTheme
+  const theme = options.theme ?? themeRegistry.default
 
   const md = new MarkdownIt({
     html: true,

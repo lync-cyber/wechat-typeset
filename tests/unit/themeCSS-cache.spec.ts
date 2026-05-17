@@ -13,8 +13,8 @@ import {
   __resetThemeCssCacheForTest,
   generateThemeCSS,
 } from '../../src/core/pipeline/themeCSS'
-import { defaultTheme } from '../../src/core/themes/default'
-import { themeList } from '../../src/core/themes'
+import { themeList, themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import { ThemeAuthoringError, type Theme } from '../../src/core/themes/types'
 
 afterEach(() => __resetThemeCssCacheForTest())

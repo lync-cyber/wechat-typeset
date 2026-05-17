@@ -10,24 +10,20 @@
 
 import { describe, expect, it } from 'vitest'
 import { applyPalette } from '../../src/core/color/applyPalette'
-import { businessFinanceTheme } from '../../src/core/themes/business-finance'
-import { defaultTheme } from '../../src/core/themes/default'
-import { industryObserverTheme } from '../../src/core/themes/industry-observer'
-import { lifeAestheticTheme } from '../../src/core/themes/life-aesthetic'
-import { literaryHumanismTheme } from '../../src/core/themes/literary-humanism'
-import { peopleStoryTheme } from '../../src/core/themes/people-story'
-import { techGeekTheme } from '../../src/core/themes/tech-geek'
+import { themeRegistry } from '../../src/core/themes'
 import type { Theme } from '../../src/core/themes/types'
 
-const themes: Theme[] = [
-  defaultTheme,
-  techGeekTheme,
-  lifeAestheticTheme,
-  businessFinanceTheme,
-  literaryHumanismTheme,
-  industryObserverTheme,
-  peopleStoryTheme,
-]
+const COVERED_THEME_IDS = [
+  'default',
+  'tech-geek',
+  'life-aesthetic',
+  'business-finance',
+  'literary-humanism',
+  'industry-observer',
+  'people-story',
+] as const
+
+const themes: Theme[] = COVERED_THEME_IDS.map((id) => themeRegistry[id])
 
 function collectSvgs(t: Theme): string[] {
   const a = t.assets
