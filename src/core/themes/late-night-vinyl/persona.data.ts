@@ -66,9 +66,9 @@ export const spec: PersonaSpec = {
   // 标签换色"的暗夜信号系统（与 editorial-mook 的"统一米卡 + 标签换色"同源纪律）。
   status: {
     tip: { accent: '#7fb069', soft: '#14263d' }, // b-side · B 面推荐 —— 苔绿
-    info: { accent: '#4a90c0', soft: '#14263d' }, // cue · 提示音 —— 冷蓝
+    info: { accent: '#5fa0c8', soft: '#14263d' }, // cue · 提示音 —— 冷蓝（5.35:1 守 AA）
     warning: { accent: '#d97a3c', soft: '#14263d' }, // static · 静电干扰 —— 橙（= primary）
-    danger: { accent: '#c44848', soft: '#14263d' }, // off-air · 停播 —— 警示红
+    danger: { accent: '#d36464', soft: '#14263d' }, // off-air · 停播 —— 警示红（4.20:1 临界，登记 grace）
   },
 
   // ============================================================

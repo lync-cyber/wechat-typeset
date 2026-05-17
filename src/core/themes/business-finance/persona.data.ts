@@ -7,7 +7,7 @@
  * 落地五根红线（规范结语）：
  *   1. primary = #2a1a14 深栗墨（**不再是红** —— 旧值 #b1252b 与 danger 同色相撞色）
  *      红色彻底让给 danger 与 K 线"涨柱" —— 稀缺即贵气
- *   2. warning = #8a6416 琥珀（脱离红系，与 primary 色相拉开 60°+）
+ *   2. warning = #7e5a12 琥珀（脱离红系，与 primary 色相拉开 60°+）
  *   3. 四态 admonition 靠**四种形状** 而非色差区分：
  *      tip=accent-bar / info=minimal-underline / warning=pill-tag / danger=ticket-notch
  *   4. `<strong>` 字重 600（不是 800）—— 全页 800 = 没有重点
@@ -56,7 +56,7 @@ export const spec: PersonaSpec = {
   status: {
     tip: { accent: '#1f4f6b', soft: '#dfe8ee' }, // 要点 Key Takeaway（钢青，7.8:1）
     info: { accent: '#3d5a75', soft: '#dde4ec' }, // 补注 Memo（烟蓝，5.6:1）
-    warning: { accent: '#8a6416', soft: '#f1e8d1' }, // 风险提示 Risk Note（琥珀，5.9:1）
+    warning: { accent: '#7e5a12', soft: '#f1e8d1' }, // 风险提示 Risk Note（琥珀，~5.0:1 WCAG AA 正文达标）
     danger: { accent: '#9a1b20', soft: '#f0dadc' }, // 警报 Alert（深朱，6.8:1）
   },
 
@@ -220,9 +220,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#8a6416', strokeWidth: 1.5 },
-        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: '#8a6416' },
-        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#8a6416' },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#7e5a12', strokeWidth: 1.5 },
+        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: '#7e5a12' },
+        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#7e5a12' },
       ],
     },
 

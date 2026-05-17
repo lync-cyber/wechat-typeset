@@ -204,22 +204,29 @@
       ],
       "properties": {
         "baseSize": {
-          "type": "number"
+          "type": "number",
+          "minimum": 14
         },
         "lineHeight": {
-          "type": "number"
+          "type": "number",
+          "minimum": 1.4,
+          "maximum": 2
         },
         "h1Size": {
-          "type": "number"
+          "type": "number",
+          "minimum": 14
         },
         "h2Size": {
-          "type": "number"
+          "type": "number",
+          "minimum": 14
         },
         "h3Size": {
-          "type": "number"
+          "type": "number",
+          "minimum": 14
         },
         "letterSpacing": {
-          "type": "number"
+          "type": "number",
+          "maximum": 1
         }
       },
       "additionalProperties": false

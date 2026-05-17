@@ -60,7 +60,7 @@ const ledgerCell: VariantDef<AdmonitionRenderArgs> = {
       name: '账本 · 风险',
       description: '研究所 RISK 行',
       admonitionKind: 'warning',
-      thumbArgs: { accent: '#8a6416', soft: '#f1e8d1' },
+      thumbArgs: { accent: '#7e5a12', soft: '#f1e8d1' },
       markdown: '::: warning 供应链集中度 variant=ledger-cell\n前五大供应商占比超 60%。\n:::\n',
     },
   ],

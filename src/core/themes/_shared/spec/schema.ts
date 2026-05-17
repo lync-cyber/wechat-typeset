@@ -34,6 +34,7 @@ export type JSONSchema7 = {
 
 import { VARIANT_IDS } from '../../types'
 import { ALLOWED_FONT_FAMILIES, HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from './validate'
+import { LETTER_SPACING_MAX, LINE_HEIGHT_MAX, LINE_HEIGHT_MIN } from './typography-rules'
 
 const HEX_PATTERN = HEX_RE.source
 const FONT_FAMILY_ENUM = [...ALLOWED_FONT_FAMILIES]
@@ -365,12 +366,12 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
         'letterSpacing',
       ],
       properties: {
-        baseSize: { type: 'number' },
-        lineHeight: { type: 'number' },
-        h1Size: { type: 'number' },
-        h2Size: { type: 'number' },
-        h3Size: { type: 'number' },
-        letterSpacing: { type: 'number' },
+        baseSize: { type: 'number', minimum: MIN_FONT_SIZE },
+        lineHeight: { type: 'number', minimum: LINE_HEIGHT_MIN, maximum: LINE_HEIGHT_MAX },
+        h1Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        h2Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        h3Size: { type: 'number', minimum: MIN_FONT_SIZE },
+        letterSpacing: { type: 'number', maximum: LETTER_SPACING_MAX },
       },
       additionalProperties: false,
     },

@@ -54,7 +54,7 @@ export const spec: PersonaSpec = {
     bgSoft: '#f0f0f0', // 浅灰（图表轨道 / bar 背景 / 栏位浅底）
     bgMuted: '#e8e8e8', // 外层衬底（略深的浅灰）
     text: '#000000', // 纯黑文字
-    textMuted: '#888888', // 中灰辅助文字（章节页码 / kicker meta）
+    textMuted: '#6b6b6b', // 中灰辅助文字（章节页码 / kicker meta，5.3:1 守 AA）
     textInverse: '#ffffff', // 反白（红章上的白色数字 / cta 中格）
     border: '#000000', // hairline 黑实线（Swiss 风的核心分隔语言）
     code: '#000000', // inline code 黑字
@@ -62,12 +62,14 @@ export const spec: PersonaSpec = {
     highlightBg: '#ffeb3c', // Swiss 设计黄高亮（inline `==xx==` 的招牌饱和色）
   },
 
-  // 语义四色（与设计稿 multi-callout INFO/TIP/WARN/STOP 一致）
+  // 语义四色（与设计稿 multi-callout INFO/TIP/WARN/STOP 一致，accent 加深以守 WCAG AA）
   status: {
-    tip: { accent: '#2e7d32', soft: '#e8f0e9' }, // TIP 绿
+    tip: { accent: '#256e29', soft: '#e8f0e9' }, // TIP 绿（5.41:1）
     info: { accent: '#000000', soft: '#f0f0f0' }, // INFO 黑（设计稿 INFO 是黑底白字）
-    warning: { accent: '#f9a825', soft: '#fdf5d6' }, // WARN 橙
-    danger: { accent: '#e30613', soft: '#fde0e2' }, // STOP 红（= primary）
+    // WARN 设计黄 #f9a825 是 swiss-grid 招牌签名色——已登记 A11Y_TEMPORARY_GRACE，
+    // 待 Phase 1.5 协商：要么"WARN 用文字色 + soft 强对比"，要么接受品牌让步加深一档。
+    warning: { accent: '#f9a825', soft: '#fdf5d6' },
+    danger: { accent: '#c1050f', soft: '#fde0e2' }, // STOP 红（5.14:1）
   },
 
   // ============================================================
@@ -324,7 +326,7 @@ export const spec: PersonaSpec = {
     h6: {
       'font-size': '11px',
       'font-weight': '700',
-      color: '#888888',
+      color: '#6b6b6b',
       'margin-top': '12px',
       'margin-bottom': '4px',
       'line-height': '1.5',
@@ -493,7 +495,7 @@ export const spec: PersonaSpec = {
       'text-emphasis-position': 'under',
     },
     del: {
-      color: '#888888',
+      color: '#6b6b6b',
       'text-decoration': 'line-through',
     },
     ins: {
@@ -725,7 +727,7 @@ export const spec: PersonaSpec = {
       margin: '6px 0 16px',
       'text-align': 'left',
       'font-size': '10px',
-      color: '#888888',
+      color: '#6b6b6b',
       'letter-spacing': '0.2em',
       'line-height': '1.5',
     },

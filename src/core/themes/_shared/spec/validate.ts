@@ -22,6 +22,8 @@ import {
   type SpecValidationResult,
   type StatusKey,
 } from './types'
+import { analyzeContrast } from './a11y'
+import { validateTypography } from './typography-rules'
 
 // 单一真源：build-capabilities.ts 会 import 这些常量生成契约文件 hardRules 段。
 // 改阈值 = 改这里一处，capabilities.json 自动跟进。
@@ -127,6 +129,14 @@ export function validateSpec(spec: PersonaSpec): SpecValidationResult {
   // meta
   if (!spec.meta || typeof spec.meta.createdAt !== 'string')
     err('meta.createdAt', 'meta.createdAt must be an ISO string')
+
+  // 语义层校验（typography 健康区间 / WCAG 对比度）—— 实现在专属模块
+  const typo = validateTypography(spec)
+  errors.push(...typo.errors)
+  warnings.push(...typo.warnings)
+  const a11y = analyzeContrast(spec)
+  errors.push(...a11y.errors)
+  warnings.push(...a11y.warnings)
 
   return { ok: errors.length === 0, errors, warnings }
 }

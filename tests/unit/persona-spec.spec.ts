@@ -44,9 +44,9 @@ const fixture: PersonaSpec = {
     code: '#1c1f24',
   },
   status: {
-    tip: { accent: '#1f8a4c', soft: '#eef6ef' },
+    tip: { accent: '#147a44', soft: '#eef6ef' },
     info: { accent: '#2558b0', soft: '#eef2f9' },
-    warning: { accent: '#9a6b1a', soft: '#f7f0df' },
+    warning: { accent: '#825a14', soft: '#f7f0df' },
     danger: { accent: '#b42318', soft: '#fbecea' },
   },
   typography: {
@@ -116,7 +116,7 @@ describe('specToTheme', () => {
     const theme = specToTheme(fixture)
     expect(theme.id).toBe('test-unit')
     expect(theme.tokens.colors.primary).toBe('#2558b0')
-    expect(theme.tokens.colors.status.tip.accent).toBe('#1f8a4c')
+    expect(theme.tokens.colors.status.tip.accent).toBe('#147a44')
     expect(theme.tokens.typography.baseSize).toBe(15)
     expect(theme.variants.admonition).toBe('accent-bar')
     expect(theme.elements.h1).toBeTruthy()

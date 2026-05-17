@@ -63,7 +63,7 @@ const newsRow: VariantDef<AdmonitionRenderArgs> = {
       name: '数据新闻 TIP',
       description: '绿色徽章 + 单行',
       admonitionKind: 'tip',
-      thumbArgs: { accent: '#1e9c5a', soft: '#dff1e6' },
+      thumbArgs: { accent: '#147a44', soft: '#dff1e6' },
       markdown: '::: tip TIP variant=news-row\n睡前 15 分钟是回升的最低成本入口。\n:::\n',
     },
     {
@@ -71,7 +71,7 @@ const newsRow: VariantDef<AdmonitionRenderArgs> = {
       name: '数据新闻 WARN',
       description: '橙色徽章 + 单行',
       admonitionKind: 'warning',
-      thumbArgs: { accent: '#e09030', soft: '#faecd9' },
+      thumbArgs: { accent: '#9e5c10', soft: '#faecd9' },
       markdown: '::: warning WARN variant=news-row\n样本量较小，结论仅供参考。\n:::\n',
     },
     {
@@ -79,7 +79,7 @@ const newsRow: VariantDef<AdmonitionRenderArgs> = {
       name: '数据新闻 STOP',
       description: '红色徽章 + 单行',
       admonitionKind: 'danger',
-      thumbArgs: { accent: '#d4381f', soft: '#fbdcd6' },
+      thumbArgs: { accent: '#b22d18', soft: '#fbdcd6' },
       markdown: '::: danger STOP variant=news-row\n勿将"平均值"误读为"大多数人"。\n:::\n',
     },
   ],

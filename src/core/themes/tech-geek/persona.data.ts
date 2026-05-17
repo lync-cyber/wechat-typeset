@@ -51,7 +51,7 @@ export const spec: PersonaSpec = {
     tip: { accent: '#a8c08a', soft: '#1e1f16' }, // NOTE 灰绿
     warning: { accent: '#e06a28', soft: '#1e1710' }, // CAVEAT HN 橙（打破 warning=黄公式）
     info: { accent: '#7a9cb8', soft: '#161b1f' }, // SEE ALSO 冷蓝
-    danger: { accent: '#c85a3a', soft: '#1f1612' }, // PITFALL 陶土红
+    danger: { accent: '#d97a62', soft: '#1f1612' }, // PITFALL 陶土红（5.85:1 守 AA）
   },
 
   // ============================================================
