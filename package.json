@@ -78,6 +78,7 @@
     "gen:showcase": "tsx scripts/gen-showcase.ts",
     "voice:report": "tsx scripts/theme-voice-report.ts",
     "validate:spec": "tsx scripts/validate-spec.ts",
+    "variant:usage": "tsx scripts/variant-usage.ts",
     "cli": "tsx packages/cli/bin/wechat-typeset.mjs",
     "mcp": "tsx packages/mcp/bin/wechat-typeset-mcp.mjs",
     "prepublishOnly": "npm run build"

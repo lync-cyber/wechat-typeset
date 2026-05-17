@@ -25,6 +25,7 @@ const minimalUnderline: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '极简',
     description: '无底色仅标题下划线，省视觉预算',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

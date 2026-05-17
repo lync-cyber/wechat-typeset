@@ -26,6 +26,7 @@ const hangingIndent: VariantDef = {
     kind: 'note',
     name: '悬挂缩进',
     description: 'uppercase 小标题 + 悬挂缩进，学术风',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

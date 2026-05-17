@@ -38,6 +38,7 @@ const stampedBanner: VariantDef = {
     kind: 'announcement',
     name: '盖章公告',
     description: '顶色条 + 右侧 SVG 印章戳（官方威权感）',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

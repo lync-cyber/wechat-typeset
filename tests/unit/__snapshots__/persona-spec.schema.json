@@ -104,6 +104,26 @@
         "preText": {
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "textCaption": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "highlightBg": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "codeBg": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "quoteCardBg": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "noteBorder": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{3,8}$"
         }
       },
       "additionalProperties": false
@@ -227,6 +247,26 @@
         "letterSpacing": {
           "type": "number",
           "maximum": 1
+        },
+        "h4Size": {
+          "type": "number",
+          "minimum": 14
+        },
+        "h5Size": {
+          "type": "number",
+          "minimum": 14
+        },
+        "h6Size": {
+          "type": "number",
+          "minimum": 14
+        },
+        "monoSize": {
+          "type": "number",
+          "minimum": 12
+        },
+        "captionSize": {
+          "type": "number",
+          "minimum": 11
         }
       },
       "additionalProperties": false

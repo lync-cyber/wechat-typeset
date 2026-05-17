@@ -36,6 +36,7 @@ const aiNotice: VariantDef = {
     kind: 'announcement',
     name: 'AI 合规告知',
     description: 'pill 形态 + 芯片图标 + 灰字告知（AI 内容披露）',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

@@ -27,6 +27,7 @@ const triptych: VariantDef = {
     kind: 'gallery',
     name: '三联',
     description: '三联横排等高（panorama）',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

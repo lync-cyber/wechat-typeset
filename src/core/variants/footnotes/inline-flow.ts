@@ -27,6 +27,7 @@ const inlineFlow: VariantDef = {
     kind: 'footnotes',
     name: '流式',
     description: '同段流式排列 + 内滚动，长引用列表',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

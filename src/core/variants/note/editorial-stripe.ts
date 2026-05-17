@@ -28,6 +28,7 @@ const editorialStripe: VariantDef = {
     kind: 'note',
     name: '编辑部按',
     description: '左 3px 主色条 + bgSoft + kicker',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

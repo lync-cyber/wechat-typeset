@@ -31,6 +31,7 @@ const interviewColumn: VariantDef = {
     kind: 'dialogue',
     name: '杂志访谈栏',
     description: '左列大写姓名 + 右列长答 + hairline 沟槽',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

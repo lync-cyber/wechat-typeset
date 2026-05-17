@@ -56,6 +56,22 @@ export interface ThemeTokens {
     preBg?: string
     /** `<pre>` 代码块文字色（同 preBg）。不声明则用 '#d8d8d4'。 */
     preText?: string
+    // ── 语义槽族（透传自 spec.palette；buildTheme / variant 模块按需消费）
+    //    五个字段都是 optional：主题不声明 = 不参与 token，作者侧仍可在 containers/inline
+    //    显式写裸 hex（但会被 theme-token-flow lint 抓住）。
+    /**
+     * 图注 / 脚注 / 紧凑小字栏的正文色（介于 text 与 textMuted 之间）。
+     * 例：swiss-grid '#333333'。
+     */
+    textCaption?: string
+    /** 高亮（`==xx==` / highlight 容器）底色。例：default '#fff4c8'。 */
+    highlightBg?: string
+    /** inline `<code>` 的底色（区别于 `code` 文字色）。例：life-aesthetic '#f3e4cc'。 */
+    codeBg?: string
+    /** quote-card 容器底色（pull-quote 与正文分层）。例：life-aesthetic '#fffaf1'。 */
+    quoteCardBg?: string
+    /** note 容器的边线 / 分隔线色（常用 dashed）。例：default '#c8ccd4'。 */
+    noteBorder?: string
   }
   typography: {
     baseSize: number
@@ -64,6 +80,18 @@ export interface ThemeTokens {
     h2Size: number
     h3Size: number
     letterSpacing: number
+    // 以下五槽均 optional：spec.typography 不声明时由 spec-to-theme 计算默认值（详见 toThemeTokens）。
+    // 主题想拗出"教程小标题更小 / mook 图注极小"等签名时可显式声明。
+    /** 四级标题字号。默认 `baseSize + 1`。 */
+    h4Size?: number
+    /** 五级标题字号。默认 `baseSize`。 */
+    h5Size?: number
+    /** 六级标题字号。默认 `baseSize`。 */
+    h6Size?: number
+    /** 等宽字（inline `<code>` / `<table>`）字号。默认 14。 */
+    monoSize?: number
+    /** 图注 / `<kbd>` / 小注字号。默认 12。 */
+    captionSize?: number
     // 注意：禁止 fontFamily 字段；themeCSS 生成器会在 CSS 层扫描并拒绝 font-family
   }
   spacing: {
@@ -274,12 +302,17 @@ export interface ThemeAssets {
   copyIcon?: SVGString
   /**
    * 外链箭头，用于 <a> 元素末尾装饰（MDN / Stripe Docs 的 universal 外链标识）。
-   * 当前未被任何渲染器自动注入，作为主题可选资产暴露供未来 inline 扩展消费。
+   *
+   * @experimental 当前未被任何渲染器自动注入，仅作为 spec / Theme 类型上的可选资产。
+   * 接入流程：在 inline `<a>` 渲染层读 theme.assets.externalLinkIcon，命中后拼到链接尾。
+   * 若 Phase 2.x 仍无消费方，迁到 ThemeAssets.experimental? 子对象避免持续误导作者。
    */
   externalLinkIcon?: SVGString
   /**
    * bash 代码块前缀 `$` 字符 SVG，提示"这行是 shell 命令"。
-   * 当前未被 highlight hook 自动注入，作为主题可选资产暴露供未来扩展消费。
+   *
+   * @experimental 当前未被 highlight hook 自动注入。接入流程：codeBlock variant
+   * 'terminal-frame' 在每行首识别 `$` 前缀后插入本 SVG。同 externalLinkIcon 的退役流程。
    */
   terminalPrompt?: SVGString
   /**

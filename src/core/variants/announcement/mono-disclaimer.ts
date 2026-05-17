@@ -29,6 +29,7 @@ const monoDisclaimer: VariantDef = {
     kind: 'announcement',
     name: '免责声明',
     description: '全边框无填充 + uppercase 宽字距标题（法律气质）',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

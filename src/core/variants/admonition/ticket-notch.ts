@@ -37,6 +37,7 @@ const ticketNotch: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '票根',
     description: '虚线撕口 + 三圆点，票据质感',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

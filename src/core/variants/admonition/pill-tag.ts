@@ -25,6 +25,7 @@ const pillTag: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '悬浮胶囊',
     description: '顶部胶囊标签 + 外框，文字有视觉重心',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

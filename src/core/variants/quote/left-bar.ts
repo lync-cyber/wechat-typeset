@@ -29,6 +29,7 @@ const leftBar: VariantDef = {
     kind: 'quote',
     name: '左竖线简约引用',
     description: '左 4px 主色竖线 + 左对齐 + 中文 byline',
+    experimental: true,
   },
   thumbnail: thumb,
   snippets: [
