@@ -4,7 +4,7 @@
  * 人格：官方盖章公告——左大字 title + 右侧 inline SVG 印章戳，下方正文，威权感最重。
  * 视觉骨架：顶部 display:table 双栏（左 78% title 16px bold accent / 右 22% 64×64 圆印），
  *   下方 body 14px line-height 1.7 全宽；wrapper bgSoft + 顶部 3px solid accent。
- *   右侧印章用 SVG transform="rotate(-8 32 32)" 自旋转（规避 CSS transform 被微信剥）。
+ *   印章正立——实物公章亦以"端正落章"为正式语义，不做倾斜。
  */
 
 import type { VariantDef } from '../_core'
@@ -28,7 +28,7 @@ function thumb(args?: { accent?: string; soft?: string; text?: string }): string
       `<rect x="12" y="40" width="30" height="2" fill="#c0c6cf"/>` +
       `<rect x="12" y="47" width="26" height="2" fill="#c0c6cf"/>` +
       `<circle cx="56" cy="42" r="10" fill="none" stroke="${accent}" stroke-width="1.5"/>` +
-      `<text x="56" y="45" text-anchor="middle" font-size="7" fill="${accent}" font-weight="700" transform="rotate(-8 56 42)">通告</text>`,
+      `<text x="56" y="45" text-anchor="middle" font-size="7" fill="${accent}" font-weight="700">通告</text>`,
   )
 }
 
@@ -55,13 +55,13 @@ const stampedBanner: VariantDef = {
     const padX = ctx.tokens.spacing.containerPadding
     const stampText = STAMP_TEXT_BY_TONE[ctx.attrs.tone ?? 'danger'] ?? '通告'
     const title = ctx.info.trim()
-    // 印章 SVG 自旋转 -8deg：transform 写在 SVG 内层 <text> 上，规避 CSS transform 被微信剥
+    // 印章正立：实物公章以端正落章传达正式语义，公文主题尤其忌讳"歪章"
     const stampSvg =
       `<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">` +
       `<circle cx="32" cy="32" r="28" fill="none" stroke="${status.accent}" stroke-width="2"/>` +
       `<circle cx="32" cy="32" r="22" fill="none" stroke="${status.accent}" stroke-width="0.8" opacity="0.6"/>` +
       `<text x="32" y="39" text-anchor="middle" font-size="17" font-weight="700" ` +
-      `fill="${status.accent}" letter-spacing="2" transform="rotate(-8 32 32)">${stampText}</text>` +
+      `fill="${status.accent}" letter-spacing="2">${stampText}</text>` +
       `</svg>`
     const titleCSS = `font-weight:700;font-size:16px;color:${status.accent};margin-bottom:6px;line-height:1.4`
     const bodyCSS = `font-size:14px;line-height:1.7;color:${c.text}`

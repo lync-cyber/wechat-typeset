@@ -33,13 +33,36 @@ const dom = new JSDOM('', { url: 'http://localhost/' })
 
 const { render } = await import('../src/core/pipeline')
 import { defaultTheme } from '../src/core/themes/default'
+import { themeRegistry } from '../src/core/themes'
 import { VARIANT_IDS } from '../src/core/themes/types'
+import { ALL_VARIANT_DEFS } from '../src/core/variants/registry'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
 const SAMPLE = resolve(HERE, 'fixtures/all-containers.md')
 
 const md = readFileSync(SAMPLE, 'utf8')
 const { html, wordCount } = render({ md, theme: defaultTheme })
+
+/**
+ * themeCompat 限定 variant 在 default 主题下会被守卫降级，class 不出现。
+ * 这里按需补渲染——把每个 themeCompat 限定 variant 用其兼容主题渲染一次，
+ * 命中"variant class 出现"断言。
+ */
+const themeCompatIndex: ReadonlyMap<string, string> = new Map(
+  ALL_VARIANT_DEFS.filter((d) => d.meta.themeCompat && d.meta.themeCompat.length > 0).map(
+    (d) => [d.meta.id, d.meta.themeCompat![0]],
+  ),
+)
+const htmlByTheme = new Map<string, string>([['default', html]])
+function htmlForVariant(variantId: string): string {
+  const themeId = themeCompatIndex.get(variantId) ?? 'default'
+  let cached = htmlByTheme.get(themeId)
+  if (cached) return cached
+  const theme = themeRegistry[themeId] ?? defaultTheme
+  cached = render({ md, theme }).html
+  htmlByTheme.set(themeId, cached)
+  return cached
+}
 
 type Result = { label: string; ok: boolean; detail?: string }
 const results: Result[] = []
@@ -49,9 +72,11 @@ function check(label: string, predicate: () => boolean, detail = ''): void {
 }
 
 // 1. 容器 variant class 枚举（codeBlock 走独立命名，下面单独检查）
+// themeCompat 限定 variant 在 default 主题下被守卫降级，用其兼容主题渲染再断言。
 for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
   if (kind === 'codeBlock') continue
   for (const id of ids as readonly string[]) {
+    const htmlForCheck = htmlForVariant(id)
     // admonition 的 kind 对应多个容器名（tip/warning/info/danger），任何一个出现即算过
     if (kind === 'admonition') {
       const classes = ['tip', 'warning', 'info', 'danger'].map(
@@ -59,7 +84,7 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
       )
       check(
         `admonition:${id}`,
-        () => classes.some((c) => html.includes(c)),
+        () => classes.some((c) => htmlForCheck.includes(c)),
         classes.join(' | '),
       )
       continue
@@ -77,7 +102,7 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
                 ? 'table-card'
                 : kind
     const cls = `container-${containerName}--${id}`
-    check(`${kind}:${id}`, () => html.includes(cls), cls)
+    check(`${kind}:${id}`, () => htmlForCheck.includes(cls), cls)
   }
 }
 
@@ -119,7 +144,6 @@ const plainContainers = [
   'container-editorial-header',
   'container-toc',
   'container-qa-block',
-  'container-callout-group',
   'container-colophon',
   // qrcode follow-card variant：刊物订阅卡（左 QR + 右 kicker/title/desc）
   'container-qrcode container-qrcode--follow-card',

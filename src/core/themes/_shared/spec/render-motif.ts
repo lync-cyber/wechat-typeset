@@ -12,6 +12,7 @@ import type {
   SvgInlineStyle,
   ViewBox,
 } from './types'
+import { fitTemplateToText } from './motif-fit'
 
 /**
  * 本地 escAttr / escText：为何不复用 pipeline/containers/_shared/escape.ts 的同名函数？
@@ -191,11 +192,12 @@ export function renderMotifTemplate(
   template: MotifTemplate,
   values: Record<string, string | number>,
 ): string {
-  const substituted = template.primitives.map((p) => substituteInPrimitive(p, values))
-  return primitivesToSvg(template.viewBox, substituted, {
-    width: template.width,
-    height: template.height,
-    inlineStyle: template.inlineStyle,
+  const fitted = fitTemplateToText(template, values)
+  const substituted = fitted.primitives.map((p) => substituteInPrimitive(p, values))
+  return primitivesToSvg(fitted.viewBox, substituted, {
+    width: fitted.width,
+    height: fitted.height,
+    inlineStyle: fitted.inlineStyle,
   })
 }
 

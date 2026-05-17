@@ -330,14 +330,8 @@
   border-radius: 2px;
 }
 
-.markdown-body .container-callout-group {
-  margin: 20px 0;
-}
-
 .markdown-body .container-note {
   background-color: transparent;
-  border-left: 1px dashed #c89759;
-  padding: 4px 0 4px 16px;
   margin: 20px 0;
   border-radius: 0;
 }

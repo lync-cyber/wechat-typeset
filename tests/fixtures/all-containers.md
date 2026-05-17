@@ -214,7 +214,8 @@ MIT License。
 ::: masthead 慢读简报 issue="004" date="2026.04.22" kicker="第 04 期"
 :::
 
-::: section-tag 深度
+<!-- section-tag 仅在 editorial-mook / data-brief / swiss-grid 等"刊物化"主题渲染签名视觉；其它主题走中性 fallback。用 DEMO 中性词避免暗示某主题专属。 -->
+::: section-tag DEMO
 :::
 
 ::: byline cells="AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026" monospaceLast="true"
@@ -236,20 +237,21 @@ MIT License。
 不能。能读完的不是书，是书的大意。两小时只够与一章相处。
 :::
 
-:::: callout-group
 ::: info INFO variant=news-row
 说明一：深夜读书请保持光源在书后侧 45°。
 :::
+
 ::: tip TIP variant=news-row
 小贴士：配温水一盏。
 :::
+
 ::: warning WARN variant=news-row
 警告：手机应在别屋充电。
 :::
+
 ::: danger STOP variant=news-row
 严禁：忌在短片毕后翻书。
 :::
-::::
 
 ::: note variant=editorial-stripe 编 者 按
 慢读并非复古姿态，而是一种对自己时间主权的重新申明。
@@ -289,6 +291,9 @@ MIT License。
 ::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"
 :::
 
+::: qrcode variant=qr-stack 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"
+:::
+
 ::: colophon next="纸本之必要：论书脊与手指的记忆" issue="第 004 期 · 2026"
 :::
 
@@ -322,7 +327,7 @@ MIT License。
 
 ## Part 5 · Variant 目录
 
-### admonition · 19 variants
+### admonition · 20 variants
 
 ::: tip 温和提示 variant=accent-bar
 accent-bar 骨架 —— 左侧 3px 色条 + 浅底 + 右侧轻圆角。
@@ -344,60 +349,79 @@ card-shadow 骨架 —— 悬浮卡片式。
 minimal-underline 骨架 —— 无底色，仅下划线与缩进。
 :::
 
+<!-- themeCompat: tech-geek / default 推荐；其它主题切换后将自动 fallback -->
 ::: info 终端风格 variant=terminal
 terminal 骨架 —— 顶部三色圆点 + 等宽正文。
 :::
 
+<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
 ::: tip // NOTE variant=dashed-border
 dashed-border 骨架 —— 左 2px 虚线 + 浅底。
 :::
 
+<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
 ::: info // REF §2.3 variant=double-border
 double-border 骨架 —— 左 4px 双线 + 透明底。
 :::
 
+<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
 ::: danger // PITFALL variant=top-bottom-rule
 top-bottom-rule 骨架 —— 顶底 1px 实线，报纸 errata 勘误条。
 :::
 
+<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
 ::: tip 工程附注 variant=manpage-log
 manpage-log 骨架 —— 顶底分隔线 + `:: NOTE ::` 状态条。
 :::
 
+<!-- themeCompat: academic-frontier 独占；其它主题切换后将自动 fallback -->
 ::: info 定义 variant=sidenote-latex
 sidenote-latex 骨架 —— 1px 细边框 + `DEFINITION.` 小型大写起始。
 :::
 
+<!-- themeCompat: literary-humanism 独占；其它主题切换后将自动 fallback -->
 ::: warning 按 variant=marginalia
 marginalia 骨架 —— 无框无底、墨色一色。
 :::
 
+<!-- themeCompat: business-finance 独占；其它主题切换后将自动 fallback -->
 ::: danger 异常 · ALERT variant=ledger-cell
 ledger-cell 骨架 —— 深色表头条 + 硬边框。
 :::
 
+<!-- themeCompat: life-aesthetic 独占；其它主题切换后将自动 fallback -->
 ::: tip 今日小发现 variant=bubble-organic
 bubble-organic 骨架 —— 大圆角 + 单侧柔软阴影。
 :::
 
+<!-- themeCompat: people-story 独占；其它主题切换后将自动 fallback -->
 ::: info 采访手记 variant=magazine-pull
 magazine-pull 骨架 —— 上下细线 + 浮空小字标签。
 :::
 
+<!-- themeCompat: industry-observer 独占；其它主题切换后将自动 fallback -->
 ::: warning 需要警惕 variant=report-section
 report-section 骨架 —— 顶 3px 底 1px + § 方角标签。
 :::
 
+<!-- themeCompat: data-brief 独占；其它主题切换后将自动 fallback -->
 ::: info INFO variant=news-row
 news-row 骨架 —— 左 3px 色条 + 实色徽章 + 紧凑单行。
 :::
 
+<!-- themeCompat: swiss-grid 独占；其它主题切换后将自动 fallback -->
 ::: info INFO variant=news-underline
 news-underline 骨架 —— 实色徽章 + 1px 黑竖分隔 + 1px 黑底线。
 :::
 
+<!-- themeCompat: editorial-mook 独占；其它主题切换后将自动 fallback -->
 ::: info variant=mook-tag
 mook-tag 骨架 —— 米卡纸底 + 主色左条 + 単字 CJK 标签。
+:::
+
+<!-- themeCompat: brutalist 独占；其它主题切换后将自动 fallback -->
+::: danger STOP variant=slab-corner
+slab-corner 骨架 —— 顶部 6px 硬条 + 右上 accent 方块徽章 + zero-radius。
 :::
 
 ### quote-card · 7 variants

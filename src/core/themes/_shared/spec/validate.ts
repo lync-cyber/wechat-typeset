@@ -23,6 +23,7 @@ import {
   type StatusKey,
 } from './types'
 import { analyzeContrast } from './a11y'
+import { fitTemplateToText } from './motif-fit'
 import { validateTypography } from './typography-rules'
 
 // 单一真源：build-capabilities.ts 会 import 这些常量生成契约文件 hardRules 段。
@@ -57,12 +58,22 @@ export function validateSpec(spec: PersonaSpec): SpecValidationResult {
   if (!spec.description) err('description', 'description is required')
   if (!spec.audience) err('audience', 'audience is required')
 
-  // palette hex
+  // palette hex（noteBorderStyle / noteBorderWidth 是非颜色结构槽，单列校验）
   if (!spec.palette) {
     err('palette', 'palette is required')
   } else {
+    const NON_HEX_KEYS = new Set(['noteBorderStyle', 'noteBorderWidth'])
     for (const [k, v] of Object.entries(spec.palette)) {
+      if (NON_HEX_KEYS.has(k)) continue
       if (!isHex(v)) err(`palette.${k}`, `"${v}" is not a valid hex color`)
+    }
+    const style = spec.palette.noteBorderStyle
+    if (style !== undefined && !['solid', 'dashed', 'double', 'dotted'].includes(style)) {
+      err('palette.noteBorderStyle', `"${style}" not in {solid|dashed|double|dotted}`)
+    }
+    const width = spec.palette.noteBorderWidth
+    if (width !== undefined && (!Number.isInteger(width) || width < 1 || width > 8)) {
+      err('palette.noteBorderWidth', `${width} must be integer in [1, 8]`)
     }
   }
 
@@ -172,8 +183,40 @@ function validateMotifs(
         if (!declared.has(name))
           err(`${path}`, `primitive uses placeholder "{${name}}" not declared in placeholders`)
       }
+      // 用一组"典型 CJK 占位样本"试探 viewBox 容量。
+      // runtime 由 fitTemplateToText 自动扩 viewBox 兜底，本警告只提醒主题作者：
+      // 你声明的 viewBox 比常见用法所需更窄，渲染期会触发自动扩展。
+      checkMotifTemplateWidth(shape as MotifTemplate, path, warn)
     }
   }
+}
+
+/**
+ * 典型 CJK 占位样本：issue=023（数字 + 字母 + 数字）/ date=2025-04-20（日期）/ kind=周刊（2 字 CJK）。
+ * 这是 issueStamp 在 industry-observer / official-gazette 中实际样本的常见形态。
+ * 其它模板（stepBadge `{N}` 单字符）通常不会触发扩展，这套样本对它们也无害。
+ */
+const TYPICAL_PLACEHOLDER_SAMPLES: Readonly<Record<string, string>> = {
+  N: '8',
+  issue: '023',
+  date: '2025-04-20',
+  kind: '周刊',
+}
+
+function checkMotifTemplateWidth(
+  template: MotifTemplate,
+  path: string,
+  warn: (p: string, m: string) => void,
+): void {
+  const fitted = fitTemplateToText(template, TYPICAL_PLACEHOLDER_SAMPLES)
+  if (fitted === template) return // 容量足够
+  const origW = template.viewBox[2]
+  const newW = fitted.viewBox[2]
+  warn(
+    `${path}.viewBox`,
+    `viewBox 宽度 ${origW} 在典型占位样本下不足（需 ${newW}）；` +
+      `runtime 会自动扩展，但建议调整模板 viewBox 与外框 rect 至 ≥ ${newW} 以避免依赖兜底。`,
+  )
 }
 
 function validatePrimitive(

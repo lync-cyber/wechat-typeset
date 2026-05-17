@@ -8,6 +8,8 @@
 import { expect } from 'vitest'
 import { VARIANT_IDS, type VariantKind } from '../../src/core/themes/types'
 import { FORBIDDEN_CSS_PATTERNS } from '../../src/core/pipeline/rules'
+import { checkVariantCompat } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
+import { ALL_VARIANT_DEFS } from '../../src/core/variants/registry'
 
 export type Kind = VariantKind
 export type VariantCase = {
@@ -159,4 +161,15 @@ export function assertSvgSafe(html: string, label: string): void {
     expect(svg, `${label} · SVG 含 id=`).not.toMatch(/\sid="/)
     expect(svg, `${label} · SVG 含 url('`).not.toMatch(/url\(['"]/)
   }
+}
+
+/**
+ * 在主题 themeId 下，variant id 是否会被 themeCompat 守卫拦截并降级。
+ * 矩阵 spec 用它跳过"variant class 含 id"的断言——降级后 wrapper class 是
+ * fallback id 而非 c.id，但基础 class + CSS/SVG 安全断言仍要跑。
+ */
+export function isCompatBlocked(themeId: string, variantId: string): boolean {
+  const def = ALL_VARIANT_DEFS.find((d) => d.meta.id === variantId)
+  if (!def) return false
+  return !checkVariantCompat(themeId, def.meta).ok
 }

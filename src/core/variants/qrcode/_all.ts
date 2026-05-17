@@ -8,5 +8,6 @@
 
 import bare from './bare'
 import followCard from './follow-card'
+import qrStack from './qr-stack'
 
-export default [bare, followCard]
+export default [bare, followCard, qrStack]

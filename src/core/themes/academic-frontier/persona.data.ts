@@ -514,8 +514,9 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
-    // box-callout variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
-    note: {},
+    // box-callout variant 接管 border + padding；voice 注入"学术零圆角"——与
+    // sidenote-latex admonition 的硬边定理框同语言（论文 / LaTeX 母语：直角）
+    note: { 'border-radius': '0' },
     // 规范 §2.6 quoteCard = 定理声明框（本主题签名）
     quoteCard: {
       'background-color': '#fefefe',

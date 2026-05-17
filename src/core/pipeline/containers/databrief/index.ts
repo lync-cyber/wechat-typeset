@@ -35,5 +35,3 @@ export {
 } from './metrics'
 
 export { qaBlockContainer, footnotesContainer } from './editorial'
-
-export { calloutGroupContainer } from './calloutGroup'

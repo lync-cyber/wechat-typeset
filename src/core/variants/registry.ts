@@ -80,6 +80,7 @@ const ADMONITION_ORDER: readonly string[] = [
   'news-row',
   'news-underline',
   'mook-tag',
+  'slab-corner',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
@@ -131,7 +132,7 @@ const FOOTNOTES_ORDER: readonly string[] = [
   'dense-academic',
 ]
 const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
-const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card']
+const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card', 'qr-stack']
 const FOOTER_CTA_ORDER: readonly string[] = ['button-led', 'triptych-actions']
 const PULL_QUOTE_ORDER: readonly string[] = [
   'giant-mark',

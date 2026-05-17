@@ -33,6 +33,12 @@ export interface VariantRenderResult {
   bodyCSS?: string
   svgSlot?: string
   /**
+   * quote-card 容器在 body 关闭后、byline 前注入的 HTML 片段。仅 quote.ts 消费,
+   * 其余容器忽略。给"开/闭引号成对"的 variant 一个挂载点——典型如 classic 在 svgSlot
+   * 输出 `「`、在 closeSlot 输出对称的 `」`，闭合成对。undefined = 不注入。
+   */
+  closeSlot?: string
+  /**
    * quote-card byline 行 inline style。仅 quote.ts 消费,其余容器忽略。
    * undefined = 走默认（居中 textMuted 13px）;非空 = 变体自定义。
    * 给印刷体 pull-quote / editorial 风格变体一个手柄,让 byline 字号/字距/对齐能跟主视一致。

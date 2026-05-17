@@ -25,13 +25,6 @@ const KIND_MARK: Record<string, string> = {
   danger: '辨',
 }
 
-const DEFAULT_TITLE: Record<string, string> = {
-  tip: '按语',
-  warning: '存疑',
-  info: '注释',
-  danger: '辨误',
-}
-
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent } = mergeThumb(args ?? {})
   return svg(
@@ -79,14 +72,18 @@ const marginalia: VariantDef<AdmonitionRenderArgs> = {
     const ink = ctx.tokens.colors.secondary
     const muted = ctx.tokens.colors.textMuted
     const mark = KIND_MARK[kind] ?? '按'
-    const title = ctx.info.trim() || DEFAULT_TITLE[kind] || ''
-    // 标题以【X】开头，inline 承接可选文案。无分隔线、无图标。
+    // 作者写了显式 title 时附加 span；空 title 仅渲【X】单字。
+    // 不维护"通用 admonition 默认标题字典"做二次过滤——作者写什么就显什么，
+    // 想要纯符号请直接 `::: tip variant=marginalia\n...\n:::` 不带 title 文本。
+    const userTitle = ctx.info.trim()
+    const titleSpan = userTitle.length > 0
+      ? `<span style="color:${muted};font-weight:500;letter-spacing:0.6px;` +
+        `margin-left:6px">` + escText(userTitle) + '</span>'
+      : ''
     const labelHtml =
       `<section style="color:${ink};font-size:15px;line-height:1.7;` +
       `margin-bottom:4px;letter-spacing:1px;font-weight:600">` +
-      `【${escText(mark)}】` +
-      `<span style="color:${muted};font-weight:500;letter-spacing:0.6px;` +
-      `margin-left:6px">` + escText(title) + '</span>' +
+      `【${escText(mark)}】` + titleSpan +
       '</section>'
     return {
       wrapperCSS:

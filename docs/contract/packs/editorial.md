@@ -27,7 +27,6 @@
 |  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。 |
 |  | `byline` | ★ | 署名条：N 栏分隔（kicker 小字 / value 主视），data-brief 家族签名。与 author 容器正交：author 是"作者名 + role"两段签名块；byline 是"AUTHOR / EDITOR / SET" 多栏 newspaper 形态。 |
 |  | `editorial-header` | ★ | 装饰性副刊头：跨栏大字标题 + 可选 chip 红章 + PP 页码 + subtitle + titleDot 红点。与微信原生标题（H1）正交，本容器输出 <section>，不抢平台 H1 语义。data-brief 家族签名。 |
-| 提示 | `callout-group` | ★ | 四态 callout 联表：外框承担"上/下/左/右 hairline"，子项 (tip/warning/info/danger) 在内串联。设计稿 multi-callout 母本——配合 admonition variant=news-row 用最佳。外层用 4 个冒号。 |
 | 内容 | `qa-block` | ★ | 读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 "读者问答 · Q&A"）。 |
 |  | `pull-quote` | ★ | 拉引：正文中段把作者已写过的句子放大重申。info 为引用文字，body 可选为署名 / 上下文。与 quote-card 正交（quote-card 是引用他人外部话语）。 |
 |  | `dialogue` | ★ | 多轮访谈 / 对谈。与 qa-block 正交：qa-block 是单 Q + 单 A 签名格式，dialogue 承载 ≥2 轮 Q&A 或多人对谈。外层 4 冒号，内部 dialogue-turn 列单轮。 |
@@ -92,23 +91,6 @@
 ```
 
 - `info` 是 kicker（如 `读者问答 · Q&A`）；`q` attr 是问题文本（主色 Q 方块头像 + 单行）；body 是回答（支持完整 Markdown）。
-
----
-
-## 四态 callout 联表
-
-```
-:::: callout-group
-::: info INFO variant=news-row
-说明一。
-:::
-::: tip TIP variant=news-row
-小贴士。
-:::
-::::
-```
-
-外框承担"上/下/左/右 hairline"，子项 (tip/warning/info/danger) 在内串联。**设计稿 multi-callout 母本**——配合 admonition `variant=news-row` 用最佳。外层 4 个冒号。
 
 ---
 

@@ -559,8 +559,9 @@ export const spec: PersonaSpec = {
     warning: {},
     info: {},
     danger: {},
-    // box-callout variant 完整接管外壳；空 slot 是与 variants.note 的契约同步
-    note: {},
+    // box-callout variant 接管 border + padding；voice 注入"金条顶端 inset + 微圆角"——
+    // 与 ledger-cell admonition 的"Bloomberg Terminal 表头条"语言呼应（accent 钤金线）
+    note: { 'box-shadow': 'inset 0 2px 0 #b8821f', 'border-radius': '2px' },
     // 规范 §2.6 quoteCard：核心判断 —— frame-brackets + bgSoft 底 + radius 2
     quoteCard: {
       'background-color': '#f3f1ec',

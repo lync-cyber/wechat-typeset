@@ -37,8 +37,9 @@
 
 import type { ContainerRenderer, ContainerRenderContext } from '../types'
 import type { ThemeAssets, ThemeVariants } from '../../../themes/types'
-import type { VariantRenderResult } from '../../../variants/_core'
+import type { VariantMeta, VariantRenderResult } from '../../../variants/_core'
 import { escText } from './escape'
+import { checkVariantCompat } from './themeCompatGuard'
 
 // ─────────────────────────────────────────────────────────────
 // 工厂入参契约
@@ -61,8 +62,9 @@ export interface VariantContainerBodyOptions {
   mode: 'optional'
 }
 
-/** table 条目最小契约。variant 注册表里实际类型更宽，但工厂只读 render。 */
+/** table 条目最小契约。variant 注册表里实际类型更宽，工厂读 render + meta（用于 themeCompat 校验）。 */
 type VariantTableEntry<Args> = {
+  meta?: VariantMeta
   render?: Args extends void
     ? (ctx: ContainerRenderContext) => VariantRenderResult
     : (ctx: ContainerRenderContext, args: Args) => VariantRenderResult
@@ -120,17 +122,33 @@ export function makeVariantContainer<Args = void>(
     const themeValid = themeId && themeId in table ? themeId : undefined
 
     let id = fallbackId
+    let isAuthorOverride = false
     const rawOverride = ctx.attrs.variant
     if (rawOverride) {
       const normalized = rawOverride.toLowerCase().trim()
       const aliased = resolveAlias?.(normalized)
       const candidate = aliased ?? rawOverride
-      if (candidate in table) id = candidate
-      else id = pageValid ?? themeValid ?? fallbackId
+      if (candidate in table) {
+        id = candidate
+        isAuthorOverride = true
+      } else {
+        id = pageValid ?? themeValid ?? fallbackId
+      }
     } else {
       id = pageValid ?? themeValid ?? fallbackId
     }
-    const entry = table[id] ?? table[fallbackId]
+
+    let entry = table[id] ?? table[fallbackId]
+    // 仅对作者级 override 做 themeCompat 校验：
+    // 主题作者声明的默认 variant（spec.variants）+ fallbackId 都是被信任的合理选择。
+    if (isAuthorOverride && entry) {
+      const compat = checkVariantCompat(ctx.themeId, entry.meta)
+      if (!compat.ok) {
+        id = themeValid ?? fallbackId
+        entry = table[id] ?? table[fallbackId]
+      }
+    }
+
     // entry.render 在调用方语境下必定存在（kind='none' 的 variant 不会进 variant 容器）；
     // 类型上 render 是 optional 是为了让 _all.ts 聚合器能同时容纳 kind='none' 的 free 组件。
     const result = (entry.render as (

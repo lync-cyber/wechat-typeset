@@ -207,14 +207,15 @@ function renderInlineQr(
 }
 
 /**
- * follow-card variant 的 left QR + right kicker/title/desc layout。
- * 走 display:table + table-cell，避开 flex 被微信粘贴剥。占位 QR：作者提供 attrs.text
- * 时复用 renderInlineQr 内置编码；attrs.qr=URL 时走 <img>；都没有则画占位 SVG。
+ * follow-card / qr-stack 共用的 QR 渲染：attrs.text 走内置编码，attrs.qr=URL 走 <img>，
+ * 都没有则画占位 SVG。size 参数决定方形像素边长。
+ *
+ * 走 display:table + table-cell，避开 flex 被微信粘贴剥。
  */
-function renderFollowCardQr(ctx: ContainerRenderContext): string {
+function renderEmbeddedQr(ctx: ContainerRenderContext, size: number): string {
   const c = ctx.tokens.colors
   const qrUrl = ctx.attrs.qr ?? ''
-  const qrImgCSS = 'display:block;width:64px;height:64px'
+  const qrImgCSS = `display:block;width:${size}px;height:${size}px`
   if (ctx.attrs.text) {
     return renderInlineQr(ctx).replace(/margin-bottom:8px/, qrImgCSS)
   }
@@ -223,7 +224,7 @@ function renderFollowCardQr(ctx: ContainerRenderContext): string {
   }
   // 占位 QR SVG：仿真三角眼 + 数据点（不承诺扫码功能，仅占位）
   return (
-    `<svg viewBox="0 0 60 60" width="64" height="64" style="${qrImgCSS}">` +
+    `<svg viewBox="0 0 60 60" width="${size}" height="${size}" style="${qrImgCSS}">` +
     `<g fill="${c.text}">` +
     `<rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="#fff"/><rect x="9" y="9" width="4" height="4"/>` +
     `<rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="#fff"/><rect x="47" y="9" width="4" height="4"/>` +
@@ -237,15 +238,59 @@ function renderFollowCardQr(ctx: ContainerRenderContext): string {
 }
 
 /**
- * qrcode 容器：variant 分派 bare（默认，居中 QR + caption）与 follow-card
- * （刊物订阅卡：左 QR + 右 kicker/title/desc 三行）。
+ * qrcode 容器：variant 分派 bare（默认，居中 QR + caption）/ follow-card（横向订阅卡：
+ * 左 QR + 右三行）/ qr-stack（垂直堆叠：上 QR + 下三行）。
  * 主题 voice 由 ctx.containers.qrcode 注入 wrapper 装饰（边框 / 底色 / 边距）。
- * 设计纪律：layout 走 display:table（避开 flex 被微信剥）；font-family 仅在 renderer
- * inline 出现（主题层 elements/containers CSS 禁 font-family）。
+ * 设计纪律：layout 走 display:table 或 text-align:center（避开 flex 被微信剥）；
+ * font-family 仅在 renderer inline 出现（主题层 elements/containers CSS 禁 font-family）。
  */
 export const qrcodeContainer: ContainerRenderer = {
   open: (ctx) => {
     const id = resolveVariantId<QrcodeVariantId>(ctx, 'qrcode', QRCODE_VARIANTS, 'bare')
+    if (id === 'qr-stack') {
+      const c = ctx.tokens.colors
+      const kicker = ctx.attrs.kicker ?? ctx.kickers.qrFollowKicker
+      const title = ctx.info.trim() || ctx.kickers.qrFollowTitle
+      const desc = ctx.attrs.desc ?? ''
+      // 垂直堆叠：text-align:center 包外壳，QR 与三行字均居中。
+      // 不走 display:grid（structural,会被 themeCSS guard 拒绝;且 wxPatch 兼容性弱于 text-align）
+      const qrEl = renderEmbeddedQr(ctx, 96)
+      const qrWrapCSS = 'text-align:center;line-height:0;margin-bottom:12px'
+      const kickerCSS = [
+        'font-family:Menlo,Monaco,monospace',
+        'font-size:10px',
+        'font-weight:700',
+        `color:${c.primary}`,
+        'letter-spacing:0.25em',
+        'text-align:center',
+      ].join(';')
+      const titleCSS = [
+        'font-size:15px',
+        'font-weight:700',
+        `color:${c.text}`,
+        'margin-top:6px',
+        'text-align:center',
+        'letter-spacing:-0.01em',
+      ].join(';')
+      const descCSS = [
+        'font-size:11px',
+        `color:${c.textMuted}`,
+        'margin-top:4px',
+        'line-height:1.5',
+        'text-align:center',
+      ].join(';')
+      const descEl = desc
+        ? `<section style="${descCSS}">${escText(desc)}</section>`
+        : ''
+      return (
+        `<section class="container-qrcode container-qrcode--qr-stack" style="text-align:center">` +
+        `<section style="${qrWrapCSS}">${qrEl}</section>` +
+        `<section style="${kickerCSS}">${escText(kicker)}</section>` +
+        `<section style="${titleCSS}">${escText(title)}</section>` +
+        descEl +
+        `</section>\n`
+      )
+    }
     if (id === 'follow-card') {
       const c = ctx.tokens.colors
       const kicker = ctx.attrs.kicker ?? ctx.kickers.qrFollowKicker
@@ -283,7 +328,7 @@ export const qrcodeContainer: ContainerRenderer = {
       const descEl = desc
         ? `<section style="${descCSS}">${escText(desc)}</section>`
         : ''
-      const qrEl = renderFollowCardQr(ctx)
+      const qrEl = renderEmbeddedQr(ctx, 64)
       return (
         `<section class="container-qrcode container-qrcode--follow-card" style="${wrapperCSS}">` +
         `<span style="${qrCellCSS}">${qrEl}</span>` +
@@ -295,17 +340,21 @@ export const qrcodeContainer: ContainerRenderer = {
         `</section>\n`
       )
     }
-    // bare variant：居中 QR + 居中 caption（默认形态）
+    // bare variant：居中 QR + 居中 caption + 可选 desc（默认形态）
     const caption = ctx.info.trim()
     const cap = caption
       ? `<section class="container-qrcode__caption" style="text-align:center;color:${ctx.tokens.colors.textMuted};margin-bottom:8px">${escText(caption)}</section>`
       : ''
+    const desc = ctx.attrs.desc ?? ''
+    const descEl = desc
+      ? `<section class="container-qrcode__desc" style="text-align:center;color:${ctx.tokens.colors.textMuted};font-size:12px;line-height:1.5;margin-top:4px">${escText(desc)}</section>`
+      : ''
     const qr = renderInlineQr(ctx)
-    return `<section class="container-qrcode container-qrcode--bare" style="text-align:center">\n${qr}${cap}\n`
+    return `<section class="container-qrcode container-qrcode--bare" style="text-align:center">\n${qr}${cap}${descEl}\n`
   },
   close: (ctx) => {
-    // follow-card 已经在 open 里自闭合；bare 走标准 close
+    // follow-card / qr-stack 已经在 open 里自闭合；bare 走标准 close
     const id = resolveVariantId<QrcodeVariantId>(ctx, 'qrcode', QRCODE_VARIANTS, 'bare')
-    return id === 'follow-card' ? '' : '</section>\n'
+    return id === 'follow-card' || id === 'qr-stack' ? '' : '</section>\n'
   },
 }

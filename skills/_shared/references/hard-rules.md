@@ -96,7 +96,7 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 <!-- generated:variant-whitelist:start -->
 
 ```ts
-admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag'
+admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag' | 'slab-corner'
 quote:         'classic' | 'left-bar' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'editorial-block' | 'tilted-sticker'
 compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
 steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot' | 'step-card' | 'split-row'
@@ -106,7 +106,7 @@ codeBlock:     'bare' | 'header-bar' | 'line-numbers' | 'terminal-frame' | 'inli
 note:          'minimal-callout' | 'box-callout' | 'side-bar' | 'hanging-indent' | 'dotted-margin' | 'smallcaps-kicker' | 'editorial-stripe' | 'research-dense'
 footnotes:     'lined' | 'inline-flow' | 'boxed-aside' | 'top-rule' | 'dense-academic'
 recommend:     'card-list' | 'academic-refs'
-qrcode:        'bare' | 'follow-card'
+qrcode:        'bare' | 'follow-card' | 'qr-stack'
 footerCTA:     'button-led' | 'triptych-actions'
 pullQuote:     'giant-mark' | 'centered-rule' | 'stamp-quote' | 'margin-pull'
 announcement:  'danger-bar' | 'mono-disclaimer' | 'ai-notice' | 'stamped-banner'

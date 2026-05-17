@@ -124,6 +124,20 @@
         "noteBorder": {
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{3,8}$"
+        },
+        "noteBorderStyle": {
+          "type": "string",
+          "enum": [
+            "solid",
+            "dashed",
+            "double",
+            "dotted"
+          ]
+        },
+        "noteBorderWidth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
         }
       },
       "additionalProperties": false
@@ -7578,7 +7592,8 @@
             "report-section",
             "news-row",
             "news-underline",
-            "mook-tag"
+            "mook-tag",
+            "slab-corner"
           ]
         },
         "quote": {
@@ -7667,7 +7682,8 @@
         "qrcode": {
           "enum": [
             "bare",
-            "follow-card"
+            "follow-card",
+            "qr-stack"
           ]
         },
         "footerCTA": {

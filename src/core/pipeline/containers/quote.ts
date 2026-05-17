@@ -30,14 +30,15 @@ export const quoteCardContainer: ContainerRenderer = {
     return parts.join('\n') + '\n'
   },
   close: (ctx) => {
-    const byline = ctx.info.trim()
-    if (!byline) return `</section>\n</section>\n`
     const id = resolveVariantId<QuoteVariantId>(ctx, 'quote', QUOTE_VARIANTS, 'classic')
     const result = QUOTE_VARIANTS[id].render(ctx)
+    const closeSlot = result.closeSlot ?? ''
+    const byline = ctx.info.trim()
+    if (!byline) return `${closeSlot}</section>\n</section>\n`
     const css = result.bylineCSS ?? defaultBylineCSS(ctx)
     const prefix = result.bylinePrefix ?? '— '
     const sig = `<section class="container-quote-card__byline" style="${css}">${escText(prefix)}${escText(byline)}</section>`
-    return `</section>\n${sig}\n</section>\n`
+    return `${closeSlot}</section>\n${sig}\n</section>\n`
   },
 }
 

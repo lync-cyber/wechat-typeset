@@ -413,7 +413,6 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
     timeline: {
       margin: '20px 0',
     },
-    calloutGroup: { margin: '20px 0' },
     // abstract / keyNumber / seeAlso 的 wrapper CSS 兜底。
     // renderer 只读 ctx.containers.<x>，不做 substring 检测、不硬涂底色——
     // 主题 voice 通过 spec.containers 深合并接管。

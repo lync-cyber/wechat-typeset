@@ -72,6 +72,13 @@ export interface ThemeTokens {
     quoteCardBg?: string
     /** note 容器的边线 / 分隔线色（常用 dashed）。例：default '#c8ccd4'。 */
     noteBorder?: string
+    /**
+     * note · side-bar variant 左侧标线线型。不声明 = 'solid'。
+     * 6 主题共用 side-bar 时靠此字段做"同骨架不同笔触"差异化。
+     */
+    noteBorderStyle?: 'solid' | 'dashed' | 'double' | 'dotted'
+    /** note · side-bar variant 左侧标线宽度（px）。不声明 = 2；double 风格建议 ≥ 3。 */
+    noteBorderWidth?: number
   }
   typography: {
     baseSize: number
@@ -191,11 +198,6 @@ export interface ThemeContainers {
   imageCaption: CSSObject
   /** 时间线：左侧年份 + 右侧事件的时序列表。 */
   timeline: CSSObject
-  /**
-   * 四态 callout 联表外框（callout-group）。承担"上/下/左/右 hairline"，
-   * 子项 (tip/warning/info/danger) 在内串联。设计稿 multi-callout 母本。
-   */
-  calloutGroup: CSSObject
   /** 文首 tl;dr 摘要块（signature 容器） */
   abstract: CSSObject
   /** 大数字 + 说明（signature 容器） */
@@ -411,6 +413,8 @@ export type AdmonitionVariantId =
   // 编集附注 単字：参 / 編 / 注 / 禁 单字 CJK 标签 + 米卡纸底 + 主色左条
   // （editorial-mook 专属；POPEYE / BRUTUS 系编集所附注的母语形态）
   | 'mook-tag'
+  // 粗野板块：顶 6px accent 硬条 + 右上方块徽章 + zero-radius（brutalist 专属）
+  | 'slab-corner'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -520,6 +524,8 @@ export type QrcodeVariantId =
   | 'bare'
   // 订阅卡：左 QR + 右 kicker/title/desc 三行（刊物收尾专用）
   | 'follow-card'
+  // 垂直堆叠：上 QR 居中 + 下 kicker/title/desc 居中（Neue Grafik / 数据简报收尾）
+  | 'qr-stack'
 
 export type FooterCTAVariantId =
   // 默认：单按钮 + 引导文案（粗体大标题 + 主色胶囊按钮）
@@ -721,6 +727,7 @@ export const VARIANT_IDS = {
     'news-row',
     'news-underline',
     'mook-tag',
+    'slab-corner',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
@@ -790,6 +797,7 @@ export const VARIANT_IDS = {
   qrcode: [
     'bare',
     'follow-card',
+    'qr-stack',
   ] as const satisfies readonly QrcodeVariantId[],
   footerCTA: [
     'button-led',

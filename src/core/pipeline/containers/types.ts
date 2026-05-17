@@ -24,6 +24,10 @@ import type {
 } from '../../themes/types'
 
 export interface ContainerRenderContext {
+  /**
+   * 当前主题 id（kebab-case）。用于 themeCompat 校验，不暴露整 Theme 对象——其余字段已扁平注入。
+   */
+  themeId: string
   tokens: ThemeTokens
   assets: ThemeAssets
   containers: ThemeContainers

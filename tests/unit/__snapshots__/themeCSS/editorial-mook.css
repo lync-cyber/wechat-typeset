@@ -340,10 +340,6 @@
   line-height: 1.8;
 }
 
-.markdown-body .container-callout-group {
-  margin: 20px 0;
-}
-
 .markdown-body .container-note {
   background-color: transparent;
   padding: 10px 0 10px 16px;
