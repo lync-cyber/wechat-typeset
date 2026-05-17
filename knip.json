@@ -1,0 +1,46 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/app/main.ts",
+    "src/public/index.ts",
+    "src/core/themes/registry.ts",
+    "scripts/serve.mjs",
+    "scripts/check-capabilities-stable.ts",
+    "scripts/_audit-jsdom.mjs",
+    "scripts/install-git-hooks.mjs",
+    "skills/*/scripts/*.{ts,mjs}",
+    "tests/verify-sample-full.ts",
+    "tests/smoke-lib.mjs",
+    "tests/unit/**/*.spec.ts",
+    "tests/e2e/**/*.spec.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,vue}",
+    "scripts/**/*.{ts,mjs}",
+    "tests/**/*.{ts,mjs}",
+    "skills/**/scripts/*.{ts,mjs}"
+  ],
+  "ignore": [
+    "audit-report/**",
+    "dist/**",
+    "src/core/themes/_template/**",
+    "scripts/audit/arch.test.ts",
+    "scripts/audit/.dep-cruiser.js"
+  ],
+  "ignoreBinaries": [
+    "depcruise",
+    "madge",
+    "knip",
+    "jscpd",
+    "dot"
+  ],
+  "ignoreDependencies": [
+    "dependency-cruiser",
+    "jscpd",
+    "madge",
+    "ts-morph",
+    "tsarch",
+    "@types/qrcode-generator",
+    "tsx"
+  ]
+}

@@ -26,16 +26,9 @@ import { analyzeContrast } from './a11y'
 import { fitTemplateToText } from './motif-fit'
 import { validateTypography } from './typography-rules'
 
-// 单一真源：build-capabilities.ts 会 import 这些常量生成契约文件 hardRules 段。
-// 改阈值 = 改这里一处，capabilities.json 自动跟进。
-export const HEX_RE = /^#[0-9a-fA-F]{3,8}$/
-export const MIN_FONT_SIZE = 14
-export const MIN_STROKE_WIDTH = 1
-export const ALLOWED_FONT_FAMILIES: ReadonlySet<string> = new Set([
-  'serif',
-  'sans-serif',
-  'monospace',
-])
+import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH, ALLOWED_FONT_FAMILIES } from './hard-rules'
+
+export { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH, ALLOWED_FONT_FAMILIES }
 
 const STATUS_KEYS: readonly StatusKey[] = ['tip', 'info', 'warning', 'danger']
 
