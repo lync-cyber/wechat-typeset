@@ -178,9 +178,58 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'jsdom',
+    // 默认 node：jsdom 启动每文件 ~1.5-2s。65 spec 里约一半（含 transitive）拉到
+    // src/core/pipeline 的 DOMParser / src/infra/clipboard 的 navigator —— 这些必须
+    // 跑 jsdom；其余跑 node。
+    //
+    // 维护：列表来源 `node scripts/_audit-jsdom.mjs`（按导入闭包内是否触达
+    // DOMParser / requestAnimationFrame / document.* / navigator.* 判断）。
+    // 新增 spec 后跑一次脚本更新本列表。
+    environment: 'node',
+    environmentMatchGlobs: [
+      ['tests/unit/actions.spec.ts', 'jsdom'],
+      ['tests/unit/cli-commands.spec.ts', 'jsdom'],
+      ['tests/unit/component-lib.spec.ts', 'jsdom'],
+      ['tests/unit/container-api.spec.ts', 'jsdom'],
+      ['tests/unit/containers.spec.ts', 'jsdom'],
+      ['tests/unit/copyHints.spec.ts', 'jsdom'],
+      ['tests/unit/copyHtml.spec.ts', 'jsdom'],
+      ['tests/unit/coverPlaceholder.spec.ts', 'jsdom'],
+      ['tests/unit/debounce.spec.ts', 'jsdom'],
+      ['tests/unit/exportFile.spec.ts', 'jsdom'],
+      ['tests/unit/heading-autonumber.spec.ts', 'jsdom'],
+      ['tests/unit/imageIntake.spec.ts', 'jsdom'],
+      ['tests/unit/inline.spec.ts', 'jsdom'],
+      ['tests/unit/inspect.spec.ts', 'jsdom'],
+      ['tests/unit/mpInsertHints.spec.ts', 'jsdom'],
+      ['tests/unit/outlinkDegrade.spec.ts', 'jsdom'],
+      ['tests/unit/page-variants.spec.ts', 'jsdom'],
+      ['tests/unit/pipeline.spec.ts', 'jsdom'],
+      ['tests/unit/preview.spec.ts', 'jsdom'],
+      ['tests/unit/public-api.spec.ts', 'jsdom'],
+      ['tests/unit/quota.spec.ts', 'jsdom'],
+      ['tests/unit/showcase-generator.spec.ts', 'jsdom'],
+      ['tests/unit/theme-capabilities.spec.ts', 'jsdom'],
+      ['tests/unit/theme-rendered-snapshot.spec.ts', 'jsdom'],
+      ['tests/unit/theme-signature-coverage.spec.ts', 'jsdom'],
+      ['tests/unit/themeOrchestrator.spec.ts', 'jsdom'],
+      ['tests/unit/themes.spec.ts', 'jsdom'],
+      ['tests/unit/useClipboardCopy.spec.ts', 'jsdom'],
+      ['tests/unit/useDraftLifecycle.spec.ts', 'jsdom'],
+      ['tests/unit/useExportActions.spec.ts', 'jsdom'],
+      ['tests/unit/usePersonaDraft.spec.ts', 'jsdom'],
+      ['tests/unit/variant-sanity.spec.ts', 'jsdom'],
+      ['tests/unit/variant-sanity-codeblock.spec.ts', 'jsdom'],
+      ['tests/unit/variant-sanity-matrix.spec.ts', 'jsdom'],
+      ['tests/unit/variant-sanity-matrix-tail.spec.ts', 'jsdom'],
+      ['tests/unit/wxPatch.spec.ts', 'jsdom'],
+    ],
+    // threads + isolate:false：worker 内复用模块缓存，砍掉 collect 阶段的重复 parse。
+    // 全局 afterEach（tests/setup.ts）清理 localStorage + state，spec 间不串台。
+    pool: 'threads',
+    poolOptions: { threads: { isolate: false, useAtomics: true } },
     globals: true,
-    // 只抓 tests/unit/；tests/e2e/ 是 Playwright 专属，在 jsdom 下跑会炸
+    // 只抓 tests/unit/；tests/e2e/ 是 Playwright 专属，跑 vitest 会炸
     include: ['tests/unit/**/*.spec.ts'],
     // Node 24+ 的原生退化 localStorage 会影子掉 jsdom 的实现；setup 里强制替换
     setupFiles: ['tests/setup.ts'],

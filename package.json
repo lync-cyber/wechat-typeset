@@ -66,6 +66,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 7788",
     "test": "vitest run && tsx tests/verify-sample-full.ts",
     "test:unit": "vitest run",
+    "test:unit:fast": "vitest run --exclude tests/unit/variant-sanity.spec.ts --exclude tests/unit/variant-sanity-matrix.spec.ts --exclude tests/unit/variant-sanity-matrix-tail.spec.ts --exclude tests/unit/variant-sanity-codeblock.spec.ts --exclude tests/unit/theme-rendered-snapshot.spec.ts",
     "test:watch": "vitest",
     "test:e2e": "tsx tests/verify-sample-full.ts",
     "test:e2e:pw": "playwright test",
