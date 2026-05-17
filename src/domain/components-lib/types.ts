@@ -61,6 +61,18 @@ export interface UserComponent extends EntryBase {
   createdAt: number
   /** 原始选区文本（便于"溯源"展示） */
   sourceMarkdown?: string
+  /**
+   * 关联的 UserVariant id（步骤 4.3）。当组件保存时附带 token 覆盖，
+   * ComponentStudio 会创建一条 UserVariantTokens 入仓并在此回写其 id，
+   * 让 Studio 编辑模式下能反查回 UV.tokens 回填 token 面板，而无需用 markdown 解析。
+   *
+   * 与 markdown 里的 `variant=uv_xxx` 是冗余编码但两者必须同步：
+   *   - 这里指向 UV 实体
+   *   - markdown 让 makeVariantContainer 渲染时命中
+   * 保留 markdown 端是为了"组件作为 markdown 片段被插入正文后仍能独立渲染"
+   * （组件被复制到其它草稿、被导入 markdown 文件等）。
+   */
+  linkedUserVariantId?: string
 }
 
 export type ComponentEntry = BuiltinEntry | UserComponent

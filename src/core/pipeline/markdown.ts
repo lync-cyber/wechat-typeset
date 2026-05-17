@@ -20,9 +20,15 @@ import markdownItTaskLists from 'markdown-it-task-lists'
 
 import { themeRegistry } from '../themes'
 import type { Theme, ThemeVariants } from '../themes/types'
+import type { UserVariant, UserVariantCustom } from '../variants/userVariant'
 import { CONTAINER_REGISTRY } from './containers'
 import type { ContainerRenderContext } from './containers'
 import { parseInfo } from './containers'
+import {
+  customFenceName,
+  renderUserCustomClose,
+  renderUserCustomOpen,
+} from './containers/_user'
 import { registerInlineExtensions } from './inline'
 import { applyHeadingPrefixDecorations } from './headingDecorations'
 
@@ -37,6 +43,19 @@ import { applyHeadingPrefixDecorations } from './headingDecorations'
 interface ContainerEnv {
   __wxContainerStacks?: Record<string, ContainerRenderContext[]>
   __wxPageVariants?: Partial<ThemeVariants>
+  /**
+   * 用户态变体快照（id → UserVariant）。pipeline 入口把 RenderInput.userVariants 数组
+   * 一次性转 Map 注入；renderer 在 attrs.variant=uv_xxx 时 O(1) 查表。
+   * 不在容器栈里持有也不在主路径里查仓——查仓是组件渲染时一次性事，命中后 baseResult
+   * 走原 render 路径，零额外缓存压力。
+   */
+  __wxUserVariants?: ReadonlyMap<string, UserVariant>
+  /**
+   * custom fence 的 open/close 配对栈。markdown-it-container 在 close 时只给 token
+   * 不带 info，但 close 段的 `{{title}}`/`{{attr.X}}` 占位符需要原 info；用 stack
+   * 把 open 时的 info 暂存供 close 取回。
+   */
+  __wxCustomInfoStacks?: Record<string, Array<{ title: string; attrs: Record<string, string> }>>
 }
 
 function pushCtx(env: ContainerEnv, name: string, ctx: ContainerRenderContext): void {
@@ -49,12 +68,37 @@ function popCtx(env: ContainerEnv, name: string): ContainerRenderContext | undef
   return env.__wxContainerStacks?.[name]?.pop()
 }
 
+function pushCustomInfo(
+  env: ContainerEnv,
+  name: string,
+  info: { title: string; attrs: Record<string, string> },
+): void {
+  env.__wxCustomInfoStacks ??= {}
+  env.__wxCustomInfoStacks[name] ??= []
+  env.__wxCustomInfoStacks[name].push(info)
+}
+
+function popCustomInfo(
+  env: ContainerEnv,
+  name: string,
+): { title: string; attrs: Record<string, string> } | undefined {
+  return env.__wxCustomInfoStacks?.[name]?.pop()
+}
+
 export interface CreateMarkdownOptions {
   theme?: Theme
+  /**
+   * Custom UV 必须在 createMarkdown 闭包里注册 fence（`uc-${uv.id}`）才能命中；
+   * 与 tokens/patch（走 env.__wxUserVariants Map）的分派路径正交。调用方按 level
+   * 切分 UV 集合，custom 喂这里，其余走 env。
+   * 任一 custom UV 变化都需新建 MarkdownIt 实例（mdCache key 必须含 customsSig）。
+   */
+  customVariants?: readonly UserVariantCustom[]
 }
 
 export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt {
   const theme = options.theme ?? themeRegistry.default
+  const customVariants = options.customVariants ?? []
 
   const md = new MarkdownIt({
     html: true,
@@ -98,12 +142,39 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
             kickers: theme.kickers,
             info: title,
             attrs,
+            userVariants: env.__wxUserVariants,
           }
           pushCtx(env, name, ctx)
           return renderer.open(ctx)
         }
-        const ctx = popCtx(env, name) ?? emptyCtx(theme, env.__wxPageVariants)
+        const ctx = popCtx(env, name) ?? emptyCtx(theme, env.__wxPageVariants, env.__wxUserVariants)
         return typeof renderer.close === 'function' ? renderer.close(ctx) : renderer.close
+      },
+    })
+  }
+
+  // Custom UV 走独立 fence + 占位符替换，不挂 makeVariantContainer 三段骨架
+  for (const uv of customVariants) {
+    const fence = customFenceName(uv.id)
+    ;(md as any).use(markdownItContainer, fence, {
+      validate(params: string): boolean {
+        return params.trim().split(/\s+/)[0] === fence
+      },
+      render(
+        tokens: Array<{ nesting: number; info: string }>,
+        idx: number,
+        _opts: unknown,
+        env: ContainerEnv,
+      ) {
+        const token = tokens[idx]
+        if (token.nesting === 1) {
+          const rest = token.info.trim().slice(fence.length).trim()
+          const info = parseInfo(rest)
+          pushCustomInfo(env, fence, info)
+          return renderUserCustomOpen(uv, info)
+        }
+        const info = popCustomInfo(env, fence) ?? { title: '', attrs: {} }
+        return renderUserCustomClose(uv, info)
       },
     })
   }
@@ -409,7 +480,11 @@ function applyTaskListSquares(md: MarkdownIt, theme: Theme): void {
   })
 }
 
-function emptyCtx(theme: Theme, pageVariants?: Partial<ThemeVariants>): ContainerRenderContext {
+function emptyCtx(
+  theme: Theme,
+  pageVariants?: Partial<ThemeVariants>,
+  userVariants?: ReadonlyMap<string, UserVariant>,
+): ContainerRenderContext {
   return {
     themeId: theme.id,
     tokens: theme.tokens,
@@ -422,5 +497,6 @@ function emptyCtx(theme: Theme, pageVariants?: Partial<ThemeVariants>): Containe
     kickers: theme.kickers,
     info: '',
     attrs: {},
+    userVariants,
   }
 }

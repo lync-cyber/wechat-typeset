@@ -13,15 +13,24 @@
  * 接受 draft 引用而非 v-model:draft 是 reactive 对象,直接 mutate 触发响应;
  * 这与 useComponentDraft 的设计一致,避免双层 emit 同步。
  */
-import { computed, watch } from 'vue'
+import { computed, defineAsyncComponent, watch } from 'vue'
 import { VARIANT_IDS } from '../../../core/themes/types'
 import { validateSnippet } from '../../../domain/components-lib/validate'
 import type { ComponentKind } from '../../../domain/components-lib'
-import type { DraftFields } from './useComponentDraft'
+import { getVariantTokenSchema } from '../../../core/variants/tokenSchemaLookup'
+import type { Theme, VariantKind } from '../../../core/themes/types'
+import type { DraftFields, UserVariantMode } from './useComponentDraft'
 import MarkdownInput from './MarkdownInput.vue'
+import TokensPanel from './TokensPanel.vue'
+
+// 懒载：CM6 lang-css/lang-html + linter 约 30-40 kB，大多数路径不进源码模式
+const SourceModePanel = defineAsyncComponent(() => import('./SourceModePanel.vue'))
+const CustomModePanel = defineAsyncComponent(() => import('./CustomModePanel.vue'))
 
 const props = defineProps<{
   draft: DraftFields
+  theme: Theme
+  originalLinkedUvId?: string | null
 }>()
 
 const KIND_OPTIONS: Array<{ value: ComponentKind; label: string }> = [
@@ -58,6 +67,67 @@ watch(
 )
 
 const validation = computed(() => validateSnippet(props.draft.markdownSnippet))
+
+// 当前 (kind, variantId) 是否有 tokenSchema——决定是否显示 tokens 切换按钮
+const hasTokenSchema = computed<boolean>(() => {
+  if (props.draft.kind === 'none' || !props.draft.variantId) return false
+  return !!getVariantTokenSchema(props.draft.kind as VariantKind, props.draft.variantId)
+})
+
+// patch 档对所有"有 base 的 variant"都开放——理论上不需要 base 暴露 tokenSchema 也可写 patch
+const canEditPatch = computed<boolean>(
+  () => props.draft.kind !== 'none' && !!props.draft.variantId,
+)
+
+// 切 base 必清 token/patch 草稿（base 不同 → 字段语义不同）。custom 不绑 base，豁免
+watch(
+  () => `${props.draft.kind}::${props.draft.variantId}`,
+  () => {
+    if (props.draft.userVariantMode === 'custom') return
+    for (const k of Object.keys(props.draft.userVariantTokens)) {
+      delete props.draft.userVariantTokens[k]
+    }
+    props.draft.userVariantCssPatch.wrapperCSS = ''
+    props.draft.userVariantCssPatch.titleCSS = ''
+    props.draft.userVariantCssPatch.bodyCSS = ''
+    props.draft.userVariantMode = null
+  },
+)
+
+// 切档清空其它档草稿；点同档=切回 null（折叠面板）
+function setMode(next: UserVariantMode): void {
+  if (next === props.draft.userVariantMode) {
+    props.draft.userVariantMode = null
+    return
+  }
+  if (next === 'tokens') {
+    props.draft.userVariantCssPatch.wrapperCSS = ''
+    props.draft.userVariantCssPatch.titleCSS = ''
+    props.draft.userVariantCssPatch.bodyCSS = ''
+    clearCustomDraft()
+  } else if (next === 'patch') {
+    for (const k of Object.keys(props.draft.userVariantTokens)) {
+      delete props.draft.userVariantTokens[k]
+    }
+    clearCustomDraft()
+  } else if (next === 'custom') {
+    for (const k of Object.keys(props.draft.userVariantTokens)) {
+      delete props.draft.userVariantTokens[k]
+    }
+    props.draft.userVariantCssPatch.wrapperCSS = ''
+    props.draft.userVariantCssPatch.titleCSS = ''
+    props.draft.userVariantCssPatch.bodyCSS = ''
+  }
+  props.draft.userVariantMode = next
+}
+
+function clearCustomDraft(): void {
+  props.draft.userVariantCustom.template = ''
+  props.draft.userVariantCustom.wrapperCSS = ''
+  props.draft.userVariantCustom.titleCSS = ''
+  props.draft.userVariantCustom.bodyCSS = ''
+  props.draft.userVariantCustom.svgSlot = ''
+}
 </script>
 
 <template>
@@ -123,6 +193,53 @@ const validation = computed(() => validateSnippet(props.draft.markdownSnippet))
           未注册 variant: <code>{{ v.container }} → variant={{ v.variantId }}</code>
         </li>
       </ul>
+    </div>
+
+    <div class="advanced">
+      <div class="mode-switch" role="tablist" aria-label="样式编辑模式">
+        <button
+          v-if="hasTokenSchema"
+          type="button"
+          role="tab"
+          :aria-selected="props.draft.userVariantMode === 'tokens'"
+          :class="['mode-btn', { active: props.draft.userVariantMode === 'tokens' }]"
+          @click="setMode('tokens')"
+        >Tokens 面板</button>
+        <button
+          v-if="canEditPatch"
+          type="button"
+          role="tab"
+          :aria-selected="props.draft.userVariantMode === 'patch'"
+          :class="['mode-btn', { active: props.draft.userVariantMode === 'patch' }]"
+          @click="setMode('patch')"
+        >源码模式 (CSS patch)</button>
+        <button
+          type="button"
+          role="tab"
+          :aria-selected="props.draft.userVariantMode === 'custom'"
+          :class="['mode-btn', { active: props.draft.userVariantMode === 'custom' }]"
+          @click="setMode('custom')"
+        >完全自定义 (custom)</button>
+      </div>
+      <TokensPanel
+        v-if="props.draft.userVariantMode === 'tokens' && hasTokenSchema"
+        :kind="props.draft.kind"
+        :variant-id="props.draft.variantId"
+        :tokens="props.draft.userVariantTokens"
+      />
+      <SourceModePanel
+        v-else-if="props.draft.userVariantMode === 'patch'"
+        :kind="props.draft.kind"
+        :variant-id="props.draft.variantId"
+        :css-patch="props.draft.userVariantCssPatch"
+        :theme="props.theme"
+      />
+      <CustomModePanel
+        v-else-if="props.draft.userVariantMode === 'custom'"
+        :custom="props.draft.userVariantCustom"
+        :theme="props.theme"
+        :original-linked-uv-id="props.originalLinkedUvId ?? null"
+      />
     </div>
   </div>
 </template>
@@ -201,6 +318,36 @@ const validation = computed(() => validateSnippet(props.draft.markdownSnippet))
   background: var(--surface-raised);
   padding: 1px 4px;
   border-radius: var(--radius-1, 2px);
+}
+
+.advanced {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  border-top: 1px dashed var(--border);
+  padding-top: var(--sp-3);
+}
+.mode-switch {
+  display: flex;
+  gap: 4px;
+}
+.mode-btn {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-wide);
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-1, 2px);
+  cursor: pointer;
+  font-family: var(--font-text);
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--surface);
 }
 
 @media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {

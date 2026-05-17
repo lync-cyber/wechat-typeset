@@ -13,6 +13,7 @@
  *   - 'wechat-typeset:outlink-strategy'   src/ui/composables/useClipboardCopy.ts
  *   - 'wechat-typeset:dev:sampleBuildId'  src/ui/composables/useDraftLifecycle.ts
  *   - 'wechat-typeset:user-components'    src/infra/storage/userComponents.repo.ts
+ *   - 'wechat-typeset:user-variants'      src/infra/storage/userVariants.repo.ts
  *   - 'wechat-typeset:drafts:*'           src/infra/storage/drafts.ts
  *   仅当出现跨文件复用时再迁入此处，避免凑数。
  */

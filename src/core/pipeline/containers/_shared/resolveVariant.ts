@@ -11,6 +11,8 @@
 
 import type { ContainerRenderContext } from '../types'
 import type { ThemeVariants } from '../../../themes/types'
+import type { VariantRenderResult } from '../../../variants/_core'
+import { applyUserVariant, isAppliableUserVariant } from './userVariantApply'
 
 export function resolveVariantId<Id extends string>(
   ctx: ContainerRenderContext,
@@ -23,4 +25,52 @@ export function resolveVariantId<Id extends string>(
   const themeChoice = ctx.variants[slot] as string | undefined
   if (themeChoice && themeChoice in table) return themeChoice as Id
   return fallback
+}
+
+/**
+ * UV-aware 解析 + 渲染结果。
+ *
+ * 给"自行管 HTML 形态"的容器（quote-card / compare / headline / ...）一条共用通道
+ * 接入用户态变体：与 makeVariantContainer 内部的 uv_ 前缀分支语义一致——
+ *   - attrs.variant 以 uv_ 开头 + 仓命中 + level ∈ {tokens, patch} + base.kind === slot
+ *     → 拿基底 render 输出 + applyUserVariant 叠加，返回 id 用基底 id（让 className 稳定）
+ *   - 任何环节失败：静默退化到原 3 级 resolveVariantId 解析
+ *
+ * className 用 base id（不是 uv id）：CSS class 是 variant"形态身份"的稳定锚点，
+ * 让"分享了用 UV 装饰的容器"复制到无 UV 仓的页面时，className 仍能匹配主题预设样式。
+ * 与 makeVariantContainer 里 `id: uv.id` 的选择不同（工厂版用 uv.id 给透明度面板溯源）；
+ * 此处容器外壳不进透明度，稳定 className 收益更大。
+ */
+export function resolveVariantWithUv<Args = void>(
+  ctx: ContainerRenderContext,
+  slot: keyof ThemeVariants,
+  table: Record<string, { render: Args extends void
+    ? (ctx: ContainerRenderContext) => VariantRenderResult
+    : (ctx: ContainerRenderContext, args: Args) => VariantRenderResult }>,
+  fallback: string,
+  args?: (ctx: ContainerRenderContext) => Args,
+): { id: string; result: VariantRenderResult } {
+  const rawOverride = ctx.attrs.variant
+  if (rawOverride) {
+    const normalized = rawOverride.toLowerCase().trim()
+    if (normalized.startsWith('uv_')) {
+      const uv = ctx.userVariants?.get(normalized)
+      if (uv && isAppliableUserVariant(uv) && uv.base.kind === slot) {
+        const baseEntry = table[uv.base.variantId]
+        if (baseEntry?.render) {
+          const baseResult = (baseEntry.render as (
+            ctx: ContainerRenderContext,
+            args?: Args,
+          ) => VariantRenderResult)(ctx, args?.(ctx))
+          return { id: uv.base.variantId, result: applyUserVariant(uv, baseResult) }
+        }
+      }
+    }
+  }
+  const id = resolveVariantId(ctx, slot, table, fallback)
+  const result = (table[id].render as (
+    ctx: ContainerRenderContext,
+    args?: Args,
+  ) => VariantRenderResult)(ctx, args?.(ctx))
+  return { id, result }
 }

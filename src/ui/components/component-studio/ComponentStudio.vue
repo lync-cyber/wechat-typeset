@@ -27,10 +27,22 @@ import type {
   CreateResult,
   UpdateResult,
 } from '../../../domain/components-lib/mutations'
-import type { Theme } from '../../../core/themes/types'
+import type { Theme, VariantKind } from '../../../core/themes/types'
+import type {
+  UserVariant,
+  UserVariantTokens,
+  UserVariantPatch,
+  UserVariantCustom,
+} from '../../../core/variants/userVariant'
 import ComponentEditor from './ComponentEditor.vue'
 import ComponentPreview from './ComponentPreview.vue'
 import { useComponentDraft, type StudioMode } from './useComponentDraft'
+import {
+  CUSTOM_FENCE_PLACEHOLDER,
+  dispatchUserVariant,
+  rewriteCustomFenceInMarkdown,
+  rewriteVariantInMarkdown,
+} from './userVariantSave'
 
 export interface StudioInit {
   mode: StudioMode
@@ -50,12 +62,105 @@ const emit = defineEmits<{
   (e: 'cancel'): void
 }>()
 
-const { draft, dirty, editingId, reset } = useComponentDraft(
+const { draft, dirty, editingId, originalLinkedUvId, reset } = useComponentDraft(
   props.init.mode,
   props.init.source ?? null,
 )
 
 const error = ref<string>('')
+
+// tokens/patch 预览 id 固定不变（与真实仓 id 池隔离，避免与 createUserVariant 产物冲突）
+const PREVIEW_UV_ID = 'uv_preview_draft'
+
+const tokenCount = computed(() => Object.keys(draft.userVariantTokens).length)
+const hasPatchContent = computed<boolean>(() => {
+  const p = draft.userVariantCssPatch
+  return !!(p.wrapperCSS.trim() || p.titleCSS.trim() || p.bodyCSS.trim())
+})
+const hasCustomContent = computed<boolean>(() => {
+  const c = draft.userVariantCustom
+  return !!(c.template.trim() && c.wrapperCSS.trim())
+})
+
+const baseValid = computed<boolean>(() => draft.kind !== 'none' && !!draft.variantId)
+
+const hasUvContent = computed<boolean>(() => {
+  if (draft.userVariantMode === 'custom') return hasCustomContent.value
+  if (!baseValid.value) return false
+  if (draft.userVariantMode === 'tokens') return tokenCount.value > 0
+  if (draft.userVariantMode === 'patch') return hasPatchContent.value
+  return false
+})
+
+// custom 预览 id 必须与 markdown 里的 fence 名（`uc-${id}`）匹配：
+// edit 模式复用原 id；new 模式用 'NEW'，与作者写的 CUSTOM_FENCE_PLACEHOLDER 对齐
+const PREVIEW_CUSTOM_ID = computed<string>(
+  () => originalLinkedUvId ?? CUSTOM_FENCE_PLACEHOLDER.replace(/^uc-/, ''),
+)
+
+const previewUserVariants = computed<readonly UserVariant[]>(() => {
+  if (!hasUvContent.value) return []
+  if (draft.userVariantMode === 'custom') {
+    const c = draft.userVariantCustom
+    const preview: UserVariantCustom = {
+      id: PREVIEW_CUSTOM_ID.value,
+      name: '__custom_preview__',
+      level: 'custom',
+      createdAt: 0,
+      updatedAt: Date.now(),
+      base: null,
+      template: c.template,
+      css: {
+        wrapperCSS: c.wrapperCSS,
+        ...(c.titleCSS.trim() ? { titleCSS: c.titleCSS } : {}),
+        ...(c.bodyCSS.trim() ? { bodyCSS: c.bodyCSS } : {}),
+        ...(c.svgSlot.trim() ? { svgSlot: c.svgSlot } : {}),
+      },
+    }
+    return [preview]
+  }
+  const base = { kind: draft.kind as VariantKind, variantId: draft.variantId }
+  if (draft.userVariantMode === 'tokens') {
+    const preview: UserVariantTokens = {
+      id: PREVIEW_UV_ID,
+      name: '__preview__',
+      level: 'tokens',
+      createdAt: 0,
+      updatedAt: 0,
+      base,
+      tokens: { ...draft.userVariantTokens },
+    }
+    return [preview]
+  }
+  // patch
+  const p = draft.userVariantCssPatch
+  const preview: UserVariantPatch = {
+    id: PREVIEW_UV_ID,
+    name: '__preview__',
+    level: 'patch',
+    createdAt: 0,
+    updatedAt: 0,
+    base,
+    cssPatch: {
+      ...(p.wrapperCSS.trim() ? { wrapperCSS: p.wrapperCSS } : {}),
+      ...(p.titleCSS.trim() ? { titleCSS: p.titleCSS } : {}),
+      ...(p.bodyCSS.trim() ? { bodyCSS: p.bodyCSS } : {}),
+    },
+  }
+  return [preview]
+})
+
+const previewMarkdown = computed<string>(() => {
+  if (!hasUvContent.value) return draft.markdownSnippet
+  if (draft.userVariantMode === 'custom') {
+    return rewriteCustomFenceInMarkdown(
+      draft.markdownSnippet,
+      CUSTOM_FENCE_PLACEHOLDER,
+      `uc-${PREVIEW_CUSTOM_ID.value}`,
+    )
+  }
+  return rewriteVariantInMarkdown(draft.markdownSnippet, draft.variantId, PREVIEW_UV_ID)
+})
 
 function onCancel() {
   if (dirty.value) {
@@ -87,13 +192,20 @@ function onSave() {
     return
   }
 
+  const { markdown: finalMarkdown, linkAction } = dispatchUserVariant(draft, originalLinkedUvId)
+
+  // linkedUserVariantId 的 patch：set / clear 都映射为显式值（undefined 在 patch 端 = 不改）
+  const linkPatch: string | null | undefined =
+    linkAction.kind === 'set' ? linkAction.id : linkAction.kind === 'clear' ? null : undefined
+
   const payload = {
     name: draft.name.trim(),
     description: draft.description.trim(),
     kind: draft.kind,
     variantId: draft.variantId || undefined,
-    markdownSnippet: ensureTrailingNewline(draft.markdownSnippet),
+    markdownSnippet: ensureTrailingNewline(finalMarkdown),
     thumbnailSvg: draft.thumbnailSvg || undefined,
+    linkedUserVariantId: linkAction.kind === 'set' ? linkAction.id : undefined,
   }
 
   if (props.init.mode === 'edit' && editingId) {
@@ -102,6 +214,7 @@ function onSave() {
       description: payload.description,
       markdownSnippet: payload.markdownSnippet,
       thumbnailSvg: payload.thumbnailSvg,
+      linkedUserVariantId: linkPatch,
     })
     if (!res.ok) {
       error.value = formatError(res)
@@ -152,10 +265,18 @@ const headerLabel = computed(() => {
     <div class="mode-banner">{{ headerLabel }}</div>
 
     <div class="content">
-      <ComponentEditor :draft="draft" />
+      <ComponentEditor
+        :draft="draft"
+        :theme="props.theme"
+        :original-linked-uv-id="originalLinkedUvId"
+      />
 
       <div class="preview-wrap">
-        <ComponentPreview :md="draft.markdownSnippet" :theme="props.theme" />
+        <ComponentPreview
+          :md="previewMarkdown"
+          :theme="props.theme"
+          :user-variants="previewUserVariants"
+        />
       </div>
     </div>
 

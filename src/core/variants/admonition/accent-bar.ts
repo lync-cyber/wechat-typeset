@@ -19,8 +19,36 @@
  * 仍然是 DEFAULT_VARIANTS.admonition 的兜底：主题不声明 variants 时即用此。
  */
 
-import type { VariantDef, AdmonitionRenderArgs, AdmonitionKind } from '../_core'
+import type { VariantDef, AdmonitionRenderArgs, AdmonitionKind, TokenSchema } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+
+/**
+ * tokens 暴露：accent-color + soft-bg 两枚通用变量。
+ *
+ * 为什么只暴露这两个、而不是 padding / radius / 边框样式：
+ *   - 主题作者已经在 theme.tokens.colors.status[kind] 决定了"四态各自的色对"，
+ *     用户态想做的最常见动作是"把 tip 的浅绿换成我的品牌色"——只覆盖颜色就够
+ *   - 分支内的 box-shadow / border-top:8px / 圆角不对称布局是 variant 的"形态身份"，
+ *     若也开放为 token 等于让用户把 danger 改成 tip 形态，破坏 variant 的差异化承诺
+ *
+ * default 用 'inherit' 占位（UI 显示"跟随主题"）；实际渲染 fallback 是 render() 里
+ * 按 kind 动态读 status[kind].accent / .soft，所以 fallback 段不能用静态字面量——
+ * 这是与 giant-mark 等"颜色 default 同样占位 inherit"的对齐。
+ */
+export const tokenSchema: TokenSchema = {
+  'accent-color': {
+    type: 'color',
+    label: '主色',
+    default: 'inherit',
+    hint: '默认跟随主题的 status 色对（四态各异）',
+  },
+  'soft-bg': {
+    type: 'color',
+    label: '浅底色',
+    default: 'inherit',
+    hint: '默认跟随主题的 status 浅底（四态各异）',
+  },
+}
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, soft } = mergeThumb(args ?? {})
@@ -36,7 +64,12 @@ function thumb(args?: { accent?: string; soft?: string; text?: string }): string
   )
 }
 
-/** 按 kind 分派四种差异化皮肤。所有分支共用 padY/padX 保证节奏一致。 */
+/**
+ * 按 kind 分派四种差异化皮肤。所有分支共用 padY/padX 保证节奏一致。
+ *
+ * 颜色全部用 `var(--uv-<key>, <fallback>)` 占位：fallback 段读 pair.accent/pair.soft，
+ * 即未注入 UV 时按主题 status 色对走；注入 UV 时被 --uv-accent-color/--uv-soft-bg 覆盖。
+ */
 function renderForKind(
   kind: AdmonitionKind,
   pair: { accent: string; soft: string },
@@ -45,61 +78,60 @@ function renderForKind(
   padX: number,
   radius: number,
 ): { wrapperCSS: string; titleCSS: string } {
+  const accentVar = `var(--uv-accent-color, ${pair.accent})`
+  const softVar = `var(--uv-soft-bg, ${pair.soft})`
   if (kind === 'tip') {
-    // 轻盈引导：气泡式不对称圆角（左上+右下大、右上+左下小）+ 柔阴影
     return {
       wrapperCSS:
-        `background-color:${pair.soft};` +
+        `background-color:${softVar};` +
         `padding:${padY}px ${padX}px;` +
         `border-radius:${radius * 4}px ${radius}px ${radius * 4}px ${radius}px;` +
         `box-shadow:0 2px 6px rgba(0,0,0,0.04);` +
         `margin:16px 0`,
       titleCSS:
-        `font-size:14px;font-weight:700;color:${pair.accent};` +
+        `font-size:14px;font-weight:700;color:${accentVar};` +
         `margin-bottom:6px;letter-spacing:0.3px`,
     }
   }
   if (kind === 'warning') {
-    // 警觉但不刺眼：上虚线 + 下实线（双层警戒带）+ 对角斜切圆角（右上/左下）
     return {
       wrapperCSS:
-        `background-color:${pair.soft};` +
-        `border-top:1px dashed ${pair.accent};` +
-        `border-bottom:2px solid ${pair.accent};` +
+        `background-color:${softVar};` +
+        `border-top:1px dashed ${accentVar};` +
+        `border-bottom:2px solid ${accentVar};` +
         `padding:${padY}px ${padX}px;` +
         `border-radius:0 ${radius * 3}px 0 ${radius * 3}px;` +
         `margin:16px 0`,
       titleCSS:
-        `font-size:14px;font-weight:700;color:${pair.accent};` +
+        `font-size:14px;font-weight:700;color:${accentVar};` +
         `margin-bottom:6px;letter-spacing:1px`,
     }
   }
   if (kind === 'info') {
-    // 中性知识：白底卡片 + 1px 全边框 + 顶端 inset accent + 柔阴影
     return {
       wrapperCSS:
         `background-color:${bg};` +
-        `border:1px solid ${pair.soft};` +
-        `box-shadow:inset 0 2px 0 ${pair.accent}, 0 1px 3px rgba(0,0,0,0.03);` +
+        `border:1px solid ${softVar};` +
+        `box-shadow:inset 0 2px 0 ${accentVar}, 0 1px 3px rgba(0,0,0,0.03);` +
         `padding:${padY + 2}px ${padX}px ${padY}px;` +
         `border-radius:${radius * 2}px;` +
         `margin:18px 0`,
       titleCSS:
-        `font-size:14px;font-weight:700;color:${pair.accent};` +
+        `font-size:14px;font-weight:700;color:${accentVar};` +
         `margin-bottom:6px;letter-spacing:0.3px`,
     }
   }
-  // danger：顶端 8px accent 实条 + 全边框 + 零圆角（硬紧迫）
+  // danger
   return {
     wrapperCSS:
-      `background-color:${pair.soft};` +
-      `border:1px solid ${pair.accent};` +
-      `border-top:8px solid ${pair.accent};` +
+      `background-color:${softVar};` +
+      `border:1px solid ${accentVar};` +
+      `border-top:8px solid ${accentVar};` +
       `padding:${padY}px ${padX}px;` +
       `border-radius:0;` +
       `margin:18px 0`,
     titleCSS:
-      `font-size:14px;font-weight:800;color:${pair.accent};` +
+      `font-size:14px;font-weight:800;color:${accentVar};` +
       `margin-bottom:6px;letter-spacing:1.5px;text-transform:uppercase`,
   }
 }
@@ -112,6 +144,7 @@ const accentBar: VariantDef<AdmonitionRenderArgs> = {
     description: '四态各具形态：气泡/警戒带/卡片浮起/硬边紧迫',
   },
   thumbnail: thumb,
+  tokenSchema,
   snippets: [
     {
       presetId: 'ad-tip-accent-bar',

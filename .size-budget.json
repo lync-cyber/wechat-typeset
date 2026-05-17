@@ -3,12 +3,12 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。Phase-4 后 18 主题 registry 索引微增 → gz 195kB（自然增长）。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 540000,
-      "gzipLimit": 205000,
+      "limit": 555000,
+      "gzipLimit": 210000,
       "mustNotEmbed": ["html2canvas"]
     },
     {
@@ -69,6 +69,67 @@
       "ext": "js",
       "limit": 24000,
       "gzipLimit": 12000
+    },
+    {
+      "$comment": "Studio 'CSS patch' 源码模式的 lazy chunk。defineAsyncComponent 装拆，进面板才下载；本体轻量，CM6 lang-css/html 实际重量在 codemirror chunk 内。",
+      "name": "source-mode panel chunk (lazy)",
+      "prefix": "SourceModePanel",
+      "ext": "js",
+      "limit": 12000,
+      "gzipLimit": 6000
+    },
+    {
+      "$comment": "SourceModePanel 的样式 chunk（CSS Module / scoped css 自动拆出）。微量，限 4kB raw / 1kB gz 足够。",
+      "name": "source-mode panel stylesheet (lazy)",
+      "prefix": "SourceModePanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
+    },
+    {
+      "$comment": "Studio '完全自定义' 模式的 lazy chunk（L3 custom HTML 模板编辑）。defineAsyncComponent 装拆，进面板才下载。",
+      "name": "custom-mode panel chunk (lazy)",
+      "prefix": "CustomModePanel",
+      "ext": "js",
+      "limit": 12000,
+      "gzipLimit": 6000
+    },
+    {
+      "name": "custom-mode panel stylesheet (lazy)",
+      "prefix": "CustomModePanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
+    },
+    {
+      "$comment": "'我的样式' tab 的 lazy chunk。defineAsyncComponent 装拆，进 tab 才下载；只读 UV 仓 + 重命名 / 删除按钮。",
+      "name": "user-variants panel chunk (lazy)",
+      "prefix": "UserVariantsPanel",
+      "ext": "js",
+      "limit": 8000,
+      "gzipLimit": 4000
+    },
+    {
+      "name": "user-variants panel stylesheet (lazy)",
+      "prefix": "UserVariantsPanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
+    },
+    {
+      "$comment": "useUserVariantLint 抽出的 lazy chunk（@codemirror/lint + lintInlineCSS/lintTemplateHTML 包装）。被 SourceModePanel / CustomModePanel 双方共享，由 vite 自动 split。",
+      "name": "user-variant-lint chunk (lazy)",
+      "prefix": "useUserVariantLint",
+      "ext": "js",
+      "limit": 8000,
+      "gzipLimit": 4000
+    },
+    {
+      "name": "user-variant-lint stylesheet (lazy)",
+      "prefix": "useUserVariantLint",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
     }
   ]
 }

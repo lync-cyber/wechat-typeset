@@ -122,3 +122,58 @@ describe('inspectPatchTargets · total 与 entries 一致', () => {
     expect(log.total).toBeGreaterThan(0)
   })
 })
+
+describe('inspectPatchTargets · samples（步骤 6 增强）', () => {
+  it('fontFamily 命中带 before / selector', () => {
+    const log = inspectPatchTargets(
+      `<h3 class="container-pull-quote__title" style="font-family: 'Source Han Serif'">x</h3>`,
+    )
+    const e = log.entries.find((x) => x.patch === 'stripFontFamily')
+    expect(e?.samples).toBeDefined()
+    expect(e?.samples).toHaveLength(1)
+    expect(e?.samples?.[0].selector).toBe('h3.container-pull-quote__title')
+    expect(e?.samples?.[0].before).toContain('font-family')
+    expect(e?.samples?.[0].before).toContain('Source Han Serif')
+  })
+
+  it('position / top / z-index 各自一条 sample', () => {
+    const log = inspectPatchTargets(
+      '<div class="x y" style="position: absolute; top: 0; z-index: 9"></div>',
+    )
+    const e = log.entries.find((x) => x.label.includes('position'))
+    expect(e?.count).toBe(3)
+    expect(e?.samples).toHaveLength(3)
+    expect(e?.samples?.map((s) => s.before.split(':')[0].trim()).sort()).toEqual(
+      ['position', 'top', 'z-index'],
+    )
+    // selector 一致——都来自同一个 div
+    for (const s of e?.samples ?? []) expect(s.selector).toBe('div.x.y')
+  })
+
+  it('hardTag 命中带标签名', () => {
+    const log = inspectPatchTargets('<style>p{}</style><script>1</script>')
+    const e = log.entries.find((x) => x.patch === 'stripForbiddenTags')
+    expect(e?.samples?.map((s) => s.before).sort()).toEqual(['<script>', '<style>'])
+  })
+
+  it('SAMPLE_LIMIT 限 5 条；count 不受限', () => {
+    const many = Array.from({ length: 10 }, (_, i) =>
+      `<p style="position:absolute" id="p${i}">x</p>`,
+    ).join('')
+    const log = inspectPatchTargets(many)
+    const e = log.entries.find((x) => x.label.includes('position'))
+    expect(e?.count).toBe(10) // 10 处 position（每个 p 一处）
+    expect(e?.samples).toHaveLength(5) // sample 截到 5
+  })
+
+  it('listWrap / deepList 不采样（结构包裹无直观 before 概念）', () => {
+    const log = inspectPatchTargets('<ul><li>a</li></ul>')
+    const e = log.entries.find((x) => x.label.includes('列表外包'))
+    expect(e?.samples).toBeUndefined()
+  })
+
+  it('合法 HTML 零命中：所有 entry 缺失，无 samples', () => {
+    const log = inspectPatchTargets('<p>hello</p>')
+    expect(log.entries).toEqual([])
+  })
+})

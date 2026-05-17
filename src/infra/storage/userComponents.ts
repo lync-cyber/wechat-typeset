@@ -17,6 +17,7 @@ export {
   deleteUserComponent,
   updateUserComponent,
   type CreateUserComponentInput,
+  type UpdateUserComponentPatch,
 } from './userComponents.repo'
 
 export {

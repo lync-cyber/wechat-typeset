@@ -5,9 +5,13 @@
  * 视觉骨架：左侧 80×60 inline SVG 引号字符（path 描线，accent 色，stroke 2px），
  *   下方 18-20px 大字 line-height 1.8 左对齐。无边框无填充，留白与字号承担分量。
  * 与其它 variant 区别：唯一用"装饰引号字形"做主视，body 大字左对齐而非居中。
+ *
+ * tokens 暴露：title/body 的颜色与字号——这四个字段是用户最常想调的"金句重音"控制点。
+ * SVG 引号颜色不开放：stroke 是 SVG 属性而非 CSS 属性，var() 在 attr 上不生效；
+ * 想换引号色得走 patch 档（直接覆盖 svgSlot），不是 L1 tokens 能解决的范围。
  */
 
-import type { VariantDef } from '../_core'
+import type { VariantDef, TokenSchema } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
@@ -20,6 +24,35 @@ function thumb(args?: { accent?: string; soft?: string; text?: string }): string
   )
 }
 
+// tokenSchema：UI 与 render 共享单一事实来源。
+// default 值必须与 render() 里 `var(--uv-<key>, <fallback>)` 的 fallback 一致。
+// 颜色类的 default 是动态的（取自主题 tokens），用 'inherit' 占位让 UI 显示"跟主题"，
+// 实际渲染由 render() 里的 fallback 段（具体颜色字符串）承担。
+export const tokenSchema: TokenSchema = {
+  'quote-color': {
+    type: 'color',
+    label: '引文颜色',
+    default: 'inherit',
+    hint: '默认跟随主题正文色',
+  },
+  'quote-size': {
+    type: 'size',
+    label: '引文字号',
+    default: '19px',
+  },
+  'byline-color': {
+    type: 'color',
+    label: '副注颜色',
+    default: 'inherit',
+    hint: '默认跟随主题次要文字色',
+  },
+  'byline-size': {
+    type: 'size',
+    label: '副注字号',
+    default: '13px',
+  },
+}
+
 const giantMark: VariantDef = {
   meta: {
     id: 'giant-mark',
@@ -28,6 +61,7 @@ const giantMark: VariantDef = {
     description: '巨号 SVG 引号 + 大字左对齐（人物特稿母本）',
   },
   thumbnail: thumb,
+  tokenSchema,
   snippets: [
     {
       presetId: 'pull-quote-giant-mark',
@@ -55,16 +89,16 @@ const giantMark: VariantDef = {
         'text-align:left',
       ].join(';'),
       titleCSS: [
-        `color:${c.text}`,
-        'font-size:19px',
+        `color:var(--uv-quote-color, ${c.text})`,
+        'font-size:var(--uv-quote-size, 19px)',
         'line-height:1.8',
         'font-weight:600',
         'letter-spacing:0.3px',
         'text-align:left',
       ].join(';'),
       bodyCSS: [
-        `color:${c.textMuted}`,
-        'font-size:13px',
+        `color:var(--uv-byline-color, ${c.textMuted})`,
+        'font-size:var(--uv-byline-size, 13px)',
         'line-height:1.6',
         'margin-top:10px',
         'text-align:left',
