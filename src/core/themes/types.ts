@@ -269,6 +269,10 @@ export interface ThemeContainers {
  *   - abstractKicker     文首 tl;dr 块的小标题色 / 字距 / 大写转换
  *   - keyNumberValue     大数字本体（数字字号 / 颜色 / 字距）
  *   - keyNumberKicker    大数字上方 kicker（小标题）
+ *
+ * @maxFields 10 —— 软上限。本接口的设计纪律是"主题 voice 差异化的内层 inline style 才进
+ * 此表"；超过 10 个字段意味着抽象已失焦，应回看是否把"通用 inline style"误塞进来了。
+ * 真要扩到 11+，先提 issue 重审接口边界，不是默默加字段。
  */
 export interface ThemeInnerStyles {
   abstractKicker: CSSObject
