@@ -5,16 +5,14 @@
  * spotlight 类用全局 unscoped <style>：目标按钮 DOM 在 Toolbar 内、不属本组件作用域。
  * 卡片 dismiss / unmount 时主动清理所有 .onboard-spotlight，避免残留高亮。
  */
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { MOBILE_MEDIA_QUERY } from '../../app/layoutMode'
+import { modKey } from '../composables/usePlatformKey'
 
 const emit = defineEmits<{
   (e: 'dismiss'): void
   (e: 'openHelp'): void
 }>()
-
-const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
-const modKey = isMac ? '⌘' : 'Ctrl'
 
 const isMobile = ref(false)
 let mq: MediaQueryList | null = null
@@ -98,6 +96,13 @@ function applySpotlight(selector: string | null) {
   el?.classList.add(SPOTLIGHT_CLASS)
 }
 
+const nextBtnRef = ref<HTMLButtonElement | null>(null)
+
+function focusNextBtn() {
+  // 让键盘用户 Enter / Space 就能推到下一步，不必从卡顶 Tab 几次
+  void nextTick(() => nextBtnRef.value?.focus())
+}
+
 function gotoStep(next: number) {
   if (next >= totalSteps) {
     dismiss()
@@ -105,6 +110,7 @@ function gotoStep(next: number) {
   }
   step.value = next as 0 | 1 | 2
   applySpotlight(current.value.anchor)
+  focusNextBtn()
 }
 
 function dismiss() {
@@ -117,6 +123,7 @@ onMounted(() => {
   syncMobile()
   mq.addEventListener('change', syncMobile)
   applySpotlight(current.value.anchor)
+  focusNextBtn()
 })
 
 onUnmounted(() => {
@@ -151,7 +158,12 @@ onUnmounted(() => {
 
     <div class="onboard-actions">
       <button class="onboard-skip" type="button" @click="dismiss">跳过</button>
-      <button class="onboard-next" type="button" @click="gotoStep(step + 1)">
+      <button
+        ref="nextBtnRef"
+        class="onboard-next"
+        type="button"
+        @click="gotoStep(step + 1)"
+      >
         {{ current.next }}
       </button>
     </div>

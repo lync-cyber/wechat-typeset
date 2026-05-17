@@ -91,8 +91,8 @@ defineExpose({ refresh })
               class="rename-input"
               maxlength="40"
               autofocus
-              @keydown.enter.prevent="commitRename"
-              @keydown.escape.prevent="cancelRename"
+              @keydown.enter.prevent.stop="commitRename"
+              @keydown.escape.prevent.stop="cancelRename"
               @blur="commitRename"
             />
           </template>

@@ -34,7 +34,9 @@ function undo() {
 </script>
 
 <template>
-  <div class="toast" role="status">
+  <!-- aria-live="polite" + aria-atomic="true"：role=status 在 NVDA/VoiceOver 上推断
+   * 已正确，但 JAWS 等部分屏读软件不会自动 derive；显式声明保证消息整段被朗读。 -->
+  <div class="toast" role="status" aria-live="polite" aria-atomic="true">
     <span class="toast-msg">{{ props.message }}</span>
     <button class="toast-undo" @click="undo">撤销</button>
   </div>

@@ -1,21 +1,21 @@
 <script setup lang="ts">
 /**
- * ComponentStudio —— 新建 / 编辑 / 派生组件的内嵌 split view (P2)。
+ * ComponentStudio —— 新建 / 编辑 / 派生组件的 split view。
+ *
+ * 由 ComponentPalette teleport 到 body 后渲染为全屏工作台（90vw×90vh），
+ * ≥900px 视口左右两栏：左侧表单 + 高级模式编辑，右侧大尺寸预览；窄屏自动
+ * 退化为单列纵向堆叠。
  *
  * 三种 init.mode 决定保存路径:
  *   - new / derive  → mutations.createComponent (新落 storage)
  *   - edit          → mutations.updateComponent (按 id 更新)
- *
- * 布局: 抽屉 340px 宽内做不下水平 split,故垂直堆叠:
- *   ┌─ 表单 (name / desc / kind / variantId / markdown)
- *   ├─ 预览 iframe
- *   └─ 底部 actions (取消 / 保存)
  *
  * 校验: ComponentEditor 实时跑 validateSnippet 显示 diagnostics,
  * 保存时统一走 mutations,失败 inline error 显示在底部 actions 旁。
  *
  * dirty 跟踪: useComponentDraft 持 initial snapshot 与 draft 的 reactive 对比。
  * "取消"在 dirty 时弹确认; 不 dirty 直接退出。
+ * defineExpose 暴露 attemptCancel 让外层 modal mask click / Esc 走同一路径。
  */
 import { computed, ref } from 'vue'
 import type { ComponentEntry } from '../../../domain/components-lib'
@@ -258,25 +258,41 @@ const headerLabel = computed(() => {
   if (props.init.mode === 'edit') return '编辑组件'
   return '派生为我的组件'
 })
+
+// 暴露给外层 modal mask：点 backdrop / 按 Esc 走与"取消"按钮同一逻辑，保留 dirty 提示
+defineExpose({ attemptCancel: onCancel })
 </script>
 
 <template>
   <section class="studio" aria-label="组件 Studio">
-    <div class="mode-banner">{{ headerLabel }}</div>
+    <header class="modal-head">
+      <span class="modal-head-label">{{ headerLabel }}</span>
+      <span v-if="dirty" class="modal-head-dirty" aria-label="有未保存改动">·已改动</span>
+      <button
+        class="modal-head-close"
+        type="button"
+        aria-label="关闭"
+        title="关闭（Esc）"
+        @click="onCancel"
+      >×</button>
+    </header>
 
     <div class="content">
-      <ComponentEditor
-        :draft="draft"
-        :theme="props.theme"
-        :original-linked-uv-id="originalLinkedUvId"
-      />
-
-      <div class="preview-wrap">
-        <ComponentPreview
-          :md="previewMarkdown"
+      <div class="col col-editor">
+        <ComponentEditor
+          :draft="draft"
           :theme="props.theme"
-          :user-variants="previewUserVariants"
+          :original-linked-uv-id="originalLinkedUvId"
         />
+      </div>
+      <div class="col col-preview">
+        <div class="preview-wrap">
+          <ComponentPreview
+            :md="previewMarkdown"
+            :theme="props.theme"
+            :user-variants="previewUserVariants"
+          />
+        </div>
       </div>
     </div>
 
@@ -303,37 +319,102 @@ const headerLabel = computed(() => {
 </template>
 
 <style scoped>
+/* ComponentStudio 永远以全屏 modal 形态渲染（由 ComponentPalette teleport 到 body）。
+ * ≥900px 视口左右两栏 grid；窄屏单列纵向。 */
 .studio {
   flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-.mode-banner {
-  flex: 0 0 auto;
-  padding: var(--sp-3) var(--sp-4);
-  font-size: var(--fs-12);
-  letter-spacing: var(--ls-wide);
-  color: var(--text-muted);
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-}
-
 .content {
   flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
+  overflow-y: auto;
+}
+.col-editor,
+.col-preview {
+  background: var(--surface-raised);
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.col-preview {
+  padding: var(--sp-4);
+  background: var(--surface);
+}
+.preview-wrap {
+  flex: 1 1 auto;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
 }
 
-.preview-wrap {
-  padding: 0 var(--sp-4) var(--sp-4);
+@media (min-width: 900px) {
+  .content {
+    display: grid;
+    grid-template-columns: minmax(380px, 1fr) minmax(420px, 1.4fr);
+    gap: 1px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .col-editor,
+  .col-preview {
+    overflow-y: auto;
+  }
+  .preview-wrap {
+    min-height: 0;
+  }
+}
+
+/* Studio 顶栏：左侧标题 + dirty 提示，右侧关闭 × */
+.modal-head {
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
-  min-height: 240px;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-raised);
+}
+.modal-head-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-14);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  color: var(--text);
+}
+.modal-head-dirty {
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-wide);
+  color: var(--accent);
+}
+.modal-head-close {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-2);
+  color: var(--text-muted);
+  font-size: var(--fs-17);
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.modal-head-close:hover {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .footer {

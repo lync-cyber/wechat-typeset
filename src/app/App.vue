@@ -23,9 +23,10 @@ import { useDraftLifecycle } from '../ui/composables/useDraftLifecycle'
 import { useClipboardCopy } from '../ui/composables/useClipboardCopy'
 import { useExportActions } from '../ui/composables/useExportActions'
 import { useKeyboardShortcuts } from '../ui/composables/useKeyboardShortcuts'
+import { modKey } from '../ui/composables/usePlatformKey'
 import { useToolbarCollapse } from '../ui/composables/useToolbarCollapse'
 import { getSample } from '../domain/samples'
-import { safeRead, safeWrite } from '../infra/storage/_kv'
+import { safeRead, safeRemove, safeWrite } from '../infra/storage/_kv'
 import { createDraft } from '../infra/storage/drafts'
 import { md, baseThemeId, hoverThemeId, customTheme, mobileTab, activeTheme, editorWidth } from './state'
 import { uiThemeMode } from './uiTheme'
@@ -37,8 +38,6 @@ import { useBootstrap } from './bootstrap'
 import { EDITOR_MIN_W, usePaneSizing } from './usePaneSizing'
 
 const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
-const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
-const modKey = isMac ? '⌘' : 'Ctrl'
 
 const editorRef = ref<InstanceType<typeof Editor> | null>(null)
 const previewRef = ref<InstanceType<typeof Preview> | null>(null)
@@ -114,6 +113,17 @@ function dismissOnboard() {
   onboardDismissed.value = true
   safeWrite(ONBOARD_STORAGE_KEY, '1')
 }
+/**
+ * "重新打开新手引导" 入口（HelpPanel 触发）：清持久化 + 关闭帮助 + 关闭其它浮层，
+ * 让 showOnboard computed 自动重新为 true。
+ */
+function restartOnboard() {
+  safeRemove(ONBOARD_STORAGE_KEY)
+  onboardDismissed.value = false
+  ui.helpOpen = false
+  ui.commandOpen = false
+  closeAll()
+}
 const showOnboard = computed(() =>
   !onboardDismissed.value && !ui.commandOpen && !ui.helpOpen
   && ui.leftSlot === null && ui.rightSlot === null,
@@ -174,6 +184,10 @@ useKeyboardShortcuts({
   openHelp: () => { ui.helpOpen = true },
   closeCommand: () => { if (ui.commandOpen) { ui.commandOpen = false; return true } return false },
   closeHelp: () => { if (ui.helpOpen) { ui.helpOpen = false; return true } return false },
+  closeDrawers: () => {
+    if (ui.leftSlot !== null || ui.rightSlot !== null) { closeAll(); return true }
+    return false
+  },
 })
 
 useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromHash, hasOpenDrawer })
@@ -301,6 +315,7 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
         :commands="commands"
         @close="ui.helpOpen = false"
         @insert="handleInsertTemplate"
+        @restart-onboard="restartOnboard"
       />
     </ErrorBoundary>
     <UndoToast v-if="undo" :message="undo.message" @undo="onUndo" @expire="onUndoExpire" />

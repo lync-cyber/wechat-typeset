@@ -23,3 +23,14 @@ export const THEME_STORAGE_KEY = 'wechat-typeset:theme:last'
 
 /** 桌面端编辑栏显式像素宽度；bootstrap 启动恢复 + 同 watcher 持久化。 */
 export const EDITOR_WIDTH_STORAGE_KEY = 'wechat-typeset:editor-width'
+
+/**
+ * 桌面端右侧抽屉显式像素宽度。两个抽屉各自一份：
+ *   - components：ComponentPalette（默认 var(--drawer-w-sm) = 340）
+ *   - persona-studio：PersonaStudio（默认 var(--drawer-w-md) = 400）
+ *
+ * value === null（未存储 / "null" 字面量）= 走 CSS 默认变量；number = 显式像素。
+ * 抽屉作为高级用户工作面板，可拖左缘加宽；移动端无此机制（CSS 已让抽屉全屏覆盖）。
+ */
+export const COMPONENT_PALETTE_WIDTH_KEY = 'wechat-typeset:component-palette-width'
+export const PERSONA_STUDIO_WIDTH_KEY = 'wechat-typeset:persona-studio-width'

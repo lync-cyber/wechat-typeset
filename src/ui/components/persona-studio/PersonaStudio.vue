@@ -18,14 +18,35 @@ import { VARIANT_IDS } from '../../../core/themes/types'
 import { customTheme } from '../../../app/state'
 import { downloadBlob } from '../../../infra/exporters/exportFile'
 import PanelHeader from '../../primitives/PanelHeader.vue'
+import DrawerResizer from '../../primitives/DrawerResizer.vue'
 import PaletteEditor from './PaletteEditor.vue'
 import { usePersonaDraft } from './usePersonaDraft'
+import { useDrawerWidth } from '../../composables/useDrawerWidth'
+import { PERSONA_STUDIO_WIDTH_KEY } from '../../../infra/storage/storageKeys'
 
 const props = defineProps<{ initialBaseId: string }>()
 const emit = defineEmits<{ (e: 'close'): void }>()
 
 const draftMgr = usePersonaDraft(props.initialBaseId)
 const draft = draftMgr.draft
+
+// 抽屉左缘拖宽：默认 400px（var(--drawer-w-md)），localStorage 持久化
+const PERSONA_STUDIO_DEFAULT_W = 400
+const {
+  width: drawerWidth,
+  maxWidth: drawerMaxWidth,
+  defaultWidth: drawerDefaultWidth,
+  minWidth: drawerMinWidth,
+} = useDrawerWidth({
+  storageKey: PERSONA_STUDIO_WIDTH_KEY,
+  defaultWidth: PERSONA_STUDIO_DEFAULT_W,
+  min: 360,
+  maxViewportRatio: 0.55,
+})
+
+const studioStyle = computed(() =>
+  drawerWidth.value === null ? undefined : { width: drawerWidth.value + 'px' },
+)
 
 // 短暂提示
 const ui = reactive({ status: '' })
@@ -130,7 +151,14 @@ const idCollision = computed(() => reservedIds.has(draft.id) && draft.id !== dra
 </script>
 
 <template>
-  <aside class="studio" aria-label="主题编辑器">
+  <aside class="studio" aria-label="主题编辑器" :style="studioStyle">
+    <DrawerResizer
+      :width="drawerWidth"
+      :min="drawerMinWidth"
+      :max="drawerMaxWidth"
+      :default-width="drawerDefaultWidth"
+      @update:width="drawerWidth = $event"
+    />
     <PanelHeader title="主题编辑器" size="sm" @close="emit('close')">
       <template #actions>
         <button class="head-action" :disabled="!draftMgr.dirty.value" @click="resetDraft">
@@ -311,7 +339,13 @@ const idCollision = computed(() => reservedIds.has(draft.id) && draft.id !== dra
       <button class="action-btn action-secondary" @click="downloadSpec">
         下载 spec.json
       </button>
-      <span v-if="ui.status" class="action-status">{{ ui.status }}</span>
+      <span
+        v-if="ui.status"
+        class="action-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >{{ ui.status }}</span>
     </footer>
   </aside>
 </template>

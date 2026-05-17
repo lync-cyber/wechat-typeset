@@ -22,6 +22,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'close'): void
   (e: 'insert', snippet: string): void
+  /** 用户主动要求重看新手引导（App 层清持久化 + 关浮层让 OnboardingCard 重新挂载） */
+  (e: 'restartOnboard'): void
 }>()
 
 function groupedWithShortcut() {
@@ -178,6 +180,12 @@ function insertContainer(spec: ContainerSpec) {
         <li>复制失败时请改用 Chrome / Safari 或关闭跨域预览。</li>
       </ul>
     </section>
+
+    <footer class="help-foot">
+      <button class="help-foot-btn" type="button" @click="emit('restartOnboard')">
+        ↻ 重新打开新手引导
+      </button>
+    </footer>
   </PanelShell>
 </template>
 
@@ -316,4 +324,28 @@ function insertContainer(spec: ContainerSpec) {
 }
 .help-tips ul { margin: 0; padding-left: var(--sp-4); }
 .help-tips li + li { margin-top: 3px; }
+
+.help-foot {
+  padding: var(--sp-3) var(--sp-5);
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  display: flex;
+  justify-content: center;
+}
+.help-foot-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  padding: 6px var(--sp-4);
+  font: inherit;
+  font-size: var(--fs-12);
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.help-foot-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
 </style>
