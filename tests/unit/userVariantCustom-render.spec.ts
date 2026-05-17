@@ -13,7 +13,9 @@ import {
 } from '../../src/core/pipeline/containers/_user'
 import type { UserVariantCustom } from '../../src/core/variants/userVariant'
 import { render } from '../../src/core/pipeline'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+
+const defaultTheme = themeRegistry.default
 
 function makeCustomUv(p: Partial<UserVariantCustom> = {}): UserVariantCustom {
   return {

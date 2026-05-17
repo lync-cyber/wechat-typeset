@@ -18,7 +18,9 @@
 import { describe, it, expect } from 'vitest'
 import { applyUserVariant } from '../../src/core/pipeline/containers/_shared/userVariantApply'
 import { render as pipelineRender } from '../../src/core/pipeline'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+
+const defaultTheme = themeRegistry.default
 import type {
   UserVariantPatch,
   UserVariantTokens,

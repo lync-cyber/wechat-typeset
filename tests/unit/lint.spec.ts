@@ -14,7 +14,9 @@ import { describe, expect, it } from 'vitest'
 import { lintProp, lintInlineCSS, type Diagnostic } from '../../src/core/pipeline/lint'
 import { ThemeAuthoringError } from '../../src/core/themes/types'
 import { generateThemeCSS } from '../../src/core/pipeline/themeCSS'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+
+const defaultTheme = themeRegistry.default
 import type { Theme } from '../../src/core/themes/types'
 
 describe('lintProp · 各分类命中', () => {

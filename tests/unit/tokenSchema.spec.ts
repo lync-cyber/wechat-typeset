@@ -27,7 +27,9 @@ import waveDivider, {
   tokenSchema as waveSchema,
 } from '../../src/core/variants/divider/wave'
 import { render as pipelineRender } from '../../src/core/pipeline'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+
+const defaultTheme = themeRegistry.default
 import type { UserVariantTokens } from '../../src/core/variants/userVariant'
 
 describe('tokenSchemaLookup', () => {
