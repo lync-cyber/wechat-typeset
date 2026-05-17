@@ -376,9 +376,9 @@ describe('PERSONA_SPEC_SCHEMA', () => {
     expect(primary?.pattern).toMatch(/#/)
   })
 
-  it('variants.admonition 枚举覆盖全部 19 个 id（含 news-row / news-underline / mook-tag）', () => {
+  it('variants.admonition 枚举覆盖全部 20 个 id（含 news-row / news-underline / mook-tag / slab-corner）', () => {
     const admonition = PERSONA_SPEC_SCHEMA.properties?.variants?.properties?.admonition
-    expect(admonition?.enum).toHaveLength(19)
+    expect(admonition?.enum).toHaveLength(20)
   })
 
   it('JSON.stringify 能产出有效 JSON（无循环引用）', () => {

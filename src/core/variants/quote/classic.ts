@@ -11,6 +11,11 @@ import { mergeThumb, svg } from '../_thumb'
 const FALLBACK_OPEN_MARK =
   `<span style="display:inline-block;font-size:28px;line-height:1;opacity:0.35;margin-right:4px">「</span>`
 
+// fallback 路径下的对称闭合标记。主题声明 assets.quoteMark 时不强行配对——
+// 信任主题作者自带的引号 SVG 自洽（多数主题就是不要闭合括号）。
+const FALLBACK_CLOSE_MARK =
+  `<span style="display:inline-block;font-size:28px;line-height:1;opacity:0.35;margin-left:4px">」</span>`
+
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, soft } = mergeThumb(args ?? {})
   return svg(
@@ -44,7 +49,8 @@ const classic: VariantDef = {
     },
   ],
   render: (ctx) => {
-    const mark = ctx.assets.quoteMark ?? FALLBACK_OPEN_MARK
+    const themeMark = ctx.assets.quoteMark
+    const mark = themeMark ?? FALLBACK_OPEN_MARK
     const pad = ctx.tokens.spacing.containerPadding
     return {
       wrapperCSS:
@@ -54,6 +60,8 @@ const classic: VariantDef = {
         `border-radius:8px`,
       bodyCSS: `font-size:16px;line-height:1.7;text-align:center`,
       svgSlot: mark,
+      // 仅 fallback 字符路径配对闭合；主题自带 SVG 引号时不强行加。
+      closeSlot: themeMark ? undefined : FALLBACK_CLOSE_MARK,
     }
   },
 }

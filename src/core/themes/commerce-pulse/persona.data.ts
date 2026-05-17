@@ -193,7 +193,9 @@ export const spec: PersonaSpec = {
       ],
     },
 
-    // stepBadge：朱红圆圈 + 白数字（购物步骤）
+    // stepBadge：朱红实心圆 + 白外环 + 白数字（CTA"按键浮起"感）。
+    // 外圈 1.5px 白 stroke 让徽章从背景"切出"，与 button-led footerCTA 的胶囊按键
+    // 同语言；区别于 default 单层实心圆（无外环）。
     stepBadge: {
       viewBox: [0, 0, 24, 24],
       width: 24,
@@ -202,6 +204,7 @@ export const spec: PersonaSpec = {
       placeholders: ['N'],
       primitives: [
         { type: 'circle', cx: 12, cy: 12, r: 11, fill: '#c4310e' },
+        { type: 'circle', cx: 12, cy: 12, r: 9, stroke: '#fefefe', strokeWidth: 1, fill: 'none', opacity: 0.55 },
         {
           type: 'text',
           x: 12,
@@ -500,11 +503,13 @@ export const spec: PersonaSpec = {
       border: '1px solid #e0d0d0',
     },
     // quoteCard：KOL 推荐语 / 买家好评引用
+    // 删 border-left:4px：commerce-pulse 默认 quote variant 是 frame-brackets
+    // （左上 / 左下 L 形角标），再叠 4px 实线会和 SVG 四角语义重叠。仅留软底 +
+    // 圆角作 voice override；左侧锚饰交由 variant 的四角 L 形承担。
     quoteCard: {
       'background-color': '#fff8f8',
-      'border-left': '4px solid #c4310e',
-      'border-radius': '0 8px 8px 0',
-      padding: '16px 18px 16px 20px',
+      'border-radius': '8px',
+      padding: '16px 20px',
       margin: '18px 0',
     },
     highlight: {

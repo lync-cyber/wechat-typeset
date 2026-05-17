@@ -171,7 +171,7 @@ export const spec: PersonaSpec = {
     // 四态多框（multi-callout）共骨架 + 大写徽章 + 色相 —— 与 data-brief 同源。
     // 作者写 `::: info NOTE` / `::: tip TIP` / `::: warning WARN` / `::: danger HALT`,
     // ctx.info 覆盖 news-row 默认 TIP/INFO/WARN/STOP。
-    admonition: 'news-row',
+    admonition: 'slab-corner', // brutalist 专属：顶 6px accent 硬条 + 右上方块徽章 + zero-radius
     quote: 'tilted-sticker', // 粗野主义签名：反色 + transform:rotate(-1deg) + 大字 sans 粗体
     compare: 'stacked-row', // 粗野主义偏竖叠陈述：先 A 段后 B 段，硬边对照
     steps: 'split-row', // 左 4px 主色实线 + 左编号，硬边骨架与 news-row 同源
@@ -183,7 +183,7 @@ export const spec: PersonaSpec = {
     recommend: 'card-list',
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
     footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
-    pullQuote: 'giant-mark',
+    pullQuote: 'stamp-quote', // brutalist DNA：印章压字 + 顶底 2px 硬条，拒绝装饰巨号
     announcement: 'danger-bar',
     tableCard: 'rule-grid',
     gallery: 'duo',

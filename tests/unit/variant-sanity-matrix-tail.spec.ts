@@ -8,7 +8,7 @@
 import { describe, expect, it } from 'vitest'
 import { render } from '../../src/core/pipeline'
 import { themeList } from '../../src/core/themes'
-import { CASES, assertNoForbiddenCss, assertSvgSafe } from '../helpers/variantCases'
+import { CASES, assertNoForbiddenCss, assertSvgSafe, isCompatBlocked } from '../helpers/variantCases'
 
 const HALF = Math.ceil(themeList.length / 2)
 const TAIL = themeList.slice(HALF)
@@ -23,9 +23,13 @@ describe('variant sanity · 主矩阵（后半）', () => {
         expect(html.length, label).toBeGreaterThan(0)
 
         const baseRe = new RegExp(`class="[^"]*container-${c.containerName}(\\s|--|")`)
-        const variantRe = new RegExp(`container-${c.containerName}--${c.id}\\b`)
         expect(html, `${label} 缺基础 class`).toMatch(baseRe)
-        expect(html, `${label} 缺 variant class`).toMatch(variantRe)
+
+        // variant class 断言：themeCompat 守卫降级时 id 已换，跳过此断言
+        if (!isCompatBlocked(theme.id, c.id)) {
+          const variantRe = new RegExp(`container-${c.containerName}--${c.id}\\b`)
+          expect(html, `${label} 缺 variant class`).toMatch(variantRe)
+        }
 
         assertNoForbiddenCss(html, label)
         assertSvgSafe(html, label)

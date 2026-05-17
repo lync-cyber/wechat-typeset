@@ -25,12 +25,15 @@ const KIND_MARK: Record<string, string> = {
   danger: '辨',
 }
 
-const DEFAULT_TITLE: Record<string, string> = {
-  tip: '按语',
-  warning: '存疑',
-  info: '注释',
-  danger: '辨误',
-}
+// 通用 admonition 默认 title——marginalia 的设计语言是"墨色一色靠符号区分"，
+// 用户没显式写 info 时，主容器会传入这些 fallback 文案；本 variant 视之为"未提供"
+// 并省略附属 span，避免【按】按语 / 【疑】注意 这种双标签噪声。
+const GENERIC_FALLBACK_TITLES: ReadonlySet<string> = new Set([
+  '小贴士',
+  '注意',
+  '说明',
+  '警告',
+])
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent } = mergeThumb(args ?? {})
@@ -79,14 +82,18 @@ const marginalia: VariantDef<AdmonitionRenderArgs> = {
     const ink = ctx.tokens.colors.secondary
     const muted = ctx.tokens.colors.textMuted
     const mark = KIND_MARK[kind] ?? '按'
-    const title = ctx.info.trim() || DEFAULT_TITLE[kind] || ''
-    // 标题以【X】开头，inline 承接可选文案。无分隔线、无图标。
+    // 自定义业务文案才追加附属 span；info 为空或为通用 admonition 默认文案（"小贴士/注意/说明/警告"）
+    // 时仅渲染【X】单字，避免"【按】按语 / 【疑】注意"的语义重复双标签。
+    const userTitle = ctx.info.trim()
+    const hasCustomTitle = userTitle.length > 0 && !GENERIC_FALLBACK_TITLES.has(userTitle)
+    const titleSpan = hasCustomTitle
+      ? `<span style="color:${muted};font-weight:500;letter-spacing:0.6px;` +
+        `margin-left:6px">` + escText(userTitle) + '</span>'
+      : ''
     const labelHtml =
       `<section style="color:${ink};font-size:15px;line-height:1.7;` +
       `margin-bottom:4px;letter-spacing:1px;font-weight:600">` +
-      `【${escText(mark)}】` +
-      `<span style="color:${muted};font-weight:500;letter-spacing:0.6px;` +
-      `margin-left:6px">` + escText(title) + '</span>' +
+      `【${escText(mark)}】` + titleSpan +
       '</section>'
     return {
       wrapperCSS:

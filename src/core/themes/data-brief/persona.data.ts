@@ -219,9 +219,9 @@ export const spec: PersonaSpec = {
     note: 'smallcaps-kicker', // 顶 2px 主色条 + uppercase kicker，与签名容器同源
     footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，财新简报底栏语言
     recommend: 'card-list',
-    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    qrcode: 'qr-stack', // 数据简报"先视觉锚后说明"：上 96×96 QR + 下三行居中
     footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
-    pullQuote: 'giant-mark',
+    pullQuote: 'margin-pull', // 数据简报 NYT Sunday 悬挂：左竖 QUOTE + 右大字，与 top-rule 底栏同调
     announcement: 'danger-bar',
     tableCard: 'rule-grid',
     gallery: 'duo',

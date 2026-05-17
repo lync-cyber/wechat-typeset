@@ -52,7 +52,10 @@ const lined: VariantDef = {
         'font-weight:700',
         'letter-spacing:0.15em',
         'margin-bottom:6px',
+        // 抵消 wrapperCSS 的 padding-left:1.6em，让标题左缘与 [1] [2] 列表项对齐。
+        // 不动 wrapper 是因为 hanging indent 必须靠 padding-left + 负 text-indent 实现。
         'text-indent:0',
+        'margin-left:-1.6em',
       ].join(';'),
     }
   },

@@ -289,6 +289,9 @@ MIT License。
 ::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"
 :::
 
+::: qrcode variant=qr-stack 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"
+:::
+
 ::: colophon next="纸本之必要：论书脊与手指的记忆" issue="第 004 期 · 2026"
 :::
 

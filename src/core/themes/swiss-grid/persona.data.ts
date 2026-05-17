@@ -189,9 +189,9 @@ export const spec: PersonaSpec = {
     note: 'side-bar', // 左 2px 中性线 + 缩进
     footnotes: 'top-rule', // 顶 hairline + 11px 密栏，国际排印底栏
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
-    qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    qrcode: 'qr-stack', // Neue Grafik 收尾语序：上 QR 视觉锚 + 下三行 monospace kicker
     footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
-    pullQuote: 'giant-mark',
+    pullQuote: 'centered-rule', // Neue Grafik placard：上下 1px 实线居中夹 + uppercase kicker
     announcement: 'danger-bar',
     tableCard: 'rule-grid',
     gallery: 'duo',

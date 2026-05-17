@@ -87,6 +87,7 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
           const rest = token.info.trim().slice(name.length).trim()
           const { title, attrs } = parseInfo(rest)
           const ctx: ContainerRenderContext = {
+            themeId: theme.id,
             tokens: theme.tokens,
             assets: theme.assets,
             containers: theme.containers,
@@ -410,6 +411,7 @@ function applyTaskListSquares(md: MarkdownIt, theme: Theme): void {
 
 function emptyCtx(theme: Theme, pageVariants?: Partial<ThemeVariants>): ContainerRenderContext {
   return {
+    themeId: theme.id,
     tokens: theme.tokens,
     assets: theme.assets,
     containers: theme.containers,

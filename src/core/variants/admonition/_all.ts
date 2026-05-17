@@ -27,6 +27,7 @@ import reportSection from './report-section'
 import newsRow from './news-row'
 import newsUnderline from './news-underline'
 import mookTag from './mook-tag'
+import slabCorner from './slab-corner'
 
 export default [
   accentBar,
@@ -48,4 +49,5 @@ export default [
   newsRow,
   newsUnderline,
   mookTag,
+  slabCorner,
 ]

@@ -49,6 +49,8 @@ const ADMONITION_ORDER: readonly string[] = [
   'report-section',
   'news-row',
   'news-underline',
+  'mook-tag',
+  'slab-corner',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
@@ -64,7 +66,7 @@ const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
 const FOOTNOTES_ORDER: readonly string[] = ['lined', 'inline-flow']
 const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
-const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card']
+const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card', 'qr-stack']
 const FOOTER_CTA_ORDER: readonly string[] = ['button-led', 'triptych-actions']
 const PULL_QUOTE_ORDER: readonly string[] = [
   'giant-mark',

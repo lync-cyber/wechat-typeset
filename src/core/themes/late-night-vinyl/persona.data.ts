@@ -205,7 +205,7 @@ export const spec: PersonaSpec = {
     // news-row：data-brief 家族的"左 3px + 徽章 + 紧凑单行"骨架。
     // 与设计稿 multi-callout（cue/b-side/static/off-air）的视觉高度对齐：
     // 仅徽章字 + 色不同，正文紧凑同色族；徽章文字由作者写 `::: info cue` 直接覆盖。
-    admonition: 'news-row',
+    admonition: 'pill-tag', // 顶部胶囊标签 + 外框（深夜电台栏目"小播报"语义，比 news-row 单行更松弛）
     // tilted-sticker：punk-zine 反色贴纸（白底深蓝字 + 微旋）—— 与 elements.blockquote 的橙线卡底协同
     quote: 'tilted-sticker',
     // stacked-row：竖叠陈述，符合 vinyl zine 单列纵贯叙事节奏
@@ -225,7 +225,7 @@ export const spec: PersonaSpec = {
     recommend: 'card-list',
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
     footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
-    pullQuote: 'giant-mark',
+    pullQuote: 'margin-pull', // NYT Sunday 悬挂式：左竖 QUOTE kicker + 右大字，深夜电台栏目感
     announcement: 'danger-bar',
     tableCard: 'rule-grid',
     gallery: 'duo',

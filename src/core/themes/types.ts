@@ -411,6 +411,8 @@ export type AdmonitionVariantId =
   // 编集附注 単字：参 / 編 / 注 / 禁 单字 CJK 标签 + 米卡纸底 + 主色左条
   // （editorial-mook 专属；POPEYE / BRUTUS 系编集所附注的母语形态）
   | 'mook-tag'
+  // 粗野板块：顶 6px accent 硬条 + 右上方块徽章 + zero-radius（brutalist 专属）
+  | 'slab-corner'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -520,6 +522,8 @@ export type QrcodeVariantId =
   | 'bare'
   // 订阅卡：左 QR + 右 kicker/title/desc 三行（刊物收尾专用）
   | 'follow-card'
+  // 垂直堆叠：上 QR 居中 + 下 kicker/title/desc 居中（Neue Grafik / 数据简报收尾）
+  | 'qr-stack'
 
 export type FooterCTAVariantId =
   // 默认：单按钮 + 引导文案（粗体大标题 + 主色胶囊按钮）
@@ -721,6 +725,7 @@ export const VARIANT_IDS = {
     'news-row',
     'news-underline',
     'mook-tag',
+    'slab-corner',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
@@ -790,6 +795,7 @@ export const VARIANT_IDS = {
   qrcode: [
     'bare',
     'follow-card',
+    'qr-stack',
   ] as const satisfies readonly QrcodeVariantId[],
   footerCTA: [
     'button-led',

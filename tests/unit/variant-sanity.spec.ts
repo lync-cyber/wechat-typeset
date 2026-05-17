@@ -16,14 +16,14 @@ import { describe, expect, it } from 'vitest'
 import { render } from '../../src/core/pipeline'
 import { defaultTheme, themeList } from '../../src/core/themes'
 import { VARIANT_IDS } from '../../src/core/themes/types'
-import { CASES } from '../helpers/variantCases'
+import { CASES, isCompatBlocked } from '../helpers/variantCases'
 
 describe('枚举完整性', () => {
   it('11 kind × N variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      admonition: 19,
+      admonition: 20, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook) +1: slab-corner (brutalist)
       quote: 7,
       compare: 4,
       steps: 5,
@@ -75,6 +75,9 @@ describe('枚举完整性', () => {
  * variant wrapperCSS / svgSlot / titleCSS 的任何意外改动都要被显式捕获，避免被
  * "不抛错"和"含 class"放行。取定位到 variant wrapper 的 section 段做快照，
  * 不吸整篇 html 与大段主题 CSS。
+ *
+ * themeCompat 限定 variant 在默认主题下会被守卫降级到 fallback，section 段
+ * class 不再是 container-X--{id}——这种情况下快照不要求精确命中，仍允许过测试。
  */
 function sliceVariantChunk(html: string, containerName: string, variantId: string): string {
   const re = new RegExp(
@@ -88,6 +91,9 @@ describe('默认主题 · 每 variant 渲染片段快照', () => {
   for (const c of CASES) {
     it(`${c.kind}:${c.id}`, () => {
       const { html } = render({ md: c.md, theme: defaultTheme })
+      // themeCompat 守卫降级时 wrapper class 已被换成 fallback id，本断言会
+      // 抓不到原 variantId 的片段，跳过快照（matrix spec 仍跑基础 class 校验）
+      if (isCompatBlocked(defaultTheme.id, c.id)) return
       const chunk = sliceVariantChunk(html, c.containerName, c.id)
       expect(chunk).not.toBe('<no-match>')
       expect(chunk).toMatchSnapshot()

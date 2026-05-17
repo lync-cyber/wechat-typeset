@@ -100,7 +100,7 @@ export const mastheadContainer: ContainerRenderer = {
 }
 
 // ============================================================
-// section-tag · 黑底白字小栏目标签
+// section-tag · 主题色胶囊小栏目标签
 // ============================================================
 
 export const sectionTagContainer: ContainerRenderer = {
@@ -108,10 +108,14 @@ export const sectionTagContainer: ContainerRenderer = {
     const label = ctx.info.trim() || '标签'
     const c = ctx.tokens.colors
     // 外壳 section 仅承载 margin；标签本体走 inline-block 胶囊。
+    // 底色用 primary 而非 text——section-tag 语义是"刊物章节标签"，要与
+    // editorial-header.chip 视觉同源（同样的 primary 底 + textInverse 字），
+    // 而不是 text 黑色（与正文同色，丢失主题签名）。textInverse 在每个主题已被
+    // 配置为"primary 底色上的反白字色"，无需额外对比度护栏。
     const wrapperCSS = inline(ctx.containers.sectionTag)
     const pillCSS = [
       'display:inline-block',
-      `background-color:${c.text}`,
+      `background-color:${c.primary}`,
       `color:${c.textInverse}`,
       'font-size:10px',
       'letter-spacing:0.15em',

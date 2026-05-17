@@ -65,8 +65,9 @@ const topRule: VariantDef = {
         `color:${c.textMuted}`,
       ].join(';'),
       titleCSS: [
-        // 小尾注题：右对齐 + uppercase + wide-letter
-        // 与 lined 默认 kicker（左对齐 10px）区分：top-rule 的标题压在线下方右侧
+        // 小尾注题：左对齐 + uppercase + wide-letter
+        // "参考文献" / "参考来源 · References" 在中文阅读习惯里期望左对齐；
+        // 早期 variant 作者写 text-align:right 是局部审美选择，与作者文案不匹配，已移除。
         `display:block`,
         `font-size:10px`,
         `font-weight:700`,
@@ -74,7 +75,6 @@ const topRule: VariantDef = {
         `text-transform:uppercase`,
         `color:${c.primary}`,
         `margin:0 0 10px 0`,
-        `text-align:right`,
         `text-indent:0`,
       ].join(';'),
     }

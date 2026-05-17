@@ -331,6 +331,7 @@
 }
 
 .markdown-body .container-note {
+  border-radius: 0;
   margin: 16px 0;
 }
 

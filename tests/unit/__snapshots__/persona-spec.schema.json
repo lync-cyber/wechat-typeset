@@ -7578,7 +7578,8 @@
             "report-section",
             "news-row",
             "news-underline",
-            "mook-tag"
+            "mook-tag",
+            "slab-corner"
           ]
         },
         "quote": {
@@ -7667,7 +7668,8 @@
         "qrcode": {
           "enum": [
             "bare",
-            "follow-card"
+            "follow-card",
+            "qr-stack"
           ]
         },
         "footerCTA": {

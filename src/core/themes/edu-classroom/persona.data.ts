@@ -135,7 +135,9 @@ export const spec: PersonaSpec = {
       ],
     },
 
-    // stepBadge：primary 森林绿 fill 圆 + 白数字（教育的灵魂：数字圈圈）
+    // stepBadge：双圆环（外深绿描边 + 内浅绿淡底）+ 主色数字。
+    // 教育"圈圈钢笔重描"语言：教科书 / 黑板上常用的双层圈编号，与单色实心圆
+    // （default / commerce-pulse / youth-zine 母语）拉开形态差异。
     stepBadge: {
       viewBox: [0, 0, 24, 24],
       width: 24,
@@ -143,14 +145,15 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'circle', cx: 12, cy: 12, r: 11, fill: '#2e7d32' },
+        { type: 'circle', cx: 12, cy: 12, r: 11, stroke: '#2e7d32', strokeWidth: 1.8, fill: '#e8f3e9' },
+        { type: 'circle', cx: 12, cy: 12, r: 8, stroke: '#2e7d32', strokeWidth: 1, fill: 'none' },
         {
           type: 'text',
           x: 12, y: 17,
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#fefefe',
+          fill: '#2e7d32',
           textAnchor: 'middle',
         },
       ],

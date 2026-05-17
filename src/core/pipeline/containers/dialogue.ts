@@ -63,7 +63,9 @@ export const dialogueTurnContainer: ContainerRenderer = {
   open: (ctx) => {
     const top = DIALOGUE_STACK[DIALOGUE_STACK.length - 1]
     if (!top) return ''
-    const name = ctx.attrs.name ?? ''
+    // `name=` 与 `speaker=` 都视为说话人——作者文档（如 sample-commerce-pulse / sample-edu-classroom）
+    // 普遍写 `speaker=...`，与 dialogue.ts 早期约定的 `name=` 等价。两者别名，name 优先。
+    const name = ctx.attrs.name ?? ctx.attrs.speaker ?? ''
     const role = ctx.attrs.role ?? ''
     const side = ctx.attrs.side ?? 'left'
     top.turnCount += 1

@@ -43,6 +43,10 @@ Grid systems are not a guarantee of good design. 网格不担保好设计——�
 约束即自由——网格不是把可能性减少，而是让可能性变得可控。
 :::
 
+::: pull-quote
+真正改变一个人的，往往是最简单的一句话。
+:::
+
 ::: steps 一份版面的诞生 variant=split-row
 ### 01 框定
 12 栏 + 8 行 + 4 mm 沟距，先确定容器骨架。
