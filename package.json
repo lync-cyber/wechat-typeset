@@ -46,12 +46,10 @@
   "engines": {
     "node": ">=24"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "packageManager": "pnpm@11.1.1",
   "scripts": {
-    "dev": "npm run build:samples && npm run build:references && npm run build:showcase && vite",
-    "build": "npm run build:samples && npm run build:references && npm run build:showcase && npm run check:registry && npm run lint:core && npm run typecheck:core && vue-tsc --noEmit && vite build && npm run build:lib && npm run check:size && npm run gen:schema && npm run build:capabilities && npm run build:covers && npm run build:writer-docs -- --check && npm run build:skill-refs -- --check && npm run gen:showcase -- --check && npm run smoke:lib",
+    "dev": "pnpm build:samples && pnpm build:references && pnpm build:showcase && vite",
+    "build": "pnpm build:samples && pnpm build:references && pnpm build:showcase && pnpm check:registry && pnpm lint:core && pnpm typecheck:core && vue-tsc --noEmit && vite build && pnpm build:lib && pnpm check:size && pnpm gen:schema && pnpm build:capabilities && pnpm build:covers && pnpm build:writer-docs --check && pnpm build:skill-refs --check && pnpm gen:showcase --check && pnpm smoke:lib",
     "lint:core": "eslint src/core --max-warnings 0",
     "typecheck:core": "tsc -p tsconfig.core.json --noEmit",
     "check:registry": "tsx scripts/check-theme-registry.ts",
@@ -83,7 +81,7 @@
     "install:hooks": "node scripts/install-git-hooks.mjs",
     "cli": "tsx packages/cli/bin/wechat-typeset.mjs",
     "mcp": "tsx packages/mcp/bin/wechat-typeset-mcp.mjs",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "chroma-js": "^3.1.2",

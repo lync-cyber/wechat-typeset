@@ -17,17 +17,21 @@
 | `default` | 默认主题 | 通用（全题材公平阅读） | `accent-bar` | `classic` | `number-circle` | `rule` | `bare` | `minimal-callout` | imageCaption、announcement |
 | `tech-geek` | 极客夜行 | 技术布道 / 工程随笔 / 架构评论（manpage / RFC / TAOCP 脚注风） | `manpage-log` | `frame-brackets` | `split-row` | `wave` | `terminal-frame` | `side-bar` | —— |
 | `tech-explainer` | 文档白昼 | 技术布道 / 产品文档 / 教程 | `accent-bar` | `column-rule` | `step-card` | `dots` | `header-bar` | `box-callout` | note |
-| `life-aesthetic` | 慢生活 | 生活写作 / 非虚构随笔 | `bubble-organic` | `magazine-dropcap` | `step-card` | `flower` | `inline-card` | `dotted-margin` | imageCaption、authorBio |
 | `business-finance` | 硬核财经 | 财经内参 / 研究所 newsletter（FT 中文、财新周刊、Bloomberg Terminal、HBR） | `ledger-cell` | `frame-brackets` | `timeline-dot` | `wave` | `bare` | `box-callout` | abstract、keyNumber |
 | `data-brief` | 数据简报 | 数据 newsletter / 数据简报 / 行业图表周刊 | `news-row` | `editorial-block` | `step-card` | `flower` | `bare` | `smallcaps-kicker` | abstract、masthead、sectionTag、toc、kpiDashboard、barChart、qaBlock、footnotes、colophon |
-| `literary-humanism` | 人文札记 | 人文非虚构（散文 / 书评 / 长评 / 札记） | `marginalia` | `magazine-dropcap` | `timeline-dot` | `flower` | `inline-card` | `dotted-margin` | imageCaption、authorBio |
 | `industry-observer` | 行业观察 | 内参 newsletter / 行业周报 / analyst essay 读者 | `report-section` | `column-rule` | `timeline-dot` | `glyph` | `bare` | `side-bar` | cover、author、footerCTA、abstract、keyNumber、imageCaption、authorBio、timeline |
+| `commerce-pulse` | 电商脉动 | B2C 电商 / 直播带货 / 双 11 大促 / 美妆服饰 KOC / 抖音电商 | `accent-bar` | `frame-brackets` | `number-circle` | `dots` | `bare` | `box-callout` | recommend、footerCTA、announcement、pullQuote、tableCard、compare、steps、quoteCard |
+| `literary-humanism` | 人文札记 | 人文非虚构（散文 / 书评 / 长评 / 札记） | `marginalia` | `magazine-dropcap` | `timeline-dot` | `flower` | `inline-card` | `dotted-margin` | imageCaption、authorBio |
 | `people-story` | 人物特稿 | 人物特稿 / 人文非虚构 / 杂志 Profile | `magazine-pull` | `magazine-dropcap` | `timeline-dot` | `glyph` | `inline-card` | `minimal-callout` | cover、author、intro、quoteCard、sectionTitle、footerCTA、recommend、qrcode、imageCaption、authorBio、announcement |
-| `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `sidenote-latex` | `frame-brackets` | `timeline-dot` | `dots` | `line-numbers` | `box-callout` | abstract |
 | `editorial-mook` | 编辑刊 | 慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物 | `mook-tag` | `editorial-block` | `timeline-dot` | `glyph` | `inline-card` | `dotted-margin` | abstract、masthead、toc、qaBlock、footnotes、colophon、imageCaption、authorBio、announcement |
+| `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `news-row` | `tilted-sticker` | `split-row` | `dots` | `terminal-frame` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、footnotes、colophon、imageCaption、authorBio、timeline |
+| `life-aesthetic` | 慢生活 | 生活写作 / 非虚构随笔 | `bubble-organic` | `magazine-dropcap` | `step-card` | `flower` | `inline-card` | `dotted-margin` | imageCaption、authorBio |
+| `edu-classroom` | 教室课堂 | K-12 教育 / 亲子科普 / 童书推荐 / 兴趣启蒙 / 知识自习 / 家长读物 | `card-shadow` | `classic` | `number-circle` | `wave` | `bare` | `hanging-indent` | steps、tip、info、recommend、dialogue、announcement、intro |
+| `academic-frontier` | 学术前沿 | 学术研究者 / 同行评审向的论文化陈述 | `sidenote-latex` | `frame-brackets` | `timeline-dot` | `dots` | `line-numbers` | `box-callout` | abstract |
+| `official-gazette` | 公文公报 | 政务通告 / 企业公告 / 监管声明 / 招股说明书 / 严肃通报 / 公开信 | `top-bottom-rule` | `frame-brackets` | `number-circle` | `rule` | `bare` | `editorial-stripe` | announcement、footnotes、sectionTitle、colophon、byline |
 | `swiss-grid` | 苏黎世栅格 | 设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔 | `news-underline` | `editorial-block` | `split-row` | `seal-mark` | `inline-card` | `side-bar` | abstract、sectionTag、editorialHeader、byline、toc、keyNumber、qaBlock、footnotes、calloutGroup、colophon、barChart、imageCaption、announcement |
 | `brutalist` | 粗野主义报刊 | 夜读简报 / 文化批评 / 实验栏目 | `news-row` | `tilted-sticker` | `split-row` | `flower` | `inline-card` | `side-bar` | masthead、toc、qaBlock、footnotes、colophon、imageCaption、announcement |
-| `late-night-vinyl` | 深夜电台 | 电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文 | `news-row` | `tilted-sticker` | `split-row` | `dots` | `terminal-frame` | `side-bar` | intro、cover、author、masthead、toc、qaBlock、footnotes、colophon、imageCaption、authorBio、timeline |
+| `youth-zine` | 青年潮志 | 青年文化 / Gen-Z / 小红书博主 / B 站 UP 主 / 潮流安利 / 二次元周边 | `pill-tag` | `column-rule` | `number-circle` | `dots` | `bare` | `side-bar` | intro、highlight、pullQuote、gallery、dialogue、recommend、tip、warning、info、danger、announcement |
 
 <!-- generated:personas-table:end -->
 
@@ -63,16 +67,6 @@
 
 **signatureContainers**：`note`
 
-### life-aesthetic · 慢生活
-
-**受众**：生活写作 / 非虚构随笔
-
-**描述**：暖米底 + 圆角柔和，写写饮食、旅行与长日
-
-**视觉签名**：admonition=`bubble-organic` · quote=`magazine-dropcap` · steps=`step-card` · divider=`flower` · codeBlock=`inline-card` · note=`dotted-margin`
-
-**signatureContainers**：`imageCaption`、`authorBio`
-
 ### business-finance · 硬核财经
 
 **受众**：财经内参 / 研究所 newsletter（FT 中文、财新周刊、Bloomberg Terminal、HBR）
@@ -93,16 +87,6 @@
 
 **signatureContainers**：`abstract`、`masthead`、`sectionTag`、`toc`、`kpiDashboard`、`barChart`、`qaBlock`、`footnotes`、`colophon`
 
-### literary-humanism · 人文札记
-
-**受众**：人文非虚构（散文 / 书评 / 长评 / 札记）
-
-**描述**：宋椠古籍 + 克制留白，给散文、书评、长评留足呼吸
-
-**视觉签名**：admonition=`marginalia` · quote=`magazine-dropcap` · steps=`timeline-dot` · divider=`flower` · codeBlock=`inline-card` · note=`dotted-margin`
-
-**signatureContainers**：`imageCaption`、`authorBio`
-
 ### industry-observer · 行业观察
 
 **受众**：内参 newsletter / 行业周报 / analyst essay 读者
@@ -112,6 +96,26 @@
 **视觉签名**：admonition=`report-section` · quote=`column-rule` · steps=`timeline-dot` · divider=`glyph` · codeBlock=`bare` · note=`side-bar`
 
 **signatureContainers**：`cover`、`author`、`footerCTA`、`abstract`、`keyNumber`、`imageCaption`、`authorBio`、`timeline`
+
+### commerce-pulse · 电商脉动
+
+**受众**：B2C 电商 / 直播带货 / 双 11 大促 / 美妆服饰 KOC / 抖音电商
+
+**描述**：朱红 + 金色 + 炭灰：促销 / 价格优势 / 限时紧迫 / KOL 推荐的高密度带货排版
+
+**视觉签名**：admonition=`accent-bar` · quote=`frame-brackets` · steps=`number-circle` · divider=`dots` · codeBlock=`bare` · note=`box-callout`
+
+**signatureContainers**：`recommend`、`footerCTA`、`announcement`、`pullQuote`、`tableCard`、`compare`、`steps`、`quoteCard`
+
+### literary-humanism · 人文札记
+
+**受众**：人文非虚构（散文 / 书评 / 长评 / 札记）
+
+**描述**：宋椠古籍 + 克制留白，给散文、书评、长评留足呼吸
+
+**视觉签名**：admonition=`marginalia` · quote=`magazine-dropcap` · steps=`timeline-dot` · divider=`flower` · codeBlock=`inline-card` · note=`dotted-margin`
+
+**signatureContainers**：`imageCaption`、`authorBio`
 
 ### people-story · 人物特稿
 
@@ -123,6 +127,46 @@
 
 **signatureContainers**：`cover`、`author`、`intro`、`quoteCard`、`sectionTitle`、`footerCTA`、`recommend`、`qrcode`、`imageCaption`、`authorBio`、`announcement`
 
+### editorial-mook · 编辑刊
+
+**受众**：慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物
+
+**描述**：米白底 + 朱橙单点缀 + 极小字号 · POPEYE / BRUTUS 系慢读编辑刊
+
+**视觉签名**：admonition=`mook-tag` · quote=`editorial-block` · steps=`timeline-dot` · divider=`glyph` · codeBlock=`inline-card` · note=`dotted-margin`
+
+**signatureContainers**：`abstract`、`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`authorBio`、`announcement`
+
+### late-night-vinyl · 深夜电台
+
+**受众**：电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文
+
+**描述**：深夜蓝 + 暖米白 + 橙色唱针 · 03:41 AM 黑胶播客慢读感
+
+**视觉签名**：admonition=`news-row` · quote=`tilted-sticker` · steps=`split-row` · divider=`dots` · codeBlock=`terminal-frame` · note=`side-bar`
+
+**signatureContainers**：`intro`、`cover`、`author`、`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`authorBio`、`timeline`
+
+### life-aesthetic · 慢生活
+
+**受众**：生活写作 / 非虚构随笔
+
+**描述**：暖米底 + 圆角柔和，写写饮食、旅行与长日
+
+**视觉签名**：admonition=`bubble-organic` · quote=`magazine-dropcap` · steps=`step-card` · divider=`flower` · codeBlock=`inline-card` · note=`dotted-margin`
+
+**signatureContainers**：`imageCaption`、`authorBio`
+
+### edu-classroom · 教室课堂
+
+**受众**：K-12 教育 / 亲子科普 / 童书推荐 / 兴趣启蒙 / 知识自习 / 家长读物
+
+**描述**：耐心讲解 / 步骤分解 / 友好亲切的教育内容，不卡通化
+
+**视觉签名**：admonition=`card-shadow` · quote=`classic` · steps=`number-circle` · divider=`wave` · codeBlock=`bare` · note=`hanging-indent`
+
+**signatureContainers**：`steps`、`tip`、`info`、`recommend`、`dialogue`、`announcement`、`intro`
+
 ### academic-frontier · 学术前沿
 
 **受众**：学术研究者 / 同行评审向的论文化陈述
@@ -133,15 +177,15 @@
 
 **signatureContainers**：`abstract`
 
-### editorial-mook · 编辑刊
+### official-gazette · 公文公报
 
-**受众**：慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物
+**受众**：政务通告 / 企业公告 / 监管声明 / 招股说明书 / 严肃通报 / 公开信
 
-**描述**：米白底 + 朱橙单点缀 + 极小字号 · POPEYE / BRUTUS 系慢读编辑刊
+**描述**：中央人民政府公报 / 上市公司公告 / 监管文件，服务政务通告、企业公告、监管声明等严肃文体
 
-**视觉签名**：admonition=`mook-tag` · quote=`editorial-block` · steps=`timeline-dot` · divider=`glyph` · codeBlock=`inline-card` · note=`dotted-margin`
+**视觉签名**：admonition=`top-bottom-rule` · quote=`frame-brackets` · steps=`number-circle` · divider=`rule` · codeBlock=`bare` · note=`editorial-stripe`
 
-**signatureContainers**：`abstract`、`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`authorBio`、`announcement`
+**signatureContainers**：`announcement`、`footnotes`、`sectionTitle`、`colophon`、`byline`
 
 ### swiss-grid · 苏黎世栅格
 
@@ -163,15 +207,15 @@
 
 **signatureContainers**：`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`announcement`
 
-### late-night-vinyl · 深夜电台
+### youth-zine · 青年潮志
 
-**受众**：电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文
+**受众**：青年文化 / Gen-Z / 小红书博主 / B 站 UP 主 / 潮流安利 / 二次元周边
 
-**描述**：深夜蓝 + 暖米白 + 橙色唱针 · 03:41 AM 黑胶播客慢读感
+**描述**：鲜玫粉主色 + 圆角胶囊 + 高行距 · 服务青年潮流文体（短段落 / 标签云 / 高饱和）
 
-**视觉签名**：admonition=`news-row` · quote=`tilted-sticker` · steps=`split-row` · divider=`dots` · codeBlock=`terminal-frame` · note=`side-bar`
+**视觉签名**：admonition=`pill-tag` · quote=`column-rule` · steps=`number-circle` · divider=`dots` · codeBlock=`bare` · note=`side-bar`
 
-**signatureContainers**：`intro`、`cover`、`author`、`masthead`、`toc`、`qaBlock`、`footnotes`、`colophon`、`imageCaption`、`authorBio`、`timeline`
+**signatureContainers**：`intro`、`highlight`、`pullQuote`、`gallery`、`dialogue`、`recommend`、`tip`、`warning`、`info`、`danger`、`announcement`
 
 <!-- generated:persona-cards:end -->
 

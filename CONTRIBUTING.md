@@ -5,13 +5,13 @@
 ## 本地开发
 
 ```bash
-npm ci             # 严格按 package-lock.json 装，避免版本漂移
-npm run dev        # 开发服务器，热更新，http://127.0.0.1:5173
-npm run build      # 生产构建 → dist/
-npm test           # 全量 vitest + tests/fixtures/all-containers.md 端到端校验
-npm run test:unit  # 只跑 vitest（开发中快速回归）
-npm run test:e2e   # 只跑 all-containers fixture 校验（改 variant/主题后必跑）
-npm run typecheck  # 单独跑 vue-tsc
+pnpm install        # 严格按 pnpm-lock.yaml 装，避免版本漂移
+pnpm dev            # 开发服务器，热更新，http://127.0.0.1:5173
+pnpm build          # 生产构建 → dist/
+pnpm test           # 全量 vitest + tests/fixtures/all-containers.md 端到端校验
+pnpm test:unit      # 只跑 vitest（开发中快速回归）
+pnpm test:e2e       # 只跑 all-containers fixture 校验（改 variant/主题后必跑）
+pnpm typecheck      # 单独跑 vue-tsc
 ```
 
 ### Playwright 移动端 E2E（可选）
@@ -19,17 +19,17 @@ npm run typecheck  # 单独跑 vue-tsc
 移动端布局与 footer-cta 链接相关变更建议跑一遍 Playwright：
 
 ```bash
-npm run test:e2e:pw:install   # 首次装浏览器（~200MB）
-npm run test:e2e:pw           # 跑 tests/e2e/ 下全部用例
-npx playwright test --project=mobile-chromium --ui   # 调试模式
+pnpm test:e2e:pw:install                              # 首次装浏览器（~200MB）
+pnpm test:e2e:pw                                      # 跑 tests/e2e/ 下全部用例
+pnpm exec playwright test --project=mobile-chromium --ui   # 调试模式
 ```
 
 viewport 锁定在 375×667（docs/release-checklist.md 的移动端基线）。CI 只跑 chromium；本地可加 `--project=mobile-webkit` 验 iOS Safari。
 
 ## 提 PR 前的自检清单
 
-- [ ] `npm run build` 无报错（含 `vue-tsc --noEmit`）
-- [ ] `npm test` 全绿（vitest + tests/fixtures/all-containers.md 端到端）
+- [ ] `pnpm build` 无报错（含 `vue-tsc --noEmit`）
+- [ ] `pnpm test` 全绿（vitest + tests/fixtures/all-containers.md 端到端）
 - [ ] 提交信息用 Conventional Commits（`feat: ...` / `fix: ...` / `refactor: ...` / `docs: ...`）
 - [ ] 不引入任何新网络请求（analytics / 远程字体 / 远程模板一律禁止）
 - [ ] 不引入新依赖，除非能用等量代码替换掉更重的现有依赖
