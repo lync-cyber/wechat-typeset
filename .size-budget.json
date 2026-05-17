@@ -19,12 +19,12 @@
       "gzipLimit": 14000
     },
     {
-      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。这是主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~13% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。",
+      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。这是主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~13% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。M-1~M-5 review 实施新增 20 个 variant（5 个新 variantKind × 4 各）后阈值上调到 380 / 80。",
       "name": "themes chunk",
       "prefix": "themes",
       "ext": "js",
-      "limit": 320000,
-      "gzipLimit": 72000
+      "limit": 380000,
+      "gzipLimit": 80000
     },
     {
       "name": "codemirror chunk",
