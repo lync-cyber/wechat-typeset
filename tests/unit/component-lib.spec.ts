@@ -13,7 +13,8 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { BUILTIN_COMPONENTS, findPresetByVariant } from '../../src/domain/components-lib'
 import { VARIANT_IDS } from '../../src/core/themes/types'
 import { render } from '../../src/core/pipeline'
-import { defaultTheme } from '../../src/core/themes/default'
+import { themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
 import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import {
   listUserComponents,

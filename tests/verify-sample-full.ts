@@ -32,8 +32,8 @@ const dom = new JSDOM('', { url: 'http://localhost/' })
 ;(globalThis as any).Node = dom.window.Node
 
 const { render } = await import('../src/core/pipeline')
-import { defaultTheme } from '../src/core/themes/default'
 import { themeRegistry } from '../src/core/themes'
+const defaultTheme = themeRegistry.default
 import { VARIANT_IDS } from '../src/core/themes/types'
 import { ALL_VARIANT_DEFS } from '../src/core/variants/registry'
 import { __setCompatSilentForTest } from '../src/core/pipeline/containers/_shared/themeCompatGuard'

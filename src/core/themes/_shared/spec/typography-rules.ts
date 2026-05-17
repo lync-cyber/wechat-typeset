@@ -2,16 +2,16 @@
  * Typography 硬约束（PersonaSpec.typography 级）。
  *
  * 与 validate.ts 的边界：
- *   - validate.MIN_FONT_SIZE 守 SVG primitive 字号（motif 文字光栅化下限）
+ *   - validate 守 motif primitive 字号（SVG 文字光栅化下限）
  *   - 本文件守 typography.baseSize（正文最小字号）+ 行高 / 字距 健康区间
  *
  * 两处共用 14px 下限（同一物理原因：微信公众号客户端 < 14px 会触发模糊光栅化），
- * 故直接复用 MIN_FONT_SIZE，不另立常量。
+ * 故都从 hard-rules.ts 单一真源复用 MIN_FONT_SIZE。
  */
 
 import type { WtError } from '../../../errors'
 import type { PersonaSpec } from './types'
-import { MIN_FONT_SIZE } from './validate'
+import { MIN_FONT_SIZE } from './hard-rules'
 
 /** 行高合理区间 —— 低于 1.4 紧到挤、高于 2.0 散到失焦。 */
 export const LINE_HEIGHT_MIN = 1.4

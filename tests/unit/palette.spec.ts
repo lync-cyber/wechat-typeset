@@ -11,8 +11,9 @@
 import { describe, expect, it } from 'vitest'
 import { applyPalette } from '../../src/core/color/applyPalette'
 import { checkContrast, derivePalette, seedFromPrimary } from '../../src/core/color/generator'
-import { defaultTheme } from '../../src/core/themes/default'
-import { lifeAestheticTheme } from '../../src/core/themes/life-aesthetic'
+import { themeRegistry } from '../../src/core/themes'
+const defaultTheme = themeRegistry.default
+const lifeAestheticTheme = themeRegistry['life-aesthetic']
 
 describe('derivePalette', () => {
   it('给出 seed → 11 个基础色 + 4 套 status', () => {
