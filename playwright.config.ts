@@ -37,7 +37,7 @@ export default defineConfig({
           ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
           : {}),
       },
-      testIgnore: /(studio-modal|toolbar-overflow)\.spec\.ts/,
+      testIgnore: /(studio-modal|toolbar-overflow|closing-contract)\.spec\.ts/,
     },
     {
       name: 'mobile-webkit',
@@ -45,7 +45,7 @@ export default defineConfig({
         ...devices['iPhone 13'],
         viewport: { width: 375, height: 667 },
       },
-      testIgnore: /(studio-modal|toolbar-overflow)\.spec\.ts/,
+      testIgnore: /(studio-modal|toolbar-overflow|closing-contract)\.spec\.ts/,
     },
     {
       name: 'desktop-chromium',
@@ -56,7 +56,7 @@ export default defineConfig({
           ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
           : {}),
       },
-      testMatch: /(studio-modal|toolbar-overflow)\.spec\.ts/,
+      testMatch: /(studio-modal|toolbar-overflow|closing-contract)\.spec\.ts/,
     },
   ],
   webServer: {

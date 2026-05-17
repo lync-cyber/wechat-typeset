@@ -13,6 +13,7 @@ import {
 import type { UiThemeMode } from '../../app/uiTheme'
 import type { ToolbarAction, ToolbarToggleTarget } from './toolbar-types'
 import { useToolbarPopovers } from '../composables/useToolbarPopovers'
+import { modKey } from '../composables/usePlatformKey'
 
 const props = defineProps<{
   /** 移动端瘦顶栏：true 时把第一行标题行滑出视口（CSS 只在移动断点下生效） */
@@ -117,9 +118,6 @@ function triggerToggle(target: ToolbarToggleTarget) {
 watch(popovers.theme, (open) => {
   if (!open) emit('hoverTheme', null)
 })
-
-const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
-const modKey = isMac ? '⌘' : 'Ctrl'
 
 /** 允许父组件（如 OnboardingCard 移动端引导）打开 "更多操作" 菜单 */
 defineExpose({

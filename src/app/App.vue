@@ -23,6 +23,7 @@ import { useDraftLifecycle } from '../ui/composables/useDraftLifecycle'
 import { useClipboardCopy } from '../ui/composables/useClipboardCopy'
 import { useExportActions } from '../ui/composables/useExportActions'
 import { useKeyboardShortcuts } from '../ui/composables/useKeyboardShortcuts'
+import { modKey } from '../ui/composables/usePlatformKey'
 import { useToolbarCollapse } from '../ui/composables/useToolbarCollapse'
 import { getSample } from '../domain/samples'
 import { safeRead, safeRemove, safeWrite } from '../infra/storage/_kv'
@@ -37,8 +38,6 @@ import { useBootstrap } from './bootstrap'
 import { EDITOR_MIN_W, usePaneSizing } from './usePaneSizing'
 
 const ONBOARD_STORAGE_KEY = 'wechat-typeset:onboard:dismissed'
-const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform)
-const modKey = isMac ? '⌘' : 'Ctrl'
 
 const editorRef = ref<InstanceType<typeof Editor> | null>(null)
 const previewRef = ref<InstanceType<typeof Preview> | null>(null)
@@ -185,6 +184,10 @@ useKeyboardShortcuts({
   openHelp: () => { ui.helpOpen = true },
   closeCommand: () => { if (ui.commandOpen) { ui.commandOpen = false; return true } return false },
   closeHelp: () => { if (ui.helpOpen) { ui.helpOpen = false; return true } return false },
+  closeDrawers: () => {
+    if (ui.leftSlot !== null || ui.rightSlot !== null) { closeAll(); return true }
+    return false
+  },
 })
 
 useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromHash, hasOpenDrawer })

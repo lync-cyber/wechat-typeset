@@ -421,7 +421,13 @@ defineExpose({ openSaveDialog })
         class="hidden-input"
         @change="onImportFile"
       />
-      <span v-if="transientStatus" class="tool-status">{{ transientStatus }}</span>
+      <span
+        v-if="transientStatus"
+        class="tool-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >{{ transientStatus }}</span>
     </div>
 
     <div class="body">

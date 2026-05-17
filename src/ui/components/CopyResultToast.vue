@@ -43,7 +43,9 @@ function dismiss() {
 </script>
 
 <template>
-  <div class="copy-toast" role="status">
+  <!-- aria-live="polite" + aria-atomic="true"：与 UndoToast 同；保证"已复制"
+   * 摘要整段朗读，不被 details chips 异步追加打断。 -->
+  <div class="copy-toast" role="status" aria-live="polite" aria-atomic="true">
     <div class="copy-toast-body">
       <span class="copy-toast-glyph" aria-hidden="true">✓</span>
       <div class="copy-toast-text">

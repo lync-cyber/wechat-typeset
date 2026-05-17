@@ -339,7 +339,13 @@ const idCollision = computed(() => reservedIds.has(draft.id) && draft.id !== dra
       <button class="action-btn action-secondary" @click="downloadSpec">
         下载 spec.json
       </button>
-      <span v-if="ui.status" class="action-status">{{ ui.status }}</span>
+      <span
+        v-if="ui.status"
+        class="action-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >{{ ui.status }}</span>
     </footer>
   </aside>
 </template>

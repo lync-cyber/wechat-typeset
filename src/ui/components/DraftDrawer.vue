@@ -99,21 +99,75 @@ function requestDelete(d: DraftMeta, ev: Event) {
 }
 
 /**
- * 编辑草稿 tag —— 走原生 prompt() 最省力：MVP 里用户不会频繁打 tag，
- * 以后可改成 chip 编辑器。支持逗号 / 空格混合分隔，去重、去首尾空白。
+ * Inline chip 标签编辑器 —— 替代原 window.prompt。
+ *
+ * 行内展开：editingTagsFor 指向当前编辑的 draft id；其它行渲染保持只读 chip。
+ * editingTagDraft 是工作副本（数组），commit 时一次性写回 storage，避免每按一键
+ * 都触发 draftIndexTick + 父侧 re-render 抖动。
+ *
+ * 用户输入流：
+ *   - 输入框打字 → Enter / 逗号 / 空格 → push 到 chip 列表
+ *   - chip × → splice 删除
+ *   - "✓ 完成" / blur 整个面板 → commit
+ *   - Esc → 取消（丢弃工作副本，回到旧 tags）
  */
-function editTags(d: DraftMeta, ev: Event) {
+const editingTagsFor = ref<string | null>(null)
+const editingTagDraft = ref<string[]>([])
+const tagInputValue = ref('')
+const tagInputRef = ref<HTMLInputElement | null>(null)
+
+function startEditTags(d: DraftMeta, ev: Event) {
   ev.stopPropagation()
-  const current = (d.tags ?? []).join(', ')
-  const next = window.prompt(`标签（用逗号或空格分隔，留空删除全部）`, current)
-  if (next === null) return // 用户取消
-  const list = Array.from(new Set(
-    next
-      .split(/[,，\s]+/g)
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0),
-  ))
-  mgr.update(d.id, { tags: list })
+  editingTagsFor.value = d.id
+  editingTagDraft.value = [...(d.tags ?? [])]
+  tagInputValue.value = ''
+  void nextTick(() => tagInputRef.value?.focus())
+}
+
+function dedupePush(t: string) {
+  const trimmed = t.trim()
+  if (!trimmed) return
+  if (editingTagDraft.value.includes(trimmed)) return
+  editingTagDraft.value.push(trimmed)
+}
+
+function flushTagInput() {
+  // 支持一次粘贴含分隔符的串："工程, 经验   速记" → 三条
+  const parts = tagInputValue.value.split(/[,，\s]+/g).filter((s) => s.length > 0)
+  parts.forEach(dedupePush)
+  tagInputValue.value = ''
+}
+
+function onTagInputKey(ev: KeyboardEvent) {
+  // 逗号 / 空格触发分词：让用户像打 Twitter hashtag 一样连打
+  if (ev.key === ',' || ev.key === '，' || ev.key === ' ') {
+    ev.preventDefault()
+    flushTagInput()
+    return
+  }
+  if (ev.key === 'Backspace' && tagInputValue.value === '') {
+    // 空输入态再 Backspace = 撤一个 chip
+    ev.preventDefault()
+    editingTagDraft.value.pop()
+  }
+}
+
+function removeChip(idx: number) {
+  editingTagDraft.value.splice(idx, 1)
+}
+
+function commitTags() {
+  if (editingTagsFor.value === null) return
+  flushTagInput()
+  mgr.update(editingTagsFor.value, { tags: [...editingTagDraft.value] })
+  editingTagsFor.value = null
+  editingTagDraft.value = []
+}
+
+function cancelTags() {
+  editingTagsFor.value = null
+  editingTagDraft.value = []
+  tagInputValue.value = ''
 }
 
 function toggleTagFilter(tag: string) {
@@ -205,8 +259,8 @@ defineExpose({ refresh })
               v-model="renameValue"
               class="rename-input"
               maxlength="48"
-              @keydown.enter.prevent="commitRename"
-              @keydown.esc.prevent="cancelRename"
+              @keydown.enter.prevent.stop="commitRename"
+              @keydown.esc.prevent.stop="cancelRename"
               @blur="commitRename"
             />
           </div>
@@ -217,7 +271,39 @@ defineExpose({ refresh })
             @dblclick.stop="startRename(d, $event)"
           >{{ d.title || '未命名' }}</div>
           <div class="summary">{{ bodySummary(d.id) }}</div>
-          <div v-if="d.tags && d.tags.length > 0" class="tags">
+          <div v-if="editingTagsFor === d.id" class="tag-editor" @click.stop>
+            <span
+              v-for="(t, i) in editingTagDraft"
+              :key="`${t}-${i}`"
+              class="tag-chip tag-chip-edit"
+            >
+              #{{ t }}
+              <button
+                type="button"
+                class="tag-chip-remove"
+                title="删除此标签"
+                aria-label="删除标签"
+                @click="removeChip(i)"
+              >×</button>
+            </span>
+            <input
+              ref="tagInputRef"
+              v-model="tagInputValue"
+              class="tag-input"
+              placeholder="新标签 · Enter / 逗号 / 空格 添加"
+              aria-label="新标签"
+              @keydown.enter.prevent.stop="flushTagInput"
+              @keydown.esc.prevent.stop="cancelTags"
+              @keydown="onTagInputKey"
+            />
+            <button
+              type="button"
+              class="tag-editor-done"
+              title="完成"
+              @click="commitTags"
+            >✓</button>
+          </div>
+          <div v-else-if="d.tags && d.tags.length > 0" class="tags">
             <span
               v-for="t in d.tags"
               :key="t"
@@ -232,7 +318,12 @@ defineExpose({ refresh })
           </div>
         </div>
         <div class="item-actions">
-          <button class="icon-btn" title="编辑标签" @click="editTags(d, $event)">#</button>
+          <button
+            class="icon-btn"
+            :class="{ active: editingTagsFor === d.id }"
+            title="编辑标签"
+            @click="startEditTags(d, $event)"
+          >#</button>
           <button class="icon-btn" title="重命名" @click="startRename(d, $event)">✎</button>
           <button class="icon-btn danger" title="删除" @click="requestDelete(d, $event)">×</button>
         </div>
@@ -402,6 +493,81 @@ defineExpose({ refresh })
   transition: var(--t-quick);
 }
 .tag-chip:hover { color: var(--accent); background: var(--accent-soft); }
+
+/* Inline tag editor —— 行内展开的 chip + input 编辑器，替代 window.prompt */
+.tag-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 3px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-2);
+}
+.tag-chip-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  cursor: default;
+  padding: 1px 4px 1px 6px;
+}
+.tag-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-left: 2px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--fs-13);
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+}
+.tag-chip-remove:hover {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+.tag-input {
+  flex: 1 1 80px;
+  min-width: 80px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--fs-11);
+  color: var(--text);
+  outline: none;
+}
+.tag-input::placeholder {
+  color: var(--text-subtle);
+  font-size: var(--fs-10);
+}
+.tag-editor-done {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-on);
+  border-radius: var(--radius-1);
+  font-size: var(--fs-12);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.tag-editor-done:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.icon-btn.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
 .item {
   position: relative;
   display: flex; align-items: flex-start; gap: var(--sp-2);
