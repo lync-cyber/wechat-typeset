@@ -1,9 +1,16 @@
 <script setup lang="ts">
 /**
- * 组件库抽屉：装配 + 模式切换（list / studio），不持有展示派生与 cell DOM。
+ * 组件库抽屉：装配 + 模式切换（list / studio）+ 抽屉宽度可拖加宽。
+ *
+ * 两种 studio 渲染方式：
+ *   - 'drawer'（默认 / 移动端）：与列表共占同一抽屉空间（向后兼容）
+ *   - 'modal'（桌面 desktop ≥768px）：teleport 到 body 的全屏工作台，左右 split
+ *      列表保留在抽屉里作为参照背景；mask 点击 / Esc 都走 ComponentStudio.attemptCancel()
+ *      保留 dirty 提示。
+ *
  * "保存选区"通过 defineExpose 暴露 openSaveDialog 由 actions.handleSaveSelection 调用。
  */
-import { computed, defineAsyncComponent, reactive, ref } from 'vue'
+import { computed, defineAsyncComponent, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import {
   COMPONENT_TABS,
   type ComponentEntry,
@@ -31,9 +38,12 @@ import {
   wrapComponentSnapshot,
 } from '../../infra/share/payloads/component'
 import PanelHeader from '../primitives/PanelHeader.vue'
+import DrawerResizer from '../primitives/DrawerResizer.vue'
 import ComponentGrid, { type GridAction } from './ComponentGrid.vue'
 import SaveSelectionDialog from './SaveSelectionDialog.vue'
 import ComponentStudio, { type StudioInit } from './component-studio/ComponentStudio.vue'
+import { useDrawerWidth } from '../composables/useDrawerWidth'
+import { COMPONENT_PALETTE_WIDTH_KEY } from '../../infra/storage/storageKeys'
 
 const props = defineProps<{ theme: Theme }>()
 const emit = defineEmits<{
@@ -45,6 +55,51 @@ type TabKind = 'template' | ComponentKind | 'user' | 'uv'
 
 const mode = ref<'list' | 'studio'>('list')
 const studioInit = ref<StudioInit | null>(null)
+const studioRef = ref<InstanceType<typeof ComponentStudio> | null>(null)
+
+// 抽屉左缘拖宽：本组件默认 340px（var(--drawer-w-sm)），localStorage 持久化
+const COMPONENT_PALETTE_DEFAULT_W = 340
+const {
+  width: drawerWidth,
+  maxWidth: drawerMaxWidth,
+  defaultWidth: drawerDefaultWidth,
+  minWidth: drawerMinWidth,
+} = useDrawerWidth({
+  storageKey: COMPONENT_PALETTE_WIDTH_KEY,
+  defaultWidth: COMPONENT_PALETTE_DEFAULT_W,
+  min: 320,
+  maxViewportRatio: 0.55,
+})
+
+const paletteStyle = computed(() =>
+  drawerWidth.value === null ? undefined : { width: drawerWidth.value + 'px' },
+)
+
+/**
+ * Studio modal mask 点击 / Esc 都走 ComponentStudio.attemptCancel()，
+ * 让 dirty 提示统一在一处（避免 mask 点掉直接销毁、用户改动丢失）。
+ */
+function onStudioMaskClick() {
+  studioRef.value?.attemptCancel()
+}
+
+function onStudioKeyDown(ev: KeyboardEvent) {
+  if (ev.key === 'Escape' && mode.value === 'studio') {
+    // bubble 阶段：让 CodeMirror autocomplete 等内部 Esc 处理先消费；
+    // 走到 window 之前在这里 stopPropagation，避免 useKeyboardShortcuts 同时
+    // 关掉别的浮层（命令面板 / 帮助）
+    ev.stopPropagation()
+    ev.preventDefault()
+    studioRef.value?.attemptCancel()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', onStudioKeyDown)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onStudioKeyDown)
+})
 
 const activeTab = ref<TabKind>('template')
 const userMgr = useUserComponents()
@@ -277,96 +332,114 @@ defineExpose({ openSaveDialog })
 </script>
 
 <template>
-  <aside class="palette" aria-label="组件库">
-    <PanelHeader
-      :title="mode === 'studio' ? '编辑组件' : '插入'"
-      size="sm"
-      @close="emit('close')"
-    >
-      <template v-if="mode === 'list'" #actions>
-        <button class="head-action" title="新建组件" @click="openStudioNew">+ 新建</button>
-      </template>
-      <template v-else #actions>
-        <button class="head-action" title="返回列表" @click="exitStudio">← 返回</button>
+  <aside class="palette" aria-label="组件库" :style="paletteStyle">
+    <DrawerResizer
+      :width="drawerWidth"
+      :min="drawerMinWidth"
+      :max="drawerMaxWidth"
+      :default-width="drawerDefaultWidth"
+      @update:width="drawerWidth = $event"
+    />
+    <PanelHeader title="插入" size="sm" @close="emit('close')">
+      <template #actions>
+        <button
+          v-if="mode !== 'studio'"
+          class="head-action"
+          title="新建组件"
+          @click="openStudioNew"
+        >+ 新建</button>
       </template>
     </PanelHeader>
 
-    <template v-if="mode === 'list'">
-      <nav class="tabs" role="tablist">
-        <button
-          class="tab"
-          :class="{ active: activeTab === 'template' }"
-          @click="activeTab = 'template'"
-        >
-          主题模板
-        </button>
-        <button
-          v-for="t in COMPONENT_TABS"
-          :key="t.kind"
-          class="tab"
-          :class="{ active: activeTab === t.kind }"
-          @click="activeTab = t.kind as TabKind"
-        >
-          {{ t.label }}
-        </button>
-      </nav>
+    <nav class="tabs" role="tablist">
+      <button
+        class="tab"
+        :class="{ active: activeTab === 'template' }"
+        @click="activeTab = 'template'"
+      >
+        主题模板
+      </button>
+      <button
+        v-for="t in COMPONENT_TABS"
+        :key="t.kind"
+        class="tab"
+        :class="{ active: activeTab === t.kind }"
+        @click="activeTab = t.kind as TabKind"
+      >
+        {{ t.label }}
+      </button>
+    </nav>
 
-      <div v-if="activeTab === 'user'" class="user-toolbar">
-        <button class="tool-btn" title="导出我的组件为 JSON" @click="exportAll">↓ 导出</button>
-        <button class="tool-btn" title="从 JSON 文件导入组件" @click="pickImport">↑ 导入</button>
-        <input
-          ref="importInputRef"
-          type="file"
-          accept="application/json,.json"
-          class="hidden-input"
-          @change="onImportFile"
+    <div v-if="activeTab === 'user'" class="user-toolbar">
+      <button class="tool-btn" title="导出我的组件为 JSON" @click="exportAll">↓ 导出</button>
+      <button class="tool-btn" title="从 JSON 文件导入组件" @click="pickImport">↑ 导入</button>
+      <input
+        ref="importInputRef"
+        type="file"
+        accept="application/json,.json"
+        class="hidden-input"
+        @change="onImportFile"
+      />
+      <span v-if="transientStatus" class="tool-status">{{ transientStatus }}</span>
+    </div>
+
+    <div class="body">
+      <UserVariantsPanel v-if="activeTab === 'uv'" />
+      <template v-else>
+        <div v-if="currentList.length === 0" class="empty">
+          <template v-if="activeTab === 'template'">
+            当前主题「{{ props.theme.name }}」暂无预设模板。切换主题或在下方预设里选择。
+          </template>
+          <template v-else-if="activeTab === 'user'">
+            <div class="empty-title">还没有自创组件</div>
+            <div class="empty-hint">
+              点上方"+ 新建"开始,或在编辑器里选中一段 markdown 后用"保存选区为组件"把它存下来。
+            </div>
+          </template>
+          <template v-else>本分类暂无预设</template>
+        </div>
+        <ComponentGrid
+          v-else
+          :entries="currentList"
+          :actions="gridActions"
+          @select="onCellSelect"
+          @action="onCellAction"
         />
-        <span v-if="transientStatus" class="tool-status">{{ transientStatus }}</span>
-      </div>
+      </template>
+    </div>
 
-      <div class="body">
-        <UserVariantsPanel v-if="activeTab === 'uv'" />
-        <template v-else>
-          <div v-if="currentList.length === 0" class="empty">
-            <template v-if="activeTab === 'template'">
-              当前主题「{{ props.theme.name }}」暂无预设模板。切换主题或在下方预设里选择。
-            </template>
-            <template v-else-if="activeTab === 'user'">
-              <div class="empty-title">还没有自创组件</div>
-              <div class="empty-hint">
-                点上方"+ 新建"开始,或在编辑器里选中一段 markdown 后用"保存选区为组件"把它存下来。
-              </div>
-            </template>
-            <template v-else>本分类暂无预设</template>
-          </div>
-          <ComponentGrid
-            v-else
-            :entries="currentList"
-            :actions="gridActions"
-            @select="onCellSelect"
-            @action="onCellAction"
-          />
-        </template>
-      </div>
-
-      <SaveSelectionDialog
-        :open="save.open"
-        :source-text="save.source"
-        :error="save.error"
-        @cancel="cancelSave"
-        @confirm="confirmSave"
-      />
-    </template>
-
-    <template v-else>
-      <ComponentStudio
-        :init="studioInit!"
-        :theme="props.theme"
-        @done="onStudioSaved"
-        @cancel="exitStudio"
-      />
-    </template>
+    <SaveSelectionDialog
+      :open="save.open"
+      :source-text="save.source"
+      :error="save.error"
+      @cancel="cancelSave"
+      @confirm="confirmSave"
+    />
   </aside>
+
+  <!-- Studio 全屏工作台：teleport 到 body，避开抽屉 340px 宽限制。
+       backdrop 半透明，列表与 toolbar 透出做背景参照。 -->
+  <Teleport to="body">
+    <div
+      v-if="mode === 'studio' && studioInit"
+      class="studio-modal-mask"
+      role="dialog"
+      aria-modal="true"
+      aria-label="组件 Studio"
+      @click.self="onStudioMaskClick"
+    >
+      <div class="studio-modal-card">
+        <ComponentStudio
+          ref="studioRef"
+          :init="studioInit"
+          :theme="props.theme"
+          layout="modal"
+          @done="onStudioSaved"
+          @cancel="exitStudio"
+        />
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -380,6 +453,58 @@ defineExpose({ openSaveDialog })
   font-family: var(--font-text);
   font-size: var(--fs-13);
   color: var(--text);
+}
+
+/* Studio 全屏工作台：mask + card。
+ * mask 用 PanelShell 同款 rgba(14,14,10,0.35) 半透明纸黑；z-index 100 与 PanelShell 一致。
+ * card 宽高用 vw/vh 与 px 取 min，保证 1280×800 笔记本与超宽屏都能合理展开。 */
+.studio-modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 14, 10, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: studio-mask-in 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.studio-modal-card {
+  width: min(1240px, 94vw);
+  height: min(840px, 90vh);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: studio-card-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes studio-mask-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes studio-card-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 移动端：mask 顶部贴 toolbar + 底部 tab bar 之间，card 占满该窗，
+ * 与 App.vue 的 .main :deep(.palette) 全屏化保持视觉一致；动画收为淡入 */
+@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
+  .studio-modal-mask {
+    align-items: stretch;
+    background: var(--surface-raised);
+  }
+  .studio-modal-card {
+    width: 100%;
+    height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 .head-action {

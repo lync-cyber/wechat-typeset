@@ -1,21 +1,22 @@
 <script setup lang="ts">
 /**
- * ComponentStudio —— 新建 / 编辑 / 派生组件的内嵌 split view (P2)。
+ * ComponentStudio —— 新建 / 编辑 / 派生组件的 split view。
  *
  * 三种 init.mode 决定保存路径:
  *   - new / derive  → mutations.createComponent (新落 storage)
  *   - edit          → mutations.updateComponent (按 id 更新)
  *
- * 布局: 抽屉 340px 宽内做不下水平 split,故垂直堆叠:
- *   ┌─ 表单 (name / desc / kind / variantId / markdown)
- *   ├─ 预览 iframe
- *   └─ 底部 actions (取消 / 保存)
+ * 两种 layout：
+ *   - 'drawer'：340px 右抽屉内垂直堆叠（向后兼容；移动端/小屏走这条）
+ *   - 'modal'：被 ComponentPalette teleport 到 body 后的全屏工作台，
+ *      左右两栏 split——左侧表单 + 高级模式编辑，右侧大尺寸预览
  *
  * 校验: ComponentEditor 实时跑 validateSnippet 显示 diagnostics,
  * 保存时统一走 mutations,失败 inline error 显示在底部 actions 旁。
  *
  * dirty 跟踪: useComponentDraft 持 initial snapshot 与 draft 的 reactive 对比。
  * "取消"在 dirty 时弹确认; 不 dirty 直接退出。
+ * defineExpose 暴露 attemptCancel 让外层 modal mask click / Esc 走同一路径。
  */
 import { computed, ref } from 'vue'
 import type { ComponentEntry } from '../../../domain/components-lib'
@@ -50,10 +51,21 @@ export interface StudioInit {
   source?: ComponentEntry
 }
 
-const props = defineProps<{
-  init: StudioInit
-  theme: Theme
-}>()
+/**
+ * 渲染上下文：
+ *   - 'drawer'：内嵌在 340px 抽屉里，垂直堆叠
+ *   - 'modal'：teleport 到 body 的全屏工作台，左右两栏 split
+ */
+export type StudioLayout = 'drawer' | 'modal'
+
+const props = withDefaults(
+  defineProps<{
+    init: StudioInit
+    theme: Theme
+    layout?: StudioLayout
+  }>(),
+  { layout: 'drawer' },
+)
 
 const emit = defineEmits<{
   /** 保存成功;参数是新落地或更新后的 entry id */
@@ -258,25 +270,46 @@ const headerLabel = computed(() => {
   if (props.init.mode === 'edit') return '编辑组件'
   return '派生为我的组件'
 })
+
+// 暴露给外层 modal mask：点 backdrop / 按 Esc 走与"取消"按钮同一逻辑，保留 dirty 提示
+defineExpose({ attemptCancel: onCancel })
 </script>
 
 <template>
-  <section class="studio" aria-label="组件 Studio">
-    <div class="mode-banner">{{ headerLabel }}</div>
+  <section
+    class="studio"
+    :class="`studio--${props.layout}`"
+    aria-label="组件 Studio"
+  >
+    <header v-if="props.layout === 'modal'" class="modal-head">
+      <span class="modal-head-label">{{ headerLabel }}</span>
+      <span v-if="dirty" class="modal-head-dirty" aria-label="有未保存改动">·已改动</span>
+      <button
+        class="modal-head-close"
+        type="button"
+        aria-label="关闭"
+        title="关闭（Esc）"
+        @click="onCancel"
+      >×</button>
+    </header>
+    <div v-else class="mode-banner">{{ headerLabel }}</div>
 
     <div class="content">
-      <ComponentEditor
-        :draft="draft"
-        :theme="props.theme"
-        :original-linked-uv-id="originalLinkedUvId"
-      />
-
-      <div class="preview-wrap">
-        <ComponentPreview
-          :md="previewMarkdown"
+      <div class="col col-editor">
+        <ComponentEditor
+          :draft="draft"
           :theme="props.theme"
-          :user-variants="previewUserVariants"
+          :original-linked-uv-id="originalLinkedUvId"
         />
+      </div>
+      <div class="col col-preview">
+        <div class="preview-wrap">
+          <ComponentPreview
+            :md="previewMarkdown"
+            :theme="props.theme"
+            :user-variants="previewUserVariants"
+          />
+        </div>
       </div>
     </div>
 
@@ -310,6 +343,78 @@ const headerLabel = computed(() => {
   flex-direction: column;
   overflow: hidden;
 }
+
+/* ── drawer 模式（向后兼容）：垂直堆叠，与改版前一致 ────────────────────────── */
+.studio--drawer .content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.studio--drawer .col-editor,
+.studio--drawer .col-preview {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.studio--drawer .col-preview {
+  padding: 0 var(--sp-4) var(--sp-4);
+  min-height: 240px;
+}
+
+/* ── modal 模式：左右两栏 split ──────────────────────────────────────────── *
+ * 窄屏（< 900px）退回单列纵向堆叠，避免 380+420 最小宽度被挤溢出；
+ * 一旦宽度允许，2-col grid 让编辑器和预览同屏可见。 */
+.studio--modal {
+  width: 100%;
+  height: 100%;
+}
+.studio--modal .content {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.studio--modal .col-editor,
+.studio--modal .col-preview {
+  background: var(--surface-raised);
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.studio--modal .col-preview {
+  padding: var(--sp-4);
+  background: var(--surface);
+}
+.studio--modal .preview-wrap {
+  flex: 1 1 auto;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .studio--modal .content {
+    display: grid;
+    grid-template-columns: minmax(380px, 1fr) minmax(420px, 1.4fr);
+    gap: 1px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .studio--modal .col-editor,
+  .studio--modal .col-preview {
+    overflow-y: auto;
+  }
+  .studio--modal .preview-wrap {
+    min-height: 0;
+  }
+}
+
+/* drawer 模式下用的小 banner */
 .mode-banner {
   flex: 0 0 auto;
   padding: var(--sp-3) var(--sp-4);
@@ -320,20 +425,48 @@ const headerLabel = computed(() => {
   border-bottom: 1px solid var(--border);
 }
 
-.content {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
+/* modal 模式 header：左侧标签 + 右侧关闭 × */
+.modal-head {
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-raised);
 }
-
-.preview-wrap {
-  padding: 0 var(--sp-4) var(--sp-4);
-  display: flex;
-  flex-direction: column;
-  min-height: 240px;
+.modal-head-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-14);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  color: var(--text);
+}
+.modal-head-dirty {
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-wide);
+  color: var(--accent);
+}
+.modal-head-close {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-2);
+  color: var(--text-muted);
+  font-size: var(--fs-17);
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--t-quick);
+}
+.modal-head-close:hover {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .footer {

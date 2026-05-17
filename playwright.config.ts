@@ -25,13 +25,19 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   // 锁定 375×667（docs/release-checklist.md 移动端验收标准视口，iPhone SE 基线）
+  // 桌面 project 单独承载工作台 / 抽屉拖宽等仅在 ≥900px 视口下生效的 UI 路径
+  // 沙箱环境若未安装最新 playwright-bundled chromium，允许通过 PW_CHROMIUM_PATH env 指向已有 binary
   projects: [
     {
       name: 'mobile-chromium',
       use: {
         ...devices['Pixel 5'],
         viewport: { width: 375, height: 667 },
+        ...(process.env.PW_CHROMIUM_PATH
+          ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
+          : {}),
       },
+      testIgnore: /studio-modal\.spec\.ts/,
     },
     {
       name: 'mobile-webkit',
@@ -39,6 +45,18 @@ export default defineConfig({
         ...devices['iPhone 13'],
         viewport: { width: 375, height: 667 },
       },
+      testIgnore: /studio-modal\.spec\.ts/,
+    },
+    {
+      name: 'desktop-chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+        ...(process.env.PW_CHROMIUM_PATH
+          ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
+          : {}),
+      },
+      testMatch: /studio-modal\.spec\.ts/,
     },
   ],
   webServer: {
