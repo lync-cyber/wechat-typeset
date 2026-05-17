@@ -17,7 +17,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:minimal-und
 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:pill-tag 1`] = `
 "<section class="container-tip container-tip--pill-tag" style="background-color:#eef6ef;border:1px solid #147a44;padding:24px 16px 16px;border-radius:6px;margin:24px 0 16px">
-<section class="container-tip__title" style="display:inline-block;padding:3px 12px;background-color:#147a44;color:#fefefe;border-radius:12px;font-size:13px;font-weight:700;margin-top:-34px;margin-bottom:10px;letter-spacing:0.4px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>"
+<section class="container-tip__title" style="display:inline-block;padding:3px 14px;background-color:#147a44;color:#fefefe;border-radius:12px;font-size:13px;font-weight:700;margin-top:-34px;margin-bottom:10px;letter-spacing:0.4px;text-align:center">测试标题</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:terminal 1`] = `

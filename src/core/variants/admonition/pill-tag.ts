@@ -56,9 +56,13 @@ const pillTag: VariantDef<AdmonitionRenderArgs> = {
         `padding:${padY + 8}px ${padX}px ${padY}px;` +
         `border-radius:6px;` +
         `margin:24px 0 16px`,
+      // 胶囊保持靠左悬浮（不动 wrapper text-align）；text-align:center 让胶囊内
+      // 的文字居中——胶囊的 padding 是水平对称的，text 也就视觉居中。
+      // suppressIcon=true：admonition kindIcon 与胶囊底色同为 accent，渲染出来不可见
+      // 却把文字向右挤偏；这里抑制掉，让胶囊纯粹是"底色 + 居中文字"。
       titleCSS:
         `display:inline-block;` +
-        `padding:3px 12px;` +
+        `padding:3px 14px;` +
         `background-color:${pair.accent};` +
         `color:${ctx.tokens.colors.textInverse};` +
         `border-radius:12px;` +
@@ -66,7 +70,9 @@ const pillTag: VariantDef<AdmonitionRenderArgs> = {
         `font-weight:700;` +
         `margin-top:-${padY + 18}px;` +
         `margin-bottom:10px;` +
-        `letter-spacing:0.4px`,
+        `letter-spacing:0.4px;` +
+        `text-align:center`,
+      suppressIcon: true,
     }
   },
 }

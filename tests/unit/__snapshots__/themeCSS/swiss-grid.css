@@ -459,7 +459,7 @@
 
 .markdown-body .container-bar-chart {
   border: 1px solid #000000;
-  padding: 0;
+  padding: 16px 14px;
   margin: 20px 0;
   background-color: #ffffff;
   border-radius: 0;

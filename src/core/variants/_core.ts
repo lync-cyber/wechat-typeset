@@ -33,6 +33,13 @@ export interface VariantRenderResult {
   bodyCSS?: string
   svgSlot?: string
   /**
+   * 抑制 renderer 默认注入的 icon（来自 title.iconKey）。
+   * 用于"标题本体是实色徽章/胶囊，icon 与底色同色不可见反而占位"的场景——典型如
+   * admonition.pill-tag：accent 底胶囊上的同色 icon 不可见，却把文字向右挤偏。
+   * undefined / false = 沿用默认（注入 ctx.assets[iconKey]）；true = 不渲染 icon。
+   */
+  suppressIcon?: boolean
+  /**
    * quote-card 容器在 body 关闭后、byline 前注入的 HTML 片段。仅 quote.ts 消费,
    * 其余容器忽略。给"开/闭引号成对"的 variant 一个挂载点——典型如 classic 在 svgSlot
    * 输出 `「`、在 closeSlot 输出对称的 `」`，闭合成对。undefined = 不注入。

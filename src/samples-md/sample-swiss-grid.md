@@ -2,9 +2,6 @@
 VOL.IX · 2026—05—16 · CHF 14.—
 :::
 
-::: section-tag ESSAY · 01
-:::
-
 ::: editorial-header 12 栏作为 / 版面的 / 呼吸节奏 chip="ESSAY · 01" pp="PP.04–19" subtitle="论 Neue Grafik 体系中的网格约束与编辑设计" topRule="6" titleDot="primary"
 :::
 

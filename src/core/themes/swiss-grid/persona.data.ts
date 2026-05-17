@@ -187,7 +187,7 @@ export const spec: PersonaSpec = {
     quote: 'editorial-block', // 国际排印 editorial pull-quote：左 6px 主色条 + 大号粗体 + uppercase byline
     compare: 'data-card', // 数据卡（顶 3px 色条 + 大号数字）—— 设计稿少见,保留备用
     steps: 'split-row', // 左竖条 + 大号编号，与 Neue Grafik 网格分栏语汇同源
-    divider: 'seal-mark', // 设计稿 signoff: 20×20 红方块右对齐（消费 sealMark motif）
+    divider: 'flower', // Swiss 居中分隔：1px 黑 hairline + 中央 6×6 红方块 + 1px hairline（消费 dividerFlower motif）。原 seal-mark 右对齐保留为"全文收束"语义，由作者按 ::: divider variant=seal-mark 显式触发
     sectionTitle: 'kicker-stack', // 上 uppercase letterspaced kicker + 主标题，Swiss 排印典范
     codeBlock: 'inline-card', // pre 元素走主题 voice（黑底白字）+ inline-card tinted 软底
     note: 'side-bar', // 左 2px 中性线 + 缩进
@@ -675,7 +675,7 @@ export const spec: PersonaSpec = {
     barChart: {
       __reset: true,
       border: '1px solid #000000',
-      padding: '0',
+      padding: '16px 14px',
       margin: '20px 0',
       'background-color': '#ffffff',
       'border-radius': '0',

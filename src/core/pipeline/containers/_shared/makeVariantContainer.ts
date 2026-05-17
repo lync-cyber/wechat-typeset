@@ -212,7 +212,7 @@ export function makeVariantContainer<Args = void>(
         const titleCss =
           result.titleCSS ??
           (typeof title.defaultCSS === 'function' ? title.defaultCSS(ctx) : title.defaultCSS)
-        const icon = title.iconKey
+        const icon = title.iconKey && !result.suppressIcon
           ? ((ctx.assets[title.iconKey] as string | undefined) ?? '')
           : ''
         parts.push(
