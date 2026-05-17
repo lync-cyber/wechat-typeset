@@ -7502,7 +7502,8 @@
         "note",
         "footnotes",
         "recommend",
-        "qrcode"
+        "qrcode",
+        "footerCTA"
       ],
       "properties": {
         "admonition": {
@@ -7615,6 +7616,12 @@
           "enum": [
             "bare",
             "follow-card"
+          ]
+        },
+        "footerCTA": {
+          "enum": [
+            "button-led",
+            "triptych-actions"
           ]
         }
       },

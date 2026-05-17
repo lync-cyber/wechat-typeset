@@ -14,8 +14,9 @@
  * 复用关系：除签名变体 `tilted-sticker` 与 masthead 的 `kicker` ribbon 模式外，
  * 全部容器 / 变体 / 装饰均复用现有词汇：
  *   - admonition · news-row（"四态共骨架 + 色相 + 标签字"）—— data-brief 同源
- *   - masthead / toc / qa-block / cta-bar / footnotes / colophon —— data-brief 家族签名容器
+ *   - masthead / toc / qa-block / footnotes / colophon —— data-brief 家族签名容器
  *   - note variant=editorial-stripe（编 者 按）/ qrcode variant=follow-card（订阅卡）
+ *   - footer-cta variant=triptych-actions（LIKE / STAR / FWD 三栏）
  *   - decorations.headingPrefix · arabic-padded / arabic-section —— 章节序号
  *
  * 平台兼容：transform:rotate 不在 wxPatch 删除列表（FORBIDDEN_POSITION_PROPS 不含），
@@ -181,6 +182,7 @@ export const spec: PersonaSpec = {
     footnotes: 'top-rule', // 顶部 hairline + 11px 密栏，punk zine 底栏
     recommend: 'card-list',
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -203,15 +205,14 @@ export const spec: PersonaSpec = {
   },
 
   // ============================================================
-  // 签名容器：复用 data-brief 家族（masthead / toc / cta-bar / qr-follow /
-  // footnotes / qa-block / editor-note / colophon）。粗野主义不引入新签名容器。
+  // 签名容器：复用 data-brief 家族（masthead / toc / footnotes / qa-block /
+  // colophon）。粗野主义不引入新签名容器。
   // ============================================================
   signatureContainers: [
     'masthead', // 三栏 ribbon 刊头（kicker / 期名 / 日期）
     'toc', // 目录（虚线框 + // CONTENTS kicker）
     'qaBlock', // 终端 Q&A 风
     'footnotes', // fn[] 等宽脚注
-    'ctaBar', // LIKE / STAR / FWD 三栏 CTA
     'colophon', // 下期预告 + 卷·期
     'imageCaption', // 图注（// CAPTION 注释风 + 荧光黄）
     'announcement', // 强警示横幅（荧光黄整块反色）
@@ -596,7 +597,6 @@ export const spec: PersonaSpec = {
       color: '#a0a0a0',
     },
     // cta-bar：三栏（LIKE / STAR / FWD）—— renderer 已提供 display:table 骨架
-    ctaBar: { margin: '24px 0' },
     // qr-follow：左 QR + 右 SUBSCRIBE / 标题 / 说明（黄边框 + 黑底）
     // colophon：上 2px 双粗线 + "下期 / 卷·期"（与 masthead 头尾呼应）
     colophon: {

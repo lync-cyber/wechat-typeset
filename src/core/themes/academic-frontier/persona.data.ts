@@ -248,6 +248,7 @@ export const spec: PersonaSpec = {
     footnotes: 'dense-academic', // 2px 章节杆 + 深 hanging，论文 bibliography 章
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

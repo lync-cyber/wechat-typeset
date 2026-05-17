@@ -17,6 +17,5 @@ export {
   barContainer,
   qaBlockContainer,
   footnotesContainer,
-  ctaBarContainer,
   calloutGroupContainer,
 } from './databrief/index'

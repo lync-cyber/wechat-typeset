@@ -224,6 +224,7 @@ export const spec: PersonaSpec = {
     footnotes: 'boxed-aside',
     recommend: 'card-list',
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -263,7 +264,6 @@ export const spec: PersonaSpec = {
     'toc',
     'qaBlock',
     'footnotes',
-    'ctaBar',
     'colophon',
     'imageCaption', // monospace 橙金时间戳图注
     'authorBio', // 电台主播卡（深蓝卡底 + 橙顶线）
@@ -654,9 +654,6 @@ export const spec: PersonaSpec = {
       'line-height': '1.85',
       'letter-spacing': '0.03em',
       color: '#a89070',
-    },
-    ctaBar: {
-      margin: '26px 0',
     },
     // qr-follow · tune·in 牌：1px 橙边框 + 深蓝卡底（设计稿 qr-follow 原型）
     // colophon · 刊物收束栏（设计稿 footer 原型）：上方 1px text 实色分隔线 +

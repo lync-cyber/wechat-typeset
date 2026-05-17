@@ -11,11 +11,10 @@
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escAttr, escText } from './_shared/escape'
 import { encodeQrSvg } from '../qr/encodeQrSvg'
-import { RECOMMEND_VARIANTS } from '../../variants/registry'
+import { RECOMMEND_VARIANTS, QRCODE_VARIANTS, FOOTER_CTA_VARIANTS } from '../../variants/registry'
 import { makeVariantContainer } from './_shared/makeVariantContainer'
 import { resolveVariantId } from './_shared/resolveVariant'
-import type { QrcodeVariantId } from '../../themes/types'
-import { QRCODE_VARIANTS } from '../../variants/registry'
+import type { QrcodeVariantId, FooterCTAVariantId } from '../../themes/types'
 
 // 期号戳共享解析（与 headline.ts resolveIssueStamp 同契约；复制避免跨文件依赖升级）
 function resolveIssueStampForFooter(
@@ -30,8 +29,82 @@ function resolveIssueStampForFooter(
   return stamp(issue, date, kind)
 }
 
+/**
+ * footer-cta · variant 分派：
+ *   - button-led（默认）= 居中标题 + issueStamp + 主色胶囊按钮 + 可选 sealMark 收束印
+ *   - triptych-actions = display:table 三栏 CTA（赞同 / 收藏 / 转发），info 触发顶部 header bar
+ *
+ * 主题 voice 由 ctx.containers.footerCTA 注入；variant 决定布局骨架。
+ * 设计纪律：layout 走 display:table 或 inline-flex（按钮 tap target ≥ 44×44 iOS HIG）。
+ */
+function renderTriptychActions(ctx: ContainerRenderContext): string {
+  const c = ctx.tokens.colors
+  const like = ctx.attrs.like ?? '♡ 赞同'
+  const star = ctx.attrs.star ?? '★ 收藏'
+  const share = ctx.attrs.share ?? '↗ 转发'
+  const kicker = ctx.info.trim()
+  const wrapperLayoutCSS = kicker
+    ? ''
+    : `display:table;width:100%;table-layout:fixed;border-collapse:collapse;`
+  const baseCell = [
+    'display:table-cell',
+    'padding:12px 0',
+    'text-align:center',
+    'font-size:11px',
+    'letter-spacing:0.1em',
+    'box-sizing:border-box',
+  ]
+  const outlineCellLeftMid = [
+    ...baseCell,
+    `color:${c.text}`,
+    `border-right:1px solid ${c.text}`,
+  ].join(';')
+  const outlineCellRight = [...baseCell, `color:${c.text}`].join(';')
+  const fillCell = [
+    ...baseCell,
+    `background-color:${c.primary}`,
+    `color:${c.textInverse}`,
+    'font-weight:500',
+    `border-right:1px solid ${c.text}`,
+  ].join(';')
+  const cellsCSS = `display:table;width:100%;table-layout:fixed;border-collapse:collapse`
+  const cells =
+    `<span style="${outlineCellLeftMid}">${escText(like)}</span>` +
+    `<span style="${fillCell}">${escText(star)}</span>` +
+    `<span style="${outlineCellRight}">${escText(share)}</span>`
+  if (kicker) {
+    const headerCSS = [
+      'display:block',
+      `background-color:${c.text}`,
+      `color:${c.textInverse}`,
+      'padding:5px 10px',
+      'font-size:10px',
+      'letter-spacing:0.2em',
+      'font-weight:700',
+    ].join(';')
+    return (
+      `<section class="container-footer-cta container-footer-cta--triptych-actions">` +
+      `<section class="container-footer-cta__kicker" style="${headerCSS}">${escText(kicker)}</section>` +
+      `<section class="container-footer-cta__cells" style="${cellsCSS}">${cells}</section>` +
+      `</section>\n`
+    )
+  }
+  return (
+    `<section class="container-footer-cta container-footer-cta--triptych-actions" style="${wrapperLayoutCSS}">${cells}</section>\n`
+  )
+}
+
 export const footerCTAContainer: ContainerRenderer = {
   open: (ctx) => {
+    const id = resolveVariantId<FooterCTAVariantId>(
+      ctx,
+      'footerCTA',
+      FOOTER_CTA_VARIANTS,
+      'button-led',
+    )
+    if (id === 'triptych-actions') {
+      return renderTriptychActions(ctx)
+    }
     const title = ctx.info.trim() || ctx.kickers.footerCTATitle
     const cta = ctx.attrs.cta ? escText(ctx.attrs.cta) : ''
     const href = ctx.attrs.href ?? ''
@@ -54,7 +127,7 @@ export const footerCTAContainer: ContainerRenderer = {
       ? `<section class="container-footer-cta__stamp" style="text-align:center;margin-bottom:10px">${stamp}</section>`
       : ''
     return (
-      `<section class="container-footer-cta" style="text-align:center">\n` +
+      `<section class="container-footer-cta container-footer-cta--button-led" style="text-align:center">\n` +
       stampEl +
       `<section class="container-footer-cta__title" style="font-weight:700;font-size:16px;margin-bottom:8px">${escText(title)}</section>\n` +
       ctaEl +
@@ -65,7 +138,15 @@ export const footerCTAContainer: ContainerRenderer = {
   // 主题不提供时保持原行为；提供时在容器末尾追加一个**居中**的收束印——
   // 朱砂作为文章 closure 的视觉焦点，居中比右下更稳：移动端窄屏右对齐易被
   // 边距裁切；居中又恰好对齐 footer 内的标题/按钮居中节律。
+  // triptych-actions variant 已在 open 闭合自身 section，close 返回空串。
   close: (ctx) => {
+    const id = resolveVariantId<FooterCTAVariantId>(
+      ctx,
+      'footerCTA',
+      FOOTER_CTA_VARIANTS,
+      'button-led',
+    )
+    if (id === 'triptych-actions') return ''
     const seal = ctx.assets.sealMark
       ? `<section class="container-footer-cta__seal" style="text-align:center;margin-top:18px;line-height:0">${ctx.assets.sealMark}</section>\n`
       : ''

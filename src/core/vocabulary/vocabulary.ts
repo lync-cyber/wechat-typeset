@@ -561,19 +561,33 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     name: 'footer-cta',
     styleKey: 'footerCTA',
     category: 'navigation',
+    variantKind: 'footerCTA',
     fenceLength: 3,
     attrs: [
-      { key: 'cta', description: '按钮文字（visual only）', example: '点此关注' },
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认的 footerCTA 骨架。button-led（默认）= 居中标题 + 主色胶囊按钮；' +
+          'triptych-actions = 三栏 CTA（赞同 / 收藏 / 转发，display:table 等宽）。',
+        enum: VARIANT_IDS.footerCTA,
+      },
+      { key: 'cta', description: 'button-led 按钮文字（visual only）', example: '点此关注' },
       {
         key: 'href',
         description:
-          '按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：' +
+          'button-led 按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：' +
           'https://mp.weixin.qq.com/s/*（同域文章）/ weixin://dl/*（小程序协议）/ ' +
           'tel:* / mailto:* / 页内锚点 #*。非白名单 URL 会触发 diagnose warning。',
         example: 'https://mp.weixin.qq.com/s/xxx',
       },
+      { key: 'like', description: 'triptych-actions 左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
+      { key: 'star', description: 'triptych-actions 中格文字（实色，默认 ★ 收藏）', example: '★ 收藏' },
+      { key: 'share', description: 'triptych-actions 右格文字（默认 ↗ 转发）', example: '↗ 转发' },
     ],
-    description: '文末 CTA 块（关注、投喂、二维码收束）。href 支持公众号内链白名单。',
+    description:
+      '文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；' +
+      'triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。' +
+      'href 支持公众号内链白名单。',
     example:
       '::: footer-cta 觉得有用？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/xxx\n如果这篇对你有启发，欢迎关注。\n:::\n',
   },
@@ -803,21 +817,6 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       'inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。' +
       'info 非空时渲染主色 kicker（如 "NOTES" / "参考文献"），与 editor-note / qa-block 同源。',
     example: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
-  },
-  {
-    name: 'cta-bar',
-    styleKey: 'ctaBar',
-    category: 'navigation',
-    pack: 'pack:editorial',
-    fenceLength: 3,
-    attrs: [
-      { key: 'like', description: '左格文字（默认 ♡ 赞同）', example: '♡ 赞同' },
-      { key: 'star', description: '中格文字（实色，默认 ★ 收藏）', example: '★ 收藏' },
-      { key: 'share', description: '右格文字（默认 ↗ 转发）', example: '↗ 转发' },
-    ],
-    description:
-      'CTA 三栏：左/右描边格 + 中实色格。data-brief 签名（赞同 / 收藏 / 转发）。body 忽略。',
-    example: '::: cta-bar\n:::\n',
   },
   {
     name: 'colophon',

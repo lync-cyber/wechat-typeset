@@ -248,6 +248,7 @@ export const spec: PersonaSpec = {
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
     recommend: 'card-list',
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -278,7 +279,6 @@ export const spec: PersonaSpec = {
     'toc', // 目录（圈号 + 标题 + 页码）
     'qaBlock', // 读者问答
     'footnotes', // 脚注
-    'ctaBar', // CTA 三栏（喜欢 / 收藏 / 分享）
     'colophon', // 下期预告
     'imageCaption', // mook 图注（极小字 + letter-spacing）
     'authorBio', // mook 番外编辑栏（极简 hairline）
@@ -706,7 +706,6 @@ export const spec: PersonaSpec = {
       color: '#6b7885',
       'letter-spacing': '0.2px',
     },
-    ctaBar: { margin: '30px 0' },
     // qr-follow · 1px text 色实线包裹（设计稿原型，非常克制）
     // mook 图注极小字 + letter-spacing + textMuted——
     // 对应 04-japanese-mook.html image-with-caption 图注："10px / textMuted / letter-spacing:0.05em"，

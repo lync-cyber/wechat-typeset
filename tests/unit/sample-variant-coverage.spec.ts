@@ -53,6 +53,8 @@ const PROBES: Record<VariantKind, RegExp> = {
   recommend: /^:{3,}\s*recommend\b/m,
   // qrcode 容器（bare 默认 / follow-card 订阅卡 variant）
   qrcode: /^:{3,}\s*qrcode\b/m,
+  // footer-cta 容器（button-led 默认 / triptych-actions 三栏 variant）
+  footerCTA: /^:{3,}\s*footer-cta\b/m,
 }
 
 const SLOT_LABELS: Record<VariantKind, string> = {
@@ -67,6 +69,7 @@ const SLOT_LABELS: Record<VariantKind, string> = {
   footnotes: '脚注（footnotes / [^id]）',
   recommend: '推荐阅读（recommend）',
   qrcode: '二维码（qrcode）',
+  footerCTA: '文末 CTA（footer-cta）',
 }
 
 describe('故事样张 variant 覆盖', () => {

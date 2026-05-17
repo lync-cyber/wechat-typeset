@@ -134,7 +134,7 @@
 事后分层加权，整体误差 ±0.87pp。
 :::
 
-::: cta-bar
+::: footer-cta variant=triptych-actions
 :::
 
 ::: qrcode variant=follow-card 数字阅读观察 desc="每季度发布 · CNNIC 合作数据 · 订阅可获原始数据集"

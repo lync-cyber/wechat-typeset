@@ -65,7 +65,13 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
       continue
     }
     const containerName =
-      kind === 'sectionTitle' ? 'section-title' : kind === 'quote' ? 'quote-card' : kind
+      kind === 'sectionTitle'
+        ? 'section-title'
+        : kind === 'quote'
+          ? 'quote-card'
+          : kind === 'footerCTA'
+            ? 'footer-cta'
+            : kind
     const cls = `container-${containerName}--${id}`
     check(`${kind}:${id}`, () => html.includes(cls), cls)
   }
@@ -110,10 +116,11 @@ const plainContainers = [
   'container-toc',
   'container-qa-block',
   'container-callout-group',
-  'container-cta-bar',
   'container-colophon',
   // qrcode follow-card variant：刊物订阅卡（左 QR + 右 kicker/title/desc）
   'container-qrcode container-qrcode--follow-card',
+  // footer-cta triptych-actions variant：三栏 CTA（赞同 / 收藏 / 转发）
+  'container-footer-cta container-footer-cta--triptych-actions',
   // pack:data-viz
   'container-kpi-dashboard',
   'container-bar-chart',

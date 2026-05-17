@@ -28,6 +28,7 @@ export const COMPONENT_TABS: ReadonlyArray<{
   { kind: 'footnotes', label: '脚注' },
   { kind: 'recommend', label: '推荐' },
   { kind: 'qrcode', label: '二维码' },
+  { kind: 'footerCTA', label: '文末 CTA' },
   { kind: 'none', label: '其它' },
   { kind: 'user', label: '我的组件' },
 ]

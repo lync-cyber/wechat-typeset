@@ -142,11 +142,19 @@ describe('steps / divider', () => {
 })
 
 describe('footer-cta / recommend / qrcode', () => {
-  it('footer-cta 读取 info 与 cta attr', () => {
+  it('footer-cta 读取 info 与 cta attr（默认 button-led variant）', () => {
     const out = run('::: footer-cta 欢迎关注 cta=点此关注\n描述文案\n:::\n')
-    expect(out).toMatch(/class="container-footer-cta"/)
+    expect(out).toMatch(/class="container-footer-cta container-footer-cta--button-led"/)
     expect(out).toContain('欢迎关注')
     expect(out).toContain('点此关注')
+  })
+
+  it('footer-cta variant=triptych-actions：display:table 三栏（赞同 / 收藏 / 转发）', () => {
+    const out = run('::: footer-cta variant=triptych-actions like="♡ 赞同" star="★ 收藏" share="↗ 转发"\n:::\n')
+    expect(out).toMatch(/class="container-footer-cta container-footer-cta--triptych-actions"/)
+    expect(out).toContain('♡ 赞同')
+    expect(out).toContain('★ 收藏')
+    expect(out).toContain('↗ 转发')
   })
 
   it('footer-cta 仅 cta 无 href：渲染为 <span>', () => {

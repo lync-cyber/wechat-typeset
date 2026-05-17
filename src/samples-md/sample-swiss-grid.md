@@ -165,7 +165,7 @@ const column = (total, gutter) =>
 本文数据取样自 12 本瑞士设计年鉴（1955–1975），逐页人工记录主栏数，共计 240 个对开页；广告版与折页不计入统计。"自由版"定义为无可辨识栏位参考线的版面。条形图按占比降序排列，满分 100 对应单一栏数全覆盖。
 :::
 
-::: cta-bar IF YOU LIKED THIS like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
+::: footer-cta variant=triptych-actions IF YOU LIKED THIS like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
 :::
 
 ::: qrcode variant=follow-card NEUE GRAFIK REVUE desc="每双周四出版 · 编辑设计与栅格排印评论" kicker="SUBSCRIBE"

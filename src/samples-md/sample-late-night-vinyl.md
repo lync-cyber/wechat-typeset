@@ -162,7 +162,7 @@ Ryuichi Sakamoto 曾说，他晚年最喜欢录下窗外的雨声，因为那是
 ::: divider
 :::
 
-::: cta-bar like="♡ 喜欢" star="★ 收藏" share="↗ 分享"
+::: footer-cta variant=triptych-actions like="♡ 喜欢" star="★ 收藏" share="↗ 分享"
 :::
 
 ::: qrcode variant=follow-card desc="每周四 · 03:41 AM 准时上线" kicker="tune · in"

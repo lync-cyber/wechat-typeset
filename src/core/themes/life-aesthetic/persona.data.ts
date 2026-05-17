@@ -332,6 +332,7 @@ export const spec: PersonaSpec = {
     footnotes: 'boxed-aside', // 软底卡片 + pill kicker，narrative aside
     recommend: 'card-list',
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

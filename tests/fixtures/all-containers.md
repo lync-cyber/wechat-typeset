@@ -283,7 +283,7 @@ MIT License。
 [2] He, K., et al. (2020). Momentum contrast for unsupervised visual representation learning. *CVPR*, 9729-9738.
 :::
 
-::: cta-bar like="♡ 赞同" star="★ 收藏" share="↗ 转发"
+::: footer-cta variant=triptych-actions like="♡ 赞同" star="★ 收藏" share="↗ 转发"
 :::
 
 ::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据" kicker="SUBSCRIBE"

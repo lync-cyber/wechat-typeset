@@ -433,6 +433,7 @@ export const spec: PersonaSpec = {
     footnotes: 'boxed-aside',
     recommend: 'card-list',
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

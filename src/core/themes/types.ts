@@ -204,8 +204,6 @@ export interface ThemeContainers {
    * （padding-left / text-indent / max-height）由 variant inline 注入。
    */
   footnotes: CSSObject
-  /** CTA 三栏（赞同/收藏/转发，data-brief 签名） */
-  ctaBar: CSSObject
   /** 刊物收束栏：上分割线 + 双栏 monospace 元数据（"下期 / 卷·期"） */
   colophon: CSSObject
 }
@@ -474,6 +472,12 @@ export type QrcodeVariantId =
   // 订阅卡：左 QR + 右 kicker/title/desc 三行（刊物收尾专用）
   | 'follow-card'
 
+export type FooterCTAVariantId =
+  // 默认：单按钮 + 引导文案（粗体大标题 + 主色胶囊按钮）
+  | 'button-led'
+  // 三栏 CTA：左/右描边格 + 中实色格（赞同 / 收藏 / 转发），可选顶部黑底白字 header bar
+  | 'triptych-actions'
+
 export type FootnotesVariantId =
   // 一条一行 + hanging indent（默认）
   | 'lined'
@@ -503,6 +507,8 @@ export interface ThemeVariants {
   recommend: RecommendVariantId
   /** 二维码骨架（bare 默认 / follow-card = 原 qr-follow）。 */
   qrcode: QrcodeVariantId
+  /** 文末 CTA 骨架（button-led 默认 / triptych-actions = 原 cta-bar）。 */
+  footerCTA: FooterCTAVariantId
 }
 
 /**
@@ -521,6 +527,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   footnotes: 'lined',
   recommend: 'card-list',
   qrcode: 'bare',
+  footerCTA: 'button-led',
 }
 
 // ============================================================
@@ -665,6 +672,10 @@ export const VARIANT_IDS = {
     'bare',
     'follow-card',
   ] as const satisfies readonly QrcodeVariantId[],
+  footerCTA: [
+    'button-led',
+    'triptych-actions',
+  ] as const satisfies readonly FooterCTAVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

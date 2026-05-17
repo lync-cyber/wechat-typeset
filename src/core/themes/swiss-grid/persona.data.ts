@@ -18,7 +18,7 @@
  *   - data-brief：数据蓝 #1756d1 + monospace + 数据卡 + sparkline——"数字是论点"
  *   - swiss-grid：国际红 + 大字章号 + 红章 H2 + pull-quote 栏偏移——"栅格是结构"
  *   两者共享 data-brief 家族签名容器（masthead 略弃用 / qa-block / footnotes
- *   / cta-bar / qr-follow / colophon / bar-chart / key-number）,
+ *   / colophon / bar-chart / key-number）,
  *   仅在 tokens / variants / innerStyles 上分叉视觉个性。
  *
  * 复用策略：
@@ -188,6 +188,7 @@ export const spec: PersonaSpec = {
     footnotes: 'top-rule', // 顶 hairline + 11px 密栏，国际排印底栏
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
     qrcode: 'follow-card', // 刊物订阅卡：左 QR + 右 kicker/title/desc 三行
+    footerCTA: 'triptych-actions', // 三栏 CTA（赞同/收藏/转发）
   },
 
   // ============================================================
@@ -222,7 +223,6 @@ export const spec: PersonaSpec = {
     'qaBlock', // 读者 Q&A
     'footnotes', // 脚注 / 参考文献（variant=lined 默认；variant=inline-flow 承担"NOTES"长文献列表）
     'calloutGroup', // 四态 callout 联表外框（multi-callout 母本）
-    'ctaBar', // 三栏 CTA（attrs.info 切到 "IF YOU LIKED THIS" header bar 模式）
     'colophon', // 刊物收束栏（NEXT · VOL 双栏）
     'barChart', // 条形图（FIG.01 按年龄）
     'imageCaption', // 图注（居左 monospace 极小字 + letter-spacing）
@@ -705,13 +705,6 @@ export const spec: PersonaSpec = {
     },
     // cta-bar：设计稿"IF YOU LIKED THIS 黑底头 + 三栏 (描边/实色/描边)"
     // renderer 固定 table 三栏: 描边 / fill / 描边; fill 走 primary=red, 与设计稿一致
-    ctaBar: {
-      __reset: true,
-      margin: '24px 0',
-      padding: '0',
-      border: '2px solid #000000',
-      'border-radius': '0',
-    },
     // qr-follow：设计稿"左 QR + 右三行文字 (SUBSCRIBE/标题/说明)" hairline 全边框 + 直角
     // colophon：设计稿"NEXT · VOL 双栏 monospace, 上 3px 黑分隔" —— renderer 走 display:table
     colophon: {

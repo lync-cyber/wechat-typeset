@@ -240,6 +240,7 @@ export const spec: PersonaSpec = {
     footnotes: 'dense-academic', // RFC 风密栏 + 深 hanging，更接近 manpage SEE ALSO 段
     recommend: 'card-list',
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

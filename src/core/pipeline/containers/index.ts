@@ -55,7 +55,6 @@ import {
   barContainer,
   qaBlockContainer,
   footnotesContainer,
-  ctaBarContainer,
   colophonContainer,
   calloutGroupContainer,
 } from './databrief'
@@ -120,7 +119,6 @@ export const CONTAINER_REGISTRY: Record<string, ContainerRenderer> = {
   bar: barContainer,
   'qa-block': qaBlockContainer,
   footnotes: footnotesContainer,
-  'cta-bar': ctaBarContainer,
   colophon: colophonContainer,
   'callout-group': calloutGroupContainer,
 }

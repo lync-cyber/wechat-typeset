@@ -296,6 +296,7 @@ export const spec: PersonaSpec = {
     footnotes: 'top-rule', // 财新简报式：顶部 hairline + 密栏小字，与 ledger 账本表语言一致
     recommend: 'card-list',
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

@@ -32,6 +32,7 @@ import {
   DIVIDER_VARIANTS,
   NOTE_VARIANTS,
   FOOTNOTES_VARIANTS,
+  FOOTER_CTA_VARIANTS,
   QRCODE_VARIANTS,
   QUOTE_VARIANTS,
   RECOMMEND_VARIANTS,
@@ -84,6 +85,7 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
     footnotes: FOOTNOTES_VARIANTS as unknown as MetaTable,
     recommend: RECOMMEND_VARIANTS as unknown as MetaTable,
     qrcode: QRCODE_VARIANTS as unknown as MetaTable,
+    footerCTA: FOOTER_CTA_VARIANTS as unknown as MetaTable,
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
@@ -120,6 +122,7 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     footnotes: FOOTNOTES_VARIANTS,
     recommend: RECOMMEND_VARIANTS,
     qrcode: QRCODE_VARIANTS,
+    footerCTA: FOOTER_CTA_VARIANTS,
   }
   return Object.keys(table[kind] ?? {})
 }

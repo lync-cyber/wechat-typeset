@@ -5,7 +5,6 @@
  *   - frame.ts     刊物结构外框  · masthead / section-tag / toc / toc-item / colophon
  *   - metrics.ts   数值与图表    · kpi-dashboard / kpi-item / bar-chart / bar
  *   - editorial.ts 编辑文案块    · qa-block / footnotes
- *   - cta.ts       召唤行动块    · cta-bar
  *
  * 设计纪律（与各子文件共通）：
  *   1. **不依赖 flex 关键布局**——wxPatch 会把 display:flex → block。需要"行内贴边"
@@ -36,7 +35,5 @@ export {
 } from './metrics'
 
 export { qaBlockContainer, footnotesContainer } from './editorial'
-
-export { ctaBarContainer } from './cta'
 
 export { calloutGroupContainer } from './calloutGroup'

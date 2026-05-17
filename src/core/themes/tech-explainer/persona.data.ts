@@ -318,6 +318,7 @@ export const spec: PersonaSpec = {
     footnotes: 'boxed-aside', // 教程文末参考资料：软底卡片 + pill kicker，narrative aside
     recommend: 'academic-refs', // 学术 / 教程主题：参考引用栏走 uppercase 小字 kicker
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   // ============================================================

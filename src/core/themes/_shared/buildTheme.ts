@@ -459,7 +459,6 @@ export function baseContainers(tokens: ThemeTokens): ThemeContainers {
       'letter-spacing': '0.01em',
       color: tokens.colors.textMuted,
     },
-    ctaBar: { margin: '22px 0' },
     // colophon：wrapper CSS 兜底由 token 驱动；renderer 只在 ctx.containers.colophon
     // 之上做 inline 合并。非 data-brief 主题不主动声明时也能得到一个克制的中性骨架。
     colophon: {

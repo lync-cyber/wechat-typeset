@@ -270,6 +270,7 @@ export const spec: PersonaSpec = {
     footnotes: 'top-rule', // 顶部 hairline + 密栏小字，研究报告参考文献条款感
     recommend: 'card-list',
     qrcode: 'bare',
+    footerCTA: 'button-led',
   },
 
   signatureContainers: [

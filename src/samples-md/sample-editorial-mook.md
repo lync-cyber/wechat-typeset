@@ -149,7 +149,7 @@
 **第 06 期预告：** 插画师与他们的手稿——关于"过程"的另一种出版形态。
 :::
 
-::: cta-bar like="❤  喜欢" star="★  收藏" share="↗  分享"
+::: footer-cta variant=triptych-actions like="❤  喜欢" star="★  收藏" share="↗  分享"
 :::
 
 ::: qrcode variant=follow-card slow reading desc="隔周四夜刊行"
