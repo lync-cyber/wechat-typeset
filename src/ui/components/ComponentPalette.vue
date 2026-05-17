@@ -3,7 +3,7 @@
  * 组件库抽屉：装配 + 模式切换（list / studio），不持有展示派生与 cell DOM。
  * "保存选区"通过 defineExpose 暴露 openSaveDialog 由 actions.handleSaveSelection 调用。
  */
-import { computed, reactive, ref } from 'vue'
+import { computed, defineAsyncComponent, reactive, ref } from 'vue'
 import {
   COMPONENT_TABS,
   type ComponentEntry,
@@ -15,6 +15,11 @@ import {
 import { useUserComponents } from '../../domain/components-lib/useUserComponents'
 import type { Theme } from '../../core/themes/types'
 import { BUILTIN_COMPONENTS } from '../../domain/components-lib/registry'
+
+/** UV 管理面板懒加载——大多数用户不会进入"我的样式" tab。 */
+const UserVariantsPanel = defineAsyncComponent(
+  () => import('./component-studio/UserVariantsPanel.vue'),
+)
 import {
   exportUserComponentsJSON,
   importUserComponentsJSON,
@@ -36,7 +41,7 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-type TabKind = 'template' | ComponentKind | 'user'
+type TabKind = 'template' | ComponentKind | 'user' | 'uv'
 
 const mode = ref<'list' | 'studio'>('list')
 const studioInit = ref<StudioInit | null>(null)
@@ -81,6 +86,7 @@ const themeTemplateList = computed<ComponentEntry[]>(() =>
 const currentList = computed<ComponentEntry[]>(() => {
   if (activeTab.value === 'template') return themeTemplateList.value
   if (activeTab.value === 'user') return userComponents.value
+  if (activeTab.value === 'uv') return [] // UV 走独立面板渲染
   return builtinByKind.value[activeTab.value as ComponentKind]
 })
 
@@ -319,25 +325,28 @@ defineExpose({ openSaveDialog })
       </div>
 
       <div class="body">
-        <div v-if="currentList.length === 0" class="empty">
-          <template v-if="activeTab === 'template'">
-            当前主题「{{ props.theme.name }}」暂无预设模板。切换主题或在下方预设里选择。
-          </template>
-          <template v-else-if="activeTab === 'user'">
-            <div class="empty-title">还没有自创组件</div>
-            <div class="empty-hint">
-              点上方"+ 新建"开始,或在编辑器里选中一段 markdown 后用"保存选区为组件"把它存下来。
-            </div>
-          </template>
-          <template v-else>本分类暂无预设</template>
-        </div>
-        <ComponentGrid
-          v-else
-          :entries="currentList"
-          :actions="gridActions"
-          @select="onCellSelect"
-          @action="onCellAction"
-        />
+        <UserVariantsPanel v-if="activeTab === 'uv'" />
+        <template v-else>
+          <div v-if="currentList.length === 0" class="empty">
+            <template v-if="activeTab === 'template'">
+              当前主题「{{ props.theme.name }}」暂无预设模板。切换主题或在下方预设里选择。
+            </template>
+            <template v-else-if="activeTab === 'user'">
+              <div class="empty-title">还没有自创组件</div>
+              <div class="empty-hint">
+                点上方"+ 新建"开始,或在编辑器里选中一段 markdown 后用"保存选区为组件"把它存下来。
+              </div>
+            </template>
+            <template v-else>本分类暂无预设</template>
+          </div>
+          <ComponentGrid
+            v-else
+            :entries="currentList"
+            :actions="gridActions"
+            @select="onCellSelect"
+            @action="onCellAction"
+          />
+        </template>
       </div>
 
       <SaveSelectionDialog

@@ -19,12 +19,20 @@ import {
   FORBIDDEN_CSS_PROPS,
   FORBIDDEN_DISPLAY_VALUES,
   FORBIDDEN_VALUE_PATTERNS,
+  HARD_REMOVE_TAGS,
+  IFRAME_SRC_ALLOW,
 } from './rules'
 
 export type DiagnosticCode =
   | 'forbidden-prop'
   | 'forbidden-display'
   | 'forbidden-value-pattern'
+  | 'forbidden-tag'
+  | 'forbidden-attr'
+  | 'unknown-placeholder'
+  | 'missing-body-placeholder'
+  | 'duplicate-body-placeholder'
+  | 'iframe-src-not-allowed'
 
 export interface Diagnostic {
   severity: 'error' | 'warning'
@@ -106,5 +114,195 @@ export function lintInlineCSS(css: string, path: string): Diagnostic[] {
     if (!prop || !value) continue
     out.push(...lintProp(prop, value, path))
   }
+  return out
+}
+
+// ─────────────────────────────────────────────────────────────
+// 步骤 7：UserVariantCustom.template HTML 白名单
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * 允许在 custom template 里出现的占位符。任何 `{{...}}` 未匹配此白名单将报警；
+ * `{{body}}` 必须恰好出现 1 次（renderer 据此把模板劈成 open / close 两段）。
+ *
+ * - title / body：来自 fence info（标题文本 + markdown 子内容）
+ * - attr.<name>：来自 fence info 的 key=value attrs
+ * - wrapperCSS / titleCSS / bodyCSS / svgSlot：来自 uv.css.* 槽位
+ *
+ * 不上完整模板引擎：custom 是单一可信输入（用户自己写的变体），正则替换够用；
+ * 引入 Mustache / Handlebars 等会带来 helper / partial 等"超出 trusted-input 假设"
+ * 的攻击面。
+ */
+const PLACEHOLDER_RE = /\{\{\s*([\w.]+)\s*\}\}/g
+const ATTR_PLACEHOLDER_RE = /^attr\.[a-zA-Z_][\w-]*$/
+const KNOWN_PLACEHOLDERS: ReadonlySet<string> = new Set([
+  'title',
+  'body',
+  'wrapperCSS',
+  'titleCSS',
+  'bodyCSS',
+  'svgSlot',
+])
+
+/**
+ * 标签禁区。HARD_REMOVE_TAGS 已经收了 style/script/link/meta/noscript；
+ * 在此基础上扩 object/embed/form/iframe（iframe 单独走 src 白名单）。
+ *
+ * 同步纪律：HARD_REMOVE_TAGS 变更时这里要跟着对齐——它们都是"微信沙箱必剥"集合，
+ * 写两份是因为 wxPatch 的目标是清洗，本 lint 的目标是阻止保存；语义同源，行为分离。
+ */
+const TEMPLATE_FORBIDDEN_TAGS: ReadonlySet<string> = new Set([
+  ...HARD_REMOVE_TAGS,
+  'object',
+  'embed',
+  'form',
+])
+
+/** 提取每个标签的"名 + 属性串"。不解析嵌套属性引号——保守扫一遍触发风险即可。 */
+const TAG_RE = /<\s*\/?\s*([a-zA-Z][\w-]*)\b([^>]*)>/g
+const EVENT_ATTR_RE = /\bon[a-z]+\s*=/gi
+const JS_HREF_RE = /\b(?:href|src|formaction|action)\s*=\s*("|')?\s*javascript:/i
+const IFRAME_SRC_RE = /\bsrc\s*=\s*("([^"]*)"|'([^']*)'|(\S+))/i
+const STYLE_ATTR_RE = /\bstyle\s*=\s*("([^"]*)"|'([^']*)')/gi
+
+/**
+ * 校验 UserVariantCustom.template 的 HTML 与占位符。返回所有命中的 diagnostic（不短路）。
+ *
+ * 规则：
+ *   1. 任何 TEMPLATE_FORBIDDEN_TAGS 中的标签 → forbidden-tag
+ *   2. iframe 且 src 不在 IFRAME_SRC_ALLOW → iframe-src-not-allowed
+ *   3. 任何 `on*=` 事件属性 → forbidden-attr
+ *   4. 任何 `href|src|formaction|action="javascript:..."` → forbidden-attr
+ *   5. `style="..."` 内嵌 CSS → 委托 lintInlineCSS
+ *   6. `{{body}}` 必须恰好 1 个；0 个 → missing-body；≥2 → duplicate-body
+ *   7. `{{...}}` 未识别 → unknown-placeholder（不致命，警告级）
+ *
+ * 不做的事：
+ *   - 不构造 DOM（vite-ssr 友好，Node 环境无 happy-dom 依赖）
+ *   - 不修复 / 不剥离 —— 仅诊断；调用方决定是否阻止保存
+ *   - 不解析嵌套 `<` / `>` —— 注释 / CDATA 等极端情况留给后续升级
+ */
+export function lintTemplateHTML(template: string, path: string): Diagnostic[] {
+  const out: Diagnostic[] = []
+
+  // 1-4. 扫标签。close tag（`</tag>`）跳过——属性检查无意义，forbidden-tag 报一次足够
+  TAG_RE.lastIndex = 0
+  let m: RegExpExecArray | null
+  while ((m = TAG_RE.exec(template)) !== null) {
+    const tagName = m[1].toLowerCase()
+    const attrs = m[2] ?? ''
+    const fragment = m[0]
+    const isClose = /^<\s*\//.test(fragment)
+    if (isClose) continue
+
+    if (TEMPLATE_FORBIDDEN_TAGS.has(tagName)) {
+      out.push({
+        severity: 'error',
+        code: 'forbidden-tag',
+        prop: tagName,
+        value: fragment,
+        path,
+        message: `[template] ${path} 含禁用标签 <${tagName}>，微信沙箱会整棵剥离或视为攻击面，请移除。`,
+      })
+      continue
+    }
+    if (tagName === 'iframe') {
+      const srcM = IFRAME_SRC_RE.exec(attrs)
+      const src = srcM ? (srcM[2] ?? srcM[3] ?? srcM[4] ?? '') : ''
+      const allowed = src && IFRAME_SRC_ALLOW.some((re) => re.test(src))
+      if (!allowed) {
+        out.push({
+          severity: 'error',
+          code: 'iframe-src-not-allowed',
+          prop: 'iframe.src',
+          value: src,
+          path,
+          message: `[template] ${path} 的 <iframe> src 不在白名单。当前仅允许 v.qq.com（mpvideo 容器）。`,
+        })
+      }
+    }
+
+    // on*= 事件属性
+    EVENT_ATTR_RE.lastIndex = 0
+    let evt: RegExpExecArray | null
+    while ((evt = EVENT_ATTR_RE.exec(attrs)) !== null) {
+      out.push({
+        severity: 'error',
+        code: 'forbidden-attr',
+        prop: evt[0].replace(/\s*=\s*$/, ''),
+        value: fragment,
+        path,
+        message: `[template] ${path} 含事件属性 \`${evt[0].trim()}\`，微信会剥离且为 XSS 风险点。`,
+      })
+    }
+
+    // javascript: 协议
+    if (JS_HREF_RE.test(attrs)) {
+      out.push({
+        severity: 'error',
+        code: 'forbidden-attr',
+        prop: 'javascript-protocol',
+        value: fragment,
+        path,
+        message: `[template] ${path} 含 \`javascript:\` 协议，禁止——XSS 风险。`,
+      })
+    }
+
+    // 5. style="..." 委托 lintInlineCSS
+    STYLE_ATTR_RE.lastIndex = 0
+    let sm: RegExpExecArray | null
+    while ((sm = STYLE_ATTR_RE.exec(attrs)) !== null) {
+      const styleBody = sm[2] ?? sm[3] ?? ''
+      if (!styleBody) continue
+      // 跳过仅含占位符的 style（如 style="{{wrapperCSS}}"）——内容由运行时注入并已分别 lint
+      const stripped = styleBody.replace(PLACEHOLDER_RE, '').trim()
+      if (!stripped) continue
+      out.push(...lintInlineCSS(styleBody, `${path}.style@<${tagName}>`))
+    }
+  }
+
+  // 6-7. 扫占位符
+  let bodyCount = 0
+  PLACEHOLDER_RE.lastIndex = 0
+  let pm: RegExpExecArray | null
+  while ((pm = PLACEHOLDER_RE.exec(template)) !== null) {
+    const name = pm[1]
+    if (name === 'body') {
+      bodyCount++
+      continue
+    }
+    if (KNOWN_PLACEHOLDERS.has(name)) continue
+    if (ATTR_PLACEHOLDER_RE.test(name)) continue
+    out.push({
+      severity: 'warning',
+      code: 'unknown-placeholder',
+      prop: name,
+      value: pm[0],
+      path,
+      message:
+        `[template] ${path} 含未识别占位符 \`${pm[0]}\`，渲染时会原样输出。` +
+        '白名单：{{title}}/{{body}}/{{attr.X}}/{{wrapperCSS}}/{{titleCSS}}/{{bodyCSS}}/{{svgSlot}}。',
+    })
+  }
+  if (bodyCount === 0) {
+    out.push({
+      severity: 'error',
+      code: 'missing-body-placeholder',
+      prop: '{{body}}',
+      value: '',
+      path,
+      message: `[template] ${path} 缺少 {{body}} 占位符——渲染器据此切分 open/close，必须恰好 1 个。`,
+    })
+  } else if (bodyCount > 1) {
+    out.push({
+      severity: 'error',
+      code: 'duplicate-body-placeholder',
+      prop: '{{body}}',
+      value: String(bodyCount),
+      path,
+      message: `[template] ${path} 含 ${bodyCount} 个 {{body}} 占位符；必须恰好 1 个。`,
+    })
+  }
+
   return out
 }

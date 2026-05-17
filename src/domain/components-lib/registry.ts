@@ -15,7 +15,7 @@ export const BUILTIN_COMPONENTS: ReadonlyArray<ComponentEntry> = BUILTIN_SOURCE
 
 /** UI 分类：展示在抽屉 tab 上。顺序即抽屉 tab 顺序。 */
 export const COMPONENT_TABS: ReadonlyArray<{
-  kind: ComponentKind | 'user'
+  kind: ComponentKind | 'user' | 'uv'
   label: string
 }> = [
   { kind: 'admonition', label: '提示' },
@@ -31,6 +31,7 @@ export const COMPONENT_TABS: ReadonlyArray<{
   { kind: 'footerCTA', label: '文末 CTA' },
   { kind: 'none', label: '其它' },
   { kind: 'user', label: '我的组件' },
+  { kind: 'uv', label: '我的样式' },
 ]
 
 export function filterByKind(

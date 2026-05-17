@@ -3,12 +3,12 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。步骤 5 的 Studio 源码模式新增 useComponentDraft / IsolatedPreview / userVariantSave / dispatch helper 等约 +5kB raw / +1kB gz（SourceModePanel 与 CM6 lang-css/html 已 defineAsyncComponent 懒载）。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。步骤 5 的 Studio 源码模式新增 useComponentDraft / IsolatedPreview / userVariantSave / dispatch helper 等约 +5kB raw / +1kB gz。步骤 7 的 custom 档 + UV 管理面板 + render() 输出缓存约 +6kB raw / +1.5kB gz（CustomModePanel / UserVariantsPanel / useUserVariantLint 均 defineAsyncComponent 懒载）。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 545000,
-      "gzipLimit": 207000,
+      "limit": 555000,
+      "gzipLimit": 210000,
       "mustNotEmbed": ["html2canvas"]
     },
     {
@@ -82,6 +82,51 @@
       "$comment": "SourceModePanel 的样式 chunk（CSS Module / scoped css 自动拆出）。微量，限 4kB raw / 1kB gz 足够。",
       "name": "source-mode panel stylesheet (lazy)",
       "prefix": "SourceModePanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
+    },
+    {
+      "$comment": "步骤 7 CustomModePanel 的 lazy chunk（L3 custom HTML 模板编辑）。defineAsyncComponent 装拆，仅当用户在 Studio 切到 '完全自定义' 时下载。5 个 tab（template/3 个 CSS slot/svgSlot）+ IsolatedPreview + PatchInspector + 全档 lint summary。",
+      "name": "custom-mode panel chunk (lazy)",
+      "prefix": "CustomModePanel",
+      "ext": "js",
+      "limit": 12000,
+      "gzipLimit": 6000
+    },
+    {
+      "name": "custom-mode panel stylesheet (lazy)",
+      "prefix": "CustomModePanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
+    },
+    {
+      "$comment": "步骤 4-6 遗留 UserVariantsPanel 的 lazy chunk（'我的样式'抽屉 tab 内容）。defineAsyncComponent 装拆，仅当用户切到 'uv' tab 时下载；本身极轻，只读 UV 仓 + 重命名 / 删除按钮。",
+      "name": "user-variants panel chunk (lazy)",
+      "prefix": "UserVariantsPanel",
+      "ext": "js",
+      "limit": 8000,
+      "gzipLimit": 4000
+    },
+    {
+      "name": "user-variants panel stylesheet (lazy)",
+      "prefix": "UserVariantsPanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
+    },
+    {
+      "$comment": "useUserVariantLint 抽出的 lazy chunk（@codemirror/lint + lintInlineCSS/lintTemplateHTML 包装）。被 SourceModePanel / CustomModePanel 双方共享，由 vite 自动 split。",
+      "name": "user-variant-lint chunk (lazy)",
+      "prefix": "useUserVariantLint",
+      "ext": "js",
+      "limit": 8000,
+      "gzipLimit": 4000
+    },
+    {
+      "name": "user-variant-lint stylesheet (lazy)",
+      "prefix": "useUserVariantLint",
       "ext": "css",
       "limit": 4000,
       "gzipLimit": 1500

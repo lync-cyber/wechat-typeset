@@ -15,7 +15,7 @@
 
 import { linter, type Diagnostic as CMDiag } from '@codemirror/lint'
 import type { Extension } from '@codemirror/state'
-import { lintInlineCSS } from '../../core/pipeline/lint'
+import { lintInlineCSS, lintTemplateHTML } from '../../core/pipeline/lint'
 
 /**
  * 在文本里定位一条 `prop:value` 声明的 [from, to) offset。
@@ -53,6 +53,35 @@ export function createUserVariantCSSLinter(path = 'editor'): Extension {
         severity: d.severity,
         message: d.message,
         source: 'wxts-css',
+      }
+    })
+  })
+}
+
+/**
+ * 把 lintTemplateHTML（步骤 7）包成 CM6 linter，供 CustomModePanel 的 template /
+ * svgSlot pane 使用。定位策略：根据 diagnostic.value（命中片段）substring 反查；
+ * `missing-body-placeholder` 等"全文范围"问题统一画在 [0, length) 全篇。
+ */
+export function createUserVariantHTMLLinter(path = 'template'): Extension {
+  return linter((view) => {
+    const text = view.state.doc.toString()
+    return lintTemplateHTML(text, path).map<CMDiag>((d) => {
+      let from = 0
+      let to = text.length
+      if (d.value && typeof d.value === 'string') {
+        const idx = text.indexOf(d.value)
+        if (idx >= 0) {
+          from = idx
+          to = idx + d.value.length
+        }
+      }
+      return {
+        from,
+        to,
+        severity: d.severity,
+        message: d.message,
+        source: 'wxts-template',
       }
     })
   })

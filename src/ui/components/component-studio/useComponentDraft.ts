@@ -29,13 +29,13 @@ export type StudioMode = 'new' | 'edit' | 'derive'
  *   - null      未启用任何 UV（保存不创建 UV）
  *   - 'tokens'  L1：tokens 面板（每字段一个 color/size 控件）
  *   - 'patch'   L2：源码模式（CSS 三 slot 直接写 inline css 片段）
+ *   - 'custom'  L3：完全自定义 HTML 骨架（template 字符串 + 4 个 CSS slot）
  *
- * 'custom' 档（L3 完全自定义 HTML 骨架）由步骤 7 单独承接，不进入 Studio 编辑流程。
- *
- * 同时只有一档生效——切档相当于切换 base 的"自由度阶梯"，不允许 tokens + patch 混搭
- * （混搭会让保存路径模糊：到底建一条 tokens UV 还是一条 patch UV？）。
+ * 同时只有一档生效——切档相当于切换 base 的"自由度阶梯"。custom 与 tokens/patch
+ * 的关键差异：custom 不依赖 base.kind/variantId（基底 = null），它注册独立 fence
+ * （`uc-<uvid>`）走 _user.ts 的占位符替换路径。
  */
-export type UserVariantMode = 'tokens' | 'patch' | null
+export type UserVariantMode = 'tokens' | 'patch' | 'custom' | null
 
 /**
  * patch 档草稿：三个 inline css slot。所有 string 字段未填即视为"不追加"。
@@ -45,6 +45,18 @@ export interface DraftCssPatch {
   wrapperCSS: string
   titleCSS: string
   bodyCSS: string
+}
+
+/**
+ * custom 档草稿：完整 HTML template + 4 个 CSS slot（含 svgSlot）。
+ * 与 UserVariantCustom.template / .css 同形，所有字段必填便于 v-model。
+ */
+export interface DraftCustom {
+  template: string
+  wrapperCSS: string
+  titleCSS: string
+  bodyCSS: string
+  svgSlot: string
 }
 
 export interface DraftFields {
@@ -69,6 +81,8 @@ export interface DraftFields {
   userVariantMode: UserVariantMode
   /** 步骤 5：patch 档草稿——SourceModePanel 三个 CodeMirrorPane 的 v-model 目标。 */
   userVariantCssPatch: DraftCssPatch
+  /** 步骤 7：custom 档草稿——CustomModePanel 的 template + 4 个 css slot 的 v-model 目标。 */
+  userVariantCustom: DraftCustom
 }
 
 export interface UseComponentDraft {
@@ -88,6 +102,13 @@ export interface UseComponentDraft {
 }
 
 const EMPTY_CSS_PATCH: DraftCssPatch = { wrapperCSS: '', titleCSS: '', bodyCSS: '' }
+const EMPTY_CUSTOM: DraftCustom = {
+  template: '',
+  wrapperCSS: '',
+  titleCSS: '',
+  bodyCSS: '',
+  svgSlot: '',
+}
 
 const EMPTY: DraftFields = {
   name: '',
@@ -99,6 +120,7 @@ const EMPTY: DraftFields = {
   userVariantTokens: {},
   userVariantMode: null,
   userVariantCssPatch: { ...EMPTY_CSS_PATCH },
+  userVariantCustom: { ...EMPTY_CUSTOM },
 }
 
 function snapshotFromEntry(entry: ComponentEntry, namePrefix = ''): DraftFields {
@@ -112,6 +134,7 @@ function snapshotFromEntry(entry: ComponentEntry, namePrefix = ''): DraftFields 
     userVariantTokens: {},
     userVariantMode: null,
     userVariantCssPatch: { ...EMPTY_CSS_PATCH },
+    userVariantCustom: { ...EMPTY_CUSTOM },
   }
 }
 
@@ -119,31 +142,47 @@ interface LoadedLink {
   originalLinkedUvId: string | null
   tokens: Record<string, string>
   cssPatch: DraftCssPatch
+  custom: DraftCustom
   mode: UserVariantMode
 }
 
 /**
  * edit 模式：若 user 组件挂着 linkedUserVariantId，反查 UV 并按 level 把数据回填到对应草稿字段。
  *
- * 严格要求 base.kind/variantId 与组件 entry 一致——不一致说明数据被外部改坏（或用户在另一会话
- * 改过组件 kind）；降级为"无 UV 覆盖"重新走 fresh 路径，保存时若用户没填任何字段会被识别为
- * "主动清空"流程（详见 ComponentStudio.onSave）。
+ * 严格要求 base.kind/variantId 与组件 entry 一致（仅 tokens/patch）——不一致说明数据被外部
+ * 改坏（或用户在另一会话改过组件 kind）；降级为"无 UV 覆盖"重新走 fresh 路径，保存时若用户
+ * 没填任何字段会被识别为"主动清空"流程（详见 ComponentStudio.onSave）。
  *
- * 失败（UV 已删 / base 不匹配 / level='custom' Studio 不支持）都返回 mode=null + 空草稿，
- * 但 originalLinkedUvId 仍透出原值让 onSave 决定是清空 link 还是覆盖。
+ * custom 档不挂 base.kind/variantId，跳过 base 校验直接回填 template + css 槽位。
+ *
+ * 失败（UV 已删 / base 不匹配）都返回 mode=null + 空草稿，但 originalLinkedUvId 仍透出
+ * 原值让 onSave 决定是清空 link 还是覆盖。
  */
 function loadLinkedUv(entry: UserComponent): LoadedLink {
   const blank: LoadedLink = {
     originalLinkedUvId: entry.linkedUserVariantId ?? null,
     tokens: {},
     cssPatch: { ...EMPTY_CSS_PATCH },
+    custom: { ...EMPTY_CUSTOM },
     mode: null,
   }
   const uvId = entry.linkedUserVariantId
   if (!uvId) return blank
   const uv = getUserVariant(uvId)
   if (!uv) return blank
-  if (uv.level === 'custom') return blank
+  if (uv.level === 'custom') {
+    return {
+      ...blank,
+      custom: {
+        template: uv.template,
+        wrapperCSS: uv.css.wrapperCSS,
+        titleCSS: uv.css.titleCSS ?? '',
+        bodyCSS: uv.css.bodyCSS ?? '',
+        svgSlot: uv.css.svgSlot ?? '',
+      },
+      mode: 'custom',
+    }
+  }
   if (uv.base.kind !== entry.kind || uv.base.variantId !== (entry.variantId ?? '')) {
     return blank
   }
@@ -171,7 +210,11 @@ export function useComponentDraft(
   let originalLinkedUvId: string | null = null
 
   if (mode === 'new' || !source) {
-    initial = { ...EMPTY, userVariantCssPatch: { ...EMPTY_CSS_PATCH } }
+    initial = {
+      ...EMPTY,
+      userVariantCssPatch: { ...EMPTY_CSS_PATCH },
+      userVariantCustom: { ...EMPTY_CUSTOM },
+    }
   } else if (mode === 'edit') {
     initial = snapshotFromEntry(source)
     if (source.source === 'user') {
@@ -179,6 +222,7 @@ export function useComponentDraft(
       const linked = loadLinkedUv(source as UserComponent)
       initial.userVariantTokens = linked.tokens
       initial.userVariantCssPatch = linked.cssPatch
+      initial.userVariantCustom = linked.custom
       initial.userVariantMode = linked.mode
       originalLinkedUvId = linked.originalLinkedUvId
     }
@@ -190,6 +234,7 @@ export function useComponentDraft(
     ...initial,
     userVariantTokens: { ...initial.userVariantTokens },
     userVariantCssPatch: { ...initial.userVariantCssPatch },
+    userVariantCustom: { ...initial.userVariantCustom },
   })
 
   const dirty = computed(() =>
@@ -201,7 +246,8 @@ export function useComponentDraft(
     draft.thumbnailSvg !== initial.thumbnailSvg ||
     draft.userVariantMode !== initial.userVariantMode ||
     !shallowEqualRecord(draft.userVariantTokens, initial.userVariantTokens) ||
-    !shallowEqualCssPatch(draft.userVariantCssPatch, initial.userVariantCssPatch),
+    !shallowEqualCssPatch(draft.userVariantCssPatch, initial.userVariantCssPatch) ||
+    !shallowEqualCustom(draft.userVariantCustom, initial.userVariantCustom),
   )
 
   function reset() {
@@ -219,6 +265,11 @@ export function useComponentDraft(
     draft.userVariantCssPatch.wrapperCSS = initial.userVariantCssPatch.wrapperCSS
     draft.userVariantCssPatch.titleCSS = initial.userVariantCssPatch.titleCSS
     draft.userVariantCssPatch.bodyCSS = initial.userVariantCssPatch.bodyCSS
+    draft.userVariantCustom.template = initial.userVariantCustom.template
+    draft.userVariantCustom.wrapperCSS = initial.userVariantCustom.wrapperCSS
+    draft.userVariantCustom.titleCSS = initial.userVariantCustom.titleCSS
+    draft.userVariantCustom.bodyCSS = initial.userVariantCustom.bodyCSS
+    draft.userVariantCustom.svgSlot = initial.userVariantCustom.svgSlot
   }
 
   return { draft, initial, dirty, editingId, originalLinkedUvId, reset }
@@ -226,6 +277,16 @@ export function useComponentDraft(
 
 function shallowEqualCssPatch(a: DraftCssPatch, b: DraftCssPatch): boolean {
   return a.wrapperCSS === b.wrapperCSS && a.titleCSS === b.titleCSS && a.bodyCSS === b.bodyCSS
+}
+
+function shallowEqualCustom(a: DraftCustom, b: DraftCustom): boolean {
+  return (
+    a.template === b.template &&
+    a.wrapperCSS === b.wrapperCSS &&
+    a.titleCSS === b.titleCSS &&
+    a.bodyCSS === b.bodyCSS &&
+    a.svgSlot === b.svgSlot
+  )
 }
 
 function shallowEqualRecord(a: Record<string, string>, b: Record<string, string>): boolean {

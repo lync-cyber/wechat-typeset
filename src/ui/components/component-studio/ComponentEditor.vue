@@ -24,16 +24,20 @@ import MarkdownInput from './MarkdownInput.vue'
 import TokensPanel from './TokensPanel.vue'
 
 /**
- * SourceModePanel 懒加载：拉入 CM6 lang-css / lang-html / oneDark 主题 + linter，
- * 体积约 30-40 kB。大多数 Studio 编辑路径不进源码模式（只走 tokens 面板 / 不开 UV），
- * 用 defineAsyncComponent 推迟到 mode='patch' 切换时才下载，节约 main app bundle。
+ * SourceModePanel / CustomModePanel 懒加载：拉入 CM6 lang-css / lang-html / oneDark
+ * 主题 + linter，体积约 30-40 kB。大多数 Studio 编辑路径不进源码模式（只走 tokens 面板
+ * 或不开 UV），用 defineAsyncComponent 推迟到 mode='patch'/'custom' 切换时才下载，
+ * 节约 main app bundle。
  */
 const SourceModePanel = defineAsyncComponent(() => import('./SourceModePanel.vue'))
+const CustomModePanel = defineAsyncComponent(() => import('./CustomModePanel.vue'))
 
 const props = defineProps<{
   draft: DraftFields
-  /** 传入主题让 SourceModePanel 跑 IsolatedPreview——TokensPanel 不消费 theme */
+  /** 传入主题让 SourceModePanel/CustomModePanel 跑 IsolatedPreview——TokensPanel 不消费 theme */
   theme: Theme
+  /** edit 模式：原 UV id 透传到 CustomModePanel 让预览 markdown 不需 rewrite */
+  originalLinkedUvId?: string | null
 }>()
 
 const KIND_OPTIONS: Array<{ value: ComponentKind; label: string }> = [
@@ -82,10 +86,12 @@ const canEditPatch = computed<boolean>(
   () => props.draft.kind !== 'none' && !!props.draft.variantId,
 )
 
-// kind / variantId 切换时清掉所有 UV 草稿数据（不同 base 的 token / patch 都无意义可移植）
+// kind / variantId 切换时清掉所有 UV 草稿数据（不同 base 的 token / patch 都无意义可移植）。
+// custom 档不依赖 base.kind/variantId（fence = uc-<uvid>，与 kind 无关），切 kind 不清。
 watch(
   () => `${props.draft.kind}::${props.draft.variantId}`,
   () => {
+    if (props.draft.userVariantMode === 'custom') return
     for (const k of Object.keys(props.draft.userVariantTokens)) {
       delete props.draft.userVariantTokens[k]
     }
@@ -97,8 +103,8 @@ watch(
 )
 
 /**
- * 切档语义：tokens ↔ patch 互斥。切换时清空另一档的草稿数据（防止保存路径歧义）。
- * 切回 null = 关闭 UV 编辑入口；不强制清数据（用户可能只是临时折叠）。
+ * 切档语义：tokens / patch / custom 三档互斥。切换时清空其它档的草稿数据
+ *（防止保存路径歧义）。切回 null = 关闭 UV 编辑入口；不强制清数据。
  */
 function setMode(next: UserVariantMode): void {
   if (next === props.draft.userVariantMode) {
@@ -109,12 +115,29 @@ function setMode(next: UserVariantMode): void {
     props.draft.userVariantCssPatch.wrapperCSS = ''
     props.draft.userVariantCssPatch.titleCSS = ''
     props.draft.userVariantCssPatch.bodyCSS = ''
+    clearCustomDraft()
   } else if (next === 'patch') {
     for (const k of Object.keys(props.draft.userVariantTokens)) {
       delete props.draft.userVariantTokens[k]
     }
+    clearCustomDraft()
+  } else if (next === 'custom') {
+    for (const k of Object.keys(props.draft.userVariantTokens)) {
+      delete props.draft.userVariantTokens[k]
+    }
+    props.draft.userVariantCssPatch.wrapperCSS = ''
+    props.draft.userVariantCssPatch.titleCSS = ''
+    props.draft.userVariantCssPatch.bodyCSS = ''
   }
   props.draft.userVariantMode = next
+}
+
+function clearCustomDraft(): void {
+  props.draft.userVariantCustom.template = ''
+  props.draft.userVariantCustom.wrapperCSS = ''
+  props.draft.userVariantCustom.titleCSS = ''
+  props.draft.userVariantCustom.bodyCSS = ''
+  props.draft.userVariantCustom.svgSlot = ''
 }
 </script>
 
@@ -183,7 +206,7 @@ function setMode(next: UserVariantMode): void {
       </ul>
     </div>
 
-    <div v-if="hasTokenSchema || canEditPatch" class="advanced">
+    <div class="advanced">
       <div class="mode-switch" role="tablist" aria-label="样式编辑模式">
         <button
           v-if="hasTokenSchema"
@@ -201,6 +224,13 @@ function setMode(next: UserVariantMode): void {
           :class="['mode-btn', { active: props.draft.userVariantMode === 'patch' }]"
           @click="setMode('patch')"
         >源码模式 (CSS patch)</button>
+        <button
+          type="button"
+          role="tab"
+          :aria-selected="props.draft.userVariantMode === 'custom'"
+          :class="['mode-btn', { active: props.draft.userVariantMode === 'custom' }]"
+          @click="setMode('custom')"
+        >完全自定义 (custom)</button>
       </div>
       <TokensPanel
         v-if="props.draft.userVariantMode === 'tokens' && hasTokenSchema"
@@ -214,6 +244,12 @@ function setMode(next: UserVariantMode): void {
         :variant-id="props.draft.variantId"
         :css-patch="props.draft.userVariantCssPatch"
         :theme="props.theme"
+      />
+      <CustomModePanel
+        v-else-if="props.draft.userVariantMode === 'custom'"
+        :custom="props.draft.userVariantCustom"
+        :theme="props.theme"
+        :original-linked-uv-id="props.originalLinkedUvId ?? null"
       />
     </div>
   </div>

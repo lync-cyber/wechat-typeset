@@ -220,6 +220,7 @@ export default defineConfig({
       ['tests/unit/useExportActions.spec.ts', 'jsdom'],
       ['tests/unit/usePersonaDraft.spec.ts', 'jsdom'],
       ['tests/unit/userVariant-resolve.spec.ts', 'jsdom'],
+      ['tests/unit/userVariantCustom-render.spec.ts', 'jsdom'],
       ['tests/unit/variant-sanity.spec.ts', 'jsdom'],
       ['tests/unit/variant-sanity-codeblock.spec.ts', 'jsdom'],
       ['tests/unit/variant-sanity-matrix.spec.ts', 'jsdom'],
