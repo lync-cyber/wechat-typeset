@@ -20,7 +20,7 @@
  *        - 'beta'        基础 patch 已有但未覆盖所有边缘情况
  */
 
-import type { PatchLog } from './wechat/inspect'
+import type { PatchLog, PatchLogEntry, PatchLogSample } from './wechat/inspect'
 
 export type PlatformStatus = 'stable' | 'beta' | 'placeholder'
 
@@ -45,4 +45,4 @@ export interface PlatformAdapter {
   inspect?(html: string): PatchLog
 }
 
-export type { PatchLog }
+export type { PatchLog, PatchLogEntry, PatchLogSample }

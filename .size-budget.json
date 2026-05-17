@@ -3,12 +3,12 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。Phase-4 后 18 主题 registry 索引微增 → gz 195kB（自然增长）。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。步骤 5 的 Studio 源码模式新增 useComponentDraft / IsolatedPreview / userVariantSave / dispatch helper 等约 +5kB raw / +1kB gz（SourceModePanel 与 CM6 lang-css/html 已 defineAsyncComponent 懒载）。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 540000,
-      "gzipLimit": 205000,
+      "limit": 545000,
+      "gzipLimit": 207000,
       "mustNotEmbed": ["html2canvas"]
     },
     {
@@ -69,6 +69,22 @@
       "ext": "js",
       "limit": 24000,
       "gzipLimit": 12000
+    },
+    {
+      "$comment": "步骤 5 SourceModePanel 的 lazy chunk（component-studio L2 patch 源码模式）。defineAsyncComponent 装拆，仅当用户在 Studio 切到 '源码模式 (CSS patch)' 时下载。绑定 CodeMirrorPane + lang-css 配置 + linter wiring，本身轻量；CM6 lang-css/html 实际重量在 codemirror chunk 内。给松一点 headroom 让后续 L3 custom 模式扩展时不立刻需要再调阈值。",
+      "name": "source-mode panel chunk (lazy)",
+      "prefix": "SourceModePanel",
+      "ext": "js",
+      "limit": 12000,
+      "gzipLimit": 6000
+    },
+    {
+      "$comment": "SourceModePanel 的样式 chunk（CSS Module / scoped css 自动拆出）。微量，限 4kB raw / 1kB gz 足够。",
+      "name": "source-mode panel stylesheet (lazy)",
+      "prefix": "SourceModePanel",
+      "ext": "css",
+      "limit": 4000,
+      "gzipLimit": 1500
     }
   ]
 }

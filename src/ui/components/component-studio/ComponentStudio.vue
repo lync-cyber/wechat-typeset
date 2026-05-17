@@ -27,10 +27,16 @@ import type {
   CreateResult,
   UpdateResult,
 } from '../../../domain/components-lib/mutations'
-import type { Theme } from '../../../core/themes/types'
+import type { Theme, VariantKind } from '../../../core/themes/types'
+import type {
+  UserVariant,
+  UserVariantTokens,
+  UserVariantPatch,
+} from '../../../core/variants/userVariant'
 import ComponentEditor from './ComponentEditor.vue'
 import ComponentPreview from './ComponentPreview.vue'
 import { useComponentDraft, type StudioMode } from './useComponentDraft'
+import { dispatchUserVariant, rewriteVariantInMarkdown } from './userVariantSave'
 
 export interface StudioInit {
   mode: StudioMode
@@ -50,12 +56,75 @@ const emit = defineEmits<{
   (e: 'cancel'): void
 }>()
 
-const { draft, dirty, editingId, reset } = useComponentDraft(
+const { draft, dirty, editingId, originalLinkedUvId, reset } = useComponentDraft(
   props.init.mode,
   props.init.source ?? null,
 )
 
 const error = ref<string>('')
+
+// ─────────────────────────────────────────────────────────────
+// 用户 token 覆盖：预览期临时 UV + 保存期真实落仓
+// ─────────────────────────────────────────────────────────────
+
+/** 预览用的固定 ephemeral id；与真实仓 id 池隔离（真实 id 由 createUserVariant 生成）。 */
+const PREVIEW_UV_ID = 'uv_preview_draft'
+
+const tokenCount = computed(() => Object.keys(draft.userVariantTokens).length)
+const hasPatchContent = computed<boolean>(() => {
+  const p = draft.userVariantCssPatch
+  return !!(p.wrapperCSS.trim() || p.titleCSS.trim() || p.bodyCSS.trim())
+})
+
+const baseValid = computed<boolean>(() => draft.kind !== 'none' && !!draft.variantId)
+
+/** 当前是否有可保存的 UV 草稿（按 mode 区分）。 */
+const hasUvContent = computed<boolean>(() => {
+  if (!baseValid.value) return false
+  if (draft.userVariantMode === 'tokens') return tokenCount.value > 0
+  if (draft.userVariantMode === 'patch') return hasPatchContent.value
+  return false
+})
+
+/** 预览期的临时 UV（不入仓），让 ComponentPreview 即时反映 token / patch 改动。 */
+const previewUserVariants = computed<readonly UserVariant[]>(() => {
+  if (!hasUvContent.value) return []
+  const base = { kind: draft.kind as VariantKind, variantId: draft.variantId }
+  if (draft.userVariantMode === 'tokens') {
+    const preview: UserVariantTokens = {
+      id: PREVIEW_UV_ID,
+      name: '__preview__',
+      level: 'tokens',
+      createdAt: 0,
+      updatedAt: 0,
+      base,
+      tokens: { ...draft.userVariantTokens },
+    }
+    return [preview]
+  }
+  // patch
+  const p = draft.userVariantCssPatch
+  const preview: UserVariantPatch = {
+    id: PREVIEW_UV_ID,
+    name: '__preview__',
+    level: 'patch',
+    createdAt: 0,
+    updatedAt: 0,
+    base,
+    cssPatch: {
+      ...(p.wrapperCSS.trim() ? { wrapperCSS: p.wrapperCSS } : {}),
+      ...(p.titleCSS.trim() ? { titleCSS: p.titleCSS } : {}),
+      ...(p.bodyCSS.trim() ? { bodyCSS: p.bodyCSS } : {}),
+    },
+  }
+  return [preview]
+})
+
+/** 预览期把 markdown 里 `variant=<base>` 改写为 `variant=uv_preview_draft`。 */
+const previewMarkdown = computed<string>(() => {
+  if (!hasUvContent.value) return draft.markdownSnippet
+  return rewriteVariantInMarkdown(draft.markdownSnippet, draft.variantId, PREVIEW_UV_ID)
+})
 
 function onCancel() {
   if (dirty.value) {
@@ -76,6 +145,8 @@ const canSave = computed(() => {
   return true
 })
 
+// dispatchUserVariant 抽到 userVariantSave.ts；本组件只持有 reactive draft 的访问壳。
+
 function onSave() {
   error.value = ''
   if (!draft.name.trim()) {
@@ -87,13 +158,20 @@ function onSave() {
     return
   }
 
+  const { markdown: finalMarkdown, linkAction } = dispatchUserVariant(draft, originalLinkedUvId)
+
+  // linkedUserVariantId 的 patch：set / clear 都映射为显式值（undefined 在 patch 端 = 不改）
+  const linkPatch: string | null | undefined =
+    linkAction.kind === 'set' ? linkAction.id : linkAction.kind === 'clear' ? null : undefined
+
   const payload = {
     name: draft.name.trim(),
     description: draft.description.trim(),
     kind: draft.kind,
     variantId: draft.variantId || undefined,
-    markdownSnippet: ensureTrailingNewline(draft.markdownSnippet),
+    markdownSnippet: ensureTrailingNewline(finalMarkdown),
     thumbnailSvg: draft.thumbnailSvg || undefined,
+    linkedUserVariantId: linkAction.kind === 'set' ? linkAction.id : undefined,
   }
 
   if (props.init.mode === 'edit' && editingId) {
@@ -102,6 +180,7 @@ function onSave() {
       description: payload.description,
       markdownSnippet: payload.markdownSnippet,
       thumbnailSvg: payload.thumbnailSvg,
+      linkedUserVariantId: linkPatch,
     })
     if (!res.ok) {
       error.value = formatError(res)
@@ -152,10 +231,14 @@ const headerLabel = computed(() => {
     <div class="mode-banner">{{ headerLabel }}</div>
 
     <div class="content">
-      <ComponentEditor :draft="draft" />
+      <ComponentEditor :draft="draft" :theme="props.theme" />
 
       <div class="preview-wrap">
-        <ComponentPreview :md="draft.markdownSnippet" :theme="props.theme" />
+        <ComponentPreview
+          :md="previewMarkdown"
+          :theme="props.theme"
+          :user-variants="previewUserVariants"
+        />
       </div>
     </div>
 

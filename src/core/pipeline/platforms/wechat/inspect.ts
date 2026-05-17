@@ -31,6 +31,13 @@ import {
   IFRAME_SRC_ALLOW,
 } from '../../rules'
 
+export interface PatchLogSample {
+  /** 节点的"路径式"选择器（如 `section.container-pull-quote__title`），便于作者反查源码位置。 */
+  selector: string
+  /** 即将被改写 / 剥离的原文片段（如 `font-family: 'Source Han Serif'`）。 */
+  before: string
+}
+
 export interface PatchLogEntry {
   /** patch 函数名（稳定键，供测试断言） */
   patch: string
@@ -38,6 +45,12 @@ export interface PatchLogEntry {
   label: string
   /** 命中次数（元素 / 声明 / 节点） */
   count: number
+  /**
+   * 前 N 处命中的"原文片段"样本，给 UI 显示 diff 用（步骤 6）。
+   * 没采集到样本（或 patch 性质本就不适合采样，如纯结构包裹）的条目不设此字段。
+   * 上限：见 inspect.ts:SAMPLE_LIMIT；多于该数静默截断，不污染。
+   */
+  samples?: ReadonlyArray<PatchLogSample>
 }
 
 export interface PatchLog {
@@ -49,6 +62,21 @@ export interface PatchLog {
 const WRAP_MARKER = 'data-wx-list-wrap'
 const KEEP_FLEX_MARKER = 'data-wx-keep-flex'
 const ID_WHITELIST = /^(fn|fnref|footnote)[-\d]/i
+
+/** 每个 entry 最多保留多少个 sample 给 UI 展示。N > 5 信息密度收益边际下降，且面板会被撑长。 */
+const SAMPLE_LIMIT = 5
+
+/** 从 element 拼一个最小可识别选择器：tag + class（限 3）。不上 nth-of-type 等花哨形式。 */
+function describeSelector(el: Element): string {
+  const tag = el.tagName.toLowerCase()
+  const cls = (el.getAttribute('class') ?? '').trim().split(/\s+/).filter(Boolean).slice(0, 3)
+  return cls.length > 0 ? `${tag}.${cls.join('.')}` : tag
+}
+
+/** 限长追加 sample；超 SAMPLE_LIMIT 静默丢弃，count 不受影响。 */
+function pushSample(bucket: PatchLogSample[], sample: PatchLogSample): void {
+  if (bucket.length < SAMPLE_LIMIT) bucket.push(sample)
+}
 
 /**
  * 扫描 juice 内联后、wxPatch 应用前的 HTML，返回即将被各 patch 命中的次数。
@@ -66,6 +94,17 @@ export function inspectPatchTargets(html: string): PatchLog {
     flexFallback: 0,
     svgId: 0,
   }
+  // 每类各自的 sample 桶；上限由 pushSample 控制。listWrap / deepList 是结构包裹，
+  // "before" 概念不直观（不是属性级改写），不采样——UI 拿 count 即可。
+  const samples = {
+    strippedId: [] as PatchLogSample[],
+    strippedPos: [] as PatchLogSample[],
+    hardTag: [] as PatchLogSample[],
+    disallowedIframe: [] as PatchLogSample[],
+    fontFamily: [] as PatchLogSample[],
+    flexFallback: [] as PatchLogSample[],
+    svgId: [] as PatchLogSample[],
+  }
 
   if (html && html.trim()) {
     try {
@@ -73,6 +112,7 @@ export function inspectPatchTargets(html: string): PatchLog {
       walkElements(container, (el) => {
         if (el === container) return // `__wx_root__` 是 parseFragment 的包壳，不属于用户 HTML
         const tag = el.tagName.toLowerCase()
+        const selector = describeSelector(el)
 
         if (tag === 'ul' || tag === 'ol') {
           const parent = el.parentElement
@@ -90,15 +130,26 @@ export function inspectPatchTargets(html: string): PatchLog {
 
         if (el.hasAttribute('id')) {
           const id = el.getAttribute('id') ?? ''
-          if (isInSvg(el)) counts.svgId++
-          else if (!ID_WHITELIST.test(id)) counts.strippedId++
+          if (isInSvg(el)) {
+            counts.svgId++
+            pushSample(samples.svgId, { selector, before: `id="${id}"` })
+          } else if (!ID_WHITELIST.test(id)) {
+            counts.strippedId++
+            pushSample(samples.strippedId, { selector, before: `id="${id}"` })
+          }
         }
 
-        if (HARD_REMOVE_TAGS.has(tag)) counts.hardTag++
+        if (HARD_REMOVE_TAGS.has(tag)) {
+          counts.hardTag++
+          pushSample(samples.hardTag, { selector, before: `<${tag}>` })
+        }
         if (tag === 'iframe') {
           const src = el.getAttribute('src') ?? ''
           const allowed = IFRAME_SRC_ALLOW.some((re) => re.test(src))
-          if (!allowed) counts.disallowedIframe++
+          if (!allowed) {
+            counts.disallowedIframe++
+            pushSample(samples.disallowedIframe, { selector, before: `src="${src}"` })
+          }
         }
 
         const style = el.getAttribute('style')
@@ -106,14 +157,21 @@ export function inspectPatchTargets(html: string): PatchLog {
           const decls = parseStyle(style)
           for (const d of decls) {
             const prop = d.prop.toLowerCase()
-            if (FORBIDDEN_POSITION_PROPS.has(prop)) counts.strippedPos++
-            if (prop === 'font-family') counts.fontFamily++
+            if (FORBIDDEN_POSITION_PROPS.has(prop)) {
+              counts.strippedPos++
+              pushSample(samples.strippedPos, { selector, before: `${d.prop}: ${d.value}` })
+            }
+            if (prop === 'font-family') {
+              counts.fontFamily++
+              pushSample(samples.fontFamily, { selector, before: `${d.prop}: ${d.value}` })
+            }
             if (
               prop === 'display' &&
               /flex/i.test(d.value) &&
               !el.hasAttribute(KEEP_FLEX_MARKER)
             ) {
               counts.flexFallback++
+              pushSample(samples.flexFallback, { selector, before: `display: ${d.value}` })
             }
           }
         }
@@ -129,19 +187,19 @@ export function inspectPatchTargets(html: string): PatchLog {
   if (counts.deepList)
     entries.push({ patch: 'patchListWrap', label: '≥ 3 层嵌套列表扁平化为段落', count: counts.deepList })
   if (counts.strippedId)
-    entries.push({ patch: 'stripForbiddenAttrs', label: '删除 id 属性（脚注锚点除外）', count: counts.strippedId })
+    entries.push({ patch: 'stripForbiddenAttrs', label: '删除 id 属性（脚注锚点除外）', count: counts.strippedId, samples: samples.strippedId })
   if (counts.strippedPos)
-    entries.push({ patch: 'stripForbiddenAttrs', label: '剥离 position/top/z-index 等定位声明', count: counts.strippedPos })
+    entries.push({ patch: 'stripForbiddenAttrs', label: '剥离 position/top/z-index 等定位声明', count: counts.strippedPos, samples: samples.strippedPos })
   if (counts.hardTag)
-    entries.push({ patch: 'stripForbiddenTags', label: '移除 style/script/meta/link 等标签', count: counts.hardTag })
+    entries.push({ patch: 'stripForbiddenTags', label: '移除 style/script/meta/link 等标签', count: counts.hardTag, samples: samples.hardTag })
   if (counts.disallowedIframe)
-    entries.push({ patch: 'stripForbiddenTags', label: '剥离非白名单 iframe', count: counts.disallowedIframe })
+    entries.push({ patch: 'stripForbiddenTags', label: '剥离非白名单 iframe', count: counts.disallowedIframe, samples: samples.disallowedIframe })
   if (counts.fontFamily)
-    entries.push({ patch: 'stripFontFamily', label: '剥离 inline font-family', count: counts.fontFamily })
+    entries.push({ patch: 'stripFontFamily', label: '剥离 inline font-family', count: counts.fontFamily, samples: samples.fontFamily })
   if (counts.flexFallback)
-    entries.push({ patch: 'patchFlexToFallback', label: 'display:flex → block 降级', count: counts.flexFallback })
+    entries.push({ patch: 'patchFlexToFallback', label: 'display:flex → block 降级', count: counts.flexFallback, samples: samples.flexFallback })
   if (counts.svgId)
-    entries.push({ patch: 'patchSvgIds', label: 'SVG 子树 id 清理', count: counts.svgId })
+    entries.push({ patch: 'patchSvgIds', label: 'SVG 子树 id 清理', count: counts.svgId, samples: samples.svgId })
 
   return {
     entries,

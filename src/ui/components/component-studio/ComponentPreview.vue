@@ -12,24 +12,43 @@
  * 实际跨主题选择由父组件控制(props.theme 切换), 本组件只渲染传入主题。
  */
 import { computed } from 'vue'
-import { render } from '../../../core/pipeline'
+import { render, type RenderOutput } from '../../../core/pipeline'
 import type { Theme } from '../../../core/themes/types'
+import type { UserVariant } from '../../../core/variants/userVariant'
+import PatchInspector from './PatchInspector.vue'
 
 const props = defineProps<{
   /** 当前草稿 markdown */
   md: string
   /** 渲染所用主题 */
   theme: Theme
+  /**
+   * 临时注入的用户态变体快照。Studio 编辑场景下，token 面板的实时改动
+   * 由父组件按 draft 构造 UserVariantTokens 数组传入，让预览即时反映 token 覆盖。
+   * 步骤 4 引入；缺省 = 走原管线。
+   */
+  userVariants?: readonly UserVariant[]
 }>()
 
-const rendered = computed(() => {
-  if (!props.md.trim()) return ''
+/**
+ * 渲染产物的完整对象（含 html 与 patchLog），透出给父组件用于 PatchInspector（步骤 6）。
+ * render 失败保留上次产物的 placeholder，避免 transient 错误把面板清空。
+ */
+const renderedOutput = computed<RenderOutput | null>(() => {
+  if (!props.md.trim()) return null
   try {
-    return render({ md: props.md, theme: props.theme }).html
+    return render({
+      md: props.md,
+      theme: props.theme,
+      userVariants: props.userVariants,
+    })
   } catch {
-    return ''
+    return null
   }
 })
+
+const rendered = computed<string>(() => renderedOutput.value?.html ?? '')
+const patchLog = computed(() => renderedOutput.value?.patchLog ?? null)
 
 const srcdoc = computed(() => {
   if (!rendered.value) return ''
@@ -73,6 +92,7 @@ const srcdoc = computed(() => {
       sandbox="allow-same-origin"
       title="组件预览"
     />
+    <PatchInspector v-if="rendered" :patch-log="patchLog" class="inspector" />
   </div>
 </template>
 
@@ -112,5 +132,11 @@ const srcdoc = computed(() => {
   border: none;
   background: var(--preview-frame);
   min-height: 200px;
+}
+.inspector {
+  flex: 0 0 auto;
+  margin: var(--sp-2);
+  max-height: 200px;
+  overflow-y: auto;
 }
 </style>

@@ -1,5 +1,6 @@
 import type MarkdownIt from 'markdown-it'
 import type { Theme } from '../themes/types'
+import type { UserVariant } from '../variants/userVariant'
 import { createMarkdown } from './markdown'
 import { generateThemeCSS } from './themeCSS'
 import { atomOneDarkCss, highlightCode } from './highlight'
@@ -20,6 +21,16 @@ export interface RenderInput {
   platform?: string
   /** 仅当 platform='wechat' 时生效；其它平台静默忽略。 */
   wxPatch?: WxPatchOptions
+  /**
+   * 用户态变体快照。入口处一次性转 Map 注入 markdown-it env，由 renderer 在
+   * attrs.variant=uv_xxx 时 O(1) 查表。
+   *
+   * 不进 mdCache key：用户变体每次编辑都可能变，但走的是 attrs.variant 单容器级
+   * 开销（每篇文章命中条数 ≤ 容器数），缓存键化反而引入 LRU thrash。
+   *
+   * 缺省 / 空数组 = 不注入 env 字段，对未声明用户变体的渲染零开销。
+   */
+  userVariants?: readonly UserVariant[]
 }
 
 export interface RenderOutput {
@@ -71,10 +82,17 @@ export function render(input: RenderInput): RenderOutput {
 
   const mdInstance = getMarkdown(theme)
 
-  // env.__wxPageVariants 是约定 key（见 markdown.ts ContainerEnv），用于把 L2 frontmatter.variants
-  // 透传到 makeVariantContainer.resolveVariant。
-  const env: { __wxPageVariants?: PageConfig['variants'] } = {}
+  // env.__wxPageVariants / __wxUserVariants 是约定 key（见 markdown.ts ContainerEnv）：
+  //   - __wxPageVariants：L2 frontmatter.variants
+  //   - __wxUserVariants：用户态变体（id → UserVariant），由 RenderInput.userVariants 转 Map
+  const env: {
+    __wxPageVariants?: PageConfig['variants']
+    __wxUserVariants?: ReadonlyMap<string, UserVariant>
+  } = {}
   if (pageConfig.variants) env.__wxPageVariants = pageConfig.variants
+  if (input.userVariants && input.userVariants.length > 0) {
+    env.__wxUserVariants = new Map(input.userVariants.map((uv) => [uv.id, uv]))
+  }
 
   const bodyHtml = mdInstance.render(body, env)
   const themeCss = generateThemeCSS(theme)

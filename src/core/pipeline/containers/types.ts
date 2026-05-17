@@ -22,6 +22,7 @@ import type {
   ThemeTokens,
   ThemeVariants,
 } from '../../themes/types'
+import type { UserVariant } from '../../variants/userVariant'
 
 export interface ContainerRenderContext {
   /**
@@ -58,6 +59,15 @@ export interface ContainerRenderContext {
   info: string
   /** 从 info 里剥出来的 YAML 风格 key=value（value 支持空格用引号包） */
   attrs: Record<string, string>
+  /**
+   * 用户态变体仓快照（id → UserVariant）。
+   * 由 pipeline 入口（RenderInput.userVariants）一次性转 Map 注入 env，再透传到此处；
+   * renderer 通过 `attrs.variant=uv_xxx` 查仓后分派到 applyUserVariant。
+   *
+   * ReadonlyMap 是契约：resolveVariant 是 hot path，禁止任何下游 mutate 这个 Map。
+   * 缺省 / 空 Map = 走原 fallback 链，对未声明用户变体的渲染无任何开销。
+   */
+  userVariants?: ReadonlyMap<string, UserVariant>
 }
 
 export interface ContainerRenderer {

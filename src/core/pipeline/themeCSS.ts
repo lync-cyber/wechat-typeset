@@ -8,11 +8,7 @@
 
 import type { CSSObject, Theme } from '../themes/types'
 import { ThemeAuthoringError } from '../themes/types'
-import {
-  FORBIDDEN_CSS_PROPS,
-  FORBIDDEN_DISPLAY_VALUES,
-  FORBIDDEN_VALUE_PATTERNS,
-} from './rules'
+import { lintProp } from './lint'
 import { STYLED_CONTAINERS } from '../vocabulary/vocabulary'
 import { ROOT_CLASS } from './constants'
 import { createLRU } from './_lru'
@@ -23,27 +19,14 @@ type Selector = string
 // 子项仍带 flex:1 / flex-direction 等 orphan 样式，布局必塌。
 // patchFlexToFallback 只在 DOM 后处理阶段把已经写进产物的 flex 改回 block，
 // 这里在"主题写 CSS"更早的阶段直接 throw，避免主题作者以为自己能用。
+//
+// 规则本体（FORBIDDEN_CSS_PROPS / DISPLAY_VALUES / VALUE_PATTERNS）已下沉到 lint.ts，
+// 本函数是它的 throw wrapper：lintProp 短路返回首条命中，文案逐字一致。
 
 function assertSafeProp(prop: string, value: string, path: string): void {
-  const lower = prop.toLowerCase()
-  if (FORBIDDEN_CSS_PROPS.includes(lower)) {
-    throw new ThemeAuthoringError(
-      `[themeCSS] 主题在 ${path} 声明了 \`${prop}\`，违反微信平台约束。请移除。`,
-    )
-  }
-  if (lower === 'display' && FORBIDDEN_DISPLAY_VALUES.has(value.toLowerCase().trim())) {
-    throw new ThemeAuthoringError(
-      `[themeCSS] 主题在 ${path} 使用了 \`display: ${value}\`，微信粘贴后会被剥离。` +
-        '改用 block / inline-block / table 系列。',
-    )
-  }
-  for (const [re, reason] of FORBIDDEN_VALUE_PATTERNS) {
-    if (re.test(value)) {
-      throw new ThemeAuthoringError(
-        `[themeCSS] 主题在 ${path} 的值里命中禁用模式（${reason}）：\`${value}\`。请移除。`,
-      )
-    }
-  }
+  const diagnostics = lintProp(prop, value, path)
+  if (diagnostics.length === 0) return
+  throw new ThemeAuthoringError(diagnostics[0].message)
 }
 
 function toCssDecl(obj: CSSObject, path: string): string {

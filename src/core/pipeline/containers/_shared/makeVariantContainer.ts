@@ -40,6 +40,7 @@ import type { ThemeAssets, ThemeVariants } from '../../../themes/types'
 import type { VariantMeta, VariantRenderResult } from '../../../variants/_core'
 import { escText } from './escape'
 import { checkVariantCompat } from './themeCompatGuard'
+import { applyUserVariant, isAppliableUserVariant } from './userVariantApply'
 
 // ─────────────────────────────────────────────────────────────
 // 工厂入参契约
@@ -111,6 +112,12 @@ export function makeVariantContainer<Args = void>(
    *
    * 4 级优先级：L1 attrs.variant > L2 pageVariants[slot] > L3 theme.variants[slot] > L4 fallbackId。
    * 非法 L1 回退到 L2/L3/L4，非法 L2 回退到 L3/L4；每层按 table.keys 做合法性确认。
+   *
+   * 用户态变体（uv_*）作为 L1 的"前缀分支"：rawOverride 以 'uv_' 开头时，先查
+   * ctx.userVariants Map；命中且 kind 匹配 themeSlot、level ∈ {tokens, patch} 时直接
+   * 用基底 variant 的 render 输出叠加 applyUserVariant 返回。任何环节失败（仓未注入 /
+   * id 未命中 / kind 不匹配 / level='custom'）静默 fall-through 到原 4 级链。
+   * 'custom' 档不在此处理——步骤 7 走"裸 HTML 容器"独立渲染器。
    */
   function resolveVariant(ctx: ContainerRenderContext): {
     id: string
@@ -121,9 +128,31 @@ export function makeVariantContainer<Args = void>(
     const pageValid = pageId && pageId in table ? pageId : undefined
     const themeValid = themeId && themeId in table ? themeId : undefined
 
+    const rawOverride = ctx.attrs.variant
+
+    // ── 用户态变体分支：uv_* 前缀命中即返回，未命中静默 fall-through ──
+    if (rawOverride) {
+      const normalized = rawOverride.toLowerCase().trim()
+      if (normalized.startsWith('uv_')) {
+        const uv = ctx.userVariants?.get(normalized)
+        if (uv && isAppliableUserVariant(uv) && uv.base.kind === themeSlot) {
+          const baseEntry = table[uv.base.variantId]
+          if (baseEntry?.render) {
+            // 不跑 checkVariantCompat：用户已显式选了这个 base，是 opt-in 行为；
+            // themeCompat 警告是给 ad-hoc author override 兜底的，不适用于用户保存的变体。
+            const baseResult = (baseEntry.render as (
+              ctx: ContainerRenderContext,
+              args?: Args,
+            ) => VariantRenderResult)(ctx, args?.(ctx))
+            return { id: uv.id, result: applyUserVariant(uv, baseResult) }
+          }
+        }
+        // 落入此处 = uv 未命中或基底无 render；继续走原 fallback 链
+      }
+    }
+
     let id = fallbackId
     let isAuthorOverride = false
-    const rawOverride = ctx.attrs.variant
     if (rawOverride) {
       const normalized = rawOverride.toLowerCase().trim()
       const aliased = resolveAlias?.(normalized)

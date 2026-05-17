@@ -122,9 +122,10 @@ describe('主题切换 · 完整脱钩', () => {
       return base
     })
     const out = run('::: tip 自定义\n正文\n:::\n', custom)
-    // accent-bar v2 的 tip 态不再有左色条，靠 soft 底色 + 标题 accent 色承担色相
-    expect(out.toLowerCase()).toMatch(/background-color:\s*#fff0f4/)
-    expect(out.toLowerCase()).toMatch(/color:\s*#ff0055/)
+    // accent-bar 已 tokenize（步骤 4）：颜色现在以 var(--uv-..., <fallback>) 形态出现，
+    // fallback 段仍读主题 token；用 var() 与 fallback 双向 regex 匹配，等价以前的直字面量。
+    expect(out.toLowerCase()).toMatch(/var\(--uv-soft-bg,\s*#fff0f4\)/)
+    expect(out.toLowerCase()).toMatch(/var\(--uv-accent-color,\s*#ff0055\)/)
   })
 
   it('移除 h2Prefix 资产 → <h2> 不再注入 SVG', () => {

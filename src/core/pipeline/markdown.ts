@@ -20,6 +20,7 @@ import markdownItTaskLists from 'markdown-it-task-lists'
 
 import { themeRegistry } from '../themes'
 import type { Theme, ThemeVariants } from '../themes/types'
+import type { UserVariant } from '../variants/userVariant'
 import { CONTAINER_REGISTRY } from './containers'
 import type { ContainerRenderContext } from './containers'
 import { parseInfo } from './containers'
@@ -37,6 +38,13 @@ import { applyHeadingPrefixDecorations } from './headingDecorations'
 interface ContainerEnv {
   __wxContainerStacks?: Record<string, ContainerRenderContext[]>
   __wxPageVariants?: Partial<ThemeVariants>
+  /**
+   * 用户态变体快照（id → UserVariant）。pipeline 入口把 RenderInput.userVariants 数组
+   * 一次性转 Map 注入；renderer 在 attrs.variant=uv_xxx 时 O(1) 查表。
+   * 不在容器栈里持有也不在主路径里查仓——查仓是组件渲染时一次性事，命中后 baseResult
+   * 走原 render 路径，零额外缓存压力。
+   */
+  __wxUserVariants?: ReadonlyMap<string, UserVariant>
 }
 
 function pushCtx(env: ContainerEnv, name: string, ctx: ContainerRenderContext): void {
@@ -98,11 +106,12 @@ export function createMarkdown(options: CreateMarkdownOptions = {}): MarkdownIt 
             kickers: theme.kickers,
             info: title,
             attrs,
+            userVariants: env.__wxUserVariants,
           }
           pushCtx(env, name, ctx)
           return renderer.open(ctx)
         }
-        const ctx = popCtx(env, name) ?? emptyCtx(theme, env.__wxPageVariants)
+        const ctx = popCtx(env, name) ?? emptyCtx(theme, env.__wxPageVariants, env.__wxUserVariants)
         return typeof renderer.close === 'function' ? renderer.close(ctx) : renderer.close
       },
     })
@@ -409,7 +418,11 @@ function applyTaskListSquares(md: MarkdownIt, theme: Theme): void {
   })
 }
 
-function emptyCtx(theme: Theme, pageVariants?: Partial<ThemeVariants>): ContainerRenderContext {
+function emptyCtx(
+  theme: Theme,
+  pageVariants?: Partial<ThemeVariants>,
+  userVariants?: ReadonlyMap<string, UserVariant>,
+): ContainerRenderContext {
   return {
     themeId: theme.id,
     tokens: theme.tokens,
@@ -422,5 +435,6 @@ function emptyCtx(theme: Theme, pageVariants?: Partial<ThemeVariants>): Containe
     kickers: theme.kickers,
     info: '',
     attrs: {},
+    userVariants,
   }
 }

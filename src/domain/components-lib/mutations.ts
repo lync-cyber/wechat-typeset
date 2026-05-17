@@ -25,8 +25,11 @@ import {
   createUserComponent as repoCreate,
   updateUserComponent as repoUpdate,
   deleteUserComponent as repoDelete,
+  getUserComponent as repoGet,
+  listUserComponents as repoList,
   type CreateUserComponentInput,
 } from '../../infra/storage/userComponents.repo'
+import { deleteUserVariant } from '../../infra/storage/userVariants.repo'
 
 export type MutationFailure =
   | { ok: false; reason: 'validation'; result: ValidateResult }
@@ -60,6 +63,8 @@ export interface UpdateComponentPatch {
   description?: string
   markdownSnippet?: string
   thumbnailSvg?: string
+  /** 关联 UserVariant id；null = 显式清空（解除链接），undefined = 不动 */
+  linkedUserVariantId?: string | null
 }
 
 /**
@@ -79,14 +84,26 @@ export function updateComponent(id: string, patch: UpdateComponentPatch): Update
 }
 
 /**
- * 删除 user 组件。
+ * 删除 user 组件 + 级联清理孤儿 UserVariant（步骤 4.4）。
  *
- * 删除不需要 validate(永远合法), 也不会返回 not-found —— 已删除的 id 重复删等价 no-op,
- * 暴露 not-found 反而要求 UI 写防御代码。直接代理给 repo.delete。
+ * 级联规则：
+ *   - 读组件 entry 拿 linkedUserVariantId
+ *   - 删组件
+ *   - 检查删除后是否还有 *其它* 组件引用同一 UV；无则连带删 UV
  *
- * 保留 mutations 这一层 export 是为了让 UI / Studio 只 import 一个域(mutations),
- * 不必同时 import mutations + repo.deleteUserComponent。
+ * 为什么先读后检查后删：linkedUserVariantId 是关联编码（实际上每次 ComponentStudio 保存都
+ * createUserVariant 生成新 UV，理论上不共享），但用户可能通过 transfer JSON 导入复用了同一
+ * UV 的组件——保守路径：先确认无第二引用再删，避免删一份组件让另一份"渲染为基底"。
+ *
+ * 同名导出保留：UI / Studio 只 import 这一个域，不必同时 import mutations + 两个 repo。
  */
 export function removeComponent(id: string): void {
+  const entry = repoGet(id)
+  const linkedId = entry?.linkedUserVariantId
   repoDelete(id)
+  if (!linkedId) return
+  const stillReferenced = repoList().some((c) => c.linkedUserVariantId === linkedId)
+  if (!stillReferenced) {
+    deleteUserVariant(linkedId)
+  }
 }

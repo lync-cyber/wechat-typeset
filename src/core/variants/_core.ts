@@ -126,6 +126,44 @@ export interface VariantMeta {
 }
 
 /**
+ * 用户态变体 token 字段元数据。
+ *
+ * 一个 variant 想暴露给用户调的字段（颜色 / 字号 / 边距等），声明一条 TokenField；
+ * UI（TokensPanel）按 type 渲染对应控件，用户填写后写回 UserVariantTokens.tokens。
+ * variant render() 在 CSS 字符串里用 `var(--uv-<key>, <fallback>)` 占位，由
+ * applyUserVariant 在 wrapperCSS 末尾注入 `--uv-<key>: <value>`。
+ *
+ * 与 VariantMeta 解耦：tokenSchema 是 variant 文件 default-export 之外的命名导出
+ * （`export const tokenSchema`），让"未 token 化的 variant"零侵入，渐进迁移。
+ *
+ * 取值口径：
+ *   - color：合法 CSS 颜色字符串（#rrggbb / rgba(...) / 命名色）
+ *   - size：长度值（"16px" / "1.2em" / "12px 18px"），简单透传
+ *   - text：任意字符串（罕用，先留口）
+ *
+ * 不在此处校验：lintInlineCSS 在保存期统一兜（步骤 1 已就绪）。
+ */
+export type TokenFieldType = 'color' | 'size' | 'text'
+
+export interface TokenField {
+  /** 字段类型，决定 UI 控件 */
+  type: TokenFieldType
+  /** UI 展示短标签（中文） */
+  label: string
+  /** 默认值——variant render() 里 `var(--uv-<key>, <default>)` 的 fallback 段必须用同一值 */
+  default: string
+  /** 可选：≤30 字辅助说明 */
+  hint?: string
+}
+
+/**
+ * 一个 variant 的 token schema：key → TokenField。
+ * key 是 CSS 自定义属性名片段（kebab-case 友好，不要包含 `--` 前缀，由 injectTokens 补）。
+ * 例：'quote-color' → 渲染到 DOM 为 `--uv-quote-color`。
+ */
+export type TokenSchema = Readonly<Record<string, TokenField>>
+
+/**
  * 标准容器 variant（kind ∈ admonition/quote/compare/steps/divider/sectionTitle/none）。
  * kind='none' 表示自由组件（intro/author/cover 等），render 可省略。
  */
@@ -137,6 +175,12 @@ export interface VariantDef<Args = void> {
   snippets: ReadonlyArray<VariantSnippet>
   /** 容器渲染函数；kind='none' 的自由组件可省略。 */
   render?: VariantRender<Args>
+  /**
+   * 可选：暴露给用户调的命名 token。命名导出（`export const tokenSchema`）+ default
+   * export 上挂同一引用，让外部既能 `import { tokenSchema } from '<id>.ts'` 拿单文件
+   * schema，也能从 VariantDef 实例上读到。无 schema 的 variant 不参与 L1 tokens 面板。
+   */
+  tokenSchema?: TokenSchema
 }
 
 /**
@@ -149,6 +193,8 @@ export interface CodeBlockDef {
   thumbnail?: (args?: ThumbArgs) => string
   snippets: ReadonlyArray<VariantSnippet>
   render: CodeBlockRender
+  /** 与 VariantDef.tokenSchema 同语义；codeBlock 当前未启用，留口让形态对齐。 */
+  tokenSchema?: TokenSchema
 }
 
 // ─────────────────────────────────────────────────────────────

@@ -71,6 +71,8 @@ export interface CreateUserComponentInput {
   /** 缩略图；未提供则用"文字首字"占位（defaults.ts） */
   thumbnailSvg?: string
   sourceMarkdown?: string
+  /** 关联 UserVariant id（含 token 覆盖时由 Studio 写入），详见 UserComponent.linkedUserVariantId */
+  linkedUserVariantId?: string
 }
 
 export function createUserComponent(input: CreateUserComponentInput): UserComponent {
@@ -85,6 +87,7 @@ export function createUserComponent(input: CreateUserComponentInput): UserCompon
     markdownSnippet: input.markdownSnippet,
     thumbnailSvg: input.thumbnailSvg ?? defaultThumb(input.name),
     sourceMarkdown: input.sourceMarkdown,
+    linkedUserVariantId: input.linkedUserVariantId,
     createdAt: Date.now(),
   }
   list.unshift(uc)
@@ -98,22 +101,37 @@ export function deleteUserComponent(id: string): void {
 }
 
 /**
- * 修改单条字段（仅 name / description）。markdown / thumbnailSvg 的修改由 mutations 层接管，
- * 因为 markdown 改了要重新跑 validate.ts；thumbnailSvg 改了可能影响展示一致性。
+ * patch 字段说明：
+ *   - name / description / markdownSnippet / thumbnailSvg：undefined = 不改
+ *   - linkedUserVariantId：undefined = 不改；null = 清空（解除与 UserVariant 的关联）
+ *     null 是显式信号，区分"不改"与"清空"。
  */
+export interface UpdateUserComponentPatch {
+  name?: string
+  description?: string
+  markdownSnippet?: string
+  thumbnailSvg?: string
+  linkedUserVariantId?: string | null
+}
+
 export function updateUserComponent(
   id: string,
-  patch: Partial<Pick<UserComponent, 'name' | 'description' | 'markdownSnippet' | 'thumbnailSvg'>>,
+  patch: UpdateUserComponentPatch,
 ): UserComponent | undefined {
   const list = readList()
   const idx = list.findIndex((c) => c.id === id)
   if (idx === -1) return undefined
+  const cur = list[idx]
   list[idx] = {
-    ...list[idx],
-    name: patch.name ?? list[idx].name,
-    description: patch.description ?? list[idx].description,
-    markdownSnippet: patch.markdownSnippet ?? list[idx].markdownSnippet,
-    thumbnailSvg: patch.thumbnailSvg ?? list[idx].thumbnailSvg,
+    ...cur,
+    name: patch.name ?? cur.name,
+    description: patch.description ?? cur.description,
+    markdownSnippet: patch.markdownSnippet ?? cur.markdownSnippet,
+    thumbnailSvg: patch.thumbnailSvg ?? cur.thumbnailSvg,
+    linkedUserVariantId:
+      patch.linkedUserVariantId === undefined
+        ? cur.linkedUserVariantId
+        : patch.linkedUserVariantId ?? undefined,
   }
   writeList(list)
   return list[idx]

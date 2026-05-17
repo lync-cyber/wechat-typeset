@@ -9,11 +9,10 @@
  * close 二次调 render 与 makeVariantContainer 同模式（render 是纯函数,O(1) 无副作用）。
  */
 
-import type { QuoteVariantId } from '../../themes/types'
 import type { ContainerRenderer, ContainerRenderContext } from './types'
 import { escText } from './_shared/escape'
 import { QUOTE_VARIANTS } from '../../variants/registry'
-import { resolveVariantId } from './_shared/resolveVariant'
+import { resolveVariantWithUv } from './_shared/resolveVariant'
 
 function defaultBylineCSS(ctx: ContainerRenderContext): string {
   return `text-align:center;color:${ctx.tokens.colors.textMuted};margin-top:10px;font-size:13px`
@@ -21,8 +20,7 @@ function defaultBylineCSS(ctx: ContainerRenderContext): string {
 
 export const quoteCardContainer: ContainerRenderer = {
   open: (ctx) => {
-    const id = resolveVariantId<QuoteVariantId>(ctx, 'quote', QUOTE_VARIANTS, 'classic')
-    const result = QUOTE_VARIANTS[id].render(ctx)
+    const { id, result } = resolveVariantWithUv(ctx, 'quote', QUOTE_VARIANTS, 'classic')
     const parts: string[] = []
     parts.push(`<section class="container-quote-card container-quote-card--${id}" style="${result.wrapperCSS}">`)
     if (result.svgSlot) parts.push(result.svgSlot)
@@ -30,8 +28,7 @@ export const quoteCardContainer: ContainerRenderer = {
     return parts.join('\n') + '\n'
   },
   close: (ctx) => {
-    const id = resolveVariantId<QuoteVariantId>(ctx, 'quote', QUOTE_VARIANTS, 'classic')
-    const result = QUOTE_VARIANTS[id].render(ctx)
+    const { result } = resolveVariantWithUv(ctx, 'quote', QUOTE_VARIANTS, 'classic')
     const closeSlot = result.closeSlot ?? ''
     const byline = ctx.info.trim()
     if (!byline) return `${closeSlot}</section>\n</section>\n`
