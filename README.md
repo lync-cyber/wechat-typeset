@@ -105,11 +105,11 @@ wechat-typeset 把视觉气质当成一等公民处理。每套主题持有完�
 ```bash
 git clone https://github.com/lync-cyber/wechat-typeset.git
 cd wechat-typeset
-npm ci
-npm run dev
+pnpm install
+pnpm dev
 ```
 
-浏览器打开 `http://127.0.0.1:5173` 即是完整编辑器。`npm run build` 产出静态文件，`npm test` 跑单测与端到端校验。
+浏览器打开 `http://127.0.0.1:5173` 即是完整编辑器。`pnpm build` 产出静态文件，`pnpm test` 跑单测与端到端校验。
 
 ---
 

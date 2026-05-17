@@ -97,12 +97,12 @@ export const urbanDiaryTheme = specToTheme(spec)
 ### 4. 跑校验 → 预览 → 测试
 
 ```bash
-npm run validate:spec     # spec 硬约束（字号 / 描边 / hex / 占位符）
-npm run voice:report      # 主题 voice 覆盖度（base 容器 / 元素）
-npm run gen:showcase      # 生成 docs/generated/showcase/<id>.html
-npm run gen:gallery       # 更新 spec 数据拼盘 docs/generated/personas-spec-gallery.html
-npm run dev               # 热更新预览，切到新主题肉眼过一遍
-npm test                  # 全量单测（含 voice / showcase / rendered-snapshot 三道守卫）
+pnpm validate:spec        # spec 硬约束（字号 / 描边 / hex / 占位符）
+pnpm voice:report         # 主题 voice 覆盖度（base 容器 / 元素）
+pnpm gen:showcase         # 生成 docs/generated/showcase/<id>.html
+pnpm gen:gallery          # 更新 spec 数据拼盘 docs/generated/personas-spec-gallery.html
+pnpm dev                  # 热更新预览，切到新主题肉眼过一遍
+pnpm test                 # 全量单测（含 voice / showcase / rendered-snapshot 三道守卫）
 ```
 
 #### Showcase 审稿 7 区块（PR 必看）
@@ -124,9 +124,9 @@ npm test                  # 全量单测（含 voice / showcase / rendered-snaps
 #### Voice 覆盖率快查
 
 ```bash
-npm run voice:report              # 表格：14 主题概览
-npm run voice:report -- --theme my-id    # 单主题：每条 issue 明细
-npm run voice:report -- --json    # 结构化 JSON
+pnpm voice:report                    # 表格：14 主题概览
+pnpm voice:report --theme my-id      # 单主题：每条 issue 明细
+pnpm voice:report --json             # 结构化 JSON
 ```
 
 ### 5. 补一份设计笔记（PR 要求）
@@ -342,10 +342,10 @@ if (!validation.ok) console.warn(validation.errors)  // [{ path, message, severi
 ## 调试与参考
 
 ```bash
-npm run validate:spec    # 只跑 spec 校验，改主题时最快反馈
-npm run gen:gallery      # 重新生成 docs/generated/personas-spec-gallery.html
-npm run gen:schema       # 重新导出 JSON Schema（用于 LLM 结构化输出）
-npm test                 # 全量：vitest + tests/fixtures/all-containers.md 端到端
+pnpm validate:spec       # 只跑 spec 校验，改主题时最快反馈
+pnpm gen:gallery         # 重新生成 docs/generated/personas-spec-gallery.html
+pnpm gen:schema          # 重新导出 JSON Schema（用于 LLM 结构化输出）
+pnpm test                # 全量：vitest + tests/fixtures/all-containers.md 端到端
 ```
 
 - **完整示例**：[`src/core/themes/default/persona.data.ts`](../src/core/themes/default/persona.data.ts) 是最干净的参照；[`tech-geek/persona.data.ts`](../src/core/themes/tech-geek/persona.data.ts) 展示了深色主题 + 复杂 motif 的用法。
