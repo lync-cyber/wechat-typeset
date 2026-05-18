@@ -677,5 +677,3 @@ export const spec: PersonaSpec = {
       '作者侧不写任何内联 HTML——内联 HTML 退出写作契约保护。',
   },
 }
-
-export default spec

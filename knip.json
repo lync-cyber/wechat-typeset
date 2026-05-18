@@ -6,6 +6,8 @@
     "src/core/themes/registry.ts",
     "scripts/serve.mjs",
     "scripts/check-capabilities-stable.ts",
+    "scripts/check-comments.mjs",
+    "scripts/sync-showcase.mjs",
     "scripts/_audit-jsdom.mjs",
     "scripts/install-git-hooks.mjs",
     "skills/*/scripts/*.{ts,mjs}",
@@ -25,7 +27,8 @@
     "dist/**",
     "src/core/themes/_template/**",
     "scripts/audit/arch.test.ts",
-    "scripts/audit/.dep-cruiser.js"
+    "scripts/audit/.dep-cruiser.cjs",
+    "src/core/themes/_shared/spec/theme-to-spec.ts"
   ],
   "ignoreBinaries": [
     "depcruise",

@@ -47,8 +47,3 @@ export async function getShowcase(): Promise<string> {
   return SHOWCASE_MARKDOWN
 }
 
-/**
- * 作为"通用起手示例"的字符串（旧 commonSample 的迁移别名）。
- * 新代码优先走 getSample('default') 或直接导入 SAMPLE_BY_THEME.default。
- */
-export const commonSample: string = SAMPLE_BY_THEME.default ?? ''

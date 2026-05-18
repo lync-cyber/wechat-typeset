@@ -174,5 +174,3 @@ export const spec: PersonaSpec = {
       '骨架模板：复制此目录 → 改 id/name/palette/motifs/variants 即可起步。所有可选字段以注释形态保留，复制后按需启用。',
   },
 }
-
-export default spec

@@ -40,11 +40,6 @@ export function checkVariantCompat(
   return { ok: false }
 }
 
-/** 测试钩子：只在 spec 测试里清理 warn dedupe 集合。生产代码勿用。 */
-export function __resetCompatWarnedForTest(): void {
-  warned.clear()
-}
-
 /**
  * 测试钩子：静音 warn 输出。variant-sanity 全矩阵 / e2e fixture 覆盖会故意穿越
  * 所有 (variant, theme) 组合（fallback 路径正是被测对象），生产期 warn 在测试日志

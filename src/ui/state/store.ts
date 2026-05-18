@@ -10,8 +10,8 @@
  *   - activeTheme：派生只读 computed，不直接赋值
  */
 import { computed, ref } from 'vue'
-import type { Theme } from '../core/themes/types'
-import { getTheme } from '../core/themes'
+import type { Theme } from '../../core/themes/types'
+import { getTheme } from '../../core/themes'
 
 export interface Seed {
   primary: string

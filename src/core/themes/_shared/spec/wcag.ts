@@ -48,7 +48,7 @@ function channelLuminance(c8: number): number {
   return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
 }
 
-export function relativeLuminance(hex: string): number | null {
+function relativeLuminance(hex: string): number | null {
   const rgb = parseHex(hex)
   if (!rgb) return null
   return (

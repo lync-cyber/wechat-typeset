@@ -826,5 +826,3 @@ _写于春分后第二日，时雨初歇。_
       '三件 motif 的 strokeWidth 全部 ≥ 1（validator 硬下限，公众号光栅化友好）。',
   },
 }
-
-export default spec

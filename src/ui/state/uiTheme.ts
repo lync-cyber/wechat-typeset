@@ -16,7 +16,7 @@
  * iframe 宿主的 var(--preview-frame) 改外圈，不渗入 .markdown-body。
  */
 import { ref, watch } from 'vue'
-import { safeRead, safeWrite } from '../infra/storage/_kv'
+import { safeRead, safeWrite } from '../../infra/storage/_kv'
 
 export type UiThemeMode = 'light' | 'dark'
 

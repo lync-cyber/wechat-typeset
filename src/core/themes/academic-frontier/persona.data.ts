@@ -641,5 +641,3 @@ CITE AS — 张三, 李四. (2026). 论文标题. 公众号名, 第 N 期. DOI: 
       '学术论文感——Nature/arXiv/LaTeX 家族；无装饰纪律：仅 theoremMark ■ + 1px h2 竖线 + 极细 rule。accent 预算 ≤ 5 次/篇。',
   },
 }
-
-export default spec

@@ -102,7 +102,3 @@ export const palettePresets: PaletteSeed[] = [
     accent: '#d9b26a',
   },
 ]
-
-export function getPaletteById(id: string): PaletteSeed | undefined {
-  return palettePresets.find((p) => p.id === id)
-}

@@ -688,5 +688,3 @@ export const spec: PersonaSpec = {
       'accent #8a3f2b 稀缺纪律 —— drop cap + pull-quote + roman 三处封顶。stepBadge {N} 占位符在运行时替换为罗马数字（替换发生在 spec 层之外）。',
   },
 }
-
-export default spec

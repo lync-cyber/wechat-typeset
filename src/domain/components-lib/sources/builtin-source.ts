@@ -12,7 +12,7 @@
 
 import type { AnyVariantDef } from '../../../core/variants/registry'
 import { ALL_VARIANT_DEFS } from '../../../core/variants/registry'
-import { getEffectiveCompat } from '../../../core/variants/_core'
+import { getEffectiveCompat, orderDefsByKind } from '../../../core/variants/_core'
 import freeAll from '../builtin-snippets/_all'
 import type { BuiltinEntry, ComponentKind } from '../types'
 
@@ -129,22 +129,7 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
   none: BUILTIN_SNIPPET_ORDER,
 }
 
-function orderedDefsByKind(kind: ComponentKind): AnyVariantDef[] {
-  const bucket = ALL_DEFS_FOR_PANEL.filter((d) => d.meta.kind === kind)
-  const byId = new Map(bucket.map((d) => [d.meta.id, d]))
-  const order = ORDER_BY_KIND[kind]
-  const ordered: AnyVariantDef[] = []
-  for (const id of order) {
-    const def = byId.get(id)
-    if (def) {
-      ordered.push(def)
-      byId.delete(id)
-    }
-  }
-  // 未在 ORDER 里列出的按 id 字典序追加，避免新增 variant 忘改 ORDER 时静默丢失。
-  for (const id of [...byId.keys()].sort()) ordered.push(byId.get(id)!)
-  return ordered
-}
+
 
 function toEntry(def: AnyVariantDef, s: AnyVariantDef['snippets'][number]): BuiltinEntry {
   const thumb = def.thumbnail ? def.thumbnail(s.thumbArgs) : ''
@@ -191,7 +176,7 @@ function buildBuiltinComponents(): BuiltinEntry[] {
     'none',
   ]
   for (const k of kinds) {
-    for (const def of orderedDefsByKind(k)) {
+    for (const def of orderDefsByKind(ALL_DEFS_FOR_PANEL, k, ORDER_BY_KIND[k])) {
       for (const s of def.snippets) out.push(toEntry(def, s))
     }
   }

@@ -10,7 +10,6 @@
  *          assets 工厂可以按需选形，而不是各写一份几乎相同的 interface。
  */
 
-export const strip = (s: string): string => s.replace(/\s+/g, ' ').trim()
 
 /**
  * 整数 → 罗马数字（1..50 覆盖杂志特稿章节 / 人生阶段 的上限情形）。

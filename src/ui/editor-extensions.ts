@@ -326,4 +326,3 @@ export function createContainerLinter(): Extension {
   )
 }
 
-export { CONTAINER_COMPLETIONS, VARIANTS_BY_CONTAINER }

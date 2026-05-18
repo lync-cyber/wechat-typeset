@@ -49,9 +49,3 @@ export function inlineHtml(htmlWithStyle: string): string {
   lastOutput = out
   return out
 }
-
-/** 测试钩子：让 spec 间不串台。 */
-export function __resetJuiceCacheForTest(): void {
-  lastInput = null
-  lastOutput = null
-}

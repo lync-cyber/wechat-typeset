@@ -659,5 +659,3 @@ export const spec: PersonaSpec = {
       '全部 WCAG AA 对比度 4.5:1 已过验证。',
   },
 }
-
-export default spec

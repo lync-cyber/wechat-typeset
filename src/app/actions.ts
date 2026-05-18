@@ -15,7 +15,7 @@ import {
   customTheme,
   md,
   type Seed,
-} from './state'
+} from '../ui/state/store'
 import { getTheme } from '../core/themes'
 import { applyPalette } from '../core/color/applyPalette'
 import { fixZhTypoWithRanges } from '../core/pipeline/zhTypo'

@@ -697,5 +697,3 @@ export const spec: PersonaSpec = {
       '公文公报主题：普鲁士蓝 #1c3a6e（HSL 219° / 59% / 27%）+ 暗金 #8a6a14；四个 orphan variant 升级（top-bottom-rule / editorial-stripe / centered-rule / stamped-banner）；h2 中文章节序号；公文首行缩进 2em；三档底色差值 ≤ 5%。',
   },
 }
-
-export default spec

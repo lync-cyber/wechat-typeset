@@ -149,7 +149,7 @@ const containerDecorationTheme = EditorView.theme({
   },
 })
 
-export const containerDecorationExtension: Extension = [
+const containerDecorationExtension: Extension = [
   containerDecorationField,
   containerDecorationTheme,
 ]
@@ -165,7 +165,7 @@ export const containerDecorationExtension: Extension = [
  * 时遍历全文，因此本地复用 scanContainerFrames 也可以；但单 open 行查找其闭合通常只
  * 需要扫"从该行往后"，比全文扫便宜一半 —— 这里走"小步长"实现以保持调用开销可控。
  */
-export const containerFoldExtension = foldService.of((state, lineStart) => {
+const containerFoldExtension = foldService.of((state, lineStart) => {
   const doc = state.doc
   const startLine = doc.lineAt(lineStart)
   const openMatch = OPEN_RE.exec(startLine.text)
@@ -230,7 +230,7 @@ function hasMatchingCloseAfter(
   return false
 }
 
-export const autoCloseContainerFenceExtension: Extension = EditorView.inputHandler.of(
+const autoCloseContainerFenceExtension: Extension = EditorView.inputHandler.of(
   (view, from, to, text) => {
     if (text !== '\n') return false
     // 光标必须无选区（避免覆写选中内容时误触）

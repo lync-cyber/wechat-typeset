@@ -12,7 +12,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
 import { createAppActions } from '../../src/app/actions'
-import { baseThemeId, customTheme, md } from '../../src/app/state'
+import { baseThemeId, customTheme, md } from '../../src/ui/state/store'
 import { getSample } from '../../src/domain/samples'
 
 function makeDeps() {

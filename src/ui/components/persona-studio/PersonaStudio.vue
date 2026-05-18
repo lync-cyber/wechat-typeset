@@ -15,7 +15,7 @@
 import { computed, reactive } from 'vue'
 import type { ThemeVariants } from '../../../core/themes/types'
 import { VARIANT_IDS } from '../../../core/themes/types'
-import { customTheme } from '../../../app/state'
+import { customTheme } from '../../state/store'
 import { downloadBlob } from '../../../infra/exporters/exportFile'
 import PanelHeader from '../../primitives/PanelHeader.vue'
 import DrawerResizer from '../../primitives/DrawerResizer.vue'

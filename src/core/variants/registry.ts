@@ -29,6 +29,7 @@ import type {
   VariantDef,
   VariantRender,
 } from './_core'
+import { orderDefsByKind } from './_core'
 import type {
   AdmonitionVariantId,
   AnnouncementVariantId,
@@ -236,22 +237,7 @@ function collectDefs(): AnyDef[] {
   ] as unknown as AnyDef[]
 }
 
-function orderedByKind(defs: AnyDef[], kind: VariantKind): AnyDef[] {
-  const bucket = defs.filter((d) => d.meta.kind === kind)
-  const byId = new Map(bucket.map((d) => [d.meta.id, d]))
-  const order = ORDER_BY_KIND[kind]
-  const ordered: AnyDef[] = []
-  for (const id of order) {
-    const def = byId.get(id)
-    if (def) {
-      ordered.push(def)
-      byId.delete(id)
-    }
-  }
-  // 未在 ORDER 里列出的按 id 字典序追加，不静默丢失。
-  for (const id of [...byId.keys()].sort()) ordered.push(byId.get(id)!)
-  return ordered
-}
+
 
 const ALL_DEFS = collectDefs()
 
@@ -275,7 +261,7 @@ function asRecord<Id extends string, Args>(
   kind: VariantKind,
 ): Record<Id, RequiredRender<Args>> {
   const out = {} as Record<Id, RequiredRender<Args>>
-  for (const d of orderedByKind(defs, kind)) {
+  for (const d of orderDefsByKind(defs, kind, ORDER_BY_KIND[kind])) {
     out[d.meta.id as Id] = d as unknown as RequiredRender<Args>
   }
   return out
@@ -309,7 +295,7 @@ export type { AdmonitionKind }
 
 export const CODE_BLOCK_VARIANTS: Record<string, CodeBlockDef> = (() => {
   const out: Record<string, CodeBlockDef> = {}
-  for (const d of orderedByKind(ALL_DEFS, 'codeBlock')) out[d.meta.id] = d as CodeBlockDef
+  for (const d of orderDefsByKind(ALL_DEFS, 'codeBlock', ORDER_BY_KIND.codeBlock)) out[d.meta.id] = d as CodeBlockDef
   return out
 })()
 

@@ -81,8 +81,6 @@ function renderPersonaSpecModule(spec: PersonaSpec): string {
 import type { PersonaSpec } from '../_shared/spec'
 
 export const spec: PersonaSpec = ${literal} as PersonaSpec
-
-export default spec
 `
 }
 

@@ -694,5 +694,3 @@ _15 分钟阅读 · 最后更新 2026-04-20_
       'note 第五态由 motifs.noteIcon + textMuted 承载；codeBlock header-bar + copyIcon 为签名语汇。',
   },
 }
-
-export default spec

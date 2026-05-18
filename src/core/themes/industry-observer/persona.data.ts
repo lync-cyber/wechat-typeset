@@ -661,5 +661,3 @@ export const spec: PersonaSpec = {
       'issueStamp 走模板渲染（固定 ISSUE #{issue} · {date} · {kind}），不再做"空参数跳过"条件分支。SVG strokeWidth 全员 ≥ 1（validateSpec 硬下限）。',
   },
 }
-
-export default spec

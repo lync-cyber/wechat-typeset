@@ -572,7 +572,3 @@ export const PERSONA_SPEC_SCHEMA: JSONSchema7 = {
   },
   additionalProperties: false,
 }
-
-export function getPersonaSpecSchema(): JSONSchema7 {
-  return PERSONA_SPEC_SCHEMA
-}
