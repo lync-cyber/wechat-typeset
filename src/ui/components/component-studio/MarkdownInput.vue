@@ -13,12 +13,18 @@
  */
 import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { EditorState } from '@codemirror/state'
-import { EditorView, keymap, lineNumbers } from '@codemirror/view'
+import { EditorView, keymap, lineNumbers, placeholder as cmPlaceholder } from '@codemirror/view'
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
 
-const props = defineProps<{ modelValue: string }>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: string
+    placeholder?: string
+  }>(),
+  { placeholder: '' },
+)
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
@@ -28,26 +34,27 @@ let view: EditorView | null = null
 
 onMounted(() => {
   if (!host.value) return
-  const state = EditorState.create({
-    doc: props.modelValue,
-    extensions: [
-      lineNumbers(),
-      history(),
-      keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
-      markdown(),
-      oneDark,
-      EditorView.lineWrapping,
-      EditorView.updateListener.of((upd) => {
-        if (upd.docChanged) {
-          emit('update:modelValue', upd.state.doc.toString())
-        }
-      }),
-      EditorView.theme({
-        '&': { height: '100%', fontSize: '13px' },
-        '.cm-scroller': { overflow: 'auto' },
-      }),
-    ],
-  })
+  const extensions = [
+    lineNumbers(),
+    history(),
+    keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
+    markdown(),
+    oneDark,
+    EditorView.lineWrapping,
+    EditorView.updateListener.of((upd) => {
+      if (upd.docChanged) {
+        emit('update:modelValue', upd.state.doc.toString())
+      }
+    }),
+    EditorView.theme({
+      '&': { height: '100%', fontSize: '13px' },
+      '.cm-scroller': { overflow: 'auto' },
+    }),
+  ]
+  if (props.placeholder) {
+    extensions.push(cmPlaceholder(props.placeholder))
+  }
+  const state = EditorState.create({ doc: props.modelValue, extensions })
   view = new EditorView({ state, parent: host.value })
 })
 

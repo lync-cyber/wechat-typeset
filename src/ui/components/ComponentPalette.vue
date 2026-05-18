@@ -196,7 +196,10 @@ function onCellAction(payload: { kind: GridAction; entry: ComponentEntry }) {
     return
   }
   if (kind === 'edit') {
-    if (entry.source !== 'user') return
+    if (entry.source !== 'user') {
+      pingStatus('内置组件不可直接编辑，请先派生为「我的」', 2500)
+      return
+    }
     studioInit.value = { mode: 'edit', source: entry }
     mode.value = 'studio'
     return

@@ -28,6 +28,7 @@ import IsolatedPreview from './IsolatedPreview.vue'
 import PatchInspector from './PatchInspector.vue'
 import { createUserVariantCSSLinter } from '../../composables/useUserVariantLint'
 import { findSlotContainingSubstring } from './userVariantSave'
+import { PLACEHOLDER_FENCE_BY_KIND } from './placeholderFence'
 
 const props = defineProps<{
   /** 当前编辑的基底 kind / variantId；为空时面板提示"请先选 base" */
@@ -73,22 +74,6 @@ const baseReady = computed<boolean>(() => props.kind !== 'none' && !!props.varia
 /** patch 草稿是否有非空 slot——决定 preview 是否注入临时 UV vs 仅渲染基底。 */
 function hasAnyPatch(p: DraftCssPatch): boolean {
   return !!(p.wrapperCSS.trim() || p.titleCSS.trim() || p.bodyCSS.trim())
-}
-
-/**
- * 占位 markdown：固定一段含 title + body 的 fence 片段，让用户至少能看见 wrapperCSS /
- * titleCSS / bodyCSS 三个 slot 的视觉变化。不同 kind 用各自的 fence 名（admonition 用
- * tip、quote 用 quote-card、divider 用 divider…）；fallback 走通用 admonition tip。
- */
-const PLACEHOLDER_FENCE_BY_KIND: Partial<Record<VK, (variantId: string) => string>> = {
-  admonition: (vid) => `::: tip 标题占位 variant=${vid}\n这里是正文示例段落。\n:::\n`,
-  quote: (vid) => `::: quote-card 作者占位 variant=${vid}\n金句占位\n:::\n`,
-  pullQuote: (vid) => `::: pull-quote variant=${vid} 引文占位\n副文占位\n:::\n`,
-  compare: (vid) => `::: compare variant=${vid}\n::: pros\nA\n:::\n::: cons\nB\n:::\n:::\n`,
-  steps: (vid) => `::: steps variant=${vid} 步骤示例\n第一步\n第二步\n:::\n`,
-  divider: (vid) => `::: divider variant=${vid}\n:::\n`,
-  sectionTitle: (vid) => `::: section-title variant=${vid}\n章节标题占位\n:::\n`,
-  note: (vid) => `::: note variant=${vid}\n备注占位\n:::\n`,
 }
 
 const PREVIEW_UV_ID = 'uv_source_mode_preview'

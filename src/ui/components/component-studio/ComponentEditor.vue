@@ -13,13 +13,14 @@
  * 接受 draft 引用而非 v-model:draft 是 reactive 对象,直接 mutate 触发响应;
  * 这与 useComponentDraft 的设计一致,避免双层 emit 同步。
  */
-import { computed, defineAsyncComponent, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { VARIANT_IDS } from '../../../core/themes/types'
 import { validateSnippet } from '../../../domain/components-lib/validate'
 import type { ComponentKind } from '../../../domain/components-lib'
 import { getVariantTokenSchema } from '../../../core/variants/tokenSchemaLookup'
 import type { Theme, VariantKind } from '../../../core/themes/types'
 import type { DraftFields, UserVariantMode } from './useComponentDraft'
+import { defaultSnippetFor } from './placeholderFence'
 import MarkdownInput from './MarkdownInput.vue'
 import TokensPanel from './TokensPanel.vue'
 
@@ -51,17 +52,26 @@ const variantOptions = computed<string[]>(() => {
   return [...(VARIANT_IDS[k] as readonly string[])]
 })
 
-// 当 kind 变化时,如果当前 variantId 不在新 kind 的合法列表里,清空
+// 仅当 markdown 仍是"上次注入的占位脚手架"或纯空白时才覆盖；任何用户编辑都让它原样保留。
+// 不与 draft.markdownSnippet 同步——它只是 watcher 的本地记忆，避免吞掉作者已写的内容。
+const lastInjectedSnippet = ref<string>('')
+
 watch(
   () => props.draft.kind,
   (k) => {
     if (k === 'none') {
       props.draft.variantId = ''
-      return
+    } else {
+      const allowed = VARIANT_IDS[k] as readonly string[]
+      if (!allowed.includes(props.draft.variantId)) {
+        props.draft.variantId = allowed[0] ?? ''
+      }
     }
-    const allowed = VARIANT_IDS[k] as readonly string[]
-    if (!allowed.includes(props.draft.variantId)) {
-      props.draft.variantId = allowed[0] ?? ''
+    const cur = props.draft.markdownSnippet
+    if (cur.trim() === '' || cur === lastInjectedSnippet.value) {
+      const next = defaultSnippetFor(k, props.draft.variantId)
+      props.draft.markdownSnippet = next
+      lastInjectedSnippet.value = next
     }
   },
 )
@@ -180,7 +190,10 @@ function clearCustomDraft(): void {
 
     <div class="row md-row">
       <span class="label">Markdown</span>
-      <MarkdownInput v-model="props.draft.markdownSnippet" />
+      <MarkdownInput
+        v-model="props.draft.markdownSnippet"
+        placeholder="选择上方“分类 + 骨架”自动填入示例；或直接在此撰写自由 markdown"
+      />
     </div>
 
     <div v-if="!validation.ok" class="diagnostics">
