@@ -11,7 +11,7 @@ import { applyZhFixHighlight, zhFixHighlightExtension } from '../editor-extensio
 import { foldGutter, foldKeymap } from '@codemirror/language'
 import { sanitizePastedHtml, shouldSanitize } from '../../infra/clipboard/pasteSanitize'
 import { uploadImages, isImageFile } from '../../infra/clipboard/imageIntake'
-import { uiThemeMode } from '../../app/uiTheme'
+import { uiThemeMode } from '../state/uiTheme'
 
 /**
  * 编辑器 chrome 主题：以 CSS 变量驱动，自动跟随 [data-theme="dark"] 切换。

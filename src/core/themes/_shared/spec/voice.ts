@@ -96,7 +96,7 @@ export const LOW_VOICE_TEMPORARY_GRACE: ReadonlySet<string> = new Set([])
  *
  * free 容器在 STYLED_CONTAINERS 里已被 styleKey=null 过滤掉。
  */
-export function getBaseContainerStyleKeys(): readonly string[] {
+function getBaseContainerStyleKeys(): readonly string[] {
   return STYLED_CONTAINERS
     .filter((s) => packOf(s) === 'base' && !s.parent)
     .map((s) => s.styleKey)

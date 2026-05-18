@@ -680,5 +680,3 @@ export const spec: PersonaSpec = {
       'dividerWave 基线 stroke-width 1.0（平台光栅化与 validator MIN_STROKE_WIDTH 硬下限）。',
   },
 }
-
-export default spec

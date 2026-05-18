@@ -85,13 +85,6 @@ export const COMPONENT_GROUPS: ReadonlyArray<ComponentGroup> = [
   },
 ]
 
-export function filterByKind(
-  entries: ReadonlyArray<ComponentEntry>,
-  kind: ComponentKind,
-): ComponentEntry[] {
-  return entries.filter((e) => e.kind === kind)
-}
-
 /** 在 BUILTIN_COMPONENTS 内按 variant id 查找第一条预设（用于"替换为..."流程）。 */
 export function findPresetByVariant(
   kind: VariantKind,

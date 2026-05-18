@@ -18,7 +18,7 @@ import {
   useThemeOrchestrator,
   type UseThemeOrchestratorDeps,
 } from '../../src/app/themeOrchestrator'
-import { baseThemeId, customTheme, md } from '../../src/app/state'
+import { baseThemeId, customTheme, md } from '../../src/ui/state/store'
 import { createDraft, readDraft } from '../../src/infra/storage/drafts'
 import { THEME_STORAGE_KEY } from '../../src/infra/storage/storageKeys'
 import { SAMPLE_BY_THEME, getSample } from '../../src/domain/samples'

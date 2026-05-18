@@ -10,7 +10,7 @@ import {
   OUTLINK_STRATEGY_HINT,
   type OutlinkStrategy,
 } from '../../infra/clipboard/outlinkDegrade'
-import type { UiThemeMode } from '../../app/uiTheme'
+import type { UiThemeMode } from '../state/uiTheme'
 import type { ToolbarAction, ToolbarToggleTarget } from './toolbar-types'
 import { useToolbarPopovers } from '../composables/useToolbarPopovers'
 import { modKey } from '../composables/usePlatformKey'

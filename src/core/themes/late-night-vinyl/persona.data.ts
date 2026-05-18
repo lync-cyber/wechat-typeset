@@ -801,5 +801,3 @@ export const spec: PersonaSpec = {
       '电台母语 kicker 全部走 spec.kickers，作者侧 markdown 不写主题装饰。',
   },
 }
-
-export default spec

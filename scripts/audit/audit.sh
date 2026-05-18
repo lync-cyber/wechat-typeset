@@ -228,7 +228,7 @@ fi
 # ── 6. dependency-cruiser — 架构规则 ─────────────────
 if [[ "$ENABLE_DEPCRUISE" == "true" ]]; then
   log "[depcruise] 架构边界规则校验…"
-  DCFG="${SCRIPT_DIR}/.dep-cruiser.js"
+  DCFG="${SCRIPT_DIR}/.dep-cruiser.cjs"
   if [[ ! -f "$DCFG" ]]; then
     warn "$DCFG 不存在，跳过 depcruise"
   else

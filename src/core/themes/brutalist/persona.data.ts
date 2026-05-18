@@ -728,5 +728,3 @@ export const spec: PersonaSpec = {
       '编辑部按 / 调研口径走 note variant=editorial-stripe / research-dense。',
   },
 }
-
-export default spec

@@ -6,7 +6,7 @@
  * 卡片 dismiss / unmount 时主动清理所有 .onboard-spotlight，避免残留高亮。
  */
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { MOBILE_MEDIA_QUERY } from '../../app/layoutMode'
+import { MOBILE_MEDIA_QUERY } from '../state/layoutMode'
 import { modKey } from '../composables/usePlatformKey'
 
 const emit = defineEmits<{

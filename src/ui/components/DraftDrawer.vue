@@ -2,7 +2,7 @@
 // 草稿抽屉：列出/搜索/重命名/删除/导入导出。CRUD 走 useDraftManager，本 SFC 只管 UI 状态。
 import { computed, nextTick, ref, watch } from 'vue'
 import { type DraftMeta } from '../../infra/storage/drafts'
-import { useDraftManager } from '../../domain/drafts/useDraftManager'
+import { useDraftManager } from '../composables/useDraftManager'
 import { downloadBlob } from '../../infra/exporters/exportFile'
 import PanelHeader from '../primitives/PanelHeader.vue'
 

@@ -241,21 +241,29 @@ export interface CodeBlockDef {
   tokenSchema?: TokenSchema
 }
 
-// ─────────────────────────────────────────────────────────────
-// 工具：variant 作者 helper
-// ─────────────────────────────────────────────────────────────
-
-/** 过滤空值后用 `;` 拼接。 */
-export function joinCss(entries: ReadonlyArray<string | false | null | undefined>): string {
-  return entries.filter(Boolean).join(';')
-}
-
-/** wrapperCSS 400 字符硬上限；超限在开发阶段直接 throw。 */
-export function assertVariantCSSLength(path: string, css: string): void {
-  if (css.length > 400) {
-    throw new Error(
-      `[variant] ${path} 的 wrapperCSS 长度 ${css.length} > 400（软约束）。` +
-        '拆分样式或将装饰移到 svgSlot。',
-    )
+/**
+ * 按 kind 过滤后按 ORDER 数组重排 defs，未在 ORDER 中的 def 按 id 字典序追加到末尾。
+ *
+ * 用于把 variant 集合按"展示顺序常量表"做稳定排序——既不丢漏新增项（避免改 ORDER
+ * 时静默丢失），也不让显式列出的乱序。registry.ts 用它派生运行时 render 表，
+ * domain/components-lib/sources/builtin-source.ts 用它派生面板 UI 顺序——
+ * 两个 ORDER 常量可独立，但算法共享。
+ */
+export function orderDefsByKind<T extends { meta: { id: string; kind: string } }>(
+  defs: readonly T[],
+  kind: string,
+  order: readonly string[],
+): T[] {
+  const bucket = defs.filter((d) => d.meta.kind === kind)
+  const byId = new Map(bucket.map((d) => [d.meta.id, d]))
+  const ordered: T[] = []
+  for (const id of order) {
+    const def = byId.get(id)
+    if (def) {
+      ordered.push(def)
+      byId.delete(id)
+    }
   }
+  for (const id of [...byId.keys()].sort()) ordered.push(byId.get(id)!)
+  return ordered
 }

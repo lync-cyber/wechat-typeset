@@ -12,7 +12,7 @@
  *   - 没用滚动绝对像素值是为了适配 editor / preview 高度不同（同一比例已归一化）
  */
 import { onBeforeUnmount, ref } from 'vue'
-import { MOBILE_MEDIA_QUERY } from '../../app/layoutMode'
+import { MOBILE_MEDIA_QUERY } from '../state/layoutMode'
 
 const DELTA_THRESHOLD = 0.01
 const TOP_REVEAL_THRESHOLD = 0.02

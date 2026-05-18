@@ -9,7 +9,7 @@
  * 否则切完之后 md 已更新就永远命中不到。除 persist 外都仅在 `val !== prev` 执行。
  */
 import { watch, type Ref } from 'vue'
-import { baseThemeId, customTheme, md } from './state'
+import { baseThemeId, customTheme, md } from '../ui/state/store'
 import { safeWrite } from '../infra/storage/_kv'
 import { THEME_STORAGE_KEY } from '../infra/storage/storageKeys'
 import { SAMPLE_BY_THEME, getSample } from '../domain/samples'

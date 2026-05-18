@@ -544,5 +544,3 @@ export const spec: PersonaSpec = {
       '规范 §0-§3.4 三条不可妥协决策在本文档落实（primary 编辑蓝、accent=primary、删除 quoteMark）。',
   },
 }
-
-export default spec

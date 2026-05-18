@@ -843,5 +843,3 @@ export const spec: PersonaSpec = {
       '全部对比度对已自查：status 四态 ≥ 4.5:1，text/bg=19.16，textMuted/bg=7.38，code/bg=6.97，primary/bg=4.35（大字装饰 ≥ 3:1）。',
   },
 }
-
-export default spec

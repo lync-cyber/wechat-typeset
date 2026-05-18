@@ -11,11 +11,11 @@
  * 清掉移动端 body class（避免热更后样式残留）。
  */
 import { onBeforeUnmount, onMounted, watch, type Ref, type ComputedRef } from 'vue'
-import { baseThemeId, editorWidth, md } from './state'
+import { baseThemeId, editorWidth, md } from '../ui/state/store'
 import { safeRead, safeWrite } from '../infra/storage/_kv'
 import { THEME_STORAGE_KEY, EDITOR_WIDTH_STORAGE_KEY } from '../infra/storage/storageKeys'
-import { useUiTheme } from './uiTheme'
-import { matchesMobile } from './layoutMode'
+import { useUiTheme } from '../ui/state/uiTheme'
+import { matchesMobile } from '../ui/state/layoutMode'
 import {
   peekComponentShareHash,
   tryImportComponentFromHash,

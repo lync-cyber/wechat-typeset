@@ -725,5 +725,3 @@ _一盏茶、一扇窗、一些可以慢下来的小事。_
       '11 件 SVG motif 全部 AST 化；dividerDots 的 4 组 rotated group 静态展开；iconFrame helper 已在 4 个图标内联。',
   },
 }
-
-export default spec

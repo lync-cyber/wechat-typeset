@@ -778,5 +778,3 @@ VOL.IV · 2026—04—22 · CHF 14.—
       '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）。',
   },
 }
-
-export default spec

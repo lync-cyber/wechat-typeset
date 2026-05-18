@@ -49,13 +49,17 @@ module.exports = {
       to:   { path: '^src/app' }
     },
 
-    // ── domain：可依赖 core，不能依赖 infra/ui/app ───
+    // ── domain：可依赖 core 与 infra/storage（仓储抽象），禁止依赖副作用层（clipboard / share / exporters）与 ui/app ───
+    //
+    // 设计：infra/storage 是 repository pattern 的实现层——纯函数 CRUD（createUserComponent /
+    // listDrafts 等），接口稳定，把它视为 domain 的数据访问端口。其他 infra 子模块（剪贴板写、
+    // 文件分享、图片导出）才是真正的浏览器副作用，domain 不应直接触发，得让 ui/app 编排。
     {
-      name: 'domain-no-infra',
+      name: 'domain-no-infra-effects',
       severity: 'error',
-      comment: 'domain 不应直接依赖 infra；如需 IO 走依赖注入',
+      comment: 'domain 不应直接依赖 infra 的副作用层（clipboard / share / exporters）；如需通过 ui/app 编排',
       from: { path: '^src/domain' },
-      to:   { path: '^src/infra' }
+      to:   { path: '^src/infra/(clipboard|share|exporters)' }
     },
     {
       name: 'domain-no-ui',

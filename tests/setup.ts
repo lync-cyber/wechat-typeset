@@ -58,7 +58,7 @@ if (typeof window !== 'undefined' && window !== (globalThis as unknown as Window
  * 关心被测代码本身。
  */
 import { afterEach } from 'vitest'
-import { __resetForTest as resetAppState } from '../src/app/state'
+import { __resetForTest as resetAppState } from '../src/ui/state/store'
 
 afterEach(() => {
   storage.clear()

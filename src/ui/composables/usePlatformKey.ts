@@ -24,5 +24,5 @@ function detectMac(): boolean {
   return /Mac|iPhone|iPad|iPod/.test(navigator.platform)
 }
 
-export const isMac: boolean = detectMac()
+const isMac: boolean = detectMac()
 export const modKey: string = isMac ? '⌘' : 'Ctrl'

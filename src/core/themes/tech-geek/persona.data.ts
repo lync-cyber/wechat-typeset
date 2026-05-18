@@ -623,5 +623,3 @@ export const spec: PersonaSpec = {
       'VT220 琥珀（#c89759）+ manpage 印刷传统；四态 admonition 四重冗余（注释前缀/边框样式/图标形状/位置）；motif 字号 ≥ 14（MIN_FONT_SIZE 硬下限）。',
   },
 }
-
-export default spec

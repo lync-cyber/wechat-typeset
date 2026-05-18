@@ -850,5 +850,3 @@ export const spec: PersonaSpec = {
       '章节自动编号 "01 / 02 / 03 + I / II / III" 由 decorations.headingPrefix 注入，作者写 `## 章节名` / `### 子标题`。',
   },
 }
-
-export default spec

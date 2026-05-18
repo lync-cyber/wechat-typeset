@@ -747,5 +747,3 @@ _预计阅读 8 分钟 · 家长可与孩子共读_
       'introDropcap 轻量化（primary 42px），steps 绿色竖线，highlight 马克笔暖黄底。',
   },
 }
-
-export default spec

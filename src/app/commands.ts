@@ -7,7 +7,7 @@ import { computed, type ComputedRef, type Ref } from 'vue'
 import type { Command } from '../ui/components/CommandPalette.vue'
 import { themeList } from '../core/themes'
 import { createDraft, listDrafts } from '../infra/storage/drafts'
-import { baseThemeId } from './state'
+import { baseThemeId } from '../ui/state/store'
 
 export interface BuildCommandsDeps {
   modKey: string

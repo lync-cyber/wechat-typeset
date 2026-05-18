@@ -5,7 +5,7 @@
  * 范围刻意小——只暴露 list / create / remove 三件事。需要 update / export / import 时再扩。
  */
 import { computed, ref, type ComputedRef } from 'vue'
-import type { ComponentEntry } from './types'
+import type { ComponentEntry } from '../../domain/components-lib/types'
 import {
   createUserComponent as storageCreate,
   deleteUserComponent as storageRemove,

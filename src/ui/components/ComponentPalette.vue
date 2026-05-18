@@ -19,7 +19,7 @@ import {
   createComponent,
   type CreateResult,
 } from '../../domain/components-lib'
-import { useUserComponents } from '../../domain/components-lib/useUserComponents'
+import { useUserComponents } from '../composables/useUserComponents'
 import type { Theme } from '../../core/themes/types'
 import { BUILTIN_COMPONENTS } from '../../domain/components-lib/registry'
 

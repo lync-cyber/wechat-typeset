@@ -2,7 +2,6 @@ export type { ComponentEntry, UserComponent, BuiltinEntry, ComponentKind } from 
 export {
   BUILTIN_COMPONENTS,
   COMPONENT_GROUPS,
-  filterByKind,
   findPresetByVariant,
 } from './registry'
 export type { ComponentGroup, ComponentSub, GroupId } from './registry'
