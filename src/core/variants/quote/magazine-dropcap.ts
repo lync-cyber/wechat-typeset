@@ -33,7 +33,7 @@ const magazineDropcap: VariantDef = {
     kind: 'quote',
     name: '杂志风金句',
     description: '上下双粗线 + 大号斜体引号',
-    themeCompat: ['literary-humanism'],
+    signatureOf: 'literary-humanism',
   },
   thumbnail: thumb,
   snippets: [

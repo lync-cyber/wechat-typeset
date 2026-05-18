@@ -16,7 +16,7 @@
 
 import { VARIANT_IDS } from '../themes/types'
 import type { PersonaSpec } from '../themes/_shared/spec'
-import type { VariantDef, CodeBlockDef } from './_core'
+import { getEffectiveCompat, type VariantDef, type CodeBlockDef } from './_core'
 
 /** 仅含 VARIANT_IDS 覆盖的 12 个 kind（codeBlock / none 不在 spec.variants 命名空间内）。 */
 type AnalyzableKind = keyof typeof VARIANT_IDS
@@ -95,7 +95,8 @@ export function analyzeVariantUsage(
     const ids = VARIANT_IDS[kind] as readonly string[]
     for (const id of ids) {
       const def = defByKindId[kind]?.[id]
-      const themeCompat = def?.meta.themeCompat ?? []
+      // 等效白名单：signatureOf 与 themeCompat 一律走 getEffectiveCompat
+      const themeCompat = getEffectiveCompat(def?.meta)
       const defaultBy = defaultByMap[kind]?.[id] ?? []
       const experimental = def?.meta.experimental === true
       const status: VariantUsageEntry['status'] =

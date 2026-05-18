@@ -12,7 +12,7 @@
 
 export * from './types'
 export type { SvgWrapperAttrs } from './render-motif'
-export { motifsToAssets, specToTheme } from './spec-to-theme'
+export { motifsToAssets, specToTheme, toThemeTokens } from './spec-to-theme'
 export { themeToSpec } from './theme-to-spec'
 export { primitivesToSvg, renderMotifTemplate, renderPrimitive, shapeToSvg } from './render-motif'
 export { validateSpec } from './validate'

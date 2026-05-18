@@ -97,7 +97,7 @@ export const spec: PersonaSpec = {
       width: 2,
       height: 16,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 10 },
-      primitives: [{ type: 'rect', x: 0, y: 1, w: 2, h: 14, fill: '#1e2c4a' }],
+      primitives: [{ type: 'rect', x: 0, y: 1, w: 2, h: 14, fill: 'token:primary' }],
     },
 
     // sectionCorner · 极简 L 形直角（规范 §1.3 ③ figureCorner）
@@ -110,7 +110,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M1,1 L1,8 M1,1 L8,1',
-          stroke: '#d8d8d4',
+          stroke: 'token:border',
           strokeWidth: 1,
         },
       ],
@@ -132,7 +132,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 500,
-          fill: '#1e2c4a',
+          fill: 'token:primary',
           textAnchor: 'middle',
         },
       ],
@@ -144,9 +144,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'circle', cx: 108, cy: 4, r: 1.2, fill: '#d8d8d4' },
-        { type: 'circle', cx: 120, cy: 4, r: 1.2, fill: '#d8d8d4' },
-        { type: 'circle', cx: 132, cy: 4, r: 1.2, fill: '#d8d8d4' },
+        { type: 'circle', cx: 108, cy: 4, r: 1.2, fill: 'token:border' },
+        { type: 'circle', cx: 120, cy: 4, r: 1.2, fill: 'token:border' },
+        { type: 'circle', cx: 132, cy: 4, r: 1.2, fill: 'token:border' },
       ],
     },
 
@@ -162,7 +162,7 @@ export const spec: PersonaSpec = {
           y: 13,
           content: '⁂',
           fontSize: 14,
-          fill: '#5a5d64',
+          fill: 'token:textMuted',
           textAnchor: 'middle',
           letterSpacing: 4,
         },
@@ -175,7 +175,7 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 4,
       primitives: [
-        { type: 'line', x1: 20, y1: 2, x2: 220, y2: 2, stroke: '#d8d8d4', strokeWidth: 1 },
+        { type: 'line', x1: 20, y1: 2, x2: 220, y2: 2, stroke: 'token:border', strokeWidth: 1 },
       ],
     },
 
@@ -185,7 +185,7 @@ export const spec: PersonaSpec = {
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
-      primitives: [{ type: 'rect', x: 4, y: 4, w: 6, h: 6, fill: '#1e2c4a' }],
+      primitives: [{ type: 'rect', x: 4, y: 4, w: 6, h: 6, fill: 'token:primary' }],
     },
 
     // infoIcon（Methods）：短下横线——呼应 minimal-underline 形状
@@ -195,7 +195,7 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'line', x1: 3, y1: 10, x2: 11, y2: 10, stroke: '#4a5670', strokeWidth: 1.4 },
+        { type: 'line', x1: 3, y1: 10, x2: 11, y2: 10, stroke: 'token:secondary', strokeWidth: 1.4 },
       ],
     },
 
@@ -210,7 +210,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M3,3 L11,3 L11,11 L3,11 Z',
-          stroke: '#5a4a18',
+          stroke: 'token:status.warning.accent',
           strokeWidth: 1,
           strokeDasharray: '1.5 1.5',
         },
@@ -224,8 +224,8 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'path', d: 'M2,2 L2,7 M2,2 L7,2', stroke: '#8a2a2a', strokeWidth: 1.2 },
-        { type: 'path', d: 'M12,12 L12,7 M12,12 L7,12', stroke: '#8a2a2a', strokeWidth: 1.2 },
+        { type: 'path', d: 'M2,2 L2,7 M2,2 L7,2', stroke: 'token:accent', strokeWidth: 1.2 },
+        { type: 'path', d: 'M12,12 L12,7 M12,12 L7,12', stroke: 'token:accent', strokeWidth: 1.2 },
       ],
     },
     // 规范 §1.3 "必删 quoteMark"——故意不导出，classic variant 走 FALLBACK_OPEN_MARK 字符回退

@@ -112,7 +112,9 @@ export function useExportActions(deps: ExportActionsDeps) {
         },
         size,
       )
-      const svg = shapeToSvg(shape)
+      // theme.tokens 透传给 shapeToSvg：buildRuntimeCover 产出的 shape 可能含 'token:<key>'
+      // 引用（与 spec.motifs 同源解析），不传 tokens 会让字面值原样写入 SVG attr。
+      const svg = shapeToSvg(shape, theme.tokens)
       const filename = `${deps.fileStem()}-cover-${size}.png`
       const result = await exportCoverImage(svg, filename, {
         width: meta.width,

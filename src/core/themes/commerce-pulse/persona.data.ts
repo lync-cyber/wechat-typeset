@@ -106,7 +106,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,1 L15,8 L8,15 L1,8 Z',
-          fill: '#c4310e',
+          fill: 'token:primary',
         },
       ],
     },
@@ -117,11 +117,11 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 10,
       primitives: [
-        { type: 'line', x1: 0, y1: 5, x2: 100, y2: 5, stroke: '#e0d0d0', strokeWidth: 1 },
-        { type: 'circle', cx: 108, cy: 5, r: 3, fill: '#c4310e' },
-        { type: 'circle', cx: 120, cy: 5, r: 3, fill: '#c89759' },
-        { type: 'circle', cx: 132, cy: 5, r: 3, fill: '#c4310e' },
-        { type: 'line', x1: 140, y1: 5, x2: 240, y2: 5, stroke: '#e0d0d0', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 5, x2: 100, y2: 5, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'circle', cx: 108, cy: 5, r: 3, fill: 'token:primary' },
+        { type: 'circle', cx: 120, cy: 5, r: 3, fill: 'token:accent' },
+        { type: 'circle', cx: 132, cy: 5, r: 3, fill: 'token:primary' },
+        { type: 'line', x1: 140, y1: 5, x2: 240, y2: 5, stroke: 'token:border', strokeWidth: 1 },
       ],
     },
 
@@ -134,7 +134,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M0,6 Q20,1 40,6 Q60,11 80,6 Q100,1 120,6 Q140,11 160,6 Q180,1 200,6 Q220,11 240,6',
-          stroke: '#c4310e',
+          stroke: 'token:primary',
           strokeWidth: 1.5,
           fill: 'none',
           strokeLinecap: 'round',
@@ -149,11 +149,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, fill: '#1a7a3c', rx: 3, ry: 3 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, fill: 'token:status.tip.accent', rx: 3, ry: 3 },
         {
           type: 'path',
           d: 'M4,8 L7,11 L12,5',
-          stroke: '#fefefe',
+          stroke: 'token:textInverse',
           strokeWidth: 2,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
@@ -171,10 +171,10 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,1 L15,14 L1,14 Z',
-          fill: '#8a5c0a',
+          fill: 'token:status.warning.accent',
         },
-        { type: 'rect', x: 7, y: 5, w: 2, h: 5, fill: '#fefefe' },
-        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#fefefe' },
+        { type: 'rect', x: 7, y: 5, w: 2, h: 5, fill: 'token:textInverse' },
+        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: 'token:textInverse' },
       ],
     },
 
@@ -188,7 +188,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M5,1 L9,5 L5,9 L1,5 Z',
-          fill: '#c4310e',
+          fill: 'token:primary',
         },
       ],
     },
@@ -203,8 +203,8 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'circle', cx: 12, cy: 12, r: 11, fill: '#c4310e' },
-        { type: 'circle', cx: 12, cy: 12, r: 9, stroke: '#fefefe', strokeWidth: 1, fill: 'none', opacity: 0.55 },
+        { type: 'circle', cx: 12, cy: 12, r: 11, fill: 'token:primary' },
+        { type: 'circle', cx: 12, cy: 12, r: 9, stroke: 'token:textInverse', strokeWidth: 1, fill: 'none', opacity: 0.55 },
         {
           type: 'text',
           x: 12,
@@ -212,7 +212,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#fefefe',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],
@@ -235,7 +235,7 @@ export const spec: PersonaSpec = {
     recommend: 'card-list',         // 商品推荐卡列表（核心签名）
     qrcode: 'bare',                 // 居中 QR（小程序 / 直播间）
     footerCTA: 'triptych-actions',  // 买 / 收藏 / 分享三联（核心 CTA）
-    pullQuote: 'giant-mark',        // 巨号引号：爆款话术 / KOL 金句
+    pullQuote: 'stamp-quote',       // 旋转印章 + 粗体大字：促销盖章感（带货语境优于 giant-mark 的文学开引号）
     announcement: 'danger-bar',     // 限时警示横幅（秒杀 / 清仓告急）
     tableCard: 'key-value',         // orphan 升级：键值对档式（规格 / SKU 参数列表）
     gallery: 'triptych',            // orphan 升级：三联图（产品三视图 / 三档位展示）

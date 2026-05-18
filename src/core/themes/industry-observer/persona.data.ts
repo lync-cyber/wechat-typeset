@@ -88,8 +88,8 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 10 },
       primitives: [
-        { type: 'rect', x: 0, y: 0, w: 3, h: 13, fill: '#24364f' },
-        { type: 'rect', x: 7, y: 5, w: 3, h: 3, fill: '#b86f2a' },
+        { type: 'rect', x: 0, y: 0, w: 3, h: 13, fill: 'token:primary' },
+        { type: 'rect', x: 7, y: 5, w: 3, h: 3, fill: 'token:accent' },
       ],
     },
 
@@ -99,7 +99,7 @@ export const spec: PersonaSpec = {
       width: 5,
       height: 5,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 7 },
-      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 3, fill: '#b86f2a' }],
+      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 3, fill: 'token:accent' }],
     },
 
     // quoteMark · 方头双引号（28×22，primary 实心），比 business 更矮更粗
@@ -112,7 +112,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M2,4 L10,4 L10,8 L6,8 L6,14 L10,14 L10,18 L2,18 Z M16,4 L24,4 L24,8 L20,8 L20,14 L24,14 L24,18 L16,18 Z',
-          fill: '#24364f',
+          fill: 'token:primary',
         },
       ],
     },
@@ -124,7 +124,7 @@ export const spec: PersonaSpec = {
       width: 18,
       height: 10,
       primitives: [
-        { type: 'path', d: 'M12,2 L16,6 L12,10 L8,6 Z', fill: '#24364f' },
+        { type: 'path', d: 'M12,2 L16,6 L12,10 L8,6 Z', fill: 'token:primary' },
       ],
     },
 
@@ -134,9 +134,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'circle', cx: 108, cy: 4, r: 1.6, fill: '#e0d6c0' },
-        { type: 'circle', cx: 120, cy: 4, r: 1.6, fill: '#e0d6c0' },
-        { type: 'circle', cx: 132, cy: 4, r: 1.6, fill: '#e0d6c0' },
+        { type: 'circle', cx: 108, cy: 4, r: 1.6, fill: 'token:border' },
+        { type: 'circle', cx: 120, cy: 4, r: 1.6, fill: 'token:border' },
+        { type: 'circle', cx: 132, cy: 4, r: 1.6, fill: 'token:border' },
       ],
     },
 
@@ -147,9 +147,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'line', x1: 60, y1: 4, x2: 90, y2: 4, stroke: '#e0d6c0', strokeWidth: 1.2 },
-        { type: 'line', x1: 105, y1: 4, x2: 135, y2: 4, stroke: '#e0d6c0', strokeWidth: 1.2 },
-        { type: 'line', x1: 150, y1: 4, x2: 180, y2: 4, stroke: '#e0d6c0', strokeWidth: 1.2 },
+        { type: 'line', x1: 60, y1: 4, x2: 90, y2: 4, stroke: 'token:border', strokeWidth: 1.2 },
+        { type: 'line', x1: 105, y1: 4, x2: 135, y2: 4, stroke: 'token:border', strokeWidth: 1.2 },
+        { type: 'line', x1: 150, y1: 4, x2: 180, y2: 4, stroke: 'token:border', strokeWidth: 1.2 },
       ],
     },
 
@@ -160,9 +160,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'line', x1: 3, y1: 4, x2: 11, y2: 4, stroke: '#2d6a5a', strokeWidth: 1.4, strokeLinecap: 'round' },
-        { type: 'line', x1: 3, y1: 7, x2: 11, y2: 7, stroke: '#2d6a5a', strokeWidth: 1.4, strokeLinecap: 'round' },
-        { type: 'line', x1: 3, y1: 10, x2: 8, y2: 10, stroke: '#2d6a5a', strokeWidth: 1.4, strokeLinecap: 'round' },
+        { type: 'line', x1: 3, y1: 4, x2: 11, y2: 4, stroke: 'token:status.tip.accent', strokeWidth: 1.4, strokeLinecap: 'round' },
+        { type: 'line', x1: 3, y1: 7, x2: 11, y2: 7, stroke: 'token:status.tip.accent', strokeWidth: 1.4, strokeLinecap: 'round' },
+        { type: 'line', x1: 3, y1: 10, x2: 8, y2: 10, stroke: 'token:status.tip.accent', strokeWidth: 1.4, strokeLinecap: 'round' },
       ],
     },
 
@@ -173,9 +173,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 7, cy: 7, r: 5.5, stroke: '#3d5a75', strokeWidth: 1.2 },
-        { type: 'rect', x: 6.4, y: 3.4, w: 1.2, h: 1.2, fill: '#3d5a75' },
-        { type: 'rect', x: 6.4, y: 5.6, w: 1.2, h: 5, fill: '#3d5a75' },
+        { type: 'circle', cx: 7, cy: 7, r: 5.5, stroke: 'token:status.info.accent', strokeWidth: 1.2 },
+        { type: 'rect', x: 6.4, y: 3.4, w: 1.2, h: 1.2, fill: 'token:status.info.accent' },
+        { type: 'rect', x: 6.4, y: 5.6, w: 1.2, h: 5, fill: 'token:status.info.accent' },
       ],
     },
 
@@ -186,15 +186,15 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 7, cy: 7, r: 5.5, stroke: '#8a5a1a', strokeWidth: 1.2 },
+        { type: 'circle', cx: 7, cy: 7, r: 5.5, stroke: 'token:status.warning.accent', strokeWidth: 1.2 },
         {
           type: 'path',
           d: 'M5.2,5.2 C5.2,4 6,3.2 7,3.2 C8,3.2 8.8,4 8.8,5 C8.8,5.8 8.2,6.2 7.5,6.8 L7,7.5 L7,8.5',
-          stroke: '#8a5a1a',
+          stroke: 'token:status.warning.accent',
           strokeWidth: 1.2,
           strokeLinecap: 'round',
         },
-        { type: 'rect', x: 6.4, y: 10, w: 1.2, h: 1.2, fill: '#8a5a1a' },
+        { type: 'rect', x: 6.4, y: 10, w: 1.2, h: 1.2, fill: 'token:status.warning.accent' },
       ],
     },
 
@@ -205,9 +205,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 7, cy: 7, r: 5.5, stroke: '#8a2a1c', strokeWidth: 1.2 },
-        { type: 'line', x1: 4.5, y1: 4.5, x2: 9.5, y2: 9.5, stroke: '#8a2a1c', strokeWidth: 1.4, strokeLinecap: 'round' },
-        { type: 'line', x1: 9.5, y1: 4.5, x2: 4.5, y2: 9.5, stroke: '#8a2a1c', strokeWidth: 1.4, strokeLinecap: 'round' },
+        { type: 'circle', cx: 7, cy: 7, r: 5.5, stroke: 'token:status.danger.accent', strokeWidth: 1.2 },
+        { type: 'line', x1: 4.5, y1: 4.5, x2: 9.5, y2: 9.5, stroke: 'token:status.danger.accent', strokeWidth: 1.4, strokeLinecap: 'round' },
+        { type: 'line', x1: 9.5, y1: 4.5, x2: 4.5, y2: 9.5, stroke: 'token:status.danger.accent', strokeWidth: 1.4, strokeLinecap: 'round' },
       ],
     },
 
@@ -219,7 +219,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'circle', cx: 12, cy: 12, r: 11, fill: '#24364f' },
+        { type: 'circle', cx: 12, cy: 12, r: 11, fill: 'token:primary' },
         {
           type: 'text',
           x: 12,
@@ -227,7 +227,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 15,
           fontWeight: 700,
-          fill: '#fefefe',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],
@@ -246,8 +246,8 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle' },
       placeholders: ['issue', 'date', 'kind'],
       primitives: [
-        { type: 'rect', x: 0.5, y: 0.5, w: 319, h: 23, stroke: '#b86f2a', strokeWidth: 1 },
-        { type: 'rect', x: 3, y: 3, w: 314, h: 18, stroke: '#b86f2a', strokeWidth: 1, opacity: 0.55 },
+        { type: 'rect', x: 0.5, y: 0.5, w: 319, h: 23, stroke: 'token:accent', strokeWidth: 1 },
+        { type: 'rect', x: 3, y: 3, w: 314, h: 18, stroke: 'token:accent', strokeWidth: 1, opacity: 0.55 },
         {
           // textAnchor=middle + x=viewBox 中线：内容居中，左右留白对称。
           // motif-fit 已正确处理 middle 锚点（right = x + w/2），超长 kind 仍可触发扩张。
@@ -257,7 +257,7 @@ export const spec: PersonaSpec = {
           content: 'ISSUE #{issue} · {date} · {kind}',
           fontSize: 14,
           fontWeight: 600,
-          fill: '#b86f2a',
+          fill: 'token:accent',
           textAnchor: 'middle',
           letterSpacing: 1.0,
         },

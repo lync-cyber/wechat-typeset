@@ -128,17 +128,45 @@ export interface VariantMeta {
   name: string
   /** ≤30 字说明 */
   description: string
-  /** 推荐主题 id 列表；空/缺省等价于全兼容 */
+  /**
+   * 软推荐主题 id 列表（**多主题适用**的视觉骨架）。空/缺省 = 全兼容。
+   * 与 signatureOf 互斥：单主题归属用 signatureOf，多主题语境用本字段。
+   * themeCompatGuard 与 getEffectiveCompat 视本字段为软推荐：作者级 override
+   * 命中且当前主题不在白名单 → fallback + warn。
+   */
   themeCompat?: readonly string[]
   /**
-   * 实验性变体：当前无任何主题以默认骨架使用、也无 themeCompat 关联。
+   * 主题签名归属（**单主题专属**的视觉骨架）。声明 signatureOf 等价于声明
+   * themeCompat: [signatureOf]，但类型层把"签名 vs 通用"语义分开：
+   *   - admonition.marginalia 等"绑死单主题"的视觉签名 → signatureOf
+   *   - admonition.terminal / quote.editorial-block 等"多主题共享" → themeCompat
+   *
+   * 与 themeCompat 互斥（schema 层不强制，约定上不同时声明）。
+   * 消费方一律走 `getEffectiveCompat(meta)`，不直接读两字段之一。
+   */
+  signatureOf?: string
+  /**
+   * 实验性变体：当前无任何主题以默认骨架使用、也无 themeCompat / signatureOf 关联。
    * 出现在 VARIANT_IDS 主表里是为了"骨架已就绪、等首个采用方"；
    * `getRecommendedVariantsFor` 会把它们排到列表末尾且不算"推荐"。
    *
    * conformance: 每个 VARIANT_IDS 成员必须满足 "≥1 主题采用" OR "experimental === true"。
-   * 移除流程：让某主题把它升级为默认骨架，或加入该主题的 themeCompat → 删 experimental 标。
+   * 移除流程：让某主题把它升级为默认骨架，或加入该主题的 themeCompat / signatureOf → 删 experimental 标。
    */
   experimental?: boolean
+}
+
+/**
+ * 取 meta 的"等效主题白名单"。
+ *   - signatureOf 优先：声明 = 单元素白名单
+ *   - 否则取 themeCompat（缺省 = 空数组）
+ *
+ * 所有消费方（guard / usage / api / 组件库）一律走本 helper，避免漂移。
+ */
+export function getEffectiveCompat(meta: VariantMeta | undefined): readonly string[] {
+  if (!meta) return []
+  if (meta.signatureOf) return [meta.signatureOf]
+  return meta.themeCompat ?? []
 }
 
 /**

@@ -27,7 +27,7 @@ const doubleBorder: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '双线框',
     description: '左 4px 双线 + 透明底，"交叉引用"manpage 风',
-    themeCompat: ['tech-geek'],
+    signatureOf: 'tech-geek',
   },
   thumbnail: thumb,
   snippets: [

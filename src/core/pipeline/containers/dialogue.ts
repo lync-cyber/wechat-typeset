@@ -103,13 +103,23 @@ export const dialogueTurnContainer: ContainerRenderer = {
 // qa-rows · Q 强 / A 弱纵向交替
 // ============================================================
 
-// role 归一：Q / 主持人 / 提问 视为 Q 侧；其它视为 A 侧。
-function isQRole(role: string): boolean {
+// qa-rows Q/A 推断三段链：
+//   1) role 显式（Q/q/主持人/提问/问 → Q；A/a/答/回答 → A；其它非空显式值 → A）
+//   2) role 为空时看 speaker / name 关键词（含 Q/问/主持人/提问/买家/客户/用户 → Q；
+//      含 A/答/商家/客服/主播 → A）
+//   3) 都判不出 → 按 idx 奇偶交替（qa-rows 99% 是一问一答，比"全 A"温和）。
+// 早期版本只看 role，sample 全部用 speaker= 不写 role 时会全 A——属于通用 bug。
+function inferIsQ(role: string, speakerOrName: string, idx: number): boolean {
   const r = role.trim()
-  if (!r) return false
-  if (r === 'Q' || r === 'q') return true
-  if (r === '主持人' || r === '提问' || r === '问') return true
-  return false
+  if (r === 'Q' || r === 'q' || r === '主持人' || r === '提问' || r === '问') return true
+  if (r === 'A' || r === 'a' || r === '答' || r === '回答') return false
+  if (r) return false
+  const s = speakerOrName.trim()
+  if (s) {
+    if (/[Qq问]|主持人|提问|买家|客户|用户/.test(s)) return true
+    if (/[Aa答]|商家|客服|主播/.test(s)) return false
+  }
+  return idx % 2 === 0
 }
 
 function renderQARowOpen(
@@ -119,7 +129,7 @@ function renderQARowOpen(
   idx: number,
 ): string {
   const c = ctx.tokens.colors
-  const isQ = isQRole(role)
+  const isQ = inferIsQ(role, name, idx)
   const rowCSS = [
     'display:table',
     'width:100%',
@@ -197,10 +207,12 @@ function renderChatBubbleOpen(
   const bubbleBg = c.bgSoft
   const slotCSS = 'display:table-cell;vertical-align:top;width:36px'
   // 头像：inline SVG circle + 首字母（避开 border-radius 在公众号粘贴里被剥的风险）
+  // 首字母走 textInverse 而非 #fff：暗底主题（brutalist / late-night-vinyl）头像底色本身就深，
+  // 白字反白才是反差最大的选择；浅底主题 textInverse 仍是 #fefefe / #ffffff 家族，效果等价。
   const avatarSvg =
     `<svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:top">` +
     `<circle cx="14" cy="14" r="14" fill="${avatarBg}"/>` +
-    `<text x="14" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">${escText(initial)}</text>` +
+    `<text x="14" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="${c.textInverse}">${escText(initial)}</text>` +
     `</svg>`
   CHAT_TURN_STATE.push({
     tailAfter: isRight ? renderChatTail(bubbleBg, 'right') : '',

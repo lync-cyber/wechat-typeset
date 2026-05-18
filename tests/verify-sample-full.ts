@@ -36,6 +36,7 @@ import { themeRegistry } from '../src/core/themes'
 const defaultTheme = themeRegistry.default
 import { VARIANT_IDS } from '../src/core/themes/types'
 import { ALL_VARIANT_DEFS } from '../src/core/variants/registry'
+import { getEffectiveCompat } from '../src/core/variants/_core'
 import { __setCompatSilentForTest } from '../src/core/pipeline/containers/_shared/themeCompatGuard'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
@@ -49,14 +50,15 @@ const md = readFileSync(SAMPLE, 'utf8')
 const { html, wordCount } = render({ md, theme: defaultTheme })
 
 /**
- * themeCompat 限定 variant 在 default 主题下会被守卫降级，class 不出现。
- * 这里按需补渲染——把每个 themeCompat 限定 variant 用其兼容主题渲染一次，
- * 命中"variant class 出现"断言。
+ * 主题白名单限定 variant（signatureOf 或多主题 themeCompat）在 default 主题下会被
+ * 守卫降级，class 不出现。这里按需补渲染——把每个白名单限定 variant 用其兼容主题
+ * 渲染一次，命中"variant class 出现"断言。
  */
 const themeCompatIndex: ReadonlyMap<string, string> = new Map(
-  ALL_VARIANT_DEFS.filter((d) => d.meta.themeCompat && d.meta.themeCompat.length > 0).map(
-    (d) => [d.meta.id, d.meta.themeCompat![0]],
-  ),
+  ALL_VARIANT_DEFS
+    .map((d) => [d.meta.id, getEffectiveCompat(d.meta)] as const)
+    .filter(([, compat]) => compat.length > 0)
+    .map(([id, compat]) => [id, compat[0]]),
 )
 const htmlByTheme = new Map<string, string>([['default', html]])
 function htmlForVariant(variantId: string): string {

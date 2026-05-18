@@ -12,6 +12,7 @@
 
 import type { AnyVariantDef } from '../../../core/variants/registry'
 import { ALL_VARIANT_DEFS } from '../../../core/variants/registry'
+import { getEffectiveCompat } from '../../../core/variants/_core'
 import freeAll from '../builtin-snippets/_all'
 import type { BuiltinEntry, ComponentKind } from '../types'
 
@@ -147,6 +148,13 @@ function orderedDefsByKind(kind: ComponentKind): AnyVariantDef[] {
 
 function toEntry(def: AnyVariantDef, s: AnyVariantDef['snippets'][number]): BuiltinEntry {
   const thumb = def.thumbnail ? def.thumbnail(s.thumbArgs) : ''
+  // snippet 级 themeCompat 优先（更细粒度）；否则取 def.meta 的等效白名单（signatureOf 转单元素）
+  const defCompat = getEffectiveCompat(def.meta)
+  const themeCompat = s.themeCompat
+    ? [...s.themeCompat]
+    : defCompat.length > 0
+      ? [...defCompat]
+      : undefined
   return {
     source: 'builtin',
     id: s.presetId,
@@ -154,7 +162,7 @@ function toEntry(def: AnyVariantDef, s: AnyVariantDef['snippets'][number]): Buil
     description: s.description,
     kind: def.meta.kind,
     variantId: def.meta.id,
-    themeCompat: s.themeCompat ? [...s.themeCompat] : def.meta.themeCompat ? [...def.meta.themeCompat] : undefined,
+    themeCompat,
     markdownSnippet: s.markdown,
     thumbnailSvg: thumb,
   }

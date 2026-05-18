@@ -107,9 +107,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'line', x1: 0, y1: 4, x2: 110, y2: 4, stroke: '#e5e7eb', strokeWidth: 1 },
-        { type: 'rect', x: 117, y: 1, w: 6, h: 6, fill: '#1756d1' },
-        { type: 'line', x1: 130, y1: 4, x2: 240, y2: 4, stroke: '#e5e7eb', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 4, x2: 110, y2: 4, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'rect', x: 117, y: 1, w: 6, h: 6, fill: 'token:primary' },
+        { type: 'line', x1: 130, y1: 4, x2: 240, y2: 4, stroke: 'token:border', strokeWidth: 1 },
       ],
     },
 
@@ -119,9 +119,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: '#1756d1' },
-        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: '#1756d1' },
-        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: '#1756d1' },
+        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: 'token:primary' },
       ],
     },
 
@@ -132,11 +132,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#147a44', strokeWidth: 1.5 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.tip.accent', strokeWidth: 1.5 },
         {
           type: 'path',
           d: 'M4,8 L7,11 L12,5',
-          stroke: '#147a44',
+          stroke: 'token:status.tip.accent',
           strokeWidth: 1.8,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
@@ -149,9 +149,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#1756d1', strokeWidth: 1.5 },
-        { type: 'rect', x: 7, y: 3, w: 2, h: 2, fill: '#1756d1' },
-        { type: 'rect', x: 7, y: 6, w: 2, h: 7, fill: '#1756d1' },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:primary', strokeWidth: 1.5 },
+        { type: 'rect', x: 7, y: 3, w: 2, h: 2, fill: 'token:primary' },
+        { type: 'rect', x: 7, y: 6, w: 2, h: 7, fill: 'token:primary' },
       ],
     },
     warningIcon: {
@@ -160,9 +160,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#9e5c10', strokeWidth: 1.5 },
-        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: '#9e5c10' },
-        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#9e5c10' },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.warning.accent', strokeWidth: 1.5 },
+        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: 'token:status.warning.accent' },
+        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: 'token:status.warning.accent' },
       ],
     },
     dangerIcon: {
@@ -171,11 +171,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#b22d18', strokeWidth: 1.5 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.danger.accent', strokeWidth: 1.5 },
         {
           type: 'path',
           d: 'M4,4 L12,12 M12,4 L4,12',
-          stroke: '#b22d18',
+          stroke: 'token:status.danger.accent',
           strokeWidth: 1.8,
           strokeLinecap: 'round',
         },
@@ -190,7 +190,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'rect', x: 0, y: 0, w: 24, h: 24, fill: '#1756d1' },
+        { type: 'rect', x: 0, y: 0, w: 24, h: 24, fill: 'token:primary' },
         {
           type: 'text',
           x: 12,
@@ -198,7 +198,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#fefefe',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],

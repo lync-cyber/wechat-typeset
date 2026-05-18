@@ -87,8 +87,8 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       primitives: [
-        { type: 'rect', x: 0, y: 2, w: 3, h: 13, fill: '#2a1a14' },
-        { type: 'rect', x: 4, y: 7, w: 14, h: 3, fill: '#0e3654', opacity: 0.75 },
+        { type: 'rect', x: 0, y: 2, w: 3, h: 13, fill: 'token:primary' },
+        { type: 'rect', x: 4, y: 7, w: 14, h: 3, fill: 'token:secondary', opacity: 0.75 },
       ],
     },
 
@@ -100,34 +100,34 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 20,
       primitives: [
-        { type: 'line', x1: 0, y1: 10, x2: 240, y2: 10, stroke: '#d0cec8', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 10, x2: 240, y2: 10, stroke: 'token:border', strokeWidth: 1 },
         // bar 1 (x=70, cy=6, danger)
-        { type: 'line', x1: 72, y1: 2, x2: 72, y2: 10, stroke: '#9a1b20', strokeWidth: 1 },
-        { type: 'rect', x: 70, y: 4, w: 4, h: 4, fill: '#9a1b20' },
+        { type: 'line', x1: 72, y1: 2, x2: 72, y2: 10, stroke: 'token:status.danger.accent', strokeWidth: 1 },
+        { type: 'rect', x: 70, y: 4, w: 4, h: 4, fill: 'token:status.danger.accent' },
         // bar 2 (x=82, cy=8, secondary)
-        { type: 'line', x1: 84, y1: 4, x2: 84, y2: 12, stroke: '#0e3654', strokeWidth: 1 },
-        { type: 'rect', x: 82, y: 6, w: 4, h: 4, fill: '#0e3654' },
+        { type: 'line', x1: 84, y1: 4, x2: 84, y2: 12, stroke: 'token:secondary', strokeWidth: 1 },
+        { type: 'rect', x: 82, y: 6, w: 4, h: 4, fill: 'token:secondary' },
         // bar 3 (x=94, cy=10, danger)
-        { type: 'line', x1: 96, y1: 6, x2: 96, y2: 14, stroke: '#9a1b20', strokeWidth: 1 },
-        { type: 'rect', x: 94, y: 8, w: 4, h: 4, fill: '#9a1b20' },
+        { type: 'line', x1: 96, y1: 6, x2: 96, y2: 14, stroke: 'token:status.danger.accent', strokeWidth: 1 },
+        { type: 'rect', x: 94, y: 8, w: 4, h: 4, fill: 'token:status.danger.accent' },
         // bar 4 (x=106, cy=12, secondary)
-        { type: 'line', x1: 108, y1: 8, x2: 108, y2: 16, stroke: '#0e3654', strokeWidth: 1 },
-        { type: 'rect', x: 106, y: 10, w: 4, h: 4, fill: '#0e3654' },
+        { type: 'line', x1: 108, y1: 8, x2: 108, y2: 16, stroke: 'token:secondary', strokeWidth: 1 },
+        { type: 'rect', x: 106, y: 10, w: 4, h: 4, fill: 'token:secondary' },
         // bar 5 (x=118, cy=14, danger)  ← V 底
-        { type: 'line', x1: 120, y1: 10, x2: 120, y2: 18, stroke: '#9a1b20', strokeWidth: 1 },
-        { type: 'rect', x: 118, y: 12, w: 4, h: 4, fill: '#9a1b20' },
+        { type: 'line', x1: 120, y1: 10, x2: 120, y2: 18, stroke: 'token:status.danger.accent', strokeWidth: 1 },
+        { type: 'rect', x: 118, y: 12, w: 4, h: 4, fill: 'token:status.danger.accent' },
         // bar 6 (x=130, cy=12, secondary)
-        { type: 'line', x1: 132, y1: 8, x2: 132, y2: 16, stroke: '#0e3654', strokeWidth: 1 },
-        { type: 'rect', x: 130, y: 10, w: 4, h: 4, fill: '#0e3654' },
+        { type: 'line', x1: 132, y1: 8, x2: 132, y2: 16, stroke: 'token:secondary', strokeWidth: 1 },
+        { type: 'rect', x: 130, y: 10, w: 4, h: 4, fill: 'token:secondary' },
         // bar 7 (x=142, cy=10, danger)
-        { type: 'line', x1: 144, y1: 6, x2: 144, y2: 14, stroke: '#9a1b20', strokeWidth: 1 },
-        { type: 'rect', x: 142, y: 8, w: 4, h: 4, fill: '#9a1b20' },
+        { type: 'line', x1: 144, y1: 6, x2: 144, y2: 14, stroke: 'token:status.danger.accent', strokeWidth: 1 },
+        { type: 'rect', x: 142, y: 8, w: 4, h: 4, fill: 'token:status.danger.accent' },
         // bar 8 (x=154, cy=8, secondary)
-        { type: 'line', x1: 156, y1: 4, x2: 156, y2: 12, stroke: '#0e3654', strokeWidth: 1 },
-        { type: 'rect', x: 154, y: 6, w: 4, h: 4, fill: '#0e3654' },
+        { type: 'line', x1: 156, y1: 4, x2: 156, y2: 12, stroke: 'token:secondary', strokeWidth: 1 },
+        { type: 'rect', x: 154, y: 6, w: 4, h: 4, fill: 'token:secondary' },
         // bar 9 (x=166, cy=6, danger)
-        { type: 'line', x1: 168, y1: 2, x2: 168, y2: 10, stroke: '#9a1b20', strokeWidth: 1 },
-        { type: 'rect', x: 166, y: 4, w: 4, h: 4, fill: '#9a1b20' },
+        { type: 'line', x1: 168, y1: 2, x2: 168, y2: 10, stroke: 'token:status.danger.accent', strokeWidth: 1 },
+        { type: 'rect', x: 166, y: 4, w: 4, h: 4, fill: 'token:status.danger.accent' },
       ],
     },
 
@@ -137,9 +137,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 10,
       primitives: [
-        { type: 'rect', x: 108, y: 3, w: 4, h: 4, fill: '#9a1b20' },
-        { type: 'rect', x: 118, y: 3, w: 4, h: 4, fill: '#0e3654' },
-        { type: 'rect', x: 128, y: 3, w: 4, h: 4, fill: '#9a1b20' },
+        { type: 'rect', x: 108, y: 3, w: 4, h: 4, fill: 'token:status.danger.accent' },
+        { type: 'rect', x: 118, y: 3, w: 4, h: 4, fill: 'token:secondary' },
+        { type: 'rect', x: 128, y: 3, w: 4, h: 4, fill: 'token:status.danger.accent' },
       ],
     },
 
@@ -150,8 +150,8 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 16,
       primitives: [
-        { type: 'line', x1: 4, y1: 10, x2: 96, y2: 10, stroke: '#d0cec8', strokeWidth: 1 },
-        { type: 'line', x1: 144, y1: 10, x2: 236, y2: 10, stroke: '#d0cec8', strokeWidth: 1 },
+        { type: 'line', x1: 4, y1: 10, x2: 96, y2: 10, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'line', x1: 144, y1: 10, x2: 236, y2: 10, stroke: 'token:border', strokeWidth: 1 },
         {
           type: 'text',
           x: 120,
@@ -159,7 +159,7 @@ export const spec: PersonaSpec = {
           content: 'Sec. I',
           fontSize: 14,
           fontWeight: 600,
-          fill: '#56606e',
+          fill: 'token:textMuted',
           textAnchor: 'middle',
           letterSpacing: 1.5,
         },
@@ -176,7 +176,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M4,6 L4,14 L8,14 L8,20 L14,20 L14,6 Z M22,6 L22,14 L26,14 L26,20 L32,20 L32,6 Z',
-          fill: '#2a1a14',
+          fill: 'token:primary',
           opacity: 0.5,
         },
       ],
@@ -189,8 +189,8 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'path', d: 'M0,0 L6,0 L6,3 L3,3 L3,18 L0,18 Z', fill: '#2a1a14' },
-        { type: 'rect', x: 9, y: 14, w: 3, h: 3, fill: '#b8821f' },
+        { type: 'path', d: 'M0,0 L6,0 L6,3 L3,3 L3,18 L0,18 Z', fill: 'token:primary' },
+        { type: 'rect', x: 9, y: 14, w: 3, h: 3, fill: 'token:accent' },
       ],
     },
 
@@ -201,11 +201,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#1f4f6b', strokeWidth: 1.5 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.tip.accent', strokeWidth: 1.5 },
         {
           type: 'path',
           d: 'M4,8 L7,11 L12,5',
-          stroke: '#1f4f6b',
+          stroke: 'token:status.tip.accent',
           strokeWidth: 1.8,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
@@ -220,9 +220,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#7e5a12', strokeWidth: 1.5 },
-        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: '#7e5a12' },
-        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: '#7e5a12' },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.warning.accent', strokeWidth: 1.5 },
+        { type: 'rect', x: 7, y: 3, w: 2, h: 7, fill: 'token:status.warning.accent' },
+        { type: 'rect', x: 7, y: 11, w: 2, h: 2, fill: 'token:status.warning.accent' },
       ],
     },
 
@@ -233,9 +233,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#3d5a75', strokeWidth: 1.5 },
-        { type: 'rect', x: 7, y: 3, w: 2, h: 2, fill: '#3d5a75' },
-        { type: 'rect', x: 7, y: 6, w: 2, h: 7, fill: '#3d5a75' },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.info.accent', strokeWidth: 1.5 },
+        { type: 'rect', x: 7, y: 3, w: 2, h: 2, fill: 'token:status.info.accent' },
+        { type: 'rect', x: 7, y: 6, w: 2, h: 7, fill: 'token:status.info.accent' },
       ],
     },
 
@@ -246,11 +246,11 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: '#9a1b20', strokeWidth: 1.5 },
+        { type: 'rect', x: 1, y: 1, w: 14, h: 14, stroke: 'token:status.danger.accent', strokeWidth: 1.5 },
         {
           type: 'path',
           d: 'M4,4 L12,12 M12,4 L4,12',
-          stroke: '#9a1b20',
+          stroke: 'token:status.danger.accent',
           strokeWidth: 1.8,
           strokeLinecap: 'round',
         },
@@ -265,8 +265,8 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'rect', x: 1, y: 1, w: 22, h: 22, fill: '#2a1a14' },
-        { type: 'rect', x: 1, y: 20, w: 22, h: 3, fill: '#b8821f' },
+        { type: 'rect', x: 1, y: 1, w: 22, h: 22, fill: 'token:primary' },
+        { type: 'rect', x: 1, y: 20, w: 22, h: 3, fill: 'token:accent' },
         {
           type: 'text',
           x: 12,
@@ -274,7 +274,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 15,
           fontWeight: 700,
-          fill: '#fefefe',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],

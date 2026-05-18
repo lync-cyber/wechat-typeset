@@ -142,17 +142,17 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 16,
       primitives: [
-        { type: 'line', x1: 0, y1: 8, x2: 100, y2: 8, stroke: '#2d3a4a', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 8, x2: 100, y2: 8, stroke: 'token:secondary', strokeWidth: 1 },
         {
           type: 'text',
           x: 120,
           y: 13,
           content: '❋', // ❋ heavy eight teardrop-spoked asterisk
           fontSize: 14,
-          fill: '#e85a3c',
+          fill: 'token:primary',
           textAnchor: 'middle',
         },
-        { type: 'line', x1: 140, y1: 8, x2: 240, y2: 8, stroke: '#2d3a4a', strokeWidth: 1 },
+        { type: 'line', x1: 140, y1: 8, x2: 240, y2: 8, stroke: 'token:secondary', strokeWidth: 1 },
       ],
     },
 
@@ -162,7 +162,7 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 2,
       primitives: [
-        { type: 'line', x1: 0, y1: 1, x2: 240, y2: 1, stroke: '#c7bfb0', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 1, x2: 240, y2: 1, stroke: 'token:border', strokeWidth: 1 },
       ],
     },
 
@@ -172,9 +172,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: '#e85a3c' },
-        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: '#e85a3c' },
-        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: '#e85a3c' },
+        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: 'token:primary' },
       ],
     },
 
@@ -186,28 +186,28 @@ export const spec: PersonaSpec = {
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
-      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: '#6b9a5a' }],
+      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: 'token:status.tip.accent' }],
     },
     infoIcon: {
       viewBox: [0, 0, 14, 14],
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
-      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: '#4a7fa8' }],
+      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: 'token:status.info.accent' }],
     },
     warningIcon: {
       viewBox: [0, 0, 14, 14],
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
-      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: '#d4a03a' }],
+      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: 'token:status.warning.accent' }],
     },
     dangerIcon: {
       viewBox: [0, 0, 14, 14],
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
-      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: '#e85a3c' }],
+      primitives: [{ type: 'rect', x: 3, y: 3, w: 8, h: 8, fill: 'token:primary' }],
     },
 
     // stepBadge · 编号方块（与 radius=0 一致）
@@ -218,7 +218,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'rect', x: 0, y: 0, w: 22, h: 22, fill: '#e85a3c' },
+        { type: 'rect', x: 0, y: 0, w: 22, h: 22, fill: 'token:primary' },
         {
           type: 'text',
           x: 11,
@@ -226,7 +226,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#faf6ef',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],

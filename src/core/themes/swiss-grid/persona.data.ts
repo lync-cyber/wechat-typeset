@@ -150,9 +150,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'line', x1: 0, y1: 4, x2: 110, y2: 4, stroke: '#000000', strokeWidth: 1 },
-        { type: 'rect', x: 117, y: 1, w: 6, h: 6, fill: '#e30613' },
-        { type: 'line', x1: 130, y1: 4, x2: 240, y2: 4, stroke: '#000000', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 4, x2: 110, y2: 4, stroke: 'token:secondary', strokeWidth: 1 },
+        { type: 'rect', x: 117, y: 1, w: 6, h: 6, fill: 'token:primary' },
+        { type: 'line', x1: 130, y1: 4, x2: 240, y2: 4, stroke: 'token:secondary', strokeWidth: 1 },
       ],
     },
 
@@ -162,9 +162,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: '#e30613' },
-        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: '#e30613' },
-        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: '#e30613' },
+        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: 'token:primary' },
       ],
     },
 
@@ -174,7 +174,7 @@ export const spec: PersonaSpec = {
       viewBox: [0, 0, 20, 20],
       width: 20,
       height: 20,
-      primitives: [{ type: 'rect', x: 0, y: 0, w: 20, h: 20, fill: '#e30613' }],
+      primitives: [{ type: 'rect', x: 0, y: 0, w: 20, h: 20, fill: 'token:primary' }],
     },
 
   },

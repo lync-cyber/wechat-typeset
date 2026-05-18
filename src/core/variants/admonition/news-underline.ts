@@ -51,7 +51,7 @@ const newsUnderline: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '苏黎世下划线',
     description: '徽章 + 竖分隔 + 底部下划线，swiss-grid multi-callout',
-    themeCompat: ['swiss-grid'],
+    signatureOf: 'swiss-grid',
   },
   thumbnail: thumb,
   snippets: [

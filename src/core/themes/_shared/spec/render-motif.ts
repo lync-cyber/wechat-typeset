@@ -3,8 +3,13 @@
  *
  * gallery 和 renderer 共用同一条渲染路径，消除"gallery 长这样、生产长那样"drift。
  * 输出的 SVG 省略 xmlns（调用方按需自行包裹）；属性用双引号，便于嵌入 HTML。
+ *
+ * Token 引用：`fill` / `stroke` 字段支持 `'token:<key>'` 语法（key ∈ ThemeTokens.colors）。
+ * 调用方传入 `tokens` 时由 resolveMotifColors 预处理为具体 hex；未传 tokens 则保留原值,
+ * 与旧裸-hex 主题完全兼容。详见 ThemeTokens.colors 与 MotifPrimitive 注释。
  */
 
+import type { ThemeTokens } from '../../types'
 import type {
   MotifPrimitive,
   MotifShape,
@@ -13,6 +18,67 @@ import type {
   ViewBox,
 } from './types'
 import { fitTemplateToText } from './motif-fit'
+
+/**
+ * 解析 motif 颜色字段：`'token:<path>'` → tokens.colors.<path>，裸值透传。
+ *
+ * 支持嵌套路径（点号分隔）：
+ *   - 顶层      `'token:primary'`              → tokens.colors.primary
+ *   - 嵌套      `'token:status.tip.accent'`    → tokens.colors.status.tip.accent
+ *
+ * tokens 未传 = 旧路径，原值透传（'token:xxx' 字符串会被原样写入 SVG attr——这是
+ * 故意的破坏性兜底：开发期能从输出里一眼看到"忘了传 tokens"）。
+ */
+function resolveColor(value: string | undefined, tokens?: ThemeTokens): string | undefined {
+  if (value === undefined) return undefined
+  if (!tokens) return value
+  if (!value.startsWith('token:')) return value
+  const path = value.slice('token:'.length).trim()
+  const parts = path.split('.')
+  let cur: unknown = tokens.colors
+  for (const seg of parts) {
+    if (cur === null || typeof cur !== 'object' || !(seg in (cur as Record<string, unknown>))) {
+      throw new Error(
+        `[render-motif] motif token reference 'token:${path}' 未知; ` +
+          `合法路径为 tokens.colors.* 下的 string 字段（如 'primary' / 'status.tip.accent'）。`,
+      )
+    }
+    cur = (cur as Record<string, unknown>)[seg]
+  }
+  if (typeof cur !== 'string') {
+    throw new Error(
+      `[render-motif] motif token reference 'token:${path}' 非字符串色值（解析到 ${typeof cur}）。`,
+    )
+  }
+  return cur
+}
+
+function resolvePrimitive(p: MotifPrimitive, tokens: ThemeTokens): MotifPrimitive {
+  if (p.type === 'group') {
+    return { ...p, children: p.children.map((c) => resolvePrimitive(c, tokens)) }
+  }
+  if (p.type === 'line') {
+    return { ...p, stroke: resolveColor(p.stroke, tokens) as string }
+  }
+  // 其余 primitive：fill / stroke 都可选；rect/circle/path/text/ellipse 共享同一处理
+  const out: Record<string, unknown> = { ...p }
+  if ('fill' in p && p.fill !== undefined) out.fill = resolveColor(p.fill, tokens)
+  if ('stroke' in p && p.stroke !== undefined) out.stroke = resolveColor(p.stroke, tokens)
+  return out as MotifPrimitive
+}
+
+/**
+ * 把 motif AST 中的 `'token:<key>'` 颜色引用预解析为具体 hex。
+ *
+ * 设计纪律：spec.motifs 保持 JSON-serializable（无函数 / 无 tokens 上下文），
+ * tokens 流动只发生在 specToTheme 投影时——本函数是这一步的唯一收口。
+ */
+export function resolveMotifPrimitives(
+  primitives: readonly MotifPrimitive[],
+  tokens: ThemeTokens,
+): MotifPrimitive[] {
+  return primitives.map((p) => resolvePrimitive(p, tokens))
+}
 
 /**
  * 本地 escAttr / escText：为何不复用 pipeline/containers/_shared/escape.ts 的同名函数？
@@ -175,8 +241,9 @@ export function primitivesToSvg(
   return `<svg${attrs}>${body}</svg>`
 }
 
-export function shapeToSvg(shape: MotifShape): string {
-  return primitivesToSvg(shape.viewBox, shape.primitives, {
+export function shapeToSvg(shape: MotifShape, tokens?: ThemeTokens): string {
+  const primitives = tokens ? resolveMotifPrimitives(shape.primitives, tokens) : shape.primitives
+  return primitivesToSvg(shape.viewBox, primitives, {
     width: shape.width,
     height: shape.height,
     inlineStyle: shape.inlineStyle,
@@ -191,10 +258,12 @@ export function shapeToSvg(shape: MotifShape): string {
 export function renderMotifTemplate(
   template: MotifTemplate,
   values: Record<string, string | number>,
+  tokens?: ThemeTokens,
 ): string {
   const fitted = fitTemplateToText(template, values)
   const substituted = fitted.primitives.map((p) => substituteInPrimitive(p, values))
-  return primitivesToSvg(fitted.viewBox, substituted, {
+  const resolved = tokens ? resolveMotifPrimitives(substituted, tokens) : substituted
+  return primitivesToSvg(fitted.viewBox, resolved, {
     width: fitted.width,
     height: fitted.height,
     inlineStyle: fitted.inlineStyle,

@@ -5,7 +5,7 @@
  * 注册表）；窄表面（不暴露 Theme 内部 buildTheme / themeCSS）。
  */
 
-import type { Theme, ThemeVariants } from '../core/themes/types'
+import type { Theme, ThemeTokens, ThemeVariants } from '../core/themes/types'
 import { DEFAULT_KICKERS, DEFAULT_VARIANTS, VARIANT_IDS } from '../core/themes/types'
 import {
   ALLOWED_FONT_FAMILIES,
@@ -302,17 +302,28 @@ export function getMotifSpec(personaId: string): MotifSpec {
   return getPersona(personaId).motifs
 }
 
-/** 单个 MotifShape → SVG 字符串（xmlns 自动注入）。 */
-export function renderMotif(shape: MotifShape): string {
-  return shapeToSvg(shape)
+/**
+ * 单个 MotifShape → SVG 字符串（xmlns 自动注入）。
+ *
+ * 第二参数 `tokens`：当 shape 含 `'token:<key>'` 颜色引用时必须传入对应主题的 tokens
+ * 才能解析为具体 hex；缺省时引用字符串会原样写入 SVG attr（开发期可见的兜底）。
+ * 推荐传 `getPersona(id).palette` 派生的 tokens：见 `toThemeTokens`。
+ */
+export function renderMotif(shape: MotifShape, tokens?: ThemeTokens): string {
+  return shapeToSvg(shape, tokens)
 }
 
-/** MotifTemplate + 占位符值 → SVG 字符串（e.g. stepBadge + {N:1}）。 */
+/**
+ * MotifTemplate + 占位符值 → SVG 字符串（e.g. stepBadge + {N:1}）。
+ *
+ * 第三参数 `tokens` 同 `renderMotif`：含 `'token:<key>'` 引用时必须传入。
+ */
 export function renderMotifWithValues(
   template: MotifTemplate,
   values: Record<string, string | number>,
+  tokens?: ThemeTokens,
 ): string {
-  return renderMotifTemplate(template, values)
+  return renderMotifTemplate(template, values, tokens)
 }
 
 // region 类型再导出（消费方单点引用）

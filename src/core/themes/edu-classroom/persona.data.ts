@@ -85,10 +85,10 @@ export const spec: PersonaSpec = {
         {
           type: 'circle',
           cx: 8, cy: 6.5, r: 4.5,
-          stroke: '#2e7d32', strokeWidth: 1.5,
+          stroke: 'token:primary', strokeWidth: 1.5,
         },
-        { type: 'line', x1: 5.5, y1: 11.5, x2: 10.5, y2: 11.5, stroke: '#2e7d32', strokeWidth: 1.5 },
-        { type: 'line', x1: 6, y1: 13, x2: 10, y2: 13, stroke: '#2e7d32', strokeWidth: 1.5 },
+        { type: 'line', x1: 5.5, y1: 11.5, x2: 10.5, y2: 11.5, stroke: 'token:primary', strokeWidth: 1.5 },
+        { type: 'line', x1: 6, y1: 13, x2: 10, y2: 13, stroke: 'token:primary', strokeWidth: 1.5 },
       ],
     },
 
@@ -102,10 +102,10 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,2 L14.5,13.5 L1.5,13.5 Z',
-          stroke: '#b34500', strokeWidth: 1.5, strokeLinejoin: 'round',
+          stroke: 'token:status.warning.accent', strokeWidth: 1.5, strokeLinejoin: 'round',
         },
-        { type: 'rect', x: 7.25, y: 6, w: 1.5, h: 4, rx: 0.5, fill: '#b34500' },
-        { type: 'circle', cx: 8, cy: 11.5, r: 0.9, fill: '#b34500' },
+        { type: 'rect', x: 7.25, y: 6, w: 1.5, h: 4, rx: 0.5, fill: 'token:status.warning.accent' },
+        { type: 'circle', cx: 8, cy: 11.5, r: 0.9, fill: 'token:status.warning.accent' },
       ],
     },
 
@@ -116,9 +116,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 2, y: 2, w: 12, h: 12, rx: 3, stroke: '#1565c0', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5.5, r: 0.9, fill: '#1565c0' },
-        { type: 'rect', x: 7.25, y: 7.5, w: 1.5, h: 4.5, rx: 0.5, fill: '#1565c0' },
+        { type: 'rect', x: 2, y: 2, w: 12, h: 12, rx: 3, stroke: 'token:status.info.accent', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5.5, r: 0.9, fill: 'token:status.info.accent' },
+        { type: 'rect', x: 7.25, y: 7.5, w: 1.5, h: 4.5, rx: 0.5, fill: 'token:status.info.accent' },
       ],
     },
 
@@ -129,9 +129,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: '#5c6b5e', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#5c6b5e' },
-        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#5c6b5e' },
+        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: 'token:textMuted', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: 'token:textMuted' },
+        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: 'token:textMuted' },
       ],
     },
 
@@ -145,15 +145,15 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'circle', cx: 12, cy: 12, r: 11, stroke: '#2e7d32', strokeWidth: 1.8, fill: '#e8f3e9' },
-        { type: 'circle', cx: 12, cy: 12, r: 8, stroke: '#2e7d32', strokeWidth: 1, fill: 'none' },
+        { type: 'circle', cx: 12, cy: 12, r: 11, stroke: 'token:primary', strokeWidth: 1.8, fill: '#e8f3e9' },
+        { type: 'circle', cx: 12, cy: 12, r: 8, stroke: 'token:primary', strokeWidth: 1, fill: 'none' },
         {
           type: 'text',
           x: 12, y: 17,
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#2e7d32',
+          fill: 'token:primary',
           textAnchor: 'middle',
         },
       ],
@@ -168,7 +168,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M0,8 C20,2 40,14 60,8 C80,2 100,14 120,8 C140,2 160,14 180,8 C200,2 220,14 240,8',
-          stroke: '#2e7d32',
+          stroke: 'token:primary',
           strokeWidth: 1.5,
           strokeLinecap: 'round',
         },
@@ -181,9 +181,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'circle', cx: 106, cy: 4, r: 2.5, fill: '#c8d5c9' },
-        { type: 'circle', cx: 120, cy: 4, r: 3, fill: '#2e7d32' },
-        { type: 'circle', cx: 134, cy: 4, r: 2.5, fill: '#c8d5c9' },
+        { type: 'circle', cx: 106, cy: 4, r: 2.5, fill: 'token:border' },
+        { type: 'circle', cx: 120, cy: 4, r: 3, fill: 'token:primary' },
+        { type: 'circle', cx: 134, cy: 4, r: 2.5, fill: 'token:border' },
       ],
     },
   },

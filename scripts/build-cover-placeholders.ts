@@ -9,7 +9,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { listPersonas, getPersona } from '../src/public'
-import { makeCoverPlaceholder, shapeToSvg } from '../src/core/themes/_shared/spec'
+import { makeCoverPlaceholder, shapeToSvg, toThemeTokens } from '../src/core/themes/_shared/spec'
 
 const OUT_DIR = resolve(process.cwd(), 'dist/api/covers')
 
@@ -31,7 +31,8 @@ function build(): void {
         tagline: spec.description,
         kicker: spec.id.toUpperCase().replace(/-/g, ' '),
       })
-    const svg = shapeToSvg(shape)
+    // tokens 透传：spec.motifs.coverPlaceholder 可能含 'token:<key>' 引用，需要 tokens 解析。
+    const svg = shapeToSvg(shape, toThemeTokens(spec))
     const out = resolve(OUT_DIR, `${s.id}.svg`)
     writeFileSync(out, svg, 'utf8')
     console.log(`wrote ${out} (${svg.length} bytes)`)

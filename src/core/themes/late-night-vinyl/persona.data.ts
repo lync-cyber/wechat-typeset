@@ -44,6 +44,10 @@ export const spec: PersonaSpec = {
   description: '深夜蓝 + 暖米白 + 橙色唱针 · 03:41 AM 黑胶播客慢读感',
   audience: '电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文',
 
+  // 暗底基线：buildTheme 切到 hairline 卡片兜底（透明底 + 1px border 代替 light 的 bgSoft 卡）。
+  // 当前 22 处 __reset 仍优先于基线生效——快照不变；未来重构可逐项消费基线，删除 __reset。
+  baseTheme: 'dark',
+
   // ============================================================
   // 色板（来源：docs/themes-specs/themes/09-late-night-vinyl.html :root tokens）
   // ============================================================
@@ -153,9 +157,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 12,
       primitives: [
-        { type: 'circle', cx: 100, cy: 6, r: 2, fill: '#d97a3c' },
-        { type: 'circle', cx: 120, cy: 6, r: 2, fill: '#d97a3c' },
-        { type: 'circle', cx: 140, cy: 6, r: 2, fill: '#d97a3c' },
+        { type: 'circle', cx: 100, cy: 6, r: 2, fill: 'token:primary' },
+        { type: 'circle', cx: 120, cy: 6, r: 2, fill: 'token:primary' },
+        { type: 'circle', cx: 140, cy: 6, r: 2, fill: 'token:primary' },
       ],
     },
 
@@ -167,7 +171,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'rect', x: 0, y: 0, w: 24, h: 24, fill: '#d97a3c' },
+        { type: 'rect', x: 0, y: 0, w: 24, h: 24, fill: 'token:primary' },
         {
           type: 'text',
           x: 12,
@@ -175,7 +179,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#0e1a2b',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],
@@ -602,8 +606,9 @@ export const spec: PersonaSpec = {
     },
     compare: { margin: '16px 0 20px' },
     steps: { margin: '20px 0' },
+    // sectionTitle：light base 给 margin + 2px primary 下划线；本主题覆盖三字段把
+    // 下划线收为 0 / 取消（本主题章节通过 ribbon-stamp variant 注入印章戳，不要 base 下划线）。
     sectionTitle: {
-      __reset: true,
       margin: '24px 0 12px',
       'padding-bottom': '0',
       'border-bottom': 'none',
@@ -627,8 +632,9 @@ export const spec: PersonaSpec = {
       margin: '20px 0',
       padding: '12px 14px',
     },
+    // abstract：dark 基线已提供 border-left/padding/margin/bg/radius；本主题覆盖
+    // border-left 收紧 (4→1px)、padding 紧凑 (仅左 14px)、margin 顶部 0、保持透明 + 直角。
     abstract: {
-      __reset: true,
       'border-left': '1px solid #d97a3c',
       padding: '0 0 0 14px',
       margin: '0 0 22px 0',

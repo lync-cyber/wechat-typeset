@@ -77,7 +77,7 @@ export interface VariantDescriptor {
 }
 
 function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescriptor | undefined {
-  type MetaTable = Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[] } }>
+  type MetaTable = Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[]; signatureOf?: string } }>
   const table: Record<VariantKind | 'codeBlock', MetaTable> = {
     admonition: ADMONITION_VARIANTS as unknown as MetaTable,
     quote: QUOTE_VARIANTS as unknown as MetaTable,
@@ -99,12 +99,17 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
+  // VariantDescriptor.themeCompat 是"等效白名单"——signatureOf 视为单元素，便于消费方
+  // 不必同时关心两个字段（与 _core.getEffectiveCompat 同语义；这里内联以避免 vocabulary
+  // 反向依赖 variants 模块）。
+  const sig = def.meta.signatureOf
+  const themeCompat = sig ? [sig] : def.meta.themeCompat
   return {
     id,
     kind,
     name: def.meta.name,
     description: def.meta.description,
-    themeCompat: def.meta.themeCompat,
+    themeCompat,
   }
 }
 
@@ -346,7 +351,9 @@ export function getRecommendedVariantsFor(args: {
     const fromCompat: string[] = []
     for (const def of ALL_VARIANT_DEFS) {
       if (def.meta.kind !== kind) continue
-      const compat = def.meta.themeCompat
+      // 等效白名单：signatureOf 视为单主题，否则取 themeCompat
+      const sig = def.meta.signatureOf
+      const compat = sig ? [sig] : def.meta.themeCompat
       if (compat && compat.includes(args.themeId)) fromCompat.push(def.meta.id)
     }
     const explicit = overrides[kind] as string | undefined

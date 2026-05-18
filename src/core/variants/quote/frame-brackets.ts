@@ -68,9 +68,13 @@ const frameBrackets: VariantDef = {
   render: (ctx) => {
     const accent = ctx.tokens.colors.primary
     return {
-      // 顶/底 padding ≥ 28 给 L 角的 20px 短边留出净空，避免正文末段压到底部角线
-      wrapperCSS: `padding:28px 22px;margin:22px 0`,
-      bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
+      // 几何：top/bottom SVG 用 margin-bottom:-20 / margin-top:-20 "悬浮"不占布局流，
+      // body 流仍从 wrapper 顶 / 底起——这意味着 **wrapper padding 控制不了 L 角到正文的距离**，
+      // 只控制 L 角到 wrapper 边的距离。早期版本误把 padding-y 当净空，正文首行仍被 L 竖边压。
+      // 正确分工：wrapper padding-y = L 角与 wrapper 边的小间距（16）；body 自己加 padding
+      // 让正文与 L 角保持视觉净空（36 = 20 SVG 高 + 16 净空）。
+      wrapperCSS: `padding:16px 24px;margin:22px 0`,
+      bodyCSS: `padding:36px 0;font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
       svgSlot: topBracketsSvg(accent),
       closeSlot: bottomBracketsSvg(accent),
     }

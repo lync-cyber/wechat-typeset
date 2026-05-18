@@ -1021,6 +1021,16 @@ export interface Theme {
    */
   svgVariant?: SvgVariant
   /**
+   * 基线主题选择（`'light'` 默认 / `'dark'` opt-in）。
+   *
+   * buildTheme 的"软底卡片"兜底是 light 基线；声明 `'dark'` 切到"hairline 边 + 透明底"
+   * 基线，让 brutalist / late-night-vinyl 等暗底主题作者免去把每个软底容器手写一遍
+   * `__reset: true, background-color: transparent`。详见 `BuildThemeOptions.baseTheme`。
+   *
+   * 切基线 != 切色板：主题色仍由 palette 控制；基线只控制"卡片底色"这条结构轴。
+   */
+  baseTheme?: 'light' | 'dark'
+  /**
    * 声明式装饰规则。所有"主题专属视觉签名"（标题前缀编号 / kicker / 章节标记 /
    * intro 首字下沉……）一律走这里, 共享层只实现一次"按声明执行"。
    */

@@ -70,11 +70,13 @@ const stampedBanner: VariantDef = {
       : ''
     // svgSlot 自渲 title 与印章 → titleCSS='' 让 renderer 跳过默认 title 行。
     // body 在 svgSlot 之后由 renderer 包出全宽 section（svgSlot 与 body 是兄弟节点）。
-    const slot =
-      `<section style="display:table;width:100%;table-layout:fixed;margin-bottom:8px">` +
-      `<span style="display:table-cell;vertical-align:middle;width:78%">${titleRow}</span>` +
-      `<span style="display:table-cell;vertical-align:middle;width:22%;text-align:right;line-height:0">${stampSvg}</span>` +
-      `</section>`
+    // title 为空：印章独立居中；title 非空：左标题右印章双栏。
+    const slot = title
+      ? `<section style="display:table;width:100%;table-layout:fixed;margin-bottom:8px">` +
+        `<span style="display:table-cell;vertical-align:middle;width:78%">${titleRow}</span>` +
+        `<span style="display:table-cell;vertical-align:middle;width:22%;text-align:right;line-height:0">${stampSvg}</span>` +
+        `</section>`
+      : `<section style="text-align:center;line-height:0;margin-bottom:8px">${stampSvg}</section>`
     return {
       wrapperCSS: [
         `background-color:${status.soft}`,

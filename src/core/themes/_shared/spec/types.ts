@@ -147,6 +147,20 @@ export interface RadiusScale {
 /** SVG 仅允许的字体家族（公众号粘贴稳定性）。 */
 export type MotifFontFamily = 'serif' | 'sans-serif' | 'monospace'
 
+/**
+ * motif 颜色字段接受的形式：
+ *   - 裸 hex / CSS 颜色字符串：`'#5B6470'` / `'rgba(0,0,0,0.4)'`（与历史主题完全兼容）
+ *   - **token 引用**：`'token:primary'` / `'token:textInverse'` 等——spec → Theme 投影时
+ *     由 render-motif.resolveColor 替换为 tokens.colors[key] 的实际 hex。让"换 palette
+ *     时 motif 颜色自动跟随"成为可能；推荐新主题统一用 token 引用而非裸 hex。
+ *
+ * 受 TypeScript 类型表达力所限，本类型仍标注为 `string`（无法精确表达"hex OR 'token:<known key>'"
+ * 而不破坏 JSON-serializable 假设）。约束在 render-motif 运行时校验：未知 token key 抛 Error。
+ *
+ * 不支持嵌套路径（如 `'token:status.tip.accent'`）—— status 色按惯例不进 motif fill。
+ */
+export type MotifColor = string
+
 export type MotifPrimitive =
   | {
       type: 'rect'
@@ -330,62 +344,23 @@ export interface MotifSpec {
 
 /**
  * 项目已登记的"签名容器"。每个主题在 PersonaSpec.signatureContainers 里列出
- * 该主题必须具备（渲染层有对应实现）的容器 id。conformance 测试会校验：
- * 每个 signatureContainer 都在渲染注册表里有实现。
+ * 该主题必须具备（渲染层有对应实现）的容器 id。
  *
- * 设计纪律：本数组的成员**必须**与 `STYLED_CONTAINERS.map(s => s.styleKey)`
- * 集合相等。手写在这里是为了保留 `as const` 的字面量字符串联合类型；
- * conformance.spec.ts 有一道 set-equality 断言守住二者不漂移。
+ * 设计纪律：本数组**派生自** vocabulary.STYLED_CONTAINERS（SSoT）——由
+ * `scripts/codegen-sig-containers.ts` 写入 `./signature-containers.generated.ts`。
+ * 改 vocabulary 后须 `pnpm codegen:sigcontainers` 重新生成；CI build 步骤以
+ * `--check` 模式守护两者同步，不同则失败。
  *
  * 新增 styled 容器流程：
  *   1. vocabulary.ts 追加 ContainerSpec（styleKey 非 null）
- *   2. 本数组同步追加同名 styleKey
+ *   2. 跑 `pnpm codegen:sigcontainers` 重新派生本清单
  *   3. buildTheme.baseContainers + ThemeContainers 类型字段一致
  */
-export const SUPPORTED_SIGNATURE_CONTAINERS = [
-  'intro',
-  'author',
-  'cover',
-  'tip',
-  'warning',
-  'info',
-  'danger',
-  'note',
-  'quoteCard',
-  'highlight',
-  'compare',
-  'steps',
-  'sectionTitle',
-  'footerCTA',
-  'recommend',
-  'qrcode',
-  'voiceCard',
-  'videoCard',
-  'announcement',
-  'authorBio',
-  'imageCaption',
-  'timeline',
-  // 跨主题通用签名（abstract / keyNumber）
-  'abstract',
-  'keyNumber',
-  // data-brief 家族（数据简报：晚点 / 财新数据 / Morning Brew）
-  'masthead',
-  'sectionTag',
-  'byline',
-  'editorialHeader',
-  'toc',
-  'kpiDashboard',
-  'barChart',
-  'qaBlock',
-  'footnotes',
-  'colophon',
-  'pullQuote',
-  'tableCard',
-  'gallery',
-  'dialogue',
-] as const
-
-export type SignatureContainerId = (typeof SUPPORTED_SIGNATURE_CONTAINERS)[number]
+import {
+  SUPPORTED_SIGNATURE_CONTAINERS,
+  type SignatureContainerId,
+} from './signature-containers.generated'
+export { SUPPORTED_SIGNATURE_CONTAINERS, type SignatureContainerId }
 
 /**
  * 主题能力自描述（PersonaSpec.capabilities）。
@@ -451,6 +426,14 @@ export interface PersonaSpec {
    * 缺省时 applyPalette 回退到 `'geometric'`。
    */
   svgVariant?: SvgVariant
+  /**
+   * 基线主题（`'light'` 默认 / `'dark'` opt-in）。
+   *
+   * 切到 `'dark'` 时 buildTheme 用 hairline 边 + 透明底 + 直角作为"卡片型容器"兜底,
+   * 暗底主题作者免去把每个软底容器都写一遍 `__reset: true`。仅当 palette.bg 为深色时
+   * 才该用 `'dark'`；浅底主题留空即可。详见 ThemeTokens.baseTheme 与 BuildThemeOptions.baseTheme。
+   */
+  baseTheme?: 'light' | 'dark'
   /**
    * 声明式装饰规则。所有"主题专属视觉签名"（标题前缀编号 / intro 首字下沉……）一律走这里,
    * 共享层一次性实现"按声明执行"——不要在 markdown.ts 加 if 分支。

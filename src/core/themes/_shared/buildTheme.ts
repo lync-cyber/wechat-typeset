@@ -48,6 +48,19 @@ export type StylePatch<T> = {
   [K in keyof T]?: CSSObjectPatch
 }
 
+/**
+ * 主题基线选择：
+ *   - `'light'`（默认）  浅底主题的"软底色卡片 + 圆角"兜底。Medium / Notion / Substack 家族。
+ *   - `'dark'`           暗底主题的"hairline 边 + 透明底 + 直角"兜底。brutalist /
+ *                        late-night-vinyl 等。让暗底主题作者免去整段 `__reset` 容器底色。
+ *
+ * 设计纪律：dark 基线只针对"会撞背景"的卡片型容器（intro / quoteCard / highlight /
+ * footerCTA / recommend / authorBio / toc / kpiDashboard / barChart / abstract /
+ * keyNumber）改 transparent + hairline，其它结构性容器（compare / steps / cover）
+ * 与元素色（h1-h6 / p / ul / a 等）依旧走 tokens 自动跟随，不需要分两套。
+ */
+export type BaseTheme = 'light' | 'dark'
+
 export interface BuildThemeOptions {
   id: string
   name: string
@@ -55,6 +68,16 @@ export interface BuildThemeOptions {
   author?: string
   preview?: string
   tokens: ThemeTokens
+  /**
+   * 基线主题（light / dark）。缺省 = `'light'`。
+   *
+   * 切到 `'dark'` 时 baseContainers / baseElements 的"软底卡片"兜底改为"hairline 边 +
+   * 透明底 + 直角"，让暗底主题（brutalist / late-night-vinyl）作者免去把每个软底容器
+   * 都写一遍 `__reset: true, background-color: transparent`。
+   *
+   * 切基线 != 切色板：主题色仍由 palette 控制；基线只控制"软底卡 vs hairline 边"这条结构轴。
+   */
+  baseTheme?: BaseTheme
   /**
    * 参数化 SVG 工厂变体。声明则触发 `buildAssets({tokens, variant})` 生成基线 assets,
    * 再由 `assets` 字段（如提供）做浅合并。**用于 applyPalette 的 runtime 路径**。
@@ -315,6 +338,113 @@ export function baseElements(tokens: ThemeTokens): ThemeElements {
     },
     strong: { 'font-weight': '700', color: colors.text },
     em: { 'font-style': 'italic', color: colors.text },
+  }
+}
+
+/**
+ * dark 基线下"卡片化容器"的 wrapper 形态。
+ *
+ * 与 light 基线的差异点（轴：背景层）：
+ *   - light: `background-color: bgSoft + border-radius` → 软底卡片
+ *   - dark : `background-color: transparent + border: 1px solid border + radius=0` → hairline 边
+ *
+ * 列入 dark 改写的字段集刻意收窄到"会撞页面底色"的卡片型容器；元素色（h1-h6 / p）
+ * 与结构容器（compare / steps）走 tokens 已自动跟随，无需分两套。
+ */
+function darkContainerOverrides(tokens: ThemeTokens): Partial<ThemeContainers> {
+  const c = tokens.colors
+  const r = tokens.radius
+  const hairlineCard: CSSObject = {
+    'background-color': 'transparent',
+    border: `1px solid ${c.border}`,
+    'border-radius': `${r.sm}px`,
+  }
+  return {
+    intro: {
+      ...hairlineCard,
+      padding: '14px 16px',
+      margin: '16px 0',
+      color: c.textMuted,
+    },
+    author: { ...hairlineCard, padding: '12px 14px', margin: '16px 0' },
+    quoteCard: { ...hairlineCard, padding: '18px 16px', margin: '20px 0' },
+    highlight: {
+      'background-color': 'transparent',
+      border: `1px solid ${c.accent}`,
+      'border-radius': `${r.sm}px`,
+      padding: '12px 14px',
+      margin: '16px 0',
+    },
+    footerCTA: { ...hairlineCard, margin: '24px 0', padding: '16px' },
+    recommend: { ...hairlineCard, margin: '20px 0', padding: '14px 16px' },
+    authorBio: { ...hairlineCard, padding: '14px 16px', margin: '20px 0' },
+    toc: { ...hairlineCard, padding: '12px 14px', margin: '0 0 24px 0' },
+    kpiDashboard: {
+      'background-color': 'transparent',
+      'border-top': `1px solid ${c.text}`,
+      'border-bottom': `1px solid ${c.text}`,
+      padding: '18px 16px 16px',
+      margin: '0 0 28px 0',
+    },
+    barChart: {
+      'background-color': 'transparent',
+      border: `1px solid ${c.border}`,
+      padding: '16px 14px',
+      margin: '20px 0 24px',
+    },
+    voiceCard: {
+      'background-color': 'transparent',
+      border: `1px solid ${c.border}`,
+      'border-radius': `${r.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    videoCard: {
+      'background-color': 'transparent',
+      border: `1px solid ${c.border}`,
+      'border-radius': `${r.md}px`,
+      padding: '14px 16px',
+      margin: '20px 0',
+    },
+    abstract: {
+      'background-color': 'transparent',
+      'border-left': `4px solid ${c.primary}`,
+      padding: '14px 16px 14px 18px',
+      margin: '18px 0 24px',
+      'border-radius': `${r.sm}px`,
+    },
+    keyNumber: {
+      'background-color': 'transparent',
+      padding: '16px 18px',
+      margin: '18px 0',
+      'border-radius': `${r.md}px`,
+      'border-top': `3px solid ${c.primary}`,
+    },
+  }
+}
+
+/**
+ * dark 基线下"卡片底色元素"的覆盖。
+ * 当前只覆盖 blockquote：light 默认走"左 border + bgSoft 底"，dark 走"上下 hairline + 透明底"
+ * （粗野主义 / 终端语言下的典型 blockquote 形态）。其它元素纯走 tokens，无需分两套。
+ */
+function darkElementOverrides(tokens: ThemeTokens): Partial<ThemeElements> {
+  const c = tokens.colors
+  return {
+    blockquote: {
+      'border-left': 'none',
+      'border-top': `1px solid ${c.border}`,
+      'border-bottom': `1px solid ${c.border}`,
+      'background-color': 'transparent',
+      color: c.textMuted,
+      'padding-top': '12px',
+      'padding-right': '16px',
+      'padding-bottom': '12px',
+      'padding-left': '16px',
+      'margin-top': '0',
+      'margin-bottom': '18px',
+      'border-radius': '0',
+    },
   }
 }
 
@@ -595,9 +725,41 @@ function mergeStyle<T>(base: T, patch: StylePatch<T> | undefined): T {
   return out as T
 }
 
+/**
+ * 把 Partial<T> 形态的 dark overrides 转成 StylePatch<T> 形态（每个 key 都标 __reset:true）。
+ *
+ * 为什么 __reset:true：dark overrides 是"整段替换 light 基线的卡片型容器"——属性级深合并
+ * 会把 light 的 `background-color: bgSoft` 与 dark 的 `background-color: transparent` 顺序
+ * 拼出 hybrid CSS，输出顺序不可控。整段替换保证 dark 形态干净。
+ *
+ * 不约束 `T extends Record<string, CSSObject>`：ThemeElements / ThemeContainers 是显式
+ * 字段接口，TS 不会把它视为 Record 索引签名子类型；改用 unknown 入参 + 内部断言。
+ */
+function asResetPatch<T>(p: Partial<T>): StylePatch<T> {
+  const out: Record<string, CSSObjectPatch> = {}
+  const src = p as Record<string, CSSObject | undefined>
+  for (const key of Object.keys(src)) {
+    const v = src[key]
+    if (!v) continue
+    out[key] = { __reset: true, ...v }
+  }
+  return out as StylePatch<T>
+}
+
 export function buildTheme(opts: BuildThemeOptions): Theme {
-  const elements = mergeStyle(baseElements(opts.tokens), opts.elements)
-  const containers = mergeStyle(baseContainers(opts.tokens), opts.containers)
+  // 先在 light 基线上叠 dark overrides（若声明 dark），再叠主题 voice patch。
+  // 设计纪律：dark 基线是"opt-in 软底卡 → hairline 边"的轴改写,不是另起一份完整 base；
+  // 把 dark overrides 作为 light 基线的 patch 走同一份 mergeStyle 路径,语义最一致。
+  const baseElems = baseElements(opts.tokens)
+  const baseConts = baseContainers(opts.tokens)
+  const elementsBaseline = opts.baseTheme === 'dark'
+    ? mergeStyle(baseElems, asResetPatch<ThemeElements>(darkElementOverrides(opts.tokens)))
+    : baseElems
+  const containersBaseline = opts.baseTheme === 'dark'
+    ? mergeStyle(baseConts, asResetPatch<ThemeContainers>(darkContainerOverrides(opts.tokens)))
+    : baseConts
+  const elements = mergeStyle(elementsBaseline, opts.elements)
+  const containers = mergeStyle(containersBaseline, opts.containers)
   const inline = mergeStyle(baseInline(opts.tokens), opts.inline)
   const innerStyles = mergeStyle(baseInnerStyles(opts.tokens), opts.innerStyles)
   // 资产基线：仅当显式指定 variant 时才调用工厂；否则不引入工厂默认。
@@ -634,5 +796,8 @@ export function buildTheme(opts: BuildThemeOptions): Theme {
       : {}),
     ...(opts.decorations ? { decorations: opts.decorations } : {}),
     ...(opts.capabilities ? { capabilities: opts.capabilities } : {}),
+    // baseTheme 透传到 Theme metadata，供下游 LLM / 推荐 API 区分浅底 / 暗底主题。
+    // pipeline 渲染不再读该字段（buildTheme 出口时基线已固化进 elements / containers）。
+    ...(opts.baseTheme ? { baseTheme: opts.baseTheme } : {}),
   }
 }

@@ -54,7 +54,7 @@ const slabCorner: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '粗野板块',
     description: '顶部 6px 硬条 + 右上 accent 徽章方块 + zero-radius',
-    themeCompat: ['brutalist'],
+    signatureOf: 'brutalist',
   },
   thumbnail: thumb,
   snippets: [

@@ -32,6 +32,11 @@ export const spec: PersonaSpec = {
   description: '近黑底 + 荧光黄 + 直角硬边：punk-zine / 终端 / 凌晨三点印刷厂',
   audience: '夜读简报 / 文化批评 / 实验栏目',
 
+  // 暗底基线：buildTheme 切到 hairline 卡片兜底。本主题历史上 28 处 __reset 主要
+  // 是为了把浅底基线的"软底卡 + 圆角"覆盖成"透明底 + hairline + 直角"——dark 基线
+  // 出现后,后续重构可逐项删除这些 __reset 直接消费基线。当前保留 __reset 保证快照稳定。
+  baseTheme: 'dark',
+
   // ============================================================
   // 色板（来源：docs/themes-specs/themes/07-brutalist.html :root tokens）
   // ============================================================
@@ -117,9 +122,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'line', x1: 0, y1: 4, x2: 110, y2: 4, stroke: '#f0f0f0', strokeWidth: 1 },
-        { type: 'rect', x: 115, y: 1, w: 10, h: 6, fill: '#ebff00' },
-        { type: 'line', x1: 130, y1: 4, x2: 240, y2: 4, stroke: '#f0f0f0', strokeWidth: 1 },
+        { type: 'line', x1: 0, y1: 4, x2: 110, y2: 4, stroke: 'token:text', strokeWidth: 1 },
+        { type: 'rect', x: 115, y: 1, w: 10, h: 6, fill: 'token:primary' },
+        { type: 'line', x1: 130, y1: 4, x2: 240, y2: 4, stroke: 'token:text', strokeWidth: 1 },
       ],
     },
 
@@ -129,7 +134,7 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 4,
       primitives: [
-        { type: 'rect', x: 0, y: 1, w: 240, h: 2, fill: '#ebff00' },
+        { type: 'rect', x: 0, y: 1, w: 240, h: 2, fill: 'token:primary' },
       ],
     },
 
@@ -139,9 +144,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: '#ebff00' },
-        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: '#ebff00' },
-        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: '#ebff00' },
+        { type: 'rect', x: 108, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 118, y: 2, w: 4, h: 4, fill: 'token:primary' },
+        { type: 'rect', x: 128, y: 2, w: 4, h: 4, fill: 'token:primary' },
       ],
     },
 
@@ -153,7 +158,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'rect', x: 0, y: 0, w: 24, h: 24, fill: '#ebff00' },
+        { type: 'rect', x: 0, y: 0, w: 24, h: 24, fill: 'token:primary' },
         {
           type: 'text',
           x: 12,
@@ -161,7 +166,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#0a0a0a',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],
@@ -472,11 +477,10 @@ export const spec: PersonaSpec = {
     info: {},
     danger: {},
 
-    // note：side-bar variant 自取 noteBorder* tokens（黄色 2px dashed），此处只补 reset
+    // note：side-bar variant 自取 noteBorder* tokens（黄色 2px dashed）。
+    // baseTheme:'dark' 已提供 margin:'16px 0' 兜底；这里只覆盖 radius 直角。
     note: {
-      __reset: true,
       'background-color': 'transparent',
-      margin: '16px 0',
       'border-radius': '0',
     },
 
@@ -496,8 +500,9 @@ export const spec: PersonaSpec = {
     compare: { margin: '16px 0' },
     steps: { margin: '20px 0' },
 
+    // sectionTitle：dark 基线提供 margin/padding-bottom；本主题覆盖 border-bottom
+    // 为 1px 实线（base 是 2px primary，粗野主义用 hairline 不抢色）。
     sectionTitle: {
-      __reset: true,
       margin: '28px 0 12px',
       'padding-bottom': '6px',
       'border-bottom': '1px solid #f0f0f0',
@@ -521,8 +526,8 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
     },
 
+    // qrcode：light/dark base 都只给 margin+padding 兜底，本主题加 1px 黑边框 + 直角。
     qrcode: {
-      __reset: true,
       margin: '22px 0',
       padding: '12px',
       border: '1px solid #f0f0f0',
@@ -530,16 +535,18 @@ export const spec: PersonaSpec = {
     },
 
     // signature 容器
+    // abstract：dark 基线已提供 border-left/bg/padding/margin/radius；本主题覆盖
+    // border-left 收紧 (4→3px)、padding 紧凑、margin 顶部 0、radius 直角。
     abstract: {
-      __reset: true,
       'border-left': '3px solid #ebff00',
       padding: '4px 0 4px 14px',
       margin: '0 0 22px 0',
       'background-color': 'transparent',
       'border-radius': '0',
     },
+    // keyNumber：dark 基线已提供 bg transparent / border-top primary / radius；
+    // 本主题加 bg #1a1a1a 让大数字落在次级深色块上 + radius 直角。
     keyNumber: {
-      __reset: true,
       margin: '18px 0',
       padding: '16px',
       'background-color': '#1a1a1a',
@@ -557,17 +564,18 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
     },
     sectionTag: { margin: '0 0 14px 0' },
-    // toc：虚线灰边框 + 黄色 // CONTENTS kicker（kicker color 走 primary）
+    // toc：dark 基线给 hairline + transparent + sm radius；本主题覆盖 border 为
+    // dashed 灰 + 直角，与终端命令行的"// CONTENTS"语汇配套。
     toc: {
-      __reset: true,
       'background-color': 'transparent',
       border: '1px dashed #a0a0a0',
       padding: '10px 12px',
       margin: '0 0 24px 0',
       'border-radius': '0',
     },
+    // kpiDashboard：dark 基线给上下 hairline + transparent；本主题加 bg #1a1a1a
+    // 让数据卡落在次级深色块上 + radius 直角。
     kpiDashboard: {
-      __reset: true,
       'background-color': '#1a1a1a',
       'border-top': '1px solid #f0f0f0',
       'border-bottom': '1px solid #f0f0f0',
@@ -575,8 +583,8 @@ export const spec: PersonaSpec = {
       margin: '0 0 28px 0',
       'border-radius': '0',
     },
+    // barChart：dark 基线给 hairline border + transparent；本主题加 bg + radius 直角。
     barChart: {
-      __reset: true,
       'background-color': '#1a1a1a',
       border: '1px solid #f0f0f0',
       padding: '16px 14px',
@@ -634,10 +642,9 @@ export const spec: PersonaSpec = {
       'font-weight': '700',
       'letter-spacing': '0.05em',
     },
-    // voice / video 卡：暗底主题不能走 baseContainers 的浅卡兜底；
-    // 走"无底色 + 2px 实线 + 直角"的粗野铁皮箱形态，与本主题刊头双粗线 + masthead 同语汇
+    // voice / video 卡：dark 基线给 transparent + 1px border + md radius；本主题加粗到
+    // 2px + 直角，与刊头双粗线、masthead 同语汇（粗野铁皮箱形态）。
     voiceCard: {
-      __reset: true,
       'background-color': 'transparent',
       border: '2px solid #f0f0f0',
       'border-radius': '0',
@@ -645,7 +652,6 @@ export const spec: PersonaSpec = {
       margin: '22px 0',
     },
     videoCard: {
-      __reset: true,
       'background-color': 'transparent',
       border: '2px solid #f0f0f0',
       'border-radius': '0',

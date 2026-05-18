@@ -1,12 +1,12 @@
 /**
  * Variant 实证守卫：VARIANT_IDS 主表的每个 variant 必须满足之一
  *   (A) 至少一个主题以默认骨架使用      `spec.variants[kind] === id`
- *   (B) meta.themeCompat 至少含一个主题  （variant 显式对某主题做推荐）
+ *   (B) 等效白名单非空：meta.signatureOf 或 meta.themeCompat 至少声明一个主题
  *   (C) meta.experimental === true       （作者显式承认"骨架就绪、等首个采用方"）
  *
  * 三者都不满足 → 当前主题生态中没有任何凭证支持这个 variant 存在，应：
  *   - 让某主题升级它为默认骨架，或
- *   - 加 themeCompat 把它登记为推荐，或
+ *   - 加 signatureOf（单主题签名）或 themeCompat（多主题软推荐），或
  *   - 加 experimental: true 显式登记"我们故意保留"。
  *
  * 实证逻辑全部在 src/core/variants/usage.ts；本测试只断言。
@@ -42,7 +42,7 @@ describe('Variant 实证守卫', () => {
       const lines = unflagged.map((e) => `  · ${e.kind}/${e.id}`).join('\n')
       throw new Error(
         `${unflagged.length} 个 orphan variant 未标 meta.experimental：\n${lines}\n` +
-          '修复路径任选一：让某主题采用为默认 / 加 themeCompat / 加 meta.experimental: true。',
+          '修复路径任选一：让某主题采用为默认 / 加 signatureOf 或 themeCompat / 加 meta.experimental: true。',
       )
     }
   })

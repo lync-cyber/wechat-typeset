@@ -84,7 +84,7 @@ export const spec: PersonaSpec = {
       width: 3,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 10 },
-      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 16, fill: '#0066cc' }],
+      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 16, fill: 'token:primary' }],
     },
 
     // tipIcon：灯泡轮廓（圆头 + 2 道灯座横线），mint 绿
@@ -97,12 +97,12 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,2 C5.5,2 3.8,4 3.8,6.4 C3.8,8 4.6,9.2 5.6,10 L5.6,11.5 L10.4,11.5 L10.4,10 C11.4,9.2 12.2,8 12.2,6.4 C12.2,4 10.5,2 8,2 Z',
-          stroke: '#0a705a',
+          stroke: 'token:status.tip.accent',
           strokeWidth: 1.5,
           strokeLinejoin: 'round',
         },
-        { type: 'line', x1: 6, y1: 12.5, x2: 10, y2: 12.5, stroke: '#0a705a', strokeWidth: 1.5 },
-        { type: 'line', x1: 6.5, y1: 14, x2: 9.5, y2: 14, stroke: '#0a705a', strokeWidth: 1.5 },
+        { type: 'line', x1: 6, y1: 12.5, x2: 10, y2: 12.5, stroke: 'token:status.tip.accent', strokeWidth: 1.5 },
+        { type: 'line', x1: 6.5, y1: 14, x2: 9.5, y2: 14, stroke: 'token:status.tip.accent', strokeWidth: 1.5 },
       ],
     },
 
@@ -113,9 +113,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: '#5c6778', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#5c6778' },
-        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#5c6778' },
+        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: 'token:textMuted', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: 'token:textMuted' },
+        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: 'token:textMuted' },
       ],
     },
 
@@ -126,9 +126,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'rect', x: 2, y: 2, w: 12, h: 12, rx: 2, stroke: '#0066cc', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#0066cc' },
-        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#0066cc' },
+        { type: 'rect', x: 2, y: 2, w: 12, h: 12, rx: 2, stroke: 'token:primary', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: 'token:primary' },
+        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: 'token:primary' },
       ],
     },
 
@@ -161,7 +161,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M5.2,1.5 L10.8,1.5 L14.5,5.2 L14.5,10.8 L10.8,14.5 L5.2,14.5 L1.5,10.8 L1.5,5.2 Z',
-          stroke: '#c8322d',
+          stroke: 'token:status.danger.accent',
           strokeWidth: 1.5,
           strokeLinejoin: 'round',
         },
@@ -171,7 +171,7 @@ export const spec: PersonaSpec = {
           y1: 5.5,
           x2: 10.5,
           y2: 10.5,
-          stroke: '#c8322d',
+          stroke: 'token:status.danger.accent',
           strokeWidth: 1.5,
           strokeLinecap: 'round',
         },
@@ -181,7 +181,7 @@ export const spec: PersonaSpec = {
           y1: 5.5,
           x2: 5.5,
           y2: 10.5,
-          stroke: '#c8322d',
+          stroke: 'token:status.danger.accent',
           strokeWidth: 1.5,
           strokeLinecap: 'round',
         },
@@ -196,7 +196,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'circle', cx: 12, cy: 12, r: 11, fill: '#0066cc' },
+        { type: 'circle', cx: 12, cy: 12, r: 11, fill: 'token:primary' },
         {
           type: 'text',
           x: 12,
@@ -204,7 +204,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 15,
           fontWeight: 600,
-          fill: '#fefefe',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],
@@ -217,8 +217,8 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle' },
       primitives: [
-        { type: 'rect', x: 5, y: 2, w: 9, h: 9, rx: 1.5, stroke: '#5c6778', strokeWidth: 1.5 },
-        { type: 'rect', x: 2, y: 5, w: 9, h: 9, rx: 1.5, stroke: '#5c6778', strokeWidth: 1.5 },
+        { type: 'rect', x: 5, y: 2, w: 9, h: 9, rx: 1.5, stroke: 'token:textMuted', strokeWidth: 1.5 },
+        { type: 'rect', x: 2, y: 5, w: 9, h: 9, rx: 1.5, stroke: 'token:textMuted', strokeWidth: 1.5 },
       ],
     },
 
@@ -232,7 +232,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M5.5,1.5 L10.5,1.5 L10.5,6.5',
-          stroke: '#0066cc',
+          stroke: 'token:primary',
           strokeWidth: 1.5,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
@@ -243,14 +243,14 @@ export const spec: PersonaSpec = {
           y1: 1.5,
           x2: 5.5,
           y2: 6.5,
-          stroke: '#0066cc',
+          stroke: 'token:primary',
           strokeWidth: 1.5,
           strokeLinecap: 'round',
         },
         {
           type: 'path',
           d: 'M8.5,10.5 L1.5,10.5 L1.5,3.5',
-          stroke: '#0066cc',
+          stroke: 'token:primary',
           strokeWidth: 1.5,
           strokeLinecap: 'round',
           strokeLinejoin: 'round',
@@ -272,7 +272,7 @@ export const spec: PersonaSpec = {
           content: '$',
           fontSize: 14,
           fontWeight: 600,
-          fill: '#0066cc',
+          fill: 'token:primary',
           textAnchor: 'middle',
         },
       ],
@@ -285,7 +285,7 @@ export const spec: PersonaSpec = {
       height: 12,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'path', d: 'M1,1 L13,1 L13,4 L4,4 L4,13 L1,13 Z', fill: '#0066cc' },
+        { type: 'path', d: 'M1,1 L13,1 L13,4 L4,4 L4,13 L1,13 Z', fill: 'token:primary' },
       ],
     },
 
@@ -295,10 +295,10 @@ export const spec: PersonaSpec = {
       width: 60,
       height: 6,
       primitives: [
-        { type: 'circle', cx: 30, cy: 3, r: 2, fill: '#0066cc' },
-        { type: 'circle', cx: 50, cy: 3, r: 2, fill: '#0066cc' },
-        { type: 'circle', cx: 70, cy: 3, r: 2.5, fill: '#0066cc' },
-        { type: 'circle', cx: 90, cy: 3, r: 2, fill: '#0066cc' },
+        { type: 'circle', cx: 30, cy: 3, r: 2, fill: 'token:primary' },
+        { type: 'circle', cx: 50, cy: 3, r: 2, fill: 'token:primary' },
+        { type: 'circle', cx: 70, cy: 3, r: 2.5, fill: 'token:primary' },
+        { type: 'circle', cx: 90, cy: 3, r: 2, fill: 'token:primary' },
       ],
     },
   },

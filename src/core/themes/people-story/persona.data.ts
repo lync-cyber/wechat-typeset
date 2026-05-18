@@ -76,8 +76,8 @@ export const spec: PersonaSpec = {
       height: 18,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       primitives: [
-        { type: 'circle', cx: 12, cy: 7, r: 4.5, fill: '#c8c2b3' },
-        { type: 'path', d: 'M8,16 L16,16 L19,22 L5,22 Z', fill: '#c8c2b3' },
+        { type: 'circle', cx: 12, cy: 7, r: 4.5, fill: 'token:border' },
+        { type: 'path', d: 'M8,16 L16,16 L19,22 L5,22 Z', fill: 'token:border' },
       ],
     },
 
@@ -91,7 +91,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M10,4 C4,10 4,24 10,34 C14,40 22,38 22,30 C22,24 16,22 14,22 C14,14 16,10 22,6 L22,4 Z M36,4 C30,10 30,24 36,34 C40,40 48,38 48,30 C48,24 42,22 40,22 C40,14 42,10 48,6 L48,4 Z',
-          fill: '#8a3f2b',
+          fill: 'token:accent',
           opacity: 0.92,
         },
       ],
@@ -103,12 +103,12 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 12,
       primitives: [
-        { type: 'line', x1: 30, y1: 6, x2: 110, y2: 6, stroke: '#c8c2b3', strokeWidth: 1 },
-        { type: 'line', x1: 130, y1: 6, x2: 210, y2: 6, stroke: '#c8c2b3', strokeWidth: 1 },
+        { type: 'line', x1: 30, y1: 6, x2: 110, y2: 6, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'line', x1: 130, y1: 6, x2: 210, y2: 6, stroke: 'token:border', strokeWidth: 1 },
         {
           type: 'path',
           d: 'M120,2 L124,6 L120,10 L116,6 Z',
-          fill: '#1b2330',
+          fill: 'token:primary',
           opacity: 0.7,
         },
       ],
@@ -120,9 +120,9 @@ export const spec: PersonaSpec = {
       width: 100,
       height: 8,
       primitives: [
-        { type: 'line', x1: 6, y1: 4, x2: 46, y2: 4, stroke: '#c8c2b3', strokeWidth: 1 },
-        { type: 'circle', cx: 50, cy: 4, r: 1.8, fill: '#5d5d63' },
-        { type: 'line', x1: 54, y1: 4, x2: 94, y2: 4, stroke: '#c8c2b3', strokeWidth: 1 },
+        { type: 'line', x1: 6, y1: 4, x2: 46, y2: 4, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'circle', cx: 50, cy: 4, r: 1.8, fill: 'token:textMuted' },
+        { type: 'line', x1: 54, y1: 4, x2: 94, y2: 4, stroke: 'token:border', strokeWidth: 1 },
       ],
     },
 
@@ -132,9 +132,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'line', x1: 60, y1: 4, x2: 90, y2: 4, stroke: '#c8c2b3', strokeWidth: 1 },
-        { type: 'line', x1: 105, y1: 4, x2: 135, y2: 4, stroke: '#c8c2b3', strokeWidth: 1 },
-        { type: 'line', x1: 150, y1: 4, x2: 180, y2: 4, stroke: '#c8c2b3', strokeWidth: 1 },
+        { type: 'line', x1: 60, y1: 4, x2: 90, y2: 4, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'line', x1: 105, y1: 4, x2: 135, y2: 4, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'line', x1: 150, y1: 4, x2: 180, y2: 4, stroke: 'token:border', strokeWidth: 1 },
       ],
     },
 
@@ -196,7 +196,7 @@ export const spec: PersonaSpec = {
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
-      primitives: [{ type: 'rect', x: 6.4, y: 3, w: 1.2, h: 8, fill: '#6b3a32', opacity: 0.7 }],
+      primitives: [{ type: 'rect', x: 6.4, y: 3, w: 1.2, h: 8, fill: 'token:status.danger.accent', opacity: 0.7 }],
     },
 
     // stepBadge：大号数字 + 下横线（24×24）。
@@ -215,10 +215,10 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 24,
           fontWeight: 700,
-          fill: '#8a3f2b',
+          fill: 'token:accent',
           textAnchor: 'middle',
         },
-        { type: 'line', x1: 8, y1: 32, x2: 32, y2: 32, stroke: '#8a3f2b', strokeWidth: 1.2 },
+        { type: 'line', x1: 8, y1: 32, x2: 32, y2: 32, stroke: 'token:accent', strokeWidth: 1.2 },
       ],
     },
   },

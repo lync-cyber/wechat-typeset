@@ -68,6 +68,9 @@ export const spec: PersonaSpec = {
 
   // ============================================================
   // Motifs（规范 §1.4：default 仅保留 4 装饰 + 4 图标 + stepBadge + sectionCorner）
+  //
+  // 颜色规范：本主题作为"token 引用"范例，motif fill/stroke 一律走 'token:*' 引用，
+  // 让"换 palette 时 motif 自动跟随"成为可能。其它主题渐进迁移（裸 hex 仍受 render-motif 兼容）。
   // ============================================================
   motifs: {
     // h2Prefix：3×16 单竖条（Medium h2 左侧单根色线）
@@ -76,7 +79,7 @@ export const spec: PersonaSpec = {
       width: 3,
       height: 16,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
-      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 20, fill: '#2558b0' }],
+      primitives: [{ type: 'rect', x: 0, y: 0, w: 3, h: 20, fill: 'token:primary' }],
     },
 
     // dividerWave：stroke-width 1.2 的单根正弦
@@ -88,7 +91,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M0,6 Q15,0 30,6 T60,6 T90,6 T120,6 T150,6 T180,6 T210,6 T240,6',
-          stroke: '#d8d8d4',
+          stroke: 'token:border',
           strokeWidth: 1.2,
         },
       ],
@@ -100,9 +103,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 8,
       primitives: [
-        { type: 'circle', cx: 96, cy: 4, r: 2, fill: '#d8d8d4' },
-        { type: 'circle', cx: 120, cy: 4, r: 2, fill: '#d8d8d4' },
-        { type: 'circle', cx: 144, cy: 4, r: 2, fill: '#d8d8d4' },
+        { type: 'circle', cx: 96, cy: 4, r: 2, fill: 'token:border' },
+        { type: 'circle', cx: 120, cy: 4, r: 2, fill: 'token:border' },
+        { type: 'circle', cx: 144, cy: 4, r: 2, fill: 'token:border' },
       ],
     },
 
@@ -112,9 +115,9 @@ export const spec: PersonaSpec = {
       width: 220,
       height: 10,
       primitives: [
-        { type: 'line', x1: 0, y1: 5, x2: 110, y2: 5, stroke: '#d8d8d4', strokeWidth: 1 },
-        { type: 'line', x1: 130, y1: 5, x2: 240, y2: 5, stroke: '#d8d8d4', strokeWidth: 1 },
-        { type: 'circle', cx: 120, cy: 5, r: 3, fill: '#2558b0' },
+        { type: 'line', x1: 0, y1: 5, x2: 110, y2: 5, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'line', x1: 130, y1: 5, x2: 240, y2: 5, stroke: 'token:border', strokeWidth: 1 },
+        { type: 'circle', cx: 120, cy: 5, r: 3, fill: 'token:primary' },
       ],
     },
 
@@ -128,7 +131,7 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M1,1 L13,1 M1,1 L1,13',
-          stroke: '#2558b0',
+          stroke: 'token:primary',
           strokeWidth: 2,
           strokeLinecap: 'square',
         },
@@ -142,9 +145,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: '#147a44', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#147a44' },
-        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#147a44' },
+        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: 'token:status.tip.accent', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: 'token:status.tip.accent' },
+        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: 'token:status.tip.accent' },
       ],
     },
 
@@ -155,9 +158,9 @@ export const spec: PersonaSpec = {
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: '#2558b0', strokeWidth: 1.5 },
-        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: '#2558b0' },
-        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: '#2558b0' },
+        { type: 'circle', cx: 8, cy: 8, r: 6, stroke: 'token:primary', strokeWidth: 1.5 },
+        { type: 'circle', cx: 8, cy: 5, r: 0.9, fill: 'token:primary' },
+        { type: 'rect', x: 7.25, y: 7, w: 1.5, h: 5, rx: 0.4, fill: 'token:primary' },
       ],
     },
 
@@ -171,28 +174,28 @@ export const spec: PersonaSpec = {
         {
           type: 'path',
           d: 'M8,2 L14.5,13.5 L1.5,13.5 Z',
-          stroke: '#825a14',
+          stroke: 'token:status.warning.accent',
           strokeWidth: 1.5,
           strokeLinejoin: 'round',
         },
-        { type: 'rect', x: 7.25, y: 6, w: 1.5, h: 4, rx: 0.4, fill: '#825a14' },
-        { type: 'circle', cx: 8, cy: 11.5, r: 0.9, fill: '#825a14' },
+        { type: 'rect', x: 7.25, y: 6, w: 1.5, h: 4, rx: 0.4, fill: 'token:status.warning.accent' },
+        { type: 'circle', cx: 8, cy: 11.5, r: 0.9, fill: 'token:status.warning.accent' },
       ],
     },
 
-    // dangerIcon：实心圆 + 白色横线（用 #fefefe 规避 SVG→PNG #fff 透明化）
+    // dangerIcon：实心圆 + 反色横线（textInverse 在 default = #fefefe，暗底主题会自动跟随）
     dangerIcon: {
       viewBox: [0, 0, 16, 16],
       width: 14,
       height: 14,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 6 },
       primitives: [
-        { type: 'circle', cx: 8, cy: 8, r: 6, fill: '#b42318' },
-        { type: 'rect', x: 3, y: 7, w: 10, h: 2, fill: '#fefefe' },
+        { type: 'circle', cx: 8, cy: 8, r: 6, fill: 'token:status.danger.accent' },
+        { type: 'rect', x: 3, y: 7, w: 10, h: 2, fill: 'token:textInverse' },
       ],
     },
 
-    // stepBadge：实心圆 + 白数字（{N} 占位）
+    // stepBadge：实心圆 + 反色数字（{N} 占位）
     stepBadge: {
       viewBox: [0, 0, 24, 24],
       width: 24,
@@ -200,7 +203,7 @@ export const spec: PersonaSpec = {
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle', marginRight: 8 },
       placeholders: ['N'],
       primitives: [
-        { type: 'circle', cx: 12, cy: 12, r: 11, fill: '#2558b0' },
+        { type: 'circle', cx: 12, cy: 12, r: 11, fill: 'token:primary' },
         {
           type: 'text',
           x: 12,
@@ -208,7 +211,7 @@ export const spec: PersonaSpec = {
           content: '{N}',
           fontSize: 14,
           fontWeight: 700,
-          fill: '#fefefe',
+          fill: 'token:textInverse',
           textAnchor: 'middle',
         },
       ],

@@ -43,7 +43,7 @@ const manpageLog: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: 'manpage 输出',
     description: '顶底分隔线 + 状态标签条，终端日志输出感',
-    themeCompat: ['tech-geek'],
+    signatureOf: 'tech-geek',
   },
   thumbnail: thumb,
   snippets: [

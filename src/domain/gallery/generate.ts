@@ -12,7 +12,7 @@
  */
 
 import type { MotifShape, MotifTemplate, PersonaSpec } from '../../core/themes/_shared/spec'
-import { shapeToSvg, renderMotifTemplate } from '../../core/themes/_shared/spec'
+import { shapeToSvg, renderMotifTemplate, toThemeTokens } from '../../core/themes/_shared/spec'
 
 // ============================================================
 // Card fragment
@@ -119,6 +119,9 @@ function motifTile(key: string, svg: string): string {
 }
 
 function renderMotifs(spec: PersonaSpec): string {
+  // tokens 透传给 motif 渲染：spec.motifs 中的 'token:<key>' 引用需要 tokens 上下文
+  // 才能解析为具体 hex；不传 tokens 会让字面值原样输出到 SVG attr（开发期可见的 bug 兜底）。
+  const tokens = toThemeTokens(spec)
   const shapeKeys: Array<keyof typeof spec.motifs> = [
     'h2Prefix', 'h3Prefix', 'dividerFlower', 'dividerWave', 'dividerDots',
     'quoteMark', 'listBullet', 'sectionCorner', 'tipIcon', 'warningIcon',
@@ -129,15 +132,15 @@ function renderMotifs(spec: PersonaSpec): string {
   for (const k of shapeKeys) {
     const shape = spec.motifs[k] as MotifShape | undefined
     if (!shape) continue
-    tiles.push(motifTile(k, shapeToSvg(shape)))
+    tiles.push(motifTile(k, shapeToSvg(shape, tokens)))
   }
   if (spec.motifs.stepBadge) {
     const tpl = spec.motifs.stepBadge as MotifTemplate
-    tiles.push(motifTile('stepBadge(1)', renderMotifTemplate(tpl, { N: 1 })))
+    tiles.push(motifTile('stepBadge(1)', renderMotifTemplate(tpl, { N: 1 }, tokens)))
   }
   if (spec.motifs.issueStamp) {
     const tpl = spec.motifs.issueStamp as MotifTemplate
-    tiles.push(motifTile('issueStamp', renderMotifTemplate(tpl, { issue: '47', date: '2026-04', kind: 'WEEKLY' })))
+    tiles.push(motifTile('issueStamp', renderMotifTemplate(tpl, { issue: '47', date: '2026-04', kind: 'WEEKLY' }, tokens)))
   }
   if (tiles.length === 0) {
     return `<div class="section-label">Motifs · 签名母题</div><div class="empty-note">该 spec 未声明任何 motif。</div>`

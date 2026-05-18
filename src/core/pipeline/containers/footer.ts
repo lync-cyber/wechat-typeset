@@ -223,12 +223,15 @@ function renderEmbeddedQr(ctx: ContainerRenderContext, size: number): string {
     return `<img src="${escAttr(qrUrl)}" alt="QR" style="${qrImgCSS}"/>`
   }
   // 占位 QR SVG：仿真三角眼 + 数据点（不承诺扫码功能，仅占位）
+  // 三角眼内层"白色镂空"走 bg：QR 协议本就要求模块反色为纸白底，暗底主题下这层裸 #fff
+  // 与卡片底反差刺眼；用 ctx.tokens.colors.bg 让占位卡随主题底色流动。
+  const eyeHole = c.bg
   return (
     `<svg viewBox="0 0 60 60" width="${size}" height="${size}" style="${qrImgCSS}">` +
     `<g fill="${c.text}">` +
-    `<rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="#fff"/><rect x="9" y="9" width="4" height="4"/>` +
-    `<rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="#fff"/><rect x="47" y="9" width="4" height="4"/>` +
-    `<rect x="3" y="41" width="16" height="16"/><rect x="6" y="44" width="10" height="10" fill="#fff"/><rect x="9" y="47" width="4" height="4"/>` +
+    `<rect x="3" y="3" width="16" height="16"/><rect x="6" y="6" width="10" height="10" fill="${eyeHole}"/><rect x="9" y="9" width="4" height="4"/>` +
+    `<rect x="41" y="3" width="16" height="16"/><rect x="44" y="6" width="10" height="10" fill="${eyeHole}"/><rect x="47" y="9" width="4" height="4"/>` +
+    `<rect x="3" y="41" width="16" height="16"/><rect x="6" y="44" width="10" height="10" fill="${eyeHole}"/><rect x="9" y="47" width="4" height="4"/>` +
     `<rect x="24" y="24" width="3" height="3"/><rect x="30" y="24" width="3" height="3"/><rect x="36" y="27" width="3" height="3"/>` +
     `<rect x="24" y="30" width="3" height="3"/><rect x="33" y="30" width="3" height="3"/><rect x="27" y="36" width="3" height="3"/>` +
     `<rect x="36" y="36" width="3" height="3"/><rect x="42" y="39" width="3" height="3"/><rect x="24" y="42" width="3" height="3"/>` +
@@ -349,7 +352,12 @@ export const qrcodeContainer: ContainerRenderer = {
     const descEl = desc
       ? `<section class="container-qrcode__desc" style="text-align:center;color:${ctx.tokens.colors.textMuted};font-size:12px;line-height:1.5;margin-top:4px">${escText(desc)}</section>`
       : ''
-    const qr = renderInlineQr(ctx)
+    // 缺 text 时回落占位 SVG（与 follow-card / qr-stack 一致）——
+    // 防御性渲染：作者写了 qrcode 容器就要看到东西，避免"模板里只有 caption / desc"时整块空白。
+    const sizePx = Number(ctx.attrs.size ?? '') || 160
+    const qr = ctx.attrs.text
+      ? renderInlineQr(ctx)
+      : `<section class="container-qrcode__qr" style="display:inline-block;margin-bottom:8px">${renderEmbeddedQr(ctx, sizePx)}</section>\n`
     return `<section class="container-qrcode container-qrcode--bare" style="text-align:center">\n${qr}${cap}${descEl}\n`
   },
   close: (ctx) => {

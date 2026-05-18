@@ -23,8 +23,14 @@ import { commonTemplates } from '../defaultTemplates'
 import { renderMotifTemplate, shapeToSvg } from './render-motif'
 import type { MotifSpec, PersonaSpec, ThemeCapabilities } from './types'
 
-/** PersonaSpec.palette + status + typography + spacing + radius → ThemeTokens */
-function toThemeTokens(spec: PersonaSpec): ThemeTokens {
+/**
+ * PersonaSpec.palette + status + typography + spacing + radius → ThemeTokens。
+ *
+ * 导出供下游 motif 消费方（gallery / showcase / cover-placeholder / UI 导出）调用——
+ * 它们直接读 spec.motifs 渲染时需要 tokens 来解析 `'token:<key>'` 引用，但没有
+ * 完整 specToTheme 流程，本函数让它们能拿到等价 tokens 实例。
+ */
+export function toThemeTokens(spec: PersonaSpec): ThemeTokens {
   // 5 个语义色（textCaption/highlightBg/codeBg/quoteCardBg/noteBorder）通过 ...spread
   // 自动透传——它们在 ThemeTokens.colors 是 optional，spec.palette 不声明则不存在。
   // typography 二级 token 默认值（h4Size 等）的填充统一在 buildTheme.fillTypographyDefaults,
@@ -40,8 +46,13 @@ function toThemeTokens(spec: PersonaSpec): ThemeTokens {
   }
 }
 
-/** MotifSpec → ThemeAssets（AST 渲染为 SVG 字符串 / 带参模板渲染为函数） */
-export function motifsToAssets(motifs: MotifSpec): ThemeAssets {
+/**
+ * MotifSpec → ThemeAssets（AST 渲染为 SVG 字符串 / 带参模板渲染为函数）。
+ *
+ * `tokens` 用于解析 motif fill/stroke 中的 `'token:<key>'` 引用（详见 render-motif）。
+ * 老主题写裸 hex 不受影响；缺省 tokens 时所有 token 引用会被原样写入 SVG（开发期可见）。
+ */
+export function motifsToAssets(motifs: MotifSpec, tokens?: ThemeTokens): ThemeAssets {
   const out: ThemeAssets = {}
   // 无参 motifs（MotifShape）
   const shapeKeys: Array<keyof MotifSpec> = [
@@ -66,18 +77,18 @@ export function motifsToAssets(motifs: MotifSpec): ThemeAssets {
   for (const k of shapeKeys) {
     const shape = motifs[k]
     if (!shape || !('primitives' in shape)) continue
-    ;(out as Record<string, string>)[k] = shapeToSvg(shape)
+    ;(out as Record<string, string>)[k] = shapeToSvg(shape, tokens)
   }
   // stepBadge: (n: number) => SVG —— 占位符 `{N}`
   if (motifs.stepBadge) {
     const tpl = motifs.stepBadge
-    out.stepBadge = (n: number) => renderMotifTemplate(tpl, { N: n })
+    out.stepBadge = (n: number) => renderMotifTemplate(tpl, { N: n }, tokens)
   }
   // issueStamp: (issue, date, kind) => SVG —— 占位符 `{issue}` `{date}` `{kind}`
   if (motifs.issueStamp) {
     const tpl = motifs.issueStamp
     out.issueStamp = (issue: string, date: string, kind: string) =>
-      renderMotifTemplate(tpl, { issue, date, kind })
+      renderMotifTemplate(tpl, { issue, date, kind }, tokens)
   }
   return out
 }
@@ -139,7 +150,9 @@ function deriveCapabilities(spec: PersonaSpec): ThemeCapabilities {
  */
 export function specToTheme(spec: PersonaSpec): Theme {
   const tokens = toThemeTokens(spec)
-  const assets = motifsToAssets(spec.motifs)
+  // tokens 透传给 motifsToAssets：解析 motif fill/stroke 中的 'token:<key>' 引用,
+  // 让"换 palette 时 motif 颜色自动跟随"成为可能。
+  const assets = motifsToAssets(spec.motifs, tokens)
   // commonTemplates 作为隐式基线：spec.templates 覆盖同 key，否则继承。
   // 这样 spec 写"Partial<ThemeTemplates>"就够——通用容器语法来自 infra，不用 LLM 重复。
   const templates = { ...commonTemplates, ...(spec.templates ?? {}) } as ThemeTemplates
@@ -162,5 +175,7 @@ export function specToTheme(spec: PersonaSpec): Theme {
     svgVariant: spec.svgVariant,
     decorations: spec.decorations,
     capabilities,
+    // baseTheme 透传：'dark' 时 buildTheme 切到 hairline 卡片基线，让暗底主题作者免写 __reset。
+    baseTheme: spec.baseTheme,
   })
 }
