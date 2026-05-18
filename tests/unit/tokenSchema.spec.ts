@@ -170,14 +170,14 @@ describe('quote · classic tokenSchema', () => {
   it('暴露 quote-bg + quote-size', () => {
     expect(Object.keys(classicQuoteSchema).sort()).toEqual(['quote-bg', 'quote-size'])
     expect(classicQuote.tokenSchema).toBe(classicQuoteSchema)
-    expect(classicQuoteSchema['quote-size'].default).toBe('16px')
+    expect(classicQuoteSchema['quote-size'].default).toBe('17px')
   })
 
-  it('quote-size 覆盖 → bodyCSS 含 var(--uv-quote-size, 16px)', () => {
+  it('quote-size 覆盖 → bodyCSS 含 var(--uv-quote-size, 17px)', () => {
     // 不注入 UV 的纯渲染：验证 fallback 段命中
     const md = '::: quote-card 作者\n金句\n:::\n'
     const out = pipelineRender({ md, theme: defaultTheme })
-    expect(out.html).toMatch(/var\(\s*--uv-quote-size\s*,\s*16px\s*\)/)
+    expect(out.html).toMatch(/var\(\s*--uv-quote-size\s*,\s*17px\s*\)/)
   })
 
   it('注入 UV：quote-bg 出现在 wrapper 的 inline css', () => {

@@ -2,10 +2,12 @@
 #
 # Pre-commit guard：
 #   1. 注释纪律检查 —— 扫描暂存的新增行，拦截 CLAUDE.md 禁止的注释形态
-#   2. Bundle 体积检查 —— 仅在暂存了影响 bundle 体积的文件时跑 check:size
+#   2. Showcase drift 检查 —— 仅在主题 / 变体 / showcase 源码暂存时跑 gen:showcase --check
+#   3. Bundle 体积检查 —— 仅在暂存了影响 bundle 体积的文件时跑 check:size
 #
 # 退出码：0 = 通过 / 非零 = 阻止 commit
-# 跳过（紧急）：SKIP_COMMENT_CHECK=1 / SKIP_SIZE_CHECK=1 git commit ...（PR 内必须补修）
+# 跳过（紧急）：SKIP_COMMENT_CHECK=1 / SKIP_SHOWCASE_CHECK=1 / SKIP_SIZE_CHECK=1
+# git commit ...（PR 内必须补修）
 
 set -e
 
@@ -17,7 +19,17 @@ if [ -n "$HAS_SOURCE" ]; then
   node scripts/check-comments.mjs --staged
 fi
 
-# ── 2. Bundle 体积检查 ───────────────────────────────────────────
+# ── 2. Showcase drift 检查 ─────────────────────────────────────────
+# 主题 voice / 变体渲染 / showcase 生成器逻辑变更都会让 docs/generated/showcase 漂移。
+# 这里只在相关源码暂存时跑，避免无关 PR 也付 gen:showcase 启动税（tsx + jsdom）。
+HAS_SHOWCASE_RELEVANT=$(echo "$STAGED" | grep -E '^(src/core/themes/|src/core/variants/|src/domain/gallery/|scripts/gen-showcase\.ts$|docs/generated/showcase/)' || true)
+
+if [ -n "$HAS_SHOWCASE_RELEVANT" ] && [ "$SKIP_SHOWCASE_CHECK" != "1" ]; then
+  echo "[pre-commit] 暂存包含主题 / 变体 / showcase 源码 → 跑 gen:showcase --check"
+  node_modules/.bin/tsx scripts/gen-showcase.ts --check
+fi
+
+# ── 3. Bundle 体积检查 ───────────────────────────────────────────
 HAS_SIZE_RELEVANT=$(echo "$STAGED" | grep -E '^(src/|vite\.config\.ts$|\.size-budget\.json$|package\.json$|pnpm-lock\.yaml$)' || true)
 
 if [ -z "$HAS_SIZE_RELEVANT" ]; then

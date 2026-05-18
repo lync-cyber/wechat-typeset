@@ -7,11 +7,11 @@
  *   - 点 # 按钮展开 chip 编辑器
  *   - 输入 + Enter 添加 chip；× 删除 chip；✓ 提交
  */
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 test.use({ viewport: { width: 1280, height: 800 } })
 
-async function dismissOnboard(page) {
+async function dismissOnboard(page: Page) {
   const close = page.locator('.onboard .close')
   if (await close.isVisible().catch(() => false)) await close.click()
 }

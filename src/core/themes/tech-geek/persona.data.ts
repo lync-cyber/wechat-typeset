@@ -520,9 +520,10 @@ export const spec: PersonaSpec = {
     info: {},
     danger: {},
     // quoteCard = Footnote Card：bgSoft 底 + 无边框
+    // padding ≥ 28px：frame-brackets variant 的顶/底 L 角各占 20px，给文字净空避免压角
     quoteCard: {
       'background-color': '#2f2920',
-      padding: '18px 20px',
+      padding: '28px 22px',
       margin: '24px 0',
       'border-radius': '4px',
       'letter-spacing': '0.8px',

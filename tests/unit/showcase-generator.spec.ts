@@ -38,6 +38,13 @@ interface Loaded {
   spec: PersonaSpec
 }
 
+// 模块加载期 sync 扫描：drift it.each 在 beforeAll 之前 collect，必须此刻就拿到 id 列表。
+// 约定：themes/<id>/persona.data.ts 的目录名 === spec.id（已在 audit 中验证全 18 主题）
+const SPEC_IDS = globSync('src/core/themes/*/persona.data.ts', { cwd: process.cwd() })
+  .map((p) => basename(dirname(p)))
+  .filter((d) => !d.startsWith('_'))
+  .sort()
+
 const LOADED: Loaded[] = []
 
 beforeAll(async () => {
@@ -75,22 +82,7 @@ function buildShowcaseHtml(spec: PersonaSpec): string {
  * 且每主题红时能从测试名一眼看到是谁。
  */
 describe('showcase generator · drift', () => {
-  it.each([
-    'academic-frontier',
-    'brutalist',
-    'business-finance',
-    'data-brief',
-    'default',
-    'editorial-mook',
-    'industry-observer',
-    'late-night-vinyl',
-    'life-aesthetic',
-    'literary-humanism',
-    'people-story',
-    'swiss-grid',
-    'tech-explainer',
-    'tech-geek',
-  ])('%s 产物与 docs/generated/showcase/<id>.html 一致', async (id) => {
+  it.each(SPEC_IDS)('%s 产物与 docs/generated/showcase/<id>.html 一致', async (id) => {
     const spec = LOADED.find((l) => l.spec.id === id)?.spec
     if (!spec) throw new Error(`spec not loaded: ${id}`)
     const html = buildShowcaseHtml(spec)

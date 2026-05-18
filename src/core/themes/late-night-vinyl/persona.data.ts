@@ -557,7 +557,6 @@ export const spec: PersonaSpec = {
       'border-radius': '0',
     },
     // masthead · 刊头：下方 1px text 色分隔线 + monospace（设计稿 masthead 原型）
-    // renderer 已强制 display:grid 1fr auto；这里只承诺装饰位。
     masthead: {
       __reset: true,
       'padding-bottom': '12px',

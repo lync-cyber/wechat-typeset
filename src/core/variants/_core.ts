@@ -56,6 +56,15 @@ export interface VariantRenderResult {
    * undefined = 走默认 "— "（U+2014 + 空格）。常见替换:"—— "(中文双破折号) / ""(无前缀)。
    */
   bylinePrefix?: string
+  /**
+   * pull-quote 容器在 body 内部 `<p>` 上注入的 inline style。仅 pull-quote.ts 消费。
+   *
+   * 为什么需要独立槽位：body 内容由 markdown-it 渲染为 `<p>`，theme.elements.p 通过
+   * juice 内联到 `<p style="font-size:14px;...">`，直接设 bodyCSS 不会改变内层 p 的字号。
+   * pull-quote 容器把本字段挂到 `.container-pull-quote--{id} > .__body > p` 选择器，
+   * juice 按 specificity (0,3,1) 覆盖 theme.p 的 (0,0,1)，从而把引文做大。
+   */
+  quoteCSS?: string
 }
 
 export type AdmonitionKind = 'tip' | 'warning' | 'info' | 'danger'

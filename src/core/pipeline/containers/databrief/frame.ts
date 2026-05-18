@@ -11,7 +11,7 @@
  *   - colophon       刊物收束栏（上分割线 + "下期 / 卷·期"双栏 monospace）
  *
  * 设计纪律（与 metrics / editorial / cta 共通）：
- *   1. 结构性布局（display:grid/table）由 renderer 强制，不进 ThemeContainers 槽位
+ *   1. 多列布局走 display:table + table-cell，不用 grid（rules.ts FORBIDDEN_DISPLAY_VALUES）
  *   2. wrapper 装饰（padding/border/bg/margin）由 ctx.containers.<slot> 决定
  *   3. monospace 字体仅在 renderer inline 出现（主题 elements/containers CSS 禁 font-family）
  */
@@ -31,24 +31,19 @@ export const mastheadContainer: ContainerRenderer = {
     const date = ctx.attrs.date ?? ''
     const kicker = ctx.attrs.kicker ?? ''
     const c = ctx.tokens.colors
-    // 装饰位（padding / border / bg / margin）由 ctx.containers.masthead 决定。
-    // 结构性 display:grid 是本容器的视觉契约，由 renderer 强制——
-    // 不进 ThemeContainers 槽位（themeCSS guard 会拒绝 display:grid）。
-    //
     // 两种布局模式（由 attrs.kicker 切换）：
-    //   - 默认（无 kicker）：左 1fr 名 / 右 auto 期号·日期 —— data-brief 经典刊头
-    //   - ribbon（有 kicker）：三栏等宽，左 kicker / 中 name（accent 色） / 右 date
-    //     —— 报刊"期次条"骨架（粗野主义 / 杂志编辑系常用），date 直接走 attrs.date
-    //     不再前缀"第 N 期"（前缀语义由 kicker 承担：例 kicker="第 04 期"）。
+    //   - 默认（无 kicker）：左 name / 右 期号·日期 —— data-brief 经典刊头
+    //   - ribbon（有 kicker）：三栏等宽，左 kicker / 中 name（accent 色） / 右 date。
+    //     date 不前缀"第 N 期"——前缀语义由 kicker 承担（例 kicker="第 04 期"）。
     const isRibbon = kicker !== ''
-    const wrapperCSS = isRibbon
-      ? `display:grid;grid-template-columns:1fr 1fr 1fr;align-items:baseline;` +
-        inline(ctx.containers.masthead)
-      : `display:grid;grid-template-columns:1fr auto;align-items:baseline;` +
-        inline(ctx.containers.masthead)
+    const wrapperCSS =
+      `display:table;width:100%;table-layout:${isRibbon ? 'fixed' : 'auto'};` +
+      inline(ctx.containers.masthead)
     if (isRibbon) {
-      // ribbon 模式：三栏等宽 monospace，中间 name 走 primary（accent）色突出
       const sideCSS = [
+        'display:table-cell',
+        'vertical-align:baseline',
+        'width:33.33%',
         `color:${c.text}`,
         'font-family:Menlo,Monaco,monospace',
         'font-size:10px',
@@ -56,6 +51,9 @@ export const mastheadContainer: ContainerRenderer = {
       ].join(';')
       const sideRightCSS = sideCSS + ';text-align:right'
       const nameCSS = [
+        'display:table-cell',
+        'vertical-align:baseline',
+        'width:33.33%',
         `color:${c.primary}`,
         'font-family:Menlo,Monaco,monospace',
         'font-size:10px',
@@ -72,12 +70,19 @@ export const mastheadContainer: ContainerRenderer = {
       )
     }
     const nameCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
       `color:${c.text}`,
       'font-size:13px',
       'font-weight:700',
       'letter-spacing:-0.01em',
     ].join(';')
+    // 公众号粘贴剥 white-space:nowrap 但保留 width:1% —— "shrink-to-content" 技巧
+    // 会塌成 1% 宽 + 每字竖排断行。所有 right-cell 改用显式像素宽。下同 5 处。
     const metaCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'width:180px',
       `color:${c.textMuted}`,
       'font-family:Menlo,Monaco,monospace',
       'font-size:11px',
@@ -92,7 +97,7 @@ export const mastheadContainer: ContainerRenderer = {
       `<span class="container-masthead__name" style="${nameCSS}">${escText(name)}</span>` +
       (metaText
         ? `<span class="container-masthead__meta" style="${metaCSS}">${metaText}</span>`
-        : '<span></span>') +
+        : `<span style="${metaCSS}"></span>`) +
       `\n`
     )
   },
@@ -244,8 +249,10 @@ export const editorialHeaderContainer: ContainerRenderer = {
     // chip 行：chip 红章 + hairline 横条 + PP 右对齐 monospace。三栏 display:table。
     let chipRow = ''
     if (chip) {
-      const chipRowCSS = `display:table;width:100%;table-layout:auto;margin-bottom:12px`
-      const chipCellCSS = 'display:table-cell;vertical-align:middle;width:1%;white-space:nowrap'
+      // 三栏 table：chip 左 + rule 中铺线 + pp 右 monospace。chip/pp 用显式像素宽，
+      // 中间 rule cell 自动撑满（width:1%+nowrap 不可用：见 masthead 注释）。
+      const chipRowCSS = `display:table;width:100%;table-layout:fixed;margin-bottom:12px`
+      const chipCellCSS = 'display:table-cell;vertical-align:middle;width:80px'
       const chipPillCSS = [
         'display:inline-block',
         `background-color:${c.primary}`,
@@ -261,11 +268,11 @@ export const editorialHeaderContainer: ContainerRenderer = {
       const ppCellCSS = [
         'display:table-cell',
         'vertical-align:middle',
-        'width:1%',
-        'white-space:nowrap',
+        'width:60px',
         'font-family:Menlo,Monaco,monospace',
         'font-size:9px',
         'letter-spacing:0.2em',
+        'text-align:right',
         `color:${c.text}`,
       ].join(';')
       const ppCell = pp
@@ -401,7 +408,7 @@ export const tocContainer: ContainerRenderer = {
 /**
  * toc-item · 单条
  *
- * 三栏 grid（序号 monospace 主色 / 标题 / 页码 monospace 灰）。
+ * 三栏 table（序号 monospace 主色 / 标题 / 页码 monospace 灰）。
  * info 为条目标题；attrs.no = 序号，attrs.page = 页码。body 内容忽略。
  */
 export const tocItemContainer: ContainerRenderer = {
@@ -411,21 +418,32 @@ export const tocItemContainer: ContainerRenderer = {
     const title = ctx.info.trim()
     const c = ctx.tokens.colors
     const wrapperCSS = [
-      'display:grid',
-      'grid-template-columns:30px 1fr auto',
-      'gap:0 10px',
-      'align-items:baseline',
+      'display:table',
+      'width:100%',
+      'table-layout:auto',
       'font-size:12px',
       'line-height:1.75',
       'padding:1px 0',
     ].join(';')
     const noCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'width:30px',
+      'padding-right:10px',
       'font-family:Menlo,Monaco,monospace',
       `color:${c.primary}`,
       'font-size:11px',
     ].join(';')
-    const titleCSS = `color:${c.text}`
+    const titleCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      `color:${c.text}`,
+    ].join(';')
     const pageCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'width:56px',
+      'padding-left:10px',
       'font-family:Menlo,Monaco,monospace',
       `color:${c.textMuted}`,
       'font-size:11px',
