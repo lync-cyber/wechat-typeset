@@ -2,19 +2,33 @@
  * quote · frame-brackets（四角 L 形装饰框）
  *
  * 视觉：四个角用 SVG 画 L 形短角，中间完全留白，正文居中。
- * 实现：svgSlot 放一个全宽 SVG 作为视觉兜底；wrapper 只管间距，不画任何边。
+ *
+ * 实现要点：顶/底两段独立 SVG（各 20px 高）分别走 svgSlot 与 closeSlot —— 不能用单个
+ * 全高 SVG + 负 margin 假覆盖，否则正文超过 SVG 固定高度时底部 L 角会被锚死在中段。
+ * 微信公众号粘贴禁用 position:absolute 与伪元素，这是当前布局下唯一稳妥的"贴顶/贴底"方案。
  */
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
 
-function bracketsSvg(accent: string): string {
+function topBracketsSvg(accent: string): string {
   return (
-    '<svg viewBox="0 0 320 120" width="100%" height="120"' +
+    '<svg viewBox="0 0 320 20" width="100%" height="20"' +
     ' xmlns="http://www.w3.org/2000/svg"' +
     ' preserveAspectRatio="none"' +
-    ' style="display:block;margin-bottom:-120px">' +
-    `<path d="M0,20 L0,0 L20,0 M300,0 L320,0 L320,20 M0,100 L0,120 L20,120 M300,120 L320,120 L320,100" stroke="${accent}" stroke-width="2" fill="none"/>` +
+    ' style="display:block;margin-bottom:-20px">' +
+    `<path d="M0,20 L0,0 L20,0 M300,0 L320,0 L320,20" stroke="${accent}" stroke-width="2" fill="none"/>` +
+    '</svg>'
+  )
+}
+
+function bottomBracketsSvg(accent: string): string {
+  return (
+    '<svg viewBox="0 0 320 20" width="100%" height="20"' +
+    ' xmlns="http://www.w3.org/2000/svg"' +
+    ' preserveAspectRatio="none"' +
+    ' style="display:block;margin-top:-20px">' +
+    `<path d="M0,0 L0,20 L20,20 M300,20 L320,20 L320,0" stroke="${accent}" stroke-width="2" fill="none"/>` +
     '</svg>'
   )
 }
@@ -51,11 +65,16 @@ const frameBrackets: VariantDef = {
       markdown: '::: quote-card variant=frame-brackets\n此处填写正文\n:::\n',
     },
   ],
-  render: (ctx) => ({
-    wrapperCSS: `padding:26px 22px;margin:22px 0`,
-    bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
-    svgSlot: bracketsSvg(ctx.tokens.colors.primary),
-  }),
+  render: (ctx) => {
+    const accent = ctx.tokens.colors.primary
+    return {
+      // 顶/底 padding ≥ 28 给 L 角的 20px 短边留出净空，避免正文末段压到底部角线
+      wrapperCSS: `padding:28px 22px;margin:22px 0`,
+      bodyCSS: `font-size:16px;line-height:1.85;text-align:center;color:${ctx.tokens.colors.text}`,
+      svgSlot: topBracketsSvg(accent),
+      closeSlot: bottomBracketsSvg(accent),
+    }
+  },
 }
 
 export default frameBrackets

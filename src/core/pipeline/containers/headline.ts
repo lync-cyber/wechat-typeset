@@ -46,8 +46,10 @@ export const coverContainer: ContainerRenderer = {
       ? `<section class="container-cover__title" style="text-align:center;font-weight:700;font-size:18px;margin-bottom:10px">${escText(title)}</section>`
       : ''
     const stamp = resolveIssueStamp(ctx)
+    // text-align:center 让 inline-block 的 stamp SVG 与上方居中标题对齐，
+    // 避免视觉重心左偏（cover 标题已显式居中，stamp 不跟进会"标题居中 / 戳贴左"）
     const stampEl = stamp
-      ? `<section class="container-cover__stamp" style="margin-top:12px">${stamp}</section>`
+      ? `<section class="container-cover__stamp" style="margin-top:12px;text-align:center">${stamp}</section>`
       : ''
     return `<section class="container-cover">\n${head}${stampEl}`
   },

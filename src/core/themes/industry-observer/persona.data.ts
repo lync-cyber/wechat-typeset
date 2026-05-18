@@ -234,26 +234,32 @@ export const spec: PersonaSpec = {
     },
 
     // issueStamp(issue,date,kind) · 期号戳（industry 的 DNA）
-    // 双线矩形框 + 中英混排 + 字距 1.5px 疏朗。由 cover/author/footerCTA 共享注入。
+    // 双线矩形框 + 中英混排。由 cover/author/footerCTA 共享注入。
     // 模板固定 `ISSUE #{issue} · {date} · {kind}`；内框 stroke-width ≥ 1（validateSpec 硬下限）。
+    // viewBox 320：覆盖 `ISSUE #023 · 2025-04-20 · 周刊` 等真实值（28 字混排约 270px），
+    // 留 50px 兜底，避免触发 motif-fit 自动扩张并保证 WeChat 粘贴后 CJK kind 不被裁。
+    // letterSpacing 1.0：与 official-gazette 同步，1.5 在 28 字混排下累计 40+px、是宽度溢出大头。
     issueStamp: {
-      viewBox: [0, 0, 260, 24],
-      width: 260,
+      viewBox: [0, 0, 320, 24],
+      width: 320,
       height: 24,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle' },
       placeholders: ['issue', 'date', 'kind'],
       primitives: [
-        { type: 'rect', x: 0.5, y: 0.5, w: 259, h: 23, stroke: '#b86f2a', strokeWidth: 1 },
-        { type: 'rect', x: 3, y: 3, w: 254, h: 18, stroke: '#b86f2a', strokeWidth: 1, opacity: 0.55 },
+        { type: 'rect', x: 0.5, y: 0.5, w: 319, h: 23, stroke: '#b86f2a', strokeWidth: 1 },
+        { type: 'rect', x: 3, y: 3, w: 314, h: 18, stroke: '#b86f2a', strokeWidth: 1, opacity: 0.55 },
         {
+          // textAnchor=middle + x=viewBox 中线：内容居中，左右留白对称。
+          // motif-fit 已正确处理 middle 锚点（right = x + w/2），超长 kind 仍可触发扩张。
           type: 'text',
-          x: 10,
+          x: 160,
           y: 16,
           content: 'ISSUE #{issue} · {date} · {kind}',
           fontSize: 14,
           fontWeight: 600,
           fill: '#b86f2a',
-          letterSpacing: 1.5,
+          textAnchor: 'middle',
+          letterSpacing: 1.0,
         },
       ],
     },

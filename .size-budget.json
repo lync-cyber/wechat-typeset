@@ -27,11 +27,12 @@
       "gzipLimit": 92000
     },
     {
+      "$comment": "CodeMirror 6 第三方 chunk（编辑器内核 + 语言扩展 + lint/autocomplete）。增长维度是接入新 CM 子模块——每接一个 @codemirror/* 包都按整包计费，难做局部 tree-shake。2026-05 容器感知扩展三件套上线：foldGutter + 自定义 Decoration StateField + autocomplete snippet apply 拉了新代码路径，chunk +~66kB raw / +~27kB gz；阈值同步上调到 820k / 280k，给 ~2% headroom。后续要继续加 CM 扩展（如 lang-typescript / lint 子规则）前请先评估是否能 lazy chunk 拆出。",
       "name": "codemirror chunk",
       "prefix": "codemirror",
       "ext": "js",
-      "limit": 720000,
-      "gzipLimit": 240000
+      "limit": 820000,
+      "gzipLimit": 280000
     },
     {
       "name": "juice chunk",

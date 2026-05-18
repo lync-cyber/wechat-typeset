@@ -88,6 +88,13 @@ function maybeRebuild() {
     fileMtime(resolve(ROOT, 'tsconfig.json')),
   )
   if (srcMtime <= distMtime) return
+  // 先把 docs/generated/showcase/ 与主题/变体源码对齐，否则 npm run build 内的
+  // gen:showcase --check 会因漂移而失败，把整个 rebuild 拖红。sync-showcase
+  // 是纯 mtime 守门 + 必要时 spawn gen:showcase；已最新时几乎零开销。
+  spawnSync(process.execPath, [resolve(ROOT, 'scripts/sync-showcase.mjs')], {
+    cwd: ROOT,
+    stdio: 'inherit',
+  })
   console.log('[wechat-typeset] 检测到源码更新，正在重建（npm run build）…')
   // Windows 上 spawn .cmd/.bat 在 Node 18.20.2+ / 20.12.2+ / 21.7.3+
   // （CVE-2024-27980 补丁后）必须显式 shell: true，否则直接退出非零。

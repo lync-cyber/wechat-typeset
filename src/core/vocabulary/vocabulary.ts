@@ -754,8 +754,8 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       { key: 'trend', description: 'sparkline 颜色方向', enum: ['up', 'down', 'flat'] },
       {
         key: 'series',
-        description: 'sparkline 折线数据（逗号分隔 0–13 整数，左右端点对齐）',
-        example: '2,4,5,6,8,9,10,11',
+        description: 'sparkline 折线数据（逗号分隔任意数值，按 min/max 自动缩放）',
+        example: '48,51,54,56,58,59,60,61',
       },
       { key: 'foot', description: '期端对比小字（monospace 双端）', example: "'15 38分 → '24 12分" },
     ],
@@ -772,6 +772,16 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     children: ['bar'],
     attrs: [
       { key: 'subtitle', description: '副标题（单位/样本说明）', example: '单位：分钟 · n=1,024' },
+      {
+        key: 'labelWidth',
+        description: '标签列宽（CSS 长度，默认 72px / 容下 5 字中文）',
+        example: '96px',
+      },
+      {
+        key: 'valueWidth',
+        description: '数值列宽（CSS 长度，默认 48px / 容下 "9 分钟"）',
+        example: '64px',
+      },
     ],
     description:
       '横向条形图（纯 div 宽度，无 SVG）。外层用 4 个冒号，内部用 bar 条目。info 为图表标题。',
@@ -790,6 +800,16 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       { key: 'pct', description: '柱宽百分比（0–100 整数）', example: '84' },
       { key: 'value', description: '数值显示（右对齐）', example: '42 分' },
       { key: 'tone', description: '色调；warn 转 danger 红', enum: ['normal', 'warn'] },
+      {
+        key: 'labelWidth',
+        description: '标签列宽（per-bar 覆盖父 bar-chart；做对齐微调）',
+        example: '96px',
+      },
+      {
+        key: 'valueWidth',
+        description: '数值列宽（per-bar 覆盖父 bar-chart；做对齐微调）',
+        example: '64px',
+      },
     ],
     description: 'bar-chart 内单条；attrs.label/pct/value 必填，tone 决定柱色（normal 走主色）。',
     example: '::: bar label="60+" pct="84" value="42 分"\n:::\n',

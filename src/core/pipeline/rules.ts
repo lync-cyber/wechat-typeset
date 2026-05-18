@@ -31,6 +31,11 @@ export const FORBIDDEN_CSS_PROPS: readonly string[] = [
 /**
  * display 的取值黑名单：flex / grid 在公众号被剥成空值，子项孤样式必塌。
  * 改用 block / inline-block / table 系列。
+ *
+ * 平台陷阱（与 display 配套，无法 lint 但必须知道）：
+ *   公众号粘贴会剥 `white-space:nowrap` 但**保留** `width:1%`——这俩搭配做
+ *   "shrink-to-content" table-cell 的常见技巧在公众号会塌成 1% 宽 + 每字断行。
+ *   table-cell 的"shrink"列必须用**显式像素宽**（如 width:160px），不要靠 nowrap。
  */
 export const FORBIDDEN_DISPLAY_VALUES: ReadonlySet<string> = new Set([
   'flex',

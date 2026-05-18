@@ -59,7 +59,8 @@ const centeredRule: VariantDef = {
         'border-radius:0',
         'background-color:transparent',
       ].join(';'),
-      titleCSS: [
+      bodyCSS: 'text-align:center',
+      quoteCSS: [
         `color:${c.text}`,
         'font-size:17px',
         'line-height:1.7',
@@ -67,8 +68,10 @@ const centeredRule: VariantDef = {
         'letter-spacing:0.5px',
         'text-align:center',
         'font-weight:500',
+        'margin-top:0',
+        'margin-bottom:0',
       ].join(';'),
-      bodyCSS: [
+      bylineCSS: [
         `color:${c.textMuted}`,
         'font-size:12px',
         'line-height:1.6',

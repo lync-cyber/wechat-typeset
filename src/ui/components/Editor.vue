@@ -6,7 +6,9 @@ import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirro
 import { markdown } from '@codemirror/lang-markdown'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { createContainerAutocomplete, createContainerLinter } from '../editor-extensions'
+import { containerAwareExtensions } from '../editor-container-aware'
 import { applyZhFixHighlight, zhFixHighlightExtension } from '../editor-extensions-zhfix'
+import { foldGutter, foldKeymap } from '@codemirror/language'
 import { sanitizePastedHtml, shouldSanitize } from '../../infra/clipboard/pasteSanitize'
 import { uploadImages, isImageFile } from '../../infra/clipboard/imageIntake'
 import { uiThemeMode } from '../../app/uiTheme'
@@ -261,9 +263,10 @@ function createView(doc: string) {
     doc,
     extensions: [
       lineNumbers(),
+      foldGutter(),
       highlightActiveLine(),
       history(),
-      keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
+      keymap.of([...defaultKeymap, ...historyKeymap, ...foldKeymap, indentWithTab]),
       markdown(),
       // 先放 chrome 兜底，再放 syntax compartment——compartment 内的 oneDark
       // 在 dark 时会覆盖 chrome 颜色（顺序后定义优先）；light 时 compartment 为空,
@@ -272,6 +275,7 @@ function createView(doc: string) {
       syntaxCompartment.of(syntaxExtensionFor(uiThemeMode.value)),
       createContainerAutocomplete(),
       createContainerLinter(),
+      containerAwareExtensions,
       ...zhFixHighlightExtension,
       EditorView.lineWrapping,
       EditorView.updateListener.of((upd) => {

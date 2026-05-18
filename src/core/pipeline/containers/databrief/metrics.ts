@@ -1,22 +1,15 @@
 /**
  * data-brief 家族 · 数值与图表（metrics）
  *
- * 4 个容器 + 4 个 sparkline / 趋势着色 helper + 1 个 KPI dashboard 内部栈：
+ * 4 个容器 + sparkline helpers + KPI dashboard 内部栈：
  *   - kpi-dashboard  三指标卡面板外壳（带 source / period 头脚）
  *   - kpi-item       单指标卡（label / delta / value+unit / sparkline / foot）
  *   - bar-chart      横向条形图外壳
- *   - bar            单条（div 宽度，无 SVG）
+ *   - bar            单条
  *
- * 为什么 helpers 不进 databrief/_shared.ts：
- *   parseSeries / pointsFromSeries / deltaTone / trendStroke 全部仅服务 kpi-item 的 sparkline 渲染；
- *   KPI_DASHBOARD_STACK 也仅在 kpi-dashboard / kpi-item 配对使用。本文件就是它们的天然归属。
- *   一旦未来出现"frame 也要画 sparkline"的诉求，再升提到 databrief/_shared.ts 不迟（YAGNI）。
- *
- * 设计纪律：
- *   - kpi-item 不对称 padding/border 用栈深度推断"是否首项"（markdown-it-container
- *     是流式 open/close，无法前瞻"是否末项"，详见 kpiItemContainer 注释）
- *   - sparkline strokeWidth ≥ 1，端点 ≥ 1.4 半径，polyline 用单根线段（公众号粘贴稳定）
- *   - bar 走 div 宽度，避免 SVG width 在被粘贴时丢失（双重保险）
+ * 布局纪律（与 bar 容器一致 · rules.ts FORBIDDEN_DISPLAY_VALUES）：
+ *   多列等宽走 display:table + table-cell，**不用 grid**——公众号粘贴后 grid 被剥成
+ *   空值，子项塌成顺排。table-layout:fixed 保证三栏等宽不被长内容拉宽。
  */
 
 import type { ContainerRenderer, ContainerRenderContext } from '../types'
@@ -42,14 +35,31 @@ function parseSeries(raw: string | undefined): number[] {
 }
 
 /**
- * 把一串 y 值（约定 0–13 视域）映射为 polyline points="..."。
- * 横向等分 viewBox 宽 110，纵向直接取原值（与设计稿 viewBox 0 0 110 14 一致）。
+ * 把任意数值序列按 min/max 自动缩放到 sparkline viewBox（0 0 110 14）的可视区。
+ *
+ * 为什么自动缩放：原约定"作者写 0–13 SVG y 坐标"反直觉（SVG y 轴反转：值越大越靠下），
+ * 且任何超出 [0,13] 的真实数据都会渲染到 viewBox 外完全不可见（例如电子书渗透率
+ * 48–61% 写入后 polyline 在 y=48..61 全部超出可视区，作者看到的是空白）。
+ *
+ * 现在作者直接写真实值（百分比 / 分钟 / 任意单位），渲染器算 min→y=12（视觉最低）/
+ * max→y=2（视觉最高），上下各留 2px 边距。所有值相等时画水平线 y=7（mid）。
+ * 返回 lastY 让圆点端标用同一刻度。
  */
-function pointsFromSeries(series: number[], width = 110): string {
-  if (series.length === 0) return ''
-  if (series.length === 1) return `0,${series[0]} ${width},${series[0]}`
+function pointsFromSeries(
+  series: number[],
+  width = 110,
+): { points: string; lastY: number } {
+  if (series.length === 0) return { points: '', lastY: 7 }
+  if (series.length === 1) return { points: `0,7 ${width},7`, lastY: 7 }
+  const min = Math.min(...series)
+  const max = Math.max(...series)
+  const range = max - min
   const step = width / (series.length - 1)
-  return series.map((y, i) => `${(i * step).toFixed(1)},${y}`).join(' ')
+  const yMin = 2
+  const ySpan = 10
+  const toY = (v: number) => (range === 0 ? 7 : yMin + ((max - v) / range) * ySpan)
+  const points = series.map((v, i) => `${(i * step).toFixed(1)},${toY(v).toFixed(2)}`).join(' ')
+  return { points, lastY: toY(series[series.length - 1]) }
 }
 
 /**
@@ -77,15 +87,9 @@ function trendStroke(trend: string | undefined, c: ContainerRenderContext['token
 // kpi-dashboard · 三指标 + sparkline（外壳）
 // ============================================================
 
-/**
- * 内部缓存：当一个 kpi-dashboard 打开时，把 source / itemCount 暂存。
- *   - source：close 时挂底部 SOURCE 行
- *   - itemCount：kpi-item.open 期间递增，让子项决定 padding/border 的不对称分配
- *     （第 1 项无左 padding，最后一项无右 padding + 无 border-right）。
- *
- * markdown-it-container 的回调是顺序流，open/close 一一对应；嵌套同名容器不允许，
- * 栈深度恒为 0/1。close 时栈顶元素的 itemCount 给出最终子项个数。
- */
+// KPI_DASHBOARD_STACK：kpi-item 的不对称 padding 通过递增 itemCount 推断"是否首项"
+// （markdown-it-container 流式 open/close 无法前瞻末项，详见 kpiItemContainer）。
+// 栈深度恒为 0/1：dashboard 不允许嵌套同名容器。
 const KPI_DASHBOARD_STACK: Array<{ source: string; itemCount: number }> = []
 
 export const kpiDashboardContainer: ContainerRenderer = {
@@ -97,27 +101,35 @@ export const kpiDashboardContainer: ContainerRenderer = {
     const c = ctx.tokens.colors
     const wrapperCSS = inline(ctx.containers.kpiDashboard)
     const headerCSS = [
-      'display:grid',
-      'grid-template-columns:1fr auto',
-      'align-items:baseline',
+      'display:table',
+      'width:100%',
+      'table-layout:auto',
       'margin-bottom:14px',
       'padding-bottom:8px',
       `border-bottom:1px solid ${c.border}`,
     ].join(';')
     const titleCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
       'font-family:Menlo,Monaco,monospace',
       `color:${c.text}`,
       'font-size:10px',
       'letter-spacing:0.15em',
     ].join(';')
+    // period 走显式像素宽——公众号剥 white-space:nowrap 而保留 width:1%，
+    // 原"shrink-to-content"技巧会把 period 塌成单字符竖排。160px 容下
+    // "2026Q1 / YoY+QoQ"（≈16 字 monospace 9px）。
     const periodCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'width:160px',
       'font-family:Menlo,Monaco,monospace',
       `color:${c.textMuted}`,
       'font-size:9px',
       'letter-spacing:0.05em',
       'text-align:right',
     ].join(';')
-    const gridCSS = ['display:grid', 'grid-template-columns:1fr 1fr 1fr', 'gap:0'].join(';')
+    const gridCSS = ['display:table', 'width:100%', 'table-layout:fixed'].join(';')
     return (
       `<section class="container-kpi-dashboard" style="${wrapperCSS}">\n` +
       `<section class="container-kpi-dashboard__header" style="${headerCSS}">` +
@@ -150,19 +162,11 @@ export const kpiDashboardContainer: ContainerRenderer = {
 /**
  * kpi-item · 单指标卡（label / delta / caption / value+unit / sparkline / foot）
  *
- * 一切以 attrs 驱动。body 内容忽略（markdown-it 仍会渲染为空段落 fragment，但视觉上
- * 不影响——为减少 noise，作者应保持 body 空）。
+ * 一切以 attrs 驱动；body 内容忽略。
  *
- * 不对称 padding / border：通过父容器（KPI_DASHBOARD_STACK 栈顶）的 itemCount 计数
- * 推断本 item 是第 1 / 中间 / 最后一项。
- *   - 第 1 项：padding-left:0，padding-right:14px，border-right:1px
- *   - 中间项：padding:0 14px，border-right:1px
- *   - 末项约定：渲染期我们不知"是否是最后"——markdown-it-container 流式 open/close
- *     没法前瞻。变通：所有项渲染时按"中间项"对待，dashboard close 时**不修剪末项**——
- *     视觉上多出的 14px 右 padding 被 dashboard 自身的 padding-right 吃掉；
- *     border-right 在末项视觉上紧贴 dashboard 内框，可接受。
- *   即：第 1 项 padding-left=0 是唯一被特殊处理的位置；这就够把"3 项中宽度被吃掉
- *   84px"的硬伤降到 28px，让"12 分钟"等值一行能放下。
+ * 不对称 padding：第 1 项 padding-left:0，其余项左右各 8px。markdown-it-container 流式
+ * open/close 无法前瞻末项，所以全部按"非末项"渲染——多出的右 padding 被 dashboard 自
+ * 身的 padding-right 吃掉。
  */
 export const kpiItemContainer: ContainerRenderer = {
   open: (ctx) => {
@@ -179,33 +183,39 @@ export const kpiItemContainer: ContainerRenderer = {
     const idx = top ? top.itemCount : 0
     if (top) top.itemCount = idx + 1
     const isFirst = idx === 0
-    const padLeft = isFirst ? 0 : 12
-    const padRight = 12
+    const padLeft = isFirst ? 0 : 8
+    const padRight = 8
     const wrapperCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:33.33%',
       `padding:0 ${padRight}px 0 ${padLeft}px`,
       `border-right:1px solid ${c.border}`,
     ].join(';')
     const headerCSS = [
-      'display:grid',
-      'grid-template-columns:1fr auto',
-      'align-items:baseline',
+      'display:table',
+      'width:100%',
+      'table-layout:auto',
       'margin-bottom:12px',
     ].join(';')
     const labelCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
       'font-family:Menlo,Monaco,monospace',
       'font-size:9px',
       `color:${c.textMuted}`,
     ].join(';')
     const deltaCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'width:60px',
       'font-family:Menlo,Monaco,monospace',
       'font-size:9px',
       `color:${deltaTone(delta, c)}`,
       'text-align:right',
     ].join(';')
     const captionCSS = ['font-size:10px', `color:${c.textMuted}`, 'margin-bottom:2px'].join(';')
-    // value-row 加 white-space:nowrap：列宽紧时 "12 分钟" / "138 次" 不再被
-    // 中文断字规则拆到第二行。inline-block + nowrap 保证整组（大数字 + 单位）
-    // 作为原子排版单元。
+    // value-row nowrap：保证大数字 + 单位作为原子单元，列宽紧时不被中文断字规则拆行。
     const valueRowCSS = [
       'display:inline-block',
       'margin-bottom:10px',
@@ -213,44 +223,44 @@ export const kpiItemContainer: ContainerRenderer = {
       'white-space:nowrap',
     ].join(';')
     const valueCSS = [
-      'font-size:34px',
+      'font-size:30px',
       'font-weight:700',
       'line-height:0.9',
       `color:${c.text}`,
       'letter-spacing:-0.03em',
     ].join(';')
     const unitCSS = [
-      'font-size:12px',
+      'font-size:11px',
       'font-weight:500',
       `color:${c.textMuted}`,
-      'margin-left:4px',
+      'margin-left:3px',
     ].join(';')
     const footCSS = [
-      'display:grid',
-      'grid-template-columns:1fr auto',
+      'display:table',
+      'width:100%',
+      'table-layout:auto',
       'font-family:Menlo,Monaco,monospace',
       'font-size:9px',
       `color:${c.textMuted}`,
+      'line-height:1.4',
       'margin-top:4px',
-      'white-space:nowrap',
     ].join(';')
-    // sparkline SVG
+    const footLhsCSS = 'display:table-cell;vertical-align:top;word-break:break-all'
+    const footRhsCSS =
+      'display:table-cell;vertical-align:top;text-align:right;padding-left:4px;word-break:break-all'
     const stroke = trendStroke(trend, c)
-    const pts = pointsFromSeries(series)
-    const lastY = series.length > 0 ? series[series.length - 1] : 7
-    const svg =
-      pts.length > 0
-        ? `<svg viewBox="0 0 110 14" width="100%" height="14" preserveAspectRatio="none" style="display:block">` +
-          `<line x1="0" y1="7" x2="110" y2="7" stroke="${c.border}" stroke-width="1"/>` +
-          `<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="1.2"/>` +
-          `<circle cx="110" cy="${lastY}" r="2" fill="${stroke}"/>` +
-          `</svg>`
-        : ''
-    // foot 拆 "lhs → rhs"
+    const { points: pts, lastY } = pointsFromSeries(series)
+    const svg = pts
+      ? `<svg viewBox="0 0 110 14" width="100%" height="14" preserveAspectRatio="none" style="display:block">` +
+        `<line x1="0" y1="7" x2="110" y2="7" stroke="${c.border}" stroke-width="1"/>` +
+        `<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="1.2"/>` +
+        `<circle cx="110" cy="${lastY.toFixed(2)}" r="2" fill="${stroke}"/>` +
+        `</svg>`
+      : ''
     const [lhs, rhs] = foot.includes('→') ? foot.split('→').map((s) => s.trim()) : [foot, '']
     const footEl =
       lhs || rhs
-        ? `<section style="${footCSS}"><span>${escText(lhs)}</span><span style="text-align:right">${escText(rhs)}</span></section>`
+        ? `<section style="${footCSS}"><span style="${footLhsCSS}">${escText(lhs)}</span><span style="${footRhsCSS}">${escText(rhs)}</span></section>`
         : ''
     return (
       `<section class="container-kpi-item" style="${wrapperCSS}">\n` +
@@ -270,10 +280,30 @@ export const kpiItemContainer: ContainerRenderer = {
 // bar-chart · 横向条形图（外壳）
 // ============================================================
 
+// BAR_CHART_STACK：让 bar 子项读父 chart 的 labelWidth / valueWidth attrs。
+// 不用上下文穿透（ctx 没有"父容器栈"槽位），栈深度恒为 0/1：bar-chart 不嵌套。
+const BAR_CHART_STACK: Array<{ labelWidth: string; valueWidth: string }> = []
+
+const DEFAULT_BAR_LABEL_WIDTH = '72px' // 容下 5 字中文 / 短英文标签
+const DEFAULT_BAR_VALUE_WIDTH = '48px' // 容下 "9 分钟" / "100%" 等 4 字数值
+
+// 接受 `80` / `80px` / `25%` / `5em` / `5rem` 形态；其它（含未配置）落到 fallback。
+// 纯数字按 px 处理；带单位则原样回传。inline style 注入前强约束以防 CSS 注入。
+const CSS_LENGTH_RE = /^\d+(?:px|%|em|rem|ch)?$/
+function sanitizeLength(raw: string | undefined, fallback: string): string {
+  if (!raw) return fallback
+  const trimmed = raw.trim()
+  if (!CSS_LENGTH_RE.test(trimmed)) return fallback
+  return /^\d+$/.test(trimmed) ? `${trimmed}px` : trimmed
+}
+
 export const barChartContainer: ContainerRenderer = {
   open: (ctx) => {
     const title = ctx.info.trim() || ''
     const subtitle = ctx.attrs.subtitle ?? ''
+    const labelWidth = sanitizeLength(ctx.attrs.labelWidth, DEFAULT_BAR_LABEL_WIDTH)
+    const valueWidth = sanitizeLength(ctx.attrs.valueWidth, DEFAULT_BAR_VALUE_WIDTH)
+    BAR_CHART_STACK.push({ labelWidth, valueWidth })
     const c = ctx.tokens.colors
     const wrapperCSS = inline(ctx.containers.barChart)
     const titleCSS = ['font-size:12px', 'font-weight:700', `color:${c.text}`, 'margin-bottom:4px'].join(';')
@@ -286,20 +316,24 @@ export const barChartContainer: ContainerRenderer = {
       : ''
     return `<section class="container-bar-chart" style="${wrapperCSS}">\n${titleEl}${subEl}`
   },
-  close: '</section>\n',
+  close: () => {
+    BAR_CHART_STACK.pop()
+    return '</section>\n'
+  },
 }
 
 /**
- * bar · 单条（attrs: label / pct / value / tone=normal|warn）
+ * bar · 单条
+ *
+ * 必填 attrs：pct（0–100，超界 clamp）。可选：label / value / tone=normal|warn /
+ *   labelWidth / valueWidth（per-bar 覆盖父 bar-chart 的同名设置，CSS length 字面量）。
  *
  * 公众号兼容性纪律：
- *   - 行布局走 `display:table` + 三个 `display:table-cell`，**不用 grid**——FORBIDDEN_DISPLAY_VALUES
- *     明文禁 grid（粘贴后被剥成空值，三栏塌成顺排）。table 是公众号已知保留的多列布局机制，
- *     仓库内 colophon 已有先例。
- *   - 轨道/填充走块级 `<section>`，**不用 `<span>`**——inline 元素的 height/width/background-color
- *     在公众号粘贴后会被无视（inline 不接受块级尺寸）。`<section>` 默认 display:block，
- *     宽度撑满 table-cell，10px 高的彩条才能稳定出现。
- *   - 填充的 `width:${pct}%` 以轨道宽为参照——轨道是 cell 内的块元素 width:100%，参照确定。
+ *   - 行布局走 `display:table` + `display:table-cell`，不用 grid（rules.ts
+ *     FORBIDDEN_DISPLAY_VALUES 明文禁 grid，粘贴后被剥成空值）。
+ *   - 轨道/填充走块级 `<section>` 而非 `<span>`——inline 元素的 height/width/
+ *     background-color 在公众号粘贴后会被无视（inline 不接受块级尺寸）。
+ *   - 填充的 `width:${pct}%` 以轨道宽为参照——轨道是 cell 内的块元素 width:100%。
  */
 export const barContainer: ContainerRenderer = {
   open: (ctx) => {
@@ -310,6 +344,16 @@ export const barContainer: ContainerRenderer = {
     const tone = ctx.attrs.tone ?? 'normal'
     const c = ctx.tokens.colors
     const barColor = tone === 'warn' ? c.status.danger.accent : c.primary
+    // 优先级：per-bar attrs > 父 bar-chart attrs > 默认值
+    const parent = BAR_CHART_STACK[BAR_CHART_STACK.length - 1]
+    const labelWidth = sanitizeLength(
+      ctx.attrs.labelWidth,
+      parent?.labelWidth ?? DEFAULT_BAR_LABEL_WIDTH,
+    )
+    const valueWidth = sanitizeLength(
+      ctx.attrs.valueWidth,
+      parent?.valueWidth ?? DEFAULT_BAR_VALUE_WIDTH,
+    )
     const wrapperCSS = [
       'display:table',
       'width:100%',
@@ -320,7 +364,7 @@ export const barContainer: ContainerRenderer = {
     ].join(';')
     const labelCellCSS = [
       'display:table-cell',
-      'width:40px',
+      `width:${labelWidth}`,
       'vertical-align:middle',
       `color:${c.text}`,
     ].join(';')
@@ -331,7 +375,7 @@ export const barContainer: ContainerRenderer = {
     ].join(';')
     const valueCellCSS = [
       'display:table-cell',
-      'width:42px',
+      `width:${valueWidth}`,
       'vertical-align:middle',
       'text-align:right',
       `color:${c.text}`,

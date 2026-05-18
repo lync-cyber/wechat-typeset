@@ -36,50 +36,46 @@ export const qaBlockContainer: ContainerRenderer = {
       'margin-bottom:10px',
     ].join(';')
     const rowCSS = [
-      'display:grid',
-      'grid-template-columns:22px 1fr',
-      'gap:10px',
-      'align-items:start',
+      'display:table',
+      'width:100%',
+      'table-layout:auto',
       'font-size:13px',
       'line-height:1.65',
       `color:${c.text}`,
       'margin-bottom:8px',
     ].join(';')
-    const qBadgeCSS = [
+    const badgeCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:22px',
+      'padding-right:10px',
+    ].join(';')
+    const textCellCSS = ['display:table-cell', 'vertical-align:top'].join(';')
+    const badgeBase = [
       'display:inline-block',
       'width:22px',
       'height:22px',
-      `background-color:${c.primary}`,
-      `color:${c.textInverse}`,
       'text-align:center',
       'line-height:22px',
       'font-size:11px',
       'font-weight:700',
-    ].join(';')
-    const aBadgeCSS = [
-      'display:inline-block',
-      'width:22px',
-      'height:22px',
-      `background-color:${c.text}`,
       `color:${c.textInverse}`,
-      'text-align:center',
-      'line-height:22px',
-      'font-size:11px',
-      'font-weight:700',
     ].join(';')
+    const qBadgeCSS = `${badgeBase};background-color:${c.primary}`
+    const aBadgeCSS = `${badgeBase};background-color:${c.text}`
     const qRow = q
-      ? `<section class="container-qa-block__q" style="${rowCSS}"><span style="${qBadgeCSS}">Q</span><span>${escText(q)}</span></section>\n`
+      ? `<section class="container-qa-block__q" style="${rowCSS}"><span style="${badgeCellCSS}"><span style="${qBadgeCSS}">Q</span></span><span style="${textCellCSS}">${escText(q)}</span></section>\n`
       : ''
     // A 头像 + 内容容器。内容由 markdown-it 渲染（在 close 之前的 body tokens 输出）。
-    // 我们把 A badge + 一个 grid 行 wrapper 写在 open 尾部；close 关 wrapper 再关 section。
+    // close 关 answer span + table-cell + row section + outer section。
     return (
       `<section class="container-qa-block" style="${wrapperCSS}">\n` +
       `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kicker)}</section>\n` +
       qRow +
-      `<section class="container-qa-block__a" style="${rowCSS}"><span style="${aBadgeCSS}">A</span><span class="container-qa-block__answer">\n`
+      `<section class="container-qa-block__a" style="${rowCSS}"><span style="${badgeCellCSS}"><span style="${aBadgeCSS}">A</span></span><span style="${textCellCSS}"><span class="container-qa-block__answer">\n`
     )
   },
-  close: '</span></section>\n</section>\n',
+  close: '</span></span></section>\n</section>\n',
 }
 
 // ============================================================

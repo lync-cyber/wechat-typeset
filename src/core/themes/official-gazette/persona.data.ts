@@ -101,24 +101,28 @@ export const spec: PersonaSpec = {
     },
 
     // issueStamp · 期号 / 文号印章（公文文号戳）
-    // 双线矩形 + 文号 ISSUE/文号 混排；与 industry-observer 形制相同但用普鲁士蓝
+    // 双线矩形 + 文号 ISSUE/文号 混排；与 industry-observer 形制相同但用普鲁士蓝。
+    // viewBox 320：覆盖 `〔023〕第2025-04-20号 · 周刊` 等真实值（CJK + 数字混排约 240px），
+    // 留出足够余量以兼容更长 kind（"特别公告"/"上市公司年报公告"）。
     issueStamp: {
-      viewBox: [0, 0, 280, 26],
-      width: 280,
+      viewBox: [0, 0, 320, 26],
+      width: 320,
       height: 26,
       inlineStyle: { display: 'inline-block', verticalAlign: 'middle' },
       placeholders: ['issue', 'date', 'kind'],
       primitives: [
-        { type: 'rect', x: 0.5, y: 0.5, w: 279, h: 25, stroke: '#1c3a6e', strokeWidth: 1 },
-        { type: 'rect', x: 3, y: 3, w: 274, h: 20, stroke: '#1c3a6e', strokeWidth: 1, opacity: 0.4 },
+        { type: 'rect', x: 0.5, y: 0.5, w: 319, h: 25, stroke: '#1c3a6e', strokeWidth: 1 },
+        { type: 'rect', x: 3, y: 3, w: 314, h: 20, stroke: '#1c3a6e', strokeWidth: 1, opacity: 0.4 },
         {
+          // textAnchor=middle：文号居中，公文戳的对称感更稳；与 industry-observer 同步
           type: 'text',
-          x: 10,
+          x: 160,
           y: 19,
           content: '〔{issue}〕第{date}号 · {kind}',
           fontSize: 14,
           fontWeight: 600,
           fill: '#1c3a6e',
+          textAnchor: 'middle',
           letterSpacing: 1,
         },
       ],

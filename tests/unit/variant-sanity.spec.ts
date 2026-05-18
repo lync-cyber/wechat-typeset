@@ -82,11 +82,27 @@ describe('枚举完整性', () => {
  * class 不再是 container-X--{id}——这种情况下快照不要求精确命中，仍允许过测试。
  */
 function sliceVariantChunk(html: string, containerName: string, variantId: string): string {
-  const re = new RegExp(
-    `<section[^>]*container-${containerName}--${variantId}[\\s\\S]*?</section>`,
-  )
+  const re = new RegExp(`<section[^>]*container-${containerName}--${variantId}[^>]*>`)
   const m = html.match(re)
-  return m?.[0] ?? '<no-match>'
+  if (!m || m.index === undefined) return '<no-match>'
+  // 深度计数：variant 内部可能再嵌 <section>（如 classic 的左/右括号 block 包裹），
+  // 非贪婪 regex 会停在第一个 </section> 漏内容；这里手动跟 open/close 对齐。
+  const start = m.index
+  let depth = 1
+  let i = start + m[0].length
+  while (i < html.length && depth > 0) {
+    const nextOpen = html.indexOf('<section', i)
+    const nextClose = html.indexOf('</section>', i)
+    if (nextClose === -1) break
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++
+      i = nextOpen + '<section'.length
+    } else {
+      depth--
+      i = nextClose + '</section>'.length
+    }
+  }
+  return html.slice(start, i)
 }
 
 describe('默认主题 · 每 variant 渲染片段快照', () => {

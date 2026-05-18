@@ -2,9 +2,9 @@
  * pull-quote · giant-mark（装饰巨号 · default）
  *
  * 人格：人物特稿杂志的 pull-quote 母本。装饰巨号 SVG 引号统领，大字左对齐。
- * 视觉骨架：左侧 80×60 inline SVG 引号字符（path 描线，accent 色，stroke 2px），
- *   下方 18-20px 大字 line-height 1.8 左对齐。无边框无填充，留白与字号承担分量。
- * 与其它 variant 区别：唯一用"装饰引号字形"做主视，body 大字左对齐而非居中。
+ * 视觉骨架：上方 64×48 inline SVG 引号字符（path 描线，accent 色，stroke 2px），
+ *   下方 body 段（markdown-it 渲染为 `<p>`，pull-quote 容器通过 quoteCSS 把 p 字号
+ *   提到 19px / 600 weight 左对齐）。无边框无填充，留白与字号承担分量。
  *
  * tokens 暴露：title/body 的颜色与字号——这四个字段是用户最常想调的"金句重音"控制点。
  * SVG 引号颜色不开放：stroke 是 SVG 属性而非 CSS 属性，var() 在 attr 上不生效；
@@ -68,7 +68,7 @@ const giantMark: VariantDef = {
       name: '拉引 · 装饰巨号',
       description: '巨号 SVG 引号 + 大字左对齐',
       markdown:
-        '::: pull-quote variant=giant-mark\n我们以为在阅读，其实只是在滑动。\n:::\n',
+        '::: pull-quote\n我们以为在阅读，其实只是在滑动。\n:::\n',
     },
   ],
   render: (ctx) => {
@@ -88,15 +88,17 @@ const giantMark: VariantDef = {
         `padding:8px 4px 8px ${ctx.tokens.spacing.containerPadding}px`,
         'text-align:left',
       ].join(';'),
-      titleCSS: [
+      bodyCSS: 'text-align:left',
+      quoteCSS: [
         `color:var(--uv-quote-color, ${c.text})`,
         'font-size:var(--uv-quote-size, 19px)',
         'line-height:1.8',
         'font-weight:600',
         'letter-spacing:0.3px',
-        'text-align:left',
+        'margin-top:0',
+        'margin-bottom:0',
       ].join(';'),
-      bodyCSS: [
+      bylineCSS: [
         `color:var(--uv-byline-color, ${c.textMuted})`,
         'font-size:var(--uv-byline-size, 13px)',
         'line-height:1.6',

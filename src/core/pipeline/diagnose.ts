@@ -34,6 +34,20 @@ import { scanZhTypo, type ZhTypoCode } from './zhTypo'
 
 export type DiagnosticSeverity = 'error' | 'warning' | 'info'
 
+/**
+ * 单点 quick-fix：一组确定性的文本编辑。
+ *
+ * 设计取舍：用 edits 数组而不是单 (from/to/insert) 三元组，是为了让"在原位修 + 文末追加"
+ * 这种跨段编辑（典型如 unclosed-fence 在文末插入闭合 fence）也能用同一个数据结构表达，
+ * linter 翻译层只需照搬 edits 即可，不必为每种 code 单独写 quick-fix 闭包。
+ */
+export interface DiagnosticFix {
+  /** action 标题（CodeMirror 在诊断浮层里渲染为按钮文字） */
+  title: string
+  /** 编辑列表；按文档原偏移给出。半开区间 [from, to)，insert 为新文本（可空串 = 删除）。 */
+  edits: ReadonlyArray<{ from: number; to: number; insert: string }>
+}
+
 export interface Diagnostic {
   /** 源码绝对字符偏移（含起始字符） */
   from: number
@@ -44,6 +58,8 @@ export interface Diagnostic {
   message: string
   /** 稳定错误码，供自动化 / i18n / 未来快速修复使用 */
   code: DiagnosticCode
+  /** 可机械修复时附带；linter 据此暴露 quick-fix action。 */
+  fix?: DiagnosticFix
 }
 
 export type DiagnosticCode =
@@ -203,6 +219,10 @@ export function diagnose(source: string): Diagnostic[] {
             : spec.parent
             ? ` 作为 ${spec.parent} 的子容器，必须用 :::。`
             : ''),
+        fix: {
+          title: `改为 ${expected}`,
+          edits: [{ from: colonStart, to: colonStart + colons, insert: expected }],
+        },
       })
     }
 
@@ -276,14 +296,19 @@ export function diagnose(source: string): Diagnostic[] {
       const hitCol = line.indexOf(yamlHit[1] + ':', line.indexOf(name) + name.length)
       if (hitCol >= 0) {
         const absStart = lineStart + hitCol
+        const keyEnd = absStart + yamlHit[1].length
         diagnostics.push({
           from: absStart,
-          to: absStart + yamlHit[1].length + 1,
+          to: keyEnd + 1,
           severity: 'warning',
           code: 'yaml-style-attr',
           message:
             `open 行的 "${yamlHit[1]}:" 看起来像 YAML；容器属性只接受 "key=value" 写法。` +
             ` 若是标题文字请忽略此告警。`,
+          fix: {
+            title: `改为 ${yamlHit[1]}=`,
+            edits: [{ from: keyEnd, to: keyEnd + 1, insert: '=' }],
+          },
         })
       }
     }
@@ -292,13 +317,29 @@ export function diagnose(source: string): Diagnostic[] {
   }
 
   // ── 6. 未闭合 fence（EOF 时栈非空） ─────────────
-  for (const frame of stack) {
+  // 倒序遍历栈：先报最内层，让 quick-fix 在文末按"内 → 外"顺序追加 close fence，
+  // 保持与作者打开顺序的对偶关系（外层 :::: 最后闭合）。
+  const sourceLen = source.length
+  const needsLeadingNewline = sourceLen > 0 && source[sourceLen - 1] !== '\n'
+  for (let i = stack.length - 1; i >= 0; i--) {
+    const frame = stack[i]
+    const fence = ':'.repeat(frame.colons)
     diagnostics.push({
       from: frame.openStart,
       to: frame.openEnd,
       severity: 'error',
       code: 'unclosed-fence',
-      message: `"${frame.name}" 容器未闭合——末尾缺少 "${':'.repeat(frame.colons)}" 行。`,
+      message: `"${frame.name}" 容器未闭合——末尾缺少 "${fence}" 行。`,
+      fix: {
+        title: `在文末插入 ${fence}`,
+        edits: [
+          {
+            from: sourceLen,
+            to: sourceLen,
+            insert: (needsLeadingNewline ? '\n' : '') + fence + '\n',
+          },
+        ],
+      },
     })
   }
 
@@ -310,6 +351,10 @@ export function diagnose(source: string): Diagnostic[] {
       severity: 'info', // 中文排版一律 info：不阻断作者发文，仅提示
       code: hit.code,
       message: ZH_TYPO_MESSAGE[hit.code](hit.original, hit.replacement),
+      fix: {
+        title: `改为 "${hit.replacement}"`,
+        edits: [{ from: hit.from, to: hit.to, insert: hit.replacement }],
+      },
     })
   }
 

@@ -2,7 +2,7 @@
  * codeBlock · terminal-frame（macOS Terminal 窗口腔）
  *
  * 设计语言：终端会话 / SSH / REPL（macOS Terminal、iTerm、tmux）。
- *   - 顶部窗口腔：3 个红/黄/绿圆点（traffic-light）+ 居中等宽窗口标题
+ *   - 顶部窗口腔：3 个红/黄/绿圆点（traffic-light）+ 紧贴圆点右侧的等宽语言名（左对齐，模拟 iTerm/tmux 标签栏）
  *   - 下方暗色代码区：固定深底 #1d1f23，hljs Atom One Dark 配色直接生效
  *   - 即使在浅色主题下也保持暗腔——"终端"语义胜于"页面 voice"
  *
@@ -58,8 +58,7 @@ function trafficLights(): string {
 }
 
 function titleFor(language: string): string {
-  if (!language) return 'terminal'
-  return `${language.toLowerCase()} — bash`
+  return language ? language.toLowerCase() : 'terminal'
 }
 
 const terminalFrame: CodeBlockDef = {
@@ -106,14 +105,13 @@ const terminalFrame: CodeBlockDef = {
     const titleCell = [
       `display:table-cell`,
       `vertical-align:middle`,
-      `text-align:center`,
+      `text-align:left`,
+      `padding-left:10px`,
       `font-family:Menlo,Monaco,Consolas,monospace`,
       `font-size:11px`,
       `color:${TERMINAL.titleText}`,
       `letter-spacing:0.04em`,
     ].join(';')
-    // 右侧补一个等宽空 cell 保持中线居中（否则 traffic-lights cell 会把 title 推右）
-    const spacerCell = [`display:table-cell`, `width:1%`].join(';')
     const preReset = [
       `margin:0`,
       `border-radius:0`,
@@ -130,7 +128,6 @@ const terminalFrame: CodeBlockDef = {
       `<section class="wx-code-block__chrome" style="${chrome}">`,
       `<span style="${lightsCell}">${trafficLights()}</span>`,
       `<span style="${titleCell}">${titleFor(language)}</span>`,
-      `<span style="${spacerCell}"></span>`,
       `</section>`,
       `<pre class="wx-code-block__pre" style="${preReset}"><code class="${langClass}">${codeInnerHtml}</code></pre>`,
       `</section>`,

@@ -7,8 +7,9 @@
  *   - editorial.ts 编辑文案块    · qa-block / footnotes
  *
  * 设计纪律（与各子文件共通）：
- *   1. **不依赖 flex 关键布局**——wxPatch 会把 display:flex → block。需要"行内贴边"
- *      走 inline-block + vertical-align；多列等宽走 display:grid（WeChat 不剥 grid）。
+ *   1. **多列布局只走 display:table + table-cell**——flex 在公众号被 wxPatch 降为
+ *      block，grid 在 rules.ts FORBIDDEN_DISPLAY_VALUES 黑名单里（粘贴后被剥成空）。
+ *      行内贴边走 inline-block + vertical-align。
  *   2. **inline SVG 走 motif 同等纪律**——strokeWidth ≥ 1，端点 ≥ 1.4 半径，
  *      polyline 用单根线段而非多 line（粘贴稳定）。
  *   3. **monospace 字体仅在 renderer inline 出现**——主题 elements/containers CSS
