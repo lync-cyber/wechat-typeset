@@ -35,14 +35,31 @@ function parseSeries(raw: string | undefined): number[] {
 }
 
 /**
- * 把一串 y 值（约定 0–13 视域）映射为 polyline points="..."。
- * 横向等分 viewBox 宽 110，纵向直接取原值（与设计稿 viewBox 0 0 110 14 一致）。
+ * 把任意数值序列按 min/max 自动缩放到 sparkline viewBox（0 0 110 14）的可视区。
+ *
+ * 为什么自动缩放：原约定"作者写 0–13 SVG y 坐标"反直觉（SVG y 轴反转：值越大越靠下），
+ * 且任何超出 [0,13] 的真实数据都会渲染到 viewBox 外完全不可见（例如电子书渗透率
+ * 48–61% 写入后 polyline 在 y=48..61 全部超出可视区，作者看到的是空白）。
+ *
+ * 现在作者直接写真实值（百分比 / 分钟 / 任意单位），渲染器算 min→y=12（视觉最低）/
+ * max→y=2（视觉最高），上下各留 2px 边距。所有值相等时画水平线 y=7（mid）。
+ * 返回 lastY 让圆点端标用同一刻度。
  */
-function pointsFromSeries(series: number[], width = 110): string {
-  if (series.length === 0) return ''
-  if (series.length === 1) return `0,${series[0]} ${width},${series[0]}`
+function pointsFromSeries(
+  series: number[],
+  width = 110,
+): { points: string; lastY: number } {
+  if (series.length === 0) return { points: '', lastY: 7 }
+  if (series.length === 1) return { points: `0,7 ${width},7`, lastY: 7 }
+  const min = Math.min(...series)
+  const max = Math.max(...series)
+  const range = max - min
   const step = width / (series.length - 1)
-  return series.map((y, i) => `${(i * step).toFixed(1)},${y}`).join(' ')
+  const yMin = 2
+  const ySpan = 10
+  const toY = (v: number) => (range === 0 ? 7 : yMin + ((max - v) / range) * ySpan)
+  const points = series.map((v, i) => `${(i * step).toFixed(1)},${toY(v).toFixed(2)}`).join(' ')
+  return { points, lastY: toY(series[series.length - 1]) }
 }
 
 /**
@@ -231,18 +248,15 @@ export const kpiItemContainer: ContainerRenderer = {
     const footLhsCSS = 'display:table-cell;vertical-align:top;word-break:break-all'
     const footRhsCSS =
       'display:table-cell;vertical-align:top;text-align:right;padding-left:4px;word-break:break-all'
-    // sparkline SVG
     const stroke = trendStroke(trend, c)
-    const pts = pointsFromSeries(series)
-    const lastY = series.length > 0 ? series[series.length - 1] : 7
-    const svg =
-      pts.length > 0
-        ? `<svg viewBox="0 0 110 14" width="100%" height="14" preserveAspectRatio="none" style="display:block">` +
-          `<line x1="0" y1="7" x2="110" y2="7" stroke="${c.border}" stroke-width="1"/>` +
-          `<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="1.2"/>` +
-          `<circle cx="110" cy="${lastY}" r="2" fill="${stroke}"/>` +
-          `</svg>`
-        : ''
+    const { points: pts, lastY } = pointsFromSeries(series)
+    const svg = pts
+      ? `<svg viewBox="0 0 110 14" width="100%" height="14" preserveAspectRatio="none" style="display:block">` +
+        `<line x1="0" y1="7" x2="110" y2="7" stroke="${c.border}" stroke-width="1"/>` +
+        `<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="1.2"/>` +
+        `<circle cx="110" cy="${lastY.toFixed(2)}" r="2" fill="${stroke}"/>` +
+        `</svg>`
+      : ''
     const [lhs, rhs] = foot.includes('→') ? foot.split('→').map((s) => s.trim()) : [foot, '']
     const footEl =
       lhs || rhs

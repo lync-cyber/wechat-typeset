@@ -53,7 +53,7 @@
 | `value` / `unit` | 数字本体 + 单位 |
 | `delta` | 同比标签（前缀决定颜色：`-` 红 / `+` 红 / `±` 灰） |
 | `trend` | sparkline 颜色方向（`up` / `down` / `flat`） |
-| `series` | sparkline 折线数据（逗号分隔 0–13 整数，左右端点对齐） |
+| `series` | sparkline 折线数据（逗号分隔的任意数值；按 min/max 自动缩放到可视区，左右端点对齐） |
 | `foot` | 期端对比小字（monospace 双端） |
 
 ---

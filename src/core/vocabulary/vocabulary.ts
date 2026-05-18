@@ -754,8 +754,8 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       { key: 'trend', description: 'sparkline 颜色方向', enum: ['up', 'down', 'flat'] },
       {
         key: 'series',
-        description: 'sparkline 折线数据（逗号分隔 0–13 整数，左右端点对齐）',
-        example: '2,4,5,6,8,9,10,11',
+        description: 'sparkline 折线数据（逗号分隔任意数值，按 min/max 自动缩放）',
+        example: '48,51,54,56,58,59,60,61',
       },
       { key: 'foot', description: '期端对比小字（monospace 双端）', example: "'15 38分 → '24 12分" },
     ],
