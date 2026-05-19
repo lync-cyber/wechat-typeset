@@ -649,7 +649,8 @@ export const spec: PersonaSpec = {
       'border-top': '3px solid #d97a3c',
       'border-radius': '0',
     },
-    // qa-block · 听众连线：左 2px 橙竖线 + 深蓝卡底（设计稿 qa-block 原型）
+    // qa-block · 听众连线 wrapper：左 2px 橙竖线 + 深蓝卡底（电台连线气质包裹），
+    // 内部 Q/A 节奏由 variant numbered-faq 渲染
     qaBlock: {
       __reset: true,
       'background-color': '#14263d',

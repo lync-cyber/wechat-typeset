@@ -772,8 +772,8 @@ VOL.IV · 2026—04—22 · CHF 14.—
       'issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；\n' +
       'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker）；编辑部按 / 方法论\n' +
       '走 note variant=editorial-stripe / research-dense。\n' +
-      '已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,\n' +
-      '但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
+      'qa-block：P3.3 升级 variant=typed-block（黑底反白 Q + 白底 A 双段），与设计稿 02·B "Q/A 三线表" 同骨架。\n' +
+      'issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
       '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）。',
   },
 }

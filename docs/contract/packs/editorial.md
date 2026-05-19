@@ -82,7 +82,7 @@
 
 ---
 
-## 读者问答
+## 读者问答（qa-block）
 
 ```
 ::: qa-block 读者问答 · Q&A q="数据显示 30 岁以下日均连读仅 8 分钟，还有救吗？"
@@ -90,7 +90,43 @@
 :::
 ```
 
-- `info` 是 kicker（如 `读者问答 · Q&A`）；`q` attr 是问题文本（主色 Q 方块头像 + 单行）；body 是回答（支持完整 Markdown）。
+- `info` 是 kicker（如 `读者问答 · Q&A`，可空——某些 variant 设计上不渲染 kicker）；`q` attr 是问题文本；body 是回答（支持完整 Markdown）。
+
+### 与 `dialogue` 容器的边界（出错频繁的地方）
+
+`qa-block` 与 `dialogue.qa-rows` **不可互换**。判断标准：
+
+| 维度 | `qa-block` | `dialogue` |
+| --- | --- | --- |
+| 轮次 | **单 Q + 单 A**（FAQ 范式） | **≥ 2 轮**（访谈 / 对谈整理稿） |
+| 数据形式 | `q` 写在 attrs（单值），body 是 A | 每轮一个 `dialogue-turn` 子容器，`name` / `role` 是 attrs |
+| 视觉 | 单条问答卡片（8 variant 各异） | 多段对话流（5 variant 各异） |
+| 语义 | 编辑部主动设问 → 一次性回答 | 真实双向交谈 / 多人对谈 |
+
+混用判定：1 次问答 → 用 `qa-block`；3 轮以上对答 → 用 `dialogue`；恰好 2 轮 → 看语义（编辑设问 = qa-block 的"问 + 答"切两轮过于堆叠；真实双向 = dialogue）。
+
+### 8 个 variant
+
+主题级默认骨架由 `theme.variants.qaBlock` 声明；作者侧用 `variant=<id>` 单稿覆盖。
+
+| id | 骨架 | 默认采用主题 | 适用场景 |
+| --- | --- | --- | --- |
+| `numbered-faq` | Q.NN 序号 + 加粗设问 + 底线分隔 + 下方答复段 | data-brief / commerce-pulse / late-night-vinyl / official-gazette / edu-classroom 等 15 主题 | FAQ 体例：逐条编号 Q + 解释 A，最通用 |
+| `hanging-qa` | 32px 左列大号斜体 Q./A. + 右列设问/回答（A 顶 1px 分隔） | editorial-mook | 杂志拉引体：编辑部读者通信，正式而克制 |
+| `seal-stamp` | 26×26 实心 + 描边 朱印徽章承载 CJK "问/答" | （experimental，待文言主题采用） | 宋本批注 / 古籍语境：问答以朱印呈现 |
+| `query-annotation` | 设问行夹在上下两条 1px 线之间 + 註 hanging 缩进 | （experimental） | 文言批注体：设问 + 注释式回答 |
+| `sample-query` | 左 54px QUERY / FINDING 双栏 + N°/obs 编号 | （experimental，待博物笔记主题采用） | 田野调查 / 标本采样：编号化设问 + 发现 |
+| `field-card` | 1px 实色外框 + Q/A kicker + dashed 行间分隔 + Card NN 编号 | （experimental） | 博物笔记 / 卡片记录：田野卡片孔位感 |
+| `circle-square` | 24×24 圆环 Q + 实心方 A 几何徽章 | youth-zine | 包豪斯 zine：粉丝问答的几何对照 |
+| `typed-block` | 1px 外框 + 黑底反白 Q 段 + 白底 A 段（双段叠层） | swiss-grid / brutalist | Neue Grafik / 终端 typed block：强反差对照 |
+
+作者侧切骨架示例：
+
+```
+::: qa-block 读者问答 · Q&A variant=hanging-qa q="我需要先具备写作基础才能加入这个写作社群？"
+不需要。我们更欢迎尚未形成"写作惯性"的初学者。
+:::
+```
 
 ---
 
