@@ -19,8 +19,9 @@ import { validateSnippet } from '../../../domain/components-lib/validate'
 import type { ComponentKind } from '../../../domain/components-lib'
 import { getVariantTokenSchema } from '../../../core/variants/tokenSchemaLookup'
 import type { Theme, VariantKind } from '../../../core/themes/types'
+import type { PatchLog } from '../../../core/pipeline/platforms/types'
 import type { DraftFields, UserVariantMode } from './useComponentDraft'
-import { defaultSnippetFor } from './placeholderFence'
+import { nextSnippetOnSelectionChange } from './placeholderFence'
 import MarkdownInput from './MarkdownInput.vue'
 import TokensPanel from './TokensPanel.vue'
 
@@ -32,6 +33,8 @@ const props = defineProps<{
   draft: DraftFields
   theme: Theme
   originalLinkedUvId?: string | null
+  /** 由 ComponentStudio 转发的大预览 patchLog，供宽屏布局下 Source/Custom 面板复用 */
+  livePatchLog?: PatchLog | null
 }>()
 
 const KIND_OPTIONS: Array<{ value: ComponentKind; label: string }> = [
@@ -57,21 +60,38 @@ const variantOptions = computed<string[]>(() => {
 const lastInjectedSnippet = ref<string>('')
 
 watch(
-  () => props.draft.kind,
-  (k) => {
-    if (k === 'none') {
-      props.draft.variantId = ''
-    } else {
-      const allowed = VARIANT_IDS[k] as readonly string[]
-      if (!allowed.includes(props.draft.variantId)) {
-        props.draft.variantId = allowed[0] ?? ''
+  () => [props.draft.kind, props.draft.variantId] as const,
+  ([k, vid], [prevK, prevVid]) => {
+    // kind 切换：先把 variantId 收敛到该 kind 下首个合法 id（none 时清空）。
+    // 收敛触发 watcher 二次执行，让 snippet 处理在 vid 已稳定的那次完成——
+    // 避免一次回调里做"改 vid + 改 md"两步，前者还可能被后者基于旧 vid 计算覆盖
+    if (k !== prevK) {
+      if (k === 'none') {
+        if (props.draft.variantId !== '') {
+          props.draft.variantId = ''
+          return
+        }
+      } else {
+        const allowed = VARIANT_IDS[k] as readonly string[]
+        if (!allowed.includes(vid)) {
+          props.draft.variantId = allowed[0] ?? ''
+          return
+        }
       }
     }
-    const cur = props.draft.markdownSnippet
-    if (cur.trim() === '' || cur === lastInjectedSnippet.value) {
-      const next = defaultSnippetFor(k, props.draft.variantId)
-      props.draft.markdownSnippet = next
-      lastInjectedSnippet.value = next
+    const { nextSnippet, rewriteLastInjected } = nextSnippetOnSelectionChange({
+      kind: k,
+      variantId: vid,
+      prevKind: prevK,
+      prevVariantId: prevVid,
+      current: props.draft.markdownSnippet,
+      lastInjected: lastInjectedSnippet.value,
+    })
+    if (nextSnippet !== props.draft.markdownSnippet) {
+      props.draft.markdownSnippet = nextSnippet
+    }
+    if (rewriteLastInjected) {
+      lastInjectedSnippet.value = nextSnippet
     }
   },
 )
@@ -104,31 +124,44 @@ watch(
   },
 )
 
-// 切档清空其它档草稿；点同档=切回 null（折叠面板）
+// 三档互斥：切档清空其它档草稿，点同档=切回 null（仅折叠面板，草稿保留）。
+// 切档前若"即将被清空"的档（非 next 那两档）有内容则 confirm；不能只看 cur——
+// toggle-off 后 cur=null 但其它档草稿仍在，下次切档会被静默清掉，是真 bug。
+// 假阳"刚进 patch/custom 还没编辑就再切档（脚手架算作内容）"代价低，远低于真编辑丢失。
+// 内联 trim 检查不引 ./userVariantScaffold —— 那模块字面常量只随 lazy panel 走，
+// 不能拖回主包；patch / custom 档"空 → 灌脚手架"由对应面板 onMounted 自行负责。
 function setMode(next: UserVariantMode): void {
-  if (next === props.draft.userVariantMode) {
+  const cur = props.draft.userVariantMode
+  if (next === cur) {
     props.draft.userVariantMode = null
     return
   }
+  const d = props.draft
+  const tokensHas = Object.keys(d.userVariantTokens).length > 0
+  const p = d.userVariantCssPatch
+  const patchHas = !!(p.wrapperCSS.trim() || p.titleCSS.trim() || p.bodyCSS.trim())
+  const c = d.userVariantCustom
+  const customHas = !!(c.template.trim() || c.wrapperCSS.trim() || c.titleCSS.trim() || c.bodyCSS.trim() || c.svgSlot.trim())
+  const willClear =
+    (next !== 'tokens' && tokensHas) ||
+    (next !== 'patch' && patchHas) ||
+    (next !== 'custom' && customHas)
+  if (willClear && !window.confirm('切换将清空其它模式下已写的内容，是否继续？')) return
   if (next === 'tokens') {
-    props.draft.userVariantCssPatch.wrapperCSS = ''
-    props.draft.userVariantCssPatch.titleCSS = ''
-    props.draft.userVariantCssPatch.bodyCSS = ''
+    d.userVariantCssPatch.wrapperCSS = ''
+    d.userVariantCssPatch.titleCSS = ''
+    d.userVariantCssPatch.bodyCSS = ''
     clearCustomDraft()
   } else if (next === 'patch') {
-    for (const k of Object.keys(props.draft.userVariantTokens)) {
-      delete props.draft.userVariantTokens[k]
-    }
+    for (const k of Object.keys(d.userVariantTokens)) delete d.userVariantTokens[k]
     clearCustomDraft()
   } else if (next === 'custom') {
-    for (const k of Object.keys(props.draft.userVariantTokens)) {
-      delete props.draft.userVariantTokens[k]
-    }
-    props.draft.userVariantCssPatch.wrapperCSS = ''
-    props.draft.userVariantCssPatch.titleCSS = ''
-    props.draft.userVariantCssPatch.bodyCSS = ''
+    for (const k of Object.keys(d.userVariantTokens)) delete d.userVariantTokens[k]
+    d.userVariantCssPatch.wrapperCSS = ''
+    d.userVariantCssPatch.titleCSS = ''
+    d.userVariantCssPatch.bodyCSS = ''
   }
-  props.draft.userVariantMode = next
+  d.userVariantMode = next
 }
 
 function clearCustomDraft(): void {
@@ -137,6 +170,91 @@ function clearCustomDraft(): void {
   props.draft.userVariantCustom.titleCSS = ''
   props.draft.userVariantCustom.bodyCSS = ''
   props.draft.userVariantCustom.svgSlot = ''
+}
+
+// ── 高级样式 tree-nav 受控状态 ──────────────────────────────────────
+// 同组内切 slot 不触发 setMode（无 confirm 阻断）；跨组切才走 setMode 流程。
+// activeSlot 在档之间各自保留，方便作者来回切组时回到上次编辑的 slot。
+type PatchSlot = 'wrapperCSS' | 'titleCSS' | 'bodyCSS'
+type CustomSlot = 'template' | 'wrapperCSS' | 'titleCSS' | 'bodyCSS' | 'svgSlot'
+
+const activePatchSlot = ref<PatchSlot>('wrapperCSS')
+const activeCustomTab = ref<CustomSlot>('template')
+
+const PATCH_SLOT_LABELS: Record<PatchSlot, string> = {
+  wrapperCSS: '外壳 (wrapper)',
+  titleCSS: '标题 (title)',
+  bodyCSS: '正文 (body)',
+}
+const CUSTOM_TAB_LABELS: Record<CustomSlot, string> = {
+  template: 'HTML 骨架',
+  wrapperCSS: '外壳 (wrapper)',
+  titleCSS: '标题 (title)',
+  bodyCSS: '正文 (body)',
+  svgSlot: '装饰 SVG',
+}
+
+type GroupId = 'tokens' | 'patch' | 'custom'
+interface SlotNode { slot: string; label: string; hasContent: boolean }
+interface GroupNode {
+  id: GroupId
+  label: string
+  available: boolean
+  expanded: boolean
+  slots: SlotNode[]
+}
+
+const treeGroups = computed<GroupNode[]>(() => {
+  const mode = props.draft.userVariantMode
+  const d = props.draft
+  return [
+    {
+      id: 'tokens',
+      label: 'Tokens 微调骨架值',
+      available: hasTokenSchema.value,
+      expanded: mode === 'tokens',
+      slots: [],
+    },
+    {
+      id: 'patch',
+      label: '源码模式 改基底 CSS',
+      available: canEditPatch.value,
+      expanded: mode === 'patch',
+      slots: (['wrapperCSS', 'titleCSS', 'bodyCSS'] as PatchSlot[]).map((s) => ({
+        slot: s,
+        label: PATCH_SLOT_LABELS[s],
+        hasContent: !!d.userVariantCssPatch[s].trim(),
+      })),
+    },
+    {
+      id: 'custom',
+      label: '完全自定义 从零写',
+      available: true,
+      expanded: mode === 'custom',
+      slots: (['template', 'wrapperCSS', 'titleCSS', 'bodyCSS', 'svgSlot'] as CustomSlot[]).map((s) => ({
+        slot: s,
+        label: CUSTOM_TAB_LABELS[s],
+        hasContent: !!d.userVariantCustom[s].trim(),
+      })),
+    },
+  ]
+})
+
+function activeSlotKey(id: GroupId): string {
+  if (id === 'patch') return activePatchSlot.value
+  if (id === 'custom') return activeCustomTab.value
+  return ''
+}
+
+// 点击组头：复用 setMode 的 toggle / confirm / 清空逻辑
+function onGroupClick(id: GroupId): void {
+  setMode(id)
+}
+
+// 点击组内 slot：组已展开 → 同组切 slot，纯切换无 confirm
+function onSlotClick(id: GroupId, slot: string): void {
+  if (id === 'patch') activePatchSlot.value = slot as PatchSlot
+  else if (id === 'custom') activeCustomTab.value = slot as CustomSlot
 }
 </script>
 
@@ -209,30 +327,38 @@ function clearCustomDraft(): void {
     </div>
 
     <div class="advanced">
-      <div class="mode-switch" role="tablist" aria-label="样式编辑模式">
-        <button
-          v-if="hasTokenSchema"
-          type="button"
-          role="tab"
-          :aria-selected="props.draft.userVariantMode === 'tokens'"
-          :class="['mode-btn', { active: props.draft.userVariantMode === 'tokens' }]"
-          @click="setMode('tokens')"
-        >Tokens 面板</button>
-        <button
-          v-if="canEditPatch"
-          type="button"
-          role="tab"
-          :aria-selected="props.draft.userVariantMode === 'patch'"
-          :class="['mode-btn', { active: props.draft.userVariantMode === 'patch' }]"
-          @click="setMode('patch')"
-        >源码模式 (CSS patch)</button>
-        <button
-          type="button"
-          role="tab"
-          :aria-selected="props.draft.userVariantMode === 'custom'"
-          :class="['mode-btn', { active: props.draft.userVariantMode === 'custom' }]"
-          @click="setMode('custom')"
-        >完全自定义 (custom)</button>
+      <p class="advanced-hint">
+        高级样式 · 三档互斥：Tokens 微调骨架值 · 源码模式 改基底 CSS · 完全自定义 从零写
+      </p>
+      <div class="slot-tree" role="tree" aria-label="样式编辑模式与槽位">
+        <template v-for="g in treeGroups" :key="g.id">
+          <template v-if="g.available">
+            <button
+              type="button"
+              role="treeitem"
+              :aria-expanded="g.expanded"
+              :class="['tree-group', { active: g.expanded }]"
+              @click="onGroupClick(g.id)"
+            >
+              <span class="caret" aria-hidden="true">{{ g.expanded ? '▼' : '▶' }}</span>
+              {{ g.label }}
+            </button>
+            <div v-if="g.expanded && g.slots.length > 0" class="tree-slots" role="group">
+              <button
+                v-for="s in g.slots"
+                :key="s.slot"
+                type="button"
+                role="treeitem"
+                :aria-selected="activeSlotKey(g.id) === s.slot"
+                :class="['tree-slot', { active: activeSlotKey(g.id) === s.slot }]"
+                @click="onSlotClick(g.id, s.slot)"
+              >
+                {{ s.label }}
+                <span v-if="s.hasContent" class="tree-dot" aria-hidden="true" />
+              </button>
+            </div>
+          </template>
+        </template>
       </div>
       <TokensPanel
         v-if="props.draft.userVariantMode === 'tokens' && hasTokenSchema"
@@ -246,12 +372,18 @@ function clearCustomDraft(): void {
         :variant-id="props.draft.variantId"
         :css-patch="props.draft.userVariantCssPatch"
         :theme="props.theme"
+        :live-patch-log="props.livePatchLog ?? null"
+        :active-slot="activePatchSlot"
+        @update:active-slot="activePatchSlot = $event"
       />
       <CustomModePanel
         v-else-if="props.draft.userVariantMode === 'custom'"
         :custom="props.draft.userVariantCustom"
         :theme="props.theme"
         :original-linked-uv-id="props.originalLinkedUvId ?? null"
+        :live-patch-log="props.livePatchLog ?? null"
+        :active-tab="activeCustomTab"
+        @update:active-tab="activeCustomTab = $event"
       />
     </div>
   </div>
@@ -340,27 +472,78 @@ function clearCustomDraft(): void {
   border-top: 1px dashed var(--border);
   padding-top: var(--sp-3);
 }
-.mode-switch {
-  display: flex;
-  gap: 4px;
+.advanced-hint {
+  margin: 0;
+  font-size: var(--fs-11);
+  color: var(--text-muted);
 }
-.mode-btn {
-  flex: 0 0 auto;
-  padding: 4px 10px;
+.slot-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  padding: 4px;
+  background: var(--surface-raised);
+}
+.tree-group {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 8px;
   font-size: var(--fs-11);
   letter-spacing: var(--ls-wide);
   color: var(--text-muted);
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 0;
   border-radius: var(--radius-1, 2px);
   cursor: pointer;
   font-family: var(--font-text);
+  text-align: left;
 }
-.mode-btn:hover { color: var(--text); }
-.mode-btn.active {
+.tree-group:hover { color: var(--text); background: var(--surface); }
+.tree-group.active {
   color: var(--accent);
-  border-color: var(--accent);
   background: var(--surface);
+  font-weight: var(--fw-medium);
+}
+.tree-group .caret {
+  font-size: 9px;
+  width: 10px;
+  text-align: center;
+  color: var(--text-subtle);
+  flex: 0 0 auto;
+}
+.tree-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 18px;
+  margin-bottom: 2px;
+}
+.tree-slot {
+  display: flex; align-items: center; gap: 6px;
+  padding: 3px 8px;
+  font-size: var(--fs-11);
+  color: var(--text-muted);
+  background: transparent;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--font-text);
+  text-align: left;
+}
+.tree-slot:hover { color: var(--text); background: var(--surface); }
+.tree-slot.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--surface);
+}
+.tree-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-pill, 50%);
+  background: var(--accent);
+  margin-left: auto;
 }
 
 @media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {

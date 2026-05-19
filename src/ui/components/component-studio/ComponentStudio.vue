@@ -34,6 +34,7 @@ import type {
   UserVariantPatch,
   UserVariantCustom,
 } from '../../../core/variants/userVariant'
+import type { PatchLog } from '../../../core/pipeline/platforms/types'
 import ComponentEditor from './ComponentEditor.vue'
 import ComponentPreview from './ComponentPreview.vue'
 import { useComponentDraft, type StudioMode } from './useComponentDraft'
@@ -68,6 +69,14 @@ const { draft, dirty, editingId, originalLinkedUvId, reset } = useComponentDraft
 )
 
 const error = ref<string>('')
+
+// 大预览的 patchLog —— 宽屏布局下作为 Source/Custom 面板内嵌 PatchInspector 的数据源，
+// 替代各自冗余的 IsolatedPreview。窄屏单列布局右侧大预览被滚到视口外时，两个面板
+// 仍各自挂 IsolatedPreview 作 fallback，本字段在那一刻被本地 emit 覆盖。
+const livePatchLog = ref<PatchLog | null>(null)
+function onPreviewPatchLog(log: PatchLog | null): void {
+  livePatchLog.value = log
+}
 
 // tokens/patch 预览 id 固定不变（与真实仓 id 池隔离，避免与 createUserVariant 产物冲突）
 const PREVIEW_UV_ID = 'uv_preview_draft'
@@ -283,6 +292,7 @@ defineExpose({ attemptCancel: onCancel })
           :draft="draft"
           :theme="props.theme"
           :original-linked-uv-id="originalLinkedUvId"
+          :live-patch-log="livePatchLog"
         />
       </div>
       <div class="col col-preview">
@@ -291,6 +301,7 @@ defineExpose({ attemptCancel: onCancel })
             :md="previewMarkdown"
             :theme="props.theme"
             :user-variants="previewUserVariants"
+            @patch-log="onPreviewPatchLog"
           />
         </div>
       </div>
