@@ -96,23 +96,25 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 <!-- generated:variant-whitelist:start -->
 
 ```ts
-admonition:    'accent-bar' | 'pill-tag' | 'ticket-notch' | 'card-shadow' | 'minimal-underline' | 'terminal' | 'dashed-border' | 'double-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag' | 'slab-corner'
-quote:         'classic' | 'left-bar' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'editorial-block' | 'tilted-sticker'
-compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card'
-steps:         'number-circle' | 'ribbon-chain' | 'timeline-dot' | 'step-card' | 'split-row'
+admonition:    'accent-bar' | 'pill-tag' | 'card-shadow' | 'terminal' | 'dashed-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag' | 'slab-corner' | 'numbered-rule' | 'hanging-nb' | 'vermilion-seal' | 'paper-slip' | 'field-tag' | 'specimen-box' | 'triangle-top'
+quote:         'classic' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'editorial-block' | 'tilted-sticker' | 'oversized-mark' | 'numbered-lines' | 'seal-kai' | 'double-frame' | 'specimen-quote' | 'binomial-attrib' | 'huge-numeral' | 'ring-device'
+compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card' | 'paired-specimen' | 'measurement-table' | 'paired-shape' | 'axis-diagram'
+steps:         'number-circle' | 'timeline-dot' | 'step-card' | 'split-row' | 'seal-cjk' | 'ruler-row'
 divider:       'wave' | 'dots' | 'flower' | 'rule' | 'glyph' | 'seal-mark'
 sectionTitle:  'bordered' | 'cornered' | 'number-prefix' | 'kicker-stack' | 'ribbon-stamp'
 codeBlock:     'bare' | 'header-bar' | 'line-numbers' | 'terminal-frame' | 'inline-card'
-note:          'minimal-callout' | 'box-callout' | 'side-bar' | 'hanging-indent' | 'dotted-margin' | 'smallcaps-kicker' | 'editorial-stripe' | 'research-dense'
+note:          'minimal-callout' | 'box-callout' | 'side-bar' | 'dotted-margin' | 'smallcaps-kicker' | 'editorial-stripe' | 'research-dense' | 'ed-signoff' | 'inline-label' | 'interlinear-gloss' | 'vermilion-gloss' | 'ruler-note' | 'latin-subhead' | 'initial-disc' | 'geometric-mark'
+highlight:     'plain' | 'dotted-underline' | 'tracked-emphasis' | 'vermilion-inline' | 'side-dots' | 'wash-ground' | 'bracketed-tick' | 'geometric-flag' | 'single-stroke'
 footnotes:     'lined' | 'inline-flow' | 'boxed-aside' | 'top-rule' | 'dense-academic'
 recommend:     'card-list' | 'academic-refs'
 qrcode:        'bare' | 'follow-card' | 'qr-stack'
 footerCTA:     'button-led' | 'triptych-actions'
-pullQuote:     'giant-mark' | 'centered-rule' | 'stamp-quote' | 'margin-pull'
+pullQuote:     'giant-mark' | 'centered-rule' | 'stamp-quote' | 'margin-pull' | 'weight-contrast' | 'drop-capital' | 'calligraphic' | 'with-gloss' | 'bilingual-stack' | 'caliper-mark' | 'inverted-plate' | 'grid-block'
 announcement:  'danger-bar' | 'mono-disclaimer' | 'ai-notice' | 'stamped-banner'
-tableCard:     'rule-grid' | 'zebra-rows' | 'key-value' | 'price-tier'
+tableCard:     'rule-grid' | 'zebra-rows' | 'key-value' | 'price-tier' | 'three-line-table' | 'index-table' | 'matrix'
 gallery:       'duo' | 'triptych' | 'nine-grid' | 'ribbon-strip'
-dialogue:      'qa-rows' | 'chat-bubbles' | 'name-prefix' | 'interview-column'
+dialogue:      'qa-rows' | 'chat-bubbles' | 'name-prefix' | 'interview-column' | 'audio-stamp'
+qaBlock:       'numbered-faq' | 'hanging-qa' | 'seal-stamp' | 'query-annotation' | 'sample-query' | 'field-card' | 'circle-square' | 'typed-block'
 ```
 
 <!-- generated:variant-whitelist:end -->
