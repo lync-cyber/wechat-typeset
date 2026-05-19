@@ -6,7 +6,7 @@
  * 容器条目可点击插入到编辑器。
  */
 import { computed } from 'vue'
-import type { Command } from './CommandPalette.vue'
+import type { Command } from './command-types'
 import { CONTAINER_VOCABULARY } from '../../core/vocabulary/vocabulary'
 import PanelShell from '../primitives/PanelShell.vue'
 import PanelHeader from '../primitives/PanelHeader.vue'
