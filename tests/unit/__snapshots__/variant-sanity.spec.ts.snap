@@ -258,6 +258,16 @@ exports[`默认主题 · 每 variant 渲染片段快照 > compare:stacked-row 1`
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:audio-stamp 1`] = `
+"<section class="container-dialogue container-dialogue--audio-stamp" style="margin: 20px 0; margin: 20px 0; padding: 0;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
+<section class="container-dialogue-turn" style="display:block;margin-top:16px"><section style="display:block;margin-bottom:6px"><span style="font-size:11px;font-weight:600;color:#1c1f24">主持人</span><span style="font-size:10px;font-style:italic;color:#636870;margin-left:8px">— Q</span></section><section style="color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
+</section></section>
+<section class="container-dialogue-turn" style="display:block;margin-top:16px"><section style="display:block;margin-bottom:6px"><span style="font-size:11px;font-weight:600;color:#1c1f24">张三</span><span style="font-size:10px;font-style:italic;color:#636870;margin-left:8px">— A</span></section><section style="color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
+</section></section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:chat-bubbles 1`] = `
 "<section class="container-dialogue container-dialogue--chat-bubbles" style="margin: 20px 0; margin: 20px 0; padding: 14px 16px; background-color: transparent;">
 <section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
@@ -314,6 +324,16 @@ exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:screenplay 1`
 <section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #636870; margin-bottom: 4px">主持人</span><span style="display:block;color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
 </span></section>
 <section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #636870; margin-bottom: 4px">张三</span><span style="display:block;color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:shape-speaker 1`] = `
+"<section class="container-dialogue container-dialogue--shape-speaker" style="margin: 20px 0; margin: 20px 0; padding: 0;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
+<section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #1c1f24; vertical-align: middle; margin-right: 12px; text-align: center; line-height: 18px; color: #1c1f24; font-weight: 700; font-size: 11px">主</span><span style="display:inline-block;vertical-align:middle;max-width:calc(100% - 40px);color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
+</span></section>
+<section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: inline-block; width: 22px; height: 22px; background-color: #2558b0; vertical-align: middle; margin-right: 12px; text-align: center; line-height: 22px; color: #fefefe; font-weight: 700; font-size: 11px">张</span><span style="display:inline-block;vertical-align:middle;max-width:calc(100% - 40px);color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
 </span></section>
 </section>"
 `;
@@ -492,6 +512,30 @@ exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:ribbon-st
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > steps:geometric-chain 1`] = `
+"<section class="container-steps container-steps--geometric-chain" style="margin: 20px 0; padding-left: 32px; border-left: 2px solid #1c1f24;">
+<section class="container-steps__title" style="font-weight:700;font-size:12px;color:#1c1f24;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:14px">操作步骤</section>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > steps:large-numeral 1`] = `
+"<section class="container-steps container-steps--large-numeral" style="margin: 24px 0; padding-left: 8px;">
+<section class="container-steps__title" style="font-weight:700;font-size:11px;color:#636870;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px">操作步骤</section>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > steps:number-circle 1`] = `
 "<section class="container-steps container-steps--number-circle" style="margin: 16px 0;">
 <section class="container-steps__title" style="font-weight:700;margin-bottom:12px">操作步骤</section>
@@ -507,6 +551,30 @@ exports[`默认主题 · 每 variant 渲染片段快照 > steps:number-circle 1`
 exports[`默认主题 · 每 variant 渲染片段快照 > steps:ribbon-chain 1`] = `
 "<section class="container-steps container-steps--ribbon-chain" style="margin: 18px 0; padding: 8px 0 8px 18px; border-left: 4px solid #2558b0;">
 <section class="container-steps__title" style="display:inline-block;padding:4px 12px;background-color:#2558b0;color:#fefefe;border-radius:12px;font-weight:700;font-size:13px;margin:0 0 12px -30px;letter-spacing:0.4px">操作步骤</section>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > steps:ruler-row 1`] = `
+"<section class="container-steps container-steps--ruler-row" style="margin: 24px 0; border-top: 1px solid #1c1f24; padding-top: 18px;">
+<section class="container-steps__title" style="font-weight:600;font-size:11px;color:#636870;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:14px">操作步骤</section>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
+<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > steps:seal-cjk 1`] = `
+"<section class="container-steps container-steps--seal-cjk" style="margin: 20px 0;">
+<section class="container-steps__title" style="font-weight:600;font-size:14px;color:#1c1f24;letter-spacing:0.1em;margin-bottom:14px">操作步骤</section>
 <h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
 <p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
 <h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
@@ -573,6 +641,17 @@ exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:key-value 1`
 <section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:100%;vertical-align:middle;background-color:#f5f5f3;color:#1c1f24;font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;text-align:center;padding:10px 12px;border-bottom:1px solid #d8d8d4">型号 · 容量 · 价格</span></section>
 <section class="container-table-row" style="display:table-row"><span style="display: table-cell; width: 35%; vertical-align: middle; background-color: #f5f5f3; color: #636870; font-weight: 600; font-size: 12px; text-align: right; padding: 10px 12px; border-bottom: 1px solid #d8d8d4">A</span><span style="display:table-cell;width:65%;vertical-align:middle;color:#1c1f24;font-size:13px;line-height:1.5;text-align:left;padding:10px 14px;border-bottom:1px solid #d8d8d4">256G</span></section>
 <section class="container-table-row" style="display:table-row"><span style="display: table-cell; width: 35%; vertical-align: middle; background-color: #f5f5f3; color: #636870; font-weight: 600; font-size: 12px; text-align: right; padding: 10px 12px; border-bottom: 1px solid #d8d8d4">B</span><span style="display:table-cell;width:65%;vertical-align:middle;color:#1c1f24;font-size:13px;line-height:1.5;text-align:left;padding:10px 14px;border-bottom:1px solid #d8d8d4">512G</span></section>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:matrix 1`] = `
+"<section class="container-table-card container-table-card--matrix" style="margin: 20px 0; margin: 18px 0;">
+<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>
+<section class="container-table-card__grid" style="display:table;width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">
+<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:50px;height:36px;vertical-align:middle;text-align:right;padding-right:8px;color:#636870;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600">型号</span><span style="display:table-cell;width:36px;height:36px;vertical-align:middle;text-align:center;color:#636870;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600">容量</span><span style="display:table-cell;width:36px;height:36px;vertical-align:middle;text-align:center;color:#636870;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600">价格</span></section>
+<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:50px;height:36px;vertical-align:middle;text-align:right;padding-right:8px;color:#1c1f24;font-size:11px;font-weight:600">A</span><span style="display:table-cell;width:36px;height:36px;vertical-align:middle;text-align:center;background-color:#2558b0;color:#fefefe;font-size:11px;font-weight:700;border:1px solid #fdfdfc">256G</span><span style="display:table-cell;width:36px;height:36px;vertical-align:middle;text-align:center;background-color:#2558b0;color:#fefefe;font-size:11px;font-weight:700;border:1px solid #fdfdfc">¥6999</span></section>
+<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:50px;height:36px;vertical-align:middle;text-align:right;padding-right:8px;color:#1c1f24;font-size:11px;font-weight:600">B</span><span style="display:table-cell;width:36px;height:36px;vertical-align:middle;text-align:center;background-color:#2558b0;color:#fefefe;font-size:11px;font-weight:700;border:1px solid #fdfdfc">512G</span><span style="display:table-cell;width:36px;height:36px;vertical-align:middle;text-align:center;background-color:#2558b0;color:#fefefe;font-size:11px;font-weight:700;border:1px solid #fdfdfc">¥8999</span></section>
 </section>
 </section>"
 `;

@@ -3,12 +3,12 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。2026-05 P0 升级：ComponentStudio 全屏工作台 + 双抽屉拖宽（DrawerResizer / useDrawerWidth）让骨架 +~3kB raw / +~1.2kB gz；阈值同步上调到 575k / 216k，留 ~10kB raw / ~8kB gz 工作 headroom。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。2026-05 P0 升级：ComponentStudio 全屏工作台 + 双抽屉拖宽（DrawerResizer / useDrawerWidth）让骨架 +~3kB raw / +~1.2kB gz；阈值同步上调到 575k / 216k，留 ~10kB raw / ~8kB gz 工作 headroom。2026-05 P2 阶段：dialogue.ts / table-card.ts switch/case 分派加 7 个 renderXxx 函数承载 5 个 renderer-driven variant（compare 走 makeVariantContainer 工厂不动 pipeline；steps 同）+~5kB raw / +~0.5kB gz；阈值上调到 585k / 220k，给 ~6kB raw / ~3kB gz headroom 缓冲后续 P3 qa-block 升级。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 575000,
-      "gzipLimit": 216000,
+      "limit": 585000,
+      "gzipLimit": 220000,
       "mustNotEmbed": ["html2canvas"]
     },
     {

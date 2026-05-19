@@ -81,6 +81,10 @@ export const dialogueTurnContainer: ContainerRenderer = {
         return renderScreenplayOpen(ctx, name)
       case 'host-guest-seal':
         return renderHostGuestSealOpen(ctx, name, role)
+      case 'audio-stamp':
+        return renderAudioStampOpen(ctx, name, role, ctx.attrs.timestamp ?? '')
+      case 'shape-speaker':
+        return renderShapeSpeakerOpen(ctx, name, ctx.attrs.shape ?? '', idx)
       case 'qa-rows':
       default:
         return renderQARowOpen(ctx, name, role, idx)
@@ -100,6 +104,10 @@ export const dialogueTurnContainer: ContainerRenderer = {
         return renderScreenplayClose()
       case 'host-guest-seal':
         return renderHostGuestSealClose()
+      case 'audio-stamp':
+        return renderAudioStampClose()
+      case 'shape-speaker':
+        return renderShapeSpeakerClose()
       case 'qa-rows':
       default:
         return renderQARowClose()
@@ -484,5 +492,120 @@ function renderHostGuestSealOpen(
 }
 
 function renderHostGuestSealClose(): string {
+  return '</span></section>\n'
+}
+
+// ============================================================
+// audio-stamp · 音频时间戳 博物笔记
+// ============================================================
+
+function renderAudioStampOpen(
+  ctx: ContainerRenderContext,
+  name: string,
+  role: string,
+  timestamp: string,
+): string {
+  const c = ctx.tokens.colors
+  const sectionCSS = 'display:block;margin-top:16px'
+  const timestampCSS = [
+    'display:block',
+    'font-family:Menlo,Monaco,monospace',
+    'font-size:10px',
+    'letter-spacing:0.1em',
+    `color:${c.primary}`,
+    'margin-bottom:2px',
+  ].join(';')
+  const nameCSS = [
+    'font-size:11px',
+    'font-weight:600',
+    `color:${c.text}`,
+  ].join(';')
+  const roleCSS = [
+    'font-size:10px',
+    'font-style:italic',
+    `color:${c.textMuted}`,
+    'margin-left:8px',
+  ].join(';')
+  const bodyCSS = [`color:${c.text}`, 'line-height:1.7'].join(';')
+  const timestampRow = timestamp
+    ? `<section style="${timestampCSS}">${escText(timestamp)}</section>`
+    : ''
+  const nameRow =
+    `<section style="display:block;margin-bottom:6px">` +
+    `<span style="${nameCSS}">${escText(name)}</span>` +
+    `<span style="${roleCSS}">— ${escText(role || 'speaker')}</span>` +
+    `</section>`
+  return (
+    `<section class="container-dialogue-turn" style="${sectionCSS}">` +
+    timestampRow +
+    nameRow +
+    `<section style="${bodyCSS}">`
+  )
+}
+
+function renderAudioStampClose(): string {
+  return '</section></section>\n'
+}
+
+// ============================================================
+// shape-speaker · 圆方代号 包豪斯
+// ============================================================
+
+function renderShapeSpeakerOpen(
+  ctx: ContainerRenderContext,
+  name: string,
+  shape: string,
+  idx: number,
+): string {
+  const c = ctx.tokens.colors
+  // shape 缺省按 idx 奇偶切换：偶数 = circle，奇数 = square
+  const resolvedShape = shape === 'circle' || shape === 'square' ? shape : idx % 2 === 0 ? 'circle' : 'square'
+  const isCircle = resolvedShape === 'circle'
+  const initial = (name.trim()[0] || '?').toUpperCase()
+  const badgeCSS = isCircle
+    ? [
+        'display:inline-block',
+        'width:22px',
+        'height:22px',
+        'border-radius:50%',
+        `border:2px solid ${c.text}`,
+        'vertical-align:middle',
+        'margin-right:12px',
+        'text-align:center',
+        'line-height:18px',
+        `color:${c.text}`,
+        'font-weight:700',
+        'font-size:11px',
+        'font-family:Menlo,Monaco,monospace',
+      ].join(';')
+    : [
+        'display:inline-block',
+        'width:22px',
+        'height:22px',
+        `background-color:${c.accent}`,
+        'vertical-align:middle',
+        'margin-right:12px',
+        'text-align:center',
+        'line-height:22px',
+        `color:${c.textInverse}`,
+        'font-weight:700',
+        'font-size:11px',
+        'font-family:Menlo,Monaco,monospace',
+      ].join(';')
+  const bodyCSS = [
+    'display:inline-block',
+    'vertical-align:middle',
+    'max-width:calc(100% - 40px)',
+    `color:${c.text}`,
+    'line-height:1.7',
+  ].join(';')
+  return (
+    `<section class="container-dialogue-turn" style="display:block;margin-top:14px">` +
+    `<span style="${badgeCSS}">${escText(initial)}</span>` +
+    `<span style="${bodyCSS}">`
+  )
+}
+
+function renderShapeSpeakerClose(): string {
   return '</span></section>\n'
 }

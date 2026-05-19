@@ -7626,7 +7626,11 @@
             "ribbon-chain",
             "timeline-dot",
             "step-card",
-            "split-row"
+            "split-row",
+            "large-numeral",
+            "seal-cjk",
+            "ruler-row",
+            "geometric-chain"
           ]
         },
         "divider": {
@@ -7721,7 +7725,8 @@
             "price-tier",
             "three-line-table",
             "index-table",
-            "vermillion-grid"
+            "vermillion-grid",
+            "matrix"
           ]
         },
         "gallery": {
@@ -7739,7 +7744,9 @@
             "name-prefix",
             "interview-column",
             "screenplay",
-            "host-guest-seal"
+            "host-guest-seal",
+            "audio-stamp",
+            "shape-speaker"
           ]
         }
       },

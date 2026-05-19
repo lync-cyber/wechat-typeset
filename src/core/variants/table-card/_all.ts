@@ -12,5 +12,6 @@ import priceTier from './price-tier'
 import threeLineTable from './three-line-table'
 import indexTable from './index-table'
 import vermillionGrid from './vermillion-grid'
+import matrix from './matrix'
 
-export default [ruleGrid, zebraRows, keyValue, priceTier, threeLineTable, indexTable, vermillionGrid]
+export default [ruleGrid, zebraRows, keyValue, priceTier, threeLineTable, indexTable, vermillionGrid, matrix]

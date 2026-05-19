@@ -464,6 +464,14 @@ export type StepsVariantId =
   | 'step-card'
   // 左右分栏：左侧大号编号 + 右侧正文（学术 / 调研主题骨架）
   | 'split-row'
+  // 大数字：作者写 ### 01/02 形成大号 serif 序号反衬 caption（编辑部 01·A）
+  | 'large-numeral'
+  // CJK 印章：作者写 ### 一/二/三 等汉字 h3 + 容器克制外框（宋本 02·A）
+  | 'seal-cjk'
+  // 刻度尺：顶部 1px 实线主轴 + h3 当刻度位置标签（博物笔记 03·A，BC-2）
+  | 'ruler-row'
+  // 几何链：左 2px 实线主轴 + 几何符号 h3（包豪斯 04·A）
+  | 'geometric-chain'
 
 export type DividerVariantId =
   | 'wave'
@@ -595,6 +603,8 @@ export type TableCardVariantId =
   | 'index-table'
   // 朱角方格：全网格 1px + header primary 底 textInverse 字承载朱印感（宋本 02·A 降级）
   | 'vermillion-grid'
+  // 热力矩阵：行列标签 + 显式 width/height 色块（包豪斯 04·B，BC-4 降级方案）
+  | 'matrix'
 
 export type GalleryVariantId =
   // 双联：display:table 50/50（左右对比图）
@@ -619,6 +629,10 @@ export type DialogueVariantId =
   | 'screenplay'
   // 主客名签：中文首字徽章（主=实心 / 客=描边）+ 正文（宋本批注 02·A）
   | 'host-guest-seal'
+  // 音频时间戳：mono timestamp 顶行 + name + role italic（博物笔记 03·A，attrs.timestamp）
+  | 'audio-stamp'
+  // 圆方代号：22×22 几何徽章（circle 描边 / square 实心）+ 正文（包豪斯 04·A，attrs.shape）
+  | 'shape-speaker'
 
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
@@ -775,6 +789,10 @@ export const VARIANT_IDS = {
     'timeline-dot',
     'step-card',
     'split-row',
+    'large-numeral',
+    'seal-cjk',
+    'ruler-row',
+    'geometric-chain',
   ] as const satisfies readonly StepsVariantId[],
   divider: [
     'wave',
@@ -848,6 +866,7 @@ export const VARIANT_IDS = {
     'three-line-table',
     'index-table',
     'vermillion-grid',
+    'matrix',
   ] as const satisfies readonly TableCardVariantId[],
   gallery: [
     'duo',
@@ -862,6 +881,8 @@ export const VARIANT_IDS = {
     'interview-column',
     'screenplay',
     'host-guest-seal',
+    'audio-stamp',
+    'shape-speaker',
   ] as const satisfies readonly DialogueVariantId[],
 }
 

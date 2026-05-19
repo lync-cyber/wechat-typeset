@@ -29,14 +29,14 @@ describe('枚举完整性', () => {
       admonition: 20, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook) +1: slab-corner (brutalist)
       quote: 7,
       compare: 9, // +5 P2-A：paired-jiayi / paired-specimen / measurement-table / paired-shape / axis-diagram（均 experimental）
-      steps: 5,
+      steps: 9, // +4 P2-D：large-numeral / seal-cjk / ruler-row / geometric-chain（均 experimental）
       divider: 6,
       sectionTitle: 5,
       pullQuote: 4,
       announcement: 4,
-      tableCard: 7, // +3 P2-C：three-line-table / index-table / vermillion-grid（均 experimental）
+      tableCard: 8, // +3 P2-C + +1 P2-F matrix（均 experimental）
       gallery: 4,
-      dialogue: 6, // +2 P2-B：screenplay / host-guest-seal（均 experimental）
+      dialogue: 8, // +2 P2-B + +2 P2-E：audio-stamp / shape-speaker（均 experimental）
     })
   })
 

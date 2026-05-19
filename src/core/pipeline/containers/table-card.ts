@@ -184,6 +184,8 @@ export const tableRowContainer: ContainerRenderer = {
         return renderIndexTableRow(ctx, cells, isHeader)
       case 'vermillion-grid':
         return renderVermillionGridRow(ctx, cells, isHeader)
+      case 'matrix':
+        return renderMatrixRow(ctx, cells, isHeader)
       case 'rule-grid':
       default:
         return renderRuleGridRow(ctx, cells, isHeader)
@@ -519,6 +521,85 @@ function renderVermillionGridRow(
         .join(';')
       return `<span style="${cellCSS}">${escText(cell)}</span>`
     })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderMatrixRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const CELL_SIZE = 36
+  const LABEL_WIDTH = 50
+  const rowCSS = 'display:table-row'
+
+  if (isHeader) {
+    const labelCSS = [
+      'display:table-cell',
+      `width:${LABEL_WIDTH}px`,
+      `height:${CELL_SIZE}px`,
+      'vertical-align:middle',
+      'text-align:right',
+      'padding-right:8px',
+      `color:${c.textMuted}`,
+      'font-size:10px',
+      'letter-spacing:0.1em',
+      'text-transform:uppercase',
+      'font-weight:600',
+    ].join(';')
+    const headCellCSS = [
+      'display:table-cell',
+      `width:${CELL_SIZE}px`,
+      `height:${CELL_SIZE}px`,
+      'vertical-align:middle',
+      'text-align:center',
+      `color:${c.textMuted}`,
+      'font-size:10px',
+      'letter-spacing:0.1em',
+      'text-transform:uppercase',
+      'font-weight:600',
+    ].join(';')
+    const cellHtml = cells
+      .map((cell, i) =>
+        i === 0
+          ? `<span style="${labelCSS}">${escText(cell)}</span>`
+          : `<span style="${headCellCSS}">${escText(cell)}</span>`,
+      )
+      .join('')
+    return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+  }
+
+  const labelCSS = [
+    'display:table-cell',
+    `width:${LABEL_WIDTH}px`,
+    `height:${CELL_SIZE}px`,
+    'vertical-align:middle',
+    'text-align:right',
+    'padding-right:8px',
+    `color:${c.text}`,
+    'font-size:11px',
+    'font-weight:600',
+  ].join(';')
+  const valueCSS = [
+    'display:table-cell',
+    `width:${CELL_SIZE}px`,
+    `height:${CELL_SIZE}px`,
+    'vertical-align:middle',
+    'text-align:center',
+    `background-color:${c.primary}`,
+    `color:${c.textInverse}`,
+    'font-size:11px',
+    'font-weight:700',
+    `border:1px solid ${c.bg}`,
+  ].join(';')
+  const cellHtml = cells
+    .map((cell, i) =>
+      i === 0
+        ? `<span style="${labelCSS}">${escText(cell)}</span>`
+        : `<span style="${valueCSS}">${escText(cell)}</span>`,
+    )
     .join('')
   return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
 }

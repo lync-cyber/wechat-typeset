@@ -109,6 +109,10 @@ const STEPS_ORDER: readonly string[] = [
   'timeline-dot',
   'step-card',
   'split-row',
+  'large-numeral',
+  'seal-cjk',
+  'ruler-row',
+  'geometric-chain',
 ]
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
 const SECTION_TITLE_ORDER: readonly string[] = [
@@ -165,6 +169,7 @@ const TABLE_CARD_ORDER: readonly string[] = [
   'three-line-table',
   'index-table',
   'vermillion-grid',
+  'matrix',
 ]
 const GALLERY_ORDER: readonly string[] = [
   'duo',
@@ -179,6 +184,8 @@ const DIALOGUE_ORDER: readonly string[] = [
   'interview-column',
   'screenplay',
   'host-guest-seal',
+  'audio-stamp',
+  'shape-speaker',
 ]
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
