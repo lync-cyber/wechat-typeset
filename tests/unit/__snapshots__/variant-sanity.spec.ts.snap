@@ -444,6 +444,87 @@ exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:stamp-quote 
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:circle-square 1`] = `
+"<section class="container-qa-block container-qa-block--circle-square" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 6px 0; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="display:table;width:100%;margin-bottom:14px"><span style="display:table-cell;vertical-align:top;width:36px;padding-right:12px"><span style="display:inline-block;width:24px;height:24px;border:2px solid #1c1f24;border-radius:50%;font-size:10px;font-weight:600;color:#1c1f24;text-align:center;line-height:20px">Q</span></span><span style="display:table-cell;vertical-align:top;font-size:14.5px;line-height:1.85;color:#1c1f24;font-weight:500">样例设问？</span></section>
+<section class="container-qa-block__a" style="display:table;width:100%"><span style="display:table-cell;vertical-align:top;width:36px;padding-right:12px"><span style="display:inline-block;width:24px;height:24px;background-color:#2558b0;font-size:10px;font-weight:600;color:#fefefe;text-align:center;line-height:24px">A</span></span><span style="display:table-cell;vertical-align:top;font-size:14.5px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:field-card 1`] = `
+"<section class="container-qa-block container-qa-block--field-card" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 10px 12px; border: 1px solid #1c1f24; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q-header" style="display:table;width:100%;border-bottom:1px dashed #1c1f24;padding-bottom:6px;margin-bottom:8px"><span style="display:table-cell;vertical-align:baseline;font-size:10px;color:#2558b0;letter-spacing:0.16em;font-weight:600">Q</span><span style="display:table-cell;vertical-align:baseline;text-align:right;font-size:11px;font-style:italic;color:#636870">Card 09</span></section>
+<span style="display:block;font-size:14px;line-height:1.85;color:#1c1f24;margin-bottom:10px">样例设问？</span>
+<span style="display:block;font-size:10px;color:#2558b0;letter-spacing:0.16em;font-weight:600;border-top:1px dashed #1c1f24;padding-top:6px;margin-bottom:6px">A</span><span style="display:block;font-size:14px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:hanging-qa 1`] = `
+"<section class="container-qa-block container-qa-block--hanging-qa" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 6px 0; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="display:table;width:100%;margin-bottom:14px"><span style="display:table-cell;vertical-align:top;width:32px;font-size:24px;font-style:italic;color:#1c1f24;line-height:1;font-weight:500">Q.</span><span style="display:table-cell;vertical-align:top;font-size:14.5px;line-height:1.85;color:#1c1f24;font-weight:500">样例设问？</span></section>
+<section class="container-qa-block__a" style="display:table;width:100%;border-top:1px solid #636870;padding-top:12px"><span style="display:table-cell;vertical-align:top;width:32px;font-size:24px;font-style:italic;color:#636870;line-height:1;font-weight:500">A.</span><span style="display:table-cell;vertical-align:top;font-size:14.5px;line-height:1.85;color:#636870">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:numbered-faq 1`] = `
+"<section class="container-qa-block container-qa-block--numbered-faq" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 6px 0; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="display:table;width:100%;border-bottom:1px solid #1c1f24;padding-bottom:6px;margin-bottom:8px"><span style="display:table-cell;vertical-align:baseline;width:40px;font-family:" ibm="" plex="" mono",monospace;font-size:10px;color:#636870;letter-spacing:0.16em"="">Q.01</span><span style="display:table-cell;vertical-align:baseline;font-size:14px;font-weight:600;color:#1c1f24">样例设问？</span></section>
+<section class="container-qa-block__a" style="font-size:13.5px;line-height:1.85;color:#636870"><span class="container-qa-block__answer">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:query-annotation 1`] = `
+"<section class="container-qa-block container-qa-block--query-annotation" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 6px 0; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="border-top:1px solid #636870;border-bottom:1px solid #636870;padding:10px 0;margin-bottom:12px"><span style="display:inline-block;font-size:11px;color:#2558b0;letter-spacing:0.3em;margin-bottom:6px">設・問</span><span style="display:block;font-size:14.5px;line-height:1.95;color:#1c1f24;font-weight:500">样例设问？</span></section>
+<section class="container-qa-block__a" style="display:table;width:100%"><span style="display:table-cell;vertical-align:top;width:20px;font-size:11px;color:#2558b0">註</span><span style="display:table-cell;vertical-align:top;font-size:14px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:sample-query 1`] = `
+"<section class="container-qa-block container-qa-block--sample-query" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 6px 0; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="display:table;width:100%;border-bottom:1px solid #1c1f24;padding-bottom:8px;margin-bottom:8px"><span style="display:table-cell;vertical-align:top;width:54px"><span style="display:block;font-size:10px;color:#636870;letter-spacing:0.12em;font-weight:600">QUERY</span><span style="display:block;font-size:10px;font-style:italic;color:#2558b0;letter-spacing:0.06em">N° 014</span></span><span style="display:table-cell;vertical-align:top;font-size:14px;line-height:1.85;color:#1c1f24;font-weight:500">样例设问？</span></section>
+<section class="container-qa-block__a" style="display:table;width:100%"><span style="display:table-cell;vertical-align:top;width:54px"><span style="display:block;font-size:10px;color:#636870;letter-spacing:0.12em;font-weight:600">FINDING</span><span style="display:block;font-size:10px;font-style:italic;color:#2558b0;letter-spacing:0.06em">obs. 014.b</span></span><span style="display:table-cell;vertical-align:top;font-size:14px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:seal-stamp 1`] = `
+"<section class="container-qa-block container-qa-block--seal-stamp" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 6px 0; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="display:table;width:100%;margin-bottom:10px"><span style="display:table-cell;vertical-align:top;width:28px;padding-right:10px"><span style="display:inline-block;width:26px;height:26px;background-color:#2558b0;color:#fefefe;font-size:13px;text-align:center;line-height:26px">问</span></span><span style="display:table-cell;vertical-align:top;font-size:14px;line-height:1.85;color:#1c1f24">样例设问？</span></section>
+<section class="container-qa-block__a" style="display:table;width:100%;margin-bottom:10px"><span style="display:table-cell;vertical-align:top;width:28px;padding-right:10px"><span style="display:inline-block;width:26px;height:26px;background-color:transparent;border:1.5px solid #2558b0;color:#2558b0;font-size:13px;text-align:center;line-height:23px">答</span></span><span style="display:table-cell;vertical-align:top;font-size:14px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:typed-block 1`] = `
+"<section class="container-qa-block container-qa-block--typed-block" style="border-top: 1px solid #d8d8d4; border-bottom: 1px solid #d8d8d4; margin: 18px 0; padding: 0; border: 1px solid #1c1f24; background-color: transparent;">
+<section class="container-qa-block__kicker" style="color:#2558b0;font-size:11px;font-weight:700;letter-spacing:0.1em;margin-bottom:10px">读者问答 · Q&amp;A</section>
+<section class="container-qa-block__q" style="background-color:#1c1f24;padding:10px 12px"><span style="display:block;font-size:9px;letter-spacing:0.2em;color:#2558b0;margin-bottom:6px">Q · 01</span><span style="display:block;font-size:14px;font-weight:500;color:#fefefe;line-height:1.75">样例设问？</span></section>
+<section class="container-qa-block__a" style="padding:10px 12px"><span style="display:block;font-size:9px;letter-spacing:0.2em;color:#636870;margin-bottom:6px">A · 01</span><span style="display:block;font-size:14px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">答案正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</span></section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > quote:classic 1`] = `
 "<section class="container-quote-card container-quote-card--classic" style="background-color: var(--uv-quote-bg, #f5f5f3); padding: 0; margin: 20px 0; border-radius: 8px;">
 <section style="text-align:left;line-height:1;padding:6px 0 8px 6px"><span style="display:inline-block;font-size:28px;opacity:0.35">「</span></section>

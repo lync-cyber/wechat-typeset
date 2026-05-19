@@ -8,6 +8,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -44,9 +45,89 @@ const sampleQuery: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const rowCSS = [
+      'display:table',
+      'width:100%',
+    ].join(';')
+    const qRowCSS = [
+      'display:table',
+      'width:100%',
+      `border-bottom:1px solid ${c.text}`,
+      'padding-bottom:8px',
+      'margin-bottom:8px',
+    ].join(';')
+    const labelCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:54px',
+    ].join(';')
+    const qLabelMainCSS = [
+      'display:block',
+      'font-size:10px',
+      `color:${c.textMuted}`,
+      'letter-spacing:0.12em',
+      'font-weight:600',
+    ].join(';')
+    const labelItalicCSS = [
+      'display:block',
+      'font-size:10px',
+      'font-style:italic',
+      `color:${c.accent}`,
+      'letter-spacing:0.06em',
+    ].join(';')
+    const bodyCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+      'font-weight:500',
+    ].join(';')
+    const aBodyCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+    ].join(';')
+
+    const qLabelHtml =
+      `<span style="${labelCellCSS}">` +
+      `<span style="${qLabelMainCSS}">QUERY</span>` +
+      `<span style="${labelItalicCSS}">N° 014</span>` +
+      `</span>`
+    const aLabelHtml =
+      `<span style="${labelCellCSS}">` +
+      `<span style="${qLabelMainCSS}">FINDING</span>` +
+      `<span style="${labelItalicCSS}">obs. 014.b</span>` +
+      `</span>`
+
+    return {
+      wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: q
+          ? `<section class="container-qa-block__q" style="${qRowCSS}">${qLabelHtml}<span style="${bodyCellCSS}">${escText(q)}</span></section>\n`
+          : '',
+        aOpenHtml: `<section class="container-qa-block__a" style="${rowCSS}">${aLabelHtml}<span style="${aBodyCellCSS}">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default sampleQuery

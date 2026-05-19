@@ -8,6 +8,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -44,9 +45,69 @@ const typedBlock: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const qSectionCSS = [
+      `background-color:${c.text}`,
+      'padding:10px 12px',
+    ].join(';')
+    const qKickerCSS = [
+      'display:block',
+      'font-size:9px',
+      'letter-spacing:0.2em',
+      `color:${c.accent}`,
+      'margin-bottom:6px',
+    ].join(';')
+    const qTextCSS = [
+      'display:block',
+      'font-size:14px',
+      'font-weight:500',
+      `color:${c.textInverse}`,
+      'line-height:1.75',
+    ].join(';')
+    const aSectionCSS = [
+      'padding:10px 12px',
+    ].join(';')
+    const aKickerCSS = [
+      'display:block',
+      'font-size:9px',
+      'letter-spacing:0.2em',
+      `color:${c.textMuted}`,
+      'margin-bottom:6px',
+    ].join(';')
+    const aBodyCSS = [
+      'display:block',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+    ].join(';')
+
+    const qBlockHtml = q
+      ? `<section class="container-qa-block__q" style="${qSectionCSS}"><span style="${qKickerCSS}">Q · 01</span><span style="${qTextCSS}">${escText(q)}</span></section>\n`
+      : ''
+
+    return {
+      wrapperCSS: `margin:18px 0;padding:0;border:1px solid ${c.text};background-color:transparent`,
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: qBlockHtml,
+        aOpenHtml: `<section class="container-qa-block__a" style="${aSectionCSS}"><span style="${aKickerCSS}">A · 01</span><span style="${aBodyCSS}">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default typedBlock

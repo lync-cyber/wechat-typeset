@@ -8,6 +8,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -42,9 +43,79 @@ const hangingQa: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const qRowCSS = [
+      'display:table',
+      'width:100%',
+      'margin-bottom:14px',
+    ].join(';')
+    const qLabelCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:32px',
+      'font-size:24px',
+      'font-style:italic',
+      `color:${c.text}`,
+      'line-height:1',
+      'font-weight:500',
+    ].join(';')
+    const qTextCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14.5px',
+      'line-height:1.85',
+      `color:${c.text}`,
+      'font-weight:500',
+    ].join(';')
+    const aRowCSS = [
+      'display:table',
+      'width:100%',
+      `border-top:1px solid ${c.textMuted}`,
+      'padding-top:12px',
+    ].join(';')
+    const aLabelCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:32px',
+      'font-size:24px',
+      'font-style:italic',
+      `color:${c.textMuted}`,
+      'line-height:1',
+      'font-weight:500',
+    ].join(';')
+    const aBodyCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14.5px',
+      'line-height:1.85',
+      `color:${c.textMuted}`,
+    ].join(';')
+
+    return {
+      wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: q
+          ? `<section class="container-qa-block__q" style="${qRowCSS}"><span style="${qLabelCSS}">Q.</span><span style="${qTextCSS}">${escText(q)}</span></section>\n`
+          : '',
+        aOpenHtml: `<section class="container-qa-block__a" style="${aRowCSS}"><span style="${aLabelCSS}">A.</span><span style="${aBodyCSS}">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default hangingQa

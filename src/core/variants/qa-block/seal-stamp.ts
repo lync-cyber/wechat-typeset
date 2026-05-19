@@ -8,6 +8,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -43,9 +44,72 @@ const sealStamp: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const rowCSS = [
+      'display:table',
+      'width:100%',
+      'margin-bottom:10px',
+    ].join(';')
+    const qBadgeCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:28px',
+      'padding-right:10px',
+    ].join(';')
+    const qBadgeInnerCSS = [
+      'display:inline-block',
+      'width:26px',
+      'height:26px',
+      `background-color:${c.primary}`,
+      `color:${c.textInverse}`,
+      'font-size:13px',
+      'text-align:center',
+      'line-height:26px',
+    ].join(';')
+    const aBadgeInnerCSS = [
+      'display:inline-block',
+      'width:26px',
+      'height:26px',
+      'background-color:transparent',
+      `border:1.5px solid ${c.primary}`,
+      `color:${c.primary}`,
+      'font-size:13px',
+      'text-align:center',
+      'line-height:23px',
+    ].join(';')
+    const bodyCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+    ].join(';')
+
+    return {
+      wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: q
+          ? `<section class="container-qa-block__q" style="${rowCSS}"><span style="${qBadgeCSS}"><span style="${qBadgeInnerCSS}">问</span></span><span style="${bodyCSS}">${escText(q)}</span></section>\n`
+          : '',
+        aOpenHtml: `<section class="container-qa-block__a" style="${rowCSS}"><span style="${qBadgeCSS}"><span style="${aBadgeInnerCSS}">答</span></span><span style="${bodyCSS}">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default sealStamp

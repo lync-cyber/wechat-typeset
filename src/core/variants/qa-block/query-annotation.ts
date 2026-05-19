@@ -8,6 +8,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -43,9 +44,71 @@ const queryAnnotation: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const qSectionCSS = [
+      `border-top:1px solid ${c.textMuted}`,
+      `border-bottom:1px solid ${c.textMuted}`,
+      'padding:10px 0',
+      'margin-bottom:12px',
+    ].join(';')
+    const qInlineKickerCSS = [
+      'display:inline-block',
+      'font-size:11px',
+      `color:${c.primary}`,
+      'letter-spacing:0.3em',
+      'margin-bottom:6px',
+    ].join(';')
+    const qTextCSS = [
+      'display:block',
+      'font-size:14.5px',
+      'line-height:1.95',
+      `color:${c.text}`,
+      'font-weight:500',
+    ].join(';')
+    const aRowCSS = [
+      'display:table',
+      'width:100%',
+    ].join(';')
+    const aLabelCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:20px',
+      'font-size:11px',
+      `color:${c.primary}`,
+    ].join(';')
+    const aBodyCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+    ].join(';')
+
+    return {
+      wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: q
+          ? `<section class="container-qa-block__q" style="${qSectionCSS}"><span style="${qInlineKickerCSS}">設・問</span><span style="${qTextCSS}">${escText(q)}</span></section>\n`
+          : '',
+        aOpenHtml: `<section class="container-qa-block__a" style="${aRowCSS}"><span style="${aLabelCellCSS}">註</span><span style="${aBodyCellCSS}">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default queryAnnotation

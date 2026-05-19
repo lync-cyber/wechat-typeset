@@ -65,6 +65,37 @@ export interface VariantRenderResult {
    * juice 按 specificity (0,3,1) 覆盖 theme.p 的 (0,0,1)，从而把引文做大。
    */
   quoteCSS?: string
+  /**
+   * qa-block 容器专用四段插槽（仅 qa-block 容器消费）。
+   *
+   * qa-block 的内部结构（kicker / Q 行 / A 行 + markdown body）跨 8 个 variant 形态差异
+   * 大（朱印徽章 vs 大号斜体 vs 圆方代号 vs 反白分栏 ...），不适合 4 段通用 SPI；
+   * 改让每个 variant 自行拼装 HTML 字符串。renderer 只把 wrapper 外壳与 close 标签套上。
+   *
+   * 节点序：
+   *   `<section class="container-qa-block container-qa-block--{id}" style="{wrapperCSS}">`
+   *      {kickerHtml}     // 空串 = 不渲染
+   *      {qHtml}          // 空串 = 不渲染问行（仅答）
+   *      {aOpenHtml}      // 答行 open + body wrapper open
+   *      ...markdown body 流...
+   *      {aCloseHtml}     // body wrapper close + 答行 close
+   *   `</section>`
+   *
+   * 约束：所有 HTML 必须满足公众号粘贴白名单（display:table/table-cell/inline-block；
+   * 禁 grid/flex/gap/position:absolute）。attrs.q 用 escText 强制 escape。
+   */
+  qaBlock?: QaBlockSlots
+}
+
+export interface QaBlockSlots {
+  /** kicker 行完整 HTML。空串 = 不渲染 kicker。 */
+  kickerHtml: string
+  /** 问行完整 HTML（attrs.q 已 escape 嵌入；renderer 不再追加任何内容）。空串 = 不渲染问行。 */
+  qHtml: string
+  /** 答行 open 段；renderer 在此后流式注入 markdown body。 */
+  aOpenHtml: string
+  /** 答行 close 段；与 aOpenHtml 配对（open 几层 tag，close 闭几层）。 */
+  aCloseHtml: string
 }
 
 export type AdmonitionKind = 'tip' | 'warning' | 'info' | 'danger'

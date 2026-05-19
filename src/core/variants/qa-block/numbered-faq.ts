@@ -2,12 +2,13 @@
  * qa-block · numbered-faq（编辑部 编号 FAQ）
  *
  * 设计稿 01·A：Q.NN mono 序号 + 加粗设问 + 底线分隔 + 下方多段答复。
- * 默认骨架：DEFAULT_VARIANTS.qaBlock 指向本 id，未声明 qaBlock 的主题自动采用。
- * P3.1 阶段 renderer 未派发，本文件仅占位登记并提供 thumbnail / snippet。
+ * 默认骨架：DEFAULT_VARIANTS.qaBlock 指向本 id；renderer 在未声明 attrs.variant
+ * 且主题 spec.variants.qaBlock 缺省时回退到此。
  */
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -29,7 +30,6 @@ const numberedFaq: VariantDef = {
     kind: 'qaBlock',
     name: '编号 FAQ',
     description: 'Q.NN 序号 + 加粗设问 + 底线分隔 + 下方答复段',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [
@@ -43,9 +43,61 @@ const numberedFaq: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const qRowCSS = [
+      'display:table',
+      'width:100%',
+      `border-bottom:1px solid ${c.text}`,
+      'padding-bottom:6px',
+      'margin-bottom:8px',
+    ].join(';')
+    const qLabelCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'width:40px',
+      'font-family:"IBM Plex Mono",monospace',
+      'font-size:10px',
+      `color:${c.textMuted}`,
+      'letter-spacing:0.16em',
+    ].join(';')
+    const qTextCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'font-size:14px',
+      'font-weight:600',
+      `color:${c.text}`,
+    ].join(';')
+    const aBodyCSS = [
+      'font-size:13.5px',
+      'line-height:1.85',
+      `color:${c.textMuted}`,
+    ].join(';')
+
+    return {
+      wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: q
+          ? `<section class="container-qa-block__q" style="${qRowCSS}"><span style="${qLabelCSS}">Q.01</span><span style="${qTextCSS}">${escText(q)}</span></section>\n`
+          : '',
+        aOpenHtml: `<section class="container-qa-block__a" style="${aBodyCSS}"><span class="container-qa-block__answer">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default numberedFaq

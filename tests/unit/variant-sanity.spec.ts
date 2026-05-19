@@ -22,7 +22,7 @@ import { __setTableCardWarnSilentForTest } from '../../src/core/pipeline/contain
 import { CASES, isCompatBlocked } from '../helpers/variantCases'
 
 describe('枚举完整性', () => {
-  it('11 kind × N variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
+  it('12 kind × N variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
@@ -37,6 +37,7 @@ describe('枚举完整性', () => {
       tableCard: 8, // +3 P2-C + +1 P2-F matrix（均 experimental）
       gallery: 4,
       dialogue: 8, // +2 P2-B + +2 P2-E：audio-stamp / shape-speaker（均 experimental）
+      qaBlock: 8, // P3.2 引入 qa-block variant 派发：numbered-faq 默认 + 7 experimental
     })
   })
 

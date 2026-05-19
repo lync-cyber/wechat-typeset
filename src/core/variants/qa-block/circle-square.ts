@@ -8,6 +8,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -45,9 +46,86 @@ const circleSquare: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const rowCSS = [
+      'display:table',
+      'width:100%',
+    ].join(';')
+    const qRowCSS = [
+      'display:table',
+      'width:100%',
+      'margin-bottom:14px',
+    ].join(';')
+    const badgeCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'width:36px',
+      'padding-right:12px',
+    ].join(';')
+    const qBadgeCSS = [
+      'display:inline-block',
+      'width:24px',
+      'height:24px',
+      `border:2px solid ${c.text}`,
+      'border-radius:50%',
+      'font-size:10px',
+      'font-weight:600',
+      `color:${c.text}`,
+      'text-align:center',
+      'line-height:20px',
+    ].join(';')
+    const aBadgeCSS = [
+      'display:inline-block',
+      'width:24px',
+      'height:24px',
+      `background-color:${c.accent}`,
+      'font-size:10px',
+      'font-weight:600',
+      `color:${c.textInverse}`,
+      'text-align:center',
+      'line-height:24px',
+    ].join(';')
+    const qBodyCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14.5px',
+      'line-height:1.85',
+      `color:${c.text}`,
+      'font-weight:500',
+    ].join(';')
+    const aBodyCellCSS = [
+      'display:table-cell',
+      'vertical-align:top',
+      'font-size:14.5px',
+      'line-height:1.85',
+      `color:${c.text}`,
+    ].join(';')
+
+    return {
+      wrapperCSS: 'margin:18px 0;padding:6px 0;background-color:transparent',
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: q
+          ? `<section class="container-qa-block__q" style="${qRowCSS}"><span style="${badgeCellCSS}"><span style="${qBadgeCSS}">Q</span></span><span style="${qBodyCellCSS}">${escText(q)}</span></section>\n`
+          : '',
+        aOpenHtml: `<section class="container-qa-block__a" style="${rowCSS}"><span style="${badgeCellCSS}"><span style="${aBadgeCSS}">A</span></span><span style="${aBodyCellCSS}">\n`,
+        aCloseHtml: '</span></section>\n',
+      },
+    }
+  },
 }
 
 export default circleSquare

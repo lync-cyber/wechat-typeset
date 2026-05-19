@@ -7,6 +7,7 @@
 
 import type { VariantDef } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, text } = mergeThumb(args ?? {})
@@ -44,9 +45,82 @@ const fieldCard: VariantDef = {
         ':::\n',
     },
   ],
-  render: () => ({
-    wrapperCSS: 'margin:18px 0;padding:0;background-color:transparent',
-  }),
+  render: (ctx) => {
+    const c = ctx.tokens.colors
+    const kickerText = ctx.info.trim() || ctx.kickers.qaBlock
+    const q = (ctx.attrs.q ?? '').trim()
+
+    const kickerCSS = [
+      `color:${c.primary}`,
+      'font-size:11px',
+      'font-weight:700',
+      'letter-spacing:0.1em',
+      'margin-bottom:10px',
+    ].join(';')
+    const qHeaderRowCSS = [
+      'display:table',
+      'width:100%',
+      `border-bottom:1px dashed ${c.text}`,
+      'padding-bottom:6px',
+      'margin-bottom:8px',
+    ].join(';')
+    const qLabelCellCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'font-size:10px',
+      `color:${c.accent}`,
+      'letter-spacing:0.16em',
+      'font-weight:600',
+    ].join(';')
+    const qCardNumCellCSS = [
+      'display:table-cell',
+      'vertical-align:baseline',
+      'text-align:right',
+      'font-size:11px',
+      'font-style:italic',
+      `color:${c.textMuted}`,
+    ].join(';')
+    const qTextCSS = [
+      'display:block',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+      'margin-bottom:10px',
+    ].join(';')
+    const aHeaderCSS = [
+      'display:block',
+      'font-size:10px',
+      `color:${c.accent}`,
+      'letter-spacing:0.16em',
+      'font-weight:600',
+      `border-top:1px dashed ${c.text}`,
+      'padding-top:6px',
+      'margin-bottom:6px',
+    ].join(';')
+    const aBodyCSS = [
+      'display:block',
+      'font-size:14px',
+      'line-height:1.85',
+      `color:${c.text}`,
+    ].join(';')
+
+    const qHeaderHtml = q
+      ? `<section class="container-qa-block__q-header" style="${qHeaderRowCSS}"><span style="${qLabelCellCSS}">Q</span><span style="${qCardNumCellCSS}">Card 09</span></section>\n` +
+        `<span style="${qTextCSS}">${escText(q)}</span>\n`
+      : ''
+
+    return {
+      wrapperCSS: `margin:18px 0;padding:10px 12px;border:1px solid ${c.text};background-color:transparent`,
+      qaBlock: {
+        kickerHtml: kickerText
+          ? `<section class="container-qa-block__kicker" style="${kickerCSS}">${escText(kickerText)}</section>\n`
+          : '',
+        qHtml: qHeaderHtml,
+        aOpenHtml: `<span style="${aHeaderCSS}">A</span><span style="${aBodyCSS}">\n`,
+        aCloseHtml: '</span>\n',
+      },
+    }
+  },
 }
 
 export default fieldCard
