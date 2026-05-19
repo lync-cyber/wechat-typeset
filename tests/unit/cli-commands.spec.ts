@@ -216,6 +216,152 @@ describe('new query endpoints (P1-2)', () => {
   })
 })
 
+describe('markdown render · dryRun / asDocument (P2-3 / P2-5)', () => {
+  it('dryRun=true → html 为空字符串、metadata 仍计算', async () => {
+    const cmd = get<
+      { md: string; persona: string; dryRun: boolean },
+      { html: string; wordCount: number; readingTime: number; patchLog?: { entries: unknown[]; total: number } }
+    >('markdown render')
+    const out = await cmd.run({
+      md: '# 标题\n\n本文一段正文，用于测试 wordCount / readingTime 计算。',
+      persona: 'default',
+      dryRun: true,
+    })
+    expect(out.html).toBe('')
+    expect(out.wordCount).toBeGreaterThan(0)
+    expect(out.readingTime).toBeGreaterThanOrEqual(1)
+    expect(out.patchLog?.total).toBe(0)
+  })
+
+  it('asDocument=true → html 是完整 <!DOCTYPE html> 文档', async () => {
+    const cmd = get<
+      { md: string; persona: string; asDocument: boolean },
+      { html: string }
+    >('markdown render')
+    const out = await cmd.run({
+      md: '# 我的标题\n\n正文。',
+      persona: 'default',
+      asDocument: true,
+    })
+    expect(out.html.startsWith('<!DOCTYPE html>')).toBe(true)
+    expect(out.html).toContain('<title>我的标题</title>')
+    expect(out.html).toContain('</html>')
+  })
+
+  it('asDocument 无 H1 时 title 回退默认串', async () => {
+    const cmd = get<
+      { md: string; persona: string; asDocument: boolean },
+      { html: string }
+    >('markdown render')
+    const out = await cmd.run({ md: '正文，没有 H1。', persona: 'default', asDocument: true })
+    expect(out.html).toContain('<title>wechat-typeset 渲染</title>')
+  })
+})
+
+describe('markdown render-batch (P2-1)', () => {
+  it('多 persona 单次调用 → 每个 persona 一条结果', async () => {
+    const cmd = get<
+      { md: string; personas: string[] },
+      {
+        total: number
+        succeeded: number
+        failed: number
+        results: Record<string, { ok: boolean; html?: string; code?: string }>
+      }
+    >('markdown render-batch')
+    const out = await cmd.run({
+      md: '# 标题\n\n::: tip\nbody\n:::\n',
+      personas: ['default', 'tech-explainer'],
+    })
+    expect(out.total).toBe(2)
+    expect(out.succeeded).toBe(2)
+    expect(out.failed).toBe(0)
+    expect(out.results.default.ok).toBe(true)
+    expect(out.results['tech-explainer'].ok).toBe(true)
+    expect(out.results.default.html).toContain('markdown-body')
+  })
+
+  it('部分 persona 失败时不中断 batch', async () => {
+    const cmd = get<
+      { md: string; personas: string[] },
+      {
+        total: number
+        succeeded: number
+        failed: number
+        results: Record<string, { ok: boolean; code?: string }>
+      }
+    >('markdown render-batch')
+    const out = await cmd.run({
+      md: '# x',
+      personas: ['default', 'no-such-persona', 'tech-explainer'],
+    })
+    expect(out.total).toBe(3)
+    expect(out.succeeded).toBe(2)
+    expect(out.failed).toBe(1)
+    expect(out.results['no-such-persona'].ok).toBe(false)
+    expect(out.results['no-such-persona'].code).toBe('RESOURCE_NOT_FOUND')
+    expect(out.results.default.ok).toBe(true)
+    expect(out.results['tech-explainer'].ok).toBe(true)
+  })
+})
+
+describe('personas derive (P2-2)', () => {
+  it('在 default 上 patch palette → 新 spec + meta.basedOn = default', async () => {
+    const cmd = get<
+      { base: string; patch: Record<string, unknown> },
+      { spec: { id: string; palette: { primary: string }; meta?: { basedOn?: string } }; validation: { ok: boolean } }
+    >('personas derive')
+    const out = await cmd.run({
+      base: 'default',
+      patch: { palette: { primary: '#ff0000' } },
+    })
+    expect(out.spec.palette.primary).toBe('#ff0000')
+    expect(out.spec.id).toMatch(/^default-derived-/)
+    expect(out.spec.meta?.basedOn).toBe('default')
+    expect(out.validation.ok).toBe(true)
+  })
+
+  it('未知 base → WtException RESOURCE_NOT_FOUND', async () => {
+    const cmd = get<{ base: string; patch: Record<string, unknown> }, unknown>('personas derive')
+    await expectWt(() => cmd.run({ base: 'no-such', patch: {} }), 'RESOURCE_NOT_FOUND')
+  })
+})
+
+describe('list filters (P2-4)', () => {
+  it('containers list --category admonition → 仅 admonition 类容器', async () => {
+    const cmd = get<{ category: string }, Array<{ category: string }>>('containers list')
+    const out = await cmd.run({ category: 'admonition' })
+    expect(out.length).toBeGreaterThan(0)
+    expect(out.every((c) => c.category === 'admonition')).toBe(true)
+  })
+
+  it('containers list --pack pack:data-viz → 仅 data-viz 包容器', async () => {
+    const cmd = get<{ pack: string }, Array<{ category: string }>>('containers list')
+    const out = await cmd.run({ pack: 'pack:data-viz' })
+    expect(out.length).toBeGreaterThan(0)
+  })
+
+  it('containers list 不传过滤参数 → 全集', async () => {
+    const cmd = get<Record<string, never>, Array<unknown>>('containers list')
+    const out = await cmd.run({})
+    expect(out.length).toBeGreaterThan(30)
+  })
+
+  it('personas list --audience 散文 → 散文相关主题', async () => {
+    const cmd = get<{ audience: string }, Array<{ id: string; audience: string }>>('personas list')
+    const out = await cmd.run({ audience: '散文' })
+    expect(out.length).toBeGreaterThan(0)
+    expect(out.every((p) => p.audience.toLowerCase().includes('散文'))).toBe(true)
+  })
+
+  it('personas list --topic 技术 → 技术相关主题（在 audience+description 中匹配）', async () => {
+    const cmd = get<{ topic: string }, Array<{ id: string }>>('personas list')
+    const out = await cmd.run({ topic: '技术' })
+    expect(out.length).toBeGreaterThan(0)
+    expect(out.some((p) => p.id === 'tech-explainer')).toBe(true)
+  })
+})
+
 describe('personas recommend · vibe/audience optional fields (P1-4)', () => {
   it('只给 vibe 也能跑出 ranked[3]', async () => {
     const cmd = get<

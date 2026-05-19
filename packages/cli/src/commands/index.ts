@@ -7,10 +7,12 @@ import { validateMarkdownCommand } from './validate-markdown'
 import { lintCommand } from './lint'
 import { annotateCommand } from './annotate'
 import { annotateApplyCommand } from './annotate-apply'
+import { markdownRenderBatchCommand } from './markdown-render-batch'
 import { personasListCommand } from './personas-list'
 import { personasGetCommand } from './personas-get'
 import { personasCapabilitiesCommand } from './personas-capabilities'
 import { personasRecommendCommand } from './personas-recommend'
+import { personasDeriveCommand } from './personas-derive'
 import { personaMotifsCommand } from './persona-motifs'
 import { containersListCommand } from './containers-list'
 import { containersGetCommand } from './containers-get'
@@ -37,10 +39,12 @@ const CANONICAL_COMMANDS: readonly AnyCommand[] = [
   lintCommand,
   annotateCommand,
   annotateApplyCommand,
+  markdownRenderBatchCommand,
   personasListCommand,
   personasGetCommand,
   personasCapabilitiesCommand,
   personasRecommendCommand,
+  personasDeriveCommand,
   personaMotifsCommand,
   containersListCommand,
   containersGetCommand,

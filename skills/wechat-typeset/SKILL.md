@@ -47,8 +47,7 @@ description: wechat-typeset 仓库的意图路由入口。当用户对仓库提�
 | author-persona | 改通用 CSS / 加非主题 fence 容器 | 改 `src/core/vocabulary/vocabulary.ts`（不在 skill 边界内） |
 | export-richtext | markdown 还没标 `:::` | annotate-markdown |
 | export-richtext | 要造新主题 | author-persona |
-| export-richtext | 渲染失败抛 `WtException(SPEC_INVALID)` | author-persona 修 spec |
-| export-richtext | 渲染失败抛 `WtException(CONTRACT_VIOLATION)` 或 lint 报 `unknown_container` | annotate-markdown 修 markdown |
+| 任意 skill | 渲染 / 校验抛 `WtException(...)` | 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)（完整码 → skill 转向矩阵） |
 
 ## 5 步路由判断（按顺序执行）
 
@@ -135,6 +134,8 @@ echo '{"md":"...原文..."}' | npm run cli -- lint --json
 
 ## 相关参考
 
+- [../_shared/references/mcp-cli-mapping.md](../_shared/references/mcp-cli-mapping.md) · CLI ↔ MCP 调用形态映射、`describe` 接入起点
+- [../_shared/references/error-routing.md](../_shared/references/error-routing.md) · `WtException` → 该转向哪个 skill 的矩阵
 - [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · 全部 CLI 真源
 - [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（决策树在底部）
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查

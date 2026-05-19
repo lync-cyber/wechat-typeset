@@ -63,7 +63,8 @@ npm run cli -- describe   # 输出 { version, commands[] }
 
 | 子命令 | 输入 schema | 输出 |
 | --- | --- | --- |
-| `markdown render` | `{ md, persona?, spec?, platform? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }`；`platform` 枚举来自 `platforms list` |
+| `markdown render` | `{ md, persona?, spec?, platform?, dryRun?, asDocument? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }`；`platform` 枚举来自 `platforms list`；`dryRun: true` → html='' 只算 metadata；`asDocument: true` → html 是完整 `<!DOCTYPE html>...</html>` 文档 |
+| `markdown render-batch` | `{ md, personas: string[], platform? }` | `{ total, succeeded, failed, results: { [id]: { ok: true, html, ... } \| { ok: false, code, message } } }`——单次调用渲染多 persona，单个失败不中断 batch |
 | `markdown lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }`；`issues[].kind` 是 8 态 enum |
 | `markdown annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }`；`patches[].kind`/`confidence` 都是 enum |
 | `markdown annotate apply` | `{ md, patches[] }` | `{ md, applied, skipped[] }` |
@@ -79,17 +80,18 @@ npm run cli -- describe   # 输出 { version, commands[] }
 
 | 子命令 | 输入 | 输出 |
 | --- | --- | --- |
-| `personas list` | — | `PersonaSummary[]` |
+| `personas list` | `{ topic?, audience? }` | `PersonaSummary[]`；filter 不传 = 全集；`topic` 子串匹配 audience+description，`audience` 仅匹配 audience（都 case-insensitive） |
 | `personas get` | `{ id }` | `PersonaSpec` |
 | `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, recommendedVariantOverrides, containers[], kickers }` |
 | `personas recommend` | `{ title?, summary?, topic?, style?, vibe?, audience? }` 至少一个非空 | `{ ranked[3], recommendNew, rationaleOneLine }`。全空 → `CONTRACT_VIOLATION` |
+| `personas derive` | `{ base, patch, id?, name? }` | `{ spec, validation }`——浅合并 palette/variants/meta/motifs；自动设 `meta.basedOn = base.id`；validation 不抛错 |
 | `persona motifs` | `{ id }` | 该 persona 的 `MotifSpec`（h2Prefix / dividers / admonition icons 等 AST 集合） |
 
 **containers · 容器词汇**
 
 | 子命令 | 输入 | 输出 |
 | --- | --- | --- |
-| `containers list` | — | `ContainerSpec[]` |
+| `containers list` | `{ category?, pack?, namespace? }` | `ContainerSpec[]`；filter 不传 = 全集；exact-match AND |
 | `containers get` | `{ name }` | 单个 `ContainerSpec`；未知 → RESOURCE_NOT_FOUND |
 | `containers variants` | `{ name }` | 容器可切换的 `VariantDescriptor[]`；无 variantKind 的容器返回 `[]` |
 | `containers snippet` | `{ name, variant?, persona? }` | `string`（传 `persona` 且未传 `variant` 时按该主题 default variant 绑定） |

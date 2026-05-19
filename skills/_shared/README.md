@@ -23,6 +23,8 @@
 | `references/personas.md` | author-persona / annotate-markdown / export-richtext / wechat-typeset（路由） | 主要由 `npm run build:skill-refs` 从 `listPersonas()` 派生；决策树手写 |
 | `references/container-vocabulary.md` | annotate-markdown / export-richtext / wechat-typeset（路由） | 手写（与 `src/core/vocabulary` 对齐） |
 | `references/cli-contract.md` | annotate-markdown / export-richtext / author-persona / wechat-typeset（路由） | 手写（脚本签名 / 退出码 / JSON / lint issue 表的单一真源） |
+| `references/mcp-cli-mapping.md` | 全部 4 个 skill | 手写（CLI ↔ MCP ↔ Node 库 三种宿主形态的调用映射；接入起点 `describe`） |
+| `references/error-routing.md` | 全部 4 个 skill | 手写（`WtException` 错误码 → 修复路径 → 路由到哪个 skill 的 SSOT） |
 
 ## 新增共享 reference 的流程
 

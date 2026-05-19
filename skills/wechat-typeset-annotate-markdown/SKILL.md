@@ -16,22 +16,26 @@ description: 把普通 Markdown 改写成 wechat-typeset 写作契约（::: 容�
 - ❌ markdown 已含合法 `:::` 容器要"渲染" → 转 `wechat-typeset-export-richtext`
 - ❌ 要造主题色 / motif / `personas recommend` 输出 `recommendNew=true` → 转 `wechat-typeset-author-persona`
 
-## CLI 入口
+## CLI / MCP 入口
 
-所有标注/校验都走 `npm run cli -- <subcommand>`。同一可执行体既能 shell 也能从 MCP 工具调（schema 单一真源）。
+所有标注/校验走同一份 schema，三种宿主形态：
+
+- **CLI（shell）**：`npm run cli -- <subcommand>`（`<subcommand>` 多词用空格，`--flag value` 或 `--json` 走 stdin）
+- **MCP**：tool 名是 `<subcommand>` 空格转下划线（`markdown_annotate` 等），inputSchema 与 CLI 同源
+- **接入起点（任一宿主）**：先调 `describe` 拉齐全部命令清单、错误码、`readOnly` 标记
 
 ```bash
 # 通用形式
 npm run cli -- <subcommand> [--flag value | --json]
 
-# 从 stdin 读 JSON（推荐复杂参数走这个）
-echo '{"md":"# 标题"}' | npm run cli -- lint --json
+# 从 stdin 读 JSON（推荐复杂参数走这个；MCP 端等价于 tool call payload）
+echo '{"md":"# 标题"}' | npm run cli -- markdown lint --json
 
 # 简单参数走 --flag（仅在 inputSchema 声明的字段上有效；--input <path> 读文件作 md）
 npm run cli -- containers snippet --name tip
 ```
 
-退出码、subcommand 签名、JSON 形状的**单一真源**：[`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)。
+权威映射 / 错误返回结构 见 [`../_shared/references/mcp-cli-mapping.md`](../_shared/references/mcp-cli-mapping.md)；命令签名 / 退出码 / JSON 形状 见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)；`WtException` → 应转向哪个 skill 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。
 
 > **工作目录约定**：所有中间产物落在 `tmp/`（已在 `.gitignore`）。如不存在请先 `mkdir -p tmp`。
 
@@ -256,8 +260,10 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 
 ## 相关参考
 
-共享 references（三个 skill 共用同一份权威源）：
+共享 references（4 个 skill 共用同一份权威源）：
 
+- [../_shared/references/mcp-cli-mapping.md](../_shared/references/mcp-cli-mapping.md) · CLI ↔ MCP ↔ Node 库 三种宿主形态映射、`describe` 接入起点
+- [../_shared/references/error-routing.md](../_shared/references/error-routing.md) · `WtException` → 该转向哪个 skill
 - [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**CLI 真源**）
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
 - [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（由 build:skill-refs 派生）
