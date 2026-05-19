@@ -39,7 +39,7 @@ const sidenoteLatex: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: 'LaTeX 旁注',
     description: '细边框 + 小型大写标题，LaTeX 定理框语汇',
-    signatureOf: 'academic-frontier',
+    designedFor: ['academic-frontier'],
   },
   thumbnail: thumb,
   snippets: [

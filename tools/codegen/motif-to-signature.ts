@@ -2,8 +2,8 @@
  * motif-to-signature.ts
  *
  * Reads docs/wechat-typeset-container/*.html for data-motif attributes,
- * reads src/core/variants/*\/<id>.ts for signatureOf / themeCompat,
- * and outputs a "motif bucket vs signatureOf bucket" consistency report.
+ * reads src/core/variants/*\/<id>.ts for designedFor,
+ * and outputs a "motif bucket vs designedFor bucket" consistency report.
  *
  * Usage: npx tsx tools/codegen/motif-to-signature.ts
  * Output: docs/wechat-typeset-container/motif-signature-check.md (and stdout)
@@ -61,14 +61,13 @@ function parseHtmlFiles(): HtmlEntry[] {
 }
 
 // ─────────────────────────────────────────────
-// Step 2: Read TS variant files → id → signatureOf/themeCompat
+// Step 2: Read TS variant files → id → designedFor
 // ─────────────────────────────────────────────
 
 interface VariantMeta {
   id: string
   kind: string
-  signatureOf?: string
-  themeCompat?: string[]
+  designedFor?: string[]
 }
 
 function parseVariantFiles(): Map<string, VariantMeta> {
@@ -92,13 +91,14 @@ function parseVariantFiles(): Map<string, VariantMeta> {
       if (!idMatch) continue
       const id = idMatch[1]
 
-      const sigMatch = content.match(/signatureOf:\s*'([^']+)'/)
-      const compatMatch = content.match(/themeCompat:\s*\[([^\]]+)\]/)
+      // Match the meta-level designedFor (first occurrence within meta object literal).
+      // Snippet-level designedFor on individual snippet entries are matched separately
+      // but currently the report only consumes meta-level.
+      const designedForMatch = content.match(/designedFor:\s*\[([^\]]+)\]/)
 
       const meta: VariantMeta = { id, kind }
-      if (sigMatch) meta.signatureOf = sigMatch[1]
-      if (compatMatch) {
-        meta.themeCompat = compatMatch[1]
+      if (designedForMatch) {
+        meta.designedFor = designedForMatch[1]
           .split(',')
           .map(s => s.trim().replace(/['"]/g, ''))
           .filter(Boolean)
@@ -166,8 +166,7 @@ const VAR_ID_TO_VARIANT: Record<string, string> = {
 
 interface MotifEntry {
   variantKey: string
-  signatureOf?: string
-  themeCompat?: string[]
+  designedFor?: string[]
   htmlVarId: string
   sourceFile: string
 }
@@ -186,8 +185,7 @@ function buildMotifBuckets(
 
     const motifEntry: MotifEntry = {
       variantKey: variantKey ?? `(html-only:${entry.varId})`,
-      signatureOf: meta?.signatureOf,
-      themeCompat: meta?.themeCompat,
+      designedFor: meta?.designedFor,
       htmlVarId: entry.varId,
       sourceFile: entry.file,
     }
@@ -204,8 +202,7 @@ function buildMotifBuckets(
 // ─────────────────────────────────────────────
 
 function effectiveSignature(e: MotifEntry): string | null {
-  if (e.signatureOf) return e.signatureOf
-  if (e.themeCompat && e.themeCompat.length > 0) return e.themeCompat[0]
+  if (e.designedFor && e.designedFor.length > 0) return e.designedFor[0]
   return null
 }
 
@@ -252,10 +249,9 @@ function generateReport(buckets: Map<string, MotifEntry[]>): string {
     ]
 
     for (const e of entries) {
-      const sig = e.signatureOf
-        ? `signatureOf: ${e.signatureOf}`
-        : e.themeCompat
-          ? `themeCompat: [${e.themeCompat.join(', ')}]`
+      const sig =
+        e.designedFor && e.designedFor.length > 0
+          ? `designedFor: [${e.designedFor.join(', ')}]`
           : '(no signature)'
       block.push(`    ${e.variantKey} → ${sig}`)
     }

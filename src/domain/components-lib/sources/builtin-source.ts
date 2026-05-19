@@ -145,10 +145,10 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
 
 function toEntry(def: AnyVariantDef, s: AnyVariantDef['snippets'][number]): BuiltinEntry {
   const thumb = def.thumbnail ? def.thumbnail(s.thumbArgs) : ''
-  // snippet 级 themeCompat 优先（更细粒度）；否则取 def.meta 的等效白名单（signatureOf 转单元素）
+  // snippet 级 designedFor 优先（更细粒度，可比 def.meta 更窄）；否则取 meta.designedFor。
   const defCompat = getEffectiveCompat(def.meta)
-  const themeCompat = s.themeCompat
-    ? [...s.themeCompat]
+  const designedFor = s.designedFor
+    ? [...s.designedFor]
     : defCompat.length > 0
       ? [...defCompat]
       : undefined
@@ -159,7 +159,7 @@ function toEntry(def: AnyVariantDef, s: AnyVariantDef['snippets'][number]): Buil
     description: s.description,
     kind: def.meta.kind,
     variantId: def.meta.id,
-    themeCompat,
+    designedFor,
     markdownSnippet: s.markdown,
     thumbnailSvg: thumb,
   }

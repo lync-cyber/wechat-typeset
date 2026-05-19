@@ -28,7 +28,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '楷字朱印',
     description: '居中朱印楷字 + 引文居中 + 朱破折号 byline（宋本 v1）',
-    themeCompat: ['literary-humanism', 'life-aesthetic'],
+    designedFor: ['literary-humanism', 'life-aesthetic'],
   },
   thumbnail: thumb,
   snippets: [

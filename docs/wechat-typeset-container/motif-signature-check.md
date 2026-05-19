@@ -1,6 +1,6 @@
 # motif-to-signature 一致性报告
 
-生成时间: 2026-05-19T04:57:53.255Z
+生成时间: 2026-05-19T08:25:28.856Z
 
 > 仅列出 content-1.html 中有对应 src/core/variants TS 文件的 variant。
 > 其余 HTML 文件的 variant 为画布原型，暂无 TS 对应（标注为 html-only）。
@@ -10,31 +10,31 @@
 ## motif: bilingual-stack
 
   variants:
-    pull-quote/bilingual-stack → signatureOf: academic-frontier
+    pull-quote/bilingual-stack → designedFor: [academic-frontier]
 
   conclusion: 同手法变体全部签名 academic-frontier ✓ (一致)
 
 ## motif: disc-device
 
   variants:
-    note/initial-disc → signatureOf: swiss-grid
-    quote/ring-device → themeCompat: [swiss-grid, brutalist]
+    note/initial-disc → designedFor: [swiss-grid]
+    quote/ring-device → designedFor: [swiss-grid, brutalist]
 
   conclusion: 同手法变体全部签名 swiss-grid ✓ (一致)
 
 ## motif: dotted-underline
 
   variants:
-    highlight/dotted-underline → signatureOf: editorial-mook
+    highlight/dotted-underline → designedFor: [editorial-mook]
 
   conclusion: 同手法变体全部签名 editorial-mook ✓ (一致)
 
 ## motif: editor-signoff
 
   variants:
-    admonition/hanging-nb → themeCompat: [official-gazette]
-    note/ed-signoff → signatureOf: editorial-mook
-    note/inline-label → signatureOf: editorial-mook
+    admonition/hanging-nb → designedFor: [official-gazette]
+    note/ed-signoff → designedFor: [editorial-mook]
+    note/inline-label → designedFor: [editorial-mook]
 
   conclusion: 签名不一致 ✗
   差异列表: official-gazette vs editorial-mook
@@ -42,42 +42,42 @@
 ## motif: filled-square
 
   variants:
-    admonition/filled-square → themeCompat: [brutalist]
-    admonition/triangle-top → themeCompat: [brutalist]
-    note/geometric-mark → signatureOf: brutalist
-    highlight/geometric-flag → signatureOf: brutalist
+    admonition/filled-square → (no signature)
+    admonition/triangle-top → designedFor: [brutalist]
+    note/geometric-mark → designedFor: [brutalist]
+    highlight/geometric-flag → designedFor: [brutalist]
 
   conclusion: 同手法变体全部签名 brutalist ✓ (一致)
 
 ## motif: interlinear-gloss
 
   variants:
-    note/interlinear-gloss → signatureOf: literary-humanism
-    note/vermilion-gloss → signatureOf: literary-humanism
-    pull-quote/with-gloss → signatureOf: literary-humanism
+    note/interlinear-gloss → designedFor: [literary-humanism]
+    note/vermilion-gloss → designedFor: [literary-humanism]
+    pull-quote/with-gloss → designedFor: [literary-humanism]
 
   conclusion: 同手法变体全部签名 literary-humanism ✓ (一致)
 
 ## motif: inverted-plate
 
   variants:
-    pull-quote/inverted-plate → signatureOf: brutalist
+    pull-quote/inverted-plate → designedFor: [brutalist]
 
   conclusion: 同手法变体全部签名 brutalist ✓ (一致)
 
 ## motif: latin-subhead
 
   variants:
-    note/latin-subhead → signatureOf: academic-frontier
-    quote/binomial-attrib → themeCompat: [academic-frontier, tech-explainer]
+    note/latin-subhead → designedFor: [academic-frontier]
+    quote/binomial-attrib → designedFor: [academic-frontier, tech-explainer]
 
   conclusion: 同手法变体全部签名 academic-frontier ✓ (一致)
 
 ## motif: numbered-cell
 
   variants:
-    admonition/specimen-box → themeCompat: [life-aesthetic]
-    pull-quote/grid-block → signatureOf: brutalist
+    admonition/specimen-box → designedFor: [life-aesthetic]
+    pull-quote/grid-block → designedFor: [brutalist]
 
   conclusion: 签名不一致 ✗
   差异列表: life-aesthetic vs brutalist
@@ -85,9 +85,9 @@
 ## motif: numbered-rule
 
   variants:
-    admonition/numbered-rule → themeCompat: [official-gazette]
-    quote/numbered-lines → themeCompat: [editorial-mook, data-brief]
-    quote/huge-numeral → themeCompat: [swiss-grid, brutalist]
+    admonition/numbered-rule → designedFor: [official-gazette]
+    quote/numbered-lines → designedFor: [editorial-mook, data-brief]
+    quote/huge-numeral → designedFor: [swiss-grid, brutalist]
 
   conclusion: 签名不一致 ✗
   差异列表: official-gazette vs editorial-mook vs swiss-grid
@@ -95,8 +95,8 @@
 ## motif: oversized-mark
 
   variants:
-    quote/oversized-mark → themeCompat: [editorial-mook, data-brief]
-    pull-quote/drop-capital → signatureOf: people-story
+    quote/oversized-mark → designedFor: [editorial-mook, data-brief]
+    pull-quote/drop-capital → designedFor: [people-story]
 
   conclusion: 签名不一致 ✗
   差异列表: editorial-mook vs people-story
@@ -104,18 +104,18 @@
 ## motif: paper-slip
 
   variants:
-    admonition/paper-slip → signatureOf: literary-humanism
+    admonition/paper-slip → designedFor: [literary-humanism]
 
   conclusion: 同手法变体全部签名 literary-humanism ✓ (一致)
 
 ## motif: ruler-tick
 
   variants:
-    admonition/field-tag → themeCompat: [life-aesthetic]
-    note/ruler-note → signatureOf: academic-frontier
-    quote/specimen-quote → themeCompat: [academic-frontier, tech-explainer]
-    highlight/bracketed-tick → signatureOf: academic-frontier
-    pull-quote/caliper-mark → signatureOf: academic-frontier
+    admonition/field-tag → designedFor: [life-aesthetic]
+    note/ruler-note → designedFor: [academic-frontier]
+    quote/specimen-quote → designedFor: [academic-frontier, tech-explainer]
+    highlight/bracketed-tick → designedFor: [academic-frontier]
+    pull-quote/caliper-mark → designedFor: [academic-frontier]
 
   conclusion: 签名不一致 ✗
   差异列表: life-aesthetic vs academic-frontier
@@ -123,15 +123,15 @@
 ## motif: single-stroke
 
   variants:
-    highlight/single-stroke → signatureOf: swiss-grid
+    highlight/single-stroke → designedFor: [swiss-grid]
 
   conclusion: 同手法变体全部签名 swiss-grid ✓ (一致)
 
 ## motif: tracked-emphasis
 
   variants:
-    highlight/tracked-emphasis → signatureOf: editorial-mook
-    pull-quote/weight-contrast → signatureOf: people-story
+    highlight/tracked-emphasis → designedFor: [editorial-mook]
+    pull-quote/weight-contrast → designedFor: [people-story]
 
   conclusion: 签名不一致 ✗
   差异列表: editorial-mook vs people-story
@@ -139,18 +139,18 @@
 ## motif: vermilion-seal
 
   variants:
-    admonition/vermilion-seal → signatureOf: literary-humanism
-    quote/double-frame → themeCompat: [literary-humanism, life-aesthetic]
-    highlight/vermilion-inline → signatureOf: literary-humanism
-    highlight/side-dots → signatureOf: literary-humanism
-    pull-quote/calligraphic → signatureOf: literary-humanism
+    admonition/vermilion-seal → designedFor: [literary-humanism]
+    quote/double-frame → designedFor: [literary-humanism, life-aesthetic]
+    highlight/vermilion-inline → designedFor: [literary-humanism]
+    highlight/side-dots → designedFor: [literary-humanism]
+    pull-quote/calligraphic → designedFor: [literary-humanism]
 
   conclusion: 同手法变体全部签名 literary-humanism ✓ (一致)
 
 ## motif: wash-ground
 
   variants:
-    highlight/wash-ground → signatureOf: academic-frontier
+    highlight/wash-ground → designedFor: [academic-frontier]
 
   conclusion: 同手法变体全部签名 academic-frontier ✓ (一致)
 

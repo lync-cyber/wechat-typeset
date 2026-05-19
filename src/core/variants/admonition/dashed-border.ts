@@ -29,7 +29,7 @@ const dashedBorder: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '虚线框',
     description: '左 2px 虚线 + 浅底，工程写作"附注"感',
-    signatureOf: 'tech-geek',
+    designedFor: ['tech-geek'],
   },
   thumbnail: thumb,
   snippets: [

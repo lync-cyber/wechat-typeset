@@ -14,6 +14,7 @@ import {
   type ComponentEntry,
   type ComponentKind,
   type ComponentGroup,
+  type ComponentSub,
   type GroupId,
   getThemeTemplateEntries,
   createComponent,
@@ -51,19 +52,22 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
-type SubKey = 'template' | ComponentKind | 'user' | 'uv'
-
 const mode = ref<'list' | 'studio'>('list')
 const studioInit = ref<StudioInit | null>(null)
 const studioRef = ref<InstanceType<typeof ComponentStudio> | null>(null)
 
-// 两级导航：activeGroup 选大类（5 个），activeSub 选组内子分类。
-// 切组时 activeSub 自动跳到该组首个子分类。
+// 两级导航：一级 7 大组（registry.ts · COMPONENT_GROUPS），二级 sub 严格对齐
+// 单一 ComponentKind 或单一 variantId。activeSub 是 sub.key 字符串（不带语义双关），
+// 取条目走 sub.source 判别联合（type:'kind'/'theme-template'/'user'/'uv'）。
 const activeGroupId = ref<GroupId>('template')
-const activeSub = ref<SubKey>('template')
+const activeSub = ref<string>(COMPONENT_GROUPS[0]?.subs[0]?.key ?? '')
 
 const activeGroup = computed<ComponentGroup>(
   () => COMPONENT_GROUPS.find((g) => g.id === activeGroupId.value) ?? COMPONENT_GROUPS[0],
+)
+
+const activeSubDef = computed<ComponentSub | undefined>(() =>
+  activeGroup.value.subs.find((s) => s.key === activeSub.value),
 )
 
 function selectGroup(id: GroupId) {
@@ -127,8 +131,6 @@ const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
     steps: [],
     divider: [],
     sectionTitle: [],
-    // codeBlock / footnotes / recommend / qrcode / footerCTA / 五个新 variant kind
-    // 有 snippets,但暂无独立 tab 入口;留空,后续如需再加 tab。
     codeBlock: [],
     note: [],
     highlight: [],
@@ -154,25 +156,37 @@ const themeTemplateList = computed<ComponentEntry[]>(() =>
   getThemeTemplateEntries(props.theme),
 )
 
-const currentList = computed<ComponentEntry[]>(() => {
-  if (activeSub.value === 'template') return themeTemplateList.value
-  if (activeSub.value === 'user') return userComponents.value
-  if (activeSub.value === 'uv') return [] // UV 走独立面板渲染
-  return builtinByKind.value[activeSub.value as ComponentKind]
-})
+/**
+ * 按 sub.source 派发取条目。统一入口便于 currentList / subCount / 空态消费。
+ *   - type:'kind' + variantIds → 在 kind 桶上按 variantId 收窄（页饰组用此分支）
+ *   - type:'theme-template' → 主题 templates 字段派生
+ *   - type:'user' → 用户自创组件仓
+ *   - type:'uv' → 走独立面板（grid 上不渲染，返回空数组）
+ */
+function entriesForSub(sub: ComponentSub | undefined): ComponentEntry[] {
+  if (!sub) return []
+  const src = sub.source
+  if (src.type === 'theme-template') return themeTemplateList.value
+  if (src.type === 'user') return userComponents.value
+  if (src.type === 'uv') return []
+  const bucket = builtinByKind.value[src.kind] ?? []
+  if (!src.variantIds || src.variantIds.length === 0) return bucket
+  const allow = new Set(src.variantIds)
+  return bucket.filter((e) => e.variantId !== undefined && allow.has(e.variantId))
+}
+
+const currentList = computed<ComponentEntry[]>(() => entriesForSub(activeSubDef.value))
 
 const gridActions = computed<GridAction[]>(() => {
-  if (activeSub.value === 'user') return ['edit', 'share', 'delete']
-  // builtin / theme template:派生入口
+  if (activeSubDef.value?.source.type === 'user') return ['edit', 'share', 'delete']
+  // builtin / theme-template：派生入口
   return ['derive']
 })
 
-/** sub-tab 显示计数：让作者扫一眼知道哪个子分类有内容（user / uv 不计） */
-function subCount(key: SubKey): number {
-  if (key === 'template') return themeTemplateList.value.length
-  if (key === 'user') return userComponents.value.length
-  if (key === 'uv') return 0
-  return builtinByKind.value[key as ComponentKind]?.length ?? 0
+/** sub-tab 显示计数：让作者扫一眼知道哪个子分类有内容（uv 走独立面板，不计） */
+function subCount(sub: ComponentSub): number {
+  if (sub.source.type === 'uv') return 0
+  return entriesForSub(sub).length
 }
 
 // 短暂状态提示（导出 / 导入 / 分享 链接复制完毕）
@@ -288,7 +302,7 @@ function onStudioSaved(savedId: string) {
   exitStudio()
   // 保存成功后跳到"我的 → 我的组件"，让作者立刻看到新条目
   selectGroup('mine')
-  activeSub.value = 'user'
+  activeSub.value = 'm-user'
   userMgr.refresh()
   void savedId
 }
@@ -333,7 +347,7 @@ function confirmSave(payload: { name: string; description: string }) {
   save.open = false
   save.error = ''
   selectGroup('mine')
-  activeSub.value = 'user'
+  activeSub.value = 'm-user'
   userMgr.refresh()
 }
 
@@ -380,7 +394,7 @@ defineExpose({ openSaveDialog })
       </template>
     </PanelHeader>
 
-    <!-- 一级：5 个语义组（主题模板 / 提示与引用 / 结构 / 互动 / 我的） -->
+    <!-- 一级：7 大组（主题模板 / 提示与强调 / 结构 / 数据与对话 / 互动 / 页饰 / 我的） -->
     <nav class="tabs tabs-group" role="tablist" aria-label="组件分组">
       <button
         v-for="g in COMPONENT_GROUPS"
@@ -412,11 +426,11 @@ defineExpose({ openSaveDialog })
         @click="activeSub = s.key"
       >
         <span>{{ s.label }}</span>
-        <span v-if="s.key !== 'uv' && subCount(s.key) > 0" class="sub-count">{{ subCount(s.key) }}</span>
+        <span v-if="s.source.type !== 'uv' && subCount(s) > 0" class="sub-count">{{ subCount(s) }}</span>
       </button>
     </nav>
 
-    <div v-if="activeSub === 'user'" class="user-toolbar">
+    <div v-if="activeSubDef?.source.type === 'user'" class="user-toolbar">
       <button class="tool-btn" title="导出我的组件为 JSON" @click="exportAll">↓ 导出</button>
       <button class="tool-btn" title="从 JSON 文件导入组件" @click="pickImport">↑ 导入</button>
       <input
@@ -436,14 +450,14 @@ defineExpose({ openSaveDialog })
     </div>
 
     <div class="body">
-      <UserVariantsPanel v-if="activeSub === 'uv'" />
+      <UserVariantsPanel v-if="activeSubDef?.source.type === 'uv'" />
       <template v-else>
         <div v-if="currentList.length === 0" class="empty">
-          <template v-if="activeSub === 'template'">
+          <template v-if="activeSubDef?.source.type === 'theme-template'">
             <div class="empty-title">当前主题「{{ props.theme.name }}」暂无预设模板</div>
             <div class="empty-hint">从工具栏切换主题，或在其它分类挑选通用组件。</div>
           </template>
-          <template v-else-if="activeSub === 'user'">
+          <template v-else-if="activeSubDef?.source.type === 'user'">
             <div class="empty-title">还没有自创组件</div>
             <div class="empty-hint">
               点下方"新建"开始，或在编辑器里选中一段 markdown 后用"保存选区为组件"把它存下来。

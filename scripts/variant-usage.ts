@@ -2,7 +2,7 @@
 /**
  * Variant 实证采用率报告 CLI。
  *
- * `pnpm variant:usage` —— 汇总表（每 kind 的 default/themeCompat/orphan 计数）
+ * `pnpm variant:usage` —— 汇总表（每 kind 的 default/designedFor/orphan 计数）
  * `pnpm variant:usage --json` —— 结构化 JSON
  * `pnpm variant:usage --orphans` —— 只列 orphan + 是否已标 experimental
  *
@@ -15,12 +15,12 @@ import { loadAllSpecs } from './_lib'
 
 function summary(report: VariantUsageReport): void {
   // 按 kind 汇总
-  const byKind: Record<string, { total: number; def: number; tc: number; orphan: number; unflagged: number }> = {}
+  const byKind: Record<string, { total: number; def: number; df: number; orphan: number; unflagged: number }> = {}
   for (const e of report.entries) {
-    const row = (byKind[e.kind] ??= { total: 0, def: 0, tc: 0, orphan: 0, unflagged: 0 })
+    const row = (byKind[e.kind] ??= { total: 0, def: 0, df: 0, orphan: 0, unflagged: 0 })
     row.total += 1
     if (e.status === 'default') row.def += 1
-    else if (e.status === 'themeCompat') row.tc += 1
+    else if (e.status === 'designedFor') row.df += 1
     else {
       row.orphan += 1
       if (!e.experimental) row.unflagged += 1
@@ -32,7 +32,7 @@ function summary(report: VariantUsageReport): void {
       kind,
       total: r.total,
       default: r.def,
-      themeCompat: r.tc,
+      designedFor: r.df,
       orphan: r.orphan,
       'orphan/未标 experimental': r.unflagged,
     })),

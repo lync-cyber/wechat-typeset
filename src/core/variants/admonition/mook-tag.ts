@@ -56,7 +56,7 @@ const mookTag: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '編集附注 単字',
     description: '参/編/注/禁 単字标签 + 米卡纸底 + 主色左条',
-    signatureOf: 'editorial-mook',
+    designedFor: ['editorial-mook'],
   },
   thumbnail: thumb,
   snippets: [

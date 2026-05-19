@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '双层边框',
     description: '双层朱字边框 + 引文 italic Lora + 朱色 byline（宋本 v2）',
-    themeCompat: ['literary-humanism', 'life-aesthetic'],
+    designedFor: ['literary-humanism', 'life-aesthetic'],
   },
   thumbnail: thumb,
   snippets: [

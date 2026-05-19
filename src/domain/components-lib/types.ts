@@ -49,10 +49,12 @@ interface EntryBase {
 export interface BuiltinEntry extends EntryBase {
   source: 'builtin'
   /**
-   * 推荐主题 id 列表（UI 用来显示"推荐"徽章）。空数组/undefined 等价于全兼容。
-   * 兼容只是推荐，不强制——用户把 terminal 放进文学主题也允许。
+   * 设计起源主题 id 列表（**软推荐**，仅供 UI badge 与排序消费）。
+   *
+   * 空数组/undefined = 通用、无主题偏好。声明 = "本变体的视觉签名是为这些主题设计的"。
+   * 用户在不兼容主题下插入仍然允许；面板 cell 会显示"为 XX 主题设计"的灰色标识。
    */
-  themeCompat?: string[]
+  designedFor?: string[]
 }
 
 export interface UserComponent extends EntryBase {

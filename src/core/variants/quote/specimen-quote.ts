@@ -24,7 +24,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '标本引文',
     description: 'SPEC.NO 测量括弧 + 学名样 byline（博物 v1）',
-    themeCompat: ['academic-frontier', 'tech-explainer'],
+    designedFor: ['academic-frontier', 'tech-explainer'],
   },
   thumbnail: thumb,
   snippets: [

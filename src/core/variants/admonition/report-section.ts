@@ -40,7 +40,7 @@ const reportSection: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '报告条款',
     description: '顶 3px 底 1px + § 方角标签，内参报告条款感',
-    signatureOf: 'industry-observer',
+    designedFor: ['industry-observer'],
   },
   thumbnail: thumb,
   snippets: [

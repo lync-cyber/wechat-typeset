@@ -23,7 +23,7 @@ const sealMark: VariantDef = {
     kind: 'divider',
     name: '收束印章',
     description: '右对齐大色块印章 · 全文收束签名',
-    signatureOf: 'swiss-grid',
+    designedFor: ['swiss-grid'],
   },
   thumbnail: thumb,
   snippets: [

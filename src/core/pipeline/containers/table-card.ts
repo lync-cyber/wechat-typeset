@@ -67,7 +67,7 @@ function interpretStarPrefix(raw: string): { recommend: boolean; text: string } 
 
 // ─────────────────────────────────────────────────────────────
 // dev warn：cells 列数 / 形状不合约定时一次性提示，不阻断渲染
-// 仿 themeCompatGuard：(variantId, kind) 去重；测试钩子可静音。
+// (variantId, kind) 去重；测试钩子可静音。
 // ─────────────────────────────────────────────────────────────
 
 const warnedShapes = new Set<string>()

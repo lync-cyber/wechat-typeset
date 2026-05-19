@@ -4,7 +4,7 @@ export {
   COMPONENT_GROUPS,
   findPresetByVariant,
 } from './registry'
-export type { ComponentGroup, ComponentSub, GroupId } from './registry'
+export type { ComponentGroup, ComponentSub, GroupId, SubSource } from './registry'
 export type { LibrarySnapshot } from './aggregator'
 export { buildLibrarySnapshot, flattenSnapshot } from './aggregator'
 export { getThemeTemplateEntries } from './sources/theme-template-source'

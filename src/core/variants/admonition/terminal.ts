@@ -46,7 +46,7 @@ const terminal: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '终端窗口',
     description: '黑底 + 三色圆点，代码讲解专用',
-    themeCompat: ['tech-geek', 'default'],
+    designedFor: ['tech-geek', 'default'],
   },
   thumbnail: thumb,
   snippets: [
@@ -55,7 +55,7 @@ const terminal: VariantDef<AdmonitionRenderArgs> = {
       name: '终端 Tip',
       description: '黑底 + 三色圆点，代码讲解专用',
       admonitionKind: 'tip',
-      themeCompat: ['tech-geek', 'default'],
+      designedFor: ['tech-geek', 'default'],
       markdown: '::: tip $ 执行这行 variant=terminal\n内容会渲染成终端风格\n:::\n',
     },
     {
@@ -63,7 +63,7 @@ const terminal: VariantDef<AdmonitionRenderArgs> = {
       name: '终端 Info',
       description: '命令日志类信息',
       admonitionKind: 'info',
-      themeCompat: ['tech-geek'],
+      designedFor: ['tech-geek'],
       markdown: '::: info $ deploy.sh variant=terminal\n2026-04-19 success\n:::\n',
     },
   ],

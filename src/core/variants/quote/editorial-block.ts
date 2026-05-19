@@ -29,7 +29,7 @@ const editorialBlock: VariantDef = {
     kind: 'quote',
     name: '编辑部磁砖引用',
     description: '左 6px 实色条 + 浅底 + 大写字距 byline',
-    themeCompat: ['data-brief', 'editorial-mook', 'business-finance', 'industry-observer'],
+    designedFor: ['data-brief', 'editorial-mook', 'business-finance', 'industry-observer'],
   },
   thumbnail: thumb,
   snippets: [
@@ -37,7 +37,7 @@ const editorialBlock: VariantDef = {
       presetId: 'q-editorial-block',
       name: '编辑部磁砖引用',
       description: '左色条 + 大号粗体 + 印刷体 byline',
-      themeCompat: ['data-brief', 'editorial-mook', 'business-finance', 'industry-observer'],
+      designedFor: ['data-brief', 'editorial-mook', 'business-finance', 'industry-observer'],
       markdown:
         '::: quote-card J. L. BORGES · 1960 variant=editorial-block\n凡我所是，皆因我读。\n:::\n',
     },
@@ -45,7 +45,7 @@ const editorialBlock: VariantDef = {
       presetId: 'q-editorial-block-no-byline',
       name: '磁砖引用无署名',
       description: '纯重点段落，作版面节奏',
-      themeCompat: ['data-brief', 'editorial-mook', 'business-finance', 'industry-observer'],
+      designedFor: ['data-brief', 'editorial-mook', 'business-finance', 'industry-observer'],
       markdown: '::: quote-card variant=editorial-block\n此处填写重点段落正文\n:::\n',
     },
   ],

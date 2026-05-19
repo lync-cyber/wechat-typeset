@@ -13,8 +13,8 @@
  * CSS 格式说明：juice 内联后样式值格式为 "property: value;"（冒号后有空格），
  * 锚点须匹配实际输出格式。font-family 经 juice 去重后可能被移除，不作锚点。
  *
- * 主题选取原则：每个 variant 使用其 themeCompat / signatureOf 中的一个兼容主题，
- * 确保 themeCompat 守卫不会将其回退到 fallback variant。
+ * 主题选取原则：每个 variant 使用其 designedFor 中的一个兼容主题，
+ * 确保 variant 渲染走作者声明的 designedFor 主题。
  */
 
 import { describe, it } from 'vitest'
@@ -87,7 +87,7 @@ function pullQuoteMd(variantId: string, body = '正文示例', author = ''): str
 // ═══════════════════════════════════════════════════════════════
 
 describe('visual-parity · admonition', () => {
-  // themeCompat: ['official-gazette']
+  // designedFor: ['official-gazette']
   it('numbered-rule', () => {
     const html = renderWith('official-gazette', admonitionMd('numbered-rule'))
     assertAnchors(
@@ -103,7 +103,7 @@ describe('visual-parity · admonition', () => {
     )
   })
 
-  // themeCompat: ['official-gazette']
+  // designedFor: ['official-gazette']
   it('hanging-nb', () => {
     const html = renderWith('official-gazette', admonitionMd('hanging-nb'))
     assertAnchors(
@@ -119,7 +119,7 @@ describe('visual-parity · admonition', () => {
     )
   })
 
-  // signatureOf: 'literary-humanism'
+  // designedFor: ['literary-humanism']
   it('vermilion-seal', () => {
     const html = renderWith('literary-humanism', admonitionMd('vermilion-seal'))
     assertAnchors(
@@ -135,7 +135,7 @@ describe('visual-parity · admonition', () => {
     )
   })
 
-  // signatureOf: 'literary-humanism'
+  // designedFor: ['literary-humanism']
   it('paper-slip', () => {
     const html = renderWith('literary-humanism', admonitionMd('paper-slip'))
     // svgSlot 的 inline style 不经 juice 归一化，冒号后无空格
@@ -151,7 +151,7 @@ describe('visual-parity · admonition', () => {
     )
   })
 
-  // themeCompat: ['life-aesthetic']
+  // designedFor: ['life-aesthetic']
   it('field-tag', () => {
     const html = renderWith('life-aesthetic', admonitionMd('field-tag'))
     assertAnchors(
@@ -166,7 +166,7 @@ describe('visual-parity · admonition', () => {
     )
   })
 
-  // themeCompat: ['life-aesthetic']
+  // designedFor: ['life-aesthetic']
   it('specimen-box', () => {
     const html = renderWith('life-aesthetic', admonitionMd('specimen-box'))
     assertAnchors(
@@ -182,7 +182,7 @@ describe('visual-parity · admonition', () => {
     )
   })
 
-  // themeCompat: ['brutalist']
+  // designedFor: ['brutalist']
   it('triangle-top', () => {
     const html = renderWith('brutalist', admonitionMd('triangle-top'))
     assertAnchors(
@@ -205,7 +205,7 @@ describe('visual-parity · admonition', () => {
 // ═══════════════════════════════════════════════════════════════
 
 describe('visual-parity · note', () => {
-  // signatureOf: 'editorial-mook'
+  // designedFor: ['editorial-mook']
   it('ed-signoff', () => {
     const html = renderWith('editorial-mook', noteMd('ed-signoff'))
     assertAnchors(
@@ -220,7 +220,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'editorial-mook'
+  // designedFor: ['editorial-mook']
   it('inline-label', () => {
     const html = renderWith('editorial-mook', noteMd('inline-label'))
     assertAnchors(
@@ -234,7 +234,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'literary-humanism'
+  // designedFor: ['literary-humanism']
   it('interlinear-gloss', () => {
     const html = renderWith('literary-humanism', noteMd('interlinear-gloss'))
     // svgSlot 的 inline style 不经 juice 归一化，冒号后无空格
@@ -250,7 +250,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'literary-humanism'
+  // designedFor: ['literary-humanism']
   // 降级理由：juice 可能归并 font-size 使 font-size: 22px 出现在父级而非 svgSlot div；
   // 朱字「注」+ class selector 是更稳定的锚点
   it('vermilion-gloss', () => {
@@ -267,7 +267,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'academic-frontier'
+  // designedFor: ['academic-frontier']
   it('ruler-note', () => {
     const html = renderWith('academic-frontier', noteMd('ruler-note'))
     assertAnchors(
@@ -282,7 +282,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'academic-frontier'
+  // designedFor: ['academic-frontier']
   it('latin-subhead', () => {
     const html = renderWith('academic-frontier', noteMd('latin-subhead'))
     assertAnchors(
@@ -296,7 +296,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'swiss-grid'
+  // designedFor: ['swiss-grid']
   it('initial-disc', () => {
     const html = renderWith('swiss-grid', noteMd('initial-disc'))
     assertAnchors(
@@ -311,7 +311,7 @@ describe('visual-parity · note', () => {
     )
   })
 
-  // signatureOf: 'brutalist'
+  // designedFor: ['brutalist']
   it('geometric-mark', () => {
     const html = renderWith('brutalist', noteMd('geometric-mark'))
     assertAnchors(
@@ -332,7 +332,7 @@ describe('visual-parity · note', () => {
 // ═══════════════════════════════════════════════════════════════
 
 describe('visual-parity · quote', () => {
-  // themeCompat: ['editorial-mook', 'data-brief']
+  // designedFor: ['editorial-mook', 'data-brief']
   it('oversized-mark', () => {
     const html = renderWith('editorial-mook', quoteMd('oversized-mark'))
     // font-family 被 juice 去重后从 svgSlot span 移除；使用固定字符锚点
@@ -348,7 +348,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['editorial-mook', 'data-brief']
+  // designedFor: ['editorial-mook', 'data-brief']
   // font-family 经 juice 去重可能被省略；改用固定文案锚点
   it('numbered-lines', () => {
     const html = renderWith('editorial-mook', quoteMd('numbered-lines'))
@@ -363,7 +363,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['literary-humanism', 'life-aesthetic']
+  // designedFor: ['literary-humanism', 'life-aesthetic']
   it('seal-kai', () => {
     const html = renderWith('literary-humanism', quoteMd('seal-kai'))
     assertAnchors(
@@ -378,7 +378,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['literary-humanism', 'life-aesthetic']
+  // designedFor: ['literary-humanism', 'life-aesthetic']
   it('double-frame', () => {
     const html = renderWith('literary-humanism', quoteMd('double-frame', '黄庭坚'))
     assertAnchors(
@@ -393,7 +393,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['academic-frontier', 'tech-explainer']
+  // designedFor: ['academic-frontier', 'tech-explainer']
   it('specimen-quote', () => {
     const html = renderWith('academic-frontier', quoteMd('specimen-quote'))
     // svgSlot sections 的 inline style 不经 juice 归一化；
@@ -411,7 +411,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['academic-frontier', 'tech-explainer']
+  // designedFor: ['academic-frontier', 'tech-explainer']
   it('binomial-attrib', () => {
     const html = renderWith('academic-frontier', quoteMd('binomial-attrib'))
     assertAnchors(
@@ -426,7 +426,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['swiss-grid', 'brutalist']
+  // designedFor: ['swiss-grid', 'brutalist']
   it('huge-numeral', () => {
     const html = renderWith('swiss-grid', quoteMd('huge-numeral'))
     assertAnchors(
@@ -441,7 +441,7 @@ describe('visual-parity · quote', () => {
     )
   })
 
-  // themeCompat: ['swiss-grid', 'brutalist']
+  // designedFor: ['swiss-grid', 'brutalist']
   it('ring-device', () => {
     const html = renderWith('swiss-grid', quoteMd('ring-device'))
     // svgSlot spans 的 inline style 不经 juice 归一化
@@ -462,7 +462,7 @@ describe('visual-parity · quote', () => {
 // ═══════════════════════════════════════════════════════════════
 // highlight × 8（baseline L485-586）
 // highlight 容器通过 resolveVariantWithUv 解析 variant；resolveVariantId 不检查
-// themeCompat，signatureOf 不阻断渲染。故 highlight 用 default 主题即可命中正确 variant。
+// designedFor 不阻断渲染。故 highlight 用 default 主题即可命中正确 variant。
 // ═══════════════════════════════════════════════════════════════
 
 describe('visual-parity · highlight', () => {
@@ -582,7 +582,7 @@ describe('visual-parity · highlight', () => {
 // ═══════════════════════════════════════════════════════════════
 
 describe('visual-parity · pull-quote', () => {
-  // signatureOf: 'people-story'
+  // designedFor: ['people-story']
   it('weight-contrast', () => {
     const html = renderWith('people-story', pullQuoteMd('weight-contrast'))
     assertAnchors(
@@ -597,7 +597,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'people-story'
+  // designedFor: ['people-story']
   // font-family 被 juice 从 svgSlot span 移除；使用字符 + font-size 作锚点
   it('drop-capital', () => {
     const html = renderWith('people-story', pullQuoteMd('drop-capital', '凡人生大半的烦恼'))
@@ -613,7 +613,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'literary-humanism'
+  // designedFor: ['literary-humanism']
   it('calligraphic', () => {
     const html = renderWith('literary-humanism', pullQuoteMd('calligraphic'))
     assertAnchors(
@@ -628,7 +628,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'literary-humanism'
+  // designedFor: ['literary-humanism']
   it('with-gloss', () => {
     const html = renderWith('literary-humanism', pullQuoteMd('with-gloss'))
     // svgSlot sections 的 inline style 不经 juice 归一化；wrapperCSS border-top 经 juice 归一化
@@ -644,7 +644,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'academic-frontier'
+  // designedFor: ['academic-frontier']
   // font-family 在 svgSlot 中被 juice 移除；使用固定文案 + font-style 作锚点
   it('bilingual-stack', () => {
     const html = renderWith('academic-frontier', pullQuoteMd('bilingual-stack'))
@@ -660,7 +660,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'academic-frontier'
+  // designedFor: ['academic-frontier']
   it('caliper-mark', () => {
     const html = renderWith('academic-frontier', pullQuoteMd('caliper-mark'))
     assertAnchors(
@@ -675,7 +675,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'brutalist'
+  // designedFor: ['brutalist']
   it('inverted-plate', () => {
     const html = renderWith('brutalist', pullQuoteMd('inverted-plate'))
     assertAnchors(
@@ -689,7 +689,7 @@ describe('visual-parity · pull-quote', () => {
     )
   })
 
-  // signatureOf: 'brutalist'
+  // designedFor: ['brutalist']
   it('grid-block', () => {
     const html = renderWith('brutalist', pullQuoteMd('grid-block', '少即多'))
     assertAnchors(

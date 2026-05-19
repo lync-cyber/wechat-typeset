@@ -17,7 +17,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '朱字小注',
     description: '左大字「注」+ 右朱褐正文（宋本 v2）',
-    signatureOf: 'literary-humanism',
+    designedFor: ['literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [

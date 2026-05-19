@@ -32,7 +32,7 @@ export const personasCapabilitiesCommand: Command<
 > = {
   name: 'personas capabilities',
   description:
-    'Aggregate "what works in this theme" view: defaultVariants, recommendedVariants (themeCompat reverse index), containers[] (with available / signature / pack / namespace), kickers.',
+    'Aggregate "what works in this theme" view: defaultVariants, recommendedVariants (designedFor reverse index), containers[] (with available / signature / pack / namespace), kickers.',
   inputSchema: {
     type: 'object',
     required: ['id'],

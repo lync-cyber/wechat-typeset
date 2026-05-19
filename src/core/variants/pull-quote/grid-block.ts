@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '网格拉引',
     description: '左编号方格 + 右大字 sans + 顶 accent 条（包豪斯 v2）',
-    signatureOf: 'brutalist',
+    designedFor: ['brutalist'],
   },
   thumbnail: thumb,
   snippets: [

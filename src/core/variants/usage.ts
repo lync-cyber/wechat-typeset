@@ -7,8 +7,8 @@
  *
  * 三类身份：
  *   - default       —— 至少有一个 spec.variants[kind] === id
- *   - themeCompat   —— meta.themeCompat 至少含一个主题
- *   - orphan        —— 既无 default 又无 themeCompat
+ *   - designedFor   —— meta.designedFor 至少含一个主题
+ *   - orphan        —— 既无 default 又无 designedFor
  *
  * orphan = 实验性候选；本模块只识别身份，不做迁移决策（VariantMeta.experimental 标记
  * 是设计者的显式确认，本分析不修改源码）。
@@ -26,12 +26,12 @@ export interface VariantUsageEntry {
   id: string
   /** 把本 variant 作为默认骨架的主题 id 列表。 */
   defaultBy: readonly string[]
-  /** meta.themeCompat 声明的推荐主题 id 列表（空 = variant 自身未声明）。 */
-  themeCompat: readonly string[]
+  /** meta.designedFor 声明的设计起源主题 id 列表（空 = variant 自身未声明）。 */
+  designedFor: readonly string[]
   /** meta.experimental 标记（作者显式确认"在等首个采用方"）。 */
   experimental: boolean
-  /** 综合身份。orphan = 既无 default 又无 themeCompat。 */
-  status: 'default' | 'themeCompat' | 'orphan'
+  /** 综合身份。orphan = 既无 default 又无 designedFor。 */
+  status: 'default' | 'designedFor' | 'orphan'
 }
 
 export interface VariantUsageReport {
@@ -95,13 +95,12 @@ export function analyzeVariantUsage(
     const ids = VARIANT_IDS[kind] as readonly string[]
     for (const id of ids) {
       const def = defByKindId[kind]?.[id]
-      // 等效白名单：signatureOf 与 themeCompat 一律走 getEffectiveCompat
-      const themeCompat = getEffectiveCompat(def?.meta)
+      const designedFor = getEffectiveCompat(def?.meta)
       const defaultBy = defaultByMap[kind]?.[id] ?? []
       const experimental = def?.meta.experimental === true
       const status: VariantUsageEntry['status'] =
-        defaultBy.length > 0 ? 'default' : themeCompat.length > 0 ? 'themeCompat' : 'orphan'
-      entries.push({ kind, id, defaultBy, themeCompat, experimental, status })
+        defaultBy.length > 0 ? 'default' : designedFor.length > 0 ? 'designedFor' : 'orphan'
+      entries.push({ kind, id, defaultBy, designedFor, experimental, status })
     }
   }
 

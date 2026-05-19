@@ -21,7 +21,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '夹注式拉引',
     description: '双行夹注 + 上下朱色细线（宋本 v2）',
-    signatureOf: 'literary-humanism',
+    designedFor: ['literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [

@@ -5,7 +5,7 @@
  * 视觉骨架：每轮一段 p；name 加粗 accent 色 + monospace + "：" + 紧接 body 文字。
  *   无方框、无头像、无装饰 SVG——dense 信息密度最高的对话形态。
  *
- * 多主题软推荐（themeCompat）：dense inline 排版与"文字密度优先"的主题最适配——
+ * 多主题软推荐（designedFor）：dense inline 排版与"文字密度优先"的主题最适配——
  * tech-explainer / academic-frontier / literary-humanism 三家具有"长篇深度对谈"
  * 出场需求；其它主题作者也能用 attrs.variant=name-prefix 显式切换。
  */
@@ -33,7 +33,7 @@ const namePrefix: VariantDef = {
     kind: 'dialogue',
     name: '名字前缀',
     description: '"**名字**：内容" 行内排版，剧本 / 对谈最 dense',
-    themeCompat: ['tech-explainer', 'academic-frontier', 'literary-humanism'],
+    designedFor: ['tech-explainer', 'academic-frontier', 'literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [

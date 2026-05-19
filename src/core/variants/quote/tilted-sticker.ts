@@ -43,7 +43,7 @@ const tiltedSticker: VariantDef = {
     kind: 'quote',
     name: '旋转贴纸金句',
     description: '反色 + 微旋转 -1deg，punk-zine 撕贴纸感',
-    themeCompat: ['brutalist', 'late-night-vinyl'],
+    designedFor: ['brutalist', 'late-night-vinyl'],
   },
   thumbnail: thumb,
   snippets: [
@@ -51,7 +51,7 @@ const tiltedSticker: VariantDef = {
       presetId: 'q-tilted-sticker',
       name: '旋转贴纸金句',
       description: '反色 + 微旋转，punk-zine 撕贴纸感',
-      themeCompat: ['brutalist', 'late-night-vinyl'],
+      designedFor: ['brutalist', 'late-night-vinyl'],
       markdown:
         '::: quote-card BORGES, J.L. variant=tilted-sticker\n"凡我所是，皆因我读。"\n:::\n',
     },
@@ -59,7 +59,7 @@ const tiltedSticker: VariantDef = {
       presetId: 'q-tilted-sticker-no-byline',
       name: '旋转贴纸无署名',
       description: '反色 + 微旋转，无作者',
-      themeCompat: ['brutalist', 'late-night-vinyl'],
+      designedFor: ['brutalist', 'late-night-vinyl'],
       markdown:
         '::: quote-card variant=tilted-sticker\n大字号金句正文\n:::\n',
     },
