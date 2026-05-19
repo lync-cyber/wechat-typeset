@@ -1,10 +1,14 @@
 /**
  * 内置主题 variant 签名强度门槛
  *
- * 内置主题必须有辨识度——9 个 variant slot 中至多 1 个沿用 DEFAULT_VARIANTS,
- * 其余 8 个必须给出"主题作者刻意挑的"签名 variant。否则该主题与 default 的视觉
+ * 内置主题必须有辨识度——计入门槛的 variant slot 中至多 1 个沿用 DEFAULT_VARIANTS,
+ * 其余必须给出"主题作者刻意挑的"签名 variant。否则该主题与 default 的视觉
  * 差异只剩 palette/typography，没必要作为独立内置主题存在（用户走"自定义配色"
  * 即可，省一份维护成本）。
+ *
+ * 不计入门槛的过渡 slot：
+ *   - highlight —— 骨架池刚启用,主题尚未接入(ThemeVariants.highlight 是 optional)。
+ *     等多数主题显式声明 variants.highlight 后,从下方过滤器移除即可。
  *
  * 这条 spec 是 CI gate：
  *   - 红线 = 提示主题作者还有 N 个 slot 没决策；列出每个 slot 可选的 variant id
@@ -26,9 +30,13 @@ import {
   type VariantKind,
 } from '../../src/core/themes/types'
 
-/** 9 slot 中至少 8 个必须偏离 DEFAULT_VARIANTS。 */
+/** 计入门槛的 slot：排除 highlight 过渡态。 */
+const SCORING_SLOTS = (Object.keys(DEFAULT_VARIANTS) as VariantKind[]).filter(
+  (k) => k !== 'highlight',
+)
+/** SCORING_SLOTS 中至少 8 个必须偏离 DEFAULT_VARIANTS。 */
 const MIN_SIGNED_SLOTS = 8
-const TOTAL_SLOTS = Object.keys(DEFAULT_VARIANTS).length
+const TOTAL_SLOTS = SCORING_SLOTS.length
 
 /**
  * 允许 < MIN_SIGNED_SLOTS 的"中立定位"主题白名单。
@@ -48,9 +56,11 @@ describe('内置主题 variant 签名强度', () => {
 
     it(`${spec.id} 至少 ${MIN_SIGNED_SLOTS}/${TOTAL_SLOTS} variant slot 偏离 DEFAULT_VARIANTS`, () => {
       const unsigned: Array<{ slot: VariantKind; current: string }> = []
-      for (const slot of Object.keys(DEFAULT_VARIANTS) as VariantKind[]) {
-        if (spec.variants[slot] === DEFAULT_VARIANTS[slot]) {
-          unsigned.push({ slot, current: DEFAULT_VARIANTS[slot] })
+      for (const slot of SCORING_SLOTS) {
+        const def = DEFAULT_VARIANTS[slot]
+        if (def === undefined) continue
+        if (spec.variants[slot] === def) {
+          unsigned.push({ slot, current: def })
         }
       }
       const signedCount = TOTAL_SLOTS - unsigned.length

@@ -79,6 +79,18 @@ export interface ThemeTokens {
     noteBorderStyle?: 'solid' | 'dashed' | 'double' | 'dotted'
     /** note · side-bar variant 左侧标线宽度（px）。不声明 = 2；double 风格建议 ≥ 3。 */
     noteBorderWidth?: number
+    /**
+     * 古典朱印色。东方传统出版物语境下的稀缺红章 / 朱字夹注 / 方印边框色。
+     * 例：'#a03a2a'。不声明 = 该主题不参与朱印语义,variant 应回退到 accent
+     * 或不绘制朱印元素。
+     */
+    accentClassical?: string
+    /**
+     * 博物笔记暖辅色。学名 / 编号 / 测量边线等的赭褐色,介于 text 与
+     * accentClassical 之间。例：'#8b4a3a'。不声明 = 该主题不参与博物语义,
+     * variant 应回退到 textMuted 或 secondary。
+     */
+    accentNaturalist?: string
   }
   typography: {
     baseSize: number
@@ -501,6 +513,14 @@ export type NoteVariantId =
   // bgSoft + 10px 紧凑 + 粗体 label：调研口径栏（图注/方法论旁附小字栏）
   | 'research-dense'
 
+/**
+ * highlight 骨架池。当前仅 'plain' 一档,作为 ThemeContainers.highlight 类规则下的
+ * 透明占位(render 不发 wrapperCSS,仅承载 `container-highlight--plain` className,
+ * 让 highlight 与其他容器一致进入骨架切换机制)。
+ */
+export type HighlightVariantId =
+  | 'plain'
+
 export type CodeBlockVariantId =
   // 裸 <pre><code>（默认）
   | 'bare'
@@ -547,7 +567,7 @@ export type FootnotesVariantId =
 
 // pull-quote 与 quote-card / highlight 的边界：
 //   - quote-card        外部话语成段引用（attrs.byline 标外部来源）
-//   - highlight         作者自我强调的整段（bgMuted 无骨架切换）
+//   - highlight         作者自我强调的整段（骨架池见 HighlightVariantId）
 //   - pull-quote        正文中段把已写过的句子放大重申（与原文同源，记忆点强化）
 // 设计语言上 4 个 variant 互不重叠：装饰巨号 / 居中夹线 / 印章压字 / 悬挂拉引
 export type PullQuoteVariantId =
@@ -611,6 +631,12 @@ export interface ThemeVariants {
   codeBlock: CodeBlockVariantId
   /** note 第五态独立变体类，与 admonition 4 态解耦。 */
   note: NoteVariantId
+  /**
+   * highlight 骨架池。字段可选: 21 主题尚未启用骨架切换,buildTheme 用
+   * DEFAULT_VARIANTS.highlight 兜底; 主题想换骨架时显式声明本字段。
+   * 其他 kind 均必填,本字段单独 optional 反映"骨架池刚启用、主题尚未接入"过渡态。
+   */
+  highlight?: HighlightVariantId
   /** 脚注 / 参考文献骨架（lined / inline-flow）。 */
   footnotes: FootnotesVariantId
   /** 推荐阅读骨架（card-list 默认 / academic-refs = 原 see-also）。 */
@@ -644,6 +670,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   sectionTitle: 'bordered',
   codeBlock: 'bare',
   note: 'minimal-callout',
+  highlight: 'plain',
   footnotes: 'lined',
   recommend: 'card-list',
   qrcode: 'bare',
@@ -783,6 +810,9 @@ export const VARIANT_IDS = {
     'editorial-stripe',
     'research-dense',
   ] as const satisfies readonly NoteVariantId[],
+  highlight: [
+    'plain',
+  ] as const satisfies readonly HighlightVariantId[],
   footnotes: [
     'lined',
     'inline-flow',

@@ -39,6 +39,7 @@ import type {
   FooterCTAVariantId,
   FootnotesVariantId,
   GalleryVariantId,
+  HighlightVariantId,
   NoteVariantId,
   PullQuoteVariantId,
   QrcodeVariantId,
@@ -125,6 +126,7 @@ const NOTE_ORDER: readonly string[] = [
   'editorial-stripe',
   'research-dense',
 ]
+const HIGHLIGHT_ORDER: readonly string[] = ['plain']
 const FOOTNOTES_ORDER: readonly string[] = [
   'lined',
   'inline-flow',
@@ -175,6 +177,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
+  highlight: HIGHLIGHT_ORDER,
   footnotes: FOOTNOTES_ORDER,
   recommend: RECOMMEND_ORDER,
   qrcode: QRCODE_ORDER,
@@ -205,6 +208,7 @@ import dividerAll from './divider/_all'
 import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
+import highlightAll from './highlight/_all'
 import footnotesAll from './footnotes/_all'
 import recommendAll from './recommend/_all'
 import qrcodeAll from './qrcode/_all'
@@ -225,6 +229,7 @@ function collectDefs(): AnyDef[] {
     ...sectionTitleAll,
     ...codeBlockAll,
     ...noteAll,
+    ...highlightAll,
     ...footnotesAll,
     ...recommendAll,
     ...qrcodeAll,
@@ -280,6 +285,7 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
   'sectionTitle',
 )
 export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
+export const HIGHLIGHT_VARIANTS = asRecord<HighlightVariantId, void>(ALL_DEFS, 'highlight')
 export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, 'footnotes')
 export const RECOMMEND_VARIANTS = asRecord<RecommendVariantId, void>(ALL_DEFS, 'recommend')
 export const QRCODE_VARIANTS = asRecord<QrcodeVariantId, void>(ALL_DEFS, 'qrcode')
