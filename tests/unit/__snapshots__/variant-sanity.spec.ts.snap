@@ -16,14 +16,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:card-shadow
 </section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > admonition:minimal-underline 1`] = `
-"<section class="container-tip container-tip--minimal-underline" style="padding:4px 0 4px 12px;margin:14px 0;border-left:2px solid #147a44">
-<section class="container-tip__title" style="display:inline-block;font-size:14px;color:#147a44;font-weight:700;padding-bottom:2px;border-bottom:1px solid #147a44;margin-bottom:8px;letter-spacing:0.5px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
-第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:pill-tag 1`] = `
 "<section class="container-tip container-tip--pill-tag" style="background-color:#eef6ef;border:1px solid #147a44;padding:24px 16px 16px;border-radius:6px;margin:24px 0 16px">
 <section class="container-tip__title" style="display:inline-block;padding:3px 14px;background-color:#147a44;color:#fefefe;border-radius:12px;font-size:13px;font-weight:700;margin-top:-34px;margin-bottom:10px;letter-spacing:0.4px;text-align:center">测试标题</section>
@@ -39,15 +31,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:terminal 1`
 <p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
-</section>"
-`;
-
-exports[`默认主题 · 每 variant 渲染片段快照 > admonition:ticket-notch 1`] = `
-"<section class="container-tip container-tip--ticket-notch" style="background-color:#eef6ef;border:1px dashed #147a44;border-left:2px dotted #147a44;border-right:2px dotted #147a44;padding:16px 20px;margin:18px 0;border-radius:3px">
-<section style="text-align:center;margin-bottom:4px"><svg viewBox="0 0 8 8" width="8" height="8" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 6px"><circle cx="4" cy="4" r="3" fill="#147a44"></circle></svg><svg viewBox="0 0 8 8" width="8" height="8" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 6px"><circle cx="4" cy="4" r="3" fill="#147a44"></circle></svg><svg viewBox="0 0 8 8" width="8" height="8" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin: 0 6px"><circle cx="4" cy="4" r="3" fill="#147a44"></circle></svg></section>
-<section class="container-tip__title" style="color:#147a44;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:14px;margin-bottom:8px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
-第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
 
@@ -182,25 +165,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > compare:measurement-ta
 </section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > compare:paired-jiayi 1`] = `
-"<section class="container-compare container-compare--paired-jiayi" style="display: table; width: 100%; table-layout: fixed; border-spacing: 10px 0; border-collapse: separate; margin: 16px 0; padding: 14px; background-color: #fdfdfc;">
-<section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
-<section class="container-pros__title" style="font-size:14px;font-weight:700;color:#147a44;margin-bottom:8px;letter-spacing:0;line-height:1.4">正方</section>
-<section data-wx-list-wrap="" style="margin-top: 0; padding-left: 12px; margin-bottom: 8px;"><ul style="margin-top: 0; padding-left: 12px; margin-bottom: 8px;">
-<li style="color: #1c1f24; font-size: 13px; letter-spacing: 0; line-height: 1.55; margin-bottom: 4px;">要点 A</li>
-<li style="color: #1c1f24; font-size: 13px; letter-spacing: 0; line-height: 1.55; margin-bottom: 4px;">要点 B</li>
-</ul></section>
-</section>
-<section class="container-cons container-cons--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
-<section class="container-cons__title" style="font-size:14px;font-weight:700;color:#b42318;margin-bottom:8px;letter-spacing:0;line-height:1.4">反方</section>
-<section data-wx-list-wrap="" style="margin-top: 0; padding-left: 12px; margin-bottom: 8px;"><ul style="margin-top: 0; padding-left: 12px; margin-bottom: 8px;">
-<li style="color: #1c1f24; font-size: 13px; letter-spacing: 0; line-height: 1.55; margin-bottom: 4px;">要点 C</li>
-<li style="color: #1c1f24; font-size: 13px; letter-spacing: 0; line-height: 1.55; margin-bottom: 4px;">要点 D</li>
-</ul></section>
-</section>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > compare:paired-shape 1`] = `
 "<section class="container-compare container-compare--paired-shape" style="display: table; width: 100%; table-layout: fixed; border-spacing: 14px 0; border-collapse: separate; margin: 16px 0;">
 <section class="container-pros container-pros--column-card" style="display: table-cell; vertical-align: top; width: 50%; box-sizing: border-box; padding: 8px; background-color: #f5f5f3; border-radius: 6px; font-size: 13px; letter-spacing: 0;">
@@ -278,16 +242,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:chat-bubbles 
 </section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:host-guest-seal 1`] = `
-"<section class="container-dialogue container-dialogue--host-guest-seal" style="margin: 20px 0; margin: 18px 0; padding: 14px 16px; background-color: transparent;">
-<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
-<section class="container-dialogue-turn" style="display:block;margin-top:12px"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;vertical-align:top;font-size:12px;font-weight:700;background-color:#2558b0;color:#fefefe">主</span><span style="display:inline-block;vertical-align:top;margin-left:10px;max-width:calc(100% - 36px);color:#1c1f24;font-size:14px;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
-</span></section>
-<section class="container-dialogue-turn" style="display:block;margin-top:12px"><span style="display:inline-block;width:22px;height:22px;line-height:20px;text-align:center;vertical-align:top;font-size:12px;font-weight:700;background-color:transparent;border:1px solid #2558b0;color:#2558b0">张</span><span style="display:inline-block;vertical-align:top;margin-left:10px;max-width:calc(100% - 36px);color:#1c1f24;font-size:14px;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
-</span></section>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:interview-column 1`] = `
 "<section class="container-dialogue container-dialogue--interview-column" style="margin: 20px 0; margin: 24px 0; padding: 0; background-color: transparent;">
 <section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
@@ -298,16 +252,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:interview-col
 </section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:name-prefix 1`] = `
-"<section class="container-dialogue container-dialogue--name-prefix" style="margin: 20px 0; margin: 20px 0; background-color: transparent;">
-<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
-<section class="container-dialogue-turn" style="margin:0 0 12px;font-size:14px;line-height:1.75;color:#1c1f24"><span style="display: inline; font-weight: 700; color: #2558b0; font-size: 13px; letter-spacing: 0.5px; margin-right: 2px">主持人：</span><span style="display:inline"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
-</span></section>
-<section class="container-dialogue-turn" style="margin:0 0 12px;font-size:14px;line-height:1.75;color:#1c1f24"><span style="display: inline; font-weight: 700; color: #2558b0; font-size: 13px; letter-spacing: 0.5px; margin-right: 2px">张三：</span><span style="display:inline"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
-</span></section>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:qa-rows 1`] = `
 "<section class="container-dialogue container-dialogue--qa-rows" style="margin: 20px 0; margin: 20px 0; padding: 14px 16px; background-color: transparent;">
 <section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
@@ -315,26 +259,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:qa-rows 1`] =
 </span></span></section>
 <section class="container-dialogue-turn" style="display:table;width:100%;table-layout:fixed;margin-top:18px"><span style="display:table-cell;vertical-align:top;width:32px;padding-right:10px"><span style="display:inline-block;width:24px;height:24px;background-color:transparent;border:1px solid #636870;color:#636870;text-align:center;line-height:22px;font-size:12px;font-weight:700">A</span></span><span style="display:table-cell;vertical-align:top"><span style="display:block;color:#636870;font-size:11px;letter-spacing:0.1em;margin-bottom:4px;font-weight:600">张三</span><span style="color:#1c1f24;font-size:14px;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
 </span></span></section>
-</section>"
-`;
-
-exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:screenplay 1`] = `
-"<section class="container-dialogue container-dialogue--screenplay" style="margin: 20px 0; margin: 18px 0; padding: 0; background-color: transparent;">
-<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
-<section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #636870; margin-bottom: 4px">主持人</span><span style="display:block;color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
-</span></section>
-<section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #636870; margin-bottom: 4px">张三</span><span style="display:block;color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
-</span></section>
-</section>"
-`;
-
-exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:shape-speaker 1`] = `
-"<section class="container-dialogue container-dialogue--shape-speaker" style="margin: 20px 0; margin: 20px 0; padding: 0;">
-<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
-<section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 2px solid #1c1f24; vertical-align: middle; margin-right: 12px; text-align: center; line-height: 18px; color: #1c1f24; font-weight: 700; font-size: 11px">主</span><span style="display:inline-block;vertical-align:middle;max-width:calc(100% - 40px);color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
-</span></section>
-<section class="container-dialogue-turn" style="display:block;margin-top:14px"><span style="display: inline-block; width: 22px; height: 22px; background-color: #2558b0; vertical-align: middle; margin-right: 12px; text-align: center; line-height: 22px; color: #fefefe; font-weight: 700; font-size: 11px">张</span><span style="display:inline-block;vertical-align:middle;max-width:calc(100% - 40px);color:#1c1f24;line-height:1.7"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
-</span></section>
 </section>"
 `;
 
@@ -554,15 +478,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > quote:frame-brackets 1
 <svg viewBox="0 0 320 20" width="100%" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display: block; margin-top: -20px"><path d="M0,0 L0,20 L20,20 M300,20 L320,20 L320,0" stroke="#2558b0" stroke-width="2" fill="none"></path></svg></section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > quote:left-bar 1`] = `
-"<section class="container-quote-card container-quote-card--left-bar" style="background-color: #f5f5f3; border-radius: 6px; padding: 10px 0 10px 18px; margin: 20px 0; border-left: 4px solid #1c1f24;">
-<section class="container-quote-card__body" style="font-size:18px;line-height:1.7;text-align:left;color:#1c1f24">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
-</section>
-<section class="container-quote-card__byline" style="text-align:left;color:#636870;margin-top:8px;font-size:14px">—— 苏轼</section>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:bordered 1`] = `
 "<section class="container-section-title container-section-title--bordered" style="margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #2558b0;">
 <section class="container-section-title__label" style="font-weight:700;font-size:20px;color:#1c1f24"><svg viewBox="0 0 14 14" width="12" height="12" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <path d="M1,1 L13,1 M1,1 L1,13" fill="none" stroke="#2558b0" stroke-width="2" stroke-linecap="square"></path> </svg>章节标题</section>
@@ -593,45 +508,9 @@ exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:ribbon-st
 </section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > steps:geometric-chain 1`] = `
-"<section class="container-steps container-steps--geometric-chain" style="margin: 20px 0; padding-left: 32px; border-left: 2px solid #1c1f24;">
-<section class="container-steps__title" style="font-weight:700;font-size:12px;color:#1c1f24;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:14px">操作步骤</section>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
-</section>"
-`;
-
-exports[`默认主题 · 每 variant 渲染片段快照 > steps:large-numeral 1`] = `
-"<section class="container-steps container-steps--large-numeral" style="margin: 24px 0; padding-left: 8px;">
-<section class="container-steps__title" style="font-weight:700;font-size:11px;color:#636870;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px">操作步骤</section>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > steps:number-circle 1`] = `
 "<section class="container-steps container-steps--number-circle" style="margin: 16px 0;">
 <section class="container-steps__title" style="font-weight:700;margin-bottom:12px">操作步骤</section>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">下锅翻炒。</p>
-<h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第三步</h3>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">起锅装盘。</p>
-</section>"
-`;
-
-exports[`默认主题 · 每 variant 渲染片段快照 > steps:ribbon-chain 1`] = `
-"<section class="container-steps container-steps--ribbon-chain" style="margin: 18px 0; padding: 8px 0 8px 18px; border-left: 4px solid #2558b0;">
-<section class="container-steps__title" style="display:inline-block;padding:4px 12px;background-color:#2558b0;color:#fefefe;border-radius:12px;font-weight:700;font-size:13px;margin:0 0 12px -30px;letter-spacing:0.4px">操作步骤</section>
 <h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第一步</h3>
 <p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">准备材料。</p>
 <h3 style="font-size: 16px; font-weight: 700; color: #1c1f24; margin-top: 22px; margin-bottom: 10px; line-height: 1.55; letter-spacing: 0.2px;">第二步</h3>
@@ -766,17 +645,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:three-line-t
 <section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#636870;font-weight:600;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;line-height:1.5;padding:10px 12px;border-bottom:1px solid #1c1f24">型号</span><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#636870;font-weight:600;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;line-height:1.5;padding:10px 12px;border-bottom:1px solid #1c1f24">容量</span><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#636870;font-weight:600;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;line-height:1.5;padding:10px 12px;border-bottom:1px solid #1c1f24">价格</span></section>
 <section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#1c1f24;font-weight:400;font-size:13px;letter-spacing:normal;text-transform:none;line-height:1.5;padding:10px 12px">A</span><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#1c1f24;font-weight:400;font-size:13px;letter-spacing:normal;text-transform:none;line-height:1.5;padding:10px 12px">256G</span><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#1c1f24;font-weight:400;font-size:13px;letter-spacing:normal;text-transform:none;line-height:1.5;padding:10px 12px">¥6999</span></section>
 <section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#1c1f24;font-weight:400;font-size:13px;letter-spacing:normal;text-transform:none;line-height:1.5;padding:10px 12px">B</span><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#1c1f24;font-weight:400;font-size:13px;letter-spacing:normal;text-transform:none;line-height:1.5;padding:10px 12px">512G</span><span style="display:table-cell;width:33.33%;vertical-align:middle;color:#1c1f24;font-weight:400;font-size:13px;letter-spacing:normal;text-transform:none;line-height:1.5;padding:10px 12px">¥8999</span></section>
-</section>
-</section>"
-`;
-
-exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:vermillion-grid 1`] = `
-"<section class="container-table-card container-table-card--vermillion-grid" style="margin: 20px 0; border: 1px solid #d8d8d4; border-radius: 2px; overflow: hidden; margin: 18px 0;">
-<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>
-<section class="container-table-card__grid" style="display:table;width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">
-<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#2558b0;color:#fefefe;font-weight:700;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">型号</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#2558b0;color:#fefefe;font-weight:700;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">容量</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#2558b0;color:#fefefe;font-weight:700;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4">价格</span></section>
-<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">A</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">256G</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4">¥6999</span></section>
-<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">B</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">512G</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4">¥8999</span></section>
 </section>
 </section>"
 `;

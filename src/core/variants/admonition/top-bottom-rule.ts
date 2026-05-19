@@ -27,7 +27,7 @@ const topBottomRule: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '上下线',
     description: '顶底 1px 实线，像报纸 errata 勘误条',
-    signatureOf: 'tech-geek',
+    themeCompat: ['tech-geek', 'official-gazette'],
   },
   thumbnail: thumb,
   snippets: [

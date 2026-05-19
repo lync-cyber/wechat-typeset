@@ -32,6 +32,7 @@ const fieldCard: VariantDef = {
     name: '田野卡片',
     description: '外框 + dashed 分隔 + Q/A kicker + Card 编号，田野采集卡',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

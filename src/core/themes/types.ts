@@ -389,18 +389,12 @@ export type AdmonitionVariantId =
   | 'accent-bar'
   // 顶部胶囊标签 + 外框下沉（标题悬于边缘上沿）
   | 'pill-tag'
-  // 票根缺口：左右两端圆切齿，SVG data-URI 背景实现
-  | 'ticket-notch'
   // 卡片阴影悬浮：单层阴影 + 圆角 + 无边框
   | 'card-shadow'
-  // 极简下划线：仅标题下方一道色条，整体无底色
-  | 'minimal-underline'
   // 终端窗口：顶部三色圆点条 + 单色字号小的正文
   | 'terminal'
   // 左 2px 虚线（"附注"铅笔感，tech-geek // NOTE）
   | 'dashed-border'
-  // 左 4px 双线（"交叉引用"manpage/RFC，tech-geek // REF）
-  | 'double-border'
   // 上下各一根 1px 实线（"勘误贴条"，tech-geek // PITFALL）
   | 'top-bottom-rule'
   // manpage 日志输出块：顶底分隔线 + 深底状态标签条（tech-geek 专属）
@@ -440,16 +434,12 @@ export type AdmonitionVariantId =
   | 'field-tag'
   // 左侧 1px border 方格 N°04 + 朱字「告示」+ 右侧正文 grid（博物 v2, L136）
   | 'specimen-box'
-  // 左 18×18 实心 accent 方块 + 大字距标题 + flex 1px 横线 + N°01（包豪斯 v1, L155）
-  | 'filled-square'
   // 顶部 -9px 三角徽 + 1px 边框 + ADMONITION·告示 monospace kicker（包豪斯 v2, L173）
   | 'triangle-top'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
   | 'classic'
-  // 左侧 4px 实线竖条 + 左对齐 + 中文双破折号 byline（日常引用,克制版面装饰）
-  | 'left-bar'
   // 首字下沉：第一字放大 2.5x，杂志排风
   | 'magazine-dropcap'
   // 双侧细竖线：左右各一根 1px 长线夹住段落
@@ -488,8 +478,6 @@ export type CompareVariantId =
   | 'ledger'
   // 数据卡：顶 3px 主色/danger 色条 + bgSoft 底 + 大号 monospace 数字（data-brief 专属）
   | 'data-card'
-  // 甲乙朱字：实心 vs 描边 primary 色块标签（宋本批注 02·A）
-  | 'paired-jiayi'
   // 标本卡：左右两栏 textMuted uppercase 标签 + hairline（博物笔记 03·A SPECIMEN A/B）
   | 'paired-specimen'
   // 测量表：双行 block + border-top/bottom + 固定宽列标签（博物笔记 03·B MEASUREMENT 降级）
@@ -502,22 +490,16 @@ export type CompareVariantId =
 export type StepsVariantId =
   // 编号圆圈徽章（当前默认行为）
   | 'number-circle'
-  // 飘带链式：每步横向色条连续
-  | 'ribbon-chain'
   // 时间轴点：左侧单列点阵 + 正文
   | 'timeline-dot'
   // 卡片化分步：每步独立浅底卡片（适合长说明步骤 / SOP）
   | 'step-card'
   // 左右分栏：左侧大号编号 + 右侧正文（学术 / 调研主题骨架）
   | 'split-row'
-  // 大数字：作者写 ### 01/02 形成大号 serif 序号反衬 caption（编辑部 01·A）
-  | 'large-numeral'
   // CJK 印章：作者写 ### 一/二/三 等汉字 h3 + 容器克制外框（宋本 02·A）
   | 'seal-cjk'
   // 刻度尺：顶部 1px 实线主轴 + h3 当刻度位置标签（博物笔记 03·A，BC-2）
   | 'ruler-row'
-  // 几何链：左 2px 实线主轴 + 几何符号 h3（包豪斯 04·A）
-  | 'geometric-chain'
 
 export type DividerVariantId =
   | 'wave'
@@ -554,8 +536,6 @@ export type NoteVariantId =
   | 'box-callout'
   // 左 2px 实线 + 缩进：经典"标记此处有补充"批注式
   | 'side-bar'
-  // 悬挂缩进 + 上标编号：学术 / 论文风脚注块
-  | 'hanging-indent'
   // 左 dotted rule + 缩进：人文札记 / 散文式旁批
   | 'dotted-margin'
   // 小型大写 kicker + 正文：粗野主义 / 数据简报骨架
@@ -706,8 +686,6 @@ export type TableCardVariantId =
   | 'three-line-table'
   // 索引目录：顶实线 + 行间 dashed + 序号/标题/页码三栏 monospace（编辑部 01·B）
   | 'index-table'
-  // 朱角方格：全网格 1px + header primary 底 textInverse 字承载朱印感（宋本 02·A 降级）
-  | 'vermillion-grid'
   // 热力矩阵：行列标签 + 显式 width/height 色块（包豪斯 04·B，BC-4 降级方案）
   | 'matrix'
 
@@ -748,14 +726,8 @@ export type DialogueVariantId =
   | 'name-prefix'
   // 杂志栏：左 fixed 列大写名字 + 右长答（New Yorker interview）
   | 'interview-column'
-  // 剧本式顶行：name mono 小字顶行 + 多段正文垂直堆叠（编辑部 01·A SCREENPLAY）
-  | 'screenplay'
-  // 主客名签：中文首字徽章（主=实心 / 客=描边）+ 正文（宋本批注 02·A）
-  | 'host-guest-seal'
   // 音频时间戳：mono timestamp 顶行 + name + role italic（博物笔记 03·A，attrs.timestamp）
   | 'audio-stamp'
-  // 圆方代号：22×22 几何徽章（circle 描边 / square 实心）+ 正文（包豪斯 04·A，attrs.shape）
-  | 'shape-speaker'
 
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
@@ -881,12 +853,9 @@ export const VARIANT_IDS = {
   admonition: [
     'accent-bar',
     'pill-tag',
-    'ticket-notch',
     'card-shadow',
-    'minimal-underline',
     'terminal',
     'dashed-border',
-    'double-border',
     'top-bottom-rule',
     'manpage-log',
     'sidenote-latex',
@@ -905,12 +874,10 @@ export const VARIANT_IDS = {
     'paper-slip',
     'field-tag',
     'specimen-box',
-    'filled-square',
     'triangle-top',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
-    'left-bar',
     'magazine-dropcap',
     'column-rule',
     'frame-brackets',
@@ -930,7 +897,6 @@ export const VARIANT_IDS = {
     'stacked-row',
     'ledger',
     'data-card',
-    'paired-jiayi',
     'paired-specimen',
     'measurement-table',
     'paired-shape',
@@ -938,14 +904,11 @@ export const VARIANT_IDS = {
   ] as const satisfies readonly CompareVariantId[],
   steps: [
     'number-circle',
-    'ribbon-chain',
     'timeline-dot',
     'step-card',
     'split-row',
-    'large-numeral',
     'seal-cjk',
     'ruler-row',
-    'geometric-chain',
   ] as const satisfies readonly StepsVariantId[],
   divider: [
     'wave',
@@ -973,7 +936,6 @@ export const VARIANT_IDS = {
     'minimal-callout',
     'box-callout',
     'side-bar',
-    'hanging-indent',
     'dotted-margin',
     'smallcaps-kicker',
     'editorial-stripe',
@@ -1045,7 +1007,6 @@ export const VARIANT_IDS = {
     'price-tier',
     'three-line-table',
     'index-table',
-    'vermillion-grid',
     'matrix',
   ] as const satisfies readonly TableCardVariantId[],
   gallery: [
@@ -1059,10 +1020,7 @@ export const VARIANT_IDS = {
     'chat-bubbles',
     'name-prefix',
     'interview-column',
-    'screenplay',
-    'host-guest-seal',
     'audio-stamp',
-    'shape-speaker',
   ] as const satisfies readonly DialogueVariantId[],
   qaBlock: [
     'numbered-faq',

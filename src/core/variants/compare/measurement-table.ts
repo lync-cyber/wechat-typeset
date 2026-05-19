@@ -31,6 +31,7 @@ const measurementTable: VariantDef<CompareRenderArgs> = {
     name: '测量数据对照',
     description: '纵向双行 block，标签固定宽 + 数据跟排，数据并列感',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

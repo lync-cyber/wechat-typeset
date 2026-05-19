@@ -31,6 +31,7 @@ const sealStamp: VariantDef = {
     name: '问答朱印',
     description: 'CJK 问 / 答 朱印徽章：实心 vs 描边，宋本批注语言',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

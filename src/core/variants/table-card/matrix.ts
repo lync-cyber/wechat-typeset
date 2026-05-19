@@ -38,6 +38,7 @@ const matrix: VariantDef = {
     name: '矩阵热力',
     description: '行列标签 + 色块矩阵，包豪斯网格风（数值简化为统一色块）',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

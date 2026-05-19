@@ -36,6 +36,7 @@ const indexTable: VariantDef = {
     name: '索引目录',
     description: '三栏索引：序号 / 标题 / 页码，dashed 行分隔',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

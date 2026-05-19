@@ -32,6 +32,7 @@ const threeLineTable: VariantDef = {
     name: '三线表',
     description: '报刊 booktabs 三线：顶底 2px + header 后 1px，无垂直线',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

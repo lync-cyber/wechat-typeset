@@ -109,7 +109,9 @@ for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
               ? 'pull-quote'
               : kind === 'tableCard'
                 ? 'table-card'
-                : kind
+                : kind === 'qaBlock'
+                  ? 'qa-block'
+                  : kind
     const cls = `container-${containerName}--${id}`
     check(`${kind}:${id}`, () => htmlForCheck.includes(cls), cls)
   }

@@ -43,6 +43,26 @@ function summary(report: VariantUsageReport): void {
   }
 }
 
+function listStale(report: VariantUsageReport): void {
+  const cutoff = new Date()
+  cutoff.setDate(cutoff.getDate() - 90)
+  const cutoffStr = cutoff.toISOString().slice(0, 10)
+  const stale = report.orphans.filter((e) => {
+    const def = ALL_VARIANT_DEFS.find((d) => d.meta.id === e.id && d.meta.kind === e.kind)
+    const since = def?.meta.experimentalSince
+    return since !== undefined && since <= cutoffStr
+  })
+  if (stale.length === 0) {
+    console.error('[variant:usage --stale] 无超过 90 天仍 experimental 的 variant。')
+    return
+  }
+  console.error(`[variant:usage --stale] ${stale.length} 个 variant 超过 90 天仍 experimental：`)
+  for (const e of stale) {
+    const def = ALL_VARIANT_DEFS.find((d) => d.meta.id === e.id && d.meta.kind === e.kind)
+    console.error(`  · ${e.kind.padEnd(14)} ${e.id.padEnd(22)} since ${def?.meta.experimentalSince}`)
+  }
+}
+
 function listOrphans(report: VariantUsageReport): void {
   for (const e of report.orphans) {
     const flag = e.experimental ? '[experimental ✓]' : '[未标 experimental ✗]'
@@ -62,6 +82,7 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2)
   const json = args.includes('--json')
   const orphansOnly = args.includes('--orphans')
+  const staleOnly = args.includes('--stale')
   const loaded = await loadAllSpecs()
   const report = analyzeVariantUsage(loaded.map((l) => l.spec), [...ALL_VARIANT_DEFS])
   if (json) {
@@ -71,6 +92,10 @@ async function main(): Promise<void> {
   }
   if (orphansOnly) {
     listOrphans(report)
+    return
+  }
+  if (staleOnly) {
+    listStale(report)
     return
   }
   summary(report)

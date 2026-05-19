@@ -7585,12 +7585,9 @@
           "enum": [
             "accent-bar",
             "pill-tag",
-            "ticket-notch",
             "card-shadow",
-            "minimal-underline",
             "terminal",
             "dashed-border",
-            "double-border",
             "top-bottom-rule",
             "manpage-log",
             "sidenote-latex",
@@ -7609,14 +7606,12 @@
             "paper-slip",
             "field-tag",
             "specimen-box",
-            "filled-square",
             "triangle-top"
           ]
         },
         "quote": {
           "enum": [
             "classic",
-            "left-bar",
             "magazine-dropcap",
             "column-rule",
             "frame-brackets",
@@ -7638,7 +7633,6 @@
             "stacked-row",
             "ledger",
             "data-card",
-            "paired-jiayi",
             "paired-specimen",
             "measurement-table",
             "paired-shape",
@@ -7648,14 +7642,11 @@
         "steps": {
           "enum": [
             "number-circle",
-            "ribbon-chain",
             "timeline-dot",
             "step-card",
             "split-row",
-            "large-numeral",
             "seal-cjk",
-            "ruler-row",
-            "geometric-chain"
+            "ruler-row"
           ]
         },
         "divider": {
@@ -7691,7 +7682,6 @@
             "minimal-callout",
             "box-callout",
             "side-bar",
-            "hanging-indent",
             "dotted-margin",
             "smallcaps-kicker",
             "editorial-stripe",
@@ -7779,7 +7769,6 @@
             "price-tier",
             "three-line-table",
             "index-table",
-            "vermillion-grid",
             "matrix"
           ]
         },
@@ -7797,10 +7786,7 @@
             "chat-bubbles",
             "name-prefix",
             "interview-column",
-            "screenplay",
-            "host-guest-seal",
-            "audio-stamp",
-            "shape-speaker"
+            "audio-stamp"
           ]
         },
         "qaBlock": {

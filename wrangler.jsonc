@@ -2,19 +2,20 @@
  * Cloudflare Workers 部署配置（静态站点模式）
  *
  * 历史：06bd959 ci(deploy) commit 引入了 jsDelivr / CF Pages / Netlify 三套镜像。
- * 此后 Cloudflare 将 CF Pages 自动迁到 "Workers Builds" 统一管线，但仓库里没有
- * 与之对应的 wrangler 配置，导致每次推送 CF 都立刻报错 "Workers Builds:
- * wechat-typeset · fail (0 秒)"——CI checks 长期挂红，看 PR 时混淆视听。
- *
- * 解决方案：本文件声明本仓库以"纯静态 SPA"形式由 Workers 提供——
- *   - assets.directory = ./dist   （sealed by `npm run build`，与 netlify/Pages 同步）
+ * 此后 Cloudflare 将 CF Pages 自动迁到 "Workers Builds" 统一管线，本文件随之
+ * 声明本仓库以"纯静态 SPA"形式由 Workers 提供——
+ *   - build.command = pnpm build      （CF Workers Build 跑这条产出 ./dist）
+ *   - assets.directory = ./dist        （sealed by `pnpm build`，与 netlify/Pages 同步）
  *   - not_found_handling = single-page-application
  *         路由未命中时回 200 + index.html，让前端路由接管。
  *         我们目前 hash 路由也兼容；未来改 history 路由时这条仍是兜底。
  *
  * 不设 `main`：本项目无 Worker 脚本，CF 看到 assets-only 即静态资源服务。
- * 不设 `build.command`：CF 控制台已配 build；wrangler 的 build 是 wrangler deploy 用,
- *    跟 Workers Builds CI 走的是 dashboard 那一条，二者别重写互踩。
+ *
+ * 历史教训：早期假设"CF 控制台已配 build"故意不写 build.command，导致
+ *   CI checks 长期 "Workers Builds: wechat-typeset · fail (0 秒)"——CF 在仓库找
+ *   不到 ./dist（gitignore）就直接判失败。本字段补回后由 wrangler.jsonc 单一
+ *   真源接管构建配置，dashboard 端不需重复配置。
  *
  * 与其它镜像的关系：本配置只让 CF Workers Build 这一处 CI check 转绿；
  * 实际的访问镜像策略（jsDelivr 主、CF Workers 备、Netlify / GH Pages 兜底）由
@@ -24,6 +25,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "wechat-typeset",
   "compatibility_date": "2026-05-13",
+  "build": {
+    "command": "pnpm install --frozen-lockfile && pnpm build"
+  },
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"

@@ -31,6 +31,7 @@ const axisDiagram: VariantDef<CompareRenderArgs> = {
     name: '轴线对立图',
     description: '水平轴 SVG + 左右对立标签，包豪斯风格概念对比',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

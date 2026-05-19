@@ -31,6 +31,7 @@ const ribbonStrip: VariantDef = {
     name: '横滚条带',
     description: '横向滚动 + 滑动提示阴影',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

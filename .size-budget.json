@@ -68,12 +68,12 @@
       "gzipLimit": 11000
     },
     {
-      "$comment": "全功能展示稿的 lazy chunk。只在用户点 '载入全功能展示' 时取；源文件 tests/fixtures/all-containers.md → src/domain/samples/_showcase.ts。fixture 是端到端测试母本，理应稳定。基线 2026-05-19：actual=21.17kB raw / 9.80kB gz。",
+      "$comment": "全功能展示稿的 lazy chunk。只在用户点 '载入全功能展示' 时取；源文件 tests/fixtures/all-containers.md → src/domain/samples/_showcase.ts。fixture 是端到端测试母本，理应稳定。基线 2026-05-19 backfill-49-variants 后：actual=29.27kB raw / 12.62kB gz（补全 49 个缺失 variant 块）。",
       "name": "showcase chunk (lazy)",
       "prefix": "_showcase",
       "ext": "js",
-      "limit": 24000,
-      "gzipLimit": 11000
+      "limit": 31300,
+      "gzipLimit": 13500
     },
     {
       "$comment": "Studio 'CSS patch' 源码模式的 lazy chunk。defineAsyncComponent 装拆，进面板才下载；本体轻量，CM6 lang-css/html 实际重量在 codemirror chunk 内。基线 2026-05-19 main 合并后：actual=2.52kB raw / 1.34kB gz（Studio P3 简化后比 P3.1 略瘦）。",

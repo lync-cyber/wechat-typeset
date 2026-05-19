@@ -90,6 +90,37 @@ UI 上"载入示例"分为三档，对应三类作者诉求：
 - [第三方主题开发指南](docs/theme-authoring.md)
 - [手动验收清单](docs/release-checklist.md)
 
+## Variant 治理流程
+
+### 新增 variant 三检
+
+1. 跑 `pnpm variant:usage` 看当前 kind 是否已有同手法近邻（横向分类参见 `docs/wechat-typeset-container/cross-variant-motif-scan.md`）；
+2. 优先用 `ctx.attrs` 或 `tokenSchema` 扩展现有 variant，而非新建；
+3. 实在要新建 → meta 必须含 `experimental: true` + `experimentalSince`（格式 `YYYY-MM-DD`），且 PR 描述里写明计划首采主题或"待主题认领"。
+
+```ts
+meta: {
+  id: 'my-new-variant',
+  kind: 'admonition',
+  name: '…',
+  description: '…',
+  experimental: true,
+  experimentalSince: '2026-05-19',  // 必填
+}
+```
+
+### 删除 variant 路径
+
+1. `pnpm variant:usage --orphans` 查看 orphan + 是否标 experimental；
+2. `pnpm variant:usage --stale` 查看超过 90 天仍 experimental 的候选（stderr 警告，不中断构建）；
+3. 实证 90 天+ 仍 0 引用 → 走 retirement PR，同步 4 处：`<id>.ts` / `_all.ts` / `VARIANT_IDS` / `*_ORDER`；
+4. 引用方主题先迁移、再删除 variant——顺序不可倒。
+
+### 冗余审查
+
+- 横向手法分类参见 `docs/wechat-typeset-container/cross-variant-motif-scan.md`；
+- 新增 variant 鼓励在 meta 里登记 `motif`（kebab-case 数组），便于跨 kind 重复检测。
+
 ## 许可
 
 提交的改动自动按 [MIT](LICENSE) 授权。

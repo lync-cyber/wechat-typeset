@@ -27,6 +27,7 @@ const nineGrid: VariantDef = {
     name: '九宫格',
     description: '3×3 强制方形（Instagram 体）',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

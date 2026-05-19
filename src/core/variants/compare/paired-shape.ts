@@ -29,6 +29,7 @@ const pairedShape: VariantDef<CompareRenderArgs> = {
     name: '圆方几何对照',
     description: '包豪斯：圆环描边 vs 实心方块，几何符号作视觉代号',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

@@ -4,7 +4,7 @@
  * 避免无关字段反向耦合 commands。未来可扩展 CommandSource 插件接口在此注入。
  */
 import { computed, type ComputedRef, type Ref } from 'vue'
-import type { Command } from '../ui/components/CommandPalette.vue'
+import type { Command } from '../ui/components/command-types'
 import { themeList } from '../core/themes'
 import { createDraft, listDrafts } from '../infra/storage/drafts'
 import { baseThemeId } from '../ui/state/store'

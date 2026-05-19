@@ -30,6 +30,7 @@ const audioStamp: VariantDef = {
     name: '音频时间戳',
     description: '顶行 mono 时间码 + name/role 次行，博物笔记 / 田野录音风',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

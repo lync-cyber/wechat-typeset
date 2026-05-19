@@ -327,7 +327,7 @@ MIT License。
 
 ## Part 5 · Variant 目录
 
-### admonition · 20 variants
+### admonition · 27 variants
 
 ::: tip 温和提示 variant=accent-bar
 accent-bar 骨架 —— 左侧 3px 色条 + 浅底 + 右侧轻圆角。
@@ -357,11 +357,6 @@ terminal 骨架 —— 顶部三色圆点 + 等宽正文。
 <!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
 ::: tip // NOTE variant=dashed-border
 dashed-border 骨架 —— 左 2px 虚线 + 浅底。
-:::
-
-<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
-::: info // REF §2.3 variant=double-border
-double-border 骨架 —— 左 4px 双线 + 透明底。
 :::
 
 <!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
@@ -424,7 +419,42 @@ mook-tag 骨架 —— 米卡纸底 + 主色左条 + 単字 CJK 标签。
 slab-corner 骨架 —— 顶部 6px 硬条 + 右上 accent 方块徽章 + zero-radius。
 :::
 
-### quote-card · 7 variants
+<!-- themeCompat: official-gazette 独占 -->
+::: tip 告示 variant=numbered-rule
+numbered-rule 骨架 —— 顶 2px + 底 1px 大字距 NOTICE·N° 横线。
+:::
+
+<!-- themeCompat: official-gazette 独占 -->
+::: tip variant=hanging-nb
+hanging-nb 骨架 —— 左侧 N.B. 缩写 + 编号 + 竖分隔。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: tip 告示 variant=vermilion-seal
+vermilion-seal 骨架 —— 右上 -3° 旋转方框朱印。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: tip 告示 variant=paper-slip
+paper-slip 骨架 —— 左竖排黄签条 + 底 1px border。
+:::
+
+<!-- themeCompat: life-aesthetic 独占 -->
+::: tip 告示 variant=field-tag
+field-tag 骨架 —— FIG.CAVE + Notabene + 短刻度。
+:::
+
+<!-- themeCompat: life-aesthetic 独占 -->
+::: tip 告示 variant=specimen-box
+specimen-box 骨架 —— 左 1px border 方格 N°。
+:::
+
+<!-- themeCompat: brutalist 独占 -->
+::: tip 告示 variant=triangle-top
+triangle-top 骨架 —— 顶 -9px 三角徽 + 1px 边框。
+:::
+
+### quote-card · 14 variants
 
 ::: quote-card 苏轼 · 前赤壁赋 variant=classic
 逝者如斯，而未尝往也；盈虚者如彼，而卒莫消长也。
@@ -454,7 +484,47 @@ editorial-block 骨架 —— 左 6px 实色条 + 浅底 + 大写字距 byline�
 "凡我所是，皆因我读。"
 :::
 
-### compare · 4 variants
+<!-- themeCompat: editorial-mook 独占 -->
+::: quote-card 韩少功《马桥词典》 variant=oversized-mark
+沉默是一种回答，只是我们经常听不见。
+:::
+
+<!-- themeCompat: editorial-mook 独占 -->
+::: quote-card 黑塞·《德米安》 variant=numbered-lines
+我们终其一生，是为了摆脱他人的期待，找到真正的自己。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: quote-card 纳兰性德 variant=seal-kai
+人生若只如初见，何事秋风悲画扇。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: quote-card 黄庭坚 variant=double-frame
+念念不忘，必有回响；有灯，就有人。
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: quote-card Fragment IX variant=specimen-quote
+所有过往的失败，都是为了让今天的失败显得不那么难以承受。
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: quote-card M. PROUST · 1923 variant=binomial-attrib
+真正的旅行不在于看到新的风景，而在于换一双新的眼睛。
+:::
+
+<!-- themeCompat: swiss-grid 独占 -->
+::: quote-card SHAKESPEARE · TEMPEST variant=huge-numeral
+凡是过往，皆为序章。
+:::
+
+<!-- themeCompat: swiss-grid 独占 -->
+::: quote-card D. RAMS, 1976 variant=ring-device
+设计不是装饰，而是某种秩序的可视化。
+:::
+
+### compare · 8 variants
 
 :::: compare variant=column-card
 ::: pros 优点
@@ -491,7 +561,49 @@ editorial-block 骨架 —— 左 6px 实色条 + 浅底 + 大写字距 byline�
 :::
 ::::
 
-### steps · 5 variants
+:::: compare variant=paired-specimen
+::: pros Spec. A
+*学名：Quercus robur*
+
+- 特征 1
+- 特征 2
+:::
+::: cons Spec. B
+*学名：Quercus petraea*
+
+- 特征 1
+- 特征 2
+:::
+::::
+
+:::: compare variant=measurement-table
+::: pros 砖木结构
+承重墙体：370mm 实心砖，层高 3.2m，抗震 6 度。
+:::
+::: cons 钢混结构
+框架柱：600×600mm，层高 3.6m，抗震 8 度。
+:::
+::::
+
+:::: compare variant=paired-shape
+::: pros CIRCLE
+有机、循环、无起点终点的运动。
+:::
+::: cons SQUARE
+秩序、稳定、以角定界的结构。
+:::
+::::
+
+:::: compare variant=axis-diagram
+::: pros 现代主义
+形式服从功能；理性秩序；以少胜多。
+:::
+::: cons 后现代主义
+形式即内容；反讽引用；以多为多。
+:::
+::::
+
+### steps · 7 variants
 
 ::: steps 使用流程 variant=number-circle
 ### 写
@@ -538,6 +650,24 @@ wxPatch 改造不兼容语法。
 选择对照组、自变量与样本量。
 :::
 
+::: steps variant=seal-cjk
+### 一
+第一步正文说明
+### 二
+第二步正文说明
+### 三
+第三步正文说明
+:::
+
+::: steps 旅程 variant=ruler-row
+### 0KM
+出发点描述
+### 30KM
+途经点描述
+### 72KM
+终点描述
+:::
+
 ### divider · 6 variants
 
 ::: divider variant=wave
@@ -558,7 +688,7 @@ wxPatch 改造不兼容语法。
 ::: divider variant=seal-mark
 :::
 
-### note · 6 variants
+### note · 14 variants
 
 ::: note 第五态补注 variant=minimal-callout
 minimal-callout —— 顶端 1px 短分隔线 + textMuted 标题。
@@ -572,8 +702,8 @@ box-callout —— 单色 1px 全边框 + textMuted 标题。
 side-bar —— 左 2px 实线 + 缩进。
 :::
 
-::: note variant=hanging-indent REMARK
-hanging-indent —— uppercase 小标题 + 悬挂缩进，学术 / 论文风。
+::: note variant=smallcaps-kicker layout=hanging REMARK
+smallcaps-kicker(layout=hanging) —— uppercase 小标题 + 悬挂缩进，无顶线。
 :::
 
 ::: note variant=dotted-margin 旁批
@@ -582,6 +712,46 @@ dotted-margin —— 左 dotted rule + 缩进，散文页边批注。
 
 ::: note variant=smallcaps-kicker NOTE
 smallcaps-kicker —— 顶 2px 主色条 + uppercase kicker，数据简报骨架。
+:::
+
+<!-- themeCompat: editorial-mook 独占 -->
+::: note variant=ed-signoff
+ed-signoff 骨架 —— 编者按语落款。
+:::
+
+<!-- themeCompat: editorial-mook 独占 -->
+::: note variant=inline-label
+inline-label 骨架 —— 行内标签式补注。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: note variant=interlinear-gloss
+interlinear-gloss 骨架 —— 行间注释体。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: note variant=vermilion-gloss
+vermilion-gloss 骨架 —— 朱批旁注。
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: note variant=ruler-note
+ruler-note 骨架 —— 学术尺线脚注。
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: note variant=latin-subhead
+latin-subhead 骨架 —— 拉丁小标题补注。
+:::
+
+<!-- themeCompat: swiss-grid 独占 -->
+::: note variant=initial-disc
+initial-disc 骨架 —— 首字圆点引导。
+:::
+
+<!-- themeCompat: brutalist 独占 -->
+::: note variant=geometric-mark
+geometric-mark 骨架 —— 几何符号标注。
 :::
 
 ### codeBlock · 5 variants
@@ -615,7 +785,49 @@ $ git push --force-with-lease
 const greet = (name) => `Hello, ${name}`
 ```
 
-### pull-quote · 4 variants
+### highlight · 8 variants
+
+<!-- themeCompat: editorial-mook 独占 -->
+::: highlight variant=dotted-underline
+强调短句
+:::
+
+<!-- themeCompat: editorial-mook 独占 -->
+::: highlight variant=tracked-emphasis
+强调短句
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: highlight variant=vermilion-inline
+强调短句
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: highlight variant=side-dots
+强调短句
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: highlight variant=wash-ground
+强调短句
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: highlight variant=bracketed-tick
+强调短句
+:::
+
+<!-- themeCompat: brutalist 独占 -->
+::: highlight variant=geometric-flag
+强调短句
+:::
+
+<!-- themeCompat: swiss-grid 独占 -->
+::: highlight variant=single-stroke
+强调短句
+:::
+
+### pull-quote · 12 variants
 
 ::: pull-quote variant=giant-mark
 我们以为在阅读，其实只是在滑动。
@@ -632,6 +844,54 @@ const greet = (name) => `Hello, ${name}`
 ::: pull-quote variant=margin-pull
 书脊与手指的记忆，比屏幕的光更持久。
 :::
+
+<!-- themeCompat: people-story 独占 -->
+::: pull-quote variant=weight-contrast
+我们活在一个越来越快，却越来越慢的时代。
+:::
+
+<!-- themeCompat: people-story 独占 -->
+::: pull-quote variant=drop-capital
+凡人生大半的烦恼，都来自把别人的剧本当成自己的人生。
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: pull-quote variant=calligraphic
+行 到 水 穷 处
+坐 看 云 起 时
+:::
+
+<!-- themeCompat: literary-humanism 独占 -->
+::: pull-quote variant=with-gloss
+花 未 全 开
+月 未 圆
+:::
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: pull-quote variant=bilingual-stack
+荒野之中，
+蕴藏世界。
+:::
+In wildness is the preservation of the world.
+
+<!-- themeCompat: academic-frontier 独占 -->
+::: pull-quote variant=caliper-mark
+山是凝固的水，
+水是流动的山。
+:::
+FIELD JOURNAL, FOL.211
+
+<!-- themeCompat: brutalist 独占 -->
+::: pull-quote variant=inverted-plate
+形式追随功能，
+而功能追随真诚。
+:::
+
+<!-- themeCompat: brutalist 独占 -->
+::: pull-quote variant=grid-block
+少即多
+:::
+L. MIES VAN DER ROHE
 
 ### announcement · 4 variants
 
@@ -651,7 +911,7 @@ const greet = (name) => `Hello, ${name}`
 《慢读简报》自本期起改为隔周四出刊；订阅用户邮件提醒同步调整。
 :::
 
-### table-card · 4 variants
+### table-card · 7 variants
 
 :::: table-card 设备规格 variant=rule-grid
 ::: table-row header=true cells="型号 | 容量 | 价格"
@@ -688,6 +948,33 @@ const greet = (name) => `Hello, ${name}`
 ::: table-row cells="¥39 | ¥99 | ¥199"
 :::
 ::: table-row cells="单端 | 三端 | 团队"
+:::
+::::
+
+:::: table-card 研究结果 variant=three-line-table
+::: table-row header=true cells="变量 | 均值 | 标准差"
+:::
+::: table-row cells="A 组 | 3.42 | 0.81"
+:::
+::: table-row cells="B 组 | 4.17 | 0.63"
+:::
+::::
+
+:::: table-card 目录 variant=index-table
+::: table-row header=true cells="No. | 文章 | 页"
+:::
+::: table-row cells="01 | 编辑前言 | 3"
+:::
+::: table-row cells="02 | 慢读论 | 8"
+:::
+::::
+
+:::: table-card 矩阵评分 variant=matrix
+::: table-row header=true cells=" | A | B | C"
+:::
+::: table-row cells="高 | 9 | 7 | 5"
+:::
+::: table-row cells="低 | 3 | 5 | 8"
 :::
 ::::
 
@@ -735,7 +1022,7 @@ const greet = (name) => `Hello, ${name}`
 :::
 ::::
 
-### dialogue · 4 variants
+### dialogue · 5 variants
 
 :::: dialogue 主编访谈 variant=qa-rows
 ::: dialogue-turn name="主持人" role="Q"
@@ -778,3 +1065,42 @@ const greet = (name) => `Hello, ${name}`
 慢读的对立面不是快读，而是被打断；只要不被打断，慢自然发生。
 :::
 ::::
+
+:::: dialogue 田野访谈 variant=audio-stamp
+::: dialogue-turn name="访员" role="interviewer" timestamp="00:04:21"
+你能描述当时的场景吗？
+:::
+::: dialogue-turn name="老李" role="villager" timestamp="00:04:38"
+那天清晨雾很大，能见度不到 10 米。
+:::
+::::
+
+### qa-block · 7 variants
+
+::: qa-block 读者问答 variant=hanging-qa q="我是否需要先具备写作基础才能加入这个写作社群？"
+不需要。我们更欢迎尚未形成"写作惯性"的初学者。
+:::
+
+::: qa-block 读者问答 variant=seal-stamp q="读古书是否一定要懂训诂之学？"
+未必。能读懂大意已属可贵，训诂之学，可俟后日积累。
+:::
+
+::: qa-block 读者问答 variant=query-annotation q="何谓诗境？"
+境者，意中之境也。情景交融，所谓"以我观物，物皆著我之色彩"。
+:::
+
+::: qa-block 读者问答 variant=sample-query q="山中昼夜温差超过多少时，应当停止野外考察？"
+温差 ≥ 15℃ 且海拔超过 3000m 时，应即刻撤回营地。
+:::
+
+::: qa-block 读者问答 variant=field-card q="为何记录树木胸径而不是树高？"
+胸径稳定可测，树高常因树梢断折而失真。
+:::
+
+::: qa-block 读者问答 variant=circle-square q="设计师该不该有自己的风格？"
+风格是结果，不是目标。刻意打造的风格，往往变成局限。
+:::
+
+::: qa-block 读者问答 variant=typed-block q="如何判断一个项目应该被砍掉？"
+当你已经无法回答"为什么是我们来做"时——该砍。
+:::

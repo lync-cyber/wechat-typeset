@@ -26,6 +26,7 @@ const sealCjk: VariantDef = {
     name: '汉字印章步骤',
     description: '作者以 h3 手写一/二/三，宋本批注风格',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

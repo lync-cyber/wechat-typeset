@@ -31,7 +31,6 @@ const typedBlock: VariantDef = {
     kind: 'qaBlock',
     name: '反白分栏',
     description: '上半段反白 Q · NN + 下半段正常底 A · NN，包豪斯 typed block',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

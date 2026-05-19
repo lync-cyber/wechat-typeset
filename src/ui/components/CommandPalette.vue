@@ -14,15 +14,9 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import PanelShell from '../primitives/PanelShell.vue'
 import { useFilteredList } from '../composables/useFilteredList'
+import type { Command } from './command-types'
 
-export interface Command {
-  id: string
-  title: string
-  group: string
-  shortcut?: string
-  keywords?: string
-  run: () => void
-}
+export type { Command }
 
 const props = defineProps<{
   commands: Command[]

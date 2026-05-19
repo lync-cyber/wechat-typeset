@@ -28,6 +28,7 @@ const inlineFlow: VariantDef = {
     name: '流式',
     description: '同段流式排列 + 内滚动，长引用列表',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [
