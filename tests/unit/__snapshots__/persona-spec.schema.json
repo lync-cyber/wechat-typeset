@@ -7601,7 +7601,15 @@
             "news-row",
             "news-underline",
             "mook-tag",
-            "slab-corner"
+            "slab-corner",
+            "numbered-rule",
+            "hanging-nb",
+            "vermilion-seal",
+            "paper-slip",
+            "field-tag",
+            "specimen-box",
+            "filled-square",
+            "triangle-top"
           ]
         },
         "quote": {
@@ -7612,7 +7620,15 @@
             "column-rule",
             "frame-brackets",
             "editorial-block",
-            "tilted-sticker"
+            "tilted-sticker",
+            "oversized-mark",
+            "numbered-lines",
+            "seal-kai",
+            "double-frame",
+            "specimen-quote",
+            "binomial-attrib",
+            "huge-numeral",
+            "ring-device"
           ]
         },
         "compare": {
@@ -7669,12 +7685,28 @@
             "dotted-margin",
             "smallcaps-kicker",
             "editorial-stripe",
-            "research-dense"
+            "research-dense",
+            "ed-signoff",
+            "inline-label",
+            "interlinear-gloss",
+            "vermilion-gloss",
+            "ruler-note",
+            "latin-subhead",
+            "initial-disc",
+            "geometric-mark"
           ]
         },
         "highlight": {
           "enum": [
-            "plain"
+            "plain",
+            "dotted-underline",
+            "tracked-emphasis",
+            "vermilion-inline",
+            "side-dots",
+            "wash-ground",
+            "bracketed-tick",
+            "geometric-flag",
+            "single-stroke"
           ]
         },
         "footnotes": {
@@ -7710,7 +7742,15 @@
             "giant-mark",
             "centered-rule",
             "stamp-quote",
-            "margin-pull"
+            "margin-pull",
+            "weight-contrast",
+            "drop-capital",
+            "calligraphic",
+            "with-gloss",
+            "bilingual-stack",
+            "caliper-mark",
+            "inverted-plate",
+            "grid-block"
           ]
         },
         "announcement": {

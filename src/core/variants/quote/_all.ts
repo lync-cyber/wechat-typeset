@@ -12,6 +12,15 @@ import frameBrackets from './frame-brackets'
 import tiltedSticker from './tilted-sticker'
 import editorialBlock from './editorial-block'
 import leftBar from './left-bar'
+// content-1.html 阶段 2 落地 — 4 主题 × 2 签名骨架（金句卡片）
+import oversizedMark from './oversized-mark'
+import numberedLines from './numbered-lines'
+import sealKai from './seal-kai'
+import doubleFrame from './double-frame'
+import specimenQuote from './specimen-quote'
+import binomialAttrib from './binomial-attrib'
+import hugeNumeral from './huge-numeral'
+import ringDevice from './ring-device'
 
 export default [
   classic,
@@ -21,4 +30,12 @@ export default [
   tiltedSticker,
   editorialBlock,
   leftBar,
+  oversizedMark,
+  numberedLines,
+  sealKai,
+  doubleFrame,
+  specimenQuote,
+  binomialAttrib,
+  hugeNumeral,
+  ringDevice,
 ]

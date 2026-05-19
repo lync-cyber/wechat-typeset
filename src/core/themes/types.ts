@@ -427,6 +427,23 @@ export type AdmonitionVariantId =
   | 'mook-tag'
   // 粗野板块：顶 6px accent 硬条 + 右上方块徽章 + zero-radius（brutalist 专属）
   | 'slab-corner'
+  // ── content-1.html 阶段 2 落地（4 主题 × 2 = 8 个签名骨架，t1 编辑部 / t2 宋本 / t3 博物 / t4 包豪斯）
+  // 顶 2px 实线 + 底 1px + 大字距 NOTICE·N°01 + 灰副句（编辑部 v1, content-1.html L48）
+  | 'numbered-rule'
+  // 左侧悬挂 N.B. 大写 + IBM Plex Mono 编号 + 1px 竖分隔线（编辑部 v2, L64）
+  | 'hanging-nb'
+  // 右上 -3° 旋转方框朱印「告」+ 副字「示」+ padding-right 让位（宋本 v1, L80）
+  | 'vermilion-seal'
+  // 左竖排黄签条「示·告」+ 底部 1px border + 朱字尾句（宋本 v2, L96）
+  | 'paper-slip'
+  // 顶部 FIG.CAVE—04 + 短刻度条 + Notabene 学名 + 底 1px 实线（博物 v1, L111）
+  | 'field-tag'
+  // 左侧 1px border 方格 N°04 + 朱字「告示」+ 右侧正文 grid（博物 v2, L136）
+  | 'specimen-box'
+  // 左 18×18 实心 accent 方块 + 大字距标题 + flex 1px 横线 + N°01（包豪斯 v1, L155）
+  | 'filled-square'
+  // 顶部 -9px 三角徽 + 1px 边框 + ADMONITION·告示 monospace kicker（包豪斯 v2, L173）
+  | 'triangle-top'
 
 export type QuoteVariantId =
   // 大号装饰引号 + 居中（当前默认行为）
@@ -444,6 +461,23 @@ export type QuoteVariantId =
   // 旋转贴纸：反色卡片 + transform:rotate(-1deg) + 大字号粗体 sans 左对齐
   // （punk-zine / brutalist 撕贴纸语义；与 classic 形成"克制 vs 张力"对立轴）
   | 'tilted-sticker'
+  // ── content-1.html 阶段 2 落地（4 主题 × 2 = 8 个签名骨架）
+  // 左上巨号 Cormorant " 装饰 + body italic + 右下 ed. byline（编辑部 v1, content-1.html L347）
+  | 'oversized-mark'
+  // 左 IBM Plex 编号竖列 + 1px 竖分隔 + 段尾右对齐 — Source（编辑部 v2, L367）
+  | 'numbered-lines'
+  // 上方居中朱印「引」楷字 + 引文居中 + 朱色破折号 byline（宋本 v1, L386）
+  | 'seal-kai'
+  // 双层边框朱字 + 引文 italic Lora + 引言尾部「— 黄庭坚」（宋本 v2, L401）
+  | 'double-frame'
+  // 顶部 SPEC. NO.07 + 短刻度条 + 引文 + 物种学名样 byline（博物 v1, L418）
+  | 'specimen-quote'
+  // 双名法风格 byline（学名 + 命名人）+ 朱字 italic 强调 + 米卡纸底（博物 v2, L437）
+  | 'binomial-attrib'
+  // 左侧巨号 32px 编号 02 + 右侧大字 sans 引文 + accent 短线 byline（包豪斯 v1, L451）
+  | 'huge-numeral'
+  // 上方实心圆 ●○ device + 大字 sans 引文 + Plex Mono — A.03 byline（包豪斯 v2, L466）
+  | 'ring-device'
 
 export type CompareVariantId =
   // 两栏卡片（当前默认行为，display:table-cell）
@@ -512,6 +546,23 @@ export type NoteVariantId =
   | 'editorial-stripe'
   // bgSoft + 10px 紧凑 + 粗体 label：调研口径栏（图注/方法论旁附小字栏）
   | 'research-dense'
+  // ── content-1.html 阶段 2 落地（4 主题 × 2 = 8 个签名骨架）
+  // 右下 ed. + Plex Mono 编辑名首字母 + 1px 短横分隔（编辑部 v1, content-1.html L214）
+  | 'ed-signoff'
+  // 段首 inline 反白胶囊「编者按」+ 紧贴正文 inline 流（编辑部 v2, L228）
+  | 'inline-label'
+  // 段内双行夹注：上下 1px border + 10px 朱色双行小字插入正文（宋本 v1, L241）
+  | 'interlinear-gloss'
+  // 左侧朱色大字「注」+ 右侧朱褐小字 14.5px 正文 flex（宋本 v2, L253）
+  | 'vermilion-gloss'
+  // 顶部 NOTE 钛字 + 虚线测量条 + ed. 2025 italic + 35mm 等宽嵌入（博物 v1, L266）
+  | 'ruler-note'
+  // 上方 italic Annotatio redactoris 拉丁文 + 编 者 按 语 间距小字（博物 v2, L281）
+  | 'latin-subhead'
+  // 左 34×34 圆形深底首字母 L + EDITOR·刘震 monospace + 正文 flex（包豪斯 v1, L293）
+  | 'initial-disc'
+  // 三角几何引号 + EDITORIAL·NOTE monospace 标题 + 17px 左缩进正文（包豪斯 v2, L307）
+  | 'geometric-mark'
 
 /**
  * highlight 骨架池。当前仅 'plain' 一档,作为 ThemeContainers.highlight 类规则下的
@@ -520,6 +571,23 @@ export type NoteVariantId =
  */
 export type HighlightVariantId =
   | 'plain'
+  // ── content-1.html 阶段 2 落地（4 主题 × 2 = 8 个签名骨架，段内关键短句强调）
+  // 关键短词外加点状下划线（编辑部 v1, content-1.html L497）
+  | 'dotted-underline'
+  // 全段 letter-spacing 加大 + bold 跟正文 flow（编辑部 v2, L510）
+  | 'tracked-emphasis'
+  // 短词朱色 + 字侧朱色单点强调（宋本 v1, L520）
+  | 'vermilion-inline'
+  // 短词每字下方圆点（中文着重号传统）（宋本 v2, L532）
+  | 'side-dots'
+  // 整段米黄色块底色 + 略大行高（博物 v1, L544）
+  | 'wash-ground'
+  // 短词外加 〔 〕 方括号 + 顶上短刻度点（博物 v2, L555）
+  | 'bracketed-tick'
+  // 短词前后实心方块旗 ▮ ▮ + 大字距（包豪斯 v1, L567）
+  | 'geometric-flag'
+  // 短词底部单划重笔（包豪斯 v2, L578）
+  | 'single-stroke'
 
 export type CodeBlockVariantId =
   // 裸 <pre><code>（默认）
@@ -579,6 +647,23 @@ export type PullQuoteVariantId =
   | 'stamp-quote'
   // 左侧深 padding + 顶部 monospace "QUOTE" kicker + 右大字（NYT Sunday pull-quote）
   | 'margin-pull'
+  // ── content-1.html 阶段 2 落地（4 主题 × 2 = 8 个签名骨架，正文中段重申）
+  // 100/400 字重对比 + 上下 1px hairline + 居中拉引（编辑部 v1, content-1.html L605）
+  | 'weight-contrast'
+  // 首字下沉大写 drop capital + 段右 Cormorant italic 拉引（编辑部 v2, L620）
+  | 'drop-capital'
+  // Cormorant Garamond italic 大字 + 朱色撇捺装饰（宋本 v1, L639）
+  | 'calligraphic'
+  // 双行夹注式拉引 + 上下朱色细线（宋本 v2, L656）
+  | 'with-gloss'
+  // 中英双语堆叠：上拉丁 italic + 下中文大字 + 中分割线（博物 v1, L674）
+  | 'bilingual-stack'
+  // 左右测量卡尺刻度 + 居中拉引 + 测量值标注样（博物 v2, L690）
+  | 'caliper-mark'
+  // 反色板块 #111 底白字 + 大号 sans 拉引 + 右下 attribution（包豪斯 v1, L707）
+  | 'inverted-plate'
+  // 网格化拉引：左编号方格 + 右大字 sans + 顶 accent 短条（包豪斯 v2, L718）
+  | 'grid-block'
 
 export type AnnouncementVariantId =
   // 默认：左 4px 色条 + soft 底 + 主色粗标题（与原 announcement 行为等价）
@@ -755,6 +840,14 @@ export const VARIANT_IDS = {
     'news-underline',
     'mook-tag',
     'slab-corner',
+    'numbered-rule',
+    'hanging-nb',
+    'vermilion-seal',
+    'paper-slip',
+    'field-tag',
+    'specimen-box',
+    'filled-square',
+    'triangle-top',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
     'classic',
@@ -764,6 +857,14 @@ export const VARIANT_IDS = {
     'frame-brackets',
     'editorial-block',
     'tilted-sticker',
+    'oversized-mark',
+    'numbered-lines',
+    'seal-kai',
+    'double-frame',
+    'specimen-quote',
+    'binomial-attrib',
+    'huge-numeral',
+    'ring-device',
   ] as const satisfies readonly QuoteVariantId[],
   compare: [
     'column-card',
@@ -809,9 +910,25 @@ export const VARIANT_IDS = {
     'smallcaps-kicker',
     'editorial-stripe',
     'research-dense',
+    'ed-signoff',
+    'inline-label',
+    'interlinear-gloss',
+    'vermilion-gloss',
+    'ruler-note',
+    'latin-subhead',
+    'initial-disc',
+    'geometric-mark',
   ] as const satisfies readonly NoteVariantId[],
   highlight: [
     'plain',
+    'dotted-underline',
+    'tracked-emphasis',
+    'vermilion-inline',
+    'side-dots',
+    'wash-ground',
+    'bracketed-tick',
+    'geometric-flag',
+    'single-stroke',
   ] as const satisfies readonly HighlightVariantId[],
   footnotes: [
     'lined',
@@ -838,6 +955,14 @@ export const VARIANT_IDS = {
     'centered-rule',
     'stamp-quote',
     'margin-pull',
+    'weight-contrast',
+    'drop-capital',
+    'calligraphic',
+    'with-gloss',
+    'bilingual-stack',
+    'caliper-mark',
+    'inverted-plate',
+    'grid-block',
   ] as const satisfies readonly PullQuoteVariantId[],
   announcement: [
     'danger-bar',

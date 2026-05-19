@@ -15,6 +15,15 @@ import dottedMargin from './dotted-margin'
 import smallcapsKicker from './smallcaps-kicker'
 import editorialStripe from './editorial-stripe'
 import researchDense from './research-dense'
+// content-1.html 阶段 2 落地 — 4 主题 × 2 签名骨架（编辑按语 / 旁批）
+import edSignoff from './ed-signoff'
+import inlineLabel from './inline-label'
+import interlinearGloss from './interlinear-gloss'
+import vermilionGloss from './vermilion-gloss'
+import rulerNote from './ruler-note'
+import latinSubhead from './latin-subhead'
+import initialDisc from './initial-disc'
+import geometricMark from './geometric-mark'
 
 export default [
   minimalCallout,
@@ -25,4 +34,12 @@ export default [
   smallcapsKicker,
   editorialStripe,
   researchDense,
+  edSignoff,
+  inlineLabel,
+  interlinearGloss,
+  vermilionGloss,
+  rulerNote,
+  latinSubhead,
+  initialDisc,
+  geometricMark,
 ]

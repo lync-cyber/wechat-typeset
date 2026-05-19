@@ -83,6 +83,14 @@ const ADMONITION_ORDER: readonly string[] = [
   'news-underline',
   'mook-tag',
   'slab-corner',
+  'numbered-rule',
+  'hanging-nb',
+  'vermilion-seal',
+  'paper-slip',
+  'field-tag',
+  'specimen-box',
+  'filled-square',
+  'triangle-top',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
@@ -92,6 +100,14 @@ const QUOTE_ORDER: readonly string[] = [
   'frame-brackets',
   'editorial-block',
   'tilted-sticker',
+  'oversized-mark',
+  'numbered-lines',
+  'seal-kai',
+  'double-frame',
+  'specimen-quote',
+  'binomial-attrib',
+  'huge-numeral',
+  'ring-device',
 ]
 const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
 const STEPS_ORDER: readonly string[] = [
@@ -125,8 +141,26 @@ const NOTE_ORDER: readonly string[] = [
   'smallcaps-kicker',
   'editorial-stripe',
   'research-dense',
+  'ed-signoff',
+  'inline-label',
+  'interlinear-gloss',
+  'vermilion-gloss',
+  'ruler-note',
+  'latin-subhead',
+  'initial-disc',
+  'geometric-mark',
 ]
-const HIGHLIGHT_ORDER: readonly string[] = ['plain']
+const HIGHLIGHT_ORDER: readonly string[] = [
+  'plain',
+  'dotted-underline',
+  'tracked-emphasis',
+  'vermilion-inline',
+  'side-dots',
+  'wash-ground',
+  'bracketed-tick',
+  'geometric-flag',
+  'single-stroke',
+]
 const FOOTNOTES_ORDER: readonly string[] = [
   'lined',
   'inline-flow',
@@ -142,6 +176,14 @@ const PULL_QUOTE_ORDER: readonly string[] = [
   'centered-rule',
   'stamp-quote',
   'margin-pull',
+  'weight-contrast',
+  'drop-capital',
+  'calligraphic',
+  'with-gloss',
+  'bilingual-stack',
+  'caliper-mark',
+  'inverted-plate',
+  'grid-block',
 ]
 const ANNOUNCEMENT_ORDER: readonly string[] = [
   'danger-bar',

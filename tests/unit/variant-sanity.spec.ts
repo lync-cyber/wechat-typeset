@@ -25,13 +25,16 @@ describe('枚举完整性', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      admonition: 20, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook) +1: slab-corner (brutalist)
-      quote: 7,
+      // admonition 20 base + 8 content-1.html 阶段 2 落地 = 28
+      admonition: 28,
+      // quote 7 base + 8 content-1.html 阶段 2 = 15
+      quote: 15,
       compare: 4,
       steps: 5,
       divider: 6,
       sectionTitle: 5,
-      pullQuote: 4,
+      // pullQuote 4 base + 8 content-1.html 阶段 2 = 12
+      pullQuote: 12,
       announcement: 4,
       tableCard: 4,
       gallery: 4,
