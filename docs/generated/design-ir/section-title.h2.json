@@ -1,0 +1,87 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 65,
+    "varIdLabel": "02·A H2 印章式"
+  },
+  "variantId": "h2",
+  "kind": "section-title",
+  "containerName": "section-title",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "vermilion-seal",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "12px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "貳",
+          "box": {
+            "width": "36px",
+            "height": "36px",
+            "background": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "color": {
+              "literal": "#f3eada",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontSize": "17px",
+            "fontWeight": "600",
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "letterSpacing": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "卷 之 二\n      山水之间",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "borderBottom": "1px solid #6b4a2a",
+        "marginBottom": "10px"
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13px",
+        "color": {
+          "literal": "#6b4a2a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "lineHeight": "1.95",
+        "margin": "0"
+      },
+      "decorations": [],
+      "slotText": "是卷所录，皆山行所见……"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;\">\n  <div style=\"display:flex;align-items:center;gap:12px;margin-bottom:8px;\">\n    <span style=\"width:36px;height:36px;background:#a03a2a;color:#f3eada;font-size:17px;font-weight:600;display:flex;align-items:center;justify-content:center;letter-spacing:0;\">貳</span>\n    <div>\n      <div style=\"font-size:11px;color:#6b4a2a;letter-spacing:.3em;margin-bottom:2px;\">卷 之 二</div>\n      <h2 style=\"font-size:22px;color:#2a1d10;margin:0;font-weight:500;letter-spacing:.05em;line-height:1;\">山水之间</h2>\n    </div>\n  </div>\n  <div style=\"border-bottom:1px solid #6b4a2a;margin-bottom:10px;\"></div>\n  <p style=\"font-size:13px;color:#6b4a2a;line-height:1.95;margin:0;\">是卷所录，皆山行所见……</p>\n</div>"
+}

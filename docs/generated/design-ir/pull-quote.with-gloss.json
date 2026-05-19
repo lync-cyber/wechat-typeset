@@ -1,0 +1,69 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·B WITH GLOSS"
+  },
+  "variantId": "with-gloss",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "interlinear-gloss",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "gap": "12px",
+        "alignItems": "flex-start"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "花 未 全 开月 未 圆",
+          "box": {
+            "fontSize": "30px",
+            "lineHeight": "1.32",
+            "color": {
+              "literal": "#2a1d10",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "fontWeight": "500",
+            "letterSpacing": ".04em",
+            "flex": "1"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "曾国藩家书有此句言事不可过盛",
+          "box": {
+            "writingMode": "vertical-rl",
+            "fontSize": "10px",
+            "lineHeight": "1.7",
+            "color": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.accentClassical"
+            },
+            "letterSpacing": ".12em",
+            "paddingTop": "6px"
+          }
+        }
+      ],
+      "bodyText": "花 未 全 开月 未 圆"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:14px 0;\">\n  <div style=\"display:flex;gap:12px;align-items:flex-start;\">\n    <p style=\"font-size:30px;line-height:1.32;color:#2a1d10;margin:0;font-weight:500;letter-spacing:.04em;flex:1;\">花 未 全 开<br>月 未 圆</p>\n    <div style=\"writing-mode:vertical-rl;font-size:10px;line-height:1.7;color:#a03a2a;letter-spacing:.12em;padding-top:6px;\">曾国藩家书有此句<br>言事不可过盛</div>\n  </div>\n</div>"
+}

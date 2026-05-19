@@ -1,0 +1,81 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 39,
+    "varIdLabel": "01·A NUMBERED LIST"
+  },
+  "variantId": "numbered-list",
+  "kind": "footnotes",
+  "containerName": "footnotes",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".2em",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "borderTop": "1px solid #0a0a0a",
+        "paddingTop": "6px",
+        "marginBottom": "6px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "NOTES"
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "12px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "1.本文所引数据皆来自国家统计局 2025 年第四季度公报。",
+          "box": {
+            "margin": "0 0 6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2.受访者均为化名，原文已交由当事人审阅。",
+          "box": {
+            "margin": "0 0 6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "3.图 3 由摄影师赵某授权使用。",
+          "box": {
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "1.本文所引数据皆来自国家统计局 2025 年第四季度公报。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;border-top:1px solid #0a0a0a;padding-top:6px;margin-bottom:6px;\">NOTES</div>\n  <div style=\"font-size:12px;line-height:1.85;color:#6b6b65;\">\n    <p style=\"margin:0 0 6px;\"><sup style=\"font-family:'Lora',serif;font-style:italic;color:#0a0a0a;margin-right:4px;\">1.</sup>本文所引数据皆来自国家统计局 2025 年第四季度公报。</p>\n    <p style=\"margin:0 0 6px;\"><sup style=\"font-family:'Lora',serif;font-style:italic;color:#0a0a0a;margin-right:4px;\">2.</sup>受访者均为化名，原文已交由当事人审阅。</p>\n    <p style=\"margin:0;\"><sup style=\"font-family:'Lora',serif;font-style:italic;color:#0a0a0a;margin-right:4px;\">3.</sup>图 3 由摄影师赵某授权使用。</p>\n  </div>\n</div>"
+}

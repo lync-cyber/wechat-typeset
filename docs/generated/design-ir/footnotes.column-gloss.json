@@ -1,0 +1,98 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 39,
+    "varIdLabel": "01·B COLUMN GLOSS"
+  },
+  "variantId": "column-gloss",
+  "kind": "footnotes",
+  "containerName": "footnotes",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "gap": "14px",
+        "borderTop": "1px solid #0a0a0a",
+        "paddingTop": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "[1]",
+          "box": {
+            "fontSize": "9px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "marginBottom": "3px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "资料整理：编辑部数据组，2025 春季。",
+          "box": {
+            "fontSize": "11.5px",
+            "lineHeight": "1.8",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "[2]",
+          "box": {
+            "fontSize": "9px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "marginBottom": "3px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "本文配图为版权资料，请勿单独转载。",
+          "box": {
+            "fontSize": "11.5px",
+            "lineHeight": "1.8",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "资料整理：编辑部数据组，2025 春季。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:14px;border-top:1px solid #0a0a0a;padding-top:8px;\">\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#6b6b65;margin-bottom:3px;\">[1]</div>\n      <p style=\"font-size:11.5px;line-height:1.8;color:#6b6b65;margin:0;\">资料整理：编辑部数据组，2025 春季。</p>\n    </div>\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#6b6b65;margin-bottom:3px;\">[2]</div>\n      <p style=\"font-size:11.5px;line-height:1.8;color:#6b6b65;margin:0;\">本文配图为版权资料，请勿单独转载。</p>\n    </div>\n  </div>\n</div>"
+}

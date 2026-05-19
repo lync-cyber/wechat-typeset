@@ -1,0 +1,98 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·A INITIAL DISC"
+  },
+  "variantId": "initial-disc",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "disc-device",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "display": "flex",
+    "gap": "12px",
+    "alignItems": "flex-start",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "badge",
+      "box": {
+        "flexShrink": "0",
+        "width": "34px",
+        "height": "34px",
+        "borderRadius": "50%",
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "color": {
+          "literal": "#efece5",
+          "tokenSuggestion": "tokens.colors.bg"
+        },
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "fontSize": "15px",
+        "fontWeight": "500",
+        "unrecognized": {
+          "font-family": "'Lora',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "L"
+    },
+    {
+      "role": "body",
+      "box": {
+        "flex": "1"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "EDITOR · 刘震",
+          "box": {
+            "fontSize": "9px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "marginBottom": "4px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "采访时长共 4 小时 22 分，原录音将于刊出三日后开放下载，仅限注册读者。",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "采访时长共 4 小时 22 分，原录音将于刊出三日后开放下载，仅限注册读者。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;display:flex;gap:12px;align-items:flex-start;\">\n  <div style=\"flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#111;color:#efece5;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:15px;font-weight:500;\">L</div>\n  <div style=\"flex:1;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;color:#454442;margin-bottom:4px;\">EDITOR · 刘震</div>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;\">采访时长共 4 小时 22 分，原录音将于刊出三日后开放下载，<span style=\"color:#c8412e;font-weight:500;\">仅限注册读者。</span></p>\n  </div>\n</div>"
+}

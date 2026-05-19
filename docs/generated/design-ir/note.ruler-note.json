@@ -1,0 +1,104 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·A RULER NOTE"
+  },
+  "variantId": "ruler-note",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "flex-end",
+        "gap": "6px",
+        "marginBottom": "6px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "NOTE",
+          "box": {
+            "fontSize": "9px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "borderBottom": "1px dashed #5e6f6a",
+            "height": "8px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "ed. 2025",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accentNaturalist"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "14.5px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "35mm f/2.8",
+          "box": {
+            "fontSize": "13px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:flex;align-items:flex-end;gap:6px;margin-bottom:6px;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.16em;\">NOTE</div>\n    <div style=\"flex:1;border-bottom:1px dashed #5e6f6a;height:8px;\"></div>\n    <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;\">ed. 2025</div>\n  </div>\n  <p style=\"font-size:14.5px;line-height:1.95;color:#1f2a2a;margin:0;\">沿途所拍照片皆为<span style=\"font-family:'IBM Plex Mono',monospace;font-size:13px;color:#5e6f6a;\">35mm f/2.8</span>定焦，未经裁切；原片存于编辑部硬盘 D-04。</p>\n</div>"
+}

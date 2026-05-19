@@ -38,11 +38,13 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     const text = c.text
     const textMuted = c.textMuted
     const accent = c.accent
-    // 三角徽：baseline 用 position:absolute top:-9px，公众号剥离 absolute。
-    // 改为在 svgSlot 里插入 inline SVG 三角，视觉效果相近，无需绝对定位。
+    // 三角徽要"贴在边框上方"而不是落在边框里——position:absolute 会被微信剥离，
+    // 改走负 margin：margin-top:-23px ≈ -(border 1 + padding-top 14 + svg 9) 的位移，
+    // 留 1px overlap 吃掉浏览器 sub-pixel 取整造成的肉眼可见缝隙；
+    // margin-bottom:14px 与之相补，使下方 ADMONITION 标签回到 padding 顶部的正常位置。
     const triangleSvg =
       `<svg width="18" height="9" viewBox="0 0 18 9" xmlns="http://www.w3.org/2000/svg" ` +
-      `style="display:block;margin-bottom:-1px;">` +
+      `style="display:block;margin-top:-23px;margin-bottom:14px;">` +
       `<polygon points="0,9 9,0 18,9" fill="${accent}"/>` +
       `<polygon points="1.4,9 9,1.4 16.6,9" fill="${bg}"/>` +
       `</svg>`

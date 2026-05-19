@@ -1,0 +1,128 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·B GRID BLOCK"
+  },
+  "variantId": "grid-block",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "8px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(3,1fr)",
+        "gap": "1px",
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "border": "1px solid #111",
+        "marginBottom": "12px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "少",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "fontSize": "28px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "aspect-ratio": "1",
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "即",
+          "box": {
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "fontSize": "28px",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "aspect-ratio": "1",
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "多",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "fontSize": "28px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "aspect-ratio": "1",
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "10px",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".22em",
+        "textAlign": "right",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:8px 0;\">\n  <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#111;border:1px solid #111;margin-bottom:12px;\">\n    <div style=\"background:#efece5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:28px;color:#111;font-weight:500;\">少</div>\n    <div style=\"background:#c8412e;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:28px;color:#efece5;font-weight:500;\">即</div>\n    <div style=\"background:#efece5;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:28px;color:#111;font-weight:500;\">多</div>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.22em;text-align:right;\">— L. MIES VAN DER ROHE</div>\n</div>"
+}

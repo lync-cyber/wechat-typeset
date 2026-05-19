@@ -1,0 +1,104 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·A OVERSIZED MARK"
+  },
+  "variantId": "oversized-mark",
+  "kind": "quote",
+  "containerName": "quote-card",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "oversized-mark",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 4px 14px",
+    "position": "relative",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "72px",
+        "lineHeight": ".8",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "fontWeight": "500",
+        "height": "32px",
+        "unrecognized": {
+          "font-family": "'Lora','Noto Serif SC',serif",
+          "overflow": "hidden"
+        }
+      },
+      "decorations": [],
+      "slotText": "\""
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "21px",
+        "lineHeight": "1.6",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "fontWeight": "500",
+        "margin": "6px 0 16px",
+        "letterSpacing": ".01em"
+      },
+      "decorations": [],
+      "slotText": "沉默是一种回答，只是我们经常听不见。"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "justifyContent": "space-between",
+        "alignItems": "baseline",
+        "borderTop": "1px solid #0a0a0a",
+        "paddingTop": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "韩少功《马桥词典》",
+          "box": {
+            "fontSize": "12px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "L. 047",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".2em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:14px 4px 14px;position:relative;\">\n  <div style=\"font-family:'Lora','Noto Serif SC',serif;font-size:72px;line-height:.8;color:#0a0a0a;font-weight:500;height:32px;overflow:hidden;\">\"</div>\n  <p style=\"font-size:21px;line-height:1.6;color:#0a0a0a;font-weight:500;margin:6px 0 16px;letter-spacing:.01em;\">沉默是一种回答，只是我们经常听不见。</p>\n  <div style=\"display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #0a0a0a;padding-top:8px;\">\n    <span style=\"font-family:'Noto Serif SC',serif;font-size:12px;color:#6b6b65;\">韩少功《马桥词典》</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.2em;\">L. 047</span>\n  </div>\n</div>"
+}

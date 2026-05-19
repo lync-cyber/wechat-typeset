@@ -1,0 +1,76 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·B INDEX CARD"
+  },
+  "variantId": "index-card",
+  "kind": "announcement",
+  "containerName": "announcement",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "54px 1fr",
+        "gap": "14px",
+        "alignItems": "start",
+        "padding": "6px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "VOL.\n      084\n      MAY '26",
+          "box": {
+            "border": "1.5px solid #0a0a0a",
+            "textAlign": "center",
+            "padding": "6px 4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "「城市的边界」专题征稿",
+          "box": {
+            "fontSize": "15px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "marginBottom": "4px",
+            "letterSpacing": ".02em"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "截稿日 6 月 18 日，单篇 4000–8000 字，详见公众号菜单。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#3a3a38",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "截稿日 6 月 18 日，单篇 4000–8000 字，详见公众号菜单。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:start;padding:6px 0;\">\n    <div style=\"border:1.5px solid #0a0a0a;text-align:center;padding:6px 4px;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;\">VOL.</div>\n      <div style=\"font-family:'Lora',serif;font-size:28px;line-height:1;font-weight:500;color:#0a0a0a;margin:2px 0;\">084</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;\">MAY '26</div>\n    </div>\n    <div>\n      <div style=\"font-size:15px;font-weight:600;color:#0a0a0a;margin-bottom:4px;letter-spacing:.02em;\">「城市的边界」专题征稿</div>\n      <p style=\"font-size:13px;line-height:1.85;color:#3a3a38;margin:0;\">截稿日 6 月 18 日，单篇 4000–8000 字，详见公众号菜单。</p>\n    </div>\n  </div>\n</div>"
+}

@@ -1,0 +1,81 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·B THUMBNAIL ROWS"
+  },
+  "variantId": "thumbnail-rows",
+  "kind": "recommend",
+  "containerName": "recommend",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "60px 1fr",
+        "gap": "12px",
+        "alignItems": "start",
+        "borderTop": "1px solid #0a0a0a",
+        "padding": "10px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "VOL.083",
+          "box": {
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "PREV ISSUE · 2026.04\n      当我们谈论故乡，究竟在谈论什么",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "60px 1fr",
+        "gap": "12px",
+        "alignItems": "start",
+        "borderTop": "1px solid #6b6b65",
+        "padding": "10px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "VOL.071",
+          "box": {
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2025.04\n      北方小镇的二十年照相史",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:60px 1fr;gap:12px;align-items:start;border-top:1px solid #0a0a0a;padding:10px 0;\">\n    <div class=\"ph-img\" style=\"aspect-ratio:1;\">VOL.083</div>\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#6b6b65;\">PREV ISSUE · 2026.04</div>\n      <div style=\"font-size:14px;font-weight:600;color:#0a0a0a;margin-top:2px;line-height:1.4;\">当我们谈论故乡，<br>究竟在谈论什么</div>\n    </div>\n  </div>\n  <div style=\"display:grid;grid-template-columns:60px 1fr;gap:12px;align-items:start;border-top:1px solid #6b6b65;padding:10px 0;\">\n    <div class=\"ph-img\" style=\"aspect-ratio:1;\">VOL.071</div>\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#6b6b65;\">2025.04</div>\n      <div style=\"font-size:14px;font-weight:600;color:#0a0a0a;margin-top:2px;line-height:1.4;\">北方小镇的二十年照相史</div>\n    </div>\n  </div>\n</div>"
+}

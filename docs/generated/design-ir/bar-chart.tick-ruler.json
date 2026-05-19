@@ -1,0 +1,73 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·B TICK RULER"
+  },
+  "variantId": "tick-ruler",
+  "kind": "bar-chart",
+  "containerName": "bar-chart",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr",
+        "gap": "10px",
+        "fontSize": "12px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "海拔 2200m",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "海拔 3000m",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "海拔 3800m",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "9px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".16em",
+        "marginTop": "8px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr;gap:10px;font-size:12px;color:#1f2a2a;\">\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.14em;\">海拔 2200m</div>\n      <div style=\"position:relative;height:14px;margin-top:4px;\">\n        <div style=\"position:absolute;left:0;top:6px;height:2px;width:74%;background:#8b4a3a;\"></div>\n        <div style=\"position:absolute;left:0;top:0;height:14px;width:100%;display:flex;justify-content:space-between;\">\n          <span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span>\n        </div>\n      </div>\n    </div>\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.14em;\">海拔 3000m</div>\n      <div style=\"position:relative;height:14px;margin-top:4px;\">\n        <div style=\"position:absolute;left:0;top:6px;height:2px;width:52%;background:#8b4a3a;\"></div>\n        <div style=\"position:absolute;left:0;top:0;height:14px;width:100%;display:flex;justify-content:space-between;\">\n          <span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span>\n        </div>\n      </div>\n    </div>\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.14em;\">海拔 3800m</div>\n      <div style=\"position:relative;height:14px;margin-top:4px;\">\n        <div style=\"position:absolute;left:0;top:6px;height:2px;width:28%;background:#8b4a3a;\"></div>\n        <div style=\"position:absolute;left:0;top:0;height:14px;width:100%;display:flex;justify-content:space-between;\">\n          <span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span><span style=\"border-left:1px solid #5e6f6a;height:6px;\"></span>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.16em;margin-top:8px;\">物种丰富度指数 / Shannon-Wiener</div>\n</div>"
+}

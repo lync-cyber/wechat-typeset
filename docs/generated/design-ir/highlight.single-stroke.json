@@ -1,0 +1,54 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·B SINGLE STROKE"
+  },
+  "variantId": "single-stroke",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "single-stroke",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "前者必须解决问题",
+          "box": {
+            "color": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "fontWeight": "500",
+            "borderBottom": "2px solid #c8412e",
+            "paddingBottom": "1px"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#efece5;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:1.95;color:#111;margin:0;\">设计师与艺术家最大的不同——<span style=\"color:#c8412e;font-weight:500;border-bottom:2px solid #c8412e;padding-bottom:1px;\">前者必须解决问题</span>，而后者只需提出问题。</p>\n</div>"
+}

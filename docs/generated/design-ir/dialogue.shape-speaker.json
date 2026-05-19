@@ -1,0 +1,109 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·A SHAPE SPEAKER"
+  },
+  "variantId": "shape-speaker",
+  "kind": "dialogue",
+  "containerName": "dialogue",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "gap": "12px",
+        "alignItems": "flex-start",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "22px",
+            "height": "22px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderRadius": "50%",
+            "flexShrink": "0",
+            "marginTop": "3px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "设计的难处，从来不是想到一个好点子。",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "设计的难处，从来不是想到一个好点子。"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "gap": "12px",
+        "alignItems": "flex-start"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "22px",
+            "height": "22px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "flexShrink": "0",
+            "marginTop": "3px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "是在五十个好点子里，决定砍掉哪四十九个。",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "是在五十个好点子里，决定砍掉哪四十九个。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;\">\n    <span style=\"width:22px;height:22px;background:#111;border-radius:50%;flex-shrink:0;margin-top:3px;\"></span>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;\">设计的难处，从来不是想到一个好点子。</p>\n  </div>\n  <div style=\"display:flex;gap:12px;align-items:flex-start;\">\n    <span style=\"width:22px;height:22px;background:#c8412e;flex-shrink:0;margin-top:3px;\"></span>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;\">是在五十个好点子里，决定砍掉哪四十九个。</p>\n  </div>\n</div>"
+}

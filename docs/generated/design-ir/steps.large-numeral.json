@@ -1,0 +1,196 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·A LARGE NUMERAL"
+  },
+  "variantId": "large-numeral",
+  "kind": "steps",
+  "containerName": "steps",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "14px",
+        "alignItems": "start",
+        "padding": "10px 0",
+        "borderTop": "1px solid #0a0a0a"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01",
+          "box": {
+            "fontSize": "32px",
+            "lineHeight": ".9",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "收集材料",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "阅读至少三篇相关研究，并整理出彼此分歧的关键点。",
+          "box": {
+            "fontSize": "13.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#3a3a38",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "阅读至少三篇相关研究，并整理出彼此分歧的关键点。"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "14px",
+        "alignItems": "start",
+        "padding": "10px 0",
+        "borderTop": "1px solid #6b6b65"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "02",
+          "box": {
+            "fontSize": "32px",
+            "lineHeight": ".9",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "提出初稿",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "在三日内完成，允许粗糙；不要试图一次成型。",
+          "box": {
+            "fontSize": "13.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#3a3a38",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "在三日内完成，允许粗糙；不要试图一次成型。"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "14px",
+        "alignItems": "start",
+        "padding": "10px 0",
+        "borderTop": "1px solid #6b6b65",
+        "borderBottom": "1px solid #0a0a0a"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "03",
+          "box": {
+            "fontSize": "32px",
+            "lineHeight": ".9",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "交付审稿",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "由两位编辑独立审读后再合议。",
+          "box": {
+            "fontSize": "13.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#3a3a38",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "由两位编辑独立审读后再合议。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #0a0a0a;\">\n    <div style=\"font-family:'Lora',serif;font-size:32px;line-height:.9;color:#0a0a0a;font-weight:500;\">01</div>\n    <div>\n      <div style=\"font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:4px;\">收集材料</div>\n      <p style=\"font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;\">阅读至少三篇相关研究，并整理出彼此分歧的关键点。</p>\n    </div>\n  </div>\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #6b6b65;\">\n    <div style=\"font-family:'Lora',serif;font-size:32px;line-height:.9;color:#0a0a0a;font-weight:500;\">02</div>\n    <div>\n      <div style=\"font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:4px;\">提出初稿</div>\n      <p style=\"font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;\">在三日内完成，允许粗糙；不要试图一次成型。</p>\n    </div>\n  </div>\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #6b6b65;border-bottom:1px solid #0a0a0a;\">\n    <div style=\"font-family:'Lora',serif;font-size:32px;line-height:.9;color:#0a0a0a;font-weight:500;\">03</div>\n    <div>\n      <div style=\"font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:4px;\">交付审稿</div>\n      <p style=\"font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;\">由两位编辑独立审读后再合议。</p>\n    </div>\n  </div>\n</div>"
+}

@@ -1,0 +1,69 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·A FIELD TAG"
+  },
+  "variantId": "field-tag",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "4px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "alignItems": "flex-end",
+        "justifyContent": "space-between",
+        "borderBottom": "1px solid #1f2a2a",
+        "paddingBottom": "6px",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "FIG. CAVE — 04\n      Notabene · 告示",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "不强行统一。",
+          "box": {
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:4px 0;\">\n  <div style=\"display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid #1f2a2a;padding-bottom:6px;margin-bottom:14px;\">\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#5e6f6a;\">FIG. CAVE — 04</div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:13px;color:#1f2a2a;margin-top:2px;\">Notabene · 告示</div>\n    </div>\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.2em;line-height:1;\">\n      <span style=\"display:inline-block;border-left:1px solid #5e6f6a;height:6px;margin-right:3px;vertical-align:bottom;\"></span>\n      <span style=\"display:inline-block;border-left:1px solid #5e6f6a;height:10px;margin-right:3px;vertical-align:bottom;\"></span>\n      <span style=\"display:inline-block;border-left:1px solid #5e6f6a;height:6px;margin-right:3px;vertical-align:bottom;\"></span>\n      <span style=\"display:inline-block;border-left:1px solid #5e6f6a;height:10px;margin-right:3px;vertical-align:bottom;\"></span>\n      <span style=\"display:inline-block;border-left:1px solid #5e6f6a;height:6px;margin-right:3px;vertical-align:bottom;\"></span>\n    </div>\n  </div>\n  <p style=\"font-size:15px;line-height:1.95;color:#1f2a2a;margin:0;\">所有物种学名以《中国植物志》最新版为准，俗名沿用调查地方言，<span style=\"color:#5e6f6a;\">不强行统一。</span></p>\n</div>"
+}

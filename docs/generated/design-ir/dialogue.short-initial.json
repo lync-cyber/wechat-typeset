@@ -1,0 +1,90 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·B SHORT INITIAL"
+  },
+  "variantId": "short-initial",
+  "kind": "dialogue",
+  "containerName": "dialogue",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "oversized-mark",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "24px 1fr",
+        "gap": "12px",
+        "fontSize": "14.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Q.",
+          "box": {
+            "fontStyle": "italic",
+            "fontWeight": "500",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "paddingTop": "2px",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "写小说和写诗，对你而言是同一件事吗？",
+          "box": {
+            "margin": "0 0 12px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "A.",
+          "box": {
+            "fontStyle": "italic",
+            "fontWeight": "500",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "paddingTop": "2px",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "不是。诗是一束光，小说是被光照亮的房子。",
+          "box": {
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "写小说和写诗，对你而言是同一件事吗？"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:24px 1fr;gap:12px;font-size:14.5px;line-height:1.85;color:#1a1a1a;\">\n    <span style=\"font-family:'Lora',serif;font-style:italic;font-weight:500;color:#0a0a0a;padding-top:2px;\">Q.</span>\n    <p style=\"margin:0 0 12px;\">写小说和写诗，对你而言是同一件事吗？</p>\n    <span style=\"font-family:'Lora',serif;font-style:italic;font-weight:500;color:#0a0a0a;padding-top:2px;\">A.</span>\n    <p style=\"margin:0;\">不是。诗是一束光，小说是被光照亮的房子。</p>\n  </div>\n</div>"
+}

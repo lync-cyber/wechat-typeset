@@ -1,0 +1,86 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·B SIDE DOTS"
+  },
+  "variantId": "side-dots",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "vermilion-seal",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "2.1",
+        "color": {
+          "literal": "#2a1d10",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "读·",
+          "box": {
+            "unrecognized": {
+              "ruby-position": "over"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "书·",
+          "box": {
+            "unrecognized": {
+              "ruby-position": "over"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "破·",
+          "box": {
+            "unrecognized": {
+              "ruby-position": "over"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "万·",
+          "box": {
+            "unrecognized": {
+              "ruby-position": "over"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "卷·",
+          "box": {
+            "unrecognized": {
+              "ruby-position": "over"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:2.1;color:#2a1d10;margin:0;\">古人云：「<ruby style=\"ruby-position:over;\">读<rt style=\"font-size:8px;color:#a03a2a;\">·</rt></ruby><ruby style=\"ruby-position:over;\">书<rt style=\"font-size:8px;color:#a03a2a;\">·</rt></ruby><ruby style=\"ruby-position:over;\">破<rt style=\"font-size:8px;color:#a03a2a;\">·</rt></ruby><ruby style=\"ruby-position:over;\">万<rt style=\"font-size:8px;color:#a03a2a;\">·</rt></ruby><ruby style=\"ruby-position:over;\">卷<rt style=\"font-size:8px;color:#a03a2a;\">·</rt></ruby>」，今人读屏破万幅，胸中所存几何，不敢自问。</p>\n</div>"
+}

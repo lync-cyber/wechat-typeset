@@ -1,0 +1,93 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·A NUMBERED RULE"
+  },
+  "variantId": "numbered-rule",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "4px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "borderTop": "2px solid #0a0a0a",
+        "borderBottom": "1px solid #0a0a0a",
+        "padding": "14px 0 12px",
+        "marginBottom": "14px",
+        "display": "flex",
+        "justifyContent": "space-between",
+        "alignItems": "baseline"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "告　示",
+          "box": {
+            "fontSize": "13px",
+            "fontWeight": "600",
+            "letterSpacing": ".3em",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "NOTICE · N°01",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".18em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "若与各省口径不一致，以正文表注为准。",
+          "box": {
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:4px 0;\">\n  <div style=\"border-top:2px solid #0a0a0a;border-bottom:1px solid #0a0a0a;padding:14px 0 12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline;\">\n    <span style=\"font-size:13px;font-weight:600;letter-spacing:.3em;color:#0a0a0a;\">告　示</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#6b6b65;\">NOTICE · N°01</span>\n  </div>\n  <p style=\"font-size:15px;line-height:1.95;color:#1a1a1a;margin:0;\">本期所引数据均来自国家统计局 2025 年第四季度公报，<span style=\"color:#6b6b65;\">若与各省口径不一致，以正文表注为准。</span></p>\n</div>"
+}

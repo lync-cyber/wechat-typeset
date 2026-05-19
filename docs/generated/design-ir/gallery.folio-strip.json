@@ -1,0 +1,70 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·B FOLIO STRIP"
+  },
+  "variantId": "folio-strip",
+  "kind": "gallery",
+  "containerName": "gallery",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "10px",
+        "alignItems": "start",
+        "marginBottom": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "i.\n      FOLIO 211",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "山口\n      出谷口，云海在脚下。",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "10px",
+        "alignItems": "start"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "ii.\n      FOLIO 212",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "林缘\n      林缘野花，三色堇与马蹄莲共生。",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start;margin-bottom:10px;\">\n    <div>\n      <div style=\"font-family:'Lora',serif;font-size:22px;color:#1f2a2a;font-weight:500;line-height:1;\">i.</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.18em;margin-top:4px;\">FOLIO 211</div>\n    </div>\n    <div>\n      <div class=\"ph-img\" style=\"aspect-ratio:16/9;background:#d6c8a8;\">山口</div>\n      <div style=\"font-size:11px;color:#1f2a2a;margin-top:6px;line-height:1.6;\">出谷口，云海在脚下。</div>\n    </div>\n  </div>\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start;\">\n    <div>\n      <div style=\"font-family:'Lora',serif;font-size:22px;color:#1f2a2a;font-weight:500;line-height:1;\">ii.</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.18em;margin-top:4px;\">FOLIO 212</div>\n    </div>\n    <div>\n      <div class=\"ph-img\" style=\"aspect-ratio:16/9;background:#d6c8a8;\">林缘</div>\n      <div style=\"font-size:11px;color:#1f2a2a;margin-top:6px;line-height:1.6;\">林缘野花，三色堇与马蹄莲共生。</div>\n    </div>\n  </div>\n</div>"
+}

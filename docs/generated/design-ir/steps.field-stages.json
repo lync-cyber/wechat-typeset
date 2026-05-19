@@ -1,0 +1,71 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·B FIELD STAGES"
+  },
+  "variantId": "field-stages",
+  "kind": "steps",
+  "containerName": "steps",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr",
+        "gap": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "STG·I\n        germinatio\n      \n      种子萌发——温度回升至 14℃ 以上，含水率 60%。",
+          "box": {
+            "display": "grid",
+            "gridTemplateColumns": "48px 1fr",
+            "padding": "8px 0",
+            "borderTop": "1px dashed #5e6f6a",
+            "alignItems": "start"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "STG·II\n        vegetatio\n      \n      营养生长——主茎抽节，需充足光照。",
+          "box": {
+            "display": "grid",
+            "gridTemplateColumns": "48px 1fr",
+            "padding": "8px 0",
+            "borderTop": "1px dashed #5e6f6a",
+            "alignItems": "start"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "STG·III\n        floratio\n      \n      开花结实——昼夜温差 ≥ 8℃ 时最佳。",
+          "box": {
+            "display": "grid",
+            "gridTemplateColumns": "48px 1fr",
+            "padding": "8px 0",
+            "borderTop": "1px dashed #5e6f6a",
+            "borderBottom": "1px dashed #5e6f6a",
+            "alignItems": "start"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr;gap:0;\">\n    <div style=\"display:grid;grid-template-columns:48px 1fr;padding:8px 0;border-top:1px dashed #5e6f6a;align-items:start;\">\n      <div>\n        <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;\">STG·I</div>\n        <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;margin-top:1px;\">germinatio</div>\n      </div>\n      <div style=\"font-size:13.5px;line-height:1.85;color:#1f2a2a;\">种子萌发——温度回升至 14℃ 以上，含水率 60%。</div>\n    </div>\n    <div style=\"display:grid;grid-template-columns:48px 1fr;padding:8px 0;border-top:1px dashed #5e6f6a;align-items:start;\">\n      <div>\n        <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;\">STG·II</div>\n        <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;margin-top:1px;\">vegetatio</div>\n      </div>\n      <div style=\"font-size:13.5px;line-height:1.85;color:#1f2a2a;\">营养生长——主茎抽节，需充足光照。</div>\n    </div>\n    <div style=\"display:grid;grid-template-columns:48px 1fr;padding:8px 0;border-top:1px dashed #5e6f6a;border-bottom:1px dashed #5e6f6a;align-items:start;\">\n      <div>\n        <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;\">STG·III</div>\n        <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;margin-top:1px;\">floratio</div>\n      </div>\n      <div style=\"font-size:13.5px;line-height:1.85;color:#1f2a2a;\">开花结实——昼夜温差 ≥ 8℃ 时最佳。</div>\n    </div>\n  </div>\n</div>"
+}

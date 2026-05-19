@@ -1,0 +1,101 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 93,
+    "varIdLabel": "03·A H2 FOLIO HEAD"
+  },
+  "variantId": "h2-folio-head",
+  "kind": "section-title",
+  "containerName": "section-title",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "justifyContent": "space-between",
+        "alignItems": "baseline",
+        "borderTop": "1.5px solid #1f2a2a",
+        "borderBottom": "1px solid #1f2a2a",
+        "padding": "8px 0",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "CHAP. II",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "Silvicultura",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "22px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 4px",
+        "fontWeight": "500",
+        "letterSpacing": ".02em"
+      },
+      "decorations": [],
+      "slotText": "高山带的植被"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".16em",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:flex;justify-content:space-between;align-items:baseline;border-top:1.5px solid #1f2a2a;border-bottom:1px solid #1f2a2a;padding:8px 0;margin-bottom:14px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#8b4a3a;\">CHAP. II</span>\n    <span style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;\">Silvicultura</span>\n  </div>\n  <h2 style=\"font-size:22px;color:#1f2a2a;margin:0 0 4px;font-weight:500;letter-spacing:.02em;\">高山带的植被</h2>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;\">FROM 2400m TO TIMBERLINE</div>\n</div>"
+}

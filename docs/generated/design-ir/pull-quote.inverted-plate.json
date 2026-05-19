@@ -1,0 +1,77 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·A INVERTED PLATE"
+  },
+  "variantId": "inverted-plate",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "inverted-plate",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "color": {
+          "literal": "#efece5",
+          "tokenSuggestion": "tokens.colors.bg"
+        },
+        "padding": "22px 18px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "PULL · 06",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#9a968a",
+              "tokenSuggestion": "tokens.colors.border"
+            },
+            "letterSpacing": ".24em",
+            "marginBottom": "10px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "形式追随功能，而功能追随真诚。",
+          "box": {
+            "fontSize": "26px",
+            "lineHeight": "1.4",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "margin": "0",
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "形式追随功能，而功能追随真诚。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:0;\">\n  <div style=\"background:#111;color:#efece5;padding:22px 18px;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9a968a;letter-spacing:.24em;margin-bottom:10px;\">PULL · 06</div>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:26px;line-height:1.4;color:#efece5;margin:0;font-weight:500;\">形式追随功能，<br>而功能追随<span style=\"color:#c8412e;\">真诚</span>。</p>\n  </div>\n</div>"
+}

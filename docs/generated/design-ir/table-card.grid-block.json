@@ -1,0 +1,286 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·A GRID BLOCK"
+  },
+  "variantId": "grid-block",
+  "kind": "table-card",
+  "containerName": "table-card",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(3,1fr)",
+        "gap": "1px",
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "border": "1px solid #111"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "YEAR",
+          "box": {
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "8px",
+            "fontSize": "10px",
+            "letterSpacing": ".16em",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "USERS",
+          "box": {
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "8px",
+            "fontSize": "10px",
+            "letterSpacing": ".16em",
+            "fontWeight": "600",
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "GROWTH",
+          "box": {
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "8px",
+            "fontSize": "10px",
+            "letterSpacing": ".16em",
+            "fontWeight": "600",
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2022",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "14px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "12.4k",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "—",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2023",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "14px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "28.9k",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "+133%",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "textAlign": "right",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2024",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "14px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "51.2k",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "+77%",
+          "box": {
+            "background": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px 8px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "textAlign": "right",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#111;border:1px solid #111;\">\n    <div style=\"background:#111;color:#efece5;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;font-weight:600;\">YEAR</div>\n    <div style=\"background:#111;color:#efece5;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;font-weight:600;text-align:right;\">USERS</div>\n    <div style=\"background:#111;color:#efece5;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;font-weight:600;text-align:right;\">GROWTH</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'Lora',serif;font-size:14px;color:#111;\">2022</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#111;text-align:right;\">12.4k</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#454442;text-align:right;\">—</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'Lora',serif;font-size:14px;color:#111;\">2023</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#111;text-align:right;\">28.9k</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#c8412e;text-align:right;font-weight:600;\">+133%</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'Lora',serif;font-size:14px;color:#111;\">2024</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#111;text-align:right;\">51.2k</div>\n    <div style=\"background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#c8412e;text-align:right;font-weight:600;\">+77%</div>\n  </div>\n</div>"
+}

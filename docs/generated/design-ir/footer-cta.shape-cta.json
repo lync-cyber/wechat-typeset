@@ -1,0 +1,66 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·A SHAPE CTA"
+  },
+  "variantId": "shape-cta",
+  "kind": "footer-cta",
+  "containerName": "footer-cta",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr 1fr",
+        "gap": "8px",
+        "textAlign": "center"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "分享",
+          "box": {
+            "border": "1.5px solid #111",
+            "padding": "14px 0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "订阅",
+          "box": {
+            "border": "1.5px solid #111",
+            "padding": "14px 0",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "留言",
+          "box": {
+            "border": "1.5px solid #111",
+            "padding": "14px 0"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;\">\n    <div style=\"border:1.5px solid #111;padding:14px 0;\">\n      <span style=\"width:14px;height:14px;background:#111;border-radius:50%;display:inline-block;margin-bottom:6px;\"></span>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;\">分享</div>\n    </div>\n    <div style=\"border:1.5px solid #111;padding:14px 0;background:#c8412e;\">\n      <span style=\"width:14px;height:14px;background:#efece5;display:inline-block;margin-bottom:6px;\"></span>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#efece5;font-weight:600;\">订阅</div>\n    </div>\n    <div style=\"border:1.5px solid #111;padding:14px 0;\">\n      <span style=\"width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:11px solid #111;display:inline-block;margin-bottom:6px;\"></span>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;\">留言</div>\n    </div>\n  </div>\n</div>"
+}

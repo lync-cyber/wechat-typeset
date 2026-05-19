@@ -1,0 +1,113 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·B HANGING Q.A."
+  },
+  "variantId": "hanging-qa",
+  "kind": "qa-block",
+  "containerName": "qa-block",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "editor-signoff",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "32px 1fr",
+        "gap": "10px",
+        "marginBottom": "12px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Q.",
+          "box": {
+            "fontSize": "24px",
+            "fontStyle": "italic",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "lineHeight": "1",
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "我是否需要先具备写作基础才能加入这个写作社群？",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "fontWeight": "500"
+          }
+        }
+      ],
+      "bodyText": "我是否需要先具备写作基础才能加入这个写作社群？"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "32px 1fr",
+        "gap": "10px",
+        "borderTop": "1px solid #6b6b65",
+        "paddingTop": "12px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "A.",
+          "box": {
+            "fontSize": "24px",
+            "fontStyle": "italic",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "lineHeight": "1",
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "不需要。我们更欢迎尚未形成\"写作惯性\"的初学者。",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#3a3a38",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "不需要。我们更欢迎尚未形成\"写作惯性\"的初学者。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:32px 1fr;gap:10px;margin-bottom:12px;\">\n    <div style=\"font-family:'Lora',serif;font-size:24px;font-style:italic;color:#0a0a0a;line-height:1;font-weight:500;\">Q.</div>\n    <p style=\"font-size:14.5px;line-height:1.85;color:#0a0a0a;margin:0;font-weight:500;\">我是否需要先具备写作基础才能加入这个写作社群？</p>\n  </div>\n  <div style=\"display:grid;grid-template-columns:32px 1fr;gap:10px;border-top:1px solid #6b6b65;padding-top:12px;\">\n    <div style=\"font-family:'Lora',serif;font-size:24px;font-style:italic;color:#6b6b65;line-height:1;font-weight:500;\">A.</div>\n    <p style=\"font-size:14.5px;line-height:1.85;color:#3a3a38;margin:0;\">不需要。我们更欢迎尚未形成\"写作惯性\"的初学者。</p>\n  </div>\n</div>"
+}

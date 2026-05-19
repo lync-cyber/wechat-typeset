@@ -1,0 +1,76 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·B LATIN SUBHEAD"
+  },
+  "variantId": "latin-subhead",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "latin-subhead",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontStyle": "italic",
+        "fontSize": "12px",
+        "color": {
+          "literal": "#8b4a3a",
+          "tokenSuggestion": "tokens.colors.accentNaturalist"
+        },
+        "letterSpacing": ".04em",
+        "lineHeight": "1.2",
+        "unrecognized": {
+          "font-family": "'Lora',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "Annotatio redactoris"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "11px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".3em",
+        "marginTop": "1px",
+        "marginBottom": "10px",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "编 者 按 语"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "14.5px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"font-family:'Lora',serif;font-style:italic;font-size:12px;color:#8b4a3a;letter-spacing:.04em;line-height:1.2;\">Annotatio redactoris</div>\n  <div style=\"font-family:'Noto Serif SC',serif;font-size:11px;color:#5e6f6a;letter-spacing:.3em;margin-top:1px;margin-bottom:10px;\">编 者 按 语</div>\n  <p style=\"font-size:14.5px;line-height:1.95;color:#1f2a2a;margin:0;\">凡所述地名以 1953 年前旧称为准，附今名于括号中，便于读者按图索骥。</p>\n</div>"
+}

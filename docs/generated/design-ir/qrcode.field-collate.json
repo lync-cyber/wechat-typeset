@@ -1,0 +1,100 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·A FIELD COLLATE"
+  },
+  "variantId": "field-collate",
+  "kind": "qrcode",
+  "containerName": "qrcode",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 86px",
+        "gap": "14px",
+        "alignItems": "center",
+        "borderTop": "1px solid #1f2a2a",
+        "borderBottom": "1px solid #1f2a2a",
+        "padding": "14px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Codex · Subscriptio",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "订　阅　目　录",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".3em",
+            "marginTop": "2px",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "收录历年田野记录，按地、按物种、按季节检索。",
+          "box": {
+            "fontSize": "11.5px",
+            "lineHeight": "1.7",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "8px 0 0"
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "background": {
+              "literal": "repeating-conic-gradient(#1f2a2a 0% 25%,#ece4d2 25% 50%) 0/10px 10px",
+              "tokenSuggestion": null
+            },
+            "border": "1px solid #1f2a2a",
+            "position": "relative",
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        }
+      ],
+      "bodyText": "收录历年田野记录，按地、按物种、按季节检索。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 86px;gap:14px;align-items:center;border-top:1px solid #1f2a2a;border-bottom:1px solid #1f2a2a;padding:14px 0;\">\n    <div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:13px;color:#8b4a3a;\">Codex · Subscriptio</div>\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:11px;color:#5e6f6a;letter-spacing:.3em;margin-top:2px;\">订　阅　目　录</div>\n      <p style=\"font-size:11.5px;line-height:1.7;color:#1f2a2a;margin:8px 0 0;\">收录历年田野记录，按地、按物种、按季节检索。</p>\n    </div>\n    <div style=\"aspect-ratio:1;background:repeating-conic-gradient(#1f2a2a 0% 25%,#ece4d2 25% 50%) 0/10px 10px;border:1px solid #1f2a2a;position:relative;\">\n      <div style=\"position:absolute;top:-6px;left:-6px;width:14px;height:14px;border:1px solid #1f2a2a;background:#ece4d2;\"></div>\n    </div>\n  </div>\n</div>"
+}

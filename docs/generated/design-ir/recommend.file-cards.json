@@ -1,0 +1,57 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·B FILE CARDS"
+  },
+  "variantId": "file-cards",
+  "kind": "recommend",
+  "containerName": "recommend",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "gap": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "VOL.041 · 2024\n      山脉系列秦岭、横断、太行",
+          "box": {
+            "border": "1px solid #1f2a2a",
+            "padding": "8px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "VOL.038 · 2024\n      河流系列长江、雅鲁藏布",
+          "box": {
+            "border": "1px solid #1f2a2a",
+            "padding": "8px",
+            "background": {
+              "literal": "#dfd5be",
+              "tokenSuggestion": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;\">\n    <div style=\"border:1px solid #1f2a2a;padding:8px;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#8b4a3a;letter-spacing:.14em;margin-bottom:4px;\">VOL.041 · 2024</div>\n      <div style=\"font-size:12px;color:#1f2a2a;line-height:1.55;\">山脉系列<br><span style=\"color:#5e6f6a;font-size:11px;\">秦岭、横断、太行</span></div>\n    </div>\n    <div style=\"border:1px solid #1f2a2a;padding:8px;background:#dfd5be;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#8b4a3a;letter-spacing:.14em;margin-bottom:4px;\">VOL.038 · 2024</div>\n      <div style=\"font-size:12px;color:#1f2a2a;line-height:1.55;\">河流系列<br><span style=\"color:#5e6f6a;font-size:11px;\">长江、雅鲁藏布</span></div>\n    </div>\n  </div>\n</div>"
+}

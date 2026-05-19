@@ -1,0 +1,70 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·B VERMILION GLOSS"
+  },
+  "variantId": "vermilion-gloss",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "interlinear-gloss",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "gap": "10px",
+        "alignItems": "flex-start"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "注",
+          "box": {
+            "color": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.accentClassical"
+            },
+            "fontSize": "22px",
+            "fontWeight": "500",
+            "lineHeight": "1",
+            "paddingTop": "2px",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "原文\"长安\"二字，宋钞本作\"金陵\"，元刻本作\"汴梁\"，本卷从宋本，余皆见校记。",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.95",
+            "color": {
+              "literal": "#6b4a2a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0",
+            "flex": "1",
+            "fontStyle": "normal"
+          }
+        }
+      ],
+      "bodyText": "原文\"长安\"二字，宋钞本作\"金陵\"，元刻本作\"汴梁\"，本卷从宋本，余皆见校记。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;\">\n  <div style=\"display:flex;gap:10px;align-items:flex-start;\">\n    <div style=\"font-family:'Noto Serif SC',serif;color:#a03a2a;font-size:22px;font-weight:500;line-height:1;padding-top:2px;\">注</div>\n    <p style=\"font-size:14.5px;line-height:1.95;color:#6b4a2a;margin:0;flex:1;font-style:normal;\">原文\"长安\"二字，宋钞本作\"金陵\"，元刻本作\"汴梁\"，本卷从宋本，<span style=\"color:#a03a2a;\">余皆见校记。</span></p>\n  </div>\n</div>"
+}

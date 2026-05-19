@@ -1,0 +1,101 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·A HUGE NUMERAL"
+  },
+  "variantId": "huge-numeral",
+  "kind": "quote",
+  "containerName": "quote-card",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "display": "grid",
+    "gridTemplateColumns": "auto 1fr",
+    "gap": "14px",
+    "alignItems": "start",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "72px",
+        "lineHeight": ".85",
+        "color": {
+          "literal": "#c8412e",
+          "tokenSuggestion": "tokens.colors.primary"
+        },
+        "fontWeight": "400",
+        "letterSpacing": "-.04em",
+        "unrecognized": {
+          "font-family": "'Lora',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "07"
+    },
+    {
+      "role": "body",
+      "box": {
+        "paddingTop": "6px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "凡是过往，皆为序章。",
+          "box": {
+            "fontSize": "16.5px",
+            "lineHeight": "1.75",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 10px",
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "SHAKESPEARE · TEMPEST",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ],
+      "bodyText": "凡是过往，皆为序章。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;\">\n  <div style=\"font-family:'Lora',serif;font-size:72px;line-height:.85;color:#c8412e;font-weight:400;letter-spacing:-.04em;\">07</div>\n  <div style=\"padding-top:6px;\">\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:16.5px;line-height:1.75;color:#111;margin:0 0 10px;font-weight:500;\">凡是过往，皆为序章。</p>\n    <div style=\"height:1px;background:#111;margin:0 0 6px;\"></div>\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.16em;\">SHAKESPEARE · TEMPEST</div>\n  </div>\n</div>"
+}

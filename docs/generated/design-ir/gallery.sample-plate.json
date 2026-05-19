@@ -1,0 +1,65 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·A SAMPLE PLATE"
+  },
+  "variantId": "sample-plate",
+  "kind": "gallery",
+  "containerName": "gallery",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(2,1fr)",
+        "gap": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "SPEC.A\n      FIG. 1A\n      D. involucrata\n      珙桐叶背银白",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "SPEC.B\n      FIG. 1B\n      P. zhennan\n      楠木叶轮生",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "9px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".18em",
+        "borderTop": "1px dashed #5e6f6a",
+        "paddingTop": "6px",
+        "marginTop": "10px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:repeat(2,1fr);gap:10px;\">\n    <div>\n      <div class=\"ph-img\" style=\"aspect-ratio:1;background:#d6c8a8;\">SPEC.A</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.14em;margin-top:6px;\">FIG. 1A</div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;line-height:1.4;\">D. involucrata</div>\n      <div style=\"font-size:11px;color:#1f2a2a;line-height:1.5;margin-top:2px;\">珙桐叶背银白</div>\n    </div>\n    <div>\n      <div class=\"ph-img\" style=\"aspect-ratio:1;background:#d6c8a8;\">SPEC.B</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.14em;margin-top:6px;\">FIG. 1B</div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;line-height:1.4;\">P. zhennan</div>\n      <div style=\"font-size:11px;color:#1f2a2a;line-height:1.5;margin-top:2px;\">楠木叶轮生</div>\n    </div>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.18em;border-top:1px dashed #5e6f6a;padding-top:6px;margin-top:10px;\">SAMPLED: 2025.04.12 / 31.42°N 102.18°E</div>\n</div>"
+}

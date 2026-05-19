@@ -1,0 +1,125 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·B NUMBERED LINES"
+  },
+  "variantId": "numbered-lines",
+  "kind": "quote",
+  "containerName": "quote-card",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "9px",
+        "letterSpacing": ".24em",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "marginBottom": "10px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "— EXCERPT 003 —"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "24px 1fr",
+        "gap": "10px",
+        "fontSize": "18px",
+        "lineHeight": "1.75",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "paddingTop": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "我们终其一生，是为了摆脱",
+          "box": {
+            "unrecognized": {
+              "font-family": "'Lora','Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "02",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "paddingTop": "2px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "他人的期待，找到真正的自己。",
+          "box": {
+            "unrecognized": {
+              "font-family": "'Lora','Noto Serif SC',serif"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "12px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "marginTop": "14px",
+        "letterSpacing": ".06em",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "— 黑塞·《德米安》开篇"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;color:#6b6b65;margin-bottom:10px;\">— EXCERPT 003 —</div>\n  <div style=\"display:grid;grid-template-columns:24px 1fr;gap:10px;font-size:18px;line-height:1.75;color:#0a0a0a;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;padding-top:8px;\">01</span>\n    <span style=\"font-family:'Lora','Noto Serif SC',serif;\">我们终其一生，是为了摆脱</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;padding-top:2px;\">02</span>\n    <span style=\"font-family:'Lora','Noto Serif SC',serif;\">他人的期待，找到真正的自己。</span>\n  </div>\n  <div style=\"font-family:'Noto Serif SC',serif;font-size:12px;color:#6b6b65;margin-top:14px;letter-spacing:.06em;\">— 黑塞·《德米安》开篇</div>\n</div>"
+}

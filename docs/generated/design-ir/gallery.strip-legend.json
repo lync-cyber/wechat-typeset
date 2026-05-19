@@ -1,0 +1,98 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·B STRIP & LEGEND"
+  },
+  "variantId": "strip-legend",
+  "kind": "gallery",
+  "containerName": "gallery",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "editor-signoff",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(3,1fr)",
+        "gap": "4px",
+        "marginBottom": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01",
+          "box": {
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "02",
+          "box": {
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "03",
+          "box": {
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "borderTop": "1px solid #0a0a0a",
+        "paddingTop": "8px",
+        "display": "grid",
+        "gridTemplateColumns": "repeat(3,1fr)",
+        "gap": "6px",
+        "fontSize": "11px",
+        "lineHeight": "1.6",
+        "color": {
+          "literal": "#3a3a38",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01. 黎明",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "02. 正午",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "03. 暮色",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px;\">\n    <div class=\"ph-img\" style=\"aspect-ratio:1;\">01</div>\n    <div class=\"ph-img\" style=\"aspect-ratio:1;\">02</div>\n    <div class=\"ph-img\" style=\"aspect-ratio:1;\">03</div>\n  </div>\n  <div style=\"border-top:1px solid #0a0a0a;padding-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:11px;line-height:1.6;color:#3a3a38;\">\n    <span><b style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#0a0a0a;\">01.</b> 黎明</span>\n    <span><b style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#0a0a0a;\">02.</b> 正午</span>\n    <span><b style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#0a0a0a;\">03.</b> 暮色</span>\n  </div>\n</div>"
+}

@@ -1,0 +1,158 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·A SPECIMEN A/B"
+  },
+  "variantId": "specimen-ab",
+  "kind": "compare",
+  "containerName": "compare",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "gap": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Spec. A",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "borderBottom": "1px solid #1f2a2a",
+            "paddingBottom": "2px",
+            "marginBottom": "6px",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "珙桐",
+          "box": {
+            "fontSize": "13px",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "Davidia involucrata",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".1em",
+            "marginBottom": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "花苞片白如鸽，喜阴凉，海拔 1500–2200m。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.9",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "Spec. B",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "borderBottom": "1px solid #1f2a2a",
+            "paddingBottom": "2px",
+            "marginBottom": "6px",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "楠木",
+          "box": {
+            "fontSize": "13px",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "Phoebe zhennan",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".1em",
+            "marginBottom": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "常绿乔木，纹理直，材质细密，多见于川黔。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.9",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "花苞片白如鸽，喜阴凉，海拔 1500–2200m。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:14px;\">\n    <div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;border-bottom:1px solid #1f2a2a;padding-bottom:2px;margin-bottom:6px;\">Spec. A</div>\n      <div style=\"font-size:13px;color:#1f2a2a;font-weight:500;margin-bottom:4px;\">珙桐</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.1em;margin-bottom:8px;\">Davidia involucrata</div>\n      <p style=\"font-size:13px;line-height:1.9;color:#1f2a2a;margin:0;\">花苞片白如鸽，喜阴凉，海拔 1500–2200m。</p>\n    </div>\n    <div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;border-bottom:1px solid #1f2a2a;padding-bottom:2px;margin-bottom:6px;\">Spec. B</div>\n      <div style=\"font-size:13px;color:#1f2a2a;font-weight:500;margin-bottom:4px;\">楠木</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.1em;margin-bottom:8px;\">Phoebe zhennan</div>\n      <p style=\"font-size:13px;line-height:1.9;color:#1f2a2a;margin:0;\">常绿乔木，纹理直，材质细密，多见于川黔。</p>\n    </div>\n  </div>\n</div>"
+}

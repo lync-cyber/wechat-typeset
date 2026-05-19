@@ -1,0 +1,110 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·B TIMELINE ROW"
+  },
+  "variantId": "timeline-row",
+  "kind": "steps",
+  "containerName": "steps",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(4,1fr)",
+        "gap": "0",
+        "borderTop": "2px solid #0a0a0a",
+        "paddingTop": "10px",
+        "position": "relative"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "8px",
+            "height": "8px",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "8px",
+            "height": "8px",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "8px",
+            "height": "8px",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "8px",
+            "height": "8px",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "DAY 01\n      立题",
+          "box": {
+            "paddingRight": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "DAY 04\n      采访",
+          "box": {
+            "paddingRight": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "DAY 10\n      初稿",
+          "box": {
+            "paddingRight": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "DAY 18\n      发表",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid #0a0a0a;padding-top:10px;position:relative;\">\n    <div style=\"position:absolute;top:-5px;left:0;width:100%;display:flex;justify-content:space-between;\">\n      <span style=\"width:8px;height:8px;background:#0a0a0a;\"></span>\n      <span style=\"width:8px;height:8px;background:#0a0a0a;\"></span>\n      <span style=\"width:8px;height:8px;background:#0a0a0a;\"></span>\n      <span style=\"width:8px;height:8px;background:#0a0a0a;\"></span>\n    </div>\n    <div style=\"padding-right:6px;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;\">DAY 01</div>\n      <div style=\"font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;\">立题</div>\n    </div>\n    <div style=\"padding-right:6px;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;\">DAY 04</div>\n      <div style=\"font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;\">采访</div>\n    </div>\n    <div style=\"padding-right:6px;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;\">DAY 10</div>\n      <div style=\"font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;\">初稿</div>\n    </div>\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;\">DAY 18</div>\n      <div style=\"font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;\">发表</div>\n    </div>\n  </div>\n</div>"
+}

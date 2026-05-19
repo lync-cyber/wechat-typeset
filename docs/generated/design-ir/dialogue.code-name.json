@@ -1,0 +1,128 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·B CODE NAME"
+  },
+  "variantId": "code-name",
+  "kind": "dialogue",
+  "containerName": "dialogue",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "12px",
+        "marginBottom": "10px",
+        "alignItems": "start"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "A",
+          "box": {
+            "fontSize": "11px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "padding": "3px 0",
+            "textAlign": "center",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "如果非要在功能和美之间选一个？",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "如果非要在功能和美之间选一个？"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "42px 1fr",
+        "gap": "12px",
+        "alignItems": "start"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "B",
+          "box": {
+            "fontSize": "11px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "padding": "3px 0",
+            "textAlign": "center",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "我会问：你愿意一辈子用一件丑的好东西吗？",
+          "box": {
+            "fontSize": "14.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "我会问：你愿意一辈子用一件丑的好东西吗？"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:12px;margin-bottom:10px;align-items:start;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:#efece5;background:#111;padding:3px 0;text-align:center;font-weight:600;\">A</div>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;\">如果非要在功能和美之间选一个？</p>\n  </div>\n  <div style=\"display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:#efece5;background:#c8412e;padding:3px 0;text-align:center;font-weight:600;\">B</div>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;\">我会问：你愿意一辈子用一件丑的好东西吗？</p>\n  </div>\n</div>"
+}

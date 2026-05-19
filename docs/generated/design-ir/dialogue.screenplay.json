@@ -1,0 +1,90 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·A SCREENPLAY"
+  },
+  "variantId": "screenplay",
+  "kind": "dialogue",
+  "containerName": "dialogue",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "oversized-mark",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".2em",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "fontWeight": "600",
+        "marginBottom": "2px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "記者　LI Z."
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "14.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 14px"
+      },
+      "decorations": [],
+      "slotText": "那你怎么看\"乡愁\"这两个字？"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".2em",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "fontWeight": "600",
+        "marginBottom": "2px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "受訪　Y. W."
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "14.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;font-weight:600;margin-bottom:2px;\">記者　LI Z.</div>\n  <p style=\"font-size:14.5px;line-height:1.85;color:#1a1a1a;margin:0 0 14px;\">那你怎么看\"乡愁\"这两个字？</p>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;font-weight:600;margin-bottom:2px;\">受訪　Y. W.</div>\n  <p style=\"font-size:14.5px;line-height:1.85;color:#1a1a1a;margin:0;\">乡愁是地理被时间替换之后的产物。我们怀念的从来不是地方，而是再也回不去的那个自己。</p>\n</div>"
+}

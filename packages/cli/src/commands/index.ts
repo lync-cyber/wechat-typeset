@@ -26,6 +26,8 @@ import { errorCodesListCommand } from './error-codes-list'
 import { schemaGetCommand } from './schema-get'
 import { motifRenderCommand } from './motif-render'
 import { platformsListCommand } from './platforms-list'
+import { variantDiffGeometryCommand } from './variant-diff-geometry'
+import { paletteLookupTokenCommand } from './palette-lookup-token'
 import { bindDescribe, describeCommand } from './describe'
 
 const require_ = createRequire(import.meta.url)
@@ -58,6 +60,8 @@ const CANONICAL_COMMANDS: readonly AnyCommand[] = [
   schemaGetCommand,
   motifRenderCommand,
   platformsListCommand,
+  variantDiffGeometryCommand,
+  paletteLookupTokenCommand,
   describeCommand,
 ] as readonly AnyCommand[]
 

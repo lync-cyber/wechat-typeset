@@ -1,0 +1,84 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 93,
+    "varIdLabel": "03·B FOLIO BREAK"
+  },
+  "variantId": "folio-break",
+  "kind": "divider",
+  "containerName": "divider",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "textAlign": "center",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "inline-flex",
+        "alignItems": "center",
+        "gap": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "— folio —",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "12px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "028 . 029 . 030",
+          "box": {
+            "fontSize": "18px",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "letterSpacing": ".04em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "—",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "12px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:14px 0;text-align:center;\">\n  <div style=\"display:inline-flex;align-items:center;gap:10px;\">\n    <span style=\"font-family:'Lora',serif;font-style:italic;font-size:12px;color:#8b4a3a;\">— folio —</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:18px;color:#1f2a2a;font-weight:500;letter-spacing:.04em;\">028 . 029 . 030</span>\n    <span style=\"font-family:'Lora',serif;font-style:italic;font-size:12px;color:#8b4a3a;\">—</span>\n  </div>\n</div>"
+}

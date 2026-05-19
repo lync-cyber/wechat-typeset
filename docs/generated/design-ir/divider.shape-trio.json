@@ -1,0 +1,63 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·A SHAPE TRIO"
+  },
+  "variantId": "shape-trio",
+  "kind": "divider",
+  "containerName": "divider",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "textAlign": "center",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "inline-flex",
+        "alignItems": "center",
+        "gap": "18px"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "14px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderRadius": "50%",
+            "display": "inline-block"
+          }
+        },
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "14px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "display": "inline-block"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:14px 0;text-align:center;\">\n  <div style=\"display:inline-flex;align-items:center;gap:18px;\">\n    <span style=\"width:14px;height:14px;background:#111;border-radius:50%;display:inline-block;\"></span>\n    <span style=\"width:14px;height:14px;background:#c8412e;display:inline-block;\"></span>\n    <span style=\"width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:13px solid #111;display:inline-block;\"></span>\n  </div>\n</div>"
+}

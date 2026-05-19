@@ -1,0 +1,72 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·A INTERLINEAR GLOSS"
+  },
+  "variantId": "interlinear-gloss",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "interlinear-gloss",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "2",
+        "color": {
+          "literal": "#2a1d10",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "黄庭坚《寄黄几复》之颔联也",
+          "box": {
+            "display": "inline-block",
+            "fontSize": "10px",
+            "lineHeight": "1.2",
+            "color": {
+              "literal": "#6b4a2a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "padding": "0 6px",
+            "margin": "0 3px",
+            "textAlign": "center",
+            "borderTop": "1px solid #6b4a2a",
+            "borderBottom": "1px solid #6b4a2a",
+            "unrecognized": {
+              "vertical-align": "middle"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "编者每读至此，",
+          "box": {
+            "color": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.accentClassical"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:2;color:#2a1d10;margin:0;\">\n    所谓\"江湖夜雨十年灯\"<span style=\"display:inline-block;vertical-align:middle;font-size:10px;line-height:1.2;color:#6b4a2a;padding:0 6px;margin:0 3px;text-align:center;border-top:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;\">黄庭坚《寄黄几复》<br>之颔联也</span>者，<span style=\"color:#a03a2a;\">编者每读至此，</span>辄思故人。\n  </p>\n</div>"
+}

@@ -1,0 +1,103 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 39,
+    "varIdLabel": "01·A DOUBLE RULE"
+  },
+  "variantId": "double-rule",
+  "kind": "divider",
+  "containerName": "divider",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "18px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "lineHeight": "1.85",
+        "margin": "0 0 22px"
+      },
+      "decorations": [],
+      "slotText": "……前一段落结束的最后一行文字。"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "position": "relative",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "§ 02",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".3em",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "lineHeight": "1.85",
+        "margin": "22px 0 0"
+      },
+      "decorations": [],
+      "slotText": "后一段落开始的第一行文字……"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:18px 0;\">\n  <p style=\"font-size:13.5px;color:#6b6b65;line-height:1.85;margin:0 0 22px;\">……前一段落结束的最后一行文字。</p>\n  <div style=\"position:relative;display:flex;align-items:center;gap:10px;\">\n    <span style=\"flex:1;height:1px;background:#0a0a0a;\"></span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.3em;color:#0a0a0a;\">§ 02</span>\n    <span style=\"flex:1;height:1px;background:#0a0a0a;\"></span>\n  </div>\n  <p style=\"font-size:13.5px;color:#6b6b65;line-height:1.85;margin:22px 0 0;\">后一段落开始的第一行文字……</p>\n</div>"
+}

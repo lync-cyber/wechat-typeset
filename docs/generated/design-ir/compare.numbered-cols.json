@@ -1,0 +1,123 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·A NUMBERED COLS"
+  },
+  "variantId": "numbered-cols",
+  "kind": "compare",
+  "containerName": "compare",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "borderTop": "1.5px solid #0a0a0a",
+        "borderBottom": "1.5px solid #0a0a0a"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "N° 01",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "观　点 一",
+          "box": {
+            "fontSize": "13px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "4px 0 6px",
+            "letterSpacing": ".1em"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "城市的密度本身就是一种自由——人随时可以隐没在人群里。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#1a1a1a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "N° 02",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "观　点 二",
+          "box": {
+            "fontSize": "13px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "4px 0 6px",
+            "letterSpacing": ".1em"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "密度同时也是牢笼——你无处可去，因为任何角落都属于他人。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#1a1a1a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "城市的密度本身就是一种自由——人随时可以隐没在人群里。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid #0a0a0a;border-bottom:1.5px solid #0a0a0a;\">\n    <div style=\"padding:14px 12px 14px 0;border-right:1px solid #0a0a0a;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;\">N° 01</div>\n      <div style=\"font-size:13px;font-weight:600;color:#0a0a0a;margin:4px 0 6px;letter-spacing:.1em;\">观　点 一</div>\n      <p style=\"font-size:14px;line-height:1.85;color:#1a1a1a;margin:0;\">城市的密度本身就是一种自由——人随时可以隐没在人群里。</p>\n    </div>\n    <div style=\"padding:14px 0 14px 12px;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;\">N° 02</div>\n      <div style=\"font-size:13px;font-weight:600;color:#0a0a0a;margin:4px 0 6px;letter-spacing:.1em;\">观　点 二</div>\n      <p style=\"font-size:14px;line-height:1.85;color:#1a1a1a;margin:0;\">密度同时也是牢笼——你无处可去，因为任何角落都属于他人。</p>\n    </div>\n  </div>\n</div>"
+}

@@ -1,0 +1,121 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·A ASYMMETRIC GRID"
+  },
+  "variantId": "asymmetric-grid",
+  "kind": "gallery",
+  "containerName": "gallery",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "2fr 1fr",
+        "gridTemplateRows": "auto auto",
+        "gap": "6px",
+        "marginBottom": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "001",
+          "box": {
+            "background": {
+              "literal": "#9a968a",
+              "tokenSuggestion": "tokens.colors.border"
+            },
+            "unrecognized": {
+              "aspect-ratio": "auto",
+              "grid-row": "1/3"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "002",
+          "box": {
+            "background": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "003",
+          "box": {
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "unrecognized": {
+              "aspect-ratio": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(3,1fr)",
+        "gap": "6px",
+        "fontSize": "9px",
+        "letterSpacing": ".16em",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "001 · 主图",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "002 · 局部",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "003 · 强调",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto auto;gap:6px;margin-bottom:10px;\">\n    <div class=\"ph-img\" style=\"aspect-ratio:auto;grid-row:1/3;background:#9a968a;\">001</div>\n    <div class=\"ph-img\" style=\"aspect-ratio:1;background:#454442;color:#efece5;\">002</div>\n    <div class=\"ph-img\" style=\"aspect-ratio:1;background:#c8412e;color:#efece5;\">003</div>\n  </div>\n  <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#454442;\">\n    <span>001 · 主图</span><span>002 · 局部</span><span>003 · 强调</span>\n  </div>\n</div>"
+}

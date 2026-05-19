@@ -1,0 +1,52 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·B CORNER MARK"
+  },
+  "variantId": "corner-mark",
+  "kind": "qrcode",
+  "containerName": "qrcode",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "color": {
+          "literal": "#efece5",
+          "tokenSuggestion": "tokens.colors.bg"
+        },
+        "padding": "18px",
+        "display": "grid",
+        "gridTemplateColumns": "1fr 96px",
+        "gap": "14px",
+        "alignItems": "center"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "— FOLLOW —\n      关注本号\n      @ DIGEST · 2026",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"background:#111;color:#efece5;padding:18px;display:grid;grid-template-columns:1fr 96px;gap:14px;align-items:center;\">\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;color:#c8412e;font-weight:600;\">— FOLLOW —</div>\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:17px;color:#efece5;line-height:1.4;margin:6px 0;font-weight:500;\">关注本号</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9a968a;letter-spacing:.16em;\">@ DIGEST · 2026</div>\n    </div>\n    <div style=\"aspect-ratio:1;background:repeating-conic-gradient(#efece5 0% 25%,#111 25% 50%) 0/10px 10px;border:2px solid #efece5;\"></div>\n  </div>\n</div>"
+}

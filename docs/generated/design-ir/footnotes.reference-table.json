@@ -1,0 +1,90 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 93,
+    "varIdLabel": "03·A REFERENCE TABLE"
+  },
+  "variantId": "reference-table",
+  "kind": "footnotes",
+  "containerName": "footnotes",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".18em",
+        "color": {
+          "literal": "#8b4a3a",
+          "tokenSuggestion": "tokens.colors.accent"
+        },
+        "borderTop": "1px solid #1f2a2a",
+        "paddingTop": "4px",
+        "marginBottom": "6px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "REFERENCES"
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "11.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "[1]《中国植物志》第 36 卷，FRPS 1984。",
+          "box": {
+            "margin": "0 0 4px",
+            "display": "grid",
+            "gridTemplateColumns": "30px 1fr",
+            "gap": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "[2]Davis P.H., Flora of Asia, 1976.",
+          "box": {
+            "margin": "0 0 4px",
+            "display": "grid",
+            "gridTemplateColumns": "30px 1fr",
+            "gap": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "[3]本队 2024 年川西考察记录，未刊。",
+          "box": {
+            "margin": "0",
+            "display": "grid",
+            "gridTemplateColumns": "30px 1fr",
+            "gap": "6px"
+          }
+        }
+      ],
+      "bodyText": "[1]《中国植物志》第 36 卷，FRPS 1984。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#8b4a3a;border-top:1px solid #1f2a2a;padding-top:4px;margin-bottom:6px;\">REFERENCES</div>\n  <div style=\"font-size:11.5px;line-height:1.85;color:#1f2a2a;\">\n    <p style=\"margin:0 0 4px;display:grid;grid-template-columns:30px 1fr;gap:6px;\"><span style=\"font-family:'IBM Plex Mono',monospace;color:#5e6f6a;\">[1]</span><span>《中国植物志》第 36 卷，<i style=\"font-family:'Lora',serif;color:#8b4a3a;\">FRPS</i> 1984。</span></p>\n    <p style=\"margin:0 0 4px;display:grid;grid-template-columns:30px 1fr;gap:6px;\"><span style=\"font-family:'IBM Plex Mono',monospace;color:#5e6f6a;\">[2]</span><span>Davis P.H., <i style=\"font-family:'Lora',serif;color:#8b4a3a;\">Flora of Asia</i>, 1976.</span></p>\n    <p style=\"margin:0;display:grid;grid-template-columns:30px 1fr;gap:6px;\"><span style=\"font-family:'IBM Plex Mono',monospace;color:#5e6f6a;\">[3]</span><span>本队 2024 年川西考察记录，未刊。</span></p>\n  </div>\n</div>"
+}

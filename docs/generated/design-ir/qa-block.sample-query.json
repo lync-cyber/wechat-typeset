@@ -1,0 +1,89 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·A SAMPLE QUERY"
+  },
+  "variantId": "sample-query",
+  "kind": "qa-block",
+  "containerName": "qa-block",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "54px 1fr",
+        "gap": "8px",
+        "borderBottom": "1px solid #1f2a2a",
+        "paddingBottom": "10px",
+        "marginBottom": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "QUERY\n      N° 014",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "山中昼夜温差超过多少时，应当停止野外考察？",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "fontWeight": "500"
+          }
+        }
+      ],
+      "bodyText": "山中昼夜温差超过多少时，应当停止野外考察？"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "54px 1fr",
+        "gap": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "FINDING\n      obs. 014.b",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "温差 ≥ 15℃ 且海拔超过 3000m 时，应即刻撤回营地。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "温差 ≥ 15℃ 且海拔超过 3000m 时，应即刻撤回营地。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:54px 1fr;gap:8px;border-bottom:1px solid #1f2a2a;padding-bottom:10px;margin-bottom:10px;\">\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;\">QUERY</div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;\">N° 014</div>\n    </div>\n    <p style=\"font-size:14px;line-height:1.85;color:#1f2a2a;margin:0;font-weight:500;\">山中昼夜温差超过多少时，应当停止野外考察？</p>\n  </div>\n  <div style=\"display:grid;grid-template-columns:54px 1fr;gap:8px;\">\n    <div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;\">FINDING</div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;\">obs. 014.b</div>\n    </div>\n    <p style=\"font-size:14px;line-height:1.85;color:#1f2a2a;margin:0;\">温差 ≥ 15℃ 且海拔超过 3000m 时，应即刻撤回营地。</p>\n  </div>\n</div>"
+}

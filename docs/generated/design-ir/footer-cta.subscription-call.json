@@ -1,0 +1,83 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 39,
+    "varIdLabel": "01·A SUBSCRIPTION CALL"
+  },
+  "variantId": "subscription-call",
+  "kind": "footer-cta",
+  "containerName": "footer-cta",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "borderTop": "1.5px solid #0a0a0a",
+        "padding": "14px 0 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "— END OF PIECE —",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".24em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "marginBottom": "6px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "读完了。请告诉我们这一篇值不值得。",
+          "box": {
+            "fontSize": "18px",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 10px",
+            "fontWeight": "600",
+            "letterSpacing": ".02em",
+            "lineHeight": "1.4"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "A. 收藏 · 转发\n      B. 留言告诉编辑",
+          "box": {
+            "display": "flex",
+            "gap": "14px",
+            "fontSize": "13px",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "lineHeight": "1.6",
+            "borderTop": "1px solid #6b6b65",
+            "paddingTop": "10px"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"border-top:1.5px solid #0a0a0a;padding:14px 0 0;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;color:#6b6b65;margin-bottom:6px;\">— END OF PIECE —</div>\n    <h3 style=\"font-size:18px;color:#0a0a0a;margin:0 0 10px;font-weight:600;letter-spacing:.02em;line-height:1.4;\">读完了。<br>请告诉我们这一篇值不值得。</h3>\n    <div style=\"display:flex;gap:14px;font-size:13px;color:#0a0a0a;line-height:1.6;border-top:1px solid #6b6b65;padding-top:10px;\">\n      <span><b style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;\">A.</b> 收藏 · 转发</span>\n      <span><b style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;\">B.</b> 留言告诉编辑</span>\n    </div>\n  </div>\n</div>"
+}

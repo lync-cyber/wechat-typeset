@@ -1,0 +1,94 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·B SPECIMEN TAG"
+  },
+  "variantId": "specimen-tag",
+  "kind": "dialogue",
+  "containerName": "dialogue",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "borderTop": "1px dashed #1f2a2a",
+        "padding": "10px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "林　师傅\n      — forester, age 67",
+          "box": {
+            "display": "flex",
+            "justifyContent": "space-between",
+            "alignItems": "baseline",
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "树要慢着养，跟人一样，急不得。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.9",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "树要慢着养，跟人一样，急不得。"
+    },
+    {
+      "role": "body",
+      "box": {
+        "borderTop": "1px dashed #1f2a2a",
+        "borderBottom": "1px dashed #1f2a2a",
+        "padding": "10px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "访谈人\n      — author",
+          "box": {
+            "display": "flex",
+            "justifyContent": "space-between",
+            "alignItems": "baseline",
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "您指的\"慢\"，是几年？",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.9",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "您指的\"慢\"，是几年？"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"border-top:1px dashed #1f2a2a;padding:10px 0;\">\n    <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;\">\n      <span style=\"font-size:12px;color:#1f2a2a;font-weight:500;\">林　师傅</span>\n      <span style=\"font-family:'Lora',serif;font-style:italic;font-size:10px;color:#5e6f6a;\">— forester, age 67</span>\n    </div>\n    <p style=\"font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;\">树要慢着养，跟人一样，急不得。</p>\n  </div>\n  <div style=\"border-top:1px dashed #1f2a2a;border-bottom:1px dashed #1f2a2a;padding:10px 0;\">\n    <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;\">\n      <span style=\"font-size:12px;color:#8b4a3a;font-weight:500;\">访谈人</span>\n      <span style=\"font-family:'Lora',serif;font-style:italic;font-size:10px;color:#5e6f6a;\">— author</span>\n    </div>\n    <p style=\"font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;\">您指的\"慢\"，是几年？</p>\n  </div>\n</div>"
+}

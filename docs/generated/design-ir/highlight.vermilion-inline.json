@@ -1,0 +1,52 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·A VERMILION INLINE"
+  },
+  "variantId": "vermilion-inline",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "vermilion-seal",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "2",
+        "color": {
+          "literal": "#2a1d10",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "无用之用，方为大用",
+          "box": {
+            "color": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.accentClassical"
+            },
+            "fontWeight": "500"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:2;color:#2a1d10;margin:0;\">读《庄子》至「<span style=\"color:#a03a2a;font-weight:500;\">无用之用，方为大用</span>」，掩卷长思——所谓废墟者，岂非时间之结庐？</p>\n</div>"
+}

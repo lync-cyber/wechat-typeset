@@ -1,0 +1,73 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·B TRACKED EMPHASIS"
+  },
+  "variantId": "tracked-emphasis",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "tracked-emphasis",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "display": "grid",
+    "gridTemplateColumns": "24px 1fr",
+    "gap": "12px",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "paddingTop": "5px",
+        "letterSpacing": ".06em",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "¶ 12"
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "慢　性　失　眠",
+          "box": {
+            "letterSpacing": ".4em",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;display:grid;grid-template-columns:24px 1fr;gap:12px;\">\n  <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;padding-top:5px;letter-spacing:.06em;\">¶ 12</span>\n  <p style=\"font-size:15px;line-height:1.95;color:#1a1a1a;margin:0;\">城市是一种<span style=\"letter-spacing:.4em;font-weight:600;color:#0a0a0a;\">慢　性　失　眠</span>，它教会你把白昼当成余生来过，而把夜晚当作彩排。</p>\n</div>"
+}

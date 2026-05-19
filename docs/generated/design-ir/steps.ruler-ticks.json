@@ -1,0 +1,110 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·A RULER TICKS"
+  },
+  "variantId": "ruler-ticks",
+  "kind": "steps",
+  "containerName": "steps",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "alignItems": "flex-end",
+        "gap": "0",
+        "borderBottom": "1px solid #1f2a2a",
+        "paddingBottom": "4px",
+        "marginBottom": "10px"
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(4,1fr)",
+        "gap": "6px",
+        "fontSize": "10px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".16em",
+        "marginBottom": "10px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "0KM",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "30KM",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "72KM",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "120KM",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "13.5px",
+        "lineHeight": "1.9",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "0–30: 出谷至河口，林相稀疏。",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "30–72: 进入云杉带，海拔渐升。",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "72–120: 雪线以上，岩石裸露。",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:flex;align-items:flex-end;gap:0;border-bottom:1px solid #1f2a2a;padding-bottom:4px;margin-bottom:10px;\">\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;border-right:1px solid #1f2a2a;\"></span>\n  </div>\n  <div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;margin-bottom:10px;\">\n    <span>0KM</span><span>30KM</span><span>72KM</span><span>120KM</span>\n  </div>\n  <div style=\"font-family:'Noto Serif SC',serif;font-size:13.5px;line-height:1.9;color:#1f2a2a;\">\n    <div>0–30: 出谷至河口，林相稀疏。</div>\n    <div>30–72: 进入云杉带，海拔渐升。</div>\n    <div>72–120: 雪线以上，岩石裸露。</div>\n  </div>\n</div>"
+}

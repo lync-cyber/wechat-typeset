@@ -1,0 +1,77 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·B INLINE LABEL"
+  },
+  "variantId": "inline-label",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "editor-signoff",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "unrecognized": {
+          "text-indent": "0"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "编者按",
+          "box": {
+            "display": "inline-block",
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#fbfaf7",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "2px 8px",
+            "marginRight": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace",
+              "vertical-align": "1px"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "尊重当事人意愿。",
+          "box": {
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:1.95;color:#1a1a1a;margin:0;text-indent:0;\">\n    <span style=\"display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;background:#0a0a0a;color:#fbfaf7;padding:2px 8px;vertical-align:1px;margin-right:8px;\">编者按</span>\n    本期专题历时四个月，跨越三省，所有受访者均以匿名出现，<span style=\"color:#6b6b65;\">尊重当事人意愿。</span>\n  </p>\n</div>"
+}

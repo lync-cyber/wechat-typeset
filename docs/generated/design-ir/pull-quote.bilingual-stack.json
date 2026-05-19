@@ -1,0 +1,103 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·A BILINGUAL STACK"
+  },
+  "variantId": "bilingual-stack",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "bilingual-stack",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontStyle": "italic",
+        "fontSize": "13px",
+        "color": {
+          "literal": "#8b4a3a",
+          "tokenSuggestion": "tokens.colors.accentNaturalist"
+        },
+        "letterSpacing": ".04em",
+        "lineHeight": "1.5",
+        "marginBottom": "6px",
+        "unrecognized": {
+          "font-family": "'Lora',serif"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "28px",
+        "lineHeight": "1.4",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "fontWeight": "500",
+        "letterSpacing": ".02em"
+      },
+      "decorations": []
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "justifyContent": "space-between",
+        "alignItems": "baseline",
+        "marginTop": "10px",
+        "paddingTop": "6px",
+        "borderTop": "1px solid #1f2a2a"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "H. D. THOREAU",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "1862 · WALKING",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:14px 0;\">\n  <div style=\"font-family:'Lora',serif;font-style:italic;font-size:13px;color:#8b4a3a;letter-spacing:.04em;line-height:1.5;margin-bottom:6px;\">In wildness is the preservation of the world.</div>\n  <p style=\"font-size:28px;line-height:1.4;color:#1f2a2a;margin:0;font-weight:500;letter-spacing:.02em;\">荒野之中，<br>蕴藏世界。</p>\n  <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:6px;border-top:1px solid #1f2a2a;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;\">H. D. THOREAU</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;\">1862 · WALKING</span>\n  </div>\n</div>"
+}

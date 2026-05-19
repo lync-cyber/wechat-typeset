@@ -1,0 +1,59 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·A GEOMETRIC FLAG"
+  },
+  "variantId": "geometric-flag",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "\"少即是多\"",
+          "box": {
+            "position": "relative",
+            "display": "inline",
+            "padding": "1px 4px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontWeight": "500"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#efece5;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:1.95;color:#111;margin:0;\">真正的现代主义建筑，不在于<span style=\"position:relative;display:inline;padding:1px 4px;background:#111;color:#efece5;font-weight:500;\">\"少即是多\"</span>这句口号本身，而在于\"多到不能再减\"的工程克制。</p>\n</div>"
+}
