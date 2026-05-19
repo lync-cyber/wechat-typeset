@@ -7588,7 +7588,6 @@
             "card-shadow",
             "terminal",
             "dashed-border",
-            "double-border",
             "top-bottom-rule",
             "manpage-log",
             "sidenote-latex",
@@ -7607,7 +7606,6 @@
             "paper-slip",
             "field-tag",
             "specimen-box",
-            "filled-square",
             "triangle-top"
           ]
         },
@@ -7772,7 +7770,6 @@
             "price-tier",
             "three-line-table",
             "index-table",
-            "vermillion-grid",
             "matrix"
           ]
         },

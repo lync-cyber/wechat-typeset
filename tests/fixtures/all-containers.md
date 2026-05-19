@@ -360,11 +360,6 @@ dashed-border 骨架 —— 左 2px 虚线 + 浅底。
 :::
 
 <!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
-::: info // REF §2.3 variant=double-border
-double-border 骨架 —— 左 4px 双线 + 透明底。
-:::
-
-<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
 ::: danger // PITFALL variant=top-bottom-rule
 top-bottom-rule 骨架 —— 顶底 1px 实线，报纸 errata 勘误条。
 :::

@@ -13,7 +13,6 @@ import pillTag from './pill-tag'
 import cardShadow from './card-shadow'
 import terminal from './terminal'
 import dashedBorder from './dashed-border'
-import doubleBorder from './double-border'
 import topBottomRule from './top-bottom-rule'
 import manpageLog from './manpage-log'
 import sidenoteLatex from './sidenote-latex'
@@ -26,14 +25,12 @@ import newsRow from './news-row'
 import newsUnderline from './news-underline'
 import mookTag from './mook-tag'
 import slabCorner from './slab-corner'
-// content-1.html 阶段 2 落地 — 4 主题 × 2 签名骨架（t1 / t2 / t3 / t4）
 import numberedRule from './numbered-rule'
 import hangingNb from './hanging-nb'
 import vermilionSeal from './vermilion-seal'
 import paperSlip from './paper-slip'
 import fieldTag from './field-tag'
 import specimenBox from './specimen-box'
-import filledSquare from './filled-square'
 import triangleTop from './triangle-top'
 
 export default [
@@ -42,7 +39,6 @@ export default [
   cardShadow,
   terminal,
   dashedBorder,
-  doubleBorder,
   topBottomRule,
   manpageLog,
   sidenoteLatex,
@@ -61,6 +57,5 @@ export default [
   paperSlip,
   fieldTag,
   specimenBox,
-  filledSquare,
   triangleTop,
 ]

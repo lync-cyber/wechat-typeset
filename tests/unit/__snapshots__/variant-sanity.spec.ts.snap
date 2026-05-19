@@ -649,17 +649,6 @@ exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:three-line-t
 </section>"
 `;
 
-exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:vermillion-grid 1`] = `
-"<section class="container-table-card container-table-card--vermillion-grid" style="margin: 20px 0; border: 1px solid #d8d8d4; border-radius: 2px; overflow: hidden; margin: 18px 0;">
-<section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>
-<section class="container-table-card__grid" style="display:table;width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0">
-<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#2558b0;color:#fefefe;font-weight:700;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">型号</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#2558b0;color:#fefefe;font-weight:700;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">容量</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#2558b0;color:#fefefe;font-weight:700;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4">价格</span></section>
-<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">A</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">256G</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4">¥6999</span></section>
-<section class="container-table-row" style="display:table-row"><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">B</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4;border-right:1px solid #d8d8d4">512G</span><span style="display:table-cell;width:33.33%;vertical-align:middle;background-color:#fdfdfc;color:#1c1f24;font-weight:400;font-size:12px;line-height:1.5;padding:8px 10px;border-bottom:1px solid #d8d8d4">¥8999</span></section>
-</section>
-</section>"
-`;
-
 exports[`默认主题 · 每 variant 渲染片段快照 > tableCard:zebra-rows 1`] = `
 "<section class="container-table-card container-table-card--zebra-rows" style="margin: 20px 0; border-top: 1px solid #1c1f24; border-bottom: 1px solid #1c1f24; margin: 18px 0;">
 <section class="container-table-card__title" style="font-weight:700;font-size:13px;color:#1c1f24;letter-spacing:0.5px;margin-bottom:8px">规格对比</section>

@@ -69,7 +69,6 @@ const ADMONITION_ORDER: readonly string[] = [
   'card-shadow',
   'terminal',
   'dashed-border',
-  'double-border',
   'top-bottom-rule',
   'manpage-log',
   'sidenote-latex',
@@ -88,7 +87,6 @@ const ADMONITION_ORDER: readonly string[] = [
   'paper-slip',
   'field-tag',
   'specimen-box',
-  'filled-square',
   'triangle-top',
 ]
 const QUOTE_ORDER: readonly string[] = [
@@ -206,7 +204,6 @@ const TABLE_CARD_ORDER: readonly string[] = [
   'price-tier',
   'three-line-table',
   'index-table',
-  'vermillion-grid',
   'matrix',
 ]
 const GALLERY_ORDER: readonly string[] = [

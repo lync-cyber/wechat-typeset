@@ -39,7 +39,6 @@ const ADMONITION_ORDER: readonly string[] = [
   'minimal-underline',
   'terminal',
   'dashed-border',
-  'double-border',
   'top-bottom-rule',
   'manpage-log',
   'sidenote-latex',

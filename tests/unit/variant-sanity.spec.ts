@@ -26,8 +26,8 @@ describe('枚举完整性', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      // admonition 20 base + 8 content-1.html 阶段 2 = 28；退役 ticket-notch + minimal-underline → 26
-      admonition: 26,
+      // admonition 20 base + 8 content-1.html 阶段 2 = 28；退役 ticket-notch + minimal-underline + double-border + filled-square → 24
+      admonition: 24,
       // quote 7 base + 8 content-1.html 阶段 2 = 15；退役 left-bar → 14
       quote: 14,
       compare: 8, // 退役 paired-jiayi；remaining：paired-specimen / measurement-table / paired-shape / axis-diagram（均 experimental）
@@ -37,7 +37,7 @@ describe('枚举完整性', () => {
       // pullQuote 4 base + 8 content-1.html 阶段 2 = 12
       pullQuote: 12,
       announcement: 4,
-      tableCard: 8, // +3 P2-C + +1 P2-F matrix（均 experimental）
+      tableCard: 7, // +3 P2-C + +1 P2-F matrix（均 experimental）；退役 vermillion-grid → 7
       gallery: 4,
       dialogue: 5, // 退役 screenplay / shape-speaker / host-guest-seal；remaining：audio-stamp（experimental）
       qaBlock: 8, // P3.2 引入 qa-block variant 派发：numbered-faq 默认 + 7 experimental

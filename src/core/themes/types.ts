@@ -395,8 +395,6 @@ export type AdmonitionVariantId =
   | 'terminal'
   // 左 2px 虚线（"附注"铅笔感，tech-geek // NOTE）
   | 'dashed-border'
-  // 左 4px 双线（"交叉引用"manpage/RFC，tech-geek // REF）
-  | 'double-border'
   // 上下各一根 1px 实线（"勘误贴条"，tech-geek // PITFALL）
   | 'top-bottom-rule'
   // manpage 日志输出块：顶底分隔线 + 深底状态标签条（tech-geek 专属）
@@ -436,8 +434,6 @@ export type AdmonitionVariantId =
   | 'field-tag'
   // 左侧 1px border 方格 N°04 + 朱字「告示」+ 右侧正文 grid（博物 v2, L136）
   | 'specimen-box'
-  // 左 18×18 实心 accent 方块 + 大字距标题 + flex 1px 横线 + N°01（包豪斯 v1, L155）
-  | 'filled-square'
   // 顶部 -9px 三角徽 + 1px 边框 + ADMONITION·告示 monospace kicker（包豪斯 v2, L173）
   | 'triangle-top'
 
@@ -692,8 +688,6 @@ export type TableCardVariantId =
   | 'three-line-table'
   // 索引目录：顶实线 + 行间 dashed + 序号/标题/页码三栏 monospace（编辑部 01·B）
   | 'index-table'
-  // 朱角方格：全网格 1px + header primary 底 textInverse 字承载朱印感（宋本 02·A 降级）
-  | 'vermillion-grid'
   // 热力矩阵：行列标签 + 显式 width/height 色块（包豪斯 04·B，BC-4 降级方案）
   | 'matrix'
 
@@ -864,7 +858,6 @@ export const VARIANT_IDS = {
     'card-shadow',
     'terminal',
     'dashed-border',
-    'double-border',
     'top-bottom-rule',
     'manpage-log',
     'sidenote-latex',
@@ -883,7 +876,6 @@ export const VARIANT_IDS = {
     'paper-slip',
     'field-tag',
     'specimen-box',
-    'filled-square',
     'triangle-top',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
@@ -1018,7 +1010,6 @@ export const VARIANT_IDS = {
     'price-tier',
     'three-line-table',
     'index-table',
-    'vermillion-grid',
     'matrix',
   ] as const satisfies readonly TableCardVariantId[],
   gallery: [

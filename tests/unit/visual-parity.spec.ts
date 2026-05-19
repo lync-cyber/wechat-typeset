@@ -183,22 +183,6 @@ describe('visual-parity · admonition', () => {
   })
 
   // themeCompat: ['brutalist']
-  it('filled-square', () => {
-    const html = renderWith('brutalist', admonitionMd('filled-square'))
-    assertAnchors(
-      html,
-      [
-        'width: 18px',
-        'height: 18px',
-        'N° 01',
-        '告　示',
-      ],
-      2,
-      'filled-square',
-    )
-  })
-
-  // themeCompat: ['brutalist']
   it('triangle-top', () => {
     const html = renderWith('brutalist', admonitionMd('triangle-top'))
     assertAnchors(
