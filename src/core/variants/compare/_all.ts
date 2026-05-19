@@ -9,5 +9,10 @@ import columnCard from './column-card'
 import stackedRow from './stacked-row'
 import ledger from './ledger'
 import dataCard from './data-card'
+import pairedJiayi from './paired-jiayi'
+import pairedSpecimen from './paired-specimen'
+import measurementTable from './measurement-table'
+import pairedShape from './paired-shape'
+import axisDiagram from './axis-diagram'
 
-export default [columnCard, stackedRow, ledger, dataCard]
+export default [columnCard, stackedRow, ledger, dataCard, pairedJiayi, pairedSpecimen, measurementTable, pairedShape, axisDiagram]

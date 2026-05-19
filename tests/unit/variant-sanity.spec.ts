@@ -28,15 +28,15 @@ describe('枚举完整性', () => {
     expect(totals).toEqual({
       admonition: 20, // +1: news-row (data-brief) +1: news-underline (swiss-grid) +1: mook-tag (editorial-mook) +1: slab-corner (brutalist)
       quote: 7,
-      compare: 4,
+      compare: 9, // +5 P2-A：paired-jiayi / paired-specimen / measurement-table / paired-shape / axis-diagram（均 experimental）
       steps: 5,
       divider: 6,
       sectionTitle: 5,
       pullQuote: 4,
       announcement: 4,
-      tableCard: 4,
+      tableCard: 7, // +3 P2-C：three-line-table / index-table / vermillion-grid（均 experimental）
       gallery: 4,
-      dialogue: 4,
+      dialogue: 6, // +2 P2-B：screenplay / host-guest-seal（均 experimental）
     })
   })
 

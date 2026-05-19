@@ -442,6 +442,16 @@ export type CompareVariantId =
   | 'ledger'
   // 数据卡：顶 3px 主色/danger 色条 + bgSoft 底 + 大号 monospace 数字（data-brief 专属）
   | 'data-card'
+  // 甲乙朱字：实心 vs 描边 primary 色块标签（宋本批注 02·A）
+  | 'paired-jiayi'
+  // 标本卡：左右两栏 textMuted uppercase 标签 + hairline（博物笔记 03·A SPECIMEN A/B）
+  | 'paired-specimen'
+  // 测量表：双行 block + border-top/bottom + 固定宽列标签（博物笔记 03·B MEASUREMENT 降级）
+  | 'measurement-table'
+  // 圆方代号：圆环 vs 实心方块 inline-block 几何对比（包豪斯 04·A，与 qa-block 同形 variant 命名错峰）
+  | 'paired-shape'
+  // 轴线图：上轴线 SVG + 中点红圆 + 下两端正文（包豪斯 04·B AXIS DIAGRAM）
+  | 'axis-diagram'
 
 export type StepsVariantId =
   // 编号圆圈徽章（当前默认行为）
@@ -579,6 +589,12 @@ export type TableCardVariantId =
   | 'key-value'
   // 价格档位：每列独立卡 + 顶部 3px 主色条 + 居中（pricing tier comparison）
   | 'price-tier'
+  // 三线表：顶 2px + 中 1px + 下 2px 实线、无垂直线（编辑部 01·A booktabs 报刊三线）
+  | 'three-line-table'
+  // 索引目录：顶实线 + 行间 dashed + 序号/标题/页码三栏 monospace（编辑部 01·B）
+  | 'index-table'
+  // 朱角方格：全网格 1px + header primary 底 textInverse 字承载朱印感（宋本 02·A 降级）
+  | 'vermillion-grid'
 
 export type GalleryVariantId =
   // 双联：display:table 50/50（左右对比图）
@@ -599,6 +615,10 @@ export type DialogueVariantId =
   | 'name-prefix'
   // 杂志栏：左 fixed 列大写名字 + 右长答（New Yorker interview）
   | 'interview-column'
+  // 剧本式顶行：name mono 小字顶行 + 多段正文垂直堆叠（编辑部 01·A SCREENPLAY）
+  | 'screenplay'
+  // 主客名签：中文首字徽章（主=实心 / 客=描边）+ 正文（宋本批注 02·A）
+  | 'host-guest-seal'
 
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
@@ -743,6 +763,11 @@ export const VARIANT_IDS = {
     'stacked-row',
     'ledger',
     'data-card',
+    'paired-jiayi',
+    'paired-specimen',
+    'measurement-table',
+    'paired-shape',
+    'axis-diagram',
   ] as const satisfies readonly CompareVariantId[],
   steps: [
     'number-circle',
@@ -820,6 +845,9 @@ export const VARIANT_IDS = {
     'zebra-rows',
     'key-value',
     'price-tier',
+    'three-line-table',
+    'index-table',
+    'vermillion-grid',
   ] as const satisfies readonly TableCardVariantId[],
   gallery: [
     'duo',
@@ -832,6 +860,8 @@ export const VARIANT_IDS = {
     'chat-bubbles',
     'name-prefix',
     'interview-column',
+    'screenplay',
+    'host-guest-seal',
   ] as const satisfies readonly DialogueVariantId[],
 }
 

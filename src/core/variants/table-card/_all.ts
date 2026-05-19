@@ -9,5 +9,8 @@ import ruleGrid from './rule-grid'
 import zebraRows from './zebra-rows'
 import keyValue from './key-value'
 import priceTier from './price-tier'
+import threeLineTable from './three-line-table'
+import indexTable from './index-table'
+import vermillionGrid from './vermillion-grid'
 
-export default [ruleGrid, zebraRows, keyValue, priceTier]
+export default [ruleGrid, zebraRows, keyValue, priceTier, threeLineTable, indexTable, vermillionGrid]

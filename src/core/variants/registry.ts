@@ -92,7 +92,17 @@ const QUOTE_ORDER: readonly string[] = [
   'editorial-block',
   'tilted-sticker',
 ]
-const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
+const COMPARE_ORDER: readonly string[] = [
+  'column-card',
+  'stacked-row',
+  'ledger',
+  'data-card',
+  'paired-jiayi',
+  'paired-specimen',
+  'measurement-table',
+  'paired-shape',
+  'axis-diagram',
+]
 const STEPS_ORDER: readonly string[] = [
   'number-circle',
   'ribbon-chain',
@@ -152,6 +162,9 @@ const TABLE_CARD_ORDER: readonly string[] = [
   'zebra-rows',
   'key-value',
   'price-tier',
+  'three-line-table',
+  'index-table',
+  'vermillion-grid',
 ]
 const GALLERY_ORDER: readonly string[] = [
   'duo',
@@ -164,6 +177,8 @@ const DIALOGUE_ORDER: readonly string[] = [
   'chat-bubbles',
   'name-prefix',
   'interview-column',
+  'screenplay',
+  'host-guest-seal',
 ]
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {

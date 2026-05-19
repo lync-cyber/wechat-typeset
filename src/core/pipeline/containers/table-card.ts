@@ -178,6 +178,12 @@ export const tableRowContainer: ContainerRenderer = {
         return renderKeyValueRow(ctx, cells, isHeader)
       case 'price-tier':
         return renderPriceTierRow(ctx, cells, isHeader, bodyIdx, top.highlightCols)
+      case 'three-line-table':
+        return renderThreeLineRow(ctx, cells, isHeader)
+      case 'index-table':
+        return renderIndexTableRow(ctx, cells, isHeader)
+      case 'vermillion-grid':
+        return renderVermillionGridRow(ctx, cells, isHeader)
       case 'rule-grid':
       default:
         return renderRuleGridRow(ctx, cells, isHeader)
@@ -382,6 +388,132 @@ function renderPriceTierRow(
         `padding:${padY} 8px`,
         borderTop,
         `border-bottom:1px solid ${c.border}`,
+      ]
+        .filter(Boolean)
+        .join(';')
+      return `<span style="${cellCSS}">${escText(cell)}</span>`
+    })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderThreeLineRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const n = cells.length || 1
+  const w = (100 / n).toFixed(2)
+  const rowCSS = 'display:table-row'
+  // header 行下方 1px 实线；body 行无任何水平/垂直分隔——纯三线骨架
+  const color = isHeader ? c.textMuted : c.text
+  const weight = isHeader ? 600 : 400
+  const fontSize = isHeader ? '11px' : '13px'
+  const letterSpacing = isHeader ? '0.08em' : 'normal'
+  const textTransform = isHeader ? 'uppercase' : 'none'
+  const cellHtml = cells
+    .map((cell) => {
+      const cellCSS = [
+        'display:table-cell',
+        `width:${w}%`,
+        'vertical-align:middle',
+        `color:${color}`,
+        `font-weight:${weight}`,
+        `font-size:${fontSize}`,
+        `letter-spacing:${letterSpacing}`,
+        `text-transform:${textTransform}`,
+        'line-height:1.5',
+        'padding:10px 12px',
+        isHeader ? `border-bottom:1px solid ${c.text}` : '',
+      ]
+        .filter(Boolean)
+        .join(';')
+      return `<span style="${cellCSS}">${escText(cell)}</span>`
+    })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderIndexTableRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const n = cells.length || 1
+  const w = (100 / n).toFixed(2)
+  const rowCSS = 'display:table-row'
+  // header 行：小号全大写 + 下方 1px 实线
+  // body 行：行间 dashed 分隔；按列索引区分 monospace（i==0,2）/ 正常（i==1）
+  const headerWeight = 600
+  const cellHtml = cells
+    .map((cell, i) => {
+      const isMonoCol = i === 0 || i === n - 1
+      const isLastCol = i === cells.length - 1
+      const bg = 'transparent'
+      const color = isHeader ? c.textMuted : isMonoCol ? c.textMuted : c.text
+      const weight = isHeader ? headerWeight : isMonoCol ? 400 : 400
+      const fontSize = isHeader ? '11px' : isMonoCol ? '12px' : '13px'
+      const fontFamily = !isHeader && isMonoCol ? 'font-family:Menlo,Monaco,monospace' : ''
+      const textAlign = !isHeader && isLastCol ? 'text-align:right' : 'text-align:left'
+      const borderBottom = isHeader
+        ? `border-bottom:1px solid ${c.text}`
+        : `border-bottom:1px dashed ${c.border}`
+      const cellCSS = [
+        'display:table-cell',
+        `width:${w}%`,
+        'vertical-align:middle',
+        `background-color:${bg}`,
+        `color:${color}`,
+        `font-weight:${weight}`,
+        `font-size:${fontSize}`,
+        fontFamily,
+        isHeader ? 'letter-spacing:0.08em' : '',
+        isHeader ? 'text-transform:uppercase' : '',
+        textAlign,
+        'line-height:1.5',
+        'padding:10px 12px',
+        borderBottom,
+      ]
+        .filter(Boolean)
+        .join(';')
+      return `<span style="${cellCSS}">${escText(cell)}</span>`
+    })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderVermillionGridRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const n = cells.length || 1
+  const w = (100 / n).toFixed(2)
+  const rowCSS = 'display:table-row'
+  // header 行：primary 底色 + textInverse 字色（朱印感降级实现）
+  // body 行：全网格 1px solid border，小号字
+  const bg = isHeader ? c.primary : c.bg
+  const color = isHeader ? c.textInverse : c.text
+  const weight = isHeader ? 700 : 400
+  const fontSize = isHeader ? '12px' : '12px'
+  const cellHtml = cells
+    .map((cell, i) => {
+      const isLastCol = i === cells.length - 1
+      const cellCSS = [
+        'display:table-cell',
+        `width:${w}%`,
+        'vertical-align:middle',
+        `background-color:${bg}`,
+        `color:${color}`,
+        `font-weight:${weight}`,
+        `font-size:${fontSize}`,
+        'line-height:1.5',
+        'padding:8px 10px',
+        `border-bottom:1px solid ${c.border}`,
+        isLastCol ? '' : `border-right:1px solid ${c.border}`,
       ]
         .filter(Boolean)
         .join(';')

@@ -77,6 +77,10 @@ export const dialogueTurnContainer: ContainerRenderer = {
         return renderNamePrefixOpen(ctx, name)
       case 'interview-column':
         return renderInterviewColumnOpen(ctx, name, role)
+      case 'screenplay':
+        return renderScreenplayOpen(ctx, name)
+      case 'host-guest-seal':
+        return renderHostGuestSealOpen(ctx, name, role)
       case 'qa-rows':
       default:
         return renderQARowOpen(ctx, name, role, idx)
@@ -92,6 +96,10 @@ export const dialogueTurnContainer: ContainerRenderer = {
         return renderNamePrefixClose()
       case 'interview-column':
         return renderInterviewColumnClose()
+      case 'screenplay':
+        return renderScreenplayClose()
+      case 'host-guest-seal':
+        return renderHostGuestSealClose()
       case 'qa-rows':
       default:
         return renderQARowClose()
@@ -376,4 +384,105 @@ function renderInterviewColumnOpen(
 
 function renderInterviewColumnClose(): string {
   return '</span></span></section>\n'
+}
+
+// ============================================================
+// screenplay · 剧本式顶行小标签
+// ============================================================
+
+function renderScreenplayOpen(ctx: ContainerRenderContext, name: string): string {
+  const c = ctx.tokens.colors
+  const sectionCSS = 'display:block;margin-top:14px'
+  // monospace 等宽关键字在公众号客户端有兜底，不依赖具体字体
+  const labelCSS = [
+    'display:block',
+    'font-family:Menlo,Monaco,monospace',
+    'font-size:10px',
+    'letter-spacing:0.2em',
+    'text-transform:uppercase',
+    `color:${c.textMuted}`,
+    'margin-bottom:4px',
+  ].join(';')
+  const bodyCSS = [`display:block`, `color:${c.text}`, 'line-height:1.7'].join(';')
+  const labelHtml = name ? `<span style="${labelCSS}">${escText(name)}</span>` : ''
+  return (
+    `<section class="container-dialogue-turn" style="${sectionCSS}">` +
+    labelHtml +
+    `<span style="${bodyCSS}">`
+  )
+}
+
+function renderScreenplayClose(): string {
+  return '</span></section>\n'
+}
+
+// ============================================================
+// host-guest-seal · 主客名签 朱印徽章
+// ============================================================
+
+// role 含"主/主持/Host/host/Q/q" → 主持人（实心徽章）；其余 → 嘉宾（描边徽章）
+function inferIsHost(role: string): boolean {
+  return /主|主持|[Hh]ost|[Qq]/.test(role.trim())
+}
+
+// 中文首字作徽章；英文 name 降级为首字母大写
+function sealChar(name: string): string {
+  if (!name) return '?'
+  const first = name.trim().slice(0, 1)
+  return /[一-鿿㐀-䶿]/.test(first) ? first : first.toUpperCase()
+}
+
+function renderHostGuestSealOpen(
+  ctx: ContainerRenderContext,
+  name: string,
+  role: string,
+): string {
+  const c = ctx.tokens.colors
+  const isHost = inferIsHost(role)
+  const char = sealChar(name)
+  const rowCSS = 'display:block;margin-top:12px'
+  const sealCSS = isHost
+    ? [
+        'display:inline-block',
+        'width:22px',
+        'height:22px',
+        'line-height:22px',
+        'text-align:center',
+        'vertical-align:top',
+        'font-size:12px',
+        'font-weight:700',
+        `background-color:${c.primary}`,
+        `color:${c.textInverse}`,
+      ].join(';')
+    : [
+        'display:inline-block',
+        'width:22px',
+        'height:22px',
+        'line-height:20px',
+        'text-align:center',
+        'vertical-align:top',
+        'font-size:12px',
+        'font-weight:700',
+        'background-color:transparent',
+        `border:1px solid ${c.primary}`,
+        `color:${c.primary}`,
+      ].join(';')
+  const bodyCSS = [
+    'display:inline-block',
+    'vertical-align:top',
+    'margin-left:10px',
+    'max-width:calc(100% - 36px)',
+    `color:${c.text}`,
+    'font-size:14px',
+    'line-height:1.7',
+  ].join(';')
+  return (
+    `<section class="container-dialogue-turn" style="${rowCSS}">` +
+    `<span style="${sealCSS}">${escText(char)}</span>` +
+    `<span style="${bodyCSS}">`
+  )
+}
+
+function renderHostGuestSealClose(): string {
+  return '</span></section>\n'
 }

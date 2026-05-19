@@ -7612,7 +7612,12 @@
             "column-card",
             "stacked-row",
             "ledger",
-            "data-card"
+            "data-card",
+            "paired-jiayi",
+            "paired-specimen",
+            "measurement-table",
+            "paired-shape",
+            "axis-diagram"
           ]
         },
         "steps": {
@@ -7713,7 +7718,10 @@
             "rule-grid",
             "zebra-rows",
             "key-value",
-            "price-tier"
+            "price-tier",
+            "three-line-table",
+            "index-table",
+            "vermillion-grid"
           ]
         },
         "gallery": {
@@ -7729,7 +7737,9 @@
             "qa-rows",
             "chat-bubbles",
             "name-prefix",
-            "interview-column"
+            "interview-column",
+            "screenplay",
+            "host-guest-seal"
           ]
         }
       },
