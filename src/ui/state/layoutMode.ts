@@ -11,3 +11,10 @@ export const MOBILE_MEDIA_QUERY =
 export function matchesMobile(): boolean {
   return window.matchMedia(MOBILE_MEDIA_QUERY).matches
 }
+
+/**
+ * ComponentStudio 在 ≥900px 启用左右双栏（编辑器 / 大预览）布局。
+ * 与 [ComponentStudio.vue] `@media (min-width: 900px)` 字面对齐——双栏时右侧已有
+ * 大预览，Source/Custom 面板内的 IsolatedPreview 冗余，按本断点条件挂载。
+ */
+export const STUDIO_SPLIT_MEDIA_QUERY = '(min-width: 900px)'

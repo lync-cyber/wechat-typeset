@@ -11,10 +11,11 @@
  * 主题列表:接 theme prop 作 "当前默认", 加几个跨题主题作可切换选项;
  * 实际跨主题选择由父组件控制(props.theme 切换), 本组件只渲染传入主题。
  */
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { render, type RenderOutput } from '../../../core/pipeline'
 import type { Theme } from '../../../core/themes/types'
 import type { UserVariant } from '../../../core/variants/userVariant'
+import type { PatchLog } from '../../../core/pipeline/platforms/types'
 import PatchInspector from './PatchInspector.vue'
 
 const props = defineProps<{
@@ -28,6 +29,14 @@ const props = defineProps<{
    * 步骤 4 引入；缺省 = 走原管线。
    */
   userVariants?: readonly UserVariant[]
+}>()
+
+const emit = defineEmits<{
+  /**
+   * 每次成功 render 后透出 patchLog 给父组件，让宽屏布局下 Source/Custom 面板的
+   * PatchInspector 复用同一份产物，免去内嵌 IsolatedPreview 的冗余。
+   */
+  (e: 'patch-log', log: PatchLog | null): void
 }>()
 
 /**
@@ -49,6 +58,9 @@ const renderedOutput = computed<RenderOutput | null>(() => {
 
 const rendered = computed<string>(() => renderedOutput.value?.html ?? '')
 const patchLog = computed(() => renderedOutput.value?.patchLog ?? null)
+
+// 把 patchLog 透出给父组件——computed 仅在被消费时求值，靠 watch immediate 主动触发首次 emit
+watch(patchLog, (log) => emit('patch-log', log), { immediate: true })
 
 const srcdoc = computed(() => {
   if (!rendered.value) return ''

@@ -456,6 +456,7 @@ defineExpose({ openSaveDialog })
         <ComponentGrid
           v-else
           :entries="currentList"
+          :theme="props.theme"
           :actions="gridActions"
           @select="onCellSelect"
           @action="onCellAction"

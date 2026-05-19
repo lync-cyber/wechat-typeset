@@ -3,12 +3,12 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。2026-05 P0 升级：ComponentStudio 全屏工作台 + 双抽屉拖宽（DrawerResizer / useDrawerWidth）让骨架 +~3kB raw / +~1.2kB gz；阈值同步上调到 575k / 216k，留 ~10kB raw / ~8kB gz 工作 headroom。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~5% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。2026-05 P0 升级：ComponentStudio 全屏工作台 + 双抽屉拖宽（DrawerResizer / useDrawerWidth）让骨架 +~3kB raw / +~1.2kB gz；阈值同步上调到 575k / 216k。2026-05 P1 Studio 多 Tab 简化：ComponentEditor 加分档引导卡（advanced-hint 段落）+ 切档 confirm（hasContent 三档内联谓词），+~0.7kB raw / +~0.15kB gz；阈值上调到 576k / 217k 给 ~7kB raw / ~6kB gz 工作 headroom。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 575000,
-      "gzipLimit": 216000,
+      "limit": 576000,
+      "gzipLimit": 217000,
       "mustNotEmbed": ["html2canvas"]
     },
     {
@@ -118,19 +118,34 @@
       "gzipLimit": 1500
     },
     {
-      "$comment": "useUserVariantLint 抽出的 lazy chunk（@codemirror/lint + lintInlineCSS/lintTemplateHTML 包装）。被 SourceModePanel / CustomModePanel 双方共享，由 vite 自动 split。",
-      "name": "user-variant-lint chunk (lazy)",
-      "prefix": "useUserVariantLint",
+      "$comment": "IsolatedPreview 单 variant 沙盒预览的 lazy chunk。被 SourceModePanel / CustomModePanel（窄屏 fallback）与 ComponentGrid（hover popover）三处共享，由 vite 自动 split；本体是 iframe shell + pipeline render 调用包装。",
+      "name": "IsolatedPreview chunk (lazy)",
+      "prefix": "IsolatedPreview",
       "ext": "js",
       "limit": 8000,
       "gzipLimit": 4000
     },
     {
-      "name": "user-variant-lint stylesheet (lazy)",
-      "prefix": "useUserVariantLint",
+      "name": "IsolatedPreview stylesheet (lazy)",
+      "prefix": "IsolatedPreview",
       "ext": "css",
       "limit": 4000,
       "gzipLimit": 1500
+    },
+    {
+      "$comment": "userVariantScaffold 的 lazy chunk —— patch / custom 档默认脚手架字面常量。SourceModePanel / CustomModePanel onMounted 时调 defaultPatchScaffold / defaultCustomScaffold 灌空草稿，让作者一进面板就有 3 行示例。被两个 panel 共享 → vite 自动 split；故意不并到 ComponentEditor 主路径里（主包预算紧），跟 panel 一起 lazy 才划算。",
+      "name": "userVariantScaffold chunk (lazy)",
+      "prefix": "userVariantScaffold",
+      "ext": "js",
+      "limit": 8000,
+      "gzipLimit": 4000
+    },
+    {
+      "name": "userVariantScaffold stylesheet (lazy)",
+      "prefix": "userVariantScaffold",
+      "ext": "css",
+      "limit": 2000,
+      "gzipLimit": 1000
     }
   ]
 }

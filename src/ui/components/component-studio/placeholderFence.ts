@@ -8,6 +8,7 @@
 
 import type { VariantKind as VK } from '../../../core/themes/types'
 import type { ComponentKind } from '../../../domain/components-lib'
+import { rewriteVariantInMarkdown } from './userVariantSave'
 
 export const PLACEHOLDER_FENCE_BY_KIND: Partial<Record<VK, (variantId: string) => string>> = {
   admonition: (vid) => `::: tip 标题占位 variant=${vid}\n这里是正文示例段落。\n:::\n`,
@@ -29,4 +30,42 @@ export function defaultSnippetFor(kind: ComponentKind, variantId: string): strin
   const builder = PLACEHOLDER_FENCE_BY_KIND[kind as VK]
   if (!builder) return ''
   return builder(variantId || '')
+}
+
+export interface SnippetTransition {
+  /** 编辑器下一刻应当呈现的 markdown 文本 */
+  nextSnippet: string
+  /** true 时调用方应把 lastInjected 记忆同步为 nextSnippet（仅全量重写场景） */
+  rewriteLastInjected: boolean
+}
+
+/**
+ * 作者在"分类 / 骨架"下拉之间切换时，决定 markdown 编辑区下一刻应当呈现什么。
+ *
+ * 三条分支按尊重作者输入的优先级排列：
+ *   1. markdown 空 / 仍是上次注入的脚手架 → 全量重写为新 (kind, variantId) 的默认骨架
+ *   2. 已写过 markdown + 仅 variantId 变（kind 不变） → 就地把 `variant=<旧 id>` 改写成新 id，
+ *      让右侧预览跟着切，又不覆盖作者已写的正文
+ *   3. 其它（已写过 + 切 kind / 切到 none） → 原样保留，由作者自行决定如何改写 fence 头
+ *      （跨 kind 时旧 variantId 与新 kind 的 fence 容器无关，强改会污染语义）
+ */
+export function nextSnippetOnSelectionChange(args: {
+  kind: ComponentKind
+  variantId: string
+  prevKind: ComponentKind
+  prevVariantId: string
+  current: string
+  lastInjected: string
+}): SnippetTransition {
+  const { kind, variantId, prevKind, prevVariantId, current, lastInjected } = args
+  const userHasEdited = current.trim() !== '' && current !== lastInjected
+  if (!userHasEdited) {
+    const next = defaultSnippetFor(kind, variantId)
+    return { nextSnippet: next, rewriteLastInjected: true }
+  }
+  if (kind === prevKind && variantId && prevVariantId && variantId !== prevVariantId) {
+    const rewritten = rewriteVariantInMarkdown(current, prevVariantId, variantId)
+    return { nextSnippet: rewritten, rewriteLastInjected: false }
+  }
+  return { nextSnippet: current, rewriteLastInjected: false }
 }
