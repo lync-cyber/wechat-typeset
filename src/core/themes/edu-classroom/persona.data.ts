@@ -693,7 +693,9 @@ export const spec: PersonaSpec = {
       margin: '20px 0',
       padding: '16px 18px',
       'background-color': '#f5f2ea',
-      'border-radius': '14px',
+      // P3.3：去掉课堂主题原本的 14px 大圆角——variant 派发后 numbered-faq
+      // 的视觉骨架（Q.NN 序号 + 底线分隔）属"教辅卡片"语境，圆角会冲淡严肃感
+      'border-radius': '0',
     },
   },
 

@@ -391,7 +391,7 @@
   margin: 20px 0;
   padding: 16px 18px;
   background-color: #f5f2ea;
-  border-radius: 14px;
+  border-radius: 0;
   border-top: 1px solid #c8d5c9;
   border-bottom: 1px solid #c8d5c9;
 }

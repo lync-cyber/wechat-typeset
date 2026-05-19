@@ -234,7 +234,8 @@ export const spec: PersonaSpec = {
     tableCard: 'rule-grid',       // 规则网格表格
     gallery: 'triptych',          // orphan 首采：三宫格安利
     dialogue: 'chat-bubbles',     // orphan 首采：IM 风气泡对话
-    qaBlock: 'numbered-faq',
+    // orphan 首采：包豪斯圆方代号——粉丝问答的圆环 Q 与实心方 A 几何对照,与 zine 几何拼贴语言一致
+    qaBlock: 'circle-square',
   },
 
   // 允许作者在单稿里按需切换 admonition variant（pill-tag 是默认，不重复登记）
