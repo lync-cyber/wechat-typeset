@@ -18,6 +18,7 @@ import { themeList, themeRegistry } from '../../src/core/themes'
 const defaultTheme = themeRegistry.default
 import { VARIANT_IDS } from '../../src/core/themes/types'
 import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
+import { __setTableCardWarnSilentForTest } from '../../src/core/pipeline/containers/table-card'
 import { CASES, isCompatBlocked } from '../helpers/variantCases'
 
 describe('枚举完整性', () => {
@@ -106,9 +107,15 @@ function sliceVariantChunk(html: string, containerName: string, variantId: strin
 }
 
 describe('默认主题 · 每 variant 渲染片段快照', () => {
-  // 故意穿越 themeCompat fallback 给 default 主题取快照；静音 warn 避免日志噪声
-  beforeAll(() => __setCompatSilentForTest(true))
-  afterAll(() => __setCompatSilentForTest(false))
+  // 故意穿越 themeCompat fallback + table-card 边界列数给 default 主题取快照；静音 warn 避免日志噪声
+  beforeAll(() => {
+    __setCompatSilentForTest(true)
+    __setTableCardWarnSilentForTest(true)
+  })
+  afterAll(() => {
+    __setCompatSilentForTest(false)
+    __setTableCardWarnSilentForTest(false)
+  })
 
   for (const c of CASES) {
     it(`${c.kind}:${c.id}`, () => {

@@ -23,6 +23,7 @@
 | 文档 | 面向 | 回答什么 |
 | --- | --- | --- |
 | [theme-authoring.md](theme-authoring.md) | 新增 / fork 主题的作者 | `PersonaSpec` 合同、校验器、公共 API、showcase 审稿 7 区块 |
+| [design-to-impl-mapping.md](design-to-impl-mapping.md) | variant 实现者 / 主题作者 | 把 `wechat-typeset-container/` 设计稿翻译为 variant 代码：grid/flex 降级、tokens 映射、checklist |
 | [design/personas/](design/personas/) | 想理解既有人格的读者 | 各套主题的设计决策笔记（色板理由 / 拒绝坐标 / 签名动作） |
 | [THEME-DEBT.md](THEME-DEBT.md) | 主题作者 / Reviewer | 字号 / 对比度 / Voice 覆盖率等"已知技术债"的显式登记 |
 

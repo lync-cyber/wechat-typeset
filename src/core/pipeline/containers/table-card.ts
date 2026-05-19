@@ -9,8 +9,16 @@
  * renderXxxRow。row 级 CSS（cell border / bg / padding）都在本文件按 variantId 分派，
  * variant 文件只产 wrapperCSS。
  *
- * cells 解析：管道 `|` 分隔，trim 后入数组。price-tier 额外约定单元格首字符 `*` 标记
- * 推荐列——首行（header）记下列号，后续每行同列顶条着 accent 色。
+ * cells 解析：管道 `|` 分隔，trim 后入数组。
+ *
+ * price-tier 推荐列约定：单元格首字符 `*` 标记当列为推荐列——首行（header）扫描记下列号，
+ * 后续每行同列顶条着 accent 色。**转义**：写 `\*` 表示字面星号，不触发推荐标记
+ * （如 cell `"\*会员"` 渲染为 `"*会员"`，不进 highlightCols）。这是为了允许真实数据
+ * 含 `*` 字面（如脚注引用、注解符号）。
+ *
+ * key-value 列数约定：必须 2 列。非 header 行 cells.length ≠ 2 时按 dev warn 提示
+ * （生产渲染仍走 fallback：少列补空、多列截断），不阻断；warn 去重，测试可静音
+ * （__setTableCardWarnSilentForTest）。
  *
  * markdown-it-container 模式：tableRowContainer.open 一次性产出完整 row HTML（含 cells），
  * close=''。这样 body 被吞、attrs 全权决定渲染——同 kpi-item / timeline-item 模式。
@@ -42,6 +50,43 @@ const TABLE_CARD_STACK: TableCardStackEntry[] = []
 function parseCells(raw: string | undefined): string[] {
   if (!raw) return []
   return raw.split('|').map((s) => s.trim())
+}
+
+/**
+ * price-tier 推荐列前缀解读。
+ *   - `*xxx`   → { recommend: true,  text: 'xxx' }  推荐列，渲染时剥掉星号
+ *   - `\*xxx`  → { recommend: false, text: '*xxx' } 字面星号转义
+ *   - 其它     → { recommend: false, text: 原值 }
+ */
+function interpretStarPrefix(raw: string): { recommend: boolean; text: string } {
+  if (raw.startsWith('\\*')) return { recommend: false, text: raw.slice(1) }
+  if (raw.startsWith('*')) return { recommend: true, text: raw.slice(1).trim() }
+  return { recommend: false, text: raw }
+}
+
+// ─────────────────────────────────────────────────────────────
+// dev warn：cells 列数 / 形状不合约定时一次性提示，不阻断渲染
+// 仿 themeCompatGuard：(variantId, kind) 去重；测试钩子可静音。
+// ─────────────────────────────────────────────────────────────
+
+const warnedShapes = new Set<string>()
+let warnSilent = false
+
+function warnCellShape(variantId: string, kind: string, msg: string): void {
+  if (warnSilent) return
+  const key = `${variantId}::${kind}`
+  if (warnedShapes.has(key)) return
+  warnedShapes.add(key)
+  console.warn(`[wechat-typeset] table-card[${variantId}] ${msg}`)
+}
+
+/**
+ * 测试钩子：静音 warn 输出。table-card variant 全矩阵 / 快照 spec 会刻意穿越
+ * 异常列数 / 转义边界（warn 路径正是被测对象），生产期 warn 在测试日志里变成
+ * 数百行噪声。spec 在 beforeAll 打开、afterAll 关掉。生产代码勿用。
+ */
+export function __setTableCardWarnSilentForTest(v: boolean): void {
+  warnSilent = v
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -115,10 +160,10 @@ export const tableRowContainer: ContainerRenderer = {
     const cells = parseCells(ctx.attrs.cells)
     if (top.rowCount === 0) {
       top.columnsCount = cells.length
-      // price-tier：首行扫描 `*` 前缀确定推荐列；后续行复用
+      // price-tier：首行扫描 `*` 前缀确定推荐列（`\*` 转义不算）；后续行复用
       if (top.variantId === 'price-tier') {
         cells.forEach((cell, i) => {
-          if (cell.startsWith('*')) top.highlightCols.add(i)
+          if (interpretStarPrefix(cell).recommend) top.highlightCols.add(i)
         })
       }
     }
@@ -145,9 +190,9 @@ export const tableRowContainer: ContainerRenderer = {
 // 4 个 row 渲染器
 // ─────────────────────────────────────────────────────────────
 
-/** 剥 price-tier 推荐列的 `*` 前缀，让渲染文本不带星号 */
+/** 剥 price-tier 推荐列的 `*` 前缀（`\*` 转义降为字面星号），让渲染文本不带星号 */
 function stripStar(s: string): string {
-  return s.startsWith('*') ? s.slice(1).trim() : s
+  return interpretStarPrefix(s).text
 }
 
 function renderRuleGridRow(
@@ -256,6 +301,13 @@ function renderKeyValueRow(
       `<section class="container-table-row" style="${rowCSS}">` +
       `<span style="${cellCSS}">${escText(headerText)}</span>` +
       `</section>\n`
+    )
+  }
+  if (cells.length !== 2) {
+    warnCellShape(
+      'key-value',
+      'row-arity',
+      `row cells.length=${cells.length}，应为 2（左 key / 右 value）；少列补空、多列截断`,
     )
   }
   const key = cells[0] ?? ''
