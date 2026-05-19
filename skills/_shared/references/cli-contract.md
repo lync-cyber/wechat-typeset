@@ -49,6 +49,7 @@ npm run cli -- describe   # 输出 { version, commands[] }
 | `validate`（**已弃用 alias**） | `{ spec }` 或 `{ md, persona? }` | 同上；spec 与 md 同时给会报错。改用 `validate spec` / `validate markdown` |
 | `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }` |
 | `annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }` |
+| `annotate apply` | `{ md, patches[] }` | `{ md, applied, skipped[] }`——把 `annotate` 输出的 patches 机械替换到 md（行号降序、检测重叠、未知容器入 skipped[]） |
 | `personas list` | — | `PersonaSummary[]` |
 | `personas get` | `{ id }` | 完整 `PersonaSpec` |
 | `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, recommendedVariantOverrides, containers[], kickers }` |
@@ -192,6 +193,28 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
 ```
 
 合法 `kind`：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
+
+### `annotate apply` 输出
+
+```json
+{
+  "md": "<新 markdown>",
+  "applied": 5,
+  "skipped": [
+    { "patch": { "line": 12, "endLine": 12, "kind": "wrap_paragraph", "container": "tip" },
+      "reason": "range overlaps a previously applied patch" }
+  ]
+}
+```
+
+`skipped[].reason` 取值：
+
+- `invalid range line=... endLine=...` —— 行号越界 / 倒置 / 非整数
+- `range overlaps a previously applied patch` —— 与已应用 patch 行范围重叠（应在筛选阶段过滤掉弱的那个）
+- `unknown container "<name>"` —— container 名拼错或未在 vocabulary 里
+- `wrap_pros_cons requires manual structure ...` —— pros/cons 不可机械应用，需 `containers snippet --name compare` 手工拼
+
+**核对**：`applied + skipped.length === patches.length`。
 
 ### `validate` 输出
 

@@ -303,6 +303,204 @@ describe('annotate', () => {
   })
 })
 
+describe('annotate apply', () => {
+  type ApplyInput = {
+    md: string
+    patches: Array<{
+      line: number
+      endLine: number
+      kind: string
+      container: string
+      variant?: string
+    }>
+  }
+  type ApplyOutput = {
+    md: string
+    applied: number
+    skipped: Array<{ patch: { container: string; kind: string }; reason: string }>
+  }
+
+  it('wrap_paragraph → ::: tip 包裹原段落', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['# 标题', '', '⚠️ 注意：草稿自动保存。'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [
+        { line: 3, endLine: 3, kind: 'wrap_paragraph', container: 'warning' },
+      ],
+    })
+    expect(out.applied).toBe(1)
+    expect(out.skipped).toEqual([])
+    expect(out.md).toContain('::: warning')
+    expect(out.md).toContain('⚠️ 注意：草稿自动保存。')
+    expect(out.md.split('\n').filter((l) => l === ':::').length).toBe(1)
+  })
+
+  it('wrap_blockquote → ::: quote-card 并剥离 `> ` 前缀', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['# 标题', '', '> 一段引文。', '> 续行。'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [{ line: 3, endLine: 4, kind: 'wrap_blockquote', container: 'quote-card' }],
+    })
+    expect(out.applied).toBe(1)
+    expect(out.md).toContain('::: quote-card')
+    expect(out.md).toContain('一段引文。')
+    expect(out.md).not.toContain('> 一段引文。')
+  })
+
+  it('convert_list → ::: steps 包裹有序列表', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['# 标题', '', '1. 打开 X', '2. 切换 Y', '3. 运行 Z'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [{ line: 3, endLine: 5, kind: 'convert_list', container: 'steps' }],
+    })
+    expect(out.applied).toBe(1)
+    expect(out.md).toMatch(/::: steps\n1\. 打开 X\n2\. 切换 Y\n3\. 运行 Z\n:::/)
+  })
+
+  it('wrap_section_title → ::: section-title 并剥离 `## ` 前缀', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['# H1', '', '## 第二章', '正文。'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [{ line: 3, endLine: 3, kind: 'wrap_section_title', container: 'section-title' }],
+    })
+    expect(out.applied).toBe(1)
+    expect(out.md).toMatch(/::: section-title\n第二章\n:::/)
+  })
+
+  it('variant 字段被写到 open 行', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['段落。'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [
+        { line: 1, endLine: 1, kind: 'wrap_paragraph', container: 'tip', variant: 'pill-tag' },
+      ],
+    })
+    expect(out.md).toContain('::: tip variant=pill-tag')
+  })
+
+  it('多 patch 按 line 降序应用，前面 patch 行号不漂移', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['段落 A。', '', '段落 B。'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [
+        { line: 1, endLine: 1, kind: 'wrap_paragraph', container: 'tip' },
+        { line: 3, endLine: 3, kind: 'wrap_paragraph', container: 'warning' },
+      ],
+    })
+    expect(out.applied).toBe(2)
+    expect(out.md.split('\n')).toEqual([
+      '::: tip',
+      '段落 A。',
+      ':::',
+      '',
+      '::: warning',
+      '段落 B。',
+      ':::',
+    ])
+  })
+
+  it('overlap 的 patch 被 skipped 报告', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['段落 A。', '段落 B。'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [
+        { line: 1, endLine: 2, kind: 'wrap_paragraph', container: 'tip' },
+        { line: 2, endLine: 2, kind: 'wrap_paragraph', container: 'warning' },
+      ],
+    })
+    expect(out.applied).toBe(1)
+    expect(out.skipped.length).toBe(1)
+    expect(out.skipped[0].reason).toMatch(/overlap/i)
+  })
+
+  it('invalid 行号 → skipped + 原 md 不变', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = '一行。'
+    const out = await cmd.run({
+      md,
+      patches: [{ line: 5, endLine: 7, kind: 'wrap_paragraph', container: 'tip' }],
+    })
+    expect(out.applied).toBe(0)
+    expect(out.skipped[0].reason).toMatch(/invalid range/)
+    expect(out.md).toBe(md)
+  })
+
+  it('未知 container → skipped', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = '一行。'
+    const out = await cmd.run({
+      md,
+      patches: [
+        { line: 1, endLine: 1, kind: 'wrap_paragraph', container: 'no-such-container' },
+      ],
+    })
+    expect(out.applied).toBe(0)
+    expect(out.skipped[0].reason).toMatch(/unknown container/)
+  })
+
+  it('wrap_pros_cons → skipped（要求人工构造）', async () => {
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = ['- 优点 A', '- 缺点 B'].join('\n')
+    const out = await cmd.run({
+      md,
+      patches: [{ line: 1, endLine: 2, kind: 'wrap_pros_cons', container: 'compare' }],
+    })
+    expect(out.applied).toBe(0)
+    expect(out.skipped[0].reason).toMatch(/wrap_pros_cons|containers snippet/)
+  })
+
+  it('compare 容器（4-fence）会用 :::: 而非 :::', async () => {
+    // 注：当前 annotate 不会产出 wrap_pros_cons，但若 LLM 手工拼一个 wrap_paragraph + compare
+    // 容器，apply 应正确选 4-fence。
+    const cmd = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = '占位。'
+    const out = await cmd.run({
+      md,
+      patches: [{ line: 1, endLine: 1, kind: 'wrap_paragraph', container: 'compare' }],
+    })
+    expect(out.applied).toBe(1)
+    expect(out.md.startsWith(':::: compare')).toBe(true)
+    expect(out.md.endsWith('::::')).toBe(true)
+  })
+
+  it('annotate → annotate apply 端到端：能消化 annotate 输出的 patches[]', async () => {
+    const annotate = get<
+      { md: string; persona: string },
+      { patches: Array<{ line: number; endLine: number; kind: string; container: string }> }
+    >('annotate')
+    const apply = get<ApplyInput, ApplyOutput>('annotate apply')
+    const md = [
+      '# 标题',
+      '',
+      '本文将探讨一个并不简单的话题——文章首段总览，长度大致八十到二百字符之间能让读者迅速建立预期；过短则失去导言价值，过长则与正文重叠。这里给一个合规的样例段落用于触发 wrap_first_paragraph 启发式。',
+      '',
+      '## 一',
+      '正文。',
+      '',
+      '## 二',
+      '正文。',
+      '',
+      '## 三',
+      '正文。',
+    ].join('\n')
+    const annot = await annotate.run({ md, persona: 'default' })
+    expect(annot.patches.length).toBeGreaterThan(0)
+    const hasFirstPara = annot.patches.some((p) => p.kind === 'wrap_first_paragraph')
+    expect(hasFirstPara).toBe(true)
+    const out = await apply.run({ md, patches: annot.patches })
+    expect(out.applied + out.skipped.length).toBe(annot.patches.length)
+    expect(out.applied).toBeGreaterThan(0)
+    expect(out.md).toMatch(/::: (intro|abstract)/)
+  })
+})
+
 describe('personas list / get / capabilities / recommend', () => {
   it('personas list 返回 PersonaSummary[]', async () => {
     const cmd = get<Record<string, never>, Array<{ id: string; palette: { primary: string } }>>(

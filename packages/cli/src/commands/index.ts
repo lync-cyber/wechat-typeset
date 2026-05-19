@@ -6,6 +6,7 @@ import { validateSpecCommand } from './validate-spec'
 import { validateMarkdownCommand } from './validate-markdown'
 import { lintCommand } from './lint'
 import { annotateCommand } from './annotate'
+import { annotateApplyCommand } from './annotate-apply'
 import { personasListCommand } from './personas-list'
 import { personasGetCommand } from './personas-get'
 import { personasCapabilitiesCommand } from './personas-capabilities'
@@ -26,6 +27,7 @@ export const COMMANDS: readonly AnyCommand[] = [
   validateCommand,
   lintCommand,
   annotateCommand,
+  annotateApplyCommand,
   personasListCommand,
   personasGetCommand,
   personasCapabilitiesCommand,

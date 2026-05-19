@@ -45,7 +45,7 @@ Task Progress:
 - [ ] 2. 查主题能力 → `personas capabilities` 输出 containers[] / defaultVariants
 - [ ] 3. 结构扫描（H1 / H2 / 列表 / 引用块 / 代码块）→ 心里有一张段落→容器的预设
 - [ ] 4. 段落分类 + 容器提议 → `annotate` 输出 patches.json，逐条决策
-- [ ] 5. 应用提议，写新 markdown（用 `containers snippet` 拿模板）
+- [ ] 5. 筛选 + 应用 patches → `annotate apply` 输出新 md（applied + skipped 计数）
 - [ ] 6. 校验 → `lint --persona <id> --json` 输出 `ok=true` 且 `errorCount=0`
        warning 不阻塞，但交付时复述给用户
 ```
@@ -138,24 +138,27 @@ npm run cli -- annotate --input <input.md> --persona <id> > tmp/patches.json
 
 **策略**：脚本不直接改 md，只输出建议。Agent（你）拿着 `patches.json` + 原文，逐条决策"应用 / 跳过 / 改改 confidence"，最后写出新的 md。
 
-### Step 5 · 应用提议 + 写新 md
+### Step 5 · 筛选 + 应用 patches
 
-按以下顺序应用：
+**核心**：你只**筛**，文本替换交给 `annotate apply`——零行号风险。
 
-1. **结构容器优先**：先包 `::: intro` / `::: cover` / `::: section-title`
-2. **内容容器**：转换 blockquote → quote-card、ol → steps、特殊段落 → tip/warning/highlight
-3. **签名容器**：按 persona 的 signatureContainers 提议（abstract / keyNumber / seeAlso 等），**不强行加**——没自然位置就跳
-4. **行内扩展**：每千字 ≤3 处 `==高亮==` 或 `[.着重.]`；**不**给整段全标
-5. **写完之后**——直接进 Step 6 校验
+1. **筛**：从 `tmp/patches.json` 挑保留集，落到 `tmp/patches.filtered.json`
+   - ✅ 保留：`confidence: 'high'` 全部 + 大部分 `'medium'` + signature 容器
+   - ❌ 丢：明显误判（preview 与文意不符）、多数 `'low'`、与更强 patch 同行的弱 patch
+2. **应用**：
 
-需要某个容器的最小骨架时：
+   ```bash
+   jq -n --slurpfile p tmp/patches.filtered.json --rawfile m input.md \
+     '{md:$m, patches:$p[0]}' | npm run cli -- annotate apply --json > tmp/apply.json
+   jq -r .md tmp/apply.json > tmp/annotated.md
+   ```
 
-```bash
-npm run cli -- containers snippet --name quote-card --variant column-rule
-# 输出：::: quote-card variant=column-rule\n…\n:::
-```
+   核对 `applied + skipped.length == patches.length`；`skipped[].reason` 含义见 [cli-contract.md · annotate apply 输出](../_shared/references/cli-contract.md#annotate-apply-输出)。
 
-列出全部容器：`npm run cli -- containers list`。
+3. **CLI 不替你做的**——手工补到 `tmp/annotated.md`：
+   - 签名容器（abstract / keyNumber / seeAlso 等）在无自然位置时**弃**，别硬塞
+   - 行内扩展每千字 ≤3 处 `==高亮==` / `[.着重.]`；详见 [`references/inline-extensions.md`](references/inline-extensions.md)
+   - 取容器骨架：`containers snippet --name <X> [--persona <id>]`（传 `--persona` 自动绑定该主题 default variant）
 
 ### Step 6 · 校验（主题敏感）
 
@@ -238,8 +241,9 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 | `personas recommend` | `{ title, summary, topic?, style? }` | `{ ranked[3], recommendNew, rationaleOneLine }` |
 | `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, containers[], kickers }` |
 | `annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }` |
+| `annotate apply` | `{ md, patches[] }` | `{ md, applied, skipped[] }`（**Step 5 核心：纯函数应用 patches 到 md**） |
 | `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }` |
-| `containers list` / `containers snippet` | — / `{ name, variant? }` | `ContainerSpec[]` / `string` |
+| `containers list` / `containers snippet` | — / `{ name, variant?, persona? }` | `ContainerSpec[]` / `string`（传 `persona` 自动绑定该主题 default variant） |
 
 全集见 `npm run cli -- describe`（自描述）。
 
