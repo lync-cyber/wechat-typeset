@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '单划重笔',
     description: '整段底部 3px accent 实线 + 浅底，包豪斯克制感',
-    themeCompat: ['bauhaus-digest'],
+    signatureOf: 'swiss-grid',
   },
   thumbnail: thumb,
   snippets: [

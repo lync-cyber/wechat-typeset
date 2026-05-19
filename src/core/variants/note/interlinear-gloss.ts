@@ -19,7 +19,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '双行夹注',
     description: '上下 1px border + 朱色双行小字（宋本 v1）',
-    experimental: true,
+    signatureOf: 'literary-humanism',
   },
   thumbnail: thumb,
   snippets: [

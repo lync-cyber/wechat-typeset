@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '朱色强调',
     description: '整段朱色文字 + 朱色左侧点线，宋本批注语境',
-    themeCompat: ['chinese-classical'],
+    signatureOf: 'literary-humanism',
   },
   thumbnail: thumb,
   snippets: [

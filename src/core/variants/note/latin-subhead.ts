@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '学名上标',
     description: 'Annotatio redactoris 拉丁 italic（博物 v2）',
-    experimental: true,
+    signatureOf: 'academic-frontier',
   },
   thumbnail: thumb,
   snippets: [

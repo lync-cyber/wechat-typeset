@@ -17,7 +17,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '字距强调',
     description: '整段 letter-spacing 加大 + bold + textMuted，编辑部印刷感',
-    themeCompat: ['editorial-classic'],
+    signatureOf: 'editorial-mook',
   },
   thumbnail: thumb,
   snippets: [

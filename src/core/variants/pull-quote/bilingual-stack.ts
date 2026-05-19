@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '双语堆叠',
     description: '中英双语堆叠：上拉丁 italic + 下中文大字（博物 v1）',
-    signatureOf: 'naturalist-notes',
+    signatureOf: 'academic-frontier',
   },
   thumbnail: thumb,
   snippets: [

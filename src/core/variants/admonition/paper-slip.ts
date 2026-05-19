@@ -20,7 +20,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '黄签条',
     description: '左竖排黄签条 + 底 1px border（宋本 v2）',
-    themeCompat: ['republican-era'],
+    signatureOf: 'literary-humanism',
   },
   thumbnail: thumb,
   snippets: [

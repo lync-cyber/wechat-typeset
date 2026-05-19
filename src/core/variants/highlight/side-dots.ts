@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '字旁着重点',
     description: '整段左侧朱色圆点列（中文着重号传统），宋本批注',
-    themeCompat: ['chinese-classical'],
+    signatureOf: 'literary-humanism',
   },
   thumbnail: thumb,
   snippets: [

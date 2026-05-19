@@ -22,7 +22,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '卡尺拉引',
     description: '左右测量卡尺刻度 + 居中拉引（博物 v2）',
-    signatureOf: 'naturalist-notes',
+    signatureOf: 'academic-frontier',
   },
   thumbnail: thumb,
   snippets: [

@@ -19,7 +19,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '朱印告示',
     description: '右上 -3° 旋转方框朱印（宋本 v1）',
-    themeCompat: ['republican-era'],
+    signatureOf: 'literary-humanism',
   },
   thumbnail: thumb,
   snippets: [

@@ -19,7 +19,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '测量条注',
     description: 'NOTE + 虚线测量条 + ed. 2025（博物 v1）',
-    experimental: true,
+    signatureOf: 'academic-frontier',
   },
   thumbnail: thumb,
   snippets: [

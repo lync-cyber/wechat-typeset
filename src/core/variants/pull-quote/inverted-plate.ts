@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '反色板块',
     description: '反色板块 #111 底白字 + 大号 sans 拉引（包豪斯 v1）',
-    signatureOf: 'bauhaus-digest',
+    signatureOf: 'brutalist',
   },
   thumbnail: thumb,
   snippets: [

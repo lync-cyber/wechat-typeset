@@ -18,9 +18,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: 'ed. 落款',
     description: '右下 ed. + 首字母 monospace（编辑部 v1）',
-    // content-1.html 阶段 2 落地骨架,4 主题映射(editorial/classical/naturalist/bauhaus)未确认,
-    // 暂不绑定 themeCompat / signatureOf;T2.7 阶段统一标注。
-    experimental: true,
+    signatureOf: 'editorial-mook',
   },
   thumbnail: thumb,
   snippets: [

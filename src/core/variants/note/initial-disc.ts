@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '首字母圆盘',
     description: '左 34×34 圆形深底 + EDITOR monospace（包豪斯 v1）',
-    experimental: true,
+    signatureOf: 'swiss-grid',
   },
   thumbnail: thumb,
   snippets: [
