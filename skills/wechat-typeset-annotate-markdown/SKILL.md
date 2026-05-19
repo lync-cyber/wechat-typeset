@@ -16,22 +16,26 @@ description: 把普通 Markdown 改写成 wechat-typeset 写作契约（::: 容�
 - ❌ markdown 已含合法 `:::` 容器要"渲染" → 转 `wechat-typeset-export-richtext`
 - ❌ 要造主题色 / motif / `personas recommend` 输出 `recommendNew=true` → 转 `wechat-typeset-author-persona`
 
-## CLI 入口
+## CLI / MCP 入口
 
-所有标注/校验都走 `npm run cli -- <subcommand>`。同一可执行体既能 shell 也能从 MCP 工具调（schema 单一真源）。
+所有标注/校验走同一份 schema，三种宿主形态：
+
+- **CLI（shell）**：`npm run cli -- <subcommand>`（`<subcommand>` 多词用空格，`--flag value` 或 `--json` 走 stdin）
+- **MCP**：tool 名是 `<subcommand>` 空格转下划线（`markdown_annotate` 等），inputSchema 与 CLI 同源
+- **接入起点（任一宿主）**：先调 `describe` 拉齐全部命令清单、错误码、`readOnly` 标记
 
 ```bash
 # 通用形式
 npm run cli -- <subcommand> [--flag value | --json]
 
-# 从 stdin 读 JSON（推荐复杂参数走这个）
-echo '{"md":"# 标题"}' | npm run cli -- lint --json
+# 从 stdin 读 JSON（推荐复杂参数走这个；MCP 端等价于 tool call payload）
+echo '{"md":"# 标题"}' | npm run cli -- markdown lint --json
 
 # 简单参数走 --flag（仅在 inputSchema 声明的字段上有效；--input <path> 读文件作 md）
 npm run cli -- containers snippet --name tip
 ```
 
-退出码、subcommand 签名、JSON 形状的**单一真源**：[`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)。
+权威映射 / 错误返回结构 见 [`../_shared/references/mcp-cli-mapping.md`](../_shared/references/mcp-cli-mapping.md)；命令签名 / 退出码 / JSON 形状 见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)；`WtException` → 应转向哪个 skill 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。
 
 > **工作目录约定**：所有中间产物落在 `tmp/`（已在 `.gitignore`）。如不存在请先 `mkdir -p tmp`。
 
@@ -45,7 +49,7 @@ Task Progress:
 - [ ] 2. 查主题能力 → `personas capabilities` 输出 containers[] / defaultVariants
 - [ ] 3. 结构扫描（H1 / H2 / 列表 / 引用块 / 代码块）→ 心里有一张段落→容器的预设
 - [ ] 4. 段落分类 + 容器提议 → `annotate` 输出 patches.json，逐条决策
-- [ ] 5. 应用提议，写新 markdown（用 `containers snippet` 拿模板）
+- [ ] 5. 筛选 + 应用 patches → `annotate apply` 输出新 md（applied + skipped 计数）
 - [ ] 6. 校验 → `lint --persona <id> --json` 输出 `ok=true` 且 `errorCount=0`
        warning 不阻塞，但交付时复述给用户
 ```
@@ -138,24 +142,27 @@ npm run cli -- annotate --input <input.md> --persona <id> > tmp/patches.json
 
 **策略**：脚本不直接改 md，只输出建议。Agent（你）拿着 `patches.json` + 原文，逐条决策"应用 / 跳过 / 改改 confidence"，最后写出新的 md。
 
-### Step 5 · 应用提议 + 写新 md
+### Step 5 · 筛选 + 应用 patches
 
-按以下顺序应用：
+**核心**：你只**筛**，文本替换交给 `annotate apply`——零行号风险。
 
-1. **结构容器优先**：先包 `::: intro` / `::: cover` / `::: section-title`
-2. **内容容器**：转换 blockquote → quote-card、ol → steps、特殊段落 → tip/warning/highlight
-3. **签名容器**：按 persona 的 signatureContainers 提议（abstract / keyNumber / seeAlso 等），**不强行加**——没自然位置就跳
-4. **行内扩展**：每千字 ≤3 处 `==高亮==` 或 `[.着重.]`；**不**给整段全标
-5. **写完之后**——直接进 Step 6 校验
+1. **筛**：从 `tmp/patches.json` 挑保留集，落到 `tmp/patches.filtered.json`
+   - ✅ 保留：`confidence: 'high'` 全部 + 大部分 `'medium'` + signature 容器
+   - ❌ 丢：明显误判（preview 与文意不符）、多数 `'low'`、与更强 patch 同行的弱 patch
+2. **应用**：
 
-需要某个容器的最小骨架时：
+   ```bash
+   jq -n --slurpfile p tmp/patches.filtered.json --rawfile m input.md \
+     '{md:$m, patches:$p[0]}' | npm run cli -- annotate apply --json > tmp/apply.json
+   jq -r .md tmp/apply.json > tmp/annotated.md
+   ```
 
-```bash
-npm run cli -- containers snippet --name quote-card --variant column-rule
-# 输出：::: quote-card variant=column-rule\n…\n:::
-```
+   核对 `applied + skipped.length == patches.length`；`skipped[].reason` 含义见 [cli-contract.md · annotate apply 输出](../_shared/references/cli-contract.md#annotate-apply-输出)。
 
-列出全部容器：`npm run cli -- containers list`。
+3. **CLI 不替你做的**——手工补到 `tmp/annotated.md`：
+   - 签名容器（abstract / keyNumber / seeAlso 等）在无自然位置时**弃**，别硬塞
+   - 行内扩展每千字 ≤3 处 `==高亮==` / `[.着重.]`；详见 [`references/inline-extensions.md`](references/inline-extensions.md)
+   - 取容器骨架：`containers snippet --name <X> [--persona <id>]`（传 `--persona` 自动绑定该主题 default variant）
 
 ### Step 6 · 校验（主题敏感）
 
@@ -238,8 +245,9 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 | `personas recommend` | `{ title, summary, topic?, style? }` | `{ ranked[3], recommendNew, rationaleOneLine }` |
 | `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, containers[], kickers }` |
 | `annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }` |
+| `annotate apply` | `{ md, patches[] }` | `{ md, applied, skipped[] }`（**Step 5 核心：纯函数应用 patches 到 md**） |
 | `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }` |
-| `containers list` / `containers snippet` | — / `{ name, variant? }` | `ContainerSpec[]` / `string` |
+| `containers list` / `containers snippet` | — / `{ name, variant?, persona? }` | `ContainerSpec[]` / `string`（传 `persona` 自动绑定该主题 default variant） |
 
 全集见 `npm run cli -- describe`（自描述）。
 
@@ -252,8 +260,10 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 
 ## 相关参考
 
-共享 references（三个 skill 共用同一份权威源）：
+共享 references（4 个 skill 共用同一份权威源）：
 
+- [../_shared/references/mcp-cli-mapping.md](../_shared/references/mcp-cli-mapping.md) · CLI ↔ MCP ↔ Node 库 三种宿主形态映射、`describe` 接入起点
+- [../_shared/references/error-routing.md](../_shared/references/error-routing.md) · `WtException` → 该转向哪个 skill
 - [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**CLI 真源**）
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查
 - [../_shared/references/personas.md](../_shared/references/personas.md) · 内置 persona 速查（由 build:skill-refs 派生）

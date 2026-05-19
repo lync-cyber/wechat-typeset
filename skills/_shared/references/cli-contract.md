@@ -39,22 +39,81 @@ npm run cli -- describe   # 输出 { version, commands[] }
 - 字符串字段直接 `--key value`；object / array 字段必须走 `--json`
 - 子命令多词分隔用空格（`personas list`、`containers snippet`、`motif render`），MCP 端转下划线（`personas_list` 等）
 
+## 命名规范
+
+**Canonical 形式**：`<resource> <action>`（如 `markdown render`、`personas list`、`containers snippet`）。新命令必须遵循此规范。
+
+**Deprecation 窗口**：bare-verb 旧名保留为 alias，description 前缀 `DEPRECATED alias of <canonical>`，下一个 major 移除。同源记录在 `capabilities.json.deprecations[]`：
+
+| 旧名 (deprecated) | Canonical |
+| --- | --- |
+| `render` | `markdown render` |
+| `lint` | `markdown lint` |
+| `annotate` | `markdown annotate` |
+| `annotate apply` | `markdown annotate apply` |
+| `validate` | `validate spec` / `validate markdown` |
+
+> MCP 工具名沿用 `空格→下划线` 转换（如 `markdown render` → `markdown_render`）。
+
 ## Subcommand 表
 
-| 子命令 | 输入 schema | 输出（成功） |
+> 表中列出 canonical 名；旧 alias 仍可用但 description 前缀 `DEPRECATED`。所有命令默认 `readOnly: true`（详见 `describe` 输出 / capabilities `cli.commands[*].readOnly`）。
+
+**markdown · 文章管线**
+
+| 子命令 | 输入 schema | 输出 |
 | --- | --- | --- |
-| `render` | `{ md, persona?, spec?, platform? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }` |
-| `validate` | `{ spec }` 或 `{ md, persona? }` | `{ ok, errors[], warnings[] }`（含 `hint`） |
-| `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }` |
-| `annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }` |
-| `personas list` | — | `PersonaSummary[]` |
-| `personas get` | `{ id }` | 完整 `PersonaSpec` |
+| `markdown render` | `{ md, persona?, spec?, platform?, dryRun?, asDocument? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }`；`platform` 枚举来自 `platforms list`；`dryRun: true` → html='' 只算 metadata；`asDocument: true` → html 是完整 `<!DOCTYPE html>...</html>` 文档 |
+| `markdown render-batch` | `{ md, personas: string[], platform? }` | `{ total, succeeded, failed, results: { [id]: { ok: true, html, ... } \| { ok: false, code, message } } }`——单次调用渲染多 persona，单个失败不中断 batch |
+| `markdown lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }`；`issues[].kind` 是 8 态 enum |
+| `markdown annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }`；`patches[].kind`/`confidence` 都是 enum |
+| `markdown annotate apply` | `{ md, patches[] }` | `{ md, applied, skipped[] }` |
+
+**validate · 校验**
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `validate spec` | `{ spec }` | `{ ok, errors[], warnings[] }` |
+| `validate markdown` | `{ md, persona? }` | `{ ok, errors[], warnings[] }` |
+
+**personas · 主题选型**
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `personas list` | `{ topic?, audience? }` | `PersonaSummary[]`；filter 不传 = 全集；`topic` 子串匹配 audience+description，`audience` 仅匹配 audience（都 case-insensitive） |
+| `personas get` | `{ id }` | `PersonaSpec` |
 | `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, recommendedVariantOverrides, containers[], kickers }` |
-| `personas recommend` | `{ title, summary, topic?, style? }` | `{ ranked[3], recommendNew, rationaleOneLine }` |
-| `containers list` | — | `ContainerSpec[]`（vocabulary 全集） |
-| `containers snippet` | `{ name, variant?, persona? }` | `string`（markdown 片段；`persona` 仅 API 对称，对输出无影响） |
-| `motif render` | `{ shape }` 或 `{ template, values }` | `string`（SVG） |
-| `describe` | — | `{ version, commands[] }`（自描述清单） |
+| `personas recommend` | `{ title?, summary?, topic?, style?, vibe?, audience? }` 至少一个非空 | `{ ranked[3], recommendNew, rationaleOneLine }`。全空 → `CONTRACT_VIOLATION` |
+| `personas derive` | `{ base, patch, id?, name? }` | `{ spec, validation }`——浅合并 palette/variants/meta/motifs；自动设 `meta.basedOn = base.id`；validation 不抛错 |
+| `persona motifs` | `{ id }` | 该 persona 的 `MotifSpec`（h2Prefix / dividers / admonition icons 等 AST 集合） |
+
+**containers · 容器词汇**
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `containers list` | `{ category?, pack?, namespace? }` | `ContainerSpec[]`；filter 不传 = 全集；exact-match AND |
+| `containers get` | `{ name }` | 单个 `ContainerSpec`；未知 → RESOURCE_NOT_FOUND |
+| `containers variants` | `{ name }` | 容器可切换的 `VariantDescriptor[]`；无 variantKind 的容器返回 `[]` |
+| `containers snippet` | `{ name, variant?, persona? }` | `string`（传 `persona` 且未传 `variant` 时按该主题 default variant 绑定） |
+
+**inline-extensions · 行内扩展**
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `inline-extensions list` | — | `InlineExtensionSpec[]`（syntax / regex / inputExample / outputHtmlExample） |
+| `inline-extensions snippet` | `{ syntax }` | `string`（该扩展的 inputExample） |
+
+**元 / 平台**
+
+| 子命令 | 输入 | 输出 |
+| --- | --- | --- |
+| `motif render` | `{ shape }` **xor** `{ template, values? }` | `string`（SVG）。同时给 / 都不给 → `CONTRACT_VIOLATION` |
+| `frontmatter parse` | `{ md }` | `{ config, body, issues }`——独立解析 markdown 头部，不走完整 render |
+| `platforms list` | — | `PlatformInfo[]`（`{ id, name, status }`） |
+| `capabilities` | — | 与 `dist/api/capabilities.json` 同源的全量契约（personas / containers / variants / hardRules / cli.commands / deprecations / fallbackBehavior 等） |
+| `error-codes list` | — | `Array<{ code, exitCode, description }>` |
+| `schema get` | — | PersonaSpec JSON Schema (draft-07)；LLM 结构化输出约束源 |
+| `describe` | — | `{ version, commands[], errorCodes[], platforms[], variantIds, signatureContainers[], hardRules, inlineExtensions[] }`，每个 command 含 `readOnly: boolean` |
 
 ## 退出码语义
 
@@ -65,8 +124,9 @@ npm run cli -- describe   # 输出 { version, commands[] }
 | `2` | 业务 `ok=false`（lint 有 error / validate 校验失败） |
 | `2` | `WtException(RESOURCE_NOT_FOUND)`（未知 persona / container 名等） |
 | `3` | `WtException(SPEC_INVALID)`（render 路径上 spec 投影校验失败） |
-| `4` | `WtException(CONTRACT_VIOLATION)` / `WtException(RENDER_FAILED)`（fence 不闭合、pipeline 报错） |
+| `4` | `WtException(CONTRACT_VIOLATION)`（fence 不闭合、嵌套错、未知容器等契约层错误） |
 | `5` | `WtException(PLATFORM_UNSUPPORTED)`（未知 publish target） |
+| `6` | `WtException(RENDER_FAILED)`（管线内部异常 / 兜底）。与 4 分离，便于 CI 程序化分支 |
 
 退出码统一从 `src/core/errors.ts` 的 `EXIT_CODES` 映射；CLI 与 MCP 同源。
 
@@ -101,6 +161,39 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
 | `id` kebab | id 必须 `^[a-z][a-z0-9-]*$`，与目录名一致 |
 | `name`/`description`/`audience` required | 三者必填非空——LLM 选型主要靠这三项 |
 | `meta.createdAt` | ISO 日期 YYYY-MM-DD |
+
+## `describe` 输出形状
+
+```jsonc
+{
+  "version": "x.y.z",
+  "commands": [
+    { "name": "render", "description": "...", "inputSchema": {...}, "outputSchema": {...} }
+  ],
+  "errorCodes": [
+    { "code": "CONTRACT_VIOLATION", "exitCode": 4, "description": "markdown 容器/语法/嵌套错（fence_not_closed 等）" }
+  ],
+  "platforms": [
+    { "id": "wechat", "name": "微信公众号", "status": "stable" }
+  ],
+  "variantIds": {
+    "admonition": ["accent-bar", "pill-tag", "ticket-notch", "..."],
+    "quote": ["classic", "left-bar", "magazine-dropcap", "..."]
+  },
+  "signatureContainers": ["abstract", "keyNumber", "..."],
+  "hardRules": {
+    "minFontSize": 14,
+    "minStrokeWidth": 1,
+    "allowedFontFamilies": ["serif", "sans-serif", "monospace"],
+    "hexPattern": "^#[0-9a-fA-F]{3,8}$"
+  },
+  "inlineExtensions": [
+    { "syntax": "==mark==", "description": "...", "regex": "...", "inputExample": "...", "outputHtmlExample": "..." }
+  ]
+}
+```
+
+> MCP / LLM 集成方一次 `describe` 即可拿到工具注册所需的全部元信息——不必额外去 `capabilities.json` 或源码翻硬约束阈值。
 
 ## JSON 输出形状
 
@@ -156,6 +249,28 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
 ```
 
 合法 `kind`：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
+
+### `annotate apply` 输出
+
+```json
+{
+  "md": "<新 markdown>",
+  "applied": 5,
+  "skipped": [
+    { "patch": { "line": 12, "endLine": 12, "kind": "wrap_paragraph", "container": "tip" },
+      "reason": "range overlaps a previously applied patch" }
+  ]
+}
+```
+
+`skipped[].reason` 取值：
+
+- `invalid range line=... endLine=...` —— 行号越界 / 倒置 / 非整数
+- `range overlaps a previously applied patch` —— 与已应用 patch 行范围重叠（应在筛选阶段过滤掉弱的那个）
+- `unknown container "<name>"` —— container 名拼错或未在 vocabulary 里
+- `wrap_pros_cons requires manual structure ...` —— pros/cons 不可机械应用，需 `containers snippet --name compare` 手工拼
+
+**核对**：`applied + skipped.length === patches.length`。
 
 ### `validate` 输出
 
@@ -213,7 +328,24 @@ CLI 与 MCP 共享同一个 COMMANDS 数组，每条 Command 的 `inputSchema` �
 }
 ```
 
-MCP tool 名映射：subcommand 空格转下划线（`personas list` → `personas_list`、`motif render` → `motif_render`）。`tools/list` 直接消费 `npm run cli -- describe` 的 commands 数组。
+MCP tool 名映射：subcommand 空格转下划线（`personas list` → `personas_list`、`markdown render` → `markdown_render`）。`tools/list` 直接消费 `npm run cli -- describe` 的 commands 数组。
+
+**错误返回**：MCP 端的 `WtException` 错误走 MCP 2025-03 `structuredContent` 字段：
+
+```jsonc
+{
+  "isError": true,
+  "content": [{ "type": "text", "text": "CONTRACT_VIOLATION: fence_not_closed at line 12 (+2 more)" }],
+  "structuredContent": {
+    "code": "CONTRACT_VIOLATION",
+    "exitCode": 4,
+    "errors": [ /* WtError[] */ ],
+    "warnings": []
+  }
+}
+```
+
+客户端读 `structuredContent.code` 程序化分支；`content[0].text` 是 fallback 可读摘要。未归类 Error 兜底成 `code: 'RENDER_FAILED'`（exitCode 6）。
 
 ## Skill 独家脚本一览
 

@@ -1,10 +1,12 @@
-import { listPersonas, type PersonaSummary } from '../../../../src/public'
+import { listPersonas, WtException, type PersonaSummary } from '../../../../src/public'
 
 export interface RecommendInput {
-  title: string
-  summary: string
+  title?: string
+  summary?: string
   topic?: string
   style?: string
+  vibe?: string
+  audience?: string
 }
 
 export interface RecommendCandidate {
@@ -174,14 +176,46 @@ function scoreCandidate(p: PersonaSummary, input: RecommendInput): RecommendCand
       }
     }
   }
-  const userText = `${input.title} ${input.summary}`
-  const audienceHits = countKeywordHits(
-    userText,
-    p.audience.split(/[\s/、，,]+/).filter((s) => s.length >= 2),
-  )
-  if (audienceHits > 0) {
-    score += Math.min(audienceHits * 0.1, 0.2)
-    reasons.push(`标题/摘要直接出现 audience 关键词 ${audienceHits} 个`)
+  const titleSummaryText = `${input.title ?? ''} ${input.summary ?? ''}`.trim()
+  if (titleSummaryText) {
+    const audienceHits = countKeywordHits(
+      titleSummaryText,
+      p.audience.split(/[\s/、，,]+/).filter((s) => s.length >= 2),
+    )
+    if (audienceHits > 0) {
+      score += Math.min(audienceHits * 0.1, 0.2)
+      reasons.push(`标题/摘要直接出现 audience 关键词 ${audienceHits} 个`)
+    }
+  }
+  if (input.vibe) {
+    const vibeTopicHits = Object.entries(TOPIC_KEYWORDS).flatMap(([, kws]) =>
+      countKeywordHits(`${input.vibe} ${p.audience} ${p.description}`, kws) > 0 ? [kws] : [],
+    )
+    if (vibeTopicHits.length > 0) {
+      const vibeHits = countKeywordHits(`${p.audience} ${p.description}`, vibeTopicHits.flat())
+      if (vibeHits > 0) {
+        score += Math.min(vibeHits * 0.15, 0.45)
+        reasons.push(`vibe 命中 persona 领域关键词 ${vibeHits} 个`)
+      }
+    }
+    for (const rule of STYLE_RULES) {
+      if (!rule.pattern.test(input.vibe)) continue
+      const fieldText = rule.matchInFields.map((f) => p[f]).join(' ')
+      const hits = countKeywordHits(fieldText, rule.targetKeywords)
+      if (hits > 0) {
+        score += Math.min(hits * 0.2, 0.4)
+        reasons.push(`vibe 命中 ${rule.matchInFields.join('/')} 语义词 ${hits} 个`)
+        break
+      }
+    }
+  }
+  if (input.audience) {
+    const personaAudienceTokens = p.audience.split(/[\s/、，,]+/).filter((s) => s.length >= 2)
+    const audienceMatchHits = countKeywordHits(input.audience, personaAudienceTokens)
+    if (audienceMatchHits > 0) {
+      score += Math.min(audienceMatchHits * 0.15, 0.3)
+      reasons.push(`audience 命中 persona 受众词 ${audienceMatchHits} 个`)
+    }
   }
   if (p.id === 'default' && reasons.length === 0) {
     score = 0.35
@@ -207,6 +241,18 @@ function scoreCandidate(p: PersonaSummary, input: RecommendInput): RecommendCand
 }
 
 export function recommendPersona(input: RecommendInput): RecommendResult {
+  const hasSignal = [input.title, input.summary, input.vibe, input.audience, input.topic, input.style].some(
+    (v) => typeof v === 'string' && v.trim().length > 0,
+  )
+  if (!hasSignal) {
+    throw new WtException('CONTRACT_VIOLATION', [
+      {
+        message: '至少提供一个评分信号：title / summary / vibe / audience / topic / style',
+        severity: 'error',
+        hint: 'vibe 接受自由文字氛围描述，audience 接受目标读者描述',
+      },
+    ])
+  }
   const personas = listPersonas()
   const candidates = personas
     .map((p) => scoreCandidate(p, input))

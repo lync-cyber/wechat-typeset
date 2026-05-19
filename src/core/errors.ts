@@ -17,7 +17,7 @@ export const WT_ERROR_INFO = Object.freeze({
   INPUT_AMBIGUOUS:      { exitCode: 1, description: 'render 同时给 persona/theme/spec' },
   RESOURCE_NOT_FOUND:   { exitCode: 2, description: '未知 persona / 容器 / variant id' },
   PLATFORM_UNSUPPORTED: { exitCode: 5, description: '未知 publish 平台 id' },
-  RENDER_FAILED:        { exitCode: 4, description: '管线内部异常（未归类，兜底）' },
+  RENDER_FAILED:        { exitCode: 6, description: '管线内部异常（未归类，兜底）。与 CONTRACT_VIOLATION 区分，便于 CI 程序化分支' },
 } as const)
 
 export type WtErrorCode = keyof typeof WT_ERROR_INFO

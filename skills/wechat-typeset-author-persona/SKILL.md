@@ -19,15 +19,15 @@ description: 设计并创建 wechat-typeset 的主题视觉——色板、字号
 
 > 进入本 skill 前**先跑** `npm run cli -- personas recommend`——能复用内置主题就直接用，**不能复用再造新的**。
 
-## CLI 入口
+## CLI / MCP 入口
 
-校验 / 选型走 `npm run cli -- <subcommand>`。skill 独家工具（prompt 构造、HTML 预览、文件落地）保留为 `scripts/*.ts`。
+校验 / 选型走同一份 schema，三种宿主：CLI / MCP / Node 库。skill 独家工具（prompt 构造、HTML 预览、文件落地）保留为本 skill 的 `scripts/*.ts`。
 
-```bash
-npm run cli -- <subcommand> [--flag value | --json]
-```
+- **CLI**：`npm run cli -- <subcommand> [--flag value | --json]`
+- **MCP**：tool 名是 `<subcommand>` 空格转下划线（如 `validate_spec`、`personas_derive`）
+- **接入起点**：先调 `describe` 拉齐全部命令、错误码、`readOnly` 标记
 
-退出码、subcommand 签名、JSON 形状的**单一真源**：[`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)。
+权威映射 / 错误返回 见 [`../_shared/references/mcp-cli-mapping.md`](../_shared/references/mcp-cli-mapping.md)；命令签名 / 退出码 / JSON 形状 见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)；`SPEC_INVALID` 等 WtException → skill 转向 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。
 
 > **工作目录约定**：所有中间产物落在 `tmp/`（已在 `.gitignore`）。如不存在请先 `mkdir -p tmp`。
 
@@ -237,8 +237,10 @@ skill 独家脚本（CLI 不覆盖）：
 
 ## 相关参考
 
-共享 references（三个 skill 共用同一份权威源）：
+共享 references（4 个 skill 共用同一份权威源）：
 
+- [../_shared/references/mcp-cli-mapping.md](../_shared/references/mcp-cli-mapping.md) · CLI ↔ MCP ↔ Node 库 三种宿主形态映射、`describe` 接入起点
+- [../_shared/references/error-routing.md](../_shared/references/error-routing.md) · `WtException` → 该转向哪个 skill
 - [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / hint 表（**CLI 真源**）
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束完整清单
 - [../_shared/references/motif-ast.md](../_shared/references/motif-ast.md) · Motif AST 完整字段

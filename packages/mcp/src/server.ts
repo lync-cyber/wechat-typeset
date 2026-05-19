@@ -59,28 +59,28 @@ export function buildServer(): Server {
       }
     } catch (e) {
       if (e instanceof WtException) {
+        const extra = e.errors.length > 1 ? ` (+${e.errors.length - 1} more)` : ''
+        const firstMsg = e.errors[0]?.message ?? e.code
         return {
           isError: true,
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(
-                {
-                  code: e.code,
-                  exitCode: EXIT_CODES[e.code],
-                  errors: e.errors,
-                  warnings: e.warnings,
-                },
-                null,
-                2,
-              ),
-            },
-          ],
+          content: [{ type: 'text', text: `${e.code}: ${firstMsg}${extra}` }],
+          structuredContent: {
+            code: e.code,
+            exitCode: EXIT_CODES[e.code],
+            errors: e.errors,
+            warnings: e.warnings,
+          },
         }
       }
       return {
         isError: true,
-        content: [{ type: 'text', text: (e as Error).message }],
+        content: [{ type: 'text', text: `RENDER_FAILED: ${(e as Error).message}` }],
+        structuredContent: {
+          code: 'RENDER_FAILED',
+          exitCode: EXIT_CODES.RENDER_FAILED,
+          errors: [{ message: (e as Error).message, severity: 'error' }],
+          warnings: [],
+        },
       }
     }
   })

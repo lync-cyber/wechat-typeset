@@ -18,13 +18,22 @@ description: 把满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 - ❌ 渲染失败 `WtException(SPEC_INVALID)` → 转 `wechat-typeset-author-persona` 修 spec
 - ❌ 渲染失败 `WtException(CONTRACT_VIOLATION)` 或 lint 报 `unknown_container` → 转 `wechat-typeset-annotate-markdown` 修 markdown
 
-## CLI 入口
+## CLI / MCP 入口
 
-```bash
-npm run cli -- <subcommand> [--flag value | --json]
-```
+三种宿主形态（schema 同源）：
 
-退出码、subcommand 签名、JSON 形状的**单一真源**：[`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)。
+- **CLI**：`npm run cli -- <subcommand> [--flag value | --json]`
+- **MCP**：tool 名是 `<subcommand>` 空格转下划线（`markdown_render` / `markdown_render_batch` / `markdown_lint` 等）
+- **接入起点**：先调 `describe`
+
+`markdown render` 新增两个可选模式（**MCP 客户端常用**）：
+
+- `dryRun: true` —— 只算 `wordCount` / `readingTime`，不产 html（批量预估成本）
+- `asDocument: true` —— 返回完整 `<!DOCTYPE html>…</html>` 文档，可直接保存为 .html 用浏览器打开，**省掉 skill 脚本 `open-in-browser.ts` 的依赖**
+
+多 persona 比较请用 `markdown render-batch`（替代之前的 `scripts/render-gallery.ts` 循环）。
+
+权威映射 / 错误返回 见 [`../_shared/references/mcp-cli-mapping.md`](../_shared/references/mcp-cli-mapping.md)；命令签名 / 退出码 / JSON 形状 见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)；渲染失败的 WtException 转向 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。
 
 > **工作目录约定**：所有中间产物落在 `tmp/`（已在 `.gitignore`）。如不存在请先 `mkdir -p tmp`。
 
@@ -126,14 +135,11 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
 
 ## 渲染失败排查路径
 
-退出码与 WtException 完整映射见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md#退出码语义)。常见诊断：
+`WtException` 错误码 → exitCode → 应转向哪个 skill 的 SSOT 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。本 skill 的快速断点：
 
-| 退出码 | code | 推断 | 路径 |
-| --- | --- | --- | --- |
-| `2` | `RESOURCE_NOT_FOUND` | persona id 拼错 / 未注册 | 检查拼写 / `npm run cli -- personas list \| jq -r '.[].id'` |
-| `3` | `SPEC_INVALID` | 用 `--spec` 走临时 spec 路径，spec 非法 | 转 `wechat-typeset-author-persona`，跑 `npm run cli -- validate` |
-| `4` | `CONTRACT_VIOLATION` | fence 名不存在 / 嵌套不闭合 / variant 写错 | 转 `wechat-typeset-annotate-markdown`，跑 `npm run cli -- lint --persona <id>` |
-| `4` | `RENDER_FAILED` | 其他渲染错误 | 看 stderr stack；通常是 markdown-it 解析问题或 wxPatch 边界 case |
+- `CONTRACT_VIOLATION`（exit 4）→ markdown 契约错；转 `wechat-typeset-annotate-markdown` 跑 `markdown lint --persona <id>`
+- `SPEC_INVALID`（exit 3）→ `--spec` 路径上 spec 非法；转 `wechat-typeset-author-persona` 跑 `validate spec`
+- `RENDER_FAILED`（exit 6）→ 管线兜底；附 stderr 提 issue
 
 ## 粘贴后的人工 checklist
 
@@ -202,8 +208,10 @@ skill 独家脚本（CLI 不覆盖）：
 - [references/wxpatch-behavior.md](references/wxpatch-behavior.md) · WxPatch 8 步自动修复的具体行为
 - [references/paste-checklist.md](references/paste-checklist.md) · 粘贴前后的人工 checklist
 
-共享 references（三个 skill 共用同一份权威源）：
+共享 references（4 个 skill 共用同一份权威源）：
 
+- [../_shared/references/mcp-cli-mapping.md](../_shared/references/mcp-cli-mapping.md) · CLI ↔ MCP ↔ Node 库 三种宿主形态映射、`describe` 接入起点
+- [../_shared/references/error-routing.md](../_shared/references/error-routing.md) · `WtException` → 该转向哪个 skill
 - [../_shared/references/cli-contract.md](../_shared/references/cli-contract.md) · subcommand 签名 / 退出码 / lint issue 修复表 / JSON 输出形状（**CLI 真源**）
 - [../_shared/references/hard-rules.md](../_shared/references/hard-rules.md) · 硬约束清单
 - [../_shared/references/container-vocabulary.md](../_shared/references/container-vocabulary.md) · 容器词汇表速查

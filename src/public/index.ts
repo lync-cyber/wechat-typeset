@@ -331,7 +331,7 @@ export function renderMotifWithValues(
 export { parseFrontmatter } from '../core/pipeline/frontmatter'
 export type { FrontmatterParseIssue, PageConfig } from '../core/pipeline/frontmatter'
 
-export { EXIT_CODES, WtException } from '../core/errors'
+export { EXIT_CODES, WT_ERROR_INFO, WtException, fail } from '../core/errors'
 export type { WtError, WtErrorCode } from '../core/errors'
 
 export type {
