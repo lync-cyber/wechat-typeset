@@ -20,7 +20,7 @@ import { INLINE_EXTENSIONS } from '../src/core/pipeline/inlineExtensions'
 import { WT_ERROR_INFO, WT_ERROR_CODES } from '../src/core/errors'
 import { COMMANDS } from '../packages/cli/src/commands'
 
-type CapabilitiesSchemaVersion = '3.0'
+type CapabilitiesSchemaVersion = '3.0' | '3.1'
 
 interface DeprecationNotice {
   id: string
@@ -279,7 +279,7 @@ function build(): CapabilitiesV3 {
   }))
   const { selfUri, versionedSelfUri, coverUriPattern, coverUriPatternVersioned } = buildSelfUris(pkg)
   return {
-    schemaVersion: '3.0',
+    schemaVersion: '3.1',
     tool: {
       name: pkg.name,
       version: pkg.version,
@@ -289,7 +289,7 @@ function build(): CapabilitiesV3 {
     compatibility: {
       minToolVersion: '0.1.0',
       recommendedToolVersion: pkg.version,
-      supportedSchemaVersions: ['3.0'],
+      supportedSchemaVersions: ['3.0', '3.1'],
     },
     contract: {
       fenceOuter: '::::',

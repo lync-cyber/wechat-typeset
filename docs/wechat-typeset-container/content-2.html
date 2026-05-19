@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>容器集 · 结构容器</title>
+<meta name="viewport" content="width=1440">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shell.css">
+</head>
+<body>
+
+<header class="canvas-head">
+  <div>
+    <div class="eyebrow">File 01 / Series B &nbsp;·&nbsp; Structural Containers</div>
+    <h1>容器集 二：<br>结构容器</h1>
+  </div>
+  <div class="meta">
+    对比 / 分步 / 对话 / 问答 / 表格<br>
+    <a href="index.html" style="color:#e8e6e0;border-bottom:1px solid #e8e6e0;text-decoration:none">← 回索引</a>
+  </div>
+</header>
+
+
+<!-- ╔══════════════════ COMPARE 对比框 ══════════════════╗ -->
+<section class="section">
+  <div class="section-head">
+    <div class="idx">B.01 / COMPARE</div>
+    <div>
+      <h2>对比框 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--canvas-dim);margin-left:14px;text-transform:uppercase">compare</span></h2>
+      <p>双方对照。四主题分别用<b>双栏编号</b>、<b>甲乙朱字</b>、<b>学名拉丁对照表</b>、<b>圆方几何代号</b>区分两侧——绝不使用"绿对红"的色彩强行对立。</p>
+    </div>
+  </div>
+
+  <div class="container-group">
+    <div class="cg-head"><span class="code">compare</span><span class="cn">对比框</span><span class="note">8 / 8</span></div>
+    <div class="variants">
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·A NUMBERED COLS</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid #0a0a0a;border-bottom:1.5px solid #0a0a0a;">
+    <div style="padding:14px 12px 14px 0;border-right:1px solid #0a0a0a;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;">N° 01</div>
+      <div style="font-size:13px;font-weight:600;color:#0a0a0a;margin:4px 0 6px;letter-spacing:.1em;">观　点 一</div>
+      <p style="font-size:14px;line-height:1.85;color:#1a1a1a;margin:0;">城市的密度本身就是一种自由——人随时可以隐没在人群里。</p>
+    </div>
+    <div style="padding:14px 0 14px 12px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;">N° 02</div>
+      <div style="font-size:13px;font-weight:600;color:#0a0a0a;margin:4px 0 6px;letter-spacing:.1em;">观　点 二</div>
+      <p style="font-size:14px;line-height:1.85;color:#1a1a1a;margin:0;">密度同时也是牢笼——你无处可去，因为任何角落都属于他人。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·B INTERLEAVED ROWS</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:60px 1fr;gap:0;border-top:1px solid #0a0a0a;">
+    <div style="padding:12px 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;border-right:1px solid #0a0a0a;padding-right:8px;">PRO</div>
+    <div style="padding:12px 0 12px 12px;font-size:14px;line-height:1.85;color:#0a0a0a;">远程办公让通勤为零，留下更多时间给家人与自己。</div>
+    <div style="padding:12px 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;border-top:1px solid #0a0a0a;border-right:1px solid #0a0a0a;padding-right:8px;">CON</div>
+    <div style="padding:12px 0 12px 12px;font-size:14px;line-height:1.85;color:#0a0a0a;border-top:1px solid #0a0a0a;">家与办公室合一，模糊了下班的边界，疲惫无处藏身。</div>
+  </div>
+  <div style="border-bottom:1px solid #0a0a0a;"></div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·A 甲 / 乙</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:22px;height:22px;background:#a03a2a;color:#f3eada;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;">甲</span>
+        <span style="font-size:12px;color:#6b4a2a;letter-spacing:.2em;">说</span>
+      </div>
+      <p style="font-size:14px;line-height:1.95;color:#2a1d10;margin:0;">古之学者为己，所以日日精进而不待人知。</p>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:22px;height:22px;border:1.5px solid #a03a2a;color:#a03a2a;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;">乙</span>
+        <span style="font-size:12px;color:#6b4a2a;letter-spacing:.2em;">驳</span>
+      </div>
+      <p style="font-size:14px;line-height:1.95;color:#2a1d10;margin:0;">今之学者为人，所以朝有所悟便急于告天下。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·B 上下铺陈</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:flex;gap:10px;margin-bottom:14px;">
+    <div style="flex-shrink:0;writing-mode:vertical-rl;font-size:11px;color:#a03a2a;letter-spacing:.4em;padding:6px 4px;border:1px solid #a03a2a;font-weight:500;">原说</div>
+    <p style="font-size:14.5px;line-height:1.95;color:#2a1d10;margin:0;flex:1;align-self:center;">士不可不弘毅，任重而道远。</p>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <div style="flex-shrink:0;writing-mode:vertical-rl;font-size:11px;color:#6b4a2a;letter-spacing:.4em;padding:6px 4px;border:1px dashed #6b4a2a;">今解</div>
+    <p style="font-size:14.5px;line-height:1.95;color:#6b4a2a;margin:0;flex:1;align-self:center;">现代人之负重，多半不在道远，而在迷途。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·A SPECIMEN A/B</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div>
+      <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;border-bottom:1px solid #1f2a2a;padding-bottom:2px;margin-bottom:6px;">Spec. A</div>
+      <div style="font-size:13px;color:#1f2a2a;font-weight:500;margin-bottom:4px;">珙桐</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.1em;margin-bottom:8px;">Davidia involucrata</div>
+      <p style="font-size:13px;line-height:1.9;color:#1f2a2a;margin:0;">花苞片白如鸽，喜阴凉，海拔 1500–2200m。</p>
+    </div>
+    <div>
+      <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;border-bottom:1px solid #1f2a2a;padding-bottom:2px;margin-bottom:6px;">Spec. B</div>
+      <div style="font-size:13px;color:#1f2a2a;font-weight:500;margin-bottom:4px;">楠木</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.1em;margin-bottom:8px;">Phoebe zhennan</div>
+      <p style="font-size:13px;line-height:1.9;color:#1f2a2a;margin:0;">常绿乔木，纹理直，材质细密，多见于川黔。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·B MEASUREMENT</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center;gap:0 10px;font-size:14px;color:#1f2a2a;line-height:2.1;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;letter-spacing:.16em;">A</span>
+    <span>砖木结构</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;letter-spacing:.16em;">vs.</span>
+    <span style="text-align:right;">钢混结构 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;letter-spacing:.16em;margin-left:4px;">B</span></span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dashed #5e6f6a;padding-top:4px;">寿命</span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:4px;">百年以上</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dashed #5e6f6a;padding-top:4px;text-align:center;">／</span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:4px;text-align:right;">五十年</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;">维护</span>
+    <span>需匠人</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;text-align:center;">／</span>
+    <span style="text-align:right;">几乎免修</span>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·A CIRCLE / SQUARE</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:18px;height:18px;border:2px solid #111;border-radius:50%;display:inline-block;"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#111;font-weight:600;">FORM A</span>
+      </div>
+      <p style="font-family:'Noto Serif SC',serif;font-size:14px;line-height:1.85;color:#111;margin:0;">圆——无方向、无端点，平等地朝向所有方向。</p>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:18px;height:18px;background:#c8412e;display:inline-block;"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#111;font-weight:600;">FORM B</span>
+      </div>
+      <p style="font-family:'Noto Serif SC',serif;font-size:14px;line-height:1.85;color:#111;margin:0;">方——有边、有角，承认重力与方向的存在。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·B AXIS DIAGRAM</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:8px 0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;flex-shrink:0;">A. 现代主义</span>
+    <span style="flex:1;height:2px;background:#111;position:relative;">
+      <span style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#c8412e;border-radius:50%;"></span>
+    </span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;flex-shrink:0;">B. 后现代</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-family:'Noto Serif SC',serif;font-size:13.5px;line-height:1.85;color:#111;">
+    <p style="margin:0;">秩序 / 网格 / 功能优先 / 反装饰</p>
+    <p style="margin:0;text-align:right;">游戏 / 引用 / 表达优先 / 拥抱装饰</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════ STEPS 分步流程 ══════════════════╗ -->
+<section class="section">
+  <div class="section-head">
+    <div class="idx">B.02 / STEPS</div>
+    <div>
+      <h2>分步流程 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--canvas-dim);margin-left:14px;text-transform:uppercase">steps</span></h2>
+      <p>序列动作。分别走<b>大数字编号</b>、<b>一二三汉字小印</b>、<b>刻度尺断点</b>、<b>几何符号链</b>四种节奏感来呈现"先后"。</p>
+    </div>
+  </div>
+
+  <div class="container-group">
+    <div class="cg-head"><span class="code">steps</span><span class="cn">分步流程</span><span class="note">8 / 8</span></div>
+    <div class="variants">
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·A LARGE NUMERAL</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #0a0a0a;">
+    <div style="font-family:'Lora',serif;font-size:32px;line-height:.9;color:#0a0a0a;font-weight:500;">01</div>
+    <div>
+      <div style="font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:4px;">收集材料</div>
+      <p style="font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;">阅读至少三篇相关研究，并整理出彼此分歧的关键点。</p>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #6b6b65;">
+    <div style="font-family:'Lora',serif;font-size:32px;line-height:.9;color:#0a0a0a;font-weight:500;">02</div>
+    <div>
+      <div style="font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:4px;">提出初稿</div>
+      <p style="font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;">在三日内完成，允许粗糙；不要试图一次成型。</p>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:10px 0;border-top:1px solid #6b6b65;border-bottom:1px solid #0a0a0a;">
+    <div style="font-family:'Lora',serif;font-size:32px;line-height:.9;color:#0a0a0a;font-weight:500;">03</div>
+    <div>
+      <div style="font-size:14px;font-weight:600;color:#0a0a0a;margin-bottom:4px;">交付审稿</div>
+      <p style="font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;">由两位编辑独立审读后再合议。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·B TIMELINE ROW</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid #0a0a0a;padding-top:10px;position:relative;">
+    <div style="position:absolute;top:-5px;left:0;width:100%;display:flex;justify-content:space-between;">
+      <span style="width:8px;height:8px;background:#0a0a0a;"></span>
+      <span style="width:8px;height:8px;background:#0a0a0a;"></span>
+      <span style="width:8px;height:8px;background:#0a0a0a;"></span>
+      <span style="width:8px;height:8px;background:#0a0a0a;"></span>
+    </div>
+    <div style="padding-right:6px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;">DAY 01</div>
+      <div style="font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;">立题</div>
+    </div>
+    <div style="padding-right:6px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;">DAY 04</div>
+      <div style="font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;">采访</div>
+    </div>
+    <div style="padding-right:6px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;">DAY 10</div>
+      <div style="font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;">初稿</div>
+    </div>
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;">DAY 18</div>
+      <div style="font-size:12px;color:#0a0a0a;font-weight:500;line-height:1.5;margin-top:2px;">发表</div>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·A 一二三 印</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+    <span style="width:26px;height:26px;background:#a03a2a;color:#f3eada;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">一</span>
+    <div><div style="font-size:14px;color:#2a1d10;font-weight:500;margin-bottom:2px;">焚香</div><p style="font-size:13.5px;line-height:1.9;color:#6b4a2a;margin:0;">取沉水香一指，置炉中。</p></div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+    <span style="width:26px;height:26px;background:#a03a2a;color:#f3eada;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">二</span>
+    <div><div style="font-size:14px;color:#2a1d10;font-weight:500;margin-bottom:2px;">候水</div><p style="font-size:13.5px;line-height:1.9;color:#6b4a2a;margin:0;">水将沸而未沸，谓之"蟹眼"。</p></div>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:14px;">
+    <span style="width:26px;height:26px;background:#a03a2a;color:#f3eada;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">三</span>
+    <div><div style="font-size:14px;color:#2a1d10;font-weight:500;margin-bottom:2px;">注盏</div><p style="font-size:13.5px;line-height:1.9;color:#6b4a2a;margin:0;">悬壶高冲，茶香自起。</p></div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·B 直排序号</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:36px 1fr 36px 1fr;gap:6px 12px;">
+    <div style="writing-mode:vertical-rl;font-size:11px;letter-spacing:.4em;color:#a03a2a;font-weight:500;text-align:center;border:1px solid #a03a2a;padding:8px 0;">第·一·步</div>
+    <p style="font-size:13.5px;line-height:1.85;color:#2a1d10;margin:0;">观——静坐良久，使心如止水。</p>
+    <div style="writing-mode:vertical-rl;font-size:11px;letter-spacing:.4em;color:#a03a2a;font-weight:500;text-align:center;border:1px solid #a03a2a;padding:8px 0;">第·二·步</div>
+    <p style="font-size:13.5px;line-height:1.85;color:#2a1d10;margin:0;">问——心既静矣，乃可设问。</p>
+    <div style="writing-mode:vertical-rl;font-size:11px;letter-spacing:.4em;color:#a03a2a;font-weight:500;text-align:center;border:1px solid #a03a2a;padding:8px 0;">第·三·步</div>
+    <p style="font-size:13.5px;line-height:1.85;color:#2a1d10;margin:0;">行——身体力之，知行合一。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·A RULER TICKS</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="display:flex;align-items:flex-end;gap:0;border-bottom:1px solid #1f2a2a;padding-bottom:4px;margin-bottom:10px;">
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:10px;"></span>
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:6px;"></span>
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:10px;"></span>
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:6px;"></span>
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:10px;"></span>
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:6px;"></span>
+    <span style="flex:1;border-left:1px solid #1f2a2a;height:10px;border-right:1px solid #1f2a2a;"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;margin-bottom:10px;">
+    <span>0KM</span><span>30KM</span><span>72KM</span><span>120KM</span>
+  </div>
+  <div style="font-family:'Noto Serif SC',serif;font-size:13.5px;line-height:1.9;color:#1f2a2a;">
+    <div>0–30: 出谷至河口，林相稀疏。</div>
+    <div>30–72: 进入云杉带，海拔渐升。</div>
+    <div>72–120: 雪线以上，岩石裸露。</div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·B FIELD STAGES</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr;gap:0;">
+    <div style="display:grid;grid-template-columns:48px 1fr;padding:8px 0;border-top:1px dashed #5e6f6a;align-items:start;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">STG·I</div>
+        <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;margin-top:1px;">germinatio</div>
+      </div>
+      <div style="font-size:13.5px;line-height:1.85;color:#1f2a2a;">种子萌发——温度回升至 14℃ 以上，含水率 60%。</div>
+    </div>
+    <div style="display:grid;grid-template-columns:48px 1fr;padding:8px 0;border-top:1px dashed #5e6f6a;align-items:start;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">STG·II</div>
+        <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;margin-top:1px;">vegetatio</div>
+      </div>
+      <div style="font-size:13.5px;line-height:1.85;color:#1f2a2a;">营养生长——主茎抽节，需充足光照。</div>
+    </div>
+    <div style="display:grid;grid-template-columns:48px 1fr;padding:8px 0;border-top:1px dashed #5e6f6a;border-bottom:1px dashed #5e6f6a;align-items:start;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">STG·III</div>
+        <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;margin-top:1px;">floratio</div>
+      </div>
+      <div style="font-size:13.5px;line-height:1.85;color:#1f2a2a;">开花结实——昼夜温差 ≥ 8℃ 时最佳。</div>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·A GEOMETRIC CHAIN</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:8px 0;">
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+    <span style="width:24px;height:24px;background:#111;border-radius:50%;color:#efece5;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;">1</span>
+    <span style="flex:1;height:1px;background:#111;"></span>
+    <span style="width:24px;height:24px;background:#c8412e;color:#efece5;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;">2</span>
+    <span style="flex:1;height:1px;background:#111;"></span>
+    <span style="width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:22px solid #111;position:relative;">
+      <span style="position:absolute;top:6px;left:-5px;width:10px;text-align:center;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;">3</span>
+    </span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.7;color:#111;">
+    <div><b style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#454442;">DEFINE</b><br>明确问题</div>
+    <div><b style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#454442;">DESIGN</b><br>提出方案</div>
+    <div><b style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#454442;">DEPLOY</b><br>付诸实施</div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·B BLOCK STACK</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:30px 1fr;gap:0;">
+    <div style="background:#111;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:14px 0;font-weight:600;">01</div>
+    <div style="padding:12px 0 12px 14px;border-bottom:1px solid #111;">
+      <div style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#111;">观察</div>
+      <p style="font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:2px 0 0;">不带先入之见地看。</p>
+    </div>
+    <div style="background:#c8412e;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:14px 0;font-weight:600;">02</div>
+    <div style="padding:12px 0 12px 14px;border-bottom:1px solid #111;">
+      <div style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#111;">归纳</div>
+      <p style="font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:2px 0 0;">从混乱中提炼模式。</p>
+    </div>
+    <div style="background:#454442;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:14px 0;font-weight:600;">03</div>
+    <div style="padding:12px 0 12px 14px;">
+      <div style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#111;">验证</div>
+      <p style="font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:2px 0 0;">用反例去检验它。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════ DIALOGUE 对话区 ══════════════════╗ -->
+<section class="section">
+  <div class="section-head">
+    <div class="idx">B.03 / DIALOGUE</div>
+    <div>
+      <h2>对话区 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--canvas-dim);margin-left:14px;text-transform:uppercase">dialogue</span></h2>
+      <p>不用聊天气泡。分别用<b>剧本式人名顶行</b>、<b>问主名 + 客名小字</b>、<b>录音字幕条</b>、<b>圆方代号</b>来标识说话者。</p>
+    </div>
+  </div>
+
+  <div class="container-group">
+    <div class="cg-head"><span class="code">dialogue</span><span class="cn">对话区</span><span class="note">8 / 8</span></div>
+    <div class="variants">
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·A SCREENPLAY</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;font-weight:600;margin-bottom:2px;">記者　LI Z.</div>
+  <p style="font-size:14.5px;line-height:1.85;color:#1a1a1a;margin:0 0 14px;">那你怎么看"乡愁"这两个字？</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;font-weight:600;margin-bottom:2px;">受訪　Y. W.</div>
+  <p style="font-size:14.5px;line-height:1.85;color:#1a1a1a;margin:0;">乡愁是地理被时间替换之后的产物。我们怀念的从来不是地方，而是再也回不去的那个自己。</p>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·B SHORT INITIAL</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:24px 1fr;gap:12px;font-size:14.5px;line-height:1.85;color:#1a1a1a;">
+    <span style="font-family:'Lora',serif;font-style:italic;font-weight:500;color:#0a0a0a;padding-top:2px;">Q.</span>
+    <p style="margin:0 0 12px;">写小说和写诗，对你而言是同一件事吗？</p>
+    <span style="font-family:'Lora',serif;font-style:italic;font-weight:500;color:#0a0a0a;padding-top:2px;">A.</span>
+    <p style="margin:0;">不是。诗是一束光，小说是被光照亮的房子。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·A 主客名签</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="margin-bottom:14px;">
+    <div style="display:inline-block;background:#a03a2a;color:#f3eada;font-size:11px;padding:2px 8px;letter-spacing:.2em;font-weight:500;">主　人</div>
+    <p style="font-size:14.5px;line-height:1.95;color:#2a1d10;margin:6px 0 0;">茶熟矣，请君入瓮。</p>
+  </div>
+  <div>
+    <div style="display:inline-block;border:1px solid #a03a2a;color:#a03a2a;font-size:11px;padding:2px 8px;letter-spacing:.2em;background:#f3eada;">客 一</div>
+    <p style="font-size:14.5px;line-height:1.95;color:#6b4a2a;margin:6px 0 0;">闻香即知是当年新摘者，主家费心。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·B 双行问答</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;margin-bottom:10px;">
+    <div style="writing-mode:vertical-rl;font-size:13px;color:#a03a2a;letter-spacing:.3em;font-weight:500;line-height:1;padding-top:2px;">问</div>
+    <p style="font-size:14.5px;line-height:1.9;color:#2a1d10;margin:0;">闻先生治学三十年，所守者何？</p>
+  </div>
+  <div style="display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;">
+    <div style="writing-mode:vertical-rl;font-size:13px;color:#6b4a2a;letter-spacing:.3em;font-weight:500;line-height:1;padding-top:2px;">答</div>
+    <p style="font-size:14.5px;line-height:1.9;color:#2a1d10;margin:0;">三十年只守一句——「实事求是」，看似浅，行之不易。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·A AUDIO STAMP</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="margin-bottom:12px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">00:04:21</span>
+      <span style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;">— interviewer</span>
+    </div>
+    <p style="font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;">您在这片山里走了几十年，最大的变化是什么？</p>
+  </div>
+  <div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">00:04:35</span>
+      <span style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;">— villager</span>
+    </div>
+    <p style="font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;">蝉鸣声小了。从前夏天，连说话都得喊。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·B SPECIMEN TAG</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="border-top:1px dashed #1f2a2a;padding:10px 0;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+      <span style="font-size:12px;color:#1f2a2a;font-weight:500;">林　师傅</span>
+      <span style="font-family:'Lora',serif;font-style:italic;font-size:10px;color:#5e6f6a;">— forester, age 67</span>
+    </div>
+    <p style="font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;">树要慢着养，跟人一样，急不得。</p>
+  </div>
+  <div style="border-top:1px dashed #1f2a2a;border-bottom:1px dashed #1f2a2a;padding:10px 0;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+      <span style="font-size:12px;color:#8b4a3a;font-weight:500;">访谈人</span>
+      <span style="font-family:'Lora',serif;font-style:italic;font-size:10px;color:#5e6f6a;">— author</span>
+    </div>
+    <p style="font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;">您指的"慢"，是几年？</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·A SHAPE SPEAKER</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;">
+    <span style="width:22px;height:22px;background:#111;border-radius:50%;flex-shrink:0;margin-top:3px;"></span>
+    <p style="font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;">设计的难处，从来不是想到一个好点子。</p>
+  </div>
+  <div style="display:flex;gap:12px;align-items:flex-start;">
+    <span style="width:22px;height:22px;background:#c8412e;flex-shrink:0;margin-top:3px;"></span>
+    <p style="font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;">是在五十个好点子里，决定砍掉哪四十九个。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·B CODE NAME</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:42px 1fr;gap:12px;margin-bottom:10px;align-items:start;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:#efece5;background:#111;padding:3px 0;text-align:center;font-weight:600;">A</div>
+    <p style="font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;">如果非要在功能和美之间选一个？</p>
+  </div>
+  <div style="display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:#efece5;background:#c8412e;padding:3px 0;text-align:center;font-weight:600;">B</div>
+    <p style="font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;">我会问：你愿意一辈子用一件丑的好东西吗？</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════ QA-BLOCK 问答区块 ══════════════════╗ -->
+<section class="section">
+  <div class="section-head">
+    <div class="idx">B.04 / QA-BLOCK</div>
+    <div>
+      <h2>问答区块 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--canvas-dim);margin-left:14px;text-transform:uppercase">qa-block</span></h2>
+      <p>更结构化的 FAQ 形式。分别走<b>序号 + 横线</b>、<b>问 / 答两枚朱印</b>、<b>采样表格</b>、<b>圆 vs 方</b>四套语言。</p>
+    </div>
+  </div>
+
+  <div class="container-group">
+    <div class="cg-head"><span class="code">qa-block</span><span class="cn">问答区块</span><span class="note">8 / 8</span></div>
+    <div class="variants">
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·A NUMBERED FAQ</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:flex;align-items:baseline;gap:10px;border-bottom:1px solid #0a0a0a;padding-bottom:6px;margin-bottom:8px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#6b6b65;">Q.01</span>
+    <span style="font-size:14px;color:#0a0a0a;font-weight:600;">订阅是否包含纸质刊？</span>
+  </div>
+  <p style="font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0 0 14px;">不含。本刊数字订阅与纸刊为独立产品，需分别购买。</p>
+  <div style="display:flex;align-items:baseline;gap:10px;border-bottom:1px solid #0a0a0a;padding-bottom:6px;margin-bottom:8px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#6b6b65;">Q.02</span>
+    <span style="font-size:14px;color:#0a0a0a;font-weight:600;">可否退订？</span>
+  </div>
+  <p style="font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;">可以。订阅后三十日内全额退款，逾期按比例返还。</p>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·B HANGING Q.A.</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;margin-bottom:12px;">
+    <div style="font-family:'Lora',serif;font-size:24px;font-style:italic;color:#0a0a0a;line-height:1;font-weight:500;">Q.</div>
+    <p style="font-size:14.5px;line-height:1.85;color:#0a0a0a;margin:0;font-weight:500;">我是否需要先具备写作基础才能加入这个写作社群？</p>
+  </div>
+  <div style="display:grid;grid-template-columns:32px 1fr;gap:10px;border-top:1px solid #6b6b65;padding-top:12px;">
+    <div style="font-family:'Lora',serif;font-size:24px;font-style:italic;color:#6b6b65;line-height:1;font-weight:500;">A.</div>
+    <p style="font-size:14.5px;line-height:1.85;color:#3a3a38;margin:0;">不需要。我们更欢迎尚未形成"写作惯性"的初学者。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·A 问／答 印</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;margin-bottom:12px;">
+    <span style="width:26px;height:26px;background:#a03a2a;color:#f3eada;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1;">问</span>
+    <p style="font-size:14.5px;line-height:1.9;color:#2a1d10;margin:0;font-weight:500;">读古书是否一定要懂训诂之学？</p>
+  </div>
+  <div style="display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;">
+    <span style="width:26px;height:26px;border:1.5px solid #a03a2a;color:#a03a2a;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1;background:#f3eada;">答</span>
+    <p style="font-size:14.5px;line-height:1.9;color:#6b4a2a;margin:0;">未必。能读懂大意已属可贵，训诂之学，可俟后日积累。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·B 设问 + 注</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="border-top:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;padding:10px 0;margin-bottom:10px;">
+    <span style="display:inline-block;font-family:'Noto Serif SC',serif;font-size:11px;color:#a03a2a;letter-spacing:.3em;margin-bottom:6px;">設・問</span>
+    <p style="font-size:14.5px;line-height:1.95;color:#2a1d10;margin:0;font-weight:500;">何谓"诗境"？</p>
+  </div>
+  <div style="padding:0 0 0 20px;position:relative;">
+    <span style="position:absolute;left:0;top:4px;font-family:'Noto Serif SC',serif;font-size:11px;color:#6b4a2a;letter-spacing:.2em;">註</span>
+    <p style="font-size:13.5px;line-height:1.9;color:#6b4a2a;margin:0;">境者，意中之境也。情景交融而非情景相加，所谓"以我观物，物皆著我之色彩"。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·A SAMPLE QUERY</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:54px 1fr;gap:8px;border-bottom:1px solid #1f2a2a;padding-bottom:10px;margin-bottom:10px;">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;">QUERY</div>
+      <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;">N° 014</div>
+    </div>
+    <p style="font-size:14px;line-height:1.85;color:#1f2a2a;margin:0;font-weight:500;">山中昼夜温差超过多少时，应当停止野外考察？</p>
+  </div>
+  <div style="display:grid;grid-template-columns:54px 1fr;gap:8px;">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">FINDING</div>
+      <div style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#8b4a3a;">obs. 014.b</div>
+    </div>
+    <p style="font-size:14px;line-height:1.85;color:#1f2a2a;margin:0;">温差 ≥ 15℃ 且海拔超过 3000m 时，应即刻撤回营地。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·B FIELD CARD</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="border:1px solid #1f2a2a;padding:10px 12px;">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dashed #1f2a2a;padding-bottom:4px;margin-bottom:6px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;">Q</span>
+      <span style="font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;">Card 09</span>
+    </div>
+    <p style="font-size:14px;line-height:1.85;color:#1f2a2a;margin:0 0 10px;">为何记录树木胸径而不是树高？</p>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;border-top:1px dashed #1f2a2a;padding-top:6px;margin-bottom:4px;">A</div>
+    <p style="font-size:14px;line-height:1.85;color:#1f2a2a;margin:0;">胸径稳定可测，树高常因树梢断折而失真。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·A CIRCLE vs SQUARE</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
+    <span style="width:24px;height:24px;border:2px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#111;flex-shrink:0;">Q</span>
+    <p style="font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;font-weight:500;">设计师该不该有自己的"风格"？</p>
+  </div>
+  <div style="display:flex;align-items:flex-start;gap:12px;">
+    <span style="width:24px;height:24px;background:#c8412e;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:#efece5;flex-shrink:0;">A</span>
+    <p style="font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.85;color:#111;margin:0;">风格是结果，不是目标。刻意打造的风格，往往变成局限。</p>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·B TYPED BLOCK</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr;gap:0;border:1px solid #111;">
+    <div style="padding:10px 12px;background:#111;color:#efece5;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;margin-bottom:4px;color:#9a968a;">Q · 01</div>
+      <div style="font-family:'Noto Serif SC',serif;font-size:14px;font-weight:500;">如何判断一个项目应该被砍掉？</div>
+    </div>
+    <div style="padding:10px 12px;background:#efece5;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;margin-bottom:4px;color:#454442;">A · 01</div>
+      <p style="font-family:'Noto Serif SC',serif;font-size:14px;line-height:1.85;color:#111;margin:0;">当你已经无法回答"为什么是我们来做"时——该砍。</p>
+    </div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════ TABLE-CARD 表格卡 ══════════════════╗ -->
+<section class="section">
+  <div class="section-head">
+    <div class="idx">B.05 / TABLE-CARD</div>
+    <div>
+      <h2>表格卡 <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--canvas-dim);margin-left:14px;text-transform:uppercase">table-card</span></h2>
+      <p>用于在公众号中展示对照数据。分别用<b>报刊三线表</b>、<b>方格内填朱字</b>、<b>测量栏 + 学名首列</b>、<b>纯几何 grid 网格</b>。</p>
+    </div>
+  </div>
+
+  <div class="container-group">
+    <div class="cg-head"><span class="code">table-card</span><span class="cn">表格卡</span><span class="note">8 / 8</span></div>
+    <div class="variants">
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·A THREE-LINE TABLE</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <table style="width:100%;border-collapse:collapse;font-size:13px;color:#0a0a0a;">
+    <thead>
+      <tr style="border-top:2px solid #0a0a0a;border-bottom:1px solid #0a0a0a;">
+        <th style="text-align:left;padding:8px 4px;font-weight:600;letter-spacing:.06em;">项目</th>
+        <th style="text-align:right;padding:8px 4px;font-weight:600;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;font-size:11px;">2023</th>
+        <th style="text-align:right;padding:8px 4px;font-weight:600;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;font-size:11px;">2024</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:8px 4px;">订阅</td><td style="text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;">12,402</td><td style="text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;">18,973</td></tr>
+      <tr><td style="padding:8px 4px;">单刊销量</td><td style="text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;">3,114</td><td style="text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;">4,287</td></tr>
+      <tr style="border-bottom:2px solid #0a0a0a;"><td style="padding:8px 4px;">合作篇目</td><td style="text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;">28</td><td style="text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;">46</td></tr>
+    </tbody>
+  </table>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t1"><span class="dot"></span><span class="theme-name">编辑部</span><span class="var-id">01·B INDEX TABLE</span></div>
+        <div class="phone t1"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:40px 1fr auto;gap:10px;font-size:13.5px;color:#0a0a0a;border-top:1px solid #0a0a0a;line-height:1;padding:10px 0 8px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.16em;">N°01</span>
+    <span style="font-weight:600;">城市边界</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6b6b65;">P. 014</span>
+  </div>
+  <div style="display:grid;grid-template-columns:40px 1fr auto;gap:10px;font-size:13.5px;color:#0a0a0a;border-top:1px solid #cfcabe;line-height:1;padding:10px 0 8px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.16em;">N°02</span>
+    <span style="font-weight:600;">乡愁与归处</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6b6b65;">P. 038</span>
+  </div>
+  <div style="display:grid;grid-template-columns:40px 1fr auto;gap:10px;font-size:13.5px;color:#0a0a0a;border-top:1px solid #cfcabe;border-bottom:1px solid #0a0a0a;line-height:1;padding:10px 0 8px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.16em;">N°03</span>
+    <span style="font-weight:600;">迁徙地图</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6b6b65;">P. 072</span>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·A 朱角方格表</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #6b4a2a;font-size:13px;color:#2a1d10;">
+    <div style="padding:8px;border-right:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;background:#e6d5b3;color:#6b4a2a;font-weight:500;letter-spacing:.1em;">朝代</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;background:#e6d5b3;color:#6b4a2a;font-weight:500;letter-spacing:.1em;">国祚</div>
+    <div style="padding:8px;border-bottom:1px solid #6b4a2a;background:#e6d5b3;color:#6b4a2a;font-weight:500;letter-spacing:.1em;text-align:right;"><span style="color:#a03a2a;">·</span> 代表</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;">北宋</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;font-family:'IBM Plex Mono',monospace;font-size:13px;">167 年</div>
+    <div style="padding:8px;border-bottom:1px solid #6b4a2a;text-align:right;color:#a03a2a;">仁宗</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;">南宋</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;border-bottom:1px solid #6b4a2a;font-family:'IBM Plex Mono',monospace;font-size:13px;">152 年</div>
+    <div style="padding:8px;border-bottom:1px solid #6b4a2a;text-align:right;color:#a03a2a;">孝宗</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;">明</div>
+    <div style="padding:8px;border-right:1px solid #6b4a2a;font-family:'IBM Plex Mono',monospace;font-size:13px;">276 年</div>
+    <div style="padding:8px;text-align:right;color:#a03a2a;">孝宗</div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t2"><span class="dot"></span><span class="theme-name">宋本批注</span><span class="var-id">02·B 钤印目录</span></div>
+        <div class="phone t2"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;">
+  <div style="font-family:'Noto Serif SC',serif;font-size:11px;color:#a03a2a;letter-spacing:.3em;border-bottom:1px solid #a03a2a;padding-bottom:4px;margin-bottom:10px;">藏 書 目 錄</div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:6px 16px;font-size:13.5px;color:#2a1d10;line-height:2;">
+    <span>《资治通鉴》</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b4a2a;">乾隆十二年刻本</span>
+    <span style="border-top:1px dashed #6b4a2a;padding-top:4px;">《史记》</span><span style="border-top:1px dashed #6b4a2a;padding-top:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b4a2a;">武英殿聚珍版</span>
+    <span style="border-top:1px dashed #6b4a2a;padding-top:4px;">《楚辞集注》</span><span style="border-top:1px dashed #6b4a2a;padding-top:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b4a2a;">宋淳熙刊</span>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·A SPECIMEN TABLE</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px 10px;font-size:12.5px;color:#1f2a2a;line-height:1.9;border-top:1px solid #1f2a2a;padding-top:6px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5e6f6a;">SPEC.</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5e6f6a;">HT.</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5e6f6a;">DBH</span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:6px;">珙桐 <i style="font-family:'Lora',serif;color:#8b4a3a;font-size:11px;">D. involucrata</i></span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;">22m</span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;">58cm</span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:6px;">楠木 <i style="font-family:'Lora',serif;color:#8b4a3a;font-size:11px;">P. zhennan</i></span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;">31m</span>
+    <span style="border-top:1px dashed #5e6f6a;padding-top:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;">87cm</span>
+    <span style="border-top:1px dashed #5e6f6a;border-bottom:1px solid #1f2a2a;padding:6px 0;">连香树 <i style="font-family:'Lora',serif;color:#8b4a3a;font-size:11px;">C. japonicum</i></span>
+    <span style="border-top:1px dashed #5e6f6a;border-bottom:1px solid #1f2a2a;padding:6px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;">18m</span>
+    <span style="border-top:1px dashed #5e6f6a;border-bottom:1px solid #1f2a2a;padding:6px 0;font-family:'IBM Plex Mono',monospace;font-size:12px;">42cm</span>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t3"><span class="dot"></span><span class="theme-name">博物笔记</span><span class="var-id">03·B SAMPLE LOG</span></div>
+        <div class="phone t3"><div class="phone-inner">
+<div style="font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.18em;margin-bottom:6px;">SAMPLE LOG · 2025.04</div>
+  <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:13px;color:#1f2a2a;line-height:1.7;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;">04.02</span>
+    <span>雀儿山垭口</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;font-weight:500;">4,250m</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dotted #5e6f6a;padding-top:6px;">04.07</span>
+    <span style="border-top:1px dotted #5e6f6a;padding-top:6px;">竹巴笼沟</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;border-top:1px dotted #5e6f6a;padding-top:6px;font-weight:500;">2,180m</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dotted #5e6f6a;padding-top:6px;">04.11</span>
+    <span style="border-top:1px dotted #5e6f6a;padding-top:6px;">理塘草原</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;border-top:1px dotted #5e6f6a;padding-top:6px;font-weight:500;">3,800m</span>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·A GRID BLOCK</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#111;border:1px solid #111;">
+    <div style="background:#111;color:#efece5;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;font-weight:600;">YEAR</div>
+    <div style="background:#111;color:#efece5;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;font-weight:600;text-align:right;">USERS</div>
+    <div style="background:#111;color:#efece5;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;font-weight:600;text-align:right;">GROWTH</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'Lora',serif;font-size:14px;color:#111;">2022</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#111;text-align:right;">12.4k</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#454442;text-align:right;">—</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'Lora',serif;font-size:14px;color:#111;">2023</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#111;text-align:right;">28.9k</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#c8412e;text-align:right;font-weight:600;">+133%</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'Lora',serif;font-size:14px;color:#111;">2024</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#111;text-align:right;">51.2k</div>
+    <div style="background:#efece5;padding:10px 8px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#c8412e;text-align:right;font-weight:600;">+77%</div>
+  </div>
+</div>
+        </div></div>
+      </div>
+
+      <div class="variant">
+        <div class="v-label t4"><span class="dot"></span><span class="theme-name">包豪斯文摘</span><span class="var-id">04·B MATRIX</span></div>
+        <div class="phone t4"><div class="phone-inner">
+<div style="font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;margin-bottom:8px;">MATRIX · 04</div>
+  <div style="display:grid;grid-template-columns:60px 1fr 1fr 1fr;gap:0;">
+    <div></div>
+    <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;padding:4px 0;">小</div>
+    <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;padding:4px 0;">中</div>
+    <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;padding:4px 0;">大</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;padding:8px 0;text-align:right;padding-right:8px;border-right:1px solid #111;">高</div>
+    <div style="aspect-ratio:1;background:#efece5;border:1px solid #111;"></div>
+    <div style="aspect-ratio:1;background:#454442;border:1px solid #111;"></div>
+    <div style="aspect-ratio:1;background:#c8412e;border:1px solid #111;"></div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;padding:8px 0;text-align:right;padding-right:8px;border-right:1px solid #111;">中</div>
+    <div style="aspect-ratio:1;background:#efece5;border:1px solid #111;"></div>
+    <div style="aspect-ratio:1;background:#9a968a;border:1px solid #111;"></div>
+    <div style="aspect-ratio:1;background:#454442;border:1px solid #111;"></div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;padding:8px 0;text-align:right;padding-right:8px;border-right:1px solid #111;">低</div>
+    <div style="aspect-ratio:1;background:#efece5;border:1px solid #111;"></div>
+    <div style="aspect-ratio:1;background:#efece5;border:1px solid #111;"></div>
+    <div style="aspect-ratio:1;background:#9a968a;border:1px solid #111;"></div>
+  </div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#454442;margin-top:8px;">影响范围 × 紧急程度</div>
+</div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<footer class="canvas-foot">
+  <span>FILE 01 / SERIES B &nbsp;·&nbsp; STRUCTURAL</span>
+  <span><a href="content-1.html">← 强调与引用</a> &nbsp;|&nbsp; <a href="content-3.html">视觉与列表 →</a></span>
+</footer>
+
+</body>
+</html>

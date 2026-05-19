@@ -15,6 +15,7 @@ import { DIALOGUE_VARIANTS } from '../../variants/registry'
 import { escText } from './_shared/escape'
 import { inlineCss as inline } from './_shared/cssInline'
 import { resolveVariantId } from './_shared/resolveVariant'
+import { devWarn } from './_shared/devWarn'
 
 interface DialogueStackEntry {
   variantId: DialogueVariantId
@@ -67,7 +68,15 @@ export const dialogueTurnContainer: ContainerRenderer = {
     // 普遍写 `speaker=...`，与 dialogue.ts 早期约定的 `name=` 等价。两者别名，name 优先。
     const name = ctx.attrs.name ?? ctx.attrs.speaker ?? ''
     const role = ctx.attrs.role ?? ''
-    const side = ctx.attrs.side ?? 'left'
+    const explicitSide = ctx.attrs.side
+    const side = explicitSide ?? 'left'
+    // side 仅 chat-bubbles 消费；其它骨架静默忽略对作者不友好——dev 提示
+    if (explicitSide !== undefined && top.variantId !== 'chat-bubbles') {
+      devWarn(
+        'dialogue:side',
+        `side="${explicitSide}" 仅 chat-bubbles 骨架消费，当前 variant="${top.variantId}" 会忽略此 attr。要左右气泡请给 dialogue 加 variant=chat-bubbles。`,
+      )
+    }
     top.turnCount += 1
     const idx = top.turnCount - 1
     switch (top.variantId) {

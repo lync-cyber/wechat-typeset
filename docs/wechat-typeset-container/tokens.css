@@ -1,0 +1,99 @@
+/* ================================================================
+   微信文章中文排版 · 设计令牌
+   ----------------------------------------------------------------
+   主题色仅使用于：序号节点、关键数字、装饰短线、装饰引号字符
+   面积控制在页面 15% 以内
+   ================================================================ */
+
+:root {
+  /* 中性色 —— 编辑灰阶 */
+  --ink-1: #1a1a1a;       /* 标题、关键文字 */
+  --ink-2: #333333;       /* 正文 */
+  --ink-3: #595959;       /* 次要文字、说明 */
+  --ink-4: #8c8c8c;       /* 标签、辅助 */
+  --ink-5: #bfbfbf;       /* 装饰线、占位 */
+
+  --paper: #ffffff;       /* 主背景 */
+  --paper-soft: #fafaf9;  /* 微差背景 */
+  --paper-gray: #f5f5f4;  /* 引用块底色 */
+  --paper-deep: #1a1a1a;  /* 反白卡片底 */
+
+  /* 主题色 —— 编辑红，克制使用 */
+  --accent: #B83A2E;
+  --accent-soft: rgba(184, 58, 46, 0.10);
+  --accent-dim: rgba(184, 58, 46, 0.20);
+
+  /* 字体栈 */
+  --serif:
+    "Songti SC", "Source Han Serif SC", "Noto Serif SC",
+    "Times New Roman", Georgia, serif;
+  --sans:
+    "PingFang SC", "Source Han Sans SC", "Noto Sans SC",
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Microsoft YaHei", sans-serif;
+  --mono:
+    "SF Mono", "JetBrains Mono", "Menlo", "Consolas", monospace;
+
+  /* 字号尺度 —— 微信阅读宽度下经过校准 */
+  --fs-display: 56px;
+  --fs-stat: 44px;
+  --fs-h2: 22px;
+  --fs-h3: 18px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+  --fs-micro: 12px;
+
+  /* 行高 */
+  --lh-tight: 1.25;
+  --lh-base: 1.75;     /* 中文正文舒适行高 */
+  --lh-loose: 2.0;
+}
+
+/* ----------------------------------------------------------------
+   全局重置 —— 仅作用于 .wx 文章容器内
+   ---------------------------------------------------------------- */
+.wx {
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-base);
+  color: var(--ink-2);
+  background: var(--paper);
+  /* 中文字距，仿《三联》数字版 */
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+.wx * { box-sizing: border-box; }
+.wx p { margin: 0 0 1em 0; }
+.wx p:last-child { margin-bottom: 0; }
+
+/* 文章主容器：约 440px，模拟微信单列阅读宽度 */
+.wx-article {
+  width: 440px;
+  padding: 32px 24px;
+  background: var(--paper);
+}
+
+/* 标段衔接 —— 紧邻容器前后的正文段落 */
+.wx-para {
+  font-size: var(--fs-body);
+  color: var(--ink-2);
+  line-height: var(--lh-base);
+}
+.wx-para + .wx-para { margin-top: 0.4em; }
+
+/* 容器之间的纵向呼吸 */
+.wx-block { margin: 28px 0; }
+.wx-block:first-child { margin-top: 0; }
+.wx-block:last-child { margin-bottom: 0; }
+
+/* ----------------------------------------------------------------
+   工具：占位文字（用于展示中的填充段落）
+   ---------------------------------------------------------------- */
+.wx-placeholder {
+  color: var(--ink-3);
+  font-size: var(--fs-body);
+  line-height: var(--lh-base);
+}

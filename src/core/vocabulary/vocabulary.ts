@@ -993,7 +993,12 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     parent: 'dialogue',
     fenceLength: 3,
     attrs: [
-      { key: 'name', description: '发言者姓名（必填）', example: '张三' },
+      {
+        key: 'name',
+        description:
+          '发言者姓名（与 shape 二选一必填——shape 以形状代号替代姓名时可省）',
+        example: '张三',
+      },
       { key: 'role', description: '角色标识（"Q" / "A" / "主持人" / "嘉宾"）', example: 'Q' },
       {
         key: 'side',
@@ -1002,8 +1007,23 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
           '其他骨架忽略此 attr。',
         enum: ['left', 'right'],
       },
+      {
+        key: 'shape',
+        description:
+          '以形状代号替代姓名（用于"形状即身份"骨架，如 shape-speaker variant）。' +
+          'circle = 圆形徽章 / square = 方形徽章。声明 shape 时 name 可省，不消费此 attr 的骨架忽略。',
+        enum: ['circle', 'square'],
+      },
+      {
+        key: 'timestamp',
+        description:
+          '时间戳（用于音频 / 视频访谈整理稿，如 "00:04:21"）。' +
+          '仅 audio-stamp 等显式消费此 attr 的骨架渲染，其他骨架忽略。',
+        example: '00:04:21',
+      },
     ],
-    description: 'dialogue 内单轮发言。attrs.name 必填，body 为发言内容。',
+    description:
+      'dialogue 内单轮发言。name 与 shape 二选一必填（shape 以形状代号替代姓名），body 为发言内容。',
     example: '::: dialogue-turn name="张三" role="A"\n你说的没错。\n:::\n',
   },
 

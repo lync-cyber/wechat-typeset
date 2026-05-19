@@ -39,7 +39,7 @@
 |  | `table-row` |  | table-card 内单行。attrs.cells 必填，body 内容被忽略。 |
 |  | `gallery` | ★ | 多图组合：弥补 image-caption 只能单图、markdown 多图串联无版式的缺陷。外层 4 冒号，内部 image-item 列单图。 |
 |  | `image-item` |  | gallery 内单图。info 为该图的图注（小字），body 内容被忽略。 |
-|  | `dialogue-turn` |  | dialogue 内单轮发言。attrs.name 必填，body 为发言内容。 |
+|  | `dialogue-turn` |  | dialogue 内单轮发言。name 与 shape 二选一必填（shape 以形状代号替代姓名），body 为发言内容。 |
 | 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。 |
 |  | `footer-cta` | ★ | 文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。href 支持公众号内链白名单。 |
 |  | `recommend` | ★ | 推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。 |

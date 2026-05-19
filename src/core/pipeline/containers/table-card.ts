@@ -22,6 +22,7 @@ import { TABLE_CARD_VARIANTS } from '../../variants/registry'
 import { resolveVariantId } from './_shared/resolveVariant'
 import { escText } from './_shared/escape'
 import { inlineCss as inline } from './_shared/cssInline'
+import { devWarn } from './_shared/devWarn'
 
 // ─────────────────────────────────────────────────────────────
 // 栈：父容器 open 推入、子容器查栈顶、父容器 close pop
@@ -121,6 +122,12 @@ export const tableRowContainer: ContainerRenderer = {
           if (cell.startsWith('*')) top.highlightCols.add(i)
         })
       }
+    } else if (cells.length !== top.columnsCount) {
+      // 列数由首行决定；不齐时多余列被截断 / 缺失列留空。静默丢弃对作者不友好——dev 提示一次
+      devWarn(
+        'table-card:cells',
+        `第 ${top.rowCount + 1} 行 cells 列数 ${cells.length} 与首行 ${top.columnsCount} 不一致：多余列被截断、缺失列留空。检查 attrs.cells 的 "|" 分隔符是否漏写或多写。`,
+      )
     }
     top.rowCount += 1
     const bodyIdx = isHeader ? -1 : top.bodyRowsRendered
