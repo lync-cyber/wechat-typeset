@@ -14,6 +14,20 @@ pnpm test:e2e       # 只跑 all-containers fixture 校验（改 variant/主题�
 pnpm typecheck      # 单独跑 vue-tsc
 ```
 
+### variant 单点预览（改容器/变体时的快路径）
+
+改 `src/core/variants/<kind>/<id>.ts` 想立刻看视觉效果，不走 vite dev / App.vue：
+
+```bash
+pnpm preview:variant admonition.accent-bar              # 默认主题 + 全 snippet，写到 .preview/
+pnpm preview:variant admonition.accent-bar --watch      # 长驻 server，文件变更自动 reload（http://127.0.0.1:5174/）
+pnpm preview:variant codeBlock.terminal-frame --all-themes  # 18 主题并排
+pnpm preview:variant pull-quote.classic --snippet 0 --open  # 只渲染第一条 snippet 并拉浏览器
+pnpm preview:variant --list --open                          # 全量索引：所有 kind/variant 一屏纵览，点击进 single 页
+```
+
+复用 `VariantDef.snippets[].markdown` 作为输入源（不用单独维护 fixture），走 `src/public.render` 出全量 inline-style HTML——与剪贴板产物完全一致。`.preview/` 已在 `.gitignore`。watch 模式监听 `src/core/variants /themes /pipeline` 目录，子进程隔离规避 ESM 缓存。
+
 ### Playwright 移动端 E2E（可选）
 
 移动端布局与 footer-cta 链接相关变更建议跑一遍 Playwright：

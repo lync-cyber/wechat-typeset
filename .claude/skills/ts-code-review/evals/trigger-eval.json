@@ -1,0 +1,26 @@
+{
+  "notes": "20 trigger queries for description optimization via skill-creator's run_loop. 10 should-trigger, 10 should-not. Edit before running.",
+  "queries": [
+    { "query": "i inherited this ts repo, types are spaghetti, where do i even start cleaning?", "should_trigger": true },
+    { "query": "can you review pr 287 on the api repo, the one renaming the auth module", "should_trigger": true },
+    { "query": "before i push this branch, eyeball my diff and tell me what's wrong", "should_trigger": true },
+    { "query": "src/payment/processor.ts is getting huge, is it salvageable?", "should_trigger": true },
+    { "query": "we shipped to staging last night and 3 tests are now skipped — find which ones got disabled and why", "should_trigger": true },
+    { "query": "looks like we have a circular dep between order-service and user-service, help me untangle it", "should_trigger": true },
+    { "query": "find all the `as any` in src/handlers and decide which ones are actually justified", "should_trigger": true },
+    { "query": "我们项目里有一堆 todo 和 fixme，能帮我分类哪些是真要做哪些可以删吗", "should_trigger": true },
+    { "query": "this codebase has been around for 4 years and i'm scared to touch it, what's actually dead?", "should_trigger": true },
+    { "query": "the cycle on dependency graph is killing our build times, walk me through breaking it", "should_trigger": true },
+
+    { "query": "write a function that parses iso-8601 timestamps", "should_trigger": false },
+    { "query": "what's the difference between unknown and any in typescript?", "should_trigger": false },
+    { "query": "set up vitest for my new package, with coverage reporting", "should_trigger": false },
+    { "query": "the build is failing with 'cannot find module react-dom', fix it", "should_trigger": false },
+    { "query": "explain how interface merging works in ts", "should_trigger": false },
+    { "query": "add a debounce hook to my react component, 300ms", "should_trigger": false },
+    { "query": "i need to migrate from cra to vite, walk me through the package.json changes", "should_trigger": false },
+    { "query": "review my pull request description and suggest a better title", "should_trigger": false },
+    { "query": "implement a binary tree class with insert and search", "should_trigger": false },
+    { "query": "configure prettier and eslint to play nicely together", "should_trigger": false }
+  ]
+}

@@ -5,11 +5,12 @@ scripts/.baseline/
 playwright-report/
 test-results/
 audit-report/
+.preview/
 *.log
 .DS_Store
 .vscode/
 .idea/
 
-# 本地 Claude Code 设置不发布；但 .claude/skill/ 里是给 LLM 使用的公开扩展指引
+# 本地 Claude Code 设置不发布；但 .claude/skills/ 里是给 LLM 使用的公开扩展指引
 .claude/*
-!.claude/skill/
+!.claude/skills/
