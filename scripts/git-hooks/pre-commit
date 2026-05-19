@@ -3,10 +3,12 @@
 # Pre-commit guard：
 #   1. 注释纪律检查 —— 扫描暂存的新增行，拦截 CLAUDE.md 禁止的注释形态
 #   2. Showcase drift 检查 —— 仅在主题 / 变体 / showcase 源码暂存时跑 gen:showcase --check
-#   3. Bundle 体积检查 —— 仅在暂存了影响 bundle 体积的文件时跑 check:size
+#   3. 派生文档漂移检查 —— vocabulary / 主题 / 变体 改了就跑
+#        build:writer-docs --check + build:skill-refs --check
+#   4. Bundle 体积检查 —— 仅在暂存了影响 bundle 体积的文件时跑 check:size
 #
 # 退出码：0 = 通过 / 非零 = 阻止 commit
-# 跳过（紧急）：SKIP_COMMENT_CHECK=1 / SKIP_SHOWCASE_CHECK=1 / SKIP_SIZE_CHECK=1
+# 跳过（紧急）：SKIP_COMMENT_CHECK=1 / SKIP_SHOWCASE_CHECK=1 / SKIP_DERIVED_DOCS_CHECK=1 / SKIP_SIZE_CHECK=1
 # git commit ...（PR 内必须补修）
 
 set -e
@@ -29,7 +31,18 @@ if [ -n "$HAS_SHOWCASE_RELEVANT" ] && [ "$SKIP_SHOWCASE_CHECK" != "1" ]; then
   node_modules/.bin/tsx scripts/gen-showcase.ts --check
 fi
 
-# ── 3. Bundle 体积检查 ───────────────────────────────────────────
+# ── 3. 派生文档漂移检查 ─────────────────────────────────────────
+# vocabulary / 主题 / 变体 / 注册表变更会让 docs/contract/*.md 与 skills/_shared/references/*.md
+# 静默漂移；同 showcase 按相关性 gate。本次 PR (#68) 因此 CI 红过两次，加上 gate 即可。
+HAS_DERIVED_DOCS_RELEVANT=$(echo "$STAGED" | grep -E '^(src/core/vocabulary/|src/core/themes/|src/core/variants/|scripts/build-(writer-docs|skill-refs)\.ts$|docs/contract/|skills/_shared/references/)' || true)
+
+if [ -n "$HAS_DERIVED_DOCS_RELEVANT" ] && [ "$SKIP_DERIVED_DOCS_CHECK" != "1" ]; then
+  echo "[pre-commit] 暂存命中 vocabulary/主题/变体 → 跑 build:writer-docs / skill-refs --check"
+  node_modules/.bin/tsx scripts/build-writer-docs.ts --check
+  node_modules/.bin/tsx scripts/build-skill-refs.ts --check
+fi
+
+# ── 4. Bundle 体积检查 ───────────────────────────────────────────
 HAS_SIZE_RELEVANT=$(echo "$STAGED" | grep -E '^(src/|vite\.config\.ts$|\.size-budget\.json$|package\.json$|pnpm-lock\.yaml$)' || true)
 
 if [ -z "$HAS_SIZE_RELEVANT" ]; then
