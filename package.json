@@ -79,6 +79,7 @@
     "voice:report": "tsx scripts/theme-voice-report.ts",
     "validate:spec": "tsx scripts/validate-spec.ts",
     "variant:usage": "tsx scripts/variant-usage.ts",
+    "preview:variant": "tsx tools/preview-variant.ts",
     "check:token-coverage": "tsx scripts/check-token-coverage.ts",
     "prepare": "node scripts/install-git-hooks.mjs",
     "install:hooks": "node scripts/install-git-hooks.mjs",
