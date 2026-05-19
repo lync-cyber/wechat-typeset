@@ -5,6 +5,7 @@ scripts/.baseline/
 playwright-report/
 test-results/
 audit-report/
+.preview/
 *.log
 .DS_Store
 .vscode/
