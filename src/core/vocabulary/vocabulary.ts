@@ -422,8 +422,8 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       {
         key: 'variant',
         description:
-          '覆盖主题默认的 note 骨架。8 个 variant 覆盖三档语气：' +
-          '中性（minimal-callout / box-callout / side-bar / hanging-indent / dotted-margin / smallcaps-kicker）；' +
+          '覆盖主题默认的 note 骨架。variant 覆盖三档语气：' +
+          '中性（minimal-callout / box-callout / side-bar / dotted-margin / smallcaps-kicker）；' +
           '编辑部按（editorial-stripe，主色左条 + bgSoft）；' +
           '调研口径（research-dense，10px 紧凑 + bold label）。',
         enum: VARIANT_IDS.note,

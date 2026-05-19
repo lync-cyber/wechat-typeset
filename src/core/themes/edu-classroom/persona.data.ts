@@ -202,8 +202,8 @@ export const spec: PersonaSpec = {
     // kicker-stack："今日课题"感（kicker 上行 + 大标题下行）
     sectionTitle: 'kicker-stack',
     codeBlock: 'bare',
-    // hanging-indent（orphan 升级：缩进注，学术/笔记感）
-    note: 'hanging-indent',
+    // smallcaps-kicker 的 hanging 形态由 sample-md 显式 layout=hanging 承担
+    note: 'smallcaps-kicker',
     footnotes: 'lined',
     recommend: 'card-list',
     qrcode: 'bare',
@@ -745,7 +745,7 @@ _预计阅读 8 分钟 · 家长可与孩子共读_
   meta: {
     createdAt: '2026-05-17',
     ownerNotes:
-      'orphan 升级：admonition=card-shadow / tableCard=zebra-rows / note=hanging-indent。' +
+      'orphan 升级：admonition=card-shadow / tableCard=zebra-rows / note=smallcaps-kicker(layout=hanging)。' +
       'primary #2e7d32 森林绿，accent #f57c00 暖橙，bg #fdfcf7 铜版纸。' +
       'introDropcap 轻量化（primary 42px），steps 绿色竖线，highlight 马克笔暖黄底。',
   },

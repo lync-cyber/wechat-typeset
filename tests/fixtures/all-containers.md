@@ -567,8 +567,8 @@ box-callout —— 单色 1px 全边框 + textMuted 标题。
 side-bar —— 左 2px 实线 + 缩进。
 :::
 
-::: note variant=hanging-indent REMARK
-hanging-indent —— uppercase 小标题 + 悬挂缩进，学术 / 论文风。
+::: note variant=smallcaps-kicker layout=hanging REMARK
+smallcaps-kicker(layout=hanging) —— uppercase 小标题 + 悬挂缩进，无顶线。
 :::
 
 ::: note variant=dotted-margin 旁批

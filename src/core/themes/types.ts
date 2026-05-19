@@ -536,8 +536,6 @@ export type NoteVariantId =
   | 'box-callout'
   // 左 2px 实线 + 缩进：经典"标记此处有补充"批注式
   | 'side-bar'
-  // 悬挂缩进 + 上标编号：学术 / 论文风脚注块
-  | 'hanging-indent'
   // 左 dotted rule + 缩进：人文札记 / 散文式旁批
   | 'dotted-margin'
   // 小型大写 kicker + 正文：粗野主义 / 数据简报骨架
@@ -938,7 +936,6 @@ export const VARIANT_IDS = {
     'minimal-callout',
     'box-callout',
     'side-bar',
-    'hanging-indent',
     'dotted-margin',
     'smallcaps-kicker',
     'editorial-stripe',

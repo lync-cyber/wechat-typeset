@@ -142,7 +142,6 @@ const NOTE_ORDER: readonly string[] = [
   'minimal-callout',
   'box-callout',
   'side-bar',
-  'hanging-indent',
   'dotted-margin',
   'smallcaps-kicker',
   'editorial-stripe',
