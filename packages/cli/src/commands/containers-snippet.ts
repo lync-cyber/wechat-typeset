@@ -1,6 +1,7 @@
 import {
   getContainerSnippet,
   getContainerSpec,
+  getPersona,
   getVariantsForContainer,
   WtException,
 } from '../../../../src/public'
@@ -15,14 +16,21 @@ interface ContainersSnippetInput {
 export const containersSnippetCommand: Command<ContainersSnippetInput, string> = {
   name: 'containers snippet',
   description:
-    'Return minimal markdown snippet for a container; pass `variant` to bind a specific skeleton. `persona` is accepted for symmetry but does not affect output (use `personas capabilities` for theme-aware filtering).',
+    "Return minimal markdown snippet for a container. Pass `variant` to bind a specific skeleton. Pass `persona` (and omit `variant`) to bind that persona's default variant for the container's variantKind — useful when generating snippets pre-tuned to the active theme. If the container has no variantKind, `persona` is a no-op.",
   inputSchema: {
     type: 'object',
     required: ['name'],
     properties: {
-      name: { type: 'string' },
-      variant: { type: 'string' },
-      persona: { type: 'string' },
+      name: { type: 'string', description: 'Container fence name (e.g. tip / quote-card / steps).' },
+      variant: {
+        type: 'string',
+        description: 'Explicit variant id; takes precedence over `persona` resolution.',
+      },
+      persona: {
+        type: 'string',
+        description:
+          "Persona id used to resolve the default variant for the container's variantKind when `variant` is omitted.",
+      },
     },
     additionalProperties: false,
   },
@@ -41,7 +49,16 @@ export const containersSnippetCommand: Command<ContainersSnippetInput, string> =
         ],
       )
     }
-    if (input.variant) {
+
+    let variantId = input.variant
+    if (!variantId && input.persona && spec.variantKind) {
+      const personaSpec = getPersona(input.persona)
+      const themeVariants = personaSpec.variants as unknown as Record<string, string | undefined>
+      const fromTheme = themeVariants[spec.variantKind]
+      if (fromTheme) variantId = fromTheme
+    }
+
+    if (variantId) {
       if (!spec.variantKind) {
         throw new WtException(
           'CONTRACT_VIOLATION',
@@ -55,12 +72,12 @@ export const containersSnippetCommand: Command<ContainersSnippetInput, string> =
         )
       }
       const known = getVariantsForContainer(input.name)
-      if (!known.some((v) => v.id === input.variant)) {
+      if (!known.some((v) => v.id === variantId)) {
         throw new WtException(
           'RESOURCE_NOT_FOUND',
           [
             {
-              message: `Unknown variant "${input.variant}" for "${input.name}". Known: ${known
+              message: `Unknown variant "${variantId}" for "${input.name}". Known: ${known
                 .map((v) => v.id)
                 .join(', ')}`,
               severity: 'error',
@@ -69,7 +86,7 @@ export const containersSnippetCommand: Command<ContainersSnippetInput, string> =
           ],
         )
       }
-      return getContainerSnippet(input.name, { variantId: input.variant })
+      return getContainerSnippet(input.name, { variantId })
     }
     return getContainerSnippet(input.name)
   },

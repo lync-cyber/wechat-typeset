@@ -1,4 +1,4 @@
-import { render, type PersonaSpec } from '../../../../src/public'
+import { listPublishPlatforms, render, type PersonaSpec } from '../../../../src/public'
 import type { Command } from '../types'
 
 interface RenderInput {
@@ -17,6 +17,8 @@ interface RenderOutput {
   pageConfig?: unknown
 }
 
+const PLATFORM_IDS = listPublishPlatforms().map((p) => p.id)
+
 export const renderCommand: Command<RenderInput, RenderOutput> = {
   name: 'render',
   description:
@@ -34,7 +36,9 @@ export const renderCommand: Command<RenderInput, RenderOutput> = {
       },
       platform: {
         type: 'string',
-        description: "Publish target id; defaults to 'wechat'.",
+        description:
+          "Publish target id; defaults to 'wechat'. Use `platforms list` to enumerate available ids.",
+        enum: PLATFORM_IDS,
       },
     },
     additionalProperties: false,

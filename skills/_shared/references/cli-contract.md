@@ -44,7 +44,9 @@ npm run cli -- describe   # 输出 { version, commands[] }
 | 子命令 | 输入 schema | 输出（成功） |
 | --- | --- | --- |
 | `render` | `{ md, persona?, spec?, platform? }` | `{ html, wordCount, readingTime, patchLog, frontmatterIssues, pageConfig }` |
-| `validate` | `{ spec }` 或 `{ md, persona? }` | `{ ok, errors[], warnings[] }`（含 `hint`） |
+| `validate spec` | `{ spec }` | `{ ok, errors[], warnings[] }`（含 `hint`） |
+| `validate markdown` | `{ md, persona? }` | `{ ok, errors[], warnings[] }`（含 `hint`） |
+| `validate`（**已弃用 alias**） | `{ spec }` 或 `{ md, persona? }` | 同上；spec 与 md 同时给会报错。改用 `validate spec` / `validate markdown` |
 | `lint` | `{ md, persona? }` | `{ ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }` |
 | `annotate` | `{ md, persona }` | `{ patches[], capabilitySnapshot, vocabularySubset, blockCount }` |
 | `personas list` | — | `PersonaSummary[]` |
@@ -52,9 +54,10 @@ npm run cli -- describe   # 输出 { version, commands[] }
 | `personas capabilities` | `{ id }` | `{ persona, defaultVariants, recommendedVariants, recommendedVariantOverrides, containers[], kickers }` |
 | `personas recommend` | `{ title, summary, topic?, style? }` | `{ ranked[3], recommendNew, rationaleOneLine }` |
 | `containers list` | — | `ContainerSpec[]`（vocabulary 全集） |
-| `containers snippet` | `{ name, variant?, persona? }` | `string`（markdown 片段；`persona` 仅 API 对称，对输出无影响） |
-| `motif render` | `{ shape }` 或 `{ template, values }` | `string`（SVG） |
-| `describe` | — | `{ version, commands[] }`（自描述清单） |
+| `containers snippet` | `{ name, variant?, persona? }` | `string`（markdown 片段；传 `persona` 且未传 `variant` 时按该主题的 default variant 绑定；容器无 `variantKind` 时 `persona` 无效） |
+| `motif render` | `{ shape }` **xor** `{ template, values? }` | `string`（SVG）。inputSchema 用 `oneOf` 表达互斥；同时给 / 都不给 → `CONTRACT_VIOLATION` |
+| `platforms list` | — | `PlatformInfo[]`（`{ id, name, status }`）。`render --platform` 接受的 id 在这里枚举 |
+| `describe` | — | `{ version, commands[], errorCodes[], platforms[], variantIds, signatureContainers[], hardRules, inlineExtensions[] }`（一次返回全部元信息） |
 
 ## 退出码语义
 
@@ -101,6 +104,39 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
 | `id` kebab | id 必须 `^[a-z][a-z0-9-]*$`，与目录名一致 |
 | `name`/`description`/`audience` required | 三者必填非空——LLM 选型主要靠这三项 |
 | `meta.createdAt` | ISO 日期 YYYY-MM-DD |
+
+## `describe` 输出形状
+
+```jsonc
+{
+  "version": "x.y.z",
+  "commands": [
+    { "name": "render", "description": "...", "inputSchema": {...}, "outputSchema": {...} }
+  ],
+  "errorCodes": [
+    { "code": "CONTRACT_VIOLATION", "exitCode": 4, "description": "markdown 容器/语法/嵌套错（fence_not_closed 等）" }
+  ],
+  "platforms": [
+    { "id": "wechat", "name": "微信公众号", "status": "stable" }
+  ],
+  "variantIds": {
+    "admonition": ["accent-bar", "pill-tag", "ticket-notch", "..."],
+    "quote": ["classic", "left-bar", "magazine-dropcap", "..."]
+  },
+  "signatureContainers": ["abstract", "keyNumber", "..."],
+  "hardRules": {
+    "minFontSize": 14,
+    "minStrokeWidth": 1,
+    "allowedFontFamilies": ["serif", "sans-serif", "monospace"],
+    "hexPattern": "^#[0-9a-fA-F]{3,8}$"
+  },
+  "inlineExtensions": [
+    { "syntax": "==mark==", "description": "...", "regex": "...", "inputExample": "...", "outputHtmlExample": "..." }
+  ]
+}
+```
+
+> MCP / LLM 集成方一次 `describe` 即可拿到工具注册所需的全部元信息——不必额外去 `capabilities.json` 或源码翻硬约束阈值。
 
 ## JSON 输出形状
 

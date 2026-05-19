@@ -48,12 +48,45 @@ describe('command catalog · meta', () => {
     }
   })
 
-  it('describe 列出全部 commands（self-referential 包含自己）', async () => {
-    const cmd = get<Record<string, never>, { version: string; commands: unknown[] }>('describe')
+  it('describe 列出全部 commands（self-referential 包含自己）+ errorCodes/platforms/variantIds/signatureContainers/hardRules/inlineExtensions', async () => {
+    const cmd = get<
+      Record<string, never>,
+      {
+        version: string
+        commands: Array<{ name: string }>
+        errorCodes: Array<{ code: string; exitCode: number; description: string }>
+        platforms: Array<{ id: string; name: string; status: string }>
+        variantIds: Record<string, readonly string[]>
+        signatureContainers: readonly string[]
+        hardRules: {
+          minFontSize: number
+          minStrokeWidth: number
+          allowedFontFamilies: readonly string[]
+          hexPattern: string
+        }
+        inlineExtensions: Array<{ syntax: string; description: string; regex: string }>
+      }
+    >('describe')
     const out = await cmd.run({})
     expect(out.commands.length).toBe(COMMANDS.length)
     expect(out.version).toBeTruthy()
-    expect((out.commands as Array<{ name: string }>).some((c) => c.name === 'describe')).toBe(true)
+    expect(out.commands.some((c) => c.name === 'describe')).toBe(true)
+
+    expect(out.errorCodes.length).toBeGreaterThanOrEqual(5)
+    expect(out.errorCodes.find((e) => e.code === 'CONTRACT_VIOLATION')?.exitCode).toBe(4)
+
+    expect(out.platforms.length).toBeGreaterThanOrEqual(1)
+    expect(out.platforms.find((p) => p.id === 'wechat')).toBeTruthy()
+
+    expect(out.variantIds.admonition).toContain('accent-bar')
+    expect(out.signatureContainers.length).toBeGreaterThan(0)
+
+    expect(out.hardRules.minFontSize).toBeGreaterThanOrEqual(14)
+    expect(out.hardRules.minStrokeWidth).toBeGreaterThanOrEqual(1)
+    expect(out.hardRules.allowedFontFamilies).toContain('sans-serif')
+
+    expect(out.inlineExtensions.length).toBeGreaterThan(0)
+    expect(out.inlineExtensions[0].syntax).toBeTruthy()
   })
 })
 
@@ -79,21 +112,21 @@ describe('render', () => {
   })
 })
 
-describe('validate', () => {
-  it('input.spec=合法 → ok=true', async () => {
+describe('validate (deprecated alias) / validate spec / validate markdown', () => {
+  it('validate spec · 合法 spec → ok=true', async () => {
     const personaGet = get<{ id: string }, unknown>('personas get')
     const spec = await personaGet.run({ id: 'default' })
-    const cmd = get<{ spec: unknown }, { ok: boolean; errors: unknown[] }>('validate')
+    const cmd = get<{ spec: unknown }, { ok: boolean; errors: unknown[] }>('validate spec')
     const out = await cmd.run({ spec })
     expect(out.ok).toBe(true)
     expect(out.errors).toEqual([])
   })
 
-  it('input.md+persona 不合法 fence → ok=false', async () => {
+  it('validate markdown · md+persona 不合法 → ok=false', async () => {
     const cmd = get<
       { md: string; persona: string },
       { ok: boolean; errors: Array<{ message: string }> }
-    >('validate')
+    >('validate markdown')
     const out = await cmd.run({
       md: '# x',
       persona: 'no-such-persona',
@@ -102,13 +135,40 @@ describe('validate', () => {
     expect(out.errors.length).toBeGreaterThan(0)
   })
 
-  it('未提供 spec 也未提供 md → ok=false + 明确报错', async () => {
+  it('validate (deprecated) · input.spec=合法 → ok=true（向后兼容）', async () => {
+    const personaGet = get<{ id: string }, unknown>('personas get')
+    const spec = await personaGet.run({ id: 'default' })
+    const cmd = get<{ spec: unknown }, { ok: boolean; errors: unknown[] }>('validate')
+    const out = await cmd.run({ spec })
+    expect(out.ok).toBe(true)
+    expect(out.errors).toEqual([])
+  })
+
+  it('validate (deprecated) · spec 与 md 同时给 → ok=false + 明确报错', async () => {
+    const cmd = get<
+      { spec: unknown; md: string },
+      { ok: boolean; errors: Array<{ message: string }> }
+    >('validate')
+    const out = await cmd.run({ spec: {}, md: '# x' })
+    expect(out.ok).toBe(false)
+    expect(out.errors[0]?.message).toMatch(/validate spec|validate markdown/)
+  })
+
+  it('validate (deprecated) · 未提供 spec 也未提供 md → ok=false', async () => {
     const cmd = get<Record<string, never>, { ok: boolean; errors: Array<{ message: string }> }>(
       'validate',
     )
     const out = await cmd.run({})
     expect(out.ok).toBe(false)
     expect(out.errors[0]?.message).toMatch(/requires either `spec` or `md`/)
+  })
+
+  it('validate / validate spec / validate markdown 三者 outputSchema 形态一致', () => {
+    const a = COMMAND_BY_NAME.get('validate')!.outputSchema
+    const b = COMMAND_BY_NAME.get('validate spec')!.outputSchema
+    const c = COMMAND_BY_NAME.get('validate markdown')!.outputSchema
+    expect(JSON.stringify(a)).toBe(JSON.stringify(b))
+    expect(JSON.stringify(b)).toBe(JSON.stringify(c))
   })
 })
 
@@ -336,5 +396,70 @@ describe('motif render', () => {
   it('未给 shape 也未给 template → WtException', async () => {
     const cmd = get<Record<string, never>, string>('motif render')
     await expectWt(() => cmd.run({}), 'CONTRACT_VIOLATION')
+  })
+
+  it('shape 与 template 同时给 → WtException CONTRACT_VIOLATION', async () => {
+    const personaGet = get<{ id: string }, { motifs: { h2Prefix?: unknown } }>('personas get')
+    const spec = await personaGet.run({ id: 'default' })
+    const cmd = get<{ shape: unknown; template: unknown }, string>('motif render')
+    await expectWt(
+      () => cmd.run({ shape: spec.motifs.h2Prefix, template: { primitives: [], placeholders: [] } }),
+      'CONTRACT_VIOLATION',
+    )
+  })
+
+  it('inputSchema 用 oneOf 表达 shape XOR template', () => {
+    const schema = COMMAND_BY_NAME.get('motif render')!.inputSchema as { oneOf?: unknown[] }
+    expect(Array.isArray(schema.oneOf)).toBe(true)
+    expect(schema.oneOf!.length).toBe(2)
+  })
+})
+
+describe('platforms list', () => {
+  it('返回非空 platforms 数组并包含 wechat', async () => {
+    const cmd = get<
+      Record<string, never>,
+      Array<{ id: string; name: string; status: string }>
+    >('platforms list')
+    const out = await cmd.run({})
+    expect(out.length).toBeGreaterThanOrEqual(1)
+    const wechat = out.find((p) => p.id === 'wechat')
+    expect(wechat).toBeTruthy()
+    expect(['stable', 'beta', 'placeholder']).toContain(wechat!.status)
+  })
+})
+
+describe('render · platform enum', () => {
+  it('render.inputSchema.platform 含 enum 列出已注册 ids', () => {
+    const schema = COMMAND_BY_NAME.get('render')!.inputSchema as {
+      properties: { platform: { enum?: string[] } }
+    }
+    const ids = schema.properties.platform.enum
+    expect(Array.isArray(ids)).toBe(true)
+    expect(ids).toContain('wechat')
+  })
+})
+
+describe('containers snippet · persona 解析默认 variant', () => {
+  it('persona=default + 容器 tip → snippet 含 default 主题的 admonition variant id', async () => {
+    const cmd = get<{ name: string; persona: string }, string>('containers snippet')
+    const out = await cmd.run({ name: 'tip', persona: 'default' })
+    // default 主题 admonition variant 是 accent-bar
+    expect(out).toMatch(/variant=accent-bar/)
+  })
+
+  it('persona 不影响无 variantKind 的容器（如 note 实际有 variantKind；用 abstract 这类无 variantKind 的）', async () => {
+    // abstract 在 vocabulary 中无 variantKind（结构容器）；snippet 不包含 variant=
+    const cmd = get<{ name: string; persona: string }, string>('containers snippet')
+    const out = await cmd.run({ name: 'abstract', persona: 'default' })
+    expect(out).not.toMatch(/variant=/)
+  })
+
+  it('未知 persona id → WtException RESOURCE_NOT_FOUND', async () => {
+    const cmd = get<{ name: string; persona: string }, string>('containers snippet')
+    await expectWt(
+      () => cmd.run({ name: 'tip', persona: 'no-such-persona' }),
+      'RESOURCE_NOT_FOUND',
+    )
   })
 })
