@@ -14,5 +14,27 @@ import giantMark from './giant-mark'
 import centeredRule from './centered-rule'
 import stampQuote from './stamp-quote'
 import marginPull from './margin-pull'
+// content-1.html 阶段 2 落地 — 4 主题 × 2 签名骨架（拉引重申）
+import weightContrast from './weight-contrast'
+import dropCapital from './drop-capital'
+import calligraphic from './calligraphic'
+import withGloss from './with-gloss'
+import bilingualStack from './bilingual-stack'
+import caliperMark from './caliper-mark'
+import invertedPlate from './inverted-plate'
+import gridBlock from './grid-block'
 
-export default [giantMark, centeredRule, stampQuote, marginPull]
+export default [
+  giantMark,
+  centeredRule,
+  stampQuote,
+  marginPull,
+  weightContrast,
+  dropCapital,
+  calligraphic,
+  withGloss,
+  bilingualStack,
+  caliperMark,
+  invertedPlate,
+  gridBlock,
+]

@@ -65,6 +65,7 @@ const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'gly
 const SECTION_TITLE_ORDER: readonly string[] = ['bordered', 'cornered']
 const CODE_BLOCK_ORDER: readonly string[] = ['bare', 'header-bar']
 const NOTE_ORDER: readonly string[] = ['minimal-callout', 'box-callout', 'side-bar']
+const HIGHLIGHT_ORDER: readonly string[] = ['plain']
 const FOOTNOTES_ORDER: readonly string[] = ['lined', 'inline-flow']
 const RECOMMEND_ORDER: readonly string[] = ['card-list', 'academic-refs']
 const QRCODE_ORDER: readonly string[] = ['bare', 'follow-card', 'qr-stack']
@@ -127,6 +128,7 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
+  highlight: HIGHLIGHT_ORDER,
   footnotes: FOOTNOTES_ORDER,
   recommend: RECOMMEND_ORDER,
   qrcode: QRCODE_ORDER,
@@ -175,6 +177,7 @@ function buildBuiltinComponents(): BuiltinEntry[] {
     'sectionTitle',
     'codeBlock',
     'note',
+    'highlight',
     'footnotes',
     'recommend',
     'qrcode',

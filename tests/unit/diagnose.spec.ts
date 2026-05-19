@@ -85,8 +85,10 @@ describe('diagnose · unknown-variant', () => {
     expect(hit?.message).toContain('accent-bar')
   })
 
-  it('highlight (无 variantKind) 加 variant= 报 info', () => {
-    const ds = diagnose('::: highlight variant=foo\n:::\n')
+  it('intro (无 variantKind) 加 variant= 报 info', () => {
+    // 历史:此处曾用 highlight。T1.1 后 highlight 是 variant 容器,改用 intro
+    // (结构容器,从未接入 variant SPI)作为"无 variantKind"代表 case。
+    const ds = diagnose('::: intro variant=foo\n:::\n')
     const hit = ds.find((d) => d.code === 'unknown-variant')
     expect(hit?.severity).toBe('info')
   })

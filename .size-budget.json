@@ -3,36 +3,36 @@
   "distDir": "dist/assets",
   "entries": [
     {
-      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~7% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。基线：2026-05-19 P4 收尾时 actual=562.79kB raw / 211.17kB gz；阈值 = actual × ~1.07。",
+      "$comment": "themes/variants 已拆出独立 chunk，主 bundle 现在只装应用骨架（Vue / 编辑器壳 / pipeline / ui 组件）。骨架理应稳定，所以给紧 ~7% headroom；如果这里被挤涨，先怀疑误把主题资产拖进 app 层（看 vite.config.ts manualChunks），不要顺手放阈值。基线 2026-05-19 main 合并后：actual=568.08kB raw / 213.45kB gz（含 P3 qa-block variant 派发 + Studio P3 真实预览 / 默认脚手架）。",
       "name": "main app bundle",
       "prefix": "index",
       "ext": "js",
-      "limit": 620000,
-      "gzipLimit": 232000,
+      "limit": 622000,
+      "gzipLimit": 234000,
       "mustNotEmbed": ["html2canvas"]
     },
     {
-      "$comment": "主 bundle CSS（Vue scoped style + 全局 base.css）。增长维度是新 UI 组件 scoped style；基线 2026-05-19：actual=83.60kB raw / 13.13kB gz。",
+      "$comment": "主 bundle CSS（Vue scoped style + 全局 base.css）。基线 2026-05-19 main 合并后：actual=85.50kB raw / 13.36kB gz。",
       "name": "main app stylesheet",
       "prefix": "index",
       "ext": "css",
-      "limit": 92000,
+      "limit": 94000,
       "gzipLimit": 14500
     },
     {
-      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~7% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。基线 2026-05-19 P4：actual=442.65kB raw / 95.96kB gz（18 主题 + qa-block 8 variant + 全套 P2 experimental）。",
+      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里。给 ~7% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。基线 2026-05-19 main 合并后：actual=506.85kB raw / 107.78kB gz（18 主题 + content-1.html 阶段 2 落地 40 新 variant + P3 qa-block 8 variant + 全套 P2 experimental）。下一波同等规模再来前先评估能否提取 SVG 装饰到共享 motif 库。",
       "name": "themes chunk",
       "prefix": "themes",
       "ext": "js",
-      "limit": 488000,
-      "gzipLimit": 106000
+      "limit": 555000,
+      "gzipLimit": 118000
     },
     {
-      "$comment": "CodeMirror 6 第三方 chunk（编辑器内核 + 语言扩展 + lint/autocomplete）。增长维度是接入新 CM 子模块——每接一个 @codemirror/* 包都按整包计费，难做局部 tree-shake。基线 2026-05-19 P4：actual=553.49kB raw / 191.18kB gz（含容器感知扩展 foldGutter + Decoration StateField + autocomplete snippet）。继续加 CM 扩展前请先评估是否能 lazy chunk 拆出。",
+      "$comment": "CodeMirror 6 第三方 chunk（编辑器内核 + 语言扩展 + lint/autocomplete）。增长维度是接入新 CM 子模块——每接一个 @codemirror/* 包都按整包计费，难做局部 tree-shake。基线 2026-05-19 main 合并后：actual=553.49kB raw / 191.18kB gz。继续加 CM 扩展前请先评估是否能 lazy chunk 拆出。",
       "name": "codemirror chunk",
       "prefix": "codemirror",
       "ext": "js",
-      "limit": 610000,
+      "limit": 608000,
       "gzipLimit": 210000
     },
     {
@@ -40,7 +40,7 @@
       "name": "juice chunk",
       "prefix": "juice",
       "ext": "js",
-      "limit": 385000,
+      "limit": 384000,
       "gzipLimit": 132000
     },
     {
@@ -48,7 +48,7 @@
       "name": "markdown chunk",
       "prefix": "markdown",
       "ext": "js",
-      "limit": 125000,
+      "limit": 124000,
       "gzipLimit": 54000
     },
     {
@@ -56,15 +56,15 @@
       "name": "html2canvas chunk (lazy import on long-image export)",
       "prefix": "html2canvas",
       "ext": "js",
-      "limit": 218000,
+      "limit": 217000,
       "gzipLimit": 52000
     },
     {
-      "$comment": "组件参考字典（18 主题 × 全容器示例）的 lazy chunk。只在用户点 '载入组件参考' 时由 src/domain/samples/index.ts dynamic import 拉取，主 bundle 启动期不付费。源文件来自 scripts/build-references.ts → src/domain/samples/_references.ts；增长维度是容器词汇表 + 主题 capabilities。基线 2026-05-19 P4：actual=287.89kB raw / 9.69kB gz。",
+      "$comment": "组件参考字典（18 主题 × 全容器示例）的 lazy chunk。只在用户点 '载入组件参考' 时由 src/domain/samples/index.ts dynamic import 拉取，主 bundle 启动期不付费。源文件来自 scripts/build-references.ts → src/domain/samples/_references.ts；增长维度是容器词汇表 + 主题 capabilities。基线 2026-05-19 main 合并后：actual=287.48kB raw / 9.68kB gz。",
       "name": "references chunk (lazy)",
       "prefix": "_references",
       "ext": "js",
-      "limit": 318000,
+      "limit": 316000,
       "gzipLimit": 11000
     },
     {
@@ -76,39 +76,39 @@
       "gzipLimit": 11000
     },
     {
-      "$comment": "Studio 'CSS patch' 源码模式的 lazy chunk。defineAsyncComponent 装拆，进面板才下载；本体轻量，CM6 lang-css/html 实际重量在 codemirror chunk 内。基线 2026-05-19：actual=2.57kB raw / 1.40kB gz。",
+      "$comment": "Studio 'CSS patch' 源码模式的 lazy chunk。defineAsyncComponent 装拆，进面板才下载；本体轻量，CM6 lang-css/html 实际重量在 codemirror chunk 内。基线 2026-05-19 main 合并后：actual=2.52kB raw / 1.34kB gz（Studio P3 简化后比 P3.1 略瘦）。",
       "name": "source-mode panel chunk (lazy)",
       "prefix": "SourceModePanel",
       "ext": "js",
-      "limit": 3000,
-      "gzipLimit": 1600
+      "limit": 2800,
+      "gzipLimit": 1500
     },
     {
-      "$comment": "SourceModePanel 的样式 chunk（CSS Module / scoped css 自动拆出）。微量；基线 2026-05-19：actual=1.02kB raw / 427 B gz。",
+      "$comment": "SourceModePanel 的样式 chunk（CSS Module / scoped css 自动拆出）。微量；基线 2026-05-19 main 合并后：actual=455 B raw / 262 B gz。",
       "name": "source-mode panel stylesheet (lazy)",
       "prefix": "SourceModePanel",
       "ext": "css",
-      "limit": 1200,
-      "gzipLimit": 500
+      "limit": 550,
+      "gzipLimit": 350
     },
     {
-      "$comment": "Studio '完全自定义' 模式的 lazy chunk（L3 custom HTML 模板编辑）。defineAsyncComponent 装拆，进面板才下载。基线 2026-05-19：actual=3.19kB raw / 1.63kB gz。",
+      "$comment": "Studio '完全自定义' 模式的 lazy chunk（L3 custom HTML 模板编辑）。defineAsyncComponent 装拆，进面板才下载。基线 2026-05-19 main 合并后：actual=3.18kB raw / 1.58kB gz。",
       "name": "custom-mode panel chunk (lazy)",
       "prefix": "CustomModePanel",
       "ext": "js",
-      "limit": 3600,
-      "gzipLimit": 1900
+      "limit": 3500,
+      "gzipLimit": 1800
     },
     {
-      "$comment": "CustomModePanel 样式 chunk。基线 2026-05-19：actual=1.39kB raw / 550 B gz。",
+      "$comment": "CustomModePanel 样式 chunk。基线 2026-05-19 main 合并后：actual=804 B raw / 385 B gz。",
       "name": "custom-mode panel stylesheet (lazy)",
       "prefix": "CustomModePanel",
       "ext": "css",
-      "limit": 1600,
-      "gzipLimit": 650
+      "limit": 900,
+      "gzipLimit": 450
     },
     {
-      "$comment": "'我的样式' tab 的 lazy chunk。defineAsyncComponent 装拆，进 tab 才下载；只读 UV 仓 + 重命名 / 删除按钮。基线 2026-05-19：actual=2.27kB raw / 1.34kB gz。",
+      "$comment": "'我的样式' tab 的 lazy chunk。defineAsyncComponent 装拆，进 tab 才下载；只读 UV 仓 + 重命名 / 删除按钮。基线 2026-05-19：actual=2.27kB raw / 1.33kB gz。",
       "name": "user-variants panel chunk (lazy)",
       "prefix": "UserVariantsPanel",
       "ext": "js",
@@ -124,20 +124,36 @@
       "gzipLimit": 850
     },
     {
-      "$comment": "useUserVariantLint 抽出的 lazy chunk（@codemirror/lint + lintInlineCSS/lintTemplateHTML 包装）。被 SourceModePanel / CustomModePanel 双方共享，由 vite 自动 split。基线 2026-05-19：actual=3.77kB raw / 1.96kB gz。",
-      "name": "user-variant-lint chunk (lazy)",
-      "prefix": "useUserVariantLint",
+      "$comment": "IsolatedPreview 单 variant 沙盒预览的 lazy chunk。被 SourceModePanel / CustomModePanel（窄屏 fallback）与 ComponentGrid（hover popover）三处共享，由 vite 自动 split；本体是 iframe shell + pipeline render 调用包装。基线 2026-05-19：actual=1.78kB raw / 1.10kB gz。",
+      "name": "IsolatedPreview chunk (lazy)",
+      "prefix": "IsolatedPreview",
       "ext": "js",
-      "limit": 4300,
-      "gzipLimit": 2300
+      "limit": 2100,
+      "gzipLimit": 1300
     },
     {
-      "$comment": "useUserVariantLint 样式 chunk。基线 2026-05-19：actual=741 B raw / 341 B gz。",
-      "name": "useUserVariantLint stylesheet (lazy)",
-      "prefix": "useUserVariantLint",
+      "$comment": "IsolatedPreview 样式 chunk。基线 2026-05-19：actual=538 B raw / 296 B gz。",
+      "name": "IsolatedPreview stylesheet (lazy)",
+      "prefix": "IsolatedPreview",
       "ext": "css",
-      "limit": 850,
-      "gzipLimit": 400
+      "limit": 650,
+      "gzipLimit": 350
+    },
+    {
+      "$comment": "userVariantScaffold 的 lazy chunk —— patch / custom 档默认脚手架字面常量。SourceModePanel / CustomModePanel onMounted 时调 defaultPatchScaffold / defaultCustomScaffold 灌空草稿，让作者一进面板就有 3 行示例。被两个 panel 共享 → vite 自动 split；故意不并到 ComponentEditor 主路径里（主包预算紧），跟 panel 一起 lazy 才划算。基线 2026-05-19：actual=3.30kB raw / 1.53kB gz。",
+      "name": "userVariantScaffold chunk (lazy)",
+      "prefix": "userVariantScaffold",
+      "ext": "js",
+      "limit": 3800,
+      "gzipLimit": 1800
+    },
+    {
+      "$comment": "userVariantScaffold 样式 chunk。基线 2026-05-19：actual=204 B raw / 156 B gz。",
+      "name": "userVariantScaffold stylesheet (lazy)",
+      "prefix": "userVariantScaffold",
+      "ext": "css",
+      "limit": 250,
+      "gzipLimit": 200
     }
   ]
 }

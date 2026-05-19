@@ -78,6 +78,10 @@ const PALETTE_SCHEMA: JSONSchema7 = {
     noteBorder: { type: 'string', pattern: HEX_PATTERN },
     noteBorderStyle: { type: 'string', enum: ['solid', 'dashed', 'double', 'dotted'] },
     noteBorderWidth: { type: 'integer', minimum: 1, maximum: 8 },
+    // 语义槽：朱印 / 博物暖辅。声明 = 主题参与对应 variant 的彩色装饰；
+    // 不声明 = variant 回退到 accent / textMuted（容器集成约束见 Palette 注释）。
+    accentClassical: { type: 'string', pattern: HEX_PATTERN },
+    accentNaturalist: { type: 'string', pattern: HEX_PATTERN },
   },
   additionalProperties: false,
 }
@@ -291,9 +295,13 @@ const MOTIF_SPEC_SCHEMA: JSONSchema7 = {
 
 // variants schema 直接派生自 VARIANT_IDS（themes/types.ts 的权威 satisfies 守护），
 // 新增 variant 改 variants/<kind>/_all.ts 与 VARIANT_IDS 即可，本 schema 自动跟进。
+//
+// highlight 字段 schema 层"可选"：ThemeVariants.highlight 是 optional 字段,21 主题
+// 尚未启用 highlight 骨架切换、buildTheme 用 DEFAULT_VARIANTS.highlight 兜底。
+// 主题接入后把 'highlight' 从下方过滤器移除即可让 schema 同步强制要求。
 const VARIANTS_SCHEMA: JSONSchema7 = {
   type: 'object',
-  required: Object.keys(VARIANT_IDS),
+  required: Object.keys(VARIANT_IDS).filter((k) => k !== 'highlight'),
   properties: Object.fromEntries(
     Object.entries(VARIANT_IDS).map(([kind, ids]) => [
       kind,

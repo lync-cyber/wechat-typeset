@@ -57,6 +57,7 @@ describe('theme.variants → VARIANT_IDS 闭包', () => {
     for (const theme of themeList) {
       for (const slot of Object.keys(theme.variants) as Array<keyof typeof theme.variants>) {
         const id = theme.variants[slot]
+        if (id === undefined) continue
         const declared = VARIANT_IDS[slot as VariantKind] as readonly string[]
         if (!declared.includes(id)) {
           offenders.push({ theme: theme.id, slot: String(slot), id })

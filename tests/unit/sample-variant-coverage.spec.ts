@@ -47,6 +47,8 @@ const PROBES: Record<VariantKind, RegExp> = {
   codeBlock: /^(?:`{3,}|~{3,})/m,
   // note 第五态独立容器
   note: /^:{3,}\s*note\b/m,
+  // highlight 容器（::: highlight 作者自我强调的整段）
+  highlight: /^:{3,}\s*highlight\b/m,
   // footnotes 容器 或 markdown-it-footnote 的 [^id]
   footnotes: /^:{3,}\s*footnotes\b|\[\^[^\]]+\]/m,
   // recommend 容器（card-list 默认 / academic-refs 参考引用 variant）
@@ -78,6 +80,7 @@ const SLOT_LABELS: Record<VariantKind, string> = {
   sectionTitle: '章节标题（section-title）',
   codeBlock: '代码块（``` fence）',
   note: '注解（note）',
+  highlight: '高亮块（highlight）',
   footnotes: '脚注（footnotes / [^id]）',
   recommend: '推荐阅读（recommend）',
   qrcode: '二维码（qrcode）',

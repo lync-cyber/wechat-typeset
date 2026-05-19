@@ -33,6 +33,7 @@ import {
   DIALOGUE_VARIANTS,
   DIVIDER_VARIANTS,
   GALLERY_VARIANTS,
+  HIGHLIGHT_VARIANTS,
   NOTE_VARIANTS,
   FOOTNOTES_VARIANTS,
   FOOTER_CTA_VARIANTS,
@@ -88,6 +89,7 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
     sectionTitle: SECTION_TITLE_VARIANTS as unknown as MetaTable,
     codeBlock: CODE_BLOCK_VARIANTS as unknown as MetaTable,
     note: NOTE_VARIANTS as unknown as MetaTable,
+    highlight: HIGHLIGHT_VARIANTS as unknown as MetaTable,
     footnotes: FOOTNOTES_VARIANTS as unknown as MetaTable,
     recommend: RECOMMEND_VARIANTS as unknown as MetaTable,
     qrcode: QRCODE_VARIANTS as unknown as MetaTable,
@@ -136,6 +138,7 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     sectionTitle: SECTION_TITLE_VARIANTS,
     codeBlock: CODE_BLOCK_VARIANTS,
     note: NOTE_VARIANTS,
+    highlight: HIGHLIGHT_VARIANTS,
     footnotes: FOOTNOTES_VARIANTS,
     recommend: RECOMMEND_VARIANTS,
     qrcode: QRCODE_VARIANTS,
@@ -173,11 +176,13 @@ export function getThemeDefaultVariants(variants: ThemeVariants): VariantDescrip
     'sectionTitle',
     'codeBlock',
     'note',
+    'highlight',
     'footnotes',
   ]
   const out: VariantDescriptor[] = []
   for (const kind of kinds) {
     const id = variants[kind]
+    if (!id) continue
     const meta = variantMeta(kind, id)
     if (meta) out.push(meta)
   }
@@ -272,6 +277,7 @@ const VARIANT_KINDS: VariantKind[] = [
   'sectionTitle',
   'codeBlock',
   'note',
+  'highlight',
   'footnotes',
 ]
 
@@ -324,7 +330,10 @@ export function getThemeCapabilitiesView(args: {
   })
 
   const defaultVariants: Record<VariantKind, string> = {} as Record<VariantKind, string>
-  for (const k of VARIANT_KINDS) defaultVariants[k] = args.variants[k]
+  for (const k of VARIANT_KINDS) {
+    const v = args.variants[k]
+    if (v !== undefined) defaultVariants[k] = v
+  }
 
   return {
     themeId: args.themeId,

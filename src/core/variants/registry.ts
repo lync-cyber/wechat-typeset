@@ -39,6 +39,7 @@ import type {
   FooterCTAVariantId,
   FootnotesVariantId,
   GalleryVariantId,
+  HighlightVariantId,
   NoteVariantId,
   PullQuoteVariantId,
   QaBlockVariantId,
@@ -83,6 +84,14 @@ const ADMONITION_ORDER: readonly string[] = [
   'news-underline',
   'mook-tag',
   'slab-corner',
+  'numbered-rule',
+  'hanging-nb',
+  'vermilion-seal',
+  'paper-slip',
+  'field-tag',
+  'specimen-box',
+  'filled-square',
+  'triangle-top',
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
@@ -92,6 +101,14 @@ const QUOTE_ORDER: readonly string[] = [
   'frame-brackets',
   'editorial-block',
   'tilted-sticker',
+  'oversized-mark',
+  'numbered-lines',
+  'seal-kai',
+  'double-frame',
+  'specimen-quote',
+  'binomial-attrib',
+  'huge-numeral',
+  'ring-device',
 ]
 const COMPARE_ORDER: readonly string[] = [
   'column-card',
@@ -139,6 +156,25 @@ const NOTE_ORDER: readonly string[] = [
   'smallcaps-kicker',
   'editorial-stripe',
   'research-dense',
+  'ed-signoff',
+  'inline-label',
+  'interlinear-gloss',
+  'vermilion-gloss',
+  'ruler-note',
+  'latin-subhead',
+  'initial-disc',
+  'geometric-mark',
+]
+const HIGHLIGHT_ORDER: readonly string[] = [
+  'plain',
+  'dotted-underline',
+  'tracked-emphasis',
+  'vermilion-inline',
+  'side-dots',
+  'wash-ground',
+  'bracketed-tick',
+  'geometric-flag',
+  'single-stroke',
 ]
 const FOOTNOTES_ORDER: readonly string[] = [
   'lined',
@@ -155,6 +191,14 @@ const PULL_QUOTE_ORDER: readonly string[] = [
   'centered-rule',
   'stamp-quote',
   'margin-pull',
+  'weight-contrast',
+  'drop-capital',
+  'calligraphic',
+  'with-gloss',
+  'bilingual-stack',
+  'caliper-mark',
+  'inverted-plate',
+  'grid-block',
 ]
 const ANNOUNCEMENT_ORDER: readonly string[] = [
   'danger-bar',
@@ -208,6 +252,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   sectionTitle: SECTION_TITLE_ORDER,
   codeBlock: CODE_BLOCK_ORDER,
   note: NOTE_ORDER,
+  highlight: HIGHLIGHT_ORDER,
   footnotes: FOOTNOTES_ORDER,
   recommend: RECOMMEND_ORDER,
   qrcode: QRCODE_ORDER,
@@ -239,6 +284,7 @@ import dividerAll from './divider/_all'
 import sectionTitleAll from './section-title/_all'
 import codeBlockAll from './codeBlock/_all'
 import noteAll from './note/_all'
+import highlightAll from './highlight/_all'
 import footnotesAll from './footnotes/_all'
 import recommendAll from './recommend/_all'
 import qrcodeAll from './qrcode/_all'
@@ -260,6 +306,7 @@ function collectDefs(): AnyDef[] {
     ...sectionTitleAll,
     ...codeBlockAll,
     ...noteAll,
+    ...highlightAll,
     ...footnotesAll,
     ...recommendAll,
     ...qrcodeAll,
@@ -316,6 +363,7 @@ export const SECTION_TITLE_VARIANTS = asRecord<SectionTitleVariantId, void>(
   'sectionTitle',
 )
 export const NOTE_VARIANTS = asRecord<NoteVariantId, void>(ALL_DEFS, 'note')
+export const HIGHLIGHT_VARIANTS = asRecord<HighlightVariantId, void>(ALL_DEFS, 'highlight')
 export const FOOTNOTES_VARIANTS = asRecord<FootnotesVariantId, void>(ALL_DEFS, 'footnotes')
 export const RECOMMEND_VARIANTS = asRecord<RecommendVariantId, void>(ALL_DEFS, 'recommend')
 export const QRCODE_VARIANTS = asRecord<QrcodeVariantId, void>(ALL_DEFS, 'qrcode')

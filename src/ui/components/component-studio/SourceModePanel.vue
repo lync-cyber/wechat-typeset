@@ -2,8 +2,13 @@
 /**
  * SourceModePanel —— UV patch 档源码编辑面板（步骤 5.3）。
  *
- * 职责：三个 CSS slot Tab（wrapperCSS / titleCSS / bodyCSS）→ CodeMirrorPane → 实时
- * IsolatedPreview 单 variant 沙盒预览 → 嵌入 PatchInspector 列微信适配 diff。
+ * 职责：三个 CSS slot Tab（wrapperCSS / titleCSS / bodyCSS）→ CodeMirrorPane → 嵌入
+ * PatchInspector 列微信适配 diff。
+ *
+ * 预览策略：宽屏（≥900px）双栏布局下右侧大预览已挂在同一份 UV 上，本面板不再内嵌
+ * IsolatedPreview——视觉冗余 + 浪费一次 pipeline render；PatchInspector 改用 Studio
+ * 透传下来的 livePatchLog。窄屏单列布局下右侧大预览会被滚到视口外，仍按需挂 IsolatedPreview
+ * 作 fallback 兼数据源，断点字面值见 STUDIO_SPLIT_MEDIA_QUERY。
  *
  * 关系：与 TokensPanel 互斥——同一 draft 上 userVariantMode 决定显示哪个。
  * 切到 patch 档由 ComponentEditor 的"切换到源码模式"按钮触发，本组件只读 draft。
@@ -14,7 +19,7 @@
  * Linter：每个 CodeMirrorPane 喂 createUserVariantCSSLinter('<slot>')，违禁声明
  * （position/float/font-family/@media/:hover 等微信黑名单）实时画红波浪。
  */
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import type { Theme, VariantKind as VK } from '../../../core/themes/types'
 import type { ComponentKind } from '../../../domain/components-lib'
 import type {
@@ -29,6 +34,12 @@ import PatchInspector from './PatchInspector.vue'
 import { createUserVariantCSSLinter } from '../../composables/useUserVariantLint'
 import { findSlotContainingSubstring } from './userVariantSave'
 import { PLACEHOLDER_FENCE_BY_KIND } from './placeholderFence'
+import { useMediaQuery } from '../../composables/useMediaQuery'
+import { STUDIO_SPLIT_MEDIA_QUERY } from '../../state/layoutMode'
+import { defaultPatchScaffold, isPatchDraftEmpty } from './userVariantScaffold'
+
+// Slot 同时被 ComponentEditor 的 tree-nav 引用；类型字面定义同源即可（重复 < 5 字节）
+type Slot = 'wrapperCSS' | 'titleCSS' | 'bodyCSS'
 
 const props = defineProps<{
   /** 当前编辑的基底 kind / variantId；为空时面板提示"请先选 base" */
@@ -37,17 +48,36 @@ const props = defineProps<{
   /** patch 草稿（双向绑定到 ComponentStudio.draft.userVariantCssPatch） */
   cssPatch: DraftCssPatch
   theme: Theme
+  /**
+   * Studio 大预览透传下来的 patchLog —— 宽屏布局下作 PatchInspector 的数据源。
+   * 双栏布局右侧大预览已挂载，内嵌 IsolatedPreview 是冗余视觉，按断点条件不挂载。
+   */
+  livePatchLog?: PatchLog | null
+  /**
+   * 受控：当前编辑的 slot 由父组件 ComponentEditor 的 tree-nav 决定；
+   * PatchInspector 跳转 sample 时通过 update:activeSlot emit 反向通知，由父更新。
+   */
+  activeSlot: Slot
 }>()
 
-type Slot = 'wrapperCSS' | 'titleCSS' | 'bodyCSS'
+const emit = defineEmits<{
+  (e: 'update:activeSlot', slot: Slot): void
+}>()
 
-const SLOT_LABELS: Record<Slot, string> = {
-  wrapperCSS: '外壳 (wrapper)',
-  titleCSS: '标题 (title)',
-  bodyCSS: '正文 (body)',
-}
+// activeSlot 来自 props（受控）；handleJumpToSample 通过 emit 而非直写
+const activeSlot = computed<Slot>(() => props.activeSlot)
 
-const activeSlot = ref<Slot>('wrapperCSS')
+// 进入面板时若 patch 草稿全空，灌入默认脚手架——降低作者从空白起步的心智门槛，
+// 立刻让右侧大预览看到三个 slot 的视觉效果。已有内容（含 edit 回填）不动。
+// 脚手架字面常量与 lint 硬闸预先对齐，作者点保存不会被拦。
+onMounted(() => {
+  if (isPatchDraftEmpty(props.cssPatch)) {
+    const s = defaultPatchScaffold()
+    props.cssPatch.wrapperCSS = s.wrapperCSS
+    props.cssPatch.titleCSS = s.titleCSS
+    props.cssPatch.bodyCSS = s.bodyCSS
+  }
+})
 
 /** 不重复构造 linter：CM Extension 对象身份变化会触发 reconfigure，频繁重建浪费。 */
 const linterWrapper = createUserVariantCSSLinter('wrapperCSS')
@@ -106,10 +136,27 @@ const placeholderMd = computed<string>(() => {
   return builder(targetVariantId)
 })
 
-const livePatchLog = ref<PatchLog | null>(null)
+// 仅窄屏单列布局下挂 IsolatedPreview——宽屏右侧大预览已经在同一份草稿上跑了同一份 UV，
+// 重复内嵌一个小 iframe 只是视觉噪声且浪费一次 pipeline render
+const isSplitLayout = useMediaQuery(STUDIO_SPLIT_MEDIA_QUERY)
+const showIsolatedPreview = computed<boolean>(() => !isSplitLayout.value)
+
+// 窄屏 fallback 时 IsolatedPreview 的本地 patchLog；宽屏不挂载，本字段恒为 null
+const localPatchLog = ref<PatchLog | null>(null)
 function onPatchLog(log: PatchLog | null): void {
-  livePatchLog.value = log
+  localPatchLog.value = log
 }
+
+// PatchInspector 的数据源：按布局二选一——
+// 窄屏走本地（小预览是当前肉眼可见的那一份，与大预览滚到视口外时唯一可信源对齐）；
+// 宽屏走 Studio 透传的大预览 log。
+// 不能写 `local ?? prop` —— 拖窗口从窄屏切宽屏时 IsolatedPreview 卸载但 localPatchLog
+// 残留旧值，那种写法会让宽屏 PatchInspector 显示过期数据。
+const inspectorPatchLog = computed<PatchLog | null>(() =>
+  showIsolatedPreview.value
+    ? localPatchLog.value
+    : (props.livePatchLog ?? null),
+)
 
 // ─────────────────────────────────────────────────────────────
 // 6.2 PatchInspector sample 点击 → 跳转 CodeMirror 行
@@ -126,9 +173,9 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
   const target = findSlotContainingSubstring(props.cssPatch, sample.before)
   if (!target) return
   if (activeSlot.value !== target) {
-    activeSlot.value = target
-    // 切 tab 后 CodeMirrorPane 的 value/extensions 通过 Compartment 更新；
+    // 受控：让父组件改 prop，CodeMirrorPane 的 value/extensions 通过 Compartment 更新；
     // 等下一个 tick 让 Vue 的 watch 把新 doc dispatch 到 CM 后再 jump
+    emit('update:activeSlot', target)
     await nextTick()
   }
   activeCmRef.value?.jumpToSubstring(sample.before)
@@ -141,20 +188,6 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
       请先在上方"分类"+"骨架"里选择基底；patch 档需要一个已注册 variant 作为叠加目标。
     </div>
     <template v-else>
-      <div class="tabs" role="tablist">
-        <button
-          v-for="(label, slot) in SLOT_LABELS"
-          :key="slot"
-          role="tab"
-          :aria-selected="activeSlot === slot"
-          :class="['tab', { active: activeSlot === slot }]"
-          @click="activeSlot = slot as Slot"
-        >
-          {{ label }}
-          <span v-if="cssPatch[slot as Slot].trim()" class="tab-dot" aria-hidden="true" />
-        </button>
-      </div>
-
       <div class="editor-wrap">
         <CodeMirrorPane
           ref="activeCmRef"
@@ -164,7 +197,7 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
         />
       </div>
 
-      <div class="preview-wrap">
+      <div v-if="showIsolatedPreview" class="preview-wrap">
         <IsolatedPreview
           :placeholder-md="placeholderMd"
           :theme="theme"
@@ -175,7 +208,7 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
 
       <PatchInspector
         class="inspector"
-        :patch-log="livePatchLog"
+        :patch-log="inspectorPatchLog"
         clickable
         @click-sample="handleJumpToSample"
       />
@@ -196,37 +229,6 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
   background: var(--surface-raised);
   border: 1px dashed var(--border);
   border-radius: var(--radius-2);
-}
-.tabs {
-  display: flex;
-  gap: 2px;
-}
-.tab {
-  flex: 1 1 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px 8px;
-  font-size: var(--fs-11);
-  letter-spacing: var(--ls-wide);
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-1, 2px);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-family: var(--font-text);
-}
-.tab.active {
-  background: var(--surface);
-  color: var(--text);
-  border-color: var(--accent);
-}
-.tab-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: var(--radius-pill, 50%);
-  background: var(--accent);
 }
 .editor-wrap {
   height: 180px;

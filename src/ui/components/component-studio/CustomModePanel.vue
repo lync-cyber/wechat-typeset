@@ -2,8 +2,12 @@
 /**
  * UV custom 档源码面板。5 tab（template / wrapperCSS / titleCSS / bodyCSS / svgSlot）。
  * Lint 失败仅画波浪 + 底部 summary，不阻断编辑；保存期硬闸由 ComponentStudio 决定。
+ *
+ * 预览策略：宽屏（≥900px）布局下右侧大预览已挂在同一份 custom UV 上，本面板不再
+ * 内嵌 IsolatedPreview；窄屏单列布局保留作 fallback。断点见 STUDIO_SPLIT_MEDIA_QUERY，
+ * 与 SourceModePanel 同款 livePatchLog 双源策略。
  */
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import type { Theme } from '../../../core/themes/types'
 import type {
   UserVariant,
@@ -19,23 +23,34 @@ import type { DraftCustom } from './useComponentDraft'
 import CodeMirrorPane from './CodeMirrorPane.vue'
 import IsolatedPreview from './IsolatedPreview.vue'
 import PatchInspector from './PatchInspector.vue'
+import { useMediaQuery } from '../../composables/useMediaQuery'
+import { STUDIO_SPLIT_MEDIA_QUERY } from '../../state/layoutMode'
+import { defaultCustomScaffold, isCustomDraftEmpty } from './userVariantScaffold'
+
+// 与 SourceModePanel 同一套 slot 命名（外壳/标题/正文）由 ComponentEditor 的 tree-nav
+// 统一展示——内部不再持有 TAB_LABELS。Tab 类型字面定义重复 < 30 字节，无需共享模块。
+type Tab = 'template' | 'wrapperCSS' | 'titleCSS' | 'bodyCSS' | 'svgSlot'
 
 const props = defineProps<{
   custom: DraftCustom
   theme: Theme
   /** edit 模式复用此 id 让 preview 的 markdown 引用不需 rewrite。 */
   originalLinkedUvId: string | null
+  /**
+   * Studio 大预览透传下来的 patchLog —— 宽屏布局下作 PatchInspector 的数据源。
+   * 双栏布局右侧大预览已挂载，内嵌 IsolatedPreview 是冗余视觉，按断点条件不挂载。
+   */
+  livePatchLog?: PatchLog | null
+  /**
+   * 受控：当前编辑的 tab 由父组件 ComponentEditor 的 tree-nav 决定；
+   * PatchInspector 跳 sample 时通过 update:activeTab 反向通知。
+   */
+  activeTab: Tab
 }>()
 
-type Tab = 'template' | 'wrapperCSS' | 'titleCSS' | 'bodyCSS' | 'svgSlot'
-
-const TAB_LABELS: Record<Tab, string> = {
-  template: 'HTML 骨架',
-  wrapperCSS: '外壳 CSS',
-  titleCSS: '标题 CSS',
-  bodyCSS: '正文 CSS',
-  svgSlot: '装饰 SVG',
-}
+const emit = defineEmits<{
+  (e: 'update:activeTab', tab: Tab): void
+}>()
 
 const TAB_LANG: Record<Tab, 'html' | 'css'> = {
   template: 'html',
@@ -45,7 +60,21 @@ const TAB_LANG: Record<Tab, 'html' | 'css'> = {
   svgSlot: 'html',
 }
 
-const activeTab = ref<Tab>('template')
+const activeTab = computed<Tab>(() => props.activeTab)
+
+// 进入面板时若 custom 草稿全空，灌入完整最小骨架：template + 三 CSS slot 都填好，
+// 作者立刻在右侧大预览看到"3 行能跑"的样子；已写过的内容（含 edit 回填）不动。
+// 字面常量与 lintTemplateHTML / lintInlineCSS 硬闸预先对齐。
+onMounted(() => {
+  if (isCustomDraftEmpty(props.custom)) {
+    const s = defaultCustomScaffold()
+    props.custom.template = s.template
+    props.custom.wrapperCSS = s.wrapperCSS
+    props.custom.titleCSS = s.titleCSS
+    props.custom.bodyCSS = s.bodyCSS
+    props.custom.svgSlot = s.svgSlot
+  }
+})
 
 // linter 引用稳定：Extension 对象身份变化会触发 CM6 reconfigure
 const linterByTab = {
@@ -100,10 +129,25 @@ const placeholderMd = computed<string>(() => {
   return `::: uc-${previewUvId.value} 标题占位\n正文示例段落（演示 {{body}} 切分）\n:::\n`
 })
 
-const livePatchLog = ref<PatchLog | null>(null)
+// 仅窄屏单列布局下挂 IsolatedPreview——宽屏右侧大预览已经在同一份草稿上跑了同一份 UV
+const isSplitLayout = useMediaQuery(STUDIO_SPLIT_MEDIA_QUERY)
+const showIsolatedPreview = computed<boolean>(() => !isSplitLayout.value)
+
+// 窄屏 fallback 时 IsolatedPreview 的本地 patchLog；宽屏不挂载，本字段恒为 null
+const localPatchLog = ref<PatchLog | null>(null)
 function onPatchLog(log: PatchLog | null): void {
-  livePatchLog.value = log
+  localPatchLog.value = log
 }
+
+// PatchInspector 的数据源：按布局二选一——
+// 窄屏走本地（小预览是当前肉眼可见的那一份）；宽屏走 Studio 透传的大预览 log。
+// 不能写 `local ?? prop` —— 拖窗口从窄屏切宽屏时 IsolatedPreview 卸载但 localPatchLog
+// 残留旧值，那种写法会让宽屏 PatchInspector 显示过期数据。
+const inspectorPatchLog = computed<PatchLog | null>(() =>
+  showIsolatedPreview.value
+    ? localPatchLog.value
+    : (props.livePatchLog ?? null),
+)
 
 const activeCmRef = ref<InstanceType<typeof CodeMirrorPane> | null>(null)
 
@@ -113,7 +157,8 @@ async function handleJumpToSample(sample: PatchLogSample): Promise<void> {
   const target = slots.find((s) => props.custom[s].includes(sample.before))
   if (!target) return
   if (activeTab.value !== target) {
-    activeTab.value = target
+    // 受控：让父切 tab，nextTick 后 CM dispatch 完才跳光标
+    emit('update:activeTab', target)
     await nextTick()
   }
   activeCmRef.value?.jumpToSubstring(sample.before)
@@ -140,20 +185,6 @@ defineExpose({ allDiagnostics })
 
 <template>
   <div class="custom-mode">
-    <div class="tabs" role="tablist">
-      <button
-        v-for="(label, tab) in TAB_LABELS"
-        :key="tab"
-        role="tab"
-        :aria-selected="activeTab === tab"
-        :class="['tab', { active: activeTab === tab }]"
-        @click="activeTab = tab as Tab"
-      >
-        {{ label }}
-        <span v-if="custom[tab as Tab].trim()" class="tab-dot" aria-hidden="true" />
-      </button>
-    </div>
-
     <div class="editor-wrap">
       <CodeMirrorPane
         ref="activeCmRef"
@@ -163,7 +194,7 @@ defineExpose({ allDiagnostics })
       />
     </div>
 
-    <div class="preview-wrap">
+    <div v-if="showIsolatedPreview" class="preview-wrap">
       <IsolatedPreview
         :placeholder-md="placeholderMd"
         :theme="theme"
@@ -174,7 +205,7 @@ defineExpose({ allDiagnostics })
 
     <PatchInspector
       class="inspector"
-      :patch-log="livePatchLog"
+      :patch-log="inspectorPatchLog"
       clickable
       @click-sample="handleJumpToSample"
     />
@@ -196,39 +227,6 @@ defineExpose({ allDiagnostics })
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
-}
-.tabs {
-  display: flex;
-  gap: 2px;
-  flex-wrap: wrap;
-}
-.tab {
-  flex: 1 1 0;
-  min-width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px 8px;
-  font-size: var(--fs-11);
-  letter-spacing: var(--ls-wide);
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-1, 2px);
-  color: var(--text-muted);
-  cursor: pointer;
-  font-family: var(--font-text);
-}
-.tab.active {
-  background: var(--surface);
-  color: var(--text);
-  border-color: var(--accent);
-}
-.tab-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: var(--radius-pill, 50%);
-  background: var(--accent);
 }
 .editor-wrap {
   height: 220px;

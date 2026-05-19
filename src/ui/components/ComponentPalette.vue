@@ -131,6 +131,7 @@ const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
     // 有 snippets,但暂无独立 tab 入口;留空,后续如需再加 tab。
     codeBlock: [],
     note: [],
+    highlight: [],
     footnotes: [],
     recommend: [],
     qrcode: [],
@@ -457,6 +458,7 @@ defineExpose({ openSaveDialog })
         <ComponentGrid
           v-else
           :entries="currentList"
+          :theme="props.theme"
           :actions="gridActions"
           @select="onCellSelect"
           @action="onCellAction"

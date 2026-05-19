@@ -1,0 +1,285 @@
+/* ==========================================================
+   排版系统总壳 — 设计画布、手机预览框、主题切片注释
+   说明：这套 CSS 只用于"展示画布"本身；
+        每个容器变体内部使用纯 inline-style，方便复制到微信编辑器。
+   ========================================================== */
+
+:root{
+  --canvas-bg: #1a1a1a;
+  --canvas-fg: #e8e6e0;
+  --canvas-dim: #8a877f;
+  --canvas-line: #2a2a2a;
+  --canvas-hair: #1f1f1f;
+
+  /* 4 主题的标签色（仅用于画布注释，不用于内容本身） */
+  --t1: #d7d4cb;   /* 编辑部 */
+  --t2: #c8a26b;   /* 宋本批注 */
+  --t3: #8eaaa0;   /* 博物笔记 */
+  --t4: #d8624a;   /* 包豪斯 */
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  background:var(--canvas-bg);
+  color:var(--canvas-fg);
+  font-family: "Inter","Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01","cv01";
+}
+
+a{color:inherit}
+
+/* ---------- 顶部页眉 ---------- */
+.canvas-head{
+  padding: 56px 64px 40px;
+  border-bottom: 1px solid var(--canvas-line);
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items:end;
+}
+.canvas-head .eyebrow{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--canvas-dim);
+}
+.canvas-head h1{
+  font-family: "Noto Serif SC","Source Han Serif SC","Songti SC", serif;
+  font-weight:500;
+  font-size:38px;
+  line-height:1.25;
+  margin:14px 0 0;
+  letter-spacing:.01em;
+  max-width: 22ch;
+}
+.canvas-head .meta{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px;
+  color:var(--canvas-dim);
+  text-align:right;
+  line-height:1.9;
+}
+
+/* ---------- 主题色板小图例 ---------- */
+.legend{
+  display:flex;
+  gap:0;
+  padding: 28px 64px;
+  border-bottom: 1px solid var(--canvas-line);
+}
+.legend .l{
+  flex:1;
+  padding-right:32px;
+  border-right: 1px solid var(--canvas-hair);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.legend .l:last-child{border-right:none}
+.legend .num{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10px;
+  letter-spacing:.2em;
+  color:var(--canvas-dim);
+}
+.legend .name{
+  font-family:"Noto Serif SC", serif;
+  font-size:17px;
+  font-weight:500;
+}
+.legend .name .en{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10px;
+  letter-spacing:.16em;
+  color:var(--canvas-dim);
+  margin-left:8px;
+  text-transform:uppercase;
+}
+.legend .desc{
+  font-family:"Noto Serif SC", serif;
+  font-size:12px;
+  color:var(--canvas-dim);
+  line-height:1.8;
+  max-width: 26ch;
+}
+.legend .l .swatch{
+  display:flex;
+  margin-top:6px;
+  height:10px;
+}
+.legend .l .swatch i{flex:1;display:block}
+
+/* ---------- 容器分类区 ---------- */
+.section{
+  padding: 80px 64px 24px;
+}
+.section + .section{
+  border-top: 1px solid var(--canvas-line);
+}
+.section-head{
+  display:grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items:start;
+  margin-bottom: 56px;
+}
+.section-head .idx{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px;
+  letter-spacing:.18em;
+  color:var(--canvas-dim);
+  padding-top: 14px;
+  border-top: 1px solid var(--canvas-fg);
+}
+.section-head h2{
+  font-family:"Noto Serif SC", serif;
+  font-weight:500;
+  font-size: 28px;
+  margin: 0 0 12px;
+  letter-spacing:.01em;
+}
+.section-head p{
+  margin:0;
+  font-size: 13px;
+  color: var(--canvas-dim);
+  line-height: 1.85;
+  font-family:"Noto Serif SC", serif;
+  max-width: 60ch;
+}
+
+/* ---------- 单个容器组 ---------- */
+.container-group{
+  padding: 48px 0;
+  border-top: 1px dashed var(--canvas-line);
+}
+.container-group:first-of-type{ border-top:none; padding-top: 0;}
+
+.cg-head{
+  display:flex;
+  align-items:baseline;
+  gap: 18px;
+  margin-bottom: 36px;
+  padding-left: 0;
+}
+.cg-head .code{
+  font-family:"IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing:.16em;
+  color: var(--canvas-fg);
+  background: transparent;
+  padding: 4px 10px;
+  border: 1px solid var(--canvas-fg);
+}
+.cg-head .cn{
+  font-family:"Noto Serif SC", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+.cg-head .note{
+  font-family:"Noto Serif SC", serif;
+  font-size: 12px;
+  color: var(--canvas-dim);
+  margin-left: auto;
+}
+
+/* ---------- 变体网格 ---------- */
+.variants{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1400px){
+  .variants{ grid-template-columns: repeat(2, 1fr);}
+}
+
+.variant{
+  display:flex;
+  flex-direction:column;
+}
+.v-label{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing:.14em;
+  color: var(--canvas-dim);
+}
+.v-label .dot{
+  width:8px; height:8px; display:inline-block; flex-shrink:0;
+}
+.v-label.t1 .dot{ background: var(--t1); }
+.v-label.t2 .dot{ background: var(--t2); }
+.v-label.t3 .dot{ background: var(--t3); }
+.v-label.t4 .dot{ background: var(--t4); }
+.v-label .theme-name{ color: var(--canvas-fg); }
+.v-label .var-id{ margin-left:auto }
+
+/* 手机预览框：每个变体内嵌一个 ~375px 宽的真实渲染 */
+.phone{
+  background: #ffffff;
+  overflow:hidden;
+  border: 1px solid var(--canvas-line);
+}
+/* 主题 1 编辑部 — 纸白 */
+.phone.t1{ background:#fbfaf7; }
+/* 主题 2 宋本 — 米黄 */
+.phone.t2{ background:#f3eada; }
+/* 主题 3 博物 — 旧纸 */
+.phone.t3{ background:#ece4d2; }
+/* 主题 4 包豪斯 — 灰白 */
+.phone.t4{ background:#efece5; }
+
+/* 主题字体祖先(画布层)。每个 variant inline-style 仍保留 font-family 声明,
+   微信粘贴时 inline 字面优先;此祖先规则仅在画布渲染态生效,让设计师调整画布字体
+   只改 1 处。t1/t2/t3 共用 Noto Serif SC,t4 用 Noto Sans SC(参考 baseline)。 */
+.phone.t1 .phone-inner,
+.phone.t2 .phone-inner,
+.phone.t3 .phone-inner {
+  font-family: "Noto Serif SC","Source Han Serif SC","Songti SC", serif;
+}
+.phone.t4 .phone-inner {
+  font-family: "Noto Sans SC","Source Han Sans SC","PingFang SC", sans-serif;
+}
+
+.phone-inner{
+  padding: 22px 18px;
+}
+
+/* ---------- 底注 ---------- */
+.canvas-foot{
+  padding: 64px;
+  border-top: 1px solid var(--canvas-line);
+  display:flex;
+  justify-content: space-between;
+  gap: 48px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--canvas-dim);
+  letter-spacing:.14em;
+}
+.canvas-foot a{
+  color: var(--canvas-fg);
+  text-decoration:none;
+  border-bottom: 1px solid var(--canvas-fg);
+  padding-bottom: 2px;
+}
+
+/* 容器内"占位图"通用样式（striped placeholder） */
+.ph-img{
+  width:100%;
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(0,0,0,.06) 0 1px,
+      transparent 1px 8px),
+    #d9d4c7;
+  display:flex; align-items:center; justify-content:center;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10px; letter-spacing:.18em; color:#6b6256;
+  text-transform: uppercase;
+}
