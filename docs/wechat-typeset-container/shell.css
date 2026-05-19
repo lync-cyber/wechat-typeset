@@ -235,6 +235,18 @@ a{color:inherit}
 /* 主题 4 包豪斯 — 灰白 */
 .phone.t4{ background:#efece5; }
 
+/* 主题字体祖先(画布层)。每个 variant inline-style 仍保留 font-family 声明,
+   微信粘贴时 inline 字面优先;此祖先规则仅在画布渲染态生效,让设计师调整画布字体
+   只改 1 处。t1/t2/t3 共用 Noto Serif SC,t4 用 Noto Sans SC(参考 baseline)。 */
+.phone.t1 .phone-inner,
+.phone.t2 .phone-inner,
+.phone.t3 .phone-inner {
+  font-family: "Noto Serif SC","Source Han Serif SC","Songti SC", serif;
+}
+.phone.t4 .phone-inner {
+  font-family: "Noto Sans SC","Source Han Sans SC","PingFang SC", sans-serif;
+}
+
 .phone-inner{
   padding: 22px 18px;
 }

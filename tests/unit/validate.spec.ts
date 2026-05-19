@@ -179,9 +179,10 @@ describe('validateSnippet · 边界与空输入', () => {
   })
 
   it('已知容器但 variantKind=null 时,attrs.variant 不报错(没有 variant 可选)', () => {
-    // highlight 容器没有 variantKind:它不接 variant=,即便用户写了也不应报错
-    // (validate.ts 的契约是 "未在 VARIANT_IDS 内的 id 报错";没有对应 kind 时跳过)
-    const md = '::: highlight variant=anything\n内容\n:::\n'
+    // intro 容器没有 variantKind:它不接 variant=,即便用户写了也不应报错
+    // (validate.ts 的契约是 "未在 VARIANT_IDS 内的 id 报错";没有对应 kind 时跳过)。
+    // 历史:此处曾用 highlight,T1.1 后 highlight 是 variant 容器,改用 intro。
+    const md = '::: intro variant=anything\n内容\n:::\n'
     const r = validateSnippet(md)
     expect(r.ok).toBe(true)
   })

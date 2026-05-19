@@ -102,6 +102,17 @@ export interface ContainerSpec {
   parent?: string
   /** markdown-it-container fence 长度（compare 外层 4 个冒号，其他 3 个） */
   fenceLength: 3 | 4
+  /**
+   * 叙述强度梯度（1 ≤ x ≤ 5）。docs/wechat-typeset-container/persona-contracts.md
+   * 规则 1 / 4 / 5 派生:LLM 写作时选容器按强度从弱到强递进。
+   *   1 = highlight（段内关键短句）
+   *   2 = note（中性补注）
+   *   3 = admonition 四态 (tip/warning/info/danger) / abstract（提请注意、文首总览）
+   *   4 = quote-card / announcement（独立块，整版级强调）
+   *   5 = pull-quote / key-number（视觉重心，独占段位）
+   * 未声明 = 该容器不在叙述强度梯度内（结构 / 索引 / 元数据类容器）。
+   */
+  narrativeStrength?: 1 | 2 | 3 | 4 | 5
   /** 一句话描述 —— 作者视角"这个容器是做什么的" */
   description: string
   /** 最小可用 markdown 示例（含起止 fence，自带末尾 \n） */
@@ -352,6 +363,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       '强警示横幅：文章顶部 / 中部"置顶通告"块，比 tip/warning 视觉强度更高。' +
       'info 为标题，body 为说明文本。4 种 variant 覆盖：常规警示 / 法律免责 / AI 合规 / 印章公告。',
     example: '::: announcement tone=danger 重要通知\n本期推送涉及账号迁移说明 …\n:::\n',
+    narrativeStrength: 4,
   },
   {
     name: 'tip',
@@ -368,6 +380,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     ],
     description: 'tip：小贴士／正向提示。',
     example: '::: tip 小贴士\n内容 …\n:::\n',
+    narrativeStrength: 3,
   },
   {
     name: 'warning',
@@ -377,6 +390,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: 'warning：需要读者注意的提醒。',
     example: '::: warning 注意\n内容 …\n:::\n',
+    narrativeStrength: 3,
   },
   {
     name: 'info',
@@ -386,6 +400,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: 'info：中性说明／补充信息。',
     example: '::: info 说明\n内容 …\n:::\n',
+    narrativeStrength: 3,
   },
   {
     name: 'danger',
@@ -395,6 +410,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: 'danger：高风险警告／错误示范。',
     example: '::: danger 警告\n内容 …\n:::\n',
+    narrativeStrength: 3,
   },
   {
     name: 'note',
@@ -418,6 +434,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       'variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到"编辑部以机构身份按语"；' +
       'research-dense 切到"调研方法论小字栏"。',
     example: '::: note 补注\n内容 …\n:::\n',
+    narrativeStrength: 2,
   },
 
   // ── content（6） ──────────────────────────────────────────
@@ -429,17 +446,20 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: '大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。',
     example: '::: quote-card\n一段值得突出的引用 …\n:::\n',
+    narrativeStrength: 4,
   },
   {
     name: 'highlight',
     styleKey: 'highlight',
     category: 'content',
+    variantKind: 'highlight',
     fenceLength: 3,
     description:
-      '行内高亮段（bgMuted 底色块，无 variant）。与 quote-card 的边界：' +
-      'quote-card 是"成段引用"（外部话语、有 variant 骨架），highlight 是"作者自己想强调的一段话"（无骨架切换、视觉更轻）。' +
+      '行内高亮段（bgMuted 底色块）。与 quote-card 的边界：' +
+      'quote-card 是"成段引用"（外部话语、有 variant 骨架），highlight 是"作者自己想强调的一段话"。' +
       '想强调一句"我要让读者停下来"用 highlight；想引用一段他人话用 quote-card。',
     example: '::: highlight\n需要读者停下来的一段话 …\n:::\n',
+    narrativeStrength: 1,
   },
   {
     name: 'compare',
@@ -701,6 +721,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     fenceLength: 3,
     description: '文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。',
     example: '::: abstract 摘要\n本文论点 …\n:::\n',
+    narrativeStrength: 3,
   },
   {
     name: 'key-number',
@@ -721,6 +742,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       '大数字 + 说明（研究报告 / 内参版面 / issue-banner）。' +
       'attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。',
     example: '::: key-number value="42%" 同比涨幅\n占全年营收 12pp …\n:::\n',
+    narrativeStrength: 5,
   },
   {
     name: 'kpi-dashboard',
@@ -876,6 +898,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       '拉引：正文中段把作者已写过的句子放大重申。info 为引用文字，body 可选为署名 / 上下文。' +
       '与 quote-card 正交（quote-card 是引用他人外部话语）。',
     example: '::: pull-quote\n我们以为在阅读，其实只是在滑动。\n:::\n',
+    narrativeStrength: 5,
   },
 
   {
