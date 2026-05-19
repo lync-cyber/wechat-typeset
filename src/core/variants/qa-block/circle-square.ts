@@ -32,7 +32,6 @@ const circleSquare: VariantDef = {
     kind: 'qaBlock',
     name: '圆方代号',
     description: '圆环 Q + 实心方 A 几何徽章，包豪斯对照',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

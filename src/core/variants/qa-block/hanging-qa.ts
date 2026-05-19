@@ -29,7 +29,6 @@ const hangingQa: VariantDef = {
     kind: 'qaBlock',
     name: '悬挂 Q./A.',
     description: '左侧大号斜体 Q./A. 标签 + 右侧设问回答悬挂缩进',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [

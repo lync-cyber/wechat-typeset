@@ -10,9 +10,7 @@
 
 import accentBar from './accent-bar'
 import pillTag from './pill-tag'
-import ticketNotch from './ticket-notch'
 import cardShadow from './card-shadow'
-import minimalUnderline from './minimal-underline'
 import terminal from './terminal'
 import dashedBorder from './dashed-border'
 import doubleBorder from './double-border'
@@ -41,9 +39,7 @@ import triangleTop from './triangle-top'
 export default [
   accentBar,
   pillTag,
-  ticketNotch,
   cardShadow,
-  minimalUnderline,
   terminal,
   dashedBorder,
   doubleBorder,

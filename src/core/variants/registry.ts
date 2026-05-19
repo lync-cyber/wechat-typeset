@@ -66,9 +66,7 @@ type RequiredRender<Args> = VariantDef<Args> & { render: NonNullable<VariantRend
 const ADMONITION_ORDER: readonly string[] = [
   'accent-bar',
   'pill-tag',
-  'ticket-notch',
   'card-shadow',
-  'minimal-underline',
   'terminal',
   'dashed-border',
   'double-border',
@@ -95,7 +93,6 @@ const ADMONITION_ORDER: readonly string[] = [
 ]
 const QUOTE_ORDER: readonly string[] = [
   'classic',
-  'left-bar',
   'magazine-dropcap',
   'column-rule',
   'frame-brackets',
@@ -115,7 +112,6 @@ const COMPARE_ORDER: readonly string[] = [
   'stacked-row',
   'ledger',
   'data-card',
-  'paired-jiayi',
   'paired-specimen',
   'measurement-table',
   'paired-shape',
@@ -123,14 +119,11 @@ const COMPARE_ORDER: readonly string[] = [
 ]
 const STEPS_ORDER: readonly string[] = [
   'number-circle',
-  'ribbon-chain',
   'timeline-dot',
   'step-card',
   'split-row',
-  'large-numeral',
   'seal-cjk',
   'ruler-row',
-  'geometric-chain',
 ]
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
 const SECTION_TITLE_ORDER: readonly string[] = [
@@ -227,10 +220,7 @@ const DIALOGUE_ORDER: readonly string[] = [
   'chat-bubbles',
   'name-prefix',
   'interview-column',
-  'screenplay',
-  'host-guest-seal',
   'audio-stamp',
-  'shape-speaker',
 ]
 const QA_BLOCK_ORDER: readonly string[] = [
   'numbered-faq',

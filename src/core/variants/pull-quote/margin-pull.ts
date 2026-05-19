@@ -34,7 +34,6 @@ const marginPull: VariantDef = {
     kind: 'pullQuote',
     name: '悬挂拉引',
     description: '左侧竖向 monospace kicker + 右大字（NYT Sunday）',
-    experimental: true,
   },
   thumbnail: thumb,
   snippets: [
