@@ -254,6 +254,8 @@ export const spec: PersonaSpec = {
     tableCard: 'rule-grid',
     gallery: 'duo',
     dialogue: 'qa-rows',
+    // 编集所读者通信走 hanging-qa：大号斜体 Q./A. 与 mook 慢读杂志的 magazine pull-quote 语言一致
+    qaBlock: 'hanging-qa',
   },
 
   // ============================================================
@@ -690,13 +692,10 @@ export const spec: PersonaSpec = {
       margin: '22px 0',
       'border-radius': '0',
     },
-    // qa-block · 设计稿原型：无 border 横线，仅 kicker + 单行 Q / 单行 A
-    //   renderer 自带 Q/A 22×22 方块徽章，与本主题"直角"语言一致
+    // qa-block · wrapper-level：transparent + 40px 上下空气；视觉骨架由 variant hanging-qa 自管
     qaBlock: {
       __reset: true,
       'background-color': 'transparent',
-      'border-top': 'none',
-      'border-bottom': 'none',
       padding: '0',
       margin: '40px 0',
       'border-radius': '0',

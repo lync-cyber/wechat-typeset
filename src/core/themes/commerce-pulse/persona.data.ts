@@ -240,6 +240,7 @@ export const spec: PersonaSpec = {
     tableCard: 'key-value',         // orphan 升级：键值对档式（规格 / SKU 参数列表）
     gallery: 'triptych',            // orphan 升级：三联图（产品三视图 / 三档位展示）
     dialogue: 'qa-rows',            // Q&A 行：买家问 / 商家答
+    qaBlock: 'numbered-faq',
   },
 
   // ============================================================

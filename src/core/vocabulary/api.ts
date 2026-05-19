@@ -38,6 +38,7 @@ import {
   FOOTNOTES_VARIANTS,
   FOOTER_CTA_VARIANTS,
   PULL_QUOTE_VARIANTS,
+  QA_BLOCK_VARIANTS,
   QRCODE_VARIANTS,
   QUOTE_VARIANTS,
   RECOMMEND_VARIANTS,
@@ -98,6 +99,7 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
     tableCard: TABLE_CARD_VARIANTS as unknown as MetaTable,
     gallery: GALLERY_VARIANTS as unknown as MetaTable,
     dialogue: DIALOGUE_VARIANTS as unknown as MetaTable,
+    qaBlock: QA_BLOCK_VARIANTS as unknown as MetaTable,
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
@@ -146,6 +148,7 @@ function variantIdsForKind(kind: VariantKind | 'codeBlock'): string[] {
     tableCard: TABLE_CARD_VARIANTS,
     gallery: GALLERY_VARIANTS,
     dialogue: DIALOGUE_VARIANTS,
+    qaBlock: QA_BLOCK_VARIANTS,
   }
   return Object.keys(table[kind] ?? {})
 }

@@ -9,8 +9,16 @@
  * renderXxxRow。row 级 CSS（cell border / bg / padding）都在本文件按 variantId 分派，
  * variant 文件只产 wrapperCSS。
  *
- * cells 解析：管道 `|` 分隔，trim 后入数组。price-tier 额外约定单元格首字符 `*` 标记
- * 推荐列——首行（header）记下列号，后续每行同列顶条着 accent 色。
+ * cells 解析：管道 `|` 分隔，trim 后入数组。
+ *
+ * price-tier 推荐列约定：单元格首字符 `*` 标记当列为推荐列——首行（header）扫描记下列号，
+ * 后续每行同列顶条着 accent 色。**转义**：写 `\*` 表示字面星号，不触发推荐标记
+ * （如 cell `"\*会员"` 渲染为 `"*会员"`，不进 highlightCols）。这是为了允许真实数据
+ * 含 `*` 字面（如脚注引用、注解符号）。
+ *
+ * key-value 列数约定：必须 2 列。非 header 行 cells.length ≠ 2 时按 dev warn 提示
+ * （生产渲染仍走 fallback：少列补空、多列截断），不阻断；warn 去重，测试可静音
+ * （__setTableCardWarnSilentForTest）。
  *
  * markdown-it-container 模式：tableRowContainer.open 一次性产出完整 row HTML（含 cells），
  * close=''。这样 body 被吞、attrs 全权决定渲染——同 kpi-item / timeline-item 模式。
@@ -43,6 +51,43 @@ const TABLE_CARD_STACK: TableCardStackEntry[] = []
 function parseCells(raw: string | undefined): string[] {
   if (!raw) return []
   return raw.split('|').map((s) => s.trim())
+}
+
+/**
+ * price-tier 推荐列前缀解读。
+ *   - `*xxx`   → { recommend: true,  text: 'xxx' }  推荐列，渲染时剥掉星号
+ *   - `\*xxx`  → { recommend: false, text: '*xxx' } 字面星号转义
+ *   - 其它     → { recommend: false, text: 原值 }
+ */
+function interpretStarPrefix(raw: string): { recommend: boolean; text: string } {
+  if (raw.startsWith('\\*')) return { recommend: false, text: raw.slice(1) }
+  if (raw.startsWith('*')) return { recommend: true, text: raw.slice(1).trim() }
+  return { recommend: false, text: raw }
+}
+
+// ─────────────────────────────────────────────────────────────
+// dev warn：cells 列数 / 形状不合约定时一次性提示，不阻断渲染
+// 仿 themeCompatGuard：(variantId, kind) 去重；测试钩子可静音。
+// ─────────────────────────────────────────────────────────────
+
+const warnedShapes = new Set<string>()
+let warnSilent = false
+
+function warnCellShape(variantId: string, kind: string, msg: string): void {
+  if (warnSilent) return
+  const key = `${variantId}::${kind}`
+  if (warnedShapes.has(key)) return
+  warnedShapes.add(key)
+  console.warn(`[wechat-typeset] table-card[${variantId}] ${msg}`)
+}
+
+/**
+ * 测试钩子：静音 warn 输出。table-card variant 全矩阵 / 快照 spec 会刻意穿越
+ * 异常列数 / 转义边界（warn 路径正是被测对象），生产期 warn 在测试日志里变成
+ * 数百行噪声。spec 在 beforeAll 打开、afterAll 关掉。生产代码勿用。
+ */
+export function __setTableCardWarnSilentForTest(v: boolean): void {
+  warnSilent = v
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -116,10 +161,10 @@ export const tableRowContainer: ContainerRenderer = {
     const cells = parseCells(ctx.attrs.cells)
     if (top.rowCount === 0) {
       top.columnsCount = cells.length
-      // price-tier：首行扫描 `*` 前缀确定推荐列；后续行复用
+      // price-tier：首行扫描 `*` 前缀确定推荐列（`\*` 转义不算）；后续行复用
       if (top.variantId === 'price-tier') {
         cells.forEach((cell, i) => {
-          if (cell.startsWith('*')) top.highlightCols.add(i)
+          if (interpretStarPrefix(cell).recommend) top.highlightCols.add(i)
         })
       }
     } else if (cells.length !== top.columnsCount) {
@@ -140,6 +185,14 @@ export const tableRowContainer: ContainerRenderer = {
         return renderKeyValueRow(ctx, cells, isHeader)
       case 'price-tier':
         return renderPriceTierRow(ctx, cells, isHeader, bodyIdx, top.highlightCols)
+      case 'three-line-table':
+        return renderThreeLineRow(ctx, cells, isHeader)
+      case 'index-table':
+        return renderIndexTableRow(ctx, cells, isHeader)
+      case 'vermillion-grid':
+        return renderVermillionGridRow(ctx, cells, isHeader)
+      case 'matrix':
+        return renderMatrixRow(ctx, cells, isHeader)
       case 'rule-grid':
       default:
         return renderRuleGridRow(ctx, cells, isHeader)
@@ -152,9 +205,9 @@ export const tableRowContainer: ContainerRenderer = {
 // 4 个 row 渲染器
 // ─────────────────────────────────────────────────────────────
 
-/** 剥 price-tier 推荐列的 `*` 前缀，让渲染文本不带星号 */
+/** 剥 price-tier 推荐列的 `*` 前缀（`\*` 转义降为字面星号），让渲染文本不带星号 */
 function stripStar(s: string): string {
-  return s.startsWith('*') ? s.slice(1).trim() : s
+  return interpretStarPrefix(s).text
 }
 
 function renderRuleGridRow(
@@ -265,6 +318,13 @@ function renderKeyValueRow(
       `</section>\n`
     )
   }
+  if (cells.length !== 2) {
+    warnCellShape(
+      'key-value',
+      'row-arity',
+      `row cells.length=${cells.length}，应为 2（左 key / 右 value）；少列补空、多列截断`,
+    )
+  }
   const key = cells[0] ?? ''
   const value = cells[1] ?? ''
   const keyCSS = [
@@ -342,6 +402,211 @@ function renderPriceTierRow(
         .join(';')
       return `<span style="${cellCSS}">${escText(cell)}</span>`
     })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderThreeLineRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const n = cells.length || 1
+  const w = (100 / n).toFixed(2)
+  const rowCSS = 'display:table-row'
+  // header 行下方 1px 实线；body 行无任何水平/垂直分隔——纯三线骨架
+  const color = isHeader ? c.textMuted : c.text
+  const weight = isHeader ? 600 : 400
+  const fontSize = isHeader ? '11px' : '13px'
+  const letterSpacing = isHeader ? '0.08em' : 'normal'
+  const textTransform = isHeader ? 'uppercase' : 'none'
+  const cellHtml = cells
+    .map((cell) => {
+      const cellCSS = [
+        'display:table-cell',
+        `width:${w}%`,
+        'vertical-align:middle',
+        `color:${color}`,
+        `font-weight:${weight}`,
+        `font-size:${fontSize}`,
+        `letter-spacing:${letterSpacing}`,
+        `text-transform:${textTransform}`,
+        'line-height:1.5',
+        'padding:10px 12px',
+        isHeader ? `border-bottom:1px solid ${c.text}` : '',
+      ]
+        .filter(Boolean)
+        .join(';')
+      return `<span style="${cellCSS}">${escText(cell)}</span>`
+    })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderIndexTableRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const n = cells.length || 1
+  const w = (100 / n).toFixed(2)
+  const rowCSS = 'display:table-row'
+  // header 行：小号全大写 + 下方 1px 实线
+  // body 行：行间 dashed 分隔；按列索引区分 monospace（i==0,2）/ 正常（i==1）
+  const headerWeight = 600
+  const cellHtml = cells
+    .map((cell, i) => {
+      const isMonoCol = i === 0 || i === n - 1
+      const isLastCol = i === cells.length - 1
+      const bg = 'transparent'
+      const color = isHeader ? c.textMuted : isMonoCol ? c.textMuted : c.text
+      const weight = isHeader ? headerWeight : isMonoCol ? 400 : 400
+      const fontSize = isHeader ? '11px' : isMonoCol ? '12px' : '13px'
+      const fontFamily = !isHeader && isMonoCol ? 'font-family:Menlo,Monaco,monospace' : ''
+      const textAlign = !isHeader && isLastCol ? 'text-align:right' : 'text-align:left'
+      const borderBottom = isHeader
+        ? `border-bottom:1px solid ${c.text}`
+        : `border-bottom:1px dashed ${c.border}`
+      const cellCSS = [
+        'display:table-cell',
+        `width:${w}%`,
+        'vertical-align:middle',
+        `background-color:${bg}`,
+        `color:${color}`,
+        `font-weight:${weight}`,
+        `font-size:${fontSize}`,
+        fontFamily,
+        isHeader ? 'letter-spacing:0.08em' : '',
+        isHeader ? 'text-transform:uppercase' : '',
+        textAlign,
+        'line-height:1.5',
+        'padding:10px 12px',
+        borderBottom,
+      ]
+        .filter(Boolean)
+        .join(';')
+      return `<span style="${cellCSS}">${escText(cell)}</span>`
+    })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderVermillionGridRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const n = cells.length || 1
+  const w = (100 / n).toFixed(2)
+  const rowCSS = 'display:table-row'
+  // header 行：primary 底色 + textInverse 字色（朱印感降级实现）
+  // body 行：全网格 1px solid border，小号字
+  const bg = isHeader ? c.primary : c.bg
+  const color = isHeader ? c.textInverse : c.text
+  const weight = isHeader ? 700 : 400
+  const fontSize = isHeader ? '12px' : '12px'
+  const cellHtml = cells
+    .map((cell, i) => {
+      const isLastCol = i === cells.length - 1
+      const cellCSS = [
+        'display:table-cell',
+        `width:${w}%`,
+        'vertical-align:middle',
+        `background-color:${bg}`,
+        `color:${color}`,
+        `font-weight:${weight}`,
+        `font-size:${fontSize}`,
+        'line-height:1.5',
+        'padding:8px 10px',
+        `border-bottom:1px solid ${c.border}`,
+        isLastCol ? '' : `border-right:1px solid ${c.border}`,
+      ]
+        .filter(Boolean)
+        .join(';')
+      return `<span style="${cellCSS}">${escText(cell)}</span>`
+    })
+    .join('')
+  return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+}
+
+function renderMatrixRow(
+  ctx: ContainerRenderContext,
+  cells: string[],
+  isHeader: boolean,
+): string {
+  const c = ctx.tokens.colors
+  const CELL_SIZE = 36
+  const LABEL_WIDTH = 50
+  const rowCSS = 'display:table-row'
+
+  if (isHeader) {
+    const labelCSS = [
+      'display:table-cell',
+      `width:${LABEL_WIDTH}px`,
+      `height:${CELL_SIZE}px`,
+      'vertical-align:middle',
+      'text-align:right',
+      'padding-right:8px',
+      `color:${c.textMuted}`,
+      'font-size:10px',
+      'letter-spacing:0.1em',
+      'text-transform:uppercase',
+      'font-weight:600',
+    ].join(';')
+    const headCellCSS = [
+      'display:table-cell',
+      `width:${CELL_SIZE}px`,
+      `height:${CELL_SIZE}px`,
+      'vertical-align:middle',
+      'text-align:center',
+      `color:${c.textMuted}`,
+      'font-size:10px',
+      'letter-spacing:0.1em',
+      'text-transform:uppercase',
+      'font-weight:600',
+    ].join(';')
+    const cellHtml = cells
+      .map((cell, i) =>
+        i === 0
+          ? `<span style="${labelCSS}">${escText(cell)}</span>`
+          : `<span style="${headCellCSS}">${escText(cell)}</span>`,
+      )
+      .join('')
+    return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
+  }
+
+  const labelCSS = [
+    'display:table-cell',
+    `width:${LABEL_WIDTH}px`,
+    `height:${CELL_SIZE}px`,
+    'vertical-align:middle',
+    'text-align:right',
+    'padding-right:8px',
+    `color:${c.text}`,
+    'font-size:11px',
+    'font-weight:600',
+  ].join(';')
+  const valueCSS = [
+    'display:table-cell',
+    `width:${CELL_SIZE}px`,
+    `height:${CELL_SIZE}px`,
+    'vertical-align:middle',
+    'text-align:center',
+    `background-color:${c.primary}`,
+    `color:${c.textInverse}`,
+    'font-size:11px',
+    'font-weight:700',
+    `border:1px solid ${c.bg}`,
+  ].join(';')
+  const cellHtml = cells
+    .map((cell, i) =>
+      i === 0
+        ? `<span style="${labelCSS}">${escText(cell)}</span>`
+        : `<span style="${valueCSS}">${escText(cell)}</span>`,
+    )
     .join('')
   return `<section class="container-table-row" style="${rowCSS}">${cellHtml}</section>\n`
 }

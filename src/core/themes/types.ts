@@ -488,6 +488,16 @@ export type CompareVariantId =
   | 'ledger'
   // 数据卡：顶 3px 主色/danger 色条 + bgSoft 底 + 大号 monospace 数字（data-brief 专属）
   | 'data-card'
+  // 甲乙朱字：实心 vs 描边 primary 色块标签（宋本批注 02·A）
+  | 'paired-jiayi'
+  // 标本卡：左右两栏 textMuted uppercase 标签 + hairline（博物笔记 03·A SPECIMEN A/B）
+  | 'paired-specimen'
+  // 测量表：双行 block + border-top/bottom + 固定宽列标签（博物笔记 03·B MEASUREMENT 降级）
+  | 'measurement-table'
+  // 圆方代号：圆环 vs 实心方块 inline-block 几何对比（包豪斯 04·A，与 qa-block 同形 variant 命名错峰）
+  | 'paired-shape'
+  // 轴线图：上轴线 SVG + 中点红圆 + 下两端正文（包豪斯 04·B AXIS DIAGRAM）
+  | 'axis-diagram'
 
 export type StepsVariantId =
   // 编号圆圈徽章（当前默认行为）
@@ -500,6 +510,14 @@ export type StepsVariantId =
   | 'step-card'
   // 左右分栏：左侧大号编号 + 右侧正文（学术 / 调研主题骨架）
   | 'split-row'
+  // 大数字：作者写 ### 01/02 形成大号 serif 序号反衬 caption（编辑部 01·A）
+  | 'large-numeral'
+  // CJK 印章：作者写 ### 一/二/三 等汉字 h3 + 容器克制外框（宋本 02·A）
+  | 'seal-cjk'
+  // 刻度尺：顶部 1px 实线主轴 + h3 当刻度位置标签（博物笔记 03·A，BC-2）
+  | 'ruler-row'
+  // 几何链：左 2px 实线主轴 + 几何符号 h3（包豪斯 04·A）
+  | 'geometric-chain'
 
 export type DividerVariantId =
   | 'wave'
@@ -684,6 +702,14 @@ export type TableCardVariantId =
   | 'key-value'
   // 价格档位：每列独立卡 + 顶部 3px 主色条 + 居中（pricing tier comparison）
   | 'price-tier'
+  // 三线表：顶 2px + 中 1px + 下 2px 实线、无垂直线（编辑部 01·A booktabs 报刊三线）
+  | 'three-line-table'
+  // 索引目录：顶实线 + 行间 dashed + 序号/标题/页码三栏 monospace（编辑部 01·B）
+  | 'index-table'
+  // 朱角方格：全网格 1px + header primary 底 textInverse 字承载朱印感（宋本 02·A 降级）
+  | 'vermillion-grid'
+  // 热力矩阵：行列标签 + 显式 width/height 色块（包豪斯 04·B，BC-4 降级方案）
+  | 'matrix'
 
 export type GalleryVariantId =
   // 双联：display:table 50/50（左右对比图）
@@ -695,6 +721,24 @@ export type GalleryVariantId =
   // 横滚条带：overflow-x:auto + inline-block 64% + 内阴影提示滑动（移动端 carousel）
   | 'ribbon-strip'
 
+export type QaBlockVariantId =
+  // 编辑部 编号 FAQ（默认骨架，DEFAULT_VARIANTS.qaBlock 指向此 id）
+  | 'numbered-faq'
+  // 编辑部 大号斜体 Q./A. 悬挂缩进
+  | 'hanging-qa'
+  // 宋本批注 问/答 朱印徽章（实心 vs 描边）
+  | 'seal-stamp'
+  // 宋本批注 設・問 上下夹线 + 註 hanging
+  | 'query-annotation'
+  // 博物笔记 QUERY/FINDING 双栏 + N°/obs 编号
+  | 'sample-query'
+  // 博物笔记 田野卡片（外框 + dashed 行分隔）
+  | 'field-card'
+  // 包豪斯 圆环 Q + 实心方 A 几何徽章
+  | 'circle-square'
+  // 包豪斯 反白上下分栏 Q · NN / A · NN
+  | 'typed-block'
+
 export type DialogueVariantId =
   // Q/A 行：每轮 kicker 头 + 正文，访谈整理稿
   | 'qa-rows'
@@ -704,6 +748,14 @@ export type DialogueVariantId =
   | 'name-prefix'
   // 杂志栏：左 fixed 列大写名字 + 右长答（New Yorker interview）
   | 'interview-column'
+  // 剧本式顶行：name mono 小字顶行 + 多段正文垂直堆叠（编辑部 01·A SCREENPLAY）
+  | 'screenplay'
+  // 主客名签：中文首字徽章（主=实心 / 客=描边）+ 正文（宋本批注 02·A）
+  | 'host-guest-seal'
+  // 音频时间戳：mono timestamp 顶行 + name + role italic（博物笔记 03·A，attrs.timestamp）
+  | 'audio-stamp'
+  // 圆方代号：22×22 几何徽章（circle 描边 / square 实心）+ 正文（包豪斯 04·A，attrs.shape）
+  | 'shape-speaker'
 
 /** 主题骨架选择。每个字段选一个 id，渲染器据此分派到 variants/{kind}/{id}.ts。 */
 export interface ThemeVariants {
@@ -740,6 +792,12 @@ export interface ThemeVariants {
   gallery: GalleryVariantId
   /** 多轮对话骨架：dialogue 容器（外层 4 冒号，内嵌 dialogue-turn）。 */
   dialogue: DialogueVariantId
+  /**
+   * 读者问答骨架：qa-block 容器（单 Q + 单 A，签名容器）。
+   * 与 dialogue 正交：dialogue 是多轮访谈，qa-block 是单轮 FAQ 范式。
+   * P3.1 已登记字段，主题未声明时由 DEFAULT_VARIANTS 兜底；renderer 在 P3.2 完成 variant 派发后正式消费。
+   */
+  qaBlock: QaBlockVariantId
 }
 
 /**
@@ -765,6 +823,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   tableCard: 'rule-grid',
   gallery: 'duo',
   dialogue: 'qa-rows',
+  qaBlock: 'numbered-faq',
 }
 
 // ============================================================
@@ -871,6 +930,11 @@ export const VARIANT_IDS = {
     'stacked-row',
     'ledger',
     'data-card',
+    'paired-jiayi',
+    'paired-specimen',
+    'measurement-table',
+    'paired-shape',
+    'axis-diagram',
   ] as const satisfies readonly CompareVariantId[],
   steps: [
     'number-circle',
@@ -878,6 +942,10 @@ export const VARIANT_IDS = {
     'timeline-dot',
     'step-card',
     'split-row',
+    'large-numeral',
+    'seal-cjk',
+    'ruler-row',
+    'geometric-chain',
   ] as const satisfies readonly StepsVariantId[],
   divider: [
     'wave',
@@ -975,6 +1043,10 @@ export const VARIANT_IDS = {
     'zebra-rows',
     'key-value',
     'price-tier',
+    'three-line-table',
+    'index-table',
+    'vermillion-grid',
+    'matrix',
   ] as const satisfies readonly TableCardVariantId[],
   gallery: [
     'duo',
@@ -987,7 +1059,21 @@ export const VARIANT_IDS = {
     'chat-bubbles',
     'name-prefix',
     'interview-column',
+    'screenplay',
+    'host-guest-seal',
+    'audio-stamp',
+    'shape-speaker',
   ] as const satisfies readonly DialogueVariantId[],
+  qaBlock: [
+    'numbered-faq',
+    'hanging-qa',
+    'seal-stamp',
+    'query-annotation',
+    'sample-query',
+    'field-card',
+    'circle-square',
+    'typed-block',
+  ] as const satisfies readonly QaBlockVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

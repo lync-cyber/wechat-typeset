@@ -67,6 +67,8 @@ const PROBES: Record<VariantKind, RegExp> = {
   gallery: /^:{4,}\s*gallery\b/m,
   // dialogue 容器（多轮对话）
   dialogue: /^:{4,}\s*dialogue\b/m,
+  // qa-block 容器（读者问答）
+  qaBlock: /^:{3,}\s*qa-block\b/m,
 }
 
 const SLOT_LABELS: Record<VariantKind, string> = {
@@ -88,6 +90,7 @@ const SLOT_LABELS: Record<VariantKind, string> = {
   tableCard: '结构化表格（table-card）',
   gallery: '多图组合（gallery）',
   dialogue: '多轮对话（dialogue）',
+  qaBlock: '读者问答（qa-block）',
 }
 
 describe('故事样张 variant 覆盖', () => {

@@ -7577,7 +7577,8 @@
         "announcement",
         "tableCard",
         "gallery",
-        "dialogue"
+        "dialogue",
+        "qaBlock"
       ],
       "properties": {
         "admonition": {
@@ -7636,7 +7637,12 @@
             "column-card",
             "stacked-row",
             "ledger",
-            "data-card"
+            "data-card",
+            "paired-jiayi",
+            "paired-specimen",
+            "measurement-table",
+            "paired-shape",
+            "axis-diagram"
           ]
         },
         "steps": {
@@ -7645,7 +7651,11 @@
             "ribbon-chain",
             "timeline-dot",
             "step-card",
-            "split-row"
+            "split-row",
+            "large-numeral",
+            "seal-cjk",
+            "ruler-row",
+            "geometric-chain"
           ]
         },
         "divider": {
@@ -7766,7 +7776,11 @@
             "rule-grid",
             "zebra-rows",
             "key-value",
-            "price-tier"
+            "price-tier",
+            "three-line-table",
+            "index-table",
+            "vermillion-grid",
+            "matrix"
           ]
         },
         "gallery": {
@@ -7782,7 +7796,23 @@
             "qa-rows",
             "chat-bubbles",
             "name-prefix",
-            "interview-column"
+            "interview-column",
+            "screenplay",
+            "host-guest-seal",
+            "audio-stamp",
+            "shape-speaker"
+          ]
+        },
+        "qaBlock": {
+          "enum": [
+            "numbered-faq",
+            "hanging-qa",
+            "seal-stamp",
+            "query-annotation",
+            "sample-query",
+            "field-card",
+            "circle-square",
+            "typed-block"
           ]
         }
       },

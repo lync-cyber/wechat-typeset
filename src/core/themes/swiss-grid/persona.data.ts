@@ -200,6 +200,8 @@ export const spec: PersonaSpec = {
     tableCard: 'rule-grid',
     gallery: 'duo',
     dialogue: 'qa-rows',
+    // Swiss grid 取 typed-block：黑底反白 Q + 白底 A 双段，国际排印的强对照
+    qaBlock: 'typed-block',
   },
 
   // ============================================================
@@ -680,15 +682,12 @@ export const spec: PersonaSpec = {
       'background-color': '#ffffff',
       'border-radius': '0',
     },
-    // qa-block：设计稿"三线边框 (上 3px 下 3px 黑) + Q 黑底 / A 红底"
-    // Q/A 徽章颜色由 renderer 硬编码 (Q=primary, A=text); 因 swiss-grid primary=red,
-    // 实际渲染 Q=红 / A=黑——与设计稿 Q=黑 / A=红 反相; 视觉上 Q/A 仍可区分（两种实色徽章）,
-    // 仅角色"提问者用色"反相。已在 ownerNotes 记录此 acceptable deviation。
+    // qa-block：典型 wrapper-level 微调——margin 留 26px 与上下文断开；
+    // 视觉骨架（黑底 Q + 白底 A）由 variant typed-block 自行承担。
     qaBlock: {
       __reset: true,
-      'border-top': '3px solid #000000',
-      'border-bottom': '3px solid #000000',
-      padding: '14px 0',
+      'background-color': 'transparent',
+      padding: '0',
       margin: '26px 0',
       'border-radius': '0',
     },
@@ -773,8 +772,8 @@ VOL.IV · 2026—04—22 · CHF 14.—
       'issue-banner 复用 key-number 容器（kicker/value/body 三段 vertical stack）；\n' +
       'NOTES 脚注用 footnotes variant=inline-flow（自带 kicker）；编辑部按 / 方法论\n' +
       '走 note variant=editorial-stripe / research-dense。\n' +
-      '已知 acceptable deviation：qa-block 徽章 Q=红/A=黑（renderer 硬编码; 与设计稿 Q=黑/A=红 反相,\n' +
-      '但两态仍可区分）。issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
+      'qa-block：P3.3 升级 variant=typed-block（黑底反白 Q + 白底 A 双段），与设计稿 02·B "Q/A 三线表" 同骨架。\n' +
+      'issue-banner 取消右侧 VOL/CHF 浮动列，改 body 单段堆叠（375px 移动端更稳）。\n' +
       '新增架构：HeadingPrefixDecoration.style 增 backgroundColor/paddingX/paddingY（H2 红章核心）。',
   },
 }

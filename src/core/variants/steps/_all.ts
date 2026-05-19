@@ -10,5 +10,9 @@ import ribbonChain from './ribbon-chain'
 import timelineDot from './timeline-dot'
 import stepCard from './step-card'
 import splitRow from './split-row'
+import largeNumeral from './large-numeral'
+import sealCjk from './seal-cjk'
+import rulerRow from './ruler-row'
+import geometricChain from './geometric-chain'
 
-export default [numberCircle, ribbonChain, timelineDot, stepCard, splitRow]
+export default [numberCircle, ribbonChain, timelineDot, stepCard, splitRow, largeNumeral, sealCjk, rulerRow, geometricChain]

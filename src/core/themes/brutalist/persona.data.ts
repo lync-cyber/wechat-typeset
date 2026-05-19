@@ -197,6 +197,8 @@ export const spec: PersonaSpec = {
     tableCard: 'rule-grid',
     gallery: 'duo',
     dialogue: 'qa-rows',
+    // brutalist 取 typed-block：硬反白 Q / 透明 A 双段，与终端 // 注释语境一致
+    qaBlock: 'typed-block',
   },
 
   // ============================================================
@@ -591,14 +593,12 @@ export const spec: PersonaSpec = {
       margin: '20px 0 24px',
       'border-radius': '0',
     },
-    // qa-block：黑底 + 白色边框 + 终端风（kicker "// Q&A" 走 primary）
+    // qa-block · wrapper-level 微调：transparent + margin；视觉骨架（外框 / 反白 Q 段）
+    //   由 variant typed-block 自管，无需主题 CSS 再开一道边框
     qaBlock: {
       __reset: true,
       'background-color': 'transparent',
-      border: '1px solid #f0f0f0',
-      'border-top': '1px solid #f0f0f0',
-      'border-bottom': '1px solid #f0f0f0',
-      padding: '12px',
+      padding: '0',
       margin: '24px 0',
       'border-radius': '0',
     },

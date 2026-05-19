@@ -133,6 +133,14 @@ export function buildCases(): VariantCase[] {
         `::::\n`,
     })
   }
+  for (const id of VARIANT_IDS.qaBlock) {
+    out.push({
+      kind: 'qaBlock',
+      id,
+      containerName: 'qa-block',
+      md: `::: qa-block 读者问答 · Q&A variant=${id} q="样例设问？"\n答案正文，含 ==高亮== 与 \`code\`。\n:::\n`,
+    })
+  }
   return out
 }
 

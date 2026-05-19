@@ -547,12 +547,22 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     styleKey: 'qaBlock',
     category: 'content',
     pack: 'pack:editorial',
+    variantKind: 'qaBlock',
     fenceLength: 3,
     attrs: [
       {
         key: 'q',
         description: '问题文本（visual: 主色 Q 方块头像 + 单行）',
         example: '数据显示 30 岁以下日均连读仅 8 分钟，还有救吗？',
+      },
+      {
+        key: 'variant',
+        description:
+          '覆盖主题默认 qa-block 骨架。numbered-faq（默认）= Q.NN 序号 + 底线分隔；' +
+          'hanging-qa = 大号斜体 Q./A. 悬挂；seal-stamp = 问/答 朱印徽章；' +
+          'query-annotation = 設・問 夹线 + 註 hanging；sample-query = QUERY/FINDING 双栏；' +
+          'field-card = 田野卡片外框；circle-square = 圆方代号；typed-block = 反白上下分栏。',
+        enum: VARIANT_IDS.qaBlock,
       },
     ],
     description:

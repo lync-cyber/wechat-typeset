@@ -42,6 +42,7 @@ import type {
   HighlightVariantId,
   NoteVariantId,
   PullQuoteVariantId,
+  QaBlockVariantId,
   QrcodeVariantId,
   QuoteVariantId,
   RecommendVariantId,
@@ -109,13 +110,27 @@ const QUOTE_ORDER: readonly string[] = [
   'huge-numeral',
   'ring-device',
 ]
-const COMPARE_ORDER: readonly string[] = ['column-card', 'stacked-row', 'ledger', 'data-card']
+const COMPARE_ORDER: readonly string[] = [
+  'column-card',
+  'stacked-row',
+  'ledger',
+  'data-card',
+  'paired-jiayi',
+  'paired-specimen',
+  'measurement-table',
+  'paired-shape',
+  'axis-diagram',
+]
 const STEPS_ORDER: readonly string[] = [
   'number-circle',
   'ribbon-chain',
   'timeline-dot',
   'step-card',
   'split-row',
+  'large-numeral',
+  'seal-cjk',
+  'ruler-row',
+  'geometric-chain',
 ]
 const DIVIDER_ORDER: readonly string[] = ['wave', 'dots', 'flower', 'rule', 'glyph', 'seal-mark']
 const SECTION_TITLE_ORDER: readonly string[] = [
@@ -196,6 +211,10 @@ const TABLE_CARD_ORDER: readonly string[] = [
   'zebra-rows',
   'key-value',
   'price-tier',
+  'three-line-table',
+  'index-table',
+  'vermillion-grid',
+  'matrix',
 ]
 const GALLERY_ORDER: readonly string[] = [
   'duo',
@@ -208,6 +227,20 @@ const DIALOGUE_ORDER: readonly string[] = [
   'chat-bubbles',
   'name-prefix',
   'interview-column',
+  'screenplay',
+  'host-guest-seal',
+  'audio-stamp',
+  'shape-speaker',
+]
+const QA_BLOCK_ORDER: readonly string[] = [
+  'numbered-faq',
+  'hanging-qa',
+  'seal-stamp',
+  'query-annotation',
+  'sample-query',
+  'field-card',
+  'circle-square',
+  'typed-block',
 ]
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
@@ -229,6 +262,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   tableCard: TABLE_CARD_ORDER,
   gallery: GALLERY_ORDER,
   dialogue: DIALOGUE_ORDER,
+  qaBlock: QA_BLOCK_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -260,6 +294,7 @@ import announcementAll from './announcement/_all'
 import tableCardAll from './table-card/_all'
 import galleryAll from './gallery/_all'
 import dialogueAll from './dialogue/_all'
+import qaBlockAll from './qa-block/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -281,6 +316,7 @@ function collectDefs(): AnyDef[] {
     ...tableCardAll,
     ...galleryAll,
     ...dialogueAll,
+    ...qaBlockAll,
   ] as unknown as AnyDef[]
 }
 
@@ -337,6 +373,7 @@ export const ANNOUNCEMENT_VARIANTS = asRecord<AnnouncementVariantId, void>(ALL_D
 export const TABLE_CARD_VARIANTS = asRecord<TableCardVariantId, void>(ALL_DEFS, 'tableCard')
 export const GALLERY_VARIANTS = asRecord<GalleryVariantId, void>(ALL_DEFS, 'gallery')
 export const DIALOGUE_VARIANTS = asRecord<DialogueVariantId, void>(ALL_DEFS, 'dialogue')
+export const QA_BLOCK_VARIANTS = asRecord<QaBlockVariantId, void>(ALL_DEFS, 'qaBlock')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }

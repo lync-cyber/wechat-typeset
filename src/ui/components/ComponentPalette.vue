@@ -141,6 +141,7 @@ const builtinByKind = computed<Record<ComponentKind, ComponentEntry[]>>(() => {
     tableCard: [],
     gallery: [],
     dialogue: [],
+    qaBlock: [],
     none: [],
   }
   for (const c of BUILTIN_COMPONENTS) {

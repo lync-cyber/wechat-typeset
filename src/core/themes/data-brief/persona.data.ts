@@ -226,6 +226,7 @@ export const spec: PersonaSpec = {
     tableCard: 'rule-grid',
     gallery: 'duo',
     dialogue: 'qa-rows',
+    qaBlock: 'numbered-faq',
   },
 
   // ============================================================

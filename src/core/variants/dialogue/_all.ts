@@ -9,5 +9,9 @@ import qaRows from './qa-rows'
 import chatBubbles from './chat-bubbles'
 import namePrefix from './name-prefix'
 import interviewColumn from './interview-column'
+import screenplay from './screenplay'
+import hostGuestSeal from './host-guest-seal'
+import audioStamp from './audio-stamp'
+import shapeSpeaker from './shape-speaker'
 
-export default [qaRows, chatBubbles, namePrefix, interviewColumn]
+export default [qaRows, chatBubbles, namePrefix, interviewColumn, screenplay, hostGuestSeal, audioStamp, shapeSpeaker]
