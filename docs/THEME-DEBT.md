@@ -72,6 +72,8 @@
 
 ## D. 实验性 variant 标记（`meta.experimental: true`）
 
+conformance: `experimental: true` 必须配 `experimentalSince`（守卫见 variant-coverage.spec.ts）。
+
 > 代码：各 `src/core/variants/<kind>/<id>.ts`
 > 报告：`pnpm variant:usage --orphans`
 
@@ -122,6 +124,12 @@ default ∨ themeCompat ∨ experimental。
 ---
 
 ## 已偿还（changelog）
+
+**Phase-5 (2026-05-19)** —— 容器变体冗余系统清理：净删 14 个 variant（10 个纯孤儿 +
+3 个合并候选 + note/hanging-indent 合并到 smallcaps-kicker layout=hanging）；
+admonition/top-bottom-rule signatureOf 冲突修复；4 个 variant 错误的 experimental
+标移除；新增 VariantMeta.experimentalSince 字段 + conformance 守卫，防 orphan
+静默积累。variant total 185→171，orphan 31→20。
 
 **Phase-4 (2026-05)** —— 4 个新主题（commerce-pulse / youth-zine / official-gazette /
 edu-classroom）填补"电商 / 青年潮 / 政务 / 教育"四档场景缺口；连带消化 14 个 orphan

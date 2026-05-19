@@ -31,6 +31,7 @@ const pairedSpecimen: VariantDef<CompareRenderArgs> = {
     name: '标本卡对照',
     description: '博物笔记：双栏分割线 + 学术标本标签',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

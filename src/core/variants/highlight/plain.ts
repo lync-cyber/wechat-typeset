@@ -29,6 +29,7 @@ const plain: VariantDef = {
     // 实验性骨架: highlight 池刚启用,21 主题暂未显式声明 variants.highlight。
     // 任一主题显式声明 'plain' 或加 themeCompat / signatureOf 后,可移除本字段。
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

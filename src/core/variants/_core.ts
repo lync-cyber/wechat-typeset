@@ -185,6 +185,18 @@ export interface VariantMeta {
    * 移除流程：让某主题把它升级为默认骨架，或加入该主题的 themeCompat / signatureOf → 删 experimental 标。
    */
   experimental?: boolean
+  /**
+   * 实验性 variant 进入 main 的日期（ISO 8601，YYYY-MM-DD）。
+   * 与 experimental: true 配套：让 orphan 倒计时可机器化检测，避免静默积累。
+   * conformance 守卫：experimental === true ⇒ experimentalSince 必填。
+   */
+  experimentalSince?: string
+  /**
+   * 视觉手法标签（kebab-case 单词数组）。跨 kind 共享词表，
+   * 用于新增 variant 时检测"是否已有同手法近邻"。
+   * 渐进登记，缺省不影响 conformance。
+   */
+  motif?: readonly string[]
 }
 
 /**

@@ -51,4 +51,21 @@ describe('Variant 实证守卫', () => {
     const report = analyzeVariantUsage(SPECS, [...ALL_VARIANT_DEFS])
     expect(report.unknownReferenced, '理应被 validateSpec 拦截').toEqual([])
   })
+
+  it('experimental variants must declare experimentalSince', () => {
+    for (const def of ALL_VARIANT_DEFS) {
+      if (def.meta.experimental === true) {
+        expect(def.meta.experimentalSince).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      }
+    }
+  })
+
+  it('experimentalSince must not predate 2026-05-01', () => {
+    // 历史下限——本次清理前的 orphan 不应携带早于此的"假装新鲜"日期
+    for (const def of ALL_VARIANT_DEFS) {
+      if (def.meta.experimentalSince) {
+        expect(def.meta.experimentalSince >= '2026-05-01').toBe(true)
+      }
+    }
+  })
 })

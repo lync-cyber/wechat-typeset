@@ -31,6 +31,7 @@ const queryAnnotation: VariantDef = {
     name: '设问注',
     description: '上下夹线设问 + 左 hanging 注解，宋本批注体',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

@@ -27,6 +27,7 @@ const rulerRow: VariantDef = {
     name: '刻度尺步骤',
     description: '顶部一根实线作主轴，h3 充当刻度标签，博物笔记风格',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

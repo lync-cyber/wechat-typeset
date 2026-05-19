@@ -32,6 +32,7 @@ const sampleQuery: VariantDef = {
     name: '采样设问',
     description: 'QUERY / FINDING 双栏 + 编号 italic 标签，博物笔记体',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [

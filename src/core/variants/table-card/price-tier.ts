@@ -46,6 +46,7 @@ const priceTier: VariantDef = {
     name: '档位卡',
     description: '每列独立 + 顶色条 + 推荐高亮，pricing tier',
     experimental: true,
+    experimentalSince: '2026-05-19',
   },
   thumbnail: thumb,
   snippets: [
