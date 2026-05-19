@@ -1,0 +1,36 @@
+{
+  "skill_name": "ts-code-review",
+  "notes": "These are realistic trigger + execution prompts. Run them via skill-creator's evaluation loop. Add assertions before iterating.",
+  "evals": [
+    {
+      "id": "full-audit",
+      "prompt": "I inherited this TS project last week and honestly it feels like a mess. Help me figure out where to start cleaning it up — what's actually dead, what's just ugly, and which files should I touch first.",
+      "expected_output": "scan + priority output, narrative review citing top-tier files with file:line evidence, suggested apply order, no auto-fix",
+      "files": []
+    },
+    {
+      "id": "branch-diff-self-review",
+      "prompt": "Before I open this PR, can you look at what I've changed against main and tell me if there's anything obviously bad? Files in the diff are mostly under src/renderer.",
+      "expected_output": "branch-diff mode scan, issues filtered to changed lines, narrative review focused only on diff",
+      "files": []
+    },
+    {
+      "id": "pr-review",
+      "prompt": "Review PR #142 — it's adding the new auth middleware. I want to know if there's anything sketchy about the way they handle the token. Bonus points if you flag any type-cast escape hatches.",
+      "expected_output": "pr mode via gh, surfaces as-any / ts-ignore in changed files, security signals if any",
+      "files": []
+    },
+    {
+      "id": "single-file-spot-check",
+      "prompt": "is src/lib/markdown-renderer.ts ok? feels like it's getting bloated",
+      "expected_output": "single-file mode, ast+placeholders+comments+complex-type findings for that one file, short summary",
+      "files": []
+    },
+    {
+      "id": "messy-codebase-vague",
+      "prompt": "我们这个项目跑了一年了，types 越来越复杂，循环依赖也开始出来，删都不知道从哪删起。能帮我过一遍吗？",
+      "expected_output": "trigger Chinese-language messy-codebase phrasing; full audit with focus on circular-dep + complex-type",
+      "files": []
+    }
+  ]
+}
