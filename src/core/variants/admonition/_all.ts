@@ -28,6 +28,15 @@ import newsRow from './news-row'
 import newsUnderline from './news-underline'
 import mookTag from './mook-tag'
 import slabCorner from './slab-corner'
+// content-1.html 阶段 2 落地 — 4 主题 × 2 签名骨架（t1 / t2 / t3 / t4）
+import numberedRule from './numbered-rule'
+import hangingNb from './hanging-nb'
+import vermilionSeal from './vermilion-seal'
+import paperSlip from './paper-slip'
+import fieldTag from './field-tag'
+import specimenBox from './specimen-box'
+import filledSquare from './filled-square'
+import triangleTop from './triangle-top'
 
 export default [
   accentBar,
@@ -50,4 +59,12 @@ export default [
   newsUnderline,
   mookTag,
   slabCorner,
+  numberedRule,
+  hangingNb,
+  vermilionSeal,
+  paperSlip,
+  fieldTag,
+  specimenBox,
+  filledSquare,
+  triangleTop,
 ]

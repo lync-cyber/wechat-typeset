@@ -73,7 +73,7 @@ describe('quote-card / highlight', () => {
 
   it('highlight 块识别', () => {
     const out = run('::: highlight\n核心观点\n:::\n')
-    expect(out).toMatch(/class="container-highlight"/)
+    expect(out).toMatch(/class="container-highlight\b[^"]*"/)
     expect(out).toContain('核心观点')
   })
 })

@@ -225,6 +225,7 @@ export default defineConfig({
       ['tests/unit/variant-sanity-codeblock.spec.ts', 'jsdom'],
       ['tests/unit/variant-sanity-matrix.spec.ts', 'jsdom'],
       ['tests/unit/variant-sanity-matrix-tail.spec.ts', 'jsdom'],
+      ['tests/unit/visual-parity.spec.ts', 'jsdom'],
       ['tests/unit/wxPatch.spec.ts', 'jsdom'],
     ],
     // threads + isolate:false：worker 内复用模块缓存，砍掉 collect 阶段的重复 parse。

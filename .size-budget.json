@@ -19,12 +19,12 @@
       "gzipLimit": 14000
     },
     {
-      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~10% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。Phase-4 后 18 主题（+4 from 14）→ raw 381kB。",
+      "$comment": "themes chunk = src/core/themes/** + src/core/variants/**。主题/视觉契约的真正增长维度——新增主题 / variant / motif 都落在这里，不再挤压 app 骨架预算。给 ~10% headroom 让单次小增量直接通过；持续逼近上限时先 trim 重复 motif/CSS 再考虑放阈值。Phase-4 后 18 主题（+4 from 14）→ raw 381kB。content-1.html 阶段 2 落地 40 新 variant（5 容器 × 8）后 chunk 升到 ~458k raw / ~98k gz，主要是 svgSlot inline HTML + 7 字体族字面值。阈值上调到 490k / 105k 留 ~7% headroom；下一波同等规模再来时先评估能否提取 SVG 装饰到共享 motif 库。",
       "name": "themes chunk",
       "prefix": "themes",
       "ext": "js",
-      "limit": 420000,
-      "gzipLimit": 92000
+      "limit": 490000,
+      "gzipLimit": 105000
     },
     {
       "$comment": "CodeMirror 6 第三方 chunk（编辑器内核 + 语言扩展 + lint/autocomplete）。增长维度是接入新 CM 子模块——每接一个 @codemirror/* 包都按整包计费，难做局部 tree-shake。2026-05 容器感知扩展三件套上线：foldGutter + 自定义 Decoration StateField + autocomplete snippet apply 拉了新代码路径，chunk +~66kB raw / +~27kB gz；阈值同步上调到 820k / 280k，给 ~2% headroom。后续要继续加 CM 扩展（如 lang-typescript / lint 子规则）前请先评估是否能 lazy chunk 拆出。",

@@ -97,6 +97,22 @@ export interface Palette {
    * 与 noteBorderStyle 协同：double 风格自动 ≥ 3px 才能看到双线。
    */
   noteBorderWidth?: number
+  /**
+   * 古典朱印色。东方传统出版物语境下的稀缺红章 / 朱字夹注 / 方印边框色。
+   * 例：'#a03a2a'。
+   *
+   * variant 渲染契约：读 `ctx.tokens.colors.accentClassical`，未声明时回退到
+   * `ctx.tokens.colors.accent` 或不绘制朱印元素——不允许 hardcode `#a03a2a`。
+   */
+  accentClassical?: string
+  /**
+   * 博物笔记暖辅色。学名 / 编号 / 测量边线等的赭褐色,介于 text 与 accentClassical
+   * 之间。例：'#8b4a3a'。
+   *
+   * variant 渲染契约：读 `ctx.tokens.colors.accentNaturalist`，未声明时回退到
+   * `ctx.tokens.colors.textMuted` 或 `secondary`——不允许 hardcode `#8b4a3a`。
+   */
+  accentNaturalist?: string
 }
 
 export type StatusKey = 'tip' | 'info' | 'warning' | 'danger'

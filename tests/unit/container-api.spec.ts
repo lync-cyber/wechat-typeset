@@ -141,9 +141,11 @@ describe('getVariantsForContainer', () => {
   })
 
   it('无 variantKind 的容器返回空数组', () => {
+    // intro / free 是结构 / 兜底容器,从未接入 variant SPI。
+    // highlight 已是 variant 容器(T1.1 改造,vocabulary variantKind='highlight'),
+    // 不再适合作为"无 variantKind"测试 case。
     expect(getVariantsForContainer('intro')).toHaveLength(0)
     expect(getVariantsForContainer('free')).toHaveLength(0)
-    expect(getVariantsForContainer('highlight')).toHaveLength(0)
   })
 
   it('未知容器名返回空数组', () => {
