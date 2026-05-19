@@ -254,7 +254,8 @@ export const spec: PersonaSpec = {
     tableCard: 'rule-grid',
     gallery: 'duo',
     dialogue: 'qa-rows',
-    qaBlock: 'numbered-faq',
+    // 编集所读者通信走 hanging-qa：大号斜体 Q./A. 与 mook 慢读杂志的 magazine pull-quote 语言一致
+    qaBlock: 'hanging-qa',
   },
 
   // ============================================================
