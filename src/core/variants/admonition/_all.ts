@@ -31,6 +31,7 @@ import vermilionSeal from './vermilion-seal'
 import paperSlip from './paper-slip'
 import fieldTag from './field-tag'
 import specimenBox from './specimen-box'
+import filledSquare from './filled-square'
 import triangleTop from './triangle-top'
 
 export default [
@@ -57,5 +58,6 @@ export default [
   paperSlip,
   fieldTag,
   specimenBox,
+  filledSquare,
   triangleTop,
 ]

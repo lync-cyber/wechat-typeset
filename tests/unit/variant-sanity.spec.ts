@@ -25,8 +25,9 @@ describe('枚举完整性', () => {
     const totals: Record<string, number> = {}
     for (const c of CASES) totals[c.kind] = (totals[c.kind] ?? 0) + 1
     expect(totals).toEqual({
-      // admonition 20 base + 8 content-1.html 阶段 2 = 28；退役 ticket-notch + minimal-underline + double-border + filled-square → 24
-      admonition: 24,
+      // admonition 20 base + 8 content-1.html 阶段 2 = 28；退役 ticket-notch + minimal-underline + double-border → 25
+      // filled-square 复活回归（content-1.html 04·A 设计稿 1:1 还原；display:table 重写，告别原 flex 实现）
+      admonition: 25,
       // quote 7 base + 8 content-1.html 阶段 2 = 15；退役 left-bar → 14
       quote: 14,
       compare: 8, // 退役 paired-jiayi；remaining：paired-specimen / measurement-table / paired-shape / axis-diagram（均 experimental）

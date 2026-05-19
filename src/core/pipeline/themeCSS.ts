@@ -217,5 +217,19 @@ function computeThemeCSS(theme: Theme): string {
     ),
   )
 
+  // admonition 四态正文 <p> 首行缩进归零：
+  //   - 部分主题（official-gazette 公文）把 elements.p 注入 text-indent:2em，
+  //     juice 内联到每个 <p> 行内，会让 admonition 容器内的正文也凭空缩进两字，
+  //     与 admonition 变体设计稿的"齐头正文"意图相悖。
+  //   - 这是变体骨架的固有意图（不是主题作者可调），所以放在 themeCSS.ts 全局收口，
+  //     与 compare 窄栏 p 收敛同 pattern。
+  //   - 选择器同时覆盖 tip/info/warning/danger 四态，无需 variant 自带 override。
+  const adContainerP =
+    `.${ROOT_CLASS} .container-tip p,` +
+    `.${ROOT_CLASS} .container-info p,` +
+    `.${ROOT_CLASS} .container-warning p,` +
+    `.${ROOT_CLASS} .container-danger p`
+  chunks.push(rule(adContainerP, { 'text-indent': '0' }, 'admonition.body p'))
+
   return chunks.filter(Boolean).join('\n\n')
 }

@@ -539,3 +539,7 @@
   font-size: 12px;
   padding: 1px 4px;
 }
+
+.markdown-body .container-tip p,.markdown-body .container-info p,.markdown-body .container-warning p,.markdown-body .container-danger p {
+  text-indent: 0;
+}

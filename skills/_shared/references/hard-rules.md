@@ -96,7 +96,7 @@ footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
 <!-- generated:variant-whitelist:start -->
 
 ```ts
-admonition:    'accent-bar' | 'pill-tag' | 'card-shadow' | 'terminal' | 'dashed-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag' | 'slab-corner' | 'numbered-rule' | 'hanging-nb' | 'vermilion-seal' | 'paper-slip' | 'field-tag' | 'specimen-box' | 'triangle-top'
+admonition:    'accent-bar' | 'pill-tag' | 'card-shadow' | 'terminal' | 'dashed-border' | 'top-bottom-rule' | 'manpage-log' | 'sidenote-latex' | 'marginalia' | 'ledger-cell' | 'bubble-organic' | 'magazine-pull' | 'report-section' | 'news-row' | 'news-underline' | 'mook-tag' | 'slab-corner' | 'numbered-rule' | 'hanging-nb' | 'vermilion-seal' | 'paper-slip' | 'field-tag' | 'specimen-box' | 'filled-square' | 'triangle-top'
 quote:         'classic' | 'magazine-dropcap' | 'column-rule' | 'frame-brackets' | 'editorial-block' | 'tilted-sticker' | 'oversized-mark' | 'numbered-lines' | 'seal-kai' | 'double-frame' | 'specimen-quote' | 'binomial-attrib' | 'huge-numeral' | 'ring-device'
 compare:       'column-card' | 'stacked-row' | 'ledger' | 'data-card' | 'paired-specimen' | 'measurement-table' | 'paired-shape' | 'axis-diagram'
 steps:         'number-circle' | 'timeline-dot' | 'step-card' | 'split-row' | 'seal-cjk' | 'ruler-row'

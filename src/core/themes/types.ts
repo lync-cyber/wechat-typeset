@@ -434,6 +434,8 @@ export type AdmonitionVariantId =
   | 'field-tag'
   // 左侧 1px border 方格 N°04 + 朱字「告示」+ 右侧正文 grid（博物 v2, L136）
   | 'specimen-box'
+  // 顶部一行 [accent 实心方块 18×18] + 告示标题 + 横线 + N° 01 单行 header（包豪斯 v1, L156）
+  | 'filled-square'
   // 顶部 -9px 三角徽 + 1px 边框 + ADMONITION·告示 monospace kicker（包豪斯 v2, L173）
   | 'triangle-top'
 
@@ -874,6 +876,7 @@ export const VARIANT_IDS = {
     'paper-slip',
     'field-tag',
     'specimen-box',
+    'filled-square',
     'triangle-top',
   ] as const satisfies readonly AdmonitionVariantId[],
   quote: [
