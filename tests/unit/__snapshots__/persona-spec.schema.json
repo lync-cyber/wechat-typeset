@@ -7569,7 +7569,8 @@
         "announcement",
         "tableCard",
         "gallery",
-        "dialogue"
+        "dialogue",
+        "qaBlock"
       ],
       "properties": {
         "admonition": {
@@ -7747,6 +7748,18 @@
             "host-guest-seal",
             "audio-stamp",
             "shape-speaker"
+          ]
+        },
+        "qaBlock": {
+          "enum": [
+            "numbered-faq",
+            "hanging-qa",
+            "seal-stamp",
+            "query-annotation",
+            "sample-query",
+            "field-card",
+            "circle-square",
+            "typed-block"
           ]
         }
       },

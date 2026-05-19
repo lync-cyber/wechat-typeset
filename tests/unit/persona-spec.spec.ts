@@ -103,6 +103,7 @@ const fixture: PersonaSpec = {
     tableCard: 'rule-grid',
     gallery: 'duo',
     dialogue: 'qa-rows',
+    qaBlock: 'numbered-faq',
   },
   meta: { createdAt: '2026-04-20' },
 }

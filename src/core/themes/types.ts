@@ -616,6 +616,24 @@ export type GalleryVariantId =
   // 横滚条带：overflow-x:auto + inline-block 64% + 内阴影提示滑动（移动端 carousel）
   | 'ribbon-strip'
 
+export type QaBlockVariantId =
+  // 编辑部 编号 FAQ（默认骨架，DEFAULT_VARIANTS.qaBlock 指向此 id）
+  | 'numbered-faq'
+  // 编辑部 大号斜体 Q./A. 悬挂缩进
+  | 'hanging-qa'
+  // 宋本批注 问/答 朱印徽章（实心 vs 描边）
+  | 'seal-stamp'
+  // 宋本批注 設・問 上下夹线 + 註 hanging
+  | 'query-annotation'
+  // 博物笔记 QUERY/FINDING 双栏 + N°/obs 编号
+  | 'sample-query'
+  // 博物笔记 田野卡片（外框 + dashed 行分隔）
+  | 'field-card'
+  // 包豪斯 圆环 Q + 实心方 A 几何徽章
+  | 'circle-square'
+  // 包豪斯 反白上下分栏 Q · NN / A · NN
+  | 'typed-block'
+
 export type DialogueVariantId =
   // Q/A 行：每轮 kicker 头 + 正文，访谈整理稿
   | 'qa-rows'
@@ -663,6 +681,12 @@ export interface ThemeVariants {
   gallery: GalleryVariantId
   /** 多轮对话骨架：dialogue 容器（外层 4 冒号，内嵌 dialogue-turn）。 */
   dialogue: DialogueVariantId
+  /**
+   * 读者问答骨架：qa-block 容器（单 Q + 单 A，签名容器）。
+   * 与 dialogue 正交：dialogue 是多轮访谈，qa-block 是单轮 FAQ 范式。
+   * P3.1 已登记字段，主题未声明时由 DEFAULT_VARIANTS 兜底；renderer 在 P3.2 完成 variant 派发后正式消费。
+   */
+  qaBlock: QaBlockVariantId
 }
 
 /**
@@ -687,6 +711,7 @@ export const DEFAULT_VARIANTS: ThemeVariants = {
   tableCard: 'rule-grid',
   gallery: 'duo',
   dialogue: 'qa-rows',
+  qaBlock: 'numbered-faq',
 }
 
 // ============================================================
@@ -884,6 +909,16 @@ export const VARIANT_IDS = {
     'audio-stamp',
     'shape-speaker',
   ] as const satisfies readonly DialogueVariantId[],
+  qaBlock: [
+    'numbered-faq',
+    'hanging-qa',
+    'seal-stamp',
+    'query-annotation',
+    'sample-query',
+    'field-card',
+    'circle-square',
+    'typed-block',
+  ] as const satisfies readonly QaBlockVariantId[],
 }
 
 export type VariantKind = keyof ThemeVariants

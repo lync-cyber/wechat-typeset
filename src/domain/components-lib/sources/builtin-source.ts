@@ -99,6 +99,16 @@ const DIALOGUE_ORDER: readonly string[] = [
   'name-prefix',
   'interview-column',
 ]
+const QA_BLOCK_ORDER: readonly string[] = [
+  'numbered-faq',
+  'hanging-qa',
+  'seal-stamp',
+  'query-annotation',
+  'sample-query',
+  'field-card',
+  'circle-square',
+  'typed-block',
+]
 const BUILTIN_SNIPPET_ORDER: readonly string[] = [
   'intro',
   'author',
@@ -126,6 +136,7 @@ const ORDER_BY_KIND: Record<ComponentKind, readonly string[]> = {
   tableCard: TABLE_CARD_ORDER,
   gallery: GALLERY_ORDER,
   dialogue: DIALOGUE_ORDER,
+  qaBlock: QA_BLOCK_ORDER,
   none: BUILTIN_SNIPPET_ORDER,
 }
 
@@ -173,6 +184,7 @@ function buildBuiltinComponents(): BuiltinEntry[] {
     'tableCard',
     'gallery',
     'dialogue',
+    'qaBlock',
     'none',
   ]
   for (const k of kinds) {

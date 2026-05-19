@@ -217,6 +217,7 @@ export const spec: PersonaSpec = {
     gallery: 'duo',
     // interview-column（orphan 升级）：师生访谈双栏（vs qa-rows 的紧凑问答行），让正式课堂对话感更强
     dialogue: 'interview-column',
+    qaBlock: 'numbered-faq',
   },
 
   // ============================================================

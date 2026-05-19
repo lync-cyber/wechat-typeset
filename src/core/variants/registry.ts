@@ -41,6 +41,7 @@ import type {
   GalleryVariantId,
   NoteVariantId,
   PullQuoteVariantId,
+  QaBlockVariantId,
   QrcodeVariantId,
   QuoteVariantId,
   RecommendVariantId,
@@ -187,6 +188,16 @@ const DIALOGUE_ORDER: readonly string[] = [
   'audio-stamp',
   'shape-speaker',
 ]
+const QA_BLOCK_ORDER: readonly string[] = [
+  'numbered-faq',
+  'hanging-qa',
+  'seal-stamp',
+  'query-annotation',
+  'sample-query',
+  'field-card',
+  'circle-square',
+  'typed-block',
+]
 
 const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   admonition: ADMONITION_ORDER,
@@ -206,6 +217,7 @@ const ORDER_BY_KIND: Record<VariantKind, readonly string[]> = {
   tableCard: TABLE_CARD_ORDER,
   gallery: GALLERY_ORDER,
   dialogue: DIALOGUE_ORDER,
+  qaBlock: QA_BLOCK_ORDER,
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -236,6 +248,7 @@ import announcementAll from './announcement/_all'
 import tableCardAll from './table-card/_all'
 import galleryAll from './gallery/_all'
 import dialogueAll from './dialogue/_all'
+import qaBlockAll from './qa-block/_all'
 
 function collectDefs(): AnyDef[] {
   return [
@@ -256,6 +269,7 @@ function collectDefs(): AnyDef[] {
     ...tableCardAll,
     ...galleryAll,
     ...dialogueAll,
+    ...qaBlockAll,
   ] as unknown as AnyDef[]
 }
 
@@ -311,6 +325,7 @@ export const ANNOUNCEMENT_VARIANTS = asRecord<AnnouncementVariantId, void>(ALL_D
 export const TABLE_CARD_VARIANTS = asRecord<TableCardVariantId, void>(ALL_DEFS, 'tableCard')
 export const GALLERY_VARIANTS = asRecord<GalleryVariantId, void>(ALL_DEFS, 'gallery')
 export const DIALOGUE_VARIANTS = asRecord<DialogueVariantId, void>(ALL_DEFS, 'dialogue')
+export const QA_BLOCK_VARIANTS = asRecord<QaBlockVariantId, void>(ALL_DEFS, 'qaBlock')
 
 // 保留 AdmonitionKind 导出（pipeline/containers/admonitions.ts 使用）
 export type { AdmonitionKind }
