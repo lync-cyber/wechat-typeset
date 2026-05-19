@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '段首胶囊',
     description: '段首反白胶囊编者按 + inline 流（编辑部 v2）',
-    signatureOf: 'editorial-mook',
+    designedFor: ['editorial-mook'],
   },
   thumbnail: thumb,
   snippets: [

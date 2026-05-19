@@ -17,7 +17,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '米黄色块底',
     description: '整段米黄色块底色 + 略大行高，博物笔记观察段',
-    signatureOf: 'academic-frontier',
+    designedFor: ['academic-frontier'],
   },
   thumbnail: thumb,
   snippets: [

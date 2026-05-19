@@ -21,7 +21,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '悬挂 N.B.',
     description: '左侧 N.B. 缩写 + 编号 + 竖分隔（编辑部 v2）',
-    themeCompat: ['official-gazette'],
+    designedFor: ['official-gazette'],
   },
   thumbnail: thumb,
   snippets: [

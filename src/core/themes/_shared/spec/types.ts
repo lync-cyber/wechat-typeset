@@ -393,7 +393,7 @@ export interface ThemeCapabilities {
   /**
    * 在 spec.variants 默认骨架之外的额外建议 variant（按 slot 部分指定）。
    * 例：`{ admonition: 'terminal' }` 表示"如果作者本想换 admonition 骨架，推荐 terminal"——
-   * getRecommendedVariantsFor 把这些 hint 加在 themeCompat 反向索引的最前面。
+   * getRecommendedVariantsFor 把这些 hint 加在 designedFor 反向索引的最前面。
    */
   variantOverrides?: Partial<ThemeVariants>
   /** 显式排除：即便兜底集里有也不推荐（如 default 主题排除 tilted-sticker） */

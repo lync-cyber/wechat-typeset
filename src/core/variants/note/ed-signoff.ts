@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: 'ed. 落款',
     description: '右下 ed. + 首字母 monospace（编辑部 v1）',
-    signatureOf: 'editorial-mook',
+    designedFor: ['editorial-mook'],
   },
   thumbnail: thumb,
   snippets: [

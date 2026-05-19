@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '楷草装饰',
     description: 'Cormorant italic 大字 + 朱色撇捺装饰（宋本 v1）',
-    signatureOf: 'literary-humanism',
+    designedFor: ['literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [

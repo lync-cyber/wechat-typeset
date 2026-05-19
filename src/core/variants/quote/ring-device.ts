@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '圆环 device',
     description: '上方圆环 device + 大字 sans 引文 + Plex Mono byline（包豪斯 v2）',
-    themeCompat: ['swiss-grid', 'brutalist'],
+    designedFor: ['swiss-grid', 'brutalist'],
   },
   thumbnail: thumb,
   snippets: [

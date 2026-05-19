@@ -24,7 +24,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '刻度学名',
     description: 'FIG.CAVE + Notabene + 短刻度（博物 v1）',
-    themeCompat: ['life-aesthetic'],
+    designedFor: ['life-aesthetic'],
   },
   thumbnail: thumb,
   snippets: [

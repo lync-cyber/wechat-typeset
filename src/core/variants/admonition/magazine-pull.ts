@@ -43,7 +43,7 @@ const magazinePull: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '杂志拉引框',
     description: '上下细线 + 浮空小字标签，《人物》特稿气质',
-    signatureOf: 'people-story',
+    designedFor: ['people-story'],
   },
   thumbnail: thumb,
   snippets: [

@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '字重对比',
     description: '100/400 字重对比 + 上下 hairline（编辑部 v1）',
-    signatureOf: 'people-story',
+    designedFor: ['people-story'],
   },
   thumbnail: thumb,
   snippets: [

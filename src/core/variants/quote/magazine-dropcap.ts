@@ -33,7 +33,7 @@ const magazineDropcap: VariantDef = {
     kind: 'quote',
     name: '杂志风金句',
     description: '上下双粗线 + 大号斜体引号',
-    signatureOf: 'literary-humanism',
+    designedFor: ['literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [
@@ -41,7 +41,7 @@ const magazineDropcap: VariantDef = {
       presetId: 'q-magazine',
       name: '杂志风金句',
       description: '上下双粗线 + 大号斜体引号',
-      themeCompat: ['literary-humanism'],
+      designedFor: ['literary-humanism'],
       markdown:
         '::: quote-card 出处 variant=magazine-dropcap\n此处填写金句正文\n:::\n',
     },
@@ -49,7 +49,7 @@ const magazineDropcap: VariantDef = {
       presetId: 'q-magazine-2',
       name: '杂志风无署名',
       description: '杂志气质极简版',
-      themeCompat: ['literary-humanism'],
+      designedFor: ['literary-humanism'],
       markdown:
         '::: quote-card variant=magazine-dropcap\n此处填写金句正文\n:::\n',
     },

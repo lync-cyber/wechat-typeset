@@ -4,7 +4,7 @@
  * 守卫：
  *   - 容器 namespace 过滤：pack:data-viz 容器（kpi-dashboard 等）在所有主题 available
  *   - signatureContainers / excluded / capabilities.containers 白名单语义
- *   - getRecommendedVariantsFor 反向索引 themeCompat + variantOverrides 排序
+ *   - getRecommendedVariantsFor 反向索引 designedFor + variantOverrides 排序
  */
 
 import { describe, it, expect } from 'vitest'
@@ -60,15 +60,15 @@ describe('getThemeCapabilities · signatureContainers', () => {
   })
 })
 
-describe('getRecommendedVariantsFor · themeCompat 反向索引', () => {
+describe('getRecommendedVariantsFor · designedFor 反向索引', () => {
   it('返回每个 kind 的友好 variant 列表', () => {
     const recs = getRecommendedVariantsFor('tech-geek')
     expect(Array.isArray(recs.admonition)).toBe(true)
     expect(Array.isArray(recs.quote)).toBe(true)
   })
 
-  it('未知主题（无 themeCompat 匹配）每个 kind 返回空数组', () => {
-    // 用一个存在的主题但通常没有 themeCompat 反向命中的——life-aesthetic
+  it('未知主题（无 designedFor 匹配）每个 kind 返回空数组', () => {
+    // 用一个存在的主题但通常没有 designedFor 反向命中的——life-aesthetic
     const recs = getRecommendedVariantsFor('life-aesthetic')
     for (const arr of Object.values(recs)) {
       expect(Array.isArray(arr)).toBe(true)

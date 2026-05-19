@@ -33,7 +33,7 @@ const bubbleOrganic: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '有机气泡',
     description: '大圆角 + 软阴影侧边，手绘信笺气质',
-    signatureOf: 'life-aesthetic',
+    designedFor: ['life-aesthetic'],
   },
   thumbnail: thumb,
   snippets: [

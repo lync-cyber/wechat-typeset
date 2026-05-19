@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'pullQuote',
     name: '首字下沉',
     description: 'drop capital + 段右 Cormorant italic（编辑部 v2）',
-    signatureOf: 'people-story',
+    designedFor: ['people-story'],
   },
   thumbnail: thumb,
   snippets: [

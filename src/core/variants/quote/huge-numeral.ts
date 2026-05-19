@@ -19,7 +19,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '巨号编号',
     description: '左 Lora 72px 编号 + 右大字 sans 引文 + accent 短线 byline（包豪斯 v1）',
-    themeCompat: ['swiss-grid', 'brutalist'],
+    designedFor: ['swiss-grid', 'brutalist'],
   },
   thumbnail: thumb,
   snippets: [

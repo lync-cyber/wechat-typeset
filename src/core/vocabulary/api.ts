@@ -67,7 +67,7 @@ export function getContainerSpec(name: string): ContainerSpec | undefined {
 // ============================================================
 
 /**
- * 某 variant kind 的所有可用 id + 元信息（name / description / themeCompat）。
+ * 某 variant kind 的所有可用 id + 元信息（name / description / designedFor）。
  * 用于 UI 做骨架切换面板，或 LLM 推荐「这个主题用哪个骨架最合适」。
  */
 export interface VariantDescriptor {
@@ -75,11 +75,12 @@ export interface VariantDescriptor {
   kind: VariantKind | 'codeBlock'
   name: string
   description: string
-  themeCompat?: readonly string[]
+  /** 设计起源主题白名单（软推荐）。空/缺省 = 通用。 */
+  designedFor?: readonly string[]
 }
 
 function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescriptor | undefined {
-  type MetaTable = Record<string, { meta: { name: string; description: string; themeCompat?: readonly string[]; signatureOf?: string } }>
+  type MetaTable = Record<string, { meta: { name: string; description: string; designedFor?: readonly string[] } }>
   const table: Record<VariantKind | 'codeBlock', MetaTable> = {
     admonition: ADMONITION_VARIANTS as unknown as MetaTable,
     quote: QUOTE_VARIANTS as unknown as MetaTable,
@@ -103,17 +104,12 @@ function variantMeta(kind: VariantKind | 'codeBlock', id: string): VariantDescri
   }
   const def = table[kind]?.[id]
   if (!def) return undefined
-  // VariantDescriptor.themeCompat 是"等效白名单"——signatureOf 视为单元素，便于消费方
-  // 不必同时关心两个字段（与 _core.getEffectiveCompat 同语义；这里内联以避免 vocabulary
-  // 反向依赖 variants 模块）。
-  const sig = def.meta.signatureOf
-  const themeCompat = sig ? [sig] : def.meta.themeCompat
   return {
     id,
     kind,
     name: def.meta.name,
     description: def.meta.description,
-    themeCompat,
+    designedFor: def.meta.designedFor,
   }
 }
 
@@ -234,7 +230,7 @@ export function getContainerSnippet(
 
 /**
  * 主题能力快照：把 spec.capabilities + signatureContainers + ContainerPack namespace
- * + variants + themeCompat 反向索引 join 起来的复合视图。
+ * + variants + variant.designedFor 反向索引 join 起来的复合视图。
  *
  * 设计意图：让 LLM / 集成方一次拿"swiss-grid 主题下我能用什么、推荐什么"，
  * 而不是自己 join 4-5 个查询函数。
@@ -344,9 +340,9 @@ export function getThemeCapabilitiesView(args: {
 }
 
 /**
- * 反向索引：列出 `themeCompat` 包含 themeId 的全部 variant id（按 kind 分组）。
+ * 反向索引：列出 `designedFor` 包含 themeId 的全部 variant id（按 kind 分组）。
  *
- * 与 getVariantsForContainer 的差别：本函数从主题视角枚举所有"对本主题友好"的 variant，
+ * 与 getVariantsForContainer 的差别：本函数从主题视角枚举所有"为本主题设计"的 variant，
  * 用于"作者切到 swiss-grid 后，admonition 类除了主题默认还推荐用什么"这类查询。
  *
  * `spec.capabilities.variantOverrides` 中显式推荐的 id 会被排在该 kind 列表最前。
@@ -363,10 +359,8 @@ export function getRecommendedVariantsFor(args: {
     const fromCompat: string[] = []
     for (const def of ALL_VARIANT_DEFS) {
       if (def.meta.kind !== kind) continue
-      // 等效白名单：signatureOf 视为单主题，否则取 themeCompat
-      const sig = def.meta.signatureOf
-      const compat = sig ? [sig] : def.meta.themeCompat
-      if (compat && compat.includes(args.themeId)) fromCompat.push(def.meta.id)
+      const designedFor = def.meta.designedFor
+      if (designedFor && designedFor.includes(args.themeId)) fromCompat.push(def.meta.id)
     }
     const explicit = overrides[kind] as string | undefined
     const merged = explicit

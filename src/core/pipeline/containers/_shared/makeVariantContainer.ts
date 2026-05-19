@@ -39,7 +39,6 @@ import type { ContainerRenderer, ContainerRenderContext } from '../types'
 import type { ThemeAssets, ThemeVariants } from '../../../themes/types'
 import type { VariantMeta, VariantRenderResult } from '../../../variants/_core'
 import { escText } from './escape'
-import { checkVariantCompat } from './themeCompatGuard'
 import { applyUserVariant, isAppliableUserVariant } from './userVariantApply'
 
 // ─────────────────────────────────────────────────────────────
@@ -63,7 +62,7 @@ export interface VariantContainerBodyOptions {
   mode: 'optional'
 }
 
-/** table 条目最小契约。variant 注册表里实际类型更宽，工厂读 render + meta（用于 themeCompat 校验）。 */
+/** table 条目最小契约。variant 注册表里实际类型更宽，工厂只读 render（meta 不再消费）。 */
 type VariantTableEntry<Args> = {
   meta?: VariantMeta
   render?: Args extends void
@@ -117,7 +116,10 @@ export function makeVariantContainer<Args = void>(
    * ctx.userVariants Map；命中且 kind 匹配 themeSlot、level ∈ {tokens, patch} 时直接
    * 用基底 variant 的 render 输出叠加 applyUserVariant 返回。任何环节失败（仓未注入 /
    * id 未命中 / kind 不匹配 / level='custom'）静默 fall-through 到原 4 级链。
-   * 'custom' 档不在此处理——步骤 7 走"裸 HTML 容器"独立渲染器。
+   *
+   * **不偷换骨架**：作者 `variant=xxx` 命中合法 id 即忠实渲染；不再按 designedFor
+   * 在不兼容主题下回退到 fallbackId。视觉协调由 UI 层（面板 badge + lint）提示，
+   * 引擎只负责"作者写什么就渲染什么"——保障 thumbnail / 预览 / 插入产物三者强一致。
    */
   function resolveVariant(ctx: ContainerRenderContext): {
     id: string
@@ -138,8 +140,6 @@ export function makeVariantContainer<Args = void>(
         if (uv && isAppliableUserVariant(uv) && uv.base.kind === themeSlot) {
           const baseEntry = table[uv.base.variantId]
           if (baseEntry?.render) {
-            // 不跑 checkVariantCompat：用户已显式选了这个 base，是 opt-in 行为；
-            // themeCompat 警告是给 ad-hoc author override 兜底的，不适用于用户保存的变体。
             const baseResult = (baseEntry.render as (
               ctx: ContainerRenderContext,
               args?: Args,
@@ -152,14 +152,12 @@ export function makeVariantContainer<Args = void>(
     }
 
     let id = fallbackId
-    let isAuthorOverride = false
     if (rawOverride) {
       const normalized = rawOverride.toLowerCase().trim()
       const aliased = resolveAlias?.(normalized)
       const candidate = aliased ?? rawOverride
       if (candidate in table) {
         id = candidate
-        isAuthorOverride = true
       } else {
         id = pageValid ?? themeValid ?? fallbackId
       }
@@ -167,16 +165,7 @@ export function makeVariantContainer<Args = void>(
       id = pageValid ?? themeValid ?? fallbackId
     }
 
-    let entry = table[id] ?? table[fallbackId]
-    // 仅对作者级 override 做 themeCompat 校验：
-    // 主题作者声明的默认 variant（spec.variants）+ fallbackId 都是被信任的合理选择。
-    if (isAuthorOverride && entry) {
-      const compat = checkVariantCompat(ctx.themeId, entry.meta)
-      if (!compat.ok) {
-        id = themeValid ?? fallbackId
-        entry = table[id] ?? table[fallbackId]
-      }
-    }
+    const entry = table[id] ?? table[fallbackId]
 
     // entry.render 在调用方语境下必定存在（kind='none' 的 variant 不会进 variant 容器）；
     // 类型上 render 是 optional 是为了让 _all.ts 聚合器能同时容纳 kind='none' 的 free 组件。

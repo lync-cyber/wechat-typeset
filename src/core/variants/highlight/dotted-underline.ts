@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '点状下划线',
     description: '整段底部点状线 + 中性底色，编辑部轻强调',
-    signatureOf: 'editorial-mook',
+    designedFor: ['editorial-mook'],
   },
   thumbnail: thumb,
   snippets: [

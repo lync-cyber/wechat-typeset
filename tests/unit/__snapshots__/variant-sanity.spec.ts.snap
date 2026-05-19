@@ -8,11 +8,137 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:accent-bar 
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:bubble-organic 1`] = `
+"<section class="container-tip container-tip--bubble-organic" style="background-color:#eef6ef;padding:16px 18px;margin:20px 0;border-radius:18px;box-shadow:inset 4px 0 0 #147a44, 0 4px 14px rgba(0,0,0,0.05)">
+<section class="container-tip__title" style="font-size:15px;font-weight:700;color:#147a44;margin-bottom:8px;letter-spacing:0.4px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:card-shadow 1`] = `
 "<section class="container-tip container-tip--card-shadow" style="background-color:#fdfdfc;border-top:2px solid #147a44;padding:16px;margin:18px 0;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.06)">
 <section class="container-tip__title" style="font-weight:700;color:#147a44;margin-bottom:8px;font-size:15px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
 <p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:dashed-border 1`] = `
+"<section class="container-tip container-tip--dashed-border" style="background-color:#eef6ef;border-left:2px dashed #147a44;padding:12px 16px;border-radius:0 4px 4px 0;margin:16px 0">
+<section class="container-tip__title" style="font-size:14px;font-weight:600;color:#147a44;margin-bottom:6px;letter-spacing:1px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:field-tag 1`] = `
+"<section class="container-tip container-tip--field-tag" style="background-color: #fdfdfc; padding: 4px 0">
+<div style="display: block; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid #1c1f24; padding-bottom: 6px; margin-bottom: 14px"><div><div style="font-size: 10px; letter-spacing: .2em; color: #636870">FIG. CAVE — 04</div><div style="font-style: italic; font-size: 13px; color: #1c1f24; margin-top: 2px">Notabene · 告示</div></div><div style="font-size: 9px; color: #636870; letter-spacing: .2em; line-height: 1"><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:10px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:10px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span></div></div>
+<section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:hanging-nb 1`] = `
+"<section class="container-tip container-tip--hanging-nb" style="background-color: #fdfdfc; display: block; gap: 14px; padding: 6px 0">
+<div style="flex-shrink:0;width:38px;text-align:right;border-right:1px solid #1c1f24;padding-right:10px;padding-top:2px;"><div style="font-style: italic; font-size: 18px; color: #1c1f24; line-height: 1">N.B.</div><div style="font-size: 9px; color: #636870; letter-spacing: .16em; margin-top: 6px">001</div></div>
+<section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0;flex:1">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:ledger-cell 1`] = `
+"<section class="container-tip container-tip--ledger-cell" style="background-color:#eef6ef;border:1px solid #147a44;padding:0;margin:20px 0;border-radius:0">
+<section style="background-color:#147a44;color:#fefefe;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;line-height:1.4">要点 · KEY<span style="margin-left:10px;letter-spacing:0.4px;text-transform:none;font-weight:600;opacity:0.92">· 测试标题</span></section>
+<section class="container-tip__body" style="color:#1c1f24;padding:10px 16px 12px;font-size:14px;line-height:1.7;letter-spacing:0.3px">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:magazine-pull 1`] = `
+"<section class="container-tip container-tip--magazine-pull" style="background-color:transparent;border-top:1px solid #147a44;border-bottom:1px solid #147a44;padding:0 0 14px;margin:24px 0;border-radius:0">
+<section style="text-align:left"><span style="display:inline-block;margin-top:-9px;margin-left:16px;padding:0 10px;background-color:#fdfdfc;color:#147a44;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;line-height:1.5">测试标题</span></section>
+<section class="container-tip__body" style="color:#1c1f24;padding:14px 16px 0;font-size:15px;line-height:1.9;letter-spacing:0.3px">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:manpage-log 1`] = `
+"<section class="container-tip container-tip--manpage-log" style="background-color:#eef6ef;border-top:1px solid #147a44;border-bottom:1px solid #147a44;padding:0;margin:20px 0;border-radius:0;box-shadow:inset -14px 0 10px -10px rgba(0,0,0,0.35)">
+<section style="background-color:#fdfdfc;padding:6px 16px;color:#147a44;font-size:13px;font-weight:600;letter-spacing:2px;border-bottom:1px solid #d8d8d4">:: NOTE ::<span style="color:#636870;font-weight:500;letter-spacing:0.6px;margin-left:10px;text-transform:none">测试标题</span></section>
+<section class="container-tip__body" style="color:#1c1f24;padding:12px 16px 14px;font-size:14px;line-height:1.8;letter-spacing:0.6px">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:marginalia 1`] = `
+"<section class="container-tip container-tip--marginalia" style="background-color:transparent;padding:4px 0 4px 28px;margin:16px 0;border:none;border-radius:0">
+<section style="color:#8a8f98;font-size:15px;line-height:1.7;margin-bottom:4px;letter-spacing:1px;font-weight:600">【按】<span style="color:#636870;font-weight:500;letter-spacing:0.6px;margin-left:6px">测试标题</span></section>
+<section class="container-tip__body" style="color:#636870;font-size:14px;line-height:1.8;letter-spacing:0.4px">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:mook-tag 1`] = `
+"<section class="container-tip container-tip--mook-tag" style="display:table;width:100%;table-layout:auto;background-color:#eef6ef;border-left:2px solid #147a44;padding:10px 12px;margin:0 0 8px 0;border-radius:0">
+<span style="display:table-cell;vertical-align:top;width:24px;font-weight:700;color:#147a44;font-size:12px;line-height:1.75">参</span>
+<section class="container-tip__body" style="display:table-cell;vertical-align:top;font-size:12px;line-height:1.75;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:news-row 1`] = `
+"<section class="container-tip container-tip--news-row" style="display:table;width:100%;table-layout:auto;border-left:3px solid #147a44;margin:0 0 4px 0;border-radius:0">
+<span style="display:table-cell;vertical-align:middle;min-width:54px;background-color:#147a44;color:#fefefe;padding:2px 10px;font-size:10px;line-height:1.4;font-weight:700;letter-spacing:0.1em;text-align:center;white-space:nowrap">测试标题</span>
+<section class="container-tip__body" style="display:table-cell;vertical-align:middle;padding:2px 12px;font-size:12px;line-height:1.65;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:news-underline 1`] = `
+"<section class="container-tip container-tip--news-underline" style="display:table;width:100%;table-layout:auto;border-bottom:1px solid #1c1f24;margin:0;border-radius:0">
+<span style="display:table-cell;vertical-align:middle;background-color:#147a44;color:#fefefe;padding:4px 8px;font-size:9px;line-height:1.4;font-weight:700;letter-spacing:0.15em;text-align:center;white-space:nowrap">测试标题</span>
+<section class="container-tip__body" style="display:table-cell;vertical-align:middle;padding:4px 10px;font-size:12px;line-height:1.45;color:#1c1f24;border-left:1px solid #1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:numbered-rule 1`] = `
+"<section class="container-tip container-tip--numbered-rule" style="background-color: #fdfdfc; padding: 4px 0">
+<div style="border-top: 2px solid #1c1f24; border-bottom: 1px solid #1c1f24; padding: 14px 0 12px; margin-bottom: 14px; display: block; justify-content: space-between; align-items: baseline"><span style="font-size:13px;font-weight:600;letter-spacing:.3em;color:#1c1f24;">告　示</span><span style="font-size: 10px; letter-spacing: .18em; color: #636870">NOTICE · N°01</span></div>
+<section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:paper-slip 1`] = `
+"<section class="container-tip container-tip--paper-slip" style="background-color: #fdfdfc; display: table; width: 100%; padding: 6px 0">
+<div style="display:table-cell;vertical-align:top;width:36px;writing-mode:vertical-rl;background:#eceae4;color:#636870;font-size:14px;letter-spacing:.4em;padding:10px 6px;font-weight:500;">示·告</div>
+<section class="container-tip__body" style="display:table-cell;vertical-align:top;padding:8px 4px 8px 16px;border-bottom:1px solid #636870;font-size:15px;line-height:2;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
 </section>"
 `;
 
@@ -24,10 +150,78 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:pill-tag 1`
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:report-section 1`] = `
+"<section class="container-tip container-tip--report-section" style="background-color:#eef6ef;border-top:3px solid #147a44;border-bottom:1px solid #147a44;padding:0 0 12px;margin:20px 0;border-radius:0">
+<section style="padding:10px 16px 0;line-height:1.5"><span style="display:inline-block;background-color:#147a44;color:#fefefe;padding:3px 10px;font-size:12px;font-weight:700;letter-spacing:2px;border-radius:0;line-height:1.4">§ 要点</span><span style="margin-left:10px;color:#1c1f24;font-size:14px;font-weight:600;letter-spacing:0.3px">测试标题</span></section>
+<section class="container-tip__body" style="color:#1c1f24;padding:8px 16px 0;font-size:14px;line-height:1.75;letter-spacing:0.3px">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:sidenote-latex 1`] = `
+"<section class="container-tip container-tip--sidenote-latex" style="border:1px solid #147a44;padding:0 0 10px;margin:18px 0;border-radius:0;background-color:transparent">
+<section style="padding:10px 16px 0;font-size:13px;color:#147a44;letter-spacing:2px;font-weight:700;text-transform:uppercase;line-height:1.6">DEFINITION.<span style="color:#1c1f24;text-transform:none;letter-spacing:0.3px;font-weight:600;margin-left:10px">测试标题</span></section>
+<section class="container-tip__body" style="padding:6px 16px 0;color:#1c1f24;font-size:14px;line-height:1.75">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:slab-corner 1`] = `
+"<section class="container-tip container-tip--slab-corner" style="background-color:#eef6ef;border-top:6px solid #147a44;padding:22px 16px 16px;margin:18px 0;border-radius:0">
+<section style="text-align:right;line-height:0;margin-bottom:8px"><span style="display:inline-block;background-color:#147a44;color:#fefefe;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:0.15em;line-height:1.4;text-align:center;border-radius:0">测试标题</span></section>
+<section class="container-tip__body" style="font-size:13px;line-height:1.65;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:specimen-box 1`] = `
+"<section class="container-tip container-tip--specimen-box" style="background-color: #fdfdfc; display: table; width: 100%; padding: 4px 0">
+<div style="display:table-cell;vertical-align:top;width:48px;border:1px solid #1c1f24;padding:6px 0;text-align:center;"><div style="font-size: 9px; color: #636870; letter-spacing: .16em">N°</div><div style="font-size: 22px; color: #1c1f24; font-weight: 500; line-height: 1; margin-top: 2px">04</div><div style="font-size:9px;color:#636870;letter-spacing:.18em;margin-top:4px;font-weight:500;">告示</div></div>
+<section class="container-tip__body" style="display:table-cell;vertical-align:top;padding:0 0 0 14px;font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:terminal 1`] = `
 "<section class="container-tip container-tip--terminal" style="background-color:#1f2937;padding:0;margin:18px 0;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.18)">
 <section style="background-color:#2d3748;padding:8px 14px;border-bottom:1px solid #111827;border-radius:6px 6px 0 0;color:#e5e7eb;font-weight:600;font-size:13px;letter-spacing:0.4px"><svg viewBox="0 0 54 14" width="42" height="11" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 10px"><circle cx="7" cy="7" r="5" fill="#ff5f56"></circle><circle cx="22" cy="7" r="5" fill="#ffbd2e"></circle><circle cx="37" cy="7" r="5" fill="#27c93f"></circle></svg>测试标题</section>
 <section class="container-tip__body" style="color:#e5e7eb;padding:14px 16px;font-size:14px;line-height:1.7;border-radius:0 0 6px 6px">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:top-bottom-rule 1`] = `
+"<section class="container-tip container-tip--top-bottom-rule" style="background-color:#eef6ef;border-top:1px solid #147a44;border-bottom:1px solid #147a44;padding:14px 16px;margin:18px 0">
+<section class="container-tip__title" style="font-size:14px;font-weight:600;color:#147a44;margin-bottom:8px;letter-spacing:1.2px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:triangle-top 1`] = `
+"<section class="container-tip container-tip--triangle-top" style="background-color: #fdfdfc; padding: 14px 14px 16px; border: 1px solid #1c1f24">
+<svg width="18" height="9" viewBox="0 0 18 9" xmlns="http://www.w3.org/2000/svg" style="display: block; margin-bottom: -1px"><polygon points="0,9 9,0 18,9" fill="#2558b0"></polygon><polygon points="1.4,9 9,1.4 16.6,9" fill="#fdfdfc"></polygon></svg><div style="font-size: 10px; letter-spacing: .24em; color: #636870; margin-bottom: 8px">ADMONITION&nbsp;·&nbsp;告示</div>
+<section class="container-tip__body" style="font-size: 15px; line-height: 1.95; color: #1c1f24; margin: 0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:vermilion-seal 1`] = `
+"<section class="container-tip container-tip--vermilion-seal" style="background-color: #fdfdfc; padding: 18px 4px">
+<div style="width: 42px; height: 42px; border: 2.5px solid #2558b0; color: #2558b0; font-size: 22px; font-weight: 600; text-align: center; line-height: 38px; transform: rotate(-3deg)">告</div><div style="font-size: 11px; letter-spacing: .4em; color: #2558b0; font-weight: 500; margin-bottom: 8px">　示</div>
+<section class="container-tip__body" style="font-size:15px;line-height:2;color:#1c1f24;margin:0;padding-right:60px">
 <p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
@@ -252,6 +446,16 @@ exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:interview-col
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:name-prefix 1`] = `
+"<section class="container-dialogue container-dialogue--name-prefix" style="margin: 20px 0; margin: 20px 0; background-color: transparent;">
+<section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
+<section class="container-dialogue-turn" style="margin:0 0 12px;font-size:14px;line-height:1.75;color:#1c1f24"><span style="display: inline; font-weight: 700; color: #2558b0; font-size: 13px; letter-spacing: 0.5px; margin-right: 2px">主持人：</span><span style="display:inline"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">你怎么看这次转向？</p>
+</span></section>
+<section class="container-dialogue-turn" style="margin:0 0 12px;font-size:14px;line-height:1.75;color:#1c1f24"><span style="display: inline; font-weight: 700; color: #2558b0; font-size: 13px; letter-spacing: 0.5px; margin-right: 2px">张三：</span><span style="display:inline"><p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">转向是必然的，但节奏会更慢。</p>
+</span></section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > dialogue:qa-rows 1`] = `
 "<section class="container-dialogue container-dialogue--qa-rows" style="margin: 20px 0; margin: 20px 0; padding: 14px 16px; background-color: transparent;">
 <section class="container-dialogue__title" style="font-weight:700;color:#1c1f24;font-size:14px;letter-spacing:0.5px;margin-bottom:12px">主编访谈</section>
@@ -283,6 +487,12 @@ exports[`默认主题 · 每 variant 渲染片段快照 > divider:glyph 1`] = `
 exports[`默认主题 · 每 variant 渲染片段快照 > divider:rule 1`] = `
 "<section class="container-divider container-divider--rule" style="margin:24px 0">
 <hr style="margin-top: 24px; margin-bottom: 24px; border: none; height: 1px; background-color: #d8d8d4; margin: 0;">
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > divider:seal-mark 1`] = `
+"<section class="container-divider container-divider--seal-mark" style="text-align:right;margin:32px 0 20px">
+<span style="display:inline-block;width:12px;height:12px;background-color:#2558b0">&nbsp;</span>
 </section>"
 `;
 
@@ -332,6 +542,33 @@ exports[`默认主题 · 每 variant 渲染片段快照 > gallery:triptych 1`] =
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:bilingual-stack 1`] = `
+"<section class="container-pull-quote container-pull-quote--bilingual-stack" style="margin: 28px 0; background: #fdfdfc; padding: 14px 0; text-align: left;">
+<section style="font-style: italic; font-size: 13px; color: #2558b0; letter-spacing: 0.04em; line-height: 1.5; margin-bottom: 8px">In wildness is the preservation of the world.</section>
+<section class="container-pull-quote__body" style="text-align:left">
+<p style="color: #1c1f24; font-size: 26px; line-height: 1.45; font-weight: 500; letter-spacing: 0.02em; text-align: left; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:caliper-mark 1`] = `
+"<section class="container-pull-quote container-pull-quote--caliper-mark" style="display: table; width: 100%; table-layout: fixed; margin: 28px 0; background: #fdfdfc; padding: 14px 0;">
+<section style="display:table-cell;vertical-align:top;width:22px;padding-top:4px;padding-right:10px"><svg width="14" height="72" viewBox="0 0 14 72" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="14" height="1.5" fill="#2558b0"></rect><rect x="6.5" y="0" width="1" height="72" fill="#2558b0"></rect><rect x="0" y="70.5" width="14" height="1.5" fill="#2558b0"></rect></svg></section>
+<section class="container-pull-quote__body" style="display:table-cell;vertical-align:top;text-align:left">
+<p style="color: #1c1f24; font-size: 24px; line-height: 1.5; font-weight: 500; letter-spacing: 0.02em; text-align: left; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:calligraphic 1`] = `
+"<section class="container-pull-quote container-pull-quote--calligraphic" style="margin: 28px 0; background: #fdfdfc; padding: 14px 0; text-align: left;">
+<section style="line-height:0;margin-bottom:6px"><svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2558b0" stroke-width="2" stroke-linecap="round"><path d="M6 6 Q10 4 16 20"></path><path d="M18 6 Q14 4 8 20"></path></svg></section>
+<section class="container-pull-quote__body" style="text-align:left">
+<p style="color: #1c1f24; font-size: 28px; line-height: 1.5; font-weight: 500; letter-spacing: 0.06em; text-align: left; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:centered-rule 1`] = `
 "<section class="container-pull-quote container-pull-quote--centered-rule" style="margin: 28px 0; border-top: 1px solid #2558b0; border-bottom: 1px solid #2558b0; padding: 24px 12px; text-align: center; border-radius: 0; background-color: transparent;">
 <section style="text-align:center;margin-bottom:10px"><span style="display:inline-block;color:#636870;font-size:11px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;line-height:1.4">QUOTE · 引言</span></section>
@@ -341,11 +578,40 @@ exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:centered-rul
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:drop-capital 1`] = `
+"<section class="container-pull-quote container-pull-quote--drop-capital" style="margin: 28px 0; background: #fdfdfc; padding: 14px 0;">
+<section style="line-height:0.85;margin:0 0 6px;text-align:left"><span style="font-size: 64px; font-weight: 400; color: #1c1f24; display: inline-block">凡</span></section>
+<section class="container-pull-quote__body" style="text-align:left">
+<p style="color: #1c1f24; font-size: 20px; line-height: 1.6; font-weight: 500; letter-spacing: 0.02em; text-align: left; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:giant-mark 1`] = `
 "<section class="container-pull-quote container-pull-quote--giant-mark" style="margin: 28px 0; padding: 8px 4px 8px 16px; text-align: left;">
 <section style="line-height:0;margin-bottom:4px"><svg width="64" height="48" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2558b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 40 C14 22 22 14 32 12 M14 40 L14 50 L26 50 L26 36 L18 36 L18 40 Z"></path><path d="M44 40 C44 22 52 14 62 12 M44 40 L44 50 L56 50 L56 36 L48 36 L48 40 Z"></path></svg></section>
 <section class="container-pull-quote__body" style="text-align:left">
 <p style="color: var(--uv-quote-color, #1c1f24); font-size: var(--uv-quote-size, 19px); line-height: 1.8; font-weight: 600; letter-spacing: 0.3px; margin-top: 0; margin-bottom: 0;">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:grid-block 1`] = `
+"<section class="container-pull-quote container-pull-quote--grid-block" style="margin: 28px 0; background: #fdfdfc; padding: 14px 0 14px 0; text-align: left;">
+<section style="height:5px;background:#2558b0;width:22px;margin-bottom:12px"></section><section style="display:table;width:100%;table-layout:fixed"><section style="display:table-cell;vertical-align:top;width:48px;padding-right:12px;padding-top:2px"><section style="width: 40px; height: 40px; border: 1px solid #1c1f24; display: block; align-items: center; justify-content: center; font-size: 22px; color: #1c1f24; font-weight: 500">少</section></section>
+<section class="container-pull-quote__body" style="display:table-cell;vertical-align:top;text-align:left">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>
+
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:inverted-plate 1`] = `
+"<section class="container-pull-quote container-pull-quote--inverted-plate" style="margin: 28px 0; background: #1c1f24; padding: 22px 18px; border-radius: 0;">
+<section style="font-size: 10px; color: #636870; letter-spacing: 0.24em; margin-bottom: 10px; text-transform: uppercase">PULL · 06</section>
+<section class="container-pull-quote__body" style="text-align:left">
+<p style="color: #fefefe; font-size: 24px; line-height: 1.45; font-weight: 500; letter-spacing: 0.01em; text-align: left; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
 </section>
 </section>"
 `;
@@ -364,6 +630,23 @@ exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:stamp-quote 
 <section style="text-align:right;line-height:0;margin-bottom:6px"><svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2558b0" stroke-width="2" stroke-linejoin="round" style="display: inline-block; vertical-align: top"><g transform="rotate(-9 26 26)"><rect x="4" y="4" width="44" height="44"></rect><rect x="9" y="9" width="34" height="34" stroke-width="1"></rect><text x="26" y="31" font-size="11" font-weight="700" text-anchor="middle" fill="#2558b0" stroke="none" font-family="monospace">QUOTE</text></g></svg></section>
 <section class="container-pull-quote__body" style="text-align:left">
 <p style="color: #1c1f24; font-size: 19px; line-height: 1.5; font-weight: 700; letter-spacing: 0.2px; text-align: left; margin-top: 0; margin-bottom: 0;">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:weight-contrast 1`] = `
+"<section class="container-pull-quote container-pull-quote--weight-contrast" style="margin: 28px 0; border-top: 1px solid #1c1f24; border-bottom: 1px solid #1c1f24; padding: 18px 0; text-align: center; background-color: transparent;">
+<section class="container-pull-quote__body" style="text-align:center">
+<p style="color: #1c1f24; font-size: 22px; line-height: 1.55; font-weight: 600; letter-spacing: 0.01em; text-align: center; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > pullQuote:with-gloss 1`] = `
+"<section class="container-pull-quote container-pull-quote--with-gloss" style="margin: 28px 0; border-top: 1px solid #2558b0; border-bottom: 1px solid #2558b0; padding: 16px 0; background: #fdfdfc;">
+<section style="display:table;width:100%;margin-bottom:0"><section style="display:table-cell;vertical-align:top"></section><section style="display:table-cell;vertical-align:top;width:22px;padding-top:4px;writing-mode:vertical-rl;font-size:10px;line-height:1.7;color:#2558b0;letter-spacing:0.12em">曾国藩家书有此句言事不可过盛</section></section>
+<section class="container-pull-quote__body" style="display:table-cell;vertical-align:top;text-align:left">
+<p style="color: #1c1f24; font-size: 28px; line-height: 1.4; font-weight: 500; letter-spacing: 0.04em; text-align: left; margin-top: 0; margin-bottom: 0">我们以为在阅读，其实只是在滑动。</p>
 </section>
 </section>"
 `;
@@ -449,6 +732,16 @@ exports[`默认主题 · 每 variant 渲染片段快照 > qaBlock:typed-block 1`
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:binomial-attrib 1`] = `
+"<section class="container-quote-card container-quote-card--binomial-attrib" style="border-radius: 6px; background-color: #fdfdfc; padding: 8px 16px; margin: 20px 0;">
+<section style="font-style: italic; font-size: 13px; color: #2558b0; letter-spacing: .02em; border-bottom: 1px solid #1c1f24; padding-bottom: 4px; margin-bottom: 14px">Sententia · 句</section>
+<section class="container-quote-card__body" style="font-size:18px;line-height:1.78;color:#1c1f24;margin:0 0 16px;font-weight:500">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="display: block; justify-content: space-between; align-items: baseline; font-size: 11px; color: #636870; letter-spacing: .16em">苏轼</section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > quote:classic 1`] = `
 "<section class="container-quote-card container-quote-card--classic" style="background-color: var(--uv-quote-bg, #f5f5f3); padding: 0; margin: 20px 0; border-radius: 8px;">
 <section style="text-align:left;line-height:1;padding:6px 0 8px 6px"><span style="display:inline-block;font-size:28px;opacity:0.35">「</span></section>
@@ -468,6 +761,25 @@ exports[`默认主题 · 每 variant 渲染片段快照 > quote:column-rule 1`] 
 </section>"
 `;
 
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:double-frame 1`] = `
+"<section class="container-quote-card container-quote-card--double-frame" style="border-radius: 6px; background-color: #fdfdfc; padding: 10px; margin: 20px 0; border: 1px solid #636870;">
+<section style="border:1px solid #636870;padding:18px 14px 16px;">
+<section class="container-quote-card__body" style="font-size: 18px; line-height: 1.85; color: #1c1f24; margin: 0 0 12px; font-weight: 500">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="display: block; justify-content: flex-end; align-items: center; gap: 8px; font-size: 11px; color: #2558b0; letter-spacing: .2em">苏轼</section>
+</section></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:editorial-block 1`] = `
+"<section class="container-quote-card container-quote-card--editorial-block" style="border-radius: 6px; background-color: #f5f5f3; padding: 18px 20px; margin: 22px 0; border-left: 6px solid #2558b0;">
+<section class="container-quote-card__body" style="font-size:20px;font-weight:700;line-height:1.45;text-align:left;color:#1c1f24;letter-spacing:-0.005em">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="text-align:left;color:#636870;margin-top:14px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase">— 苏轼</section>
+</section>"
+`;
+
 exports[`默认主题 · 每 variant 渲染片段快照 > quote:frame-brackets 1`] = `
 "<section class="container-quote-card container-quote-card--frame-brackets" style="background-color: #f5f5f3; border-radius: 6px; padding: 16px 24px; margin: 22px 0;">
 <svg viewBox="0 0 320 20" width="100%" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display: block; margin-bottom: -20px"><path d="M0,20 L0,0 L20,0 M300,0 L320,0 L320,20" stroke="#2558b0" stroke-width="2" fill="none"></path></svg>
@@ -476,6 +788,85 @@ exports[`默认主题 · 每 variant 渲染片段快照 > quote:frame-brackets 1
 </section>
 <section class="container-quote-card__byline" style="text-align:center;color:#636870;margin-top:2px;font-size:13px">— 苏轼</section>
 <svg viewBox="0 0 320 20" width="100%" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display: block; margin-top: -20px"><path d="M0,0 L0,20 L20,20 M300,20 L320,20 L320,0" stroke="#2558b0" stroke-width="2" fill="none"></path></svg></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:huge-numeral 1`] = `
+"<section class="container-quote-card container-quote-card--huge-numeral" style="border-radius: 6px; background-color: #fdfdfc; padding: 14px 16px 16px; margin: 20px 0;">
+<section style="display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;"><section style="font-size: 72px; line-height: .85; color: #2558b0; font-weight: 400; letter-spacing: -.04em">07</section><section style="padding-top:6px;">
+<section class="container-quote-card__body" style="font-size: 16.5px; line-height: 1.75; color: #1c1f24; margin: 0 0 10px; font-weight: 500">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="font-size: 10px; color: #636870; letter-spacing: .16em; border-top: 1px solid #1c1f24; padding-top: 6px; margin-top: 0">苏轼</section>
+</section></section></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:magazine-dropcap 1`] = `
+"<section class="container-quote-card container-quote-card--magazine-dropcap" style="border-radius: 6px; background-color: #fdfdfc; padding: 22px 18px; margin: 24px 0; border-top: 3px double #2558b0; border-bottom: 3px double #2558b0;">
+<span style="display:inline-block;font-size:48px;line-height:1;color:inherit;opacity:0.25;margin-right:8px;font-style:italic">“</span>
+<section class="container-quote-card__body" style="font-size:17px;line-height:1.85;color:#1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="text-align:center;color:#636870;margin-top:2px;font-size:13px">— 苏轼</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:numbered-lines 1`] = `
+"<section class="container-quote-card container-quote-card--numbered-lines" style="border-radius: 6px; background-color: #fdfdfc; padding: 14px 16px 16px; margin: 20px 0;">
+<section style="font-size: 9px; letter-spacing: .24em; margin-bottom: 10px">— EXCERPT 003 —</section>
+<section class="container-quote-card__body" style="font-size: 18px; line-height: 1.75; color: #1c1f24">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="font-size: 12px; color: #636870; margin-top: 14px; letter-spacing: .06em">— 苏轼</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:oversized-mark 1`] = `
+"<section class="container-quote-card container-quote-card--oversized-mark" style="border-radius: 6px; background-color: #fdfdfc; padding: 0 0 16px; margin: 20px 0;">
+<section style="line-height:.8;padding:14px 16px 0"><span style="font-size: 72px; color: #1c1f24; font-weight: 500; font-style: italic; display: block; height: 36px; overflow: hidden">“</span></section>
+<section class="container-quote-card__body" style="font-size: 21px; font-style: italic; line-height: 1.6; color: #1c1f24; font-weight: 500; margin: 6px 0 12px; padding: 0 16px; letter-spacing: .01em">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="display: block; justify-content: space-between; align-items: baseline; border-top: 1px solid #1c1f24; padding: 8px 16px 0; font-size: 12px; color: #636870">苏轼</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:ring-device 1`] = `
+"<section class="container-quote-card container-quote-card--ring-device" style="border-radius: 6px; background-color: #fdfdfc; padding: 14px 16px 16px; margin: 20px 0;">
+<section style="display: block; gap: 10px; align-items: center; margin-bottom: 14px; color: #1c1f24"><span style="width:22px;height:22px;border:2px solid #1c1f24;border-radius:50%;display:inline-block;flex-shrink:0;"></span><span style="flex:1;height:1px;background:#1c1f24;"></span><span style="width:14px;height:14px;background:#2558b0;border-radius:50%;display:inline-block;flex-shrink:0;"></span><span style="flex:1;height:1px;background:#1c1f24;"></span><span style="width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:18px solid #1c1f24;display:inline-block;flex-shrink:0;"></span></section>
+<section class="container-quote-card__body" style="font-size: 18px; line-height: 1.7; color: #1c1f24; margin: 0 0 8px; font-weight: 500; letter-spacing: .01em">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="font-size: 10px; color: #636870; letter-spacing: .2em; text-transform: uppercase">— 苏轼</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:seal-kai 1`] = `
+"<section class="container-quote-card container-quote-card--seal-kai" style="border-radius: 6px; background-color: #fdfdfc; padding: 18px 16px 14px; margin: 20px 0;">
+<section style="display: block; justify-content: center; margin-bottom: 14px"><span style="width: 30px; height: 30px; background: #2558b0; color: #fdfdfc; font-size: 14px; font-weight: 600; display: block; align-items: center; justify-content: center; letter-spacing: 0">句</span></section>
+<section class="container-quote-card__body" style="font-size:19px;line-height:1.85;color:#1c1f24;text-align:center;font-weight:500;margin:0 0 14px;letter-spacing:.04em">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="text-align:center;font-size:12px;color:#2558b0;letter-spacing:.2em">— 苏轼</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:specimen-quote 1`] = `
+"<section class="container-quote-card container-quote-card--specimen-quote" style="border-radius: 6px; background-color: #fdfdfc; padding: 14px 16px 16px; margin: 20px 0;">
+<section style="display: block; align-items: stretch; gap: 8px"><section style="width:8px;border-top:1px solid #1c1f24;border-bottom:1px solid #1c1f24;border-left:1px solid #1c1f24;flex-shrink:0;"></section><section style="flex:1;padding:6px 0 8px;">
+<section class="container-quote-card__body" style="font-size:17px;line-height:1.85;color:#1c1f24;margin:0;font-weight:500">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="display: block; justify-content: space-between; align-items: baseline; margin-top: 10px; font-size: 12px">&lt;span style="font-family:'Lora',serif;font-style:italic;color:#2558b0;"&gt;— &lt;/span&gt;苏轼</section>
+</section><section style="width:8px;border-top:1px solid #1c1f24;border-bottom:1px solid #1c1f24;border-right:1px solid #1c1f24;flex-shrink:0;"></section></section></section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > quote:tilted-sticker 1`] = `
+"<section class="container-quote-card container-quote-card--tilted-sticker" style="background-color: #f5f5f3; padding: 16px 18px; margin: 24px 0; transform: rotate(-1deg); border-radius: 0;">
+<section class="container-quote-card__body" style="font-size:20px;font-weight:700;line-height:1.3;text-align:left;letter-spacing:-0.005em">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">人生如逆旅，我亦是行人。</p>
+</section>
+<section class="container-quote-card__byline" style="text-align:center;color:#636870;margin-top:2px;font-size:13px">— 苏轼</section>
+</section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > sectionTitle:bordered 1`] = `

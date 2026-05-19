@@ -1,7 +1,7 @@
 # T3.1 横向手法重复扫描报告
 
 **扫描范围**：新 40 variant × 既有 39 variant。
-**消费方**：T3.2 signatureOf 共享标注。
+**消费方**：T3.2 designedFor 共享标注。
 
 ---
 
@@ -9,57 +9,57 @@
 
 ### 朱印 / 旋转角度
 
-- 旧：admonition/marginalia（signatureOf: literary-humanism）、pull-quote/stamp-quote（brutalist）
+- 旧：admonition/marginalia（designedFor: literary-humanism）、pull-quote/stamp-quote（brutalist）
 - 新：admonition/vermilion-seal（-3° 旋转方框朱印）、quote/seal-kai（居中朱印楷字）、pull-quote/calligraphic（朱色撇捺装饰）、note/vermilion-gloss（朱褐大字「注」）、highlight/vermilion-inline（朱色文字+左侧点线）
 
 ### 编号 / 横线 / 大字距
 
-- 旧：admonition/news-row（signatureOf: data-brief）、admonition/top-bottom-rule（signatureOf: tech-geek）、admonition/manpage-log（signatureOf: tech-geek）
+- 旧：admonition/news-row（designedFor: data-brief）、admonition/top-bottom-rule（designedFor: tech-geek）、admonition/manpage-log（designedFor: tech-geek）
 - 新：admonition/numbered-rule（顶2px+底1px 大字距 NOTICE·N°）、admonition/hanging-nb（N.B.+编号+竖分隔）、quote/numbered-lines（IBM Plex 编号竖列）、quote/huge-numeral（左 Lora 72px 巨号编号）
 
 ### 巨号引号 / Drop Cap / 首字下沉
 
-- 旧：quote/magazine-dropcap（signatureOf: literary-humanism）、pull-quote/giant-mark（巨号 SVG 引号）
+- 旧：quote/magazine-dropcap（designedFor: literary-humanism）、pull-quote/giant-mark（巨号 SVG 引号）
 - 新：quote/oversized-mark（左上巨号 Cormorant ）、pull-quote/drop-capital（drop capital + Cormorant italic）
 
 ### 双行夹注 / 朱字批注
 
-- 旧：pull-quote/with-gloss（signatureOf: literary-humanism）、admonition/marginalia（signatureOf: literary-humanism）
+- 旧：pull-quote/with-gloss（designedFor: literary-humanism）、admonition/marginalia（designedFor: literary-humanism）
 - 新：note/interlinear-gloss（上下 1px border + 朱色双行小字）、note/vermilion-gloss（朱褐大字「注」+右正文）
 
 ### 测量条 / 卡尺 / 标本括弧
 
-- 旧：pull-quote/margin-pull（左竖向 monospace kicker）、admonition/sidenote-latex（signatureOf: academic-frontier）
-- 新：note/ruler-note（NOTE + 虚线测量条）、pull-quote/caliper-mark（signatureOf: naturalist-notes）、quote/specimen-quote（SPEC.NO 测量括弧）、admonition/field-tag（FIG.CAVE + 短刻度）、admonition/specimen-box（左 border 方格 N°）
+- 旧：pull-quote/margin-pull（左竖向 monospace kicker）、admonition/sidenote-latex（designedFor: academic-frontier）
+- 新：note/ruler-note（NOTE + 虚线测量条）、pull-quote/caliper-mark（designedFor: naturalist-notes）、quote/specimen-quote（SPEC.NO 测量括弧）、admonition/field-tag（FIG.CAVE + 短刻度）、admonition/specimen-box（左 border 方格 N°）
 
 ### 拉丁副标 / 学名 italic
 
-- 旧：admonition/sidenote-latex（LaTeX 小型大写标题，signatureOf: academic-frontier）
+- 旧：admonition/sidenote-latex（LaTeX 小型大写标题，designedFor: academic-frontier）
 - 新：note/latin-subhead（Annotatio redactoris 拉丁 italic）、quote/binomial-attrib（学名 + 命名人式 byline）
 
 ### 几何形块 / 三角徽 / 方块旗
 
-- 旧：admonition/slab-corner（signatureOf: brutalist）、admonition/mook-tag（signatureOf: editorial-mook）
+- 旧：admonition/slab-corner（designedFor: brutalist）、admonition/mook-tag（designedFor: editorial-mook）
 - 新：admonition/filled-square（左 18×18 accent 方块）、admonition/triangle-top（顶三角徽 + 1px 边框）、note/geometric-mark（三角引号）、highlight/geometric-flag（左右实色方块旗）
 
 ### 圆点 device / 圆盘 / 圆环
 
-- 旧：admonition/bubble-organic（signatureOf: life-aesthetic）、admonition/ticket-notch（三圆点票据）
+- 旧：admonition/bubble-organic（designedFor: life-aesthetic）、admonition/ticket-notch（三圆点票据）
 - 新：note/initial-disc（左 34×34 圆形深底）、quote/ring-device（上方圆环 device + 三角 + 圆点）、highlight/side-dots（字旁着重圆点）
 
 ### 反色板块
 
 - 旧：quote/tilted-sticker（反色 + 微旋转）、pull-quote/centered-rule（gallery placard 体）
-- 新：pull-quote/inverted-plate（signatureOf: bauhaus-digest → #111 底白字）、highlight/geometric-flag（左右实色方块旗）
+- 新：pull-quote/inverted-plate（designedFor: bauhaus-digest → #111 底白字）、highlight/geometric-flag（左右实色方块旗）
 
 ### 双语堆叠 / bilingual
 
 - 旧：（无直接旧 variant，closest: pull-quote/margin-pull NYT Sunday 体）
-- 新：pull-quote/bilingual-stack（signatureOf: naturalist-notes）
+- 新：pull-quote/bilingual-stack（designedFor: naturalist-notes）
 
 ### 编辑部落款 / kicker
 
-- 旧：admonition/news-underline（signatureOf: swiss-grid）、note/editorial-stripe、note/smallcaps-kicker
+- 旧：admonition/news-underline（designedFor: swiss-grid）、note/editorial-stripe、note/smallcaps-kicker
 - 新：note/ed-signoff（右下 ed. + 首字母 monospace）、note/inline-label（段首反白胶囊）、admonition/hanging-nb（N.B.+编号）
 
 ### 竖签条 / 左竖排
@@ -69,7 +69,7 @@
 
 ### 米黄底色 / 色块底
 
-- 旧：admonition/bubble-organic（signatureOf: life-aesthetic）、admonition/mook-tag（米卡纸底）
+- 旧：admonition/bubble-organic（designedFor: life-aesthetic）、admonition/mook-tag（米卡纸底）
 - 新：highlight/wash-ground（整段米黄色块底）
 
 ### 点状下划线 / dotted
@@ -79,24 +79,24 @@
 
 ### 大字距字重
 
-- 旧：admonition/news-underline（signatureOf: swiss-grid）、note/hanging-indent（uppercase + 悬挂缩进）
+- 旧：admonition/news-underline（designedFor: swiss-grid）、note/hanging-indent（uppercase + 悬挂缩进）
 - 新：highlight/tracked-emphasis（整段 letter-spacing + bold）
 
 ### 方格 / 方块 / 网格编号
 
-- 旧：admonition/ledger-cell（signatureOf: business-finance）、pull-quote/grid-block（signatureOf: bauhaus-digest）
-- 新：admonition/specimen-box（左 border 方格 N°）、pull-quote/grid-block（已有 signatureOf）
+- 旧：admonition/ledger-cell（designedFor: business-finance）、pull-quote/grid-block（designedFor: bauhaus-digest）
+- 新：admonition/specimen-box（左 border 方格 N°）、pull-quote/grid-block（已有 designedFor）
 
 ### 单划底线 / accent 实线
 
-- 旧：admonition/minimal-underline（仅标题下划线）、admonition/news-underline（signatureOf: swiss-grid）
+- 旧：admonition/minimal-underline（仅标题下划线）、admonition/news-underline（designedFor: swiss-grid）
 - 新：highlight/single-stroke（底部 3px accent 实线）
 
 ---
 
 ## 重叠对清单
 
-| 新 variant | 旧 variant | 共享手法 | signatureOf 建议 |
+| 新 variant | 旧 variant | 共享手法 | designedFor 建议 |
 |---|---|---|---|
 | admonition/vermilion-seal | admonition/marginalia | 朱印 / 旋转角度 | literary-humanism |
 | admonition/paper-slip | admonition/marginalia | 竖签条 / 宋本批注气质 | literary-humanism |
@@ -135,7 +135,7 @@
 | pull-quote/inverted-plate | quote/tilted-sticker | 反色板块 / 深底白字 | brutalist |
 | pull-quote/grid-block | admonition/ledger-cell | 方格编号 + 顶 accent 条 | brutalist |
 
-**注**：pull-quote/weight-contrast、drop-capital、calligraphic、with-gloss、bilingual-stack、caliper-mark、inverted-plate、grid-block 均已有 signatureOf（见 grep 结果），其中 `naturalist-notes` 和 `bauhaus-digest` 不在现有 18 主题列表内，T3.2 需修正为 `academic-frontier` 和 `brutalist`。
+**注**：pull-quote/weight-contrast、drop-capital、calligraphic、with-gloss、bilingual-stack、caliper-mark、inverted-plate、grid-block 均已有 designedFor（见 grep 结果），其中 `naturalist-notes` 和 `bauhaus-digest` 不在现有 18 主题列表内，T3.2 需修正为 `academic-frontier` 和 `brutalist`。
 
 ---
 
@@ -152,9 +152,9 @@
 
 ## T3.2 建议动作
 
-### 需新增 signatureOf 的 variant（取代 experimental: true 或 themeCompat 非现有主题）
+### 需新增 designedFor 的 variant（取代 experimental: true 或 designedFor 非现有主题）
 
-| signatureOf 目标主题 | variant 列表 |
+| designedFor 目标主题 | variant 列表 |
 |---|---|
 | editorial-mook | admonition/numbered-rule、admonition/hanging-nb、note/ed-signoff、note/inline-label、quote/oversized-mark、quote/numbered-lines、highlight/dotted-underline、highlight/tracked-emphasis |
 | literary-humanism | admonition/vermilion-seal、admonition/paper-slip、note/interlinear-gloss、note/vermilion-gloss、quote/seal-kai、quote/double-frame、highlight/vermilion-inline、highlight/side-dots |
@@ -167,9 +167,9 @@
 
 ### 既有 variant 不动
 
-共 39 个既有 variant 的 signatureOf 不变，新 variant 共享其签名归属方向，不改旧有绑定。
+共 39 个既有 variant 的 designedFor 不变，新 variant 共享其签名归属方向，不改旧有绑定。
 
-### signatureOf 分布汇总
+### designedFor 分布汇总
 
 | 主题 | 新 variant 数 |
 |---|---|

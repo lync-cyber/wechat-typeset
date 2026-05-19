@@ -19,7 +19,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '三角顶',
     description: '顶 -9px 三角徽 + 1px 边框（包豪斯 v2）',
-    themeCompat: ['brutalist'],
+    designedFor: ['brutalist'],
   },
   thumbnail: thumb,
   snippets: [

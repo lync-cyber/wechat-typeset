@@ -349,107 +349,107 @@ card-shadow 骨架 —— 悬浮卡片式。
 minimal-underline 骨架 —— 无底色，仅下划线与缩进。
 :::
 
-<!-- themeCompat: tech-geek / default 推荐；其它主题切换后将自动 fallback -->
+<!-- designedFor: tech-geek / default 推荐 -->
 ::: info 终端风格 variant=terminal
 terminal 骨架 —— 顶部三色圆点 + 等宽正文。
 :::
 
-<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: tech-geek 独占 -->
 ::: tip // NOTE variant=dashed-border
 dashed-border 骨架 —— 左 2px 虚线 + 浅底。
 :::
 
-<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: tech-geek 独占 -->
 ::: danger // PITFALL variant=top-bottom-rule
 top-bottom-rule 骨架 —— 顶底 1px 实线，报纸 errata 勘误条。
 :::
 
-<!-- themeCompat: tech-geek 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: tech-geek 独占 -->
 ::: tip 工程附注 variant=manpage-log
 manpage-log 骨架 —— 顶底分隔线 + `:: NOTE ::` 状态条。
 :::
 
-<!-- themeCompat: academic-frontier 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: info 定义 variant=sidenote-latex
 sidenote-latex 骨架 —— 1px 细边框 + `DEFINITION.` 小型大写起始。
 :::
 
-<!-- themeCompat: literary-humanism 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: warning 按 variant=marginalia
 marginalia 骨架 —— 无框无底、墨色一色。
 :::
 
-<!-- themeCompat: business-finance 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: business-finance 独占 -->
 ::: danger 异常 · ALERT variant=ledger-cell
 ledger-cell 骨架 —— 深色表头条 + 硬边框。
 :::
 
-<!-- themeCompat: life-aesthetic 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: life-aesthetic 独占 -->
 ::: tip 今日小发现 variant=bubble-organic
 bubble-organic 骨架 —— 大圆角 + 单侧柔软阴影。
 :::
 
-<!-- themeCompat: people-story 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: people-story 独占 -->
 ::: info 采访手记 variant=magazine-pull
 magazine-pull 骨架 —— 上下细线 + 浮空小字标签。
 :::
 
-<!-- themeCompat: industry-observer 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: industry-observer 独占 -->
 ::: warning 需要警惕 variant=report-section
 report-section 骨架 —— 顶 3px 底 1px + § 方角标签。
 :::
 
-<!-- themeCompat: data-brief 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: data-brief 独占 -->
 ::: info INFO variant=news-row
 news-row 骨架 —— 左 3px 色条 + 实色徽章 + 紧凑单行。
 :::
 
-<!-- themeCompat: swiss-grid 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: swiss-grid 独占 -->
 ::: info INFO variant=news-underline
 news-underline 骨架 —— 实色徽章 + 1px 黑竖分隔 + 1px 黑底线。
 :::
 
-<!-- themeCompat: editorial-mook 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: info variant=mook-tag
 mook-tag 骨架 —— 米卡纸底 + 主色左条 + 単字 CJK 标签。
 :::
 
-<!-- themeCompat: brutalist 独占；其它主题切换后将自动 fallback -->
+<!-- designedFor: brutalist 独占 -->
 ::: danger STOP variant=slab-corner
 slab-corner 骨架 —— 顶部 6px 硬条 + 右上 accent 方块徽章 + zero-radius。
 :::
 
-<!-- themeCompat: official-gazette 独占 -->
+<!-- designedFor: official-gazette 独占 -->
 ::: tip 告示 variant=numbered-rule
 numbered-rule 骨架 —— 顶 2px + 底 1px 大字距 NOTICE·N° 横线。
 :::
 
-<!-- themeCompat: official-gazette 独占 -->
+<!-- designedFor: official-gazette 独占 -->
 ::: tip variant=hanging-nb
 hanging-nb 骨架 —— 左侧 N.B. 缩写 + 编号 + 竖分隔。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: tip 告示 variant=vermilion-seal
 vermilion-seal 骨架 —— 右上 -3° 旋转方框朱印。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: tip 告示 variant=paper-slip
 paper-slip 骨架 —— 左竖排黄签条 + 底 1px border。
 :::
 
-<!-- themeCompat: life-aesthetic 独占 -->
+<!-- designedFor: life-aesthetic 独占 -->
 ::: tip 告示 variant=field-tag
 field-tag 骨架 —— FIG.CAVE + Notabene + 短刻度。
 :::
 
-<!-- themeCompat: life-aesthetic 独占 -->
+<!-- designedFor: life-aesthetic 独占 -->
 ::: tip 告示 variant=specimen-box
 specimen-box 骨架 —— 左 1px border 方格 N°。
 :::
 
-<!-- themeCompat: brutalist 独占 -->
+<!-- designedFor: brutalist 独占 -->
 ::: tip 告示 variant=triangle-top
 triangle-top 骨架 —— 顶 -9px 三角徽 + 1px 边框。
 :::
@@ -484,42 +484,42 @@ editorial-block 骨架 —— 左 6px 实色条 + 浅底 + 大写字距 byline�
 "凡我所是，皆因我读。"
 :::
 
-<!-- themeCompat: editorial-mook 独占 -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: quote-card 韩少功《马桥词典》 variant=oversized-mark
 沉默是一种回答，只是我们经常听不见。
 :::
 
-<!-- themeCompat: editorial-mook 独占 -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: quote-card 黑塞·《德米安》 variant=numbered-lines
 我们终其一生，是为了摆脱他人的期待，找到真正的自己。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: quote-card 纳兰性德 variant=seal-kai
 人生若只如初见，何事秋风悲画扇。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: quote-card 黄庭坚 variant=double-frame
 念念不忘，必有回响；有灯，就有人。
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: quote-card Fragment IX variant=specimen-quote
 所有过往的失败，都是为了让今天的失败显得不那么难以承受。
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: quote-card M. PROUST · 1923 variant=binomial-attrib
 真正的旅行不在于看到新的风景，而在于换一双新的眼睛。
 :::
 
-<!-- themeCompat: swiss-grid 独占 -->
+<!-- designedFor: swiss-grid 独占 -->
 ::: quote-card SHAKESPEARE · TEMPEST variant=huge-numeral
 凡是过往，皆为序章。
 :::
 
-<!-- themeCompat: swiss-grid 独占 -->
+<!-- designedFor: swiss-grid 独占 -->
 ::: quote-card D. RAMS, 1976 variant=ring-device
 设计不是装饰，而是某种秩序的可视化。
 :::
@@ -714,42 +714,42 @@ dotted-margin —— 左 dotted rule + 缩进，散文页边批注。
 smallcaps-kicker —— 顶 2px 主色条 + uppercase kicker，数据简报骨架。
 :::
 
-<!-- themeCompat: editorial-mook 独占 -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: note variant=ed-signoff
 ed-signoff 骨架 —— 编者按语落款。
 :::
 
-<!-- themeCompat: editorial-mook 独占 -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: note variant=inline-label
 inline-label 骨架 —— 行内标签式补注。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: note variant=interlinear-gloss
 interlinear-gloss 骨架 —— 行间注释体。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: note variant=vermilion-gloss
 vermilion-gloss 骨架 —— 朱批旁注。
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: note variant=ruler-note
 ruler-note 骨架 —— 学术尺线脚注。
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: note variant=latin-subhead
 latin-subhead 骨架 —— 拉丁小标题补注。
 :::
 
-<!-- themeCompat: swiss-grid 独占 -->
+<!-- designedFor: swiss-grid 独占 -->
 ::: note variant=initial-disc
 initial-disc 骨架 —— 首字圆点引导。
 :::
 
-<!-- themeCompat: brutalist 独占 -->
+<!-- designedFor: brutalist 独占 -->
 ::: note variant=geometric-mark
 geometric-mark 骨架 —— 几何符号标注。
 :::
@@ -787,42 +787,42 @@ const greet = (name) => `Hello, ${name}`
 
 ### highlight · 8 variants
 
-<!-- themeCompat: editorial-mook 独占 -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: highlight variant=dotted-underline
 强调短句
 :::
 
-<!-- themeCompat: editorial-mook 独占 -->
+<!-- designedFor: editorial-mook 独占 -->
 ::: highlight variant=tracked-emphasis
 强调短句
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: highlight variant=vermilion-inline
 强调短句
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: highlight variant=side-dots
 强调短句
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: highlight variant=wash-ground
 强调短句
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: highlight variant=bracketed-tick
 强调短句
 :::
 
-<!-- themeCompat: brutalist 独占 -->
+<!-- designedFor: brutalist 独占 -->
 ::: highlight variant=geometric-flag
 强调短句
 :::
 
-<!-- themeCompat: swiss-grid 独占 -->
+<!-- designedFor: swiss-grid 独占 -->
 ::: highlight variant=single-stroke
 强调短句
 :::
@@ -845,49 +845,49 @@ const greet = (name) => `Hello, ${name}`
 书脊与手指的记忆，比屏幕的光更持久。
 :::
 
-<!-- themeCompat: people-story 独占 -->
+<!-- designedFor: people-story 独占 -->
 ::: pull-quote variant=weight-contrast
 我们活在一个越来越快，却越来越慢的时代。
 :::
 
-<!-- themeCompat: people-story 独占 -->
+<!-- designedFor: people-story 独占 -->
 ::: pull-quote variant=drop-capital
 凡人生大半的烦恼，都来自把别人的剧本当成自己的人生。
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: pull-quote variant=calligraphic
 行 到 水 穷 处
 坐 看 云 起 时
 :::
 
-<!-- themeCompat: literary-humanism 独占 -->
+<!-- designedFor: literary-humanism 独占 -->
 ::: pull-quote variant=with-gloss
 花 未 全 开
 月 未 圆
 :::
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: pull-quote variant=bilingual-stack
 荒野之中，
 蕴藏世界。
 :::
 In wildness is the preservation of the world.
 
-<!-- themeCompat: academic-frontier 独占 -->
+<!-- designedFor: academic-frontier 独占 -->
 ::: pull-quote variant=caliper-mark
 山是凝固的水，
 水是流动的山。
 :::
 FIELD JOURNAL, FOL.211
 
-<!-- themeCompat: brutalist 独占 -->
+<!-- designedFor: brutalist 独占 -->
 ::: pull-quote variant=inverted-plate
 形式追随功能，
 而功能追随真诚。
 :::
 
-<!-- themeCompat: brutalist 独占 -->
+<!-- designedFor: brutalist 独占 -->
 ::: pull-quote variant=grid-block
 少即多
 :::

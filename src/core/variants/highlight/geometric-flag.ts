@@ -19,7 +19,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '几何旗标',
     description: '整段左右实色方块旗 + 大字距，包豪斯构成感',
-    signatureOf: 'brutalist',
+    designedFor: ['brutalist'],
   },
   thumbnail: thumb,
   snippets: [

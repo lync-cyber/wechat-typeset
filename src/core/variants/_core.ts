@@ -2,7 +2,7 @@
  * 统一 Variant 注册表契约（VariantDef 目标形状）
  *
  * 一个 variant = 一个目录下的单文件，default-export 一个 `VariantDef`：
- *   - meta：id / kind / 中文短名 / 描述 / themeCompat
+ *   - meta：id / kind / 中文短名 / 描述 / designedFor（设计起源主题白名单，软推荐）
  *   - thumbnail：75×75 inline SVG 工厂（接 ThumbArgs）
  *   - snippets：该 variant 对外产出的"预设"条目（同一 variant 可有多条：
  *     不同 kind / 不同文案 / 不同 thumbArgs），组件库 UI 聚合时摊平
@@ -144,10 +144,13 @@ export interface VariantSnippet {
   /** 可直接插入编辑器的 markdown fence（自带末尾 \n） */
   markdown: string
   /**
-   * 预设级主题推荐（覆盖 meta.themeCompat）。部分 snippet 只推荐某主题
-   * （如 terminal info 专推 tech-geek），细分粒度到条目。
+   * 设计起源主题 id 列表（**软推荐**）。snippet 级覆盖 meta.designedFor，
+   * 用于"同 variant 不同 snippet 推荐不同主题"的细粒度（如 terminal info 专推 tech-geek）。
+   *
+   * 不参与运行时回退：渲染管线对作者级 `variant=xxx` override 一律忠实渲染，
+   * 不在不兼容时偷换骨架。本字段仅供面板 badge / lint 提示等 UI 层消费。
    */
-  themeCompat?: readonly string[]
+  designedFor?: readonly string[]
 }
 
 export interface VariantMeta {
@@ -160,29 +163,27 @@ export interface VariantMeta {
   /** ≤30 字说明 */
   description: string
   /**
-   * 软推荐主题 id 列表（**多主题适用**的视觉骨架）。空/缺省 = 全兼容。
-   * 与 signatureOf 互斥：单主题归属用 signatureOf，多主题语境用本字段。
-   * themeCompatGuard 与 getEffectiveCompat 视本字段为软推荐：作者级 override
-   * 命中且当前主题不在白名单 → fallback + warn。
-   */
-  themeCompat?: readonly string[]
-  /**
-   * 主题签名归属（**单主题专属**的视觉骨架）。声明 signatureOf 等价于声明
-   * themeCompat: [signatureOf]，但类型层把"签名 vs 通用"语义分开：
-   *   - admonition.marginalia 等"绑死单主题"的视觉签名 → signatureOf
-   *   - admonition.terminal / quote.editorial-block 等"多主题共享" → themeCompat
+   * 设计起源主题 id 列表（**软推荐**，不参与运行时回退）。
    *
-   * 与 themeCompat 互斥（schema 层不强制，约定上不同时声明）。
-   * 消费方一律走 `getEffectiveCompat(meta)`，不直接读两字段之一。
+   * 语义：variant 的视觉签名是为哪些主题设计的——`['literary-humanism']` 表示
+   * 单主题专属签名，`['tech-geek', 'tech-explainer']` 表示多主题共享。空/缺省 = 通用。
+   *
+   * 不影响渲染：作者写 `variant=xxx` 时引擎总是忠实渲染，绝不偷换。本字段仅供：
+   *   - 组件面板 cell badge（不兼容主题下灰色提示"为 XX 主题设计"）
+   *   - 编辑器 lint info-level 提示
+   *   - 主题作者推荐排序（getRecommendedVariantsFor）
+   *   - usage 分析 (实证采用率)
+   *
+   * 取等效白名单一律走 `getEffectiveCompat(meta)`，不直接读字段。
    */
-  signatureOf?: string
+  designedFor?: readonly string[]
   /**
-   * 实验性变体：当前无任何主题以默认骨架使用、也无 themeCompat / signatureOf 关联。
+   * 实验性变体：当前无任何主题以默认骨架使用、也无 designedFor 关联。
    * 出现在 VARIANT_IDS 主表里是为了"骨架已就绪、等首个采用方"；
    * `getRecommendedVariantsFor` 会把它们排到列表末尾且不算"推荐"。
    *
-   * conformance: 每个 VARIANT_IDS 成员必须满足 "≥1 主题采用" OR "experimental === true"。
-   * 移除流程：让某主题把它升级为默认骨架，或加入该主题的 themeCompat / signatureOf → 删 experimental 标。
+   * conformance: 每个 VARIANT_IDS 成员必须满足 "≥1 主题采用" OR "designedFor 非空" OR "experimental === true"。
+   * 移除流程：让某主题把它升级为默认骨架，或加入 designedFor → 删 experimental 标。
    */
   experimental?: boolean
   /**
@@ -200,16 +201,19 @@ export interface VariantMeta {
 }
 
 /**
- * 取 meta 的"等效主题白名单"。
- *   - signatureOf 优先：声明 = 单元素白名单
- *   - 否则取 themeCompat（缺省 = 空数组）
+ * 取 meta 的"等效设计起源白名单"——variant 是为哪些主题设计的（软推荐）。
  *
- * 所有消费方（guard / usage / api / 组件库）一律走本 helper，避免漂移。
+ * 字段 `designedFor` 形态：
+ *   - `designedFor: ['literary-humanism']`          单主题签名
+ *   - `designedFor: ['tech-geek', 'tech-explainer']` 多主题共享
+ *   - 空/缺省                                       通用、无主题偏好
+ *
+ * 所有消费方（usage / api / 组件库 / 面板 badge）一律走本 helper，避免漂移。
+ * 渲染管线不消费本字段——作者 `variant=xxx` override 总是忠实渲染，不偷换。
  */
 export function getEffectiveCompat(meta: VariantMeta | undefined): readonly string[] {
   if (!meta) return []
-  if (meta.signatureOf) return [meta.signatureOf]
-  return meta.themeCompat ?? []
+  return meta.designedFor ?? []
 }
 
 /**

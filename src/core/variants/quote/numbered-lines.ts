@@ -26,7 +26,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '编号竖列',
     description: '左 IBM Plex 编号竖列 + 1px 竖分隔（编辑部 v2）',
-    themeCompat: ['editorial-mook', 'data-brief'],
+    designedFor: ['editorial-mook', 'data-brief'],
   },
   thumbnail: thumb,
   snippets: [

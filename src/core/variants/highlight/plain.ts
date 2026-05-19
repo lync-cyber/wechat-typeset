@@ -27,7 +27,7 @@ const plain: VariantDef = {
     name: '默认高亮',
     description: '外壳样式由 ThemeContainers.highlight 主题级 CSS 接管,变体不发 wrapperCSS',
     // 实验性骨架: highlight 池刚启用,21 主题暂未显式声明 variants.highlight。
-    // 任一主题显式声明 'plain' 或加 themeCompat / signatureOf 后,可移除本字段。
+    // 任一主题显式声明 'plain' 或为本变体加 designedFor 后,可移除本字段。
     experimental: true,
     experimentalSince: '2026-05-19',
   },

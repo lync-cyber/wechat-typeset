@@ -26,7 +26,7 @@ import type { UserVariant } from '../../variants/userVariant'
 
 export interface ContainerRenderContext {
   /**
-   * 当前主题 id（kebab-case）。用于 themeCompat 校验，不暴露整 Theme 对象——其余字段已扁平注入。
+   * 当前主题 id（kebab-case）。给 variant render 引用（设计起源判别 / 主题感知细节），不暴露整 Theme 对象——其余字段已扁平注入。
    */
   themeId: string
   tokens: ThemeTokens

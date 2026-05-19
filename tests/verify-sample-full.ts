@@ -37,26 +37,24 @@ const defaultTheme = themeRegistry.default
 import { VARIANT_IDS } from '../src/core/themes/types'
 import { ALL_VARIANT_DEFS } from '../src/core/variants/registry'
 import { getEffectiveCompat } from '../src/core/variants/_core'
-import { __setCompatSilentForTest } from '../src/core/pipeline/containers/_shared/themeCompatGuard'
 import { __setTableCardWarnSilentForTest } from '../src/core/pipeline/containers/table-card'
 
 const HERE = fileURLToPath(new URL('.', import.meta.url))
 const SAMPLE = resolve(HERE, 'fixtures/all-containers.md')
 
-// fixture 跨多主题渲染会穿越 themeCompat fallback + table-card 边界列数；本 e2e
-// 校验的是 class 出现/类型完整性，warn 在这里只是噪声。静音以保持 [verify] 输出干净。
-__setCompatSilentForTest(true)
+// table-card 边界列数告警在 fixture 多主题渲染中属符合契约,静音降噪。
 __setTableCardWarnSilentForTest(true)
 
 const md = readFileSync(SAMPLE, 'utf8')
 const { html, wordCount } = render({ md, theme: defaultTheme })
 
 /**
- * 主题白名单限定 variant（signatureOf 或多主题 themeCompat）在 default 主题下会被
- * 守卫降级，class 不出现。这里按需补渲染——把每个白名单限定 variant 用其兼容主题
- * 渲染一次，命中"variant class 出现"断言。
+ * variant 的 designedFor 列表声明它"为哪些主题设计"。
+ * default 主题下渲染 fixture 仍能产出每个 variant 的 class（不再被偷换），
+ * 但为了让"在主题语境下色彩、字距等也对得上"的语义校验跑过，
+ * 仍按变体首选主题渲一次。
  */
-const themeCompatIndex: ReadonlyMap<string, string> = new Map(
+const designedForIndex: ReadonlyMap<string, string> = new Map(
   ALL_VARIANT_DEFS
     .map((d) => [d.meta.id, getEffectiveCompat(d.meta)] as const)
     .filter(([, compat]) => compat.length > 0)
@@ -64,7 +62,7 @@ const themeCompatIndex: ReadonlyMap<string, string> = new Map(
 )
 const htmlByTheme = new Map<string, string>([['default', html]])
 function htmlForVariant(variantId: string): string {
-  const themeId = themeCompatIndex.get(variantId) ?? 'default'
+  const themeId = designedForIndex.get(variantId) ?? 'default'
   let cached = htmlByTheme.get(themeId)
   if (cached) return cached
   const theme = themeRegistry[themeId] ?? defaultTheme
@@ -81,7 +79,7 @@ function check(label: string, predicate: () => boolean, detail = ''): void {
 }
 
 // 1. 容器 variant class 枚举（codeBlock 走独立命名，下面单独检查）
-// themeCompat 限定 variant 在 default 主题下被守卫降级，用其兼容主题渲染再断言。
+// 用 designedFor 首选主题渲染断言以确保色彩/字距/版式与设计起源一致。
 for (const [kind, ids] of Object.entries(VARIANT_IDS)) {
   if (kind === 'codeBlock') continue
   for (const id of ids as readonly string[]) {
@@ -174,7 +172,6 @@ check('video-card-iframe', () => html.includes('<iframe'), 'v.qq.com iframe')
 // 4. 基本健康：有字数
 check('word-count>0', () => wordCount > 0, `words=${wordCount}`)
 
-__setCompatSilentForTest(false)
 __setTableCardWarnSilentForTest(false)
 
 // ---- 报告 ----

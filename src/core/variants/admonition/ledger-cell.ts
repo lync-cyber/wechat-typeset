@@ -43,7 +43,7 @@ const ledgerCell: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '账本单元',
     description: '深色表头条 + 硬边框，Bloomberg Terminal 数据感',
-    signatureOf: 'business-finance',
+    designedFor: ['business-finance'],
   },
   thumbnail: thumb,
   snippets: [

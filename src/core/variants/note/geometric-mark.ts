@@ -18,7 +18,7 @@ const variantDef: VariantDef = {
     kind: 'note',
     name: '几何引号',
     description: '三角引号 + EDITORIAL·NOTE 标题（包豪斯 v2）',
-    signatureOf: 'brutalist',
+    designedFor: ['brutalist'],
   },
   thumbnail: thumb,
   snippets: [

@@ -46,7 +46,7 @@ const newsRow: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '数据新闻单行',
     description: '左 3px + 徽章 + 紧凑单行，data-brief 签名',
-    signatureOf: 'data-brief',
+    designedFor: ['data-brief'],
   },
   thumbnail: thumb,
   snippets: [

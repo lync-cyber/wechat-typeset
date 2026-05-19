@@ -17,7 +17,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '巨号引号',
     description: '左上巨号 Cormorant " + italic Lora 正文 + 右下编辑部署名',
-    themeCompat: ['editorial-mook', 'data-brief'],
+    designedFor: ['editorial-mook', 'data-brief'],
   },
   thumbnail: thumb,
   snippets: [

@@ -19,6 +19,15 @@ import { computed, defineAsyncComponent, onBeforeUnmount, ref } from 'vue'
 import type { ComponentEntry } from '../../domain/components-lib'
 import type { Theme } from '../../core/themes/types'
 import { computePopoverPlacement } from './popoverPlacement'
+import { themeList } from '../../core/themes'
+
+// 主题 id → 中文名映射（badge 显示用）。
+// themeList 是单一事实来源，本地缓存到 Map 避免每个 cell 都 array.find。
+const THEME_NAME_BY_ID = new Map(themeList.map((t) => [t.id, t.name]))
+
+function themeName(id: string): string {
+  return THEME_NAME_BY_ID.get(id) ?? id
+}
 
 export type GridAction = 'delete' | 'edit' | 'derive' | 'share'
 
@@ -67,6 +76,29 @@ function actionTitle(kind: GridAction): string {
   if (kind === 'edit') return '编辑'
   if (kind === 'share') return '复制分享链接'
   return '复制一份到「我的」可编辑'
+}
+
+/**
+ * 设计起源 badge：
+ *   - entry.designedFor 空 / 未声明 → 不显示 badge（通用变体）
+ *   - 当前主题在 designedFor 内 → 不显示 badge（合拍变体，让作者放心）
+ *   - 当前主题不在 designedFor 内 → 显示 badge "为 XX 设计"（灰色 chip，软提示）
+ *
+ * 不阻断插入——这是软推荐。作者照样可以插，引擎会忠实按 variant 渲染（不偷换骨架），
+ * 但视觉色彩会取当前主题的 token。
+ */
+function foreignDesignedFor(entry: ComponentEntry): { primary: string; tooltip: string } | null {
+  if (entry.source !== 'builtin') return null
+  const list = entry.designedFor
+  if (!list || list.length === 0) return null
+  const currentId = props.theme?.id
+  if (currentId && list.includes(currentId)) return null
+  const labels = list.map(themeName)
+  const allLabel = labels.length === 1 ? labels[0] : labels.join(' / ')
+  return {
+    primary: labels[0],
+    tooltip: '本变体为「' + allLabel + '」主题设计；当前主题下色彩会按当前 token 调和',
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -166,6 +198,14 @@ onBeforeUnmount(() => {
     >
       <span class="thumb" v-html="entry.thumbnailSvg" />
       <span class="name">{{ entry.name }}</span>
+      <template v-if="foreignDesignedFor(entry)">
+        <span
+          class="designed-for-chip"
+          :title="foreignDesignedFor(entry)!.tooltip"
+        >
+          为 {{ foreignDesignedFor(entry)!.primary }} 设计
+        </span>
+      </template>
       <span v-if="hasActions()" class="cell-actions">
         <button
           v-for="kind in actions"
@@ -231,6 +271,32 @@ onBeforeUnmount(() => {
 .thumb { width: 75px; height: 75px; display: block; pointer-events: none; }
 .thumb :deep(svg) { width: 75px; height: 75px; display: block; }
 .name { line-height: 1.3; word-break: break-word; }
+
+/* designedFor "foreign" badge：变体声明了设计起源主题，但当前主题不在其内。
+ *
+ * 视觉策略：低对比 chip，告知作者"本变体的视觉签名是别处来的"——不阻断插入，
+ * 让作者自己判断要不要换主题。粗体颜色用 var(--text-muted) 而非告警色，保持
+ * "提示 not 警告"的语气；hover 时整 cell 已变 accent-soft，badge 保持灰色形成层次。
+ *
+ * "home" 态故意不出 badge：让通用变体与"为本主题设计"变体在视觉上无负担地共存，
+ * 减少作者扫读时的 chip 噪声。 */
+.designed-for-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: calc(100% - 8px);
+  padding: 1px 6px;
+  margin-top: 2px;
+  font-size: var(--fs-10);
+  line-height: 1.4;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: auto;
+}
 
 .cell-actions {
   position: absolute; top: 2px; right: 2px;

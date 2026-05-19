@@ -36,7 +36,7 @@
 | L2 frontmatter.variants[slot] 合法 | 在该 slot 上覆盖 L3 主题默认 | `RenderOutput.pageConfig.variants[slot]` |
 | L2 frontmatter.variants[slot] 非法 / 未知 slot | **静默忽略**，回退 L3/L4；写 issue | `RenderOutput.frontmatterIssues[]` warning |
 | L3 theme.variants[slot] 在 variant 注册表里不存在 | 回退到 L4 fallbackId（如 admonition 是 `accent-bar`） | — |
-| variant.meta.themeCompat 不含当前主题（"理论上能用但不推荐"） | 仍正常渲染 | 由 `getRecommendedVariantsFor(personaId)[kind]` 反向索引提示 LLM |
+| variant.meta.designedFor 不含当前主题（"理论上能用但不推荐"） | 仍正常渲染（引擎不偷换骨架） | 由 `getRecommendedVariantsFor(personaId)[kind]` 反向索引提示 LLM |
 
 L4 各 slot fallbackId（见 `DEFAULT_VARIANTS`，与 `makeVariantContainer.fallbackId` 同源）：
 

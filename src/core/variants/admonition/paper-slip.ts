@@ -1,5 +1,6 @@
 import type { VariantDef, AdmonitionRenderArgs } from '../_core'
 import { mergeThumb, svg } from '../_thumb'
+import { escText } from '../../pipeline/containers/_shared/escape'
 
 function thumb(args?: { accent?: string; soft?: string; text?: string }): string {
   const { accent, soft } = mergeThumb(args ?? {})
@@ -20,7 +21,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '黄签条',
     description: '左竖排黄签条 + 底 1px border（宋本 v2）',
-    signatureOf: 'literary-humanism',
+    designedFor: ['literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [
@@ -38,24 +39,30 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     const bg = c.bg
     const text = c.text
     const textMuted = c.textMuted
-    // 黄签底色：使用 bgMuted（米黄纸感），朱字用 accentClassical
     const slipBg = c.bgMuted
+    // 竖签条文字可由 attrs.slip 覆盖（让非文人主题作者改成 INFO / NB / NOTE 等
+    // 符合自家语境的短串）；缺省维持宋本"示·告"汉字气质。
+    const slipText = (ctx.attrs.slip ?? '示·告').trim()
+    // 横排"竖签条 + 正文"必须走 display:table + table-cell——public-account 粘贴会
+    // 把 display:flex/grid 剥成空，flex:1/gap/justify-* 全部失效。table 系列在
+    // wxPatch 白名单里，与 qa-block.hanging-qa / databrief.metrics 同一手法。
     return {
       wrapperCSS: [
         `font-family:'Noto Serif SC',serif`,
         `background-color:${bg}`,
-        `display:flex`,
-        `gap:0`,
+        `display:table`,
+        `width:100%`,
         `padding:6px 0`,
       ].join(';'),
       titleCSS: '',
-      // 左竖排签条：writing-mode:vertical-rl 在公众号可用
       svgSlot:
-        `<div style="writing-mode:vertical-rl;background:${slipBg};` +
+        `<div style="display:table-cell;vertical-align:top;width:36px;` +
+        `writing-mode:vertical-rl;background:${slipBg};` +
         `color:${textMuted};font-size:14px;letter-spacing:.4em;` +
-        `padding:10px 6px;font-weight:500;">示·告</div>`,
+        `padding:10px 6px;font-weight:500;">${escText(slipText)}</div>`,
       bodyCSS: [
-        `flex:1`,
+        `display:table-cell`,
+        `vertical-align:top`,
         `padding:8px 4px 8px 16px`,
         `border-bottom:1px solid ${textMuted}`,
         `font-size:15px`,

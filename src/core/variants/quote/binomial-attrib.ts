@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'quote',
     name: '双名法 byline',
     description: '学名 + 命名人式 byline + 朱字 italic（博物 v2）',
-    themeCompat: ['academic-frontier', 'tech-explainer'],
+    designedFor: ['academic-frontier', 'tech-explainer'],
   },
   thumbnail: thumb,
   snippets: [

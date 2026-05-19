@@ -21,7 +21,7 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '编号横线',
     description: '顶2px+底1px大字距 NOTICE·N°（编辑部 v1）',
-    themeCompat: ['official-gazette'],
+    designedFor: ['official-gazette'],
   },
   thumbnail: thumb,
   snippets: [

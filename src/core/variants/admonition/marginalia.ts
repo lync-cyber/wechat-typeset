@@ -46,7 +46,7 @@ const marginalia: VariantDef<AdmonitionRenderArgs> = {
     kind: 'admonition',
     name: '书页批注',
     description: '无框、墨色一色；靠【按】【疑】【注】【辨】符号区分类型',
-    signatureOf: 'literary-humanism',
+    designedFor: ['literary-humanism'],
   },
   thumbnail: thumb,
   snippets: [

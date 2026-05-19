@@ -174,7 +174,7 @@ export function getContainerSnippet(
 /**
  * 主题能力复合查询（"按主题筛容器 + 推荐 variant"一站式）。聚合 PersonaSpec.variants /
  * signatureContainers / capabilities + ContainerVocabulary 全集（按 namespace 过滤）+
- * themeCompat 反向索引。
+ * variant.designedFor 反向索引。
  */
 export function getThemeCapabilities(personaId: string): ThemeCapabilitiesView {
   const spec = getPersona(personaId)

@@ -17,9 +17,8 @@ import { render } from '../../src/core/pipeline'
 import { themeList, themeRegistry } from '../../src/core/themes'
 const defaultTheme = themeRegistry.default
 import { VARIANT_IDS } from '../../src/core/themes/types'
-import { __setCompatSilentForTest } from '../../src/core/pipeline/containers/_shared/themeCompatGuard'
 import { __setTableCardWarnSilentForTest } from '../../src/core/pipeline/containers/table-card'
-import { CASES, isCompatBlocked } from '../helpers/variantCases'
+import { CASES } from '../helpers/variantCases'
 
 describe('枚举完整性', () => {
   it('12 kind × N variant 全部进入容器测试矩阵（codeBlock / note / footnotes 走独立组）', () => {
@@ -83,8 +82,9 @@ describe('枚举完整性', () => {
  * "不抛错"和"含 class"放行。取定位到 variant wrapper 的 section 段做快照，
  * 不吸整篇 html 与大段主题 CSS。
  *
- * themeCompat 限定 variant 在默认主题下会被守卫降级到 fallback，section 段
- * class 不再是 container-X--{id}——这种情况下快照不要求精确命中，仍允许过测试。
+ * R-arch 重构后,引擎不再为 designedFor 不兼容 fallback 偷换骨架——作者写什么
+ * variant 就忠实渲染什么。本快照覆盖默认主题下所有 variant（含 designedFor
+ * 不含 default 的）的实际产出片段。
  */
 function sliceVariantChunk(html: string, containerName: string, variantId: string): string {
   const re = new RegExp(`<section[^>]*container-${containerName}--${variantId}[^>]*>`)
@@ -111,22 +111,17 @@ function sliceVariantChunk(html: string, containerName: string, variantId: strin
 }
 
 describe('默认主题 · 每 variant 渲染片段快照', () => {
-  // 故意穿越 themeCompat fallback + table-card 边界列数给 default 主题取快照；静音 warn 避免日志噪声
+  // table-card 边界列数告警在快照取样路径符合契约,静音避免日志噪声。
   beforeAll(() => {
-    __setCompatSilentForTest(true)
     __setTableCardWarnSilentForTest(true)
   })
   afterAll(() => {
-    __setCompatSilentForTest(false)
     __setTableCardWarnSilentForTest(false)
   })
 
   for (const c of CASES) {
     it(`${c.kind}:${c.id}`, () => {
       const { html } = render({ md: c.md, theme: defaultTheme })
-      // themeCompat 守卫降级时 wrapper class 已被换成 fallback id，本断言会
-      // 抓不到原 variantId 的片段，跳过快照（matrix spec 仍跑基础 class 校验）
-      if (isCompatBlocked(defaultTheme.id, c.id)) return
       const chunk = sliceVariantChunk(html, c.containerName, c.id)
       expect(chunk).not.toBe('<no-match>')
       expect(chunk).toMatchSnapshot()

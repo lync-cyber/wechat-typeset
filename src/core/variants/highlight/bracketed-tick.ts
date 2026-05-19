@@ -20,7 +20,7 @@ const variantDef: VariantDef = {
     kind: 'highlight',
     name: '方括号刻度',
     description: '整段上下细线框 + 博物学名 monospace 风，博物笔记',
-    signatureOf: 'academic-frontier',
+    designedFor: ['academic-frontier'],
   },
   thumbnail: thumb,
   snippets: [
