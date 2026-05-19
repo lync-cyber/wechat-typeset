@@ -3,7 +3,7 @@
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:accent-bar 1`] = `
 "<section class="container-tip container-tip--accent-bar" style="background-color:var(--uv-soft-bg, #eef6ef);padding:12px 16px;border-radius:16px 4px 16px 4px;box-shadow:0 2px 6px rgba(0,0,0,0.04);margin:16px 0">
 <section class="container-tip__title" style="font-size:14px;font-weight:700;color:var(--uv-accent-color, #147a44);margin-bottom:6px;letter-spacing:0.3px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
@@ -11,7 +11,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:accent-bar 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:bubble-organic 1`] = `
 "<section class="container-tip container-tip--bubble-organic" style="background-color:#eef6ef;padding:16px 18px;margin:20px 0;border-radius:18px;box-shadow:inset 4px 0 0 #147a44, 0 4px 14px rgba(0,0,0,0.05)">
 <section class="container-tip__title" style="font-size:15px;font-weight:700;color:#147a44;margin-bottom:8px;letter-spacing:0.4px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
@@ -19,7 +19,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:bubble-orga
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:card-shadow 1`] = `
 "<section class="container-tip container-tip--card-shadow" style="background-color:#fdfdfc;border-top:2px solid #147a44;padding:16px;margin:18px 0;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.06)">
 <section class="container-tip__title" style="font-weight:700;color:#147a44;margin-bottom:8px;font-size:15px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
@@ -27,26 +27,36 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:card-shadow
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:dashed-border 1`] = `
 "<section class="container-tip container-tip--dashed-border" style="background-color:#eef6ef;border-left:2px dashed #147a44;padding:12px 16px;border-radius:0 4px 4px 0;margin:16px 0">
 <section class="container-tip__title" style="font-size:14px;font-weight:600;color:#147a44;margin-bottom:6px;letter-spacing:1px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:field-tag 1`] = `
 "<section class="container-tip container-tip--field-tag" style="background-color: #fdfdfc; padding: 4px 0">
-<div style="display: block; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid #1c1f24; padding-bottom: 6px; margin-bottom: 14px"><div><div style="font-size: 10px; letter-spacing: .2em; color: #636870">FIG. CAVE — 04</div><div style="font-style: italic; font-size: 13px; color: #1c1f24; margin-top: 2px">Notabene · 告示</div></div><div style="font-size: 9px; color: #636870; letter-spacing: .2em; line-height: 1"><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:10px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:10px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span></div></div>
+<div style="display:table;width:100%;border-bottom:1px solid #1c1f24;padding-bottom:6px;margin-bottom:14px;"><div style="display:table-cell;vertical-align:bottom;"><div style="font-size: 10px; letter-spacing: .2em; color: #636870">FIG. CAVE — 04</div><div style="font-style: italic; font-size: 13px; color: #1c1f24; margin-top: 2px">Notabene · 告示</div></div><div style="display: table-cell; vertical-align: bottom; text-align: right; font-size: 9px; color: #636870; letter-spacing: .2em; line-height: 1"><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:10px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:10px;margin-right:3px;vertical-align:bottom;"></span><span style="display:inline-block;border-left:1px solid #636870;height:6px;margin-right:3px;vertical-align:bottom;"></span></div></div>
 <section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
+第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
+</section>
+</section>"
+`;
+
+exports[`默认主题 · 每 variant 渲染片段快照 > admonition:filled-square 1`] = `
+"<section class="container-tip container-tip--filled-square" style="background-color:#fdfdfc;padding:4px 0">
+<div style="display:table;width:100%;margin-bottom:14px;"><div style="display:table-cell;vertical-align:middle;width:18px;padding-right:14px;"><span style="display:inline-block;width:18px;height:18px;background-color:#2558b0;"></span></div><div style="display:table-cell;vertical-align:middle;font-size:14px;font-weight:700;letter-spacing:.3em;color:#1c1f24;padding-right:14px;white-space:nowrap;">告　示</div><div style="display:table-cell;vertical-align:middle;width:60%;padding:0 14px 0 0;"><div style="height:1px;background-color:#1c1f24;"></div></div><div style="display: table-cell; vertical-align: middle; text-align: right; font-size: 10px; letter-spacing: .16em; color: #636870; white-space: nowrap">N° 01</div></div>
+<section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:hanging-nb 1`] = `
-"<section class="container-tip container-tip--hanging-nb" style="background-color: #fdfdfc; display: block; gap: 14px; padding: 6px 0">
-<div style="flex-shrink:0;width:38px;text-align:right;border-right:1px solid #1c1f24;padding-right:10px;padding-top:2px;"><div style="font-style: italic; font-size: 18px; color: #1c1f24; line-height: 1">N.B.</div><div style="font-size: 9px; color: #636870; letter-spacing: .16em; margin-top: 6px">001</div></div>
-<section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0;flex:1">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+"<section class="container-tip container-tip--hanging-nb" style="background-color: #fdfdfc; display: table; width: 100%; padding: 6px 0">
+<div style="display:table-cell;vertical-align:top;width:48px;text-align:right;border-right:1px solid #1c1f24;padding-right:10px;padding-top:2px;"><div style="font-style: italic; font-size: 18px; color: #1c1f24; line-height: 1">N.B.</div><div style="font-size: 9px; color: #636870; letter-spacing: .16em; margin-top: 6px">001</div></div>
+<section class="container-tip__body" style="display:table-cell;vertical-align:top;padding-left:14px;font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -56,7 +66,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:ledger-cell
 "<section class="container-tip container-tip--ledger-cell" style="background-color:#eef6ef;border:1px solid #147a44;padding:0;margin:20px 0;border-radius:0">
 <section style="background-color:#147a44;color:#fefefe;padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;line-height:1.4">要点 · KEY<span style="margin-left:10px;letter-spacing:0.4px;text-transform:none;font-weight:600;opacity:0.92">· 测试标题</span></section>
 <section class="container-tip__body" style="color:#1c1f24;padding:10px 16px 12px;font-size:14px;line-height:1.7;letter-spacing:0.3px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -66,7 +76,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:magazine-pu
 "<section class="container-tip container-tip--magazine-pull" style="background-color:transparent;border-top:1px solid #147a44;border-bottom:1px solid #147a44;padding:0 0 14px;margin:24px 0;border-radius:0">
 <section style="text-align:left"><span style="display:inline-block;margin-top:-9px;margin-left:16px;padding:0 10px;background-color:#fdfdfc;color:#147a44;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;line-height:1.5">测试标题</span></section>
 <section class="container-tip__body" style="color:#1c1f24;padding:14px 16px 0;font-size:15px;line-height:1.9;letter-spacing:0.3px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -76,7 +86,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:manpage-log
 "<section class="container-tip container-tip--manpage-log" style="background-color:#eef6ef;border-top:1px solid #147a44;border-bottom:1px solid #147a44;padding:0;margin:20px 0;border-radius:0;box-shadow:inset -14px 0 10px -10px rgba(0,0,0,0.35)">
 <section style="background-color:#fdfdfc;padding:6px 16px;color:#147a44;font-size:13px;font-weight:600;letter-spacing:2px;border-bottom:1px solid #d8d8d4">:: NOTE ::<span style="color:#636870;font-weight:500;letter-spacing:0.6px;margin-left:10px;text-transform:none">测试标题</span></section>
 <section class="container-tip__body" style="color:#1c1f24;padding:12px 16px 14px;font-size:14px;line-height:1.8;letter-spacing:0.6px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -86,7 +96,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:marginalia 
 "<section class="container-tip container-tip--marginalia" style="background-color:transparent;padding:4px 0 4px 28px;margin:16px 0;border:none;border-radius:0">
 <section style="color:#8a8f98;font-size:15px;line-height:1.7;margin-bottom:4px;letter-spacing:1px;font-weight:600">【按】<span style="color:#636870;font-weight:500;letter-spacing:0.6px;margin-left:6px">测试标题</span></section>
 <section class="container-tip__body" style="color:#636870;font-size:14px;line-height:1.8;letter-spacing:0.4px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -96,7 +106,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:mook-tag 1`
 "<section class="container-tip container-tip--mook-tag" style="display:table;width:100%;table-layout:auto;background-color:#eef6ef;border-left:2px solid #147a44;padding:10px 12px;margin:0 0 8px 0;border-radius:0">
 <span style="display:table-cell;vertical-align:top;width:24px;font-weight:700;color:#147a44;font-size:12px;line-height:1.75">参</span>
 <section class="container-tip__body" style="display:table-cell;vertical-align:top;font-size:12px;line-height:1.75;color:#1c1f24">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -106,7 +116,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:news-row 1`
 "<section class="container-tip container-tip--news-row" style="display:table;width:100%;table-layout:auto;border-left:3px solid #147a44;margin:0 0 4px 0;border-radius:0">
 <span style="display:table-cell;vertical-align:middle;min-width:54px;background-color:#147a44;color:#fefefe;padding:2px 10px;font-size:10px;line-height:1.4;font-weight:700;letter-spacing:0.1em;text-align:center;white-space:nowrap">测试标题</span>
 <section class="container-tip__body" style="display:table-cell;vertical-align:middle;padding:2px 12px;font-size:12px;line-height:1.65;color:#1c1f24">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -116,7 +126,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:news-underl
 "<section class="container-tip container-tip--news-underline" style="display:table;width:100%;table-layout:auto;border-bottom:1px solid #1c1f24;margin:0;border-radius:0">
 <span style="display:table-cell;vertical-align:middle;background-color:#147a44;color:#fefefe;padding:4px 8px;font-size:9px;line-height:1.4;font-weight:700;letter-spacing:0.15em;text-align:center;white-space:nowrap">测试标题</span>
 <section class="container-tip__body" style="display:table-cell;vertical-align:middle;padding:4px 10px;font-size:12px;line-height:1.45;color:#1c1f24;border-left:1px solid #1c1f24">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -124,9 +134,9 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:news-underl
 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:numbered-rule 1`] = `
 "<section class="container-tip container-tip--numbered-rule" style="background-color: #fdfdfc; padding: 4px 0">
-<div style="border-top: 2px solid #1c1f24; border-bottom: 1px solid #1c1f24; padding: 14px 0 12px; margin-bottom: 14px; display: block; justify-content: space-between; align-items: baseline"><span style="font-size:13px;font-weight:600;letter-spacing:.3em;color:#1c1f24;">告　示</span><span style="font-size: 10px; letter-spacing: .18em; color: #636870">NOTICE · N°01</span></div>
+<div style="border-top:2px solid #1c1f24;border-bottom:1px solid #1c1f24;padding:14px 0 12px;margin-bottom:14px;display:table;width:100%;"><span style="display:table-cell;vertical-align:baseline;font-size:13px;font-weight:600;letter-spacing:.3em;color:#1c1f24;">告　示</span><span style="display: table-cell; vertical-align: baseline; text-align: right; font-size: 10px; letter-spacing: .18em; color: #636870">NOTICE · N°01</span></div>
 <section class="container-tip__body" style="font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -136,7 +146,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:paper-slip 
 "<section class="container-tip container-tip--paper-slip" style="background-color: #fdfdfc; display: table; width: 100%; padding: 6px 0">
 <div style="display:table-cell;vertical-align:top;width:36px;writing-mode:vertical-rl;background:#eceae4;color:#636870;font-size:14px;letter-spacing:.4em;padding:10px 6px;font-weight:500;">示·告</div>
 <section class="container-tip__body" style="display:table-cell;vertical-align:top;padding:8px 4px 8px 16px;border-bottom:1px solid #636870;font-size:15px;line-height:2;color:#1c1f24;margin:0">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -145,7 +155,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:paper-slip 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:pill-tag 1`] = `
 "<section class="container-tip container-tip--pill-tag" style="background-color:#eef6ef;border:1px solid #147a44;padding:24px 16px 16px;border-radius:6px;margin:24px 0 16px">
 <section class="container-tip__title" style="display:inline-block;padding:3px 14px;background-color:#147a44;color:#fefefe;border-radius:12px;font-size:13px;font-weight:700;margin-top:-34px;margin-bottom:10px;letter-spacing:0.4px;text-align:center">测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
@@ -154,7 +164,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:report-sect
 "<section class="container-tip container-tip--report-section" style="background-color:#eef6ef;border-top:3px solid #147a44;border-bottom:1px solid #147a44;padding:0 0 12px;margin:20px 0;border-radius:0">
 <section style="padding:10px 16px 0;line-height:1.5"><span style="display:inline-block;background-color:#147a44;color:#fefefe;padding:3px 10px;font-size:12px;font-weight:700;letter-spacing:2px;border-radius:0;line-height:1.4">§ 要点</span><span style="margin-left:10px;color:#1c1f24;font-size:14px;font-weight:600;letter-spacing:0.3px">测试标题</span></section>
 <section class="container-tip__body" style="color:#1c1f24;padding:8px 16px 0;font-size:14px;line-height:1.75;letter-spacing:0.3px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -164,7 +174,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:sidenote-la
 "<section class="container-tip container-tip--sidenote-latex" style="border:1px solid #147a44;padding:0 0 10px;margin:18px 0;border-radius:0;background-color:transparent">
 <section style="padding:10px 16px 0;font-size:13px;color:#147a44;letter-spacing:2px;font-weight:700;text-transform:uppercase;line-height:1.6">DEFINITION.<span style="color:#1c1f24;text-transform:none;letter-spacing:0.3px;font-weight:600;margin-left:10px">测试标题</span></section>
 <section class="container-tip__body" style="padding:6px 16px 0;color:#1c1f24;font-size:14px;line-height:1.75">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -174,7 +184,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:slab-corner
 "<section class="container-tip container-tip--slab-corner" style="background-color:#eef6ef;border-top:6px solid #147a44;padding:22px 16px 16px;margin:18px 0;border-radius:0">
 <section style="text-align:right;line-height:0;margin-bottom:8px"><span style="display:inline-block;background-color:#147a44;color:#fefefe;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:0.15em;line-height:1.4;text-align:center;border-radius:0">测试标题</span></section>
 <section class="container-tip__body" style="font-size:13px;line-height:1.65;color:#1c1f24">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -184,7 +194,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:specimen-bo
 "<section class="container-tip container-tip--specimen-box" style="background-color: #fdfdfc; display: table; width: 100%; padding: 4px 0">
 <div style="display:table-cell;vertical-align:top;width:48px;border:1px solid #1c1f24;padding:6px 0;text-align:center;"><div style="font-size: 9px; color: #636870; letter-spacing: .16em">N°</div><div style="font-size: 22px; color: #1c1f24; font-weight: 500; line-height: 1; margin-top: 2px">04</div><div style="font-size:9px;color:#636870;letter-spacing:.18em;margin-top:4px;font-weight:500;">告示</div></div>
 <section class="container-tip__body" style="display:table-cell;vertical-align:top;padding:0 0 0 14px;font-size:15px;line-height:1.95;color:#1c1f24;margin:0">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -194,7 +204,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:terminal 1`
 "<section class="container-tip container-tip--terminal" style="background-color:#1f2937;padding:0;margin:18px 0;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.18)">
 <section style="background-color:#2d3748;padding:8px 14px;border-bottom:1px solid #111827;border-radius:6px 6px 0 0;color:#e5e7eb;font-weight:600;font-size:13px;letter-spacing:0.4px"><svg viewBox="0 0 54 14" width="42" height="11" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 10px"><circle cx="7" cy="7" r="5" fill="#ff5f56"></circle><circle cx="22" cy="7" r="5" fill="#ffbd2e"></circle><circle cx="37" cy="7" r="5" fill="#27c93f"></circle></svg>测试标题</section>
 <section class="container-tip__body" style="color:#e5e7eb;padding:14px 16px;font-size:14px;line-height:1.7;border-radius:0 0 6px 6px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
@@ -203,7 +213,7 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:terminal 1`
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:top-bottom-rule 1`] = `
 "<section class="container-tip container-tip--top-bottom-rule" style="background-color:#eef6ef;border-top:1px solid #147a44;border-bottom:1px solid #147a44;padding:14px 16px;margin:18px 0">
 <section class="container-tip__title" style="font-size:14px;font-weight:600;color:#147a44;margin-bottom:8px;letter-spacing:1.2px"><svg viewBox="0 0 16 16" width="14" height="14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 6px"> <circle cx="8" cy="8" r="6" fill="none" stroke="#147a44" stroke-width="1.5"></circle> <circle cx="8" cy="5" r="0.9" fill="#147a44"></circle> <rect x="7.25" y="7" width="1.5" height="5" rx="0.4" fill="#147a44"></rect> </svg>测试标题</section>
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>"
 `;
@@ -212,17 +222,17 @@ exports[`默认主题 · 每 variant 渲染片段快照 > admonition:triangle-to
 "<section class="container-tip container-tip--triangle-top" style="background-color: #fdfdfc; padding: 14px 14px 16px; border: 1px solid #1c1f24">
 <svg width="18" height="9" viewBox="0 0 18 9" xmlns="http://www.w3.org/2000/svg" style="display: block; margin-bottom: -1px"><polygon points="0,9 9,0 18,9" fill="#2558b0"></polygon><polygon points="1.4,9 9,1.4 16.6,9" fill="#fdfdfc"></polygon></svg><div style="font-size: 10px; letter-spacing: .24em; color: #636870; margin-bottom: 8px">ADMONITION&nbsp;·&nbsp;告示</div>
 <section class="container-tip__body" style="font-size: 15px; line-height: 1.95; color: #1c1f24; margin: 0">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"
 `;
 
 exports[`默认主题 · 每 variant 渲染片段快照 > admonition:vermilion-seal 1`] = `
-"<section class="container-tip container-tip--vermilion-seal" style="background-color: #fdfdfc; padding: 18px 4px">
-<div style="width: 42px; height: 42px; border: 2.5px solid #2558b0; color: #2558b0; font-size: 22px; font-weight: 600; text-align: center; line-height: 38px; transform: rotate(-3deg)">告</div><div style="font-size: 11px; letter-spacing: .4em; color: #2558b0; font-weight: 500; margin-bottom: 8px">　示</div>
-<section class="container-tip__body" style="font-size:15px;line-height:2;color:#1c1f24;margin:0;padding-right:60px">
-<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px;">第一行正文。
+"<section class="container-tip container-tip--vermilion-seal" style="background-color: #fdfdfc; padding: 6px 4px">
+<div style="text-align:right;line-height:0;margin-bottom:6px;"><span style="display: inline-block; width: 42px; height: 42px; border: 2.5px solid #2558b0; color: #2558b0; font-size: 22px; font-weight: 600; text-align: center; line-height: 38px; transform: rotate(-3deg)">告</span></div><div style="font-size: 11px; letter-spacing: .4em; color: #2558b0; font-weight: 500; margin-bottom: 8px">　示</div>
+<section class="container-tip__body" style="font-size:15px;line-height:2;color:#1c1f24;margin:0">
+<p style="font-size: 15px; line-height: 1.75; color: #1c1f24; margin-top: 0; margin-bottom: 18px; letter-spacing: 0.3px; text-indent: 0;">第一行正文。
 第二行正文，含 <mark style="background-color: #fff4c8; color: #1c1f24; padding: 0 3px; border-radius: 2px;">高亮</mark> 与 <code style="background-color: #eceae4; color: #1c1f24; padding: 2px 6px; border-radius: 3px; font-size: 14px; word-break: break-all;">code</code>。</p>
 </section>
 </section>"

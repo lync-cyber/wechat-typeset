@@ -37,20 +37,24 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     const bg = c.bg
     const text = c.text
     const seal = c.accentClassical ?? c.accent
+    // 朱印不能走 position:absolute —— wxPatch 会剥 position/top/right。
+    // 改为"顶端独占一行"：包一层 text-align:right line-height:0 让 42×42 inline-block
+    // 印章贴右上；下面是「示」副字 + 用户正文。失去"印章浮在文字之上"的层叠感，
+    // 换来"印章 + 示 + 正文"三段堆叠的可粘贴版本，签名元素（朱红方框 告 字）保留。
     return {
       wrapperCSS: [
         `font-family:'Noto Serif SC',serif`,
         `background-color:${bg}`,
-        `padding:18px 4px`,
-        `position:relative`,
+        `padding:6px 4px`,
       ].join(';'),
       titleCSS: '',
-      // 朱印方框绝对定位右上角；副字「示」作为 svgSlot 里的普通流文字在印章下方
       svgSlot:
-        `<div style="position:absolute;top:4px;right:6px;width:42px;height:42px;` +
+        `<div style="text-align:right;line-height:0;margin-bottom:6px;">` +
+        `<span style="display:inline-block;width:42px;height:42px;` +
         `border:2.5px solid ${seal};color:${seal};font-size:22px;font-weight:600;` +
         `text-align:center;line-height:38px;font-family:'Noto Serif SC',serif;` +
-        `transform:rotate(-3deg);">告</div>` +
+        `transform:rotate(-3deg);">告</span>` +
+        `</div>` +
         `<div style="font-family:'Noto Serif SC',serif;font-size:11px;` +
         `letter-spacing:.4em;color:${seal};font-weight:500;margin-bottom:8px;">　示</div>`,
       bodyCSS: [
@@ -58,7 +62,6 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
         `line-height:2`,
         `color:${text}`,
         `margin:0`,
-        `padding-right:60px`,
       ].join(';'),
       suppressIcon: true,
     }

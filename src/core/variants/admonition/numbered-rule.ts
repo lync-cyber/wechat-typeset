@@ -46,12 +46,16 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
         `padding:4px 0`,
       ].join(';'),
       titleCSS: '',
+      // header 走 display:table —— wxPatch 会把 display:flex 改成 block，
+      // 导致 NOTICE·N°01 塌到第二行。table-cell 在白名单内稳保横向布局。
+      // 右侧 text-align:right 替代 justify-content:space-between。
       svgSlot:
         `<div style="border-top:2px solid ${text};border-bottom:1px solid ${text};` +
-        `padding:14px 0 12px;margin-bottom:14px;display:flex;` +
-        `justify-content:space-between;align-items:baseline;">` +
-        `<span style="font-size:13px;font-weight:600;letter-spacing:.3em;color:${text};">告　示</span>` +
-        `<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;` +
+        `padding:14px 0 12px;margin-bottom:14px;display:table;width:100%;">` +
+        `<span style="display:table-cell;vertical-align:baseline;` +
+        `font-size:13px;font-weight:600;letter-spacing:.3em;color:${text};">告　示</span>` +
+        `<span style="display:table-cell;vertical-align:baseline;text-align:right;` +
+        `font-family:'IBM Plex Mono',monospace;font-size:10px;` +
         `letter-spacing:.18em;color:${textMuted};">NOTICE · N°01</span>` +
         `</div>`,
       bodyCSS: [

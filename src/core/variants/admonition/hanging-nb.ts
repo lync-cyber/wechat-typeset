@@ -39,17 +39,20 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
     const bg = c.bg
     const text = c.text
     const textMuted = c.textMuted
+    // 走 display:table —— flex 在公众号粘贴时被剥成 block，N.B. 块与正文会上下塌
+    // 而非左右并排。table-cell 在白名单（与 paper-slip / specimen-box 同手法）。
+    // 取消 gap，改用右 cell 的 padding-left 替代。
     return {
       wrapperCSS: [
         `font-family:'Noto Serif SC',serif`,
         `background-color:${bg}`,
-        `display:flex`,
-        `gap:14px`,
+        `display:table`,
+        `width:100%`,
         `padding:6px 0`,
       ].join(';'),
       titleCSS: '',
       svgSlot:
-        `<div style="flex-shrink:0;width:38px;text-align:right;` +
+        `<div style="display:table-cell;vertical-align:top;width:48px;text-align:right;` +
         `border-right:1px solid ${text};padding-right:10px;padding-top:2px;">` +
         `<div style="font-family:'Lora',serif;font-style:italic;font-size:18px;` +
         `color:${text};line-height:1;">N.B.</div>` +
@@ -57,11 +60,13 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
         `color:${textMuted};letter-spacing:.16em;margin-top:6px;">001</div>` +
         `</div>`,
       bodyCSS: [
+        `display:table-cell`,
+        `vertical-align:top`,
+        `padding-left:14px`,
         `font-size:15px`,
         `line-height:1.95`,
         `color:${text}`,
         `margin:0`,
-        `flex:1`,
       ].join(';'),
       suppressIcon: true,
     }
