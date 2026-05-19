@@ -1,0 +1,110 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·B TRIANGLE TOP"
+  },
+  "variantId": "triangle-top",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 14px 16px",
+    "border": "1px solid #111",
+    "position": "relative",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".24em",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "marginBottom": "8px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "ADMONITION · 告示"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "A.01",
+          "box": {
+            "fontSize": "13px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "1px 6px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [
+    {
+      "kind": "mini-box",
+      "box": {
+        "position": "absolute",
+        "top": "-9px",
+        "left": "18px",
+        "width": "0",
+        "height": "0",
+        "borderLeft": "9px solid transparent",
+        "borderRight": "9px solid transparent",
+        "borderBottom": "9px solid #c8412e"
+      }
+    },
+    {
+      "kind": "mini-box",
+      "box": {
+        "position": "absolute",
+        "top": "-9px",
+        "left": "18px",
+        "width": "0",
+        "height": "0",
+        "borderLeft": "9px solid transparent",
+        "borderRight": "9px solid transparent",
+        "borderBottom": "9px solid #efece5",
+        "transform": "translate(0,1px) scale(.78)"
+      }
+    }
+  ],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:14px 14px 16px;border:1px solid #111;position:relative;\">\n  <div style=\"position:absolute;top:-9px;left:18px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid #c8412e;\"></div>\n  <div style=\"position:absolute;top:-9px;left:18px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid #efece5;transform:translate(0,1px) scale(.78);\"></div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;color:#454442;margin-bottom:8px;\">ADMONITION&nbsp;·&nbsp;告示</div>\n  <p style=\"font-family:'Noto Serif SC',serif;font-size:15px;line-height:1.95;color:#111;margin:0;\">读者若引用本文之论点，请保留原作者与编号 <span style=\"font-family:'IBM Plex Mono',monospace;font-size:13px;background:#111;color:#efece5;padding:1px 6px;\">A.01</span>，便于学界追溯。</p>\n</div>"
+}

@@ -1,0 +1,107 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·B RING DEVICE"
+  },
+  "variantId": "ring-device",
+  "kind": "quote",
+  "containerName": "quote-card",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "disc-device",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 4px 6px",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "gap": "10px",
+        "alignItems": "center",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "14px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "borderRadius": "50%",
+            "display": "inline-block"
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "18px",
+        "lineHeight": "1.7",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 8px",
+        "fontWeight": "500",
+        "letterSpacing": ".01em",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".2em",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "— D. RAMS, 1976"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:14px 4px 6px;\">\n  <div style=\"display:flex;gap:10px;align-items:center;margin-bottom:14px;\">\n    <span style=\"width:22px;height:22px;border:2px solid #111;border-radius:50%;display:inline-block;\"></span>\n    <span style=\"flex:1;height:1px;background:#111;\"></span>\n    <span style=\"width:14px;height:14px;background:#c8412e;border-radius:50%;display:inline-block;\"></span>\n    <span style=\"flex:1;height:1px;background:#111;\"></span>\n    <span style=\"width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:18px solid #111;display:inline-block;\"></span>\n  </div>\n  <p style=\"font-family:'Noto Serif SC',serif;font-size:18px;line-height:1.7;color:#111;margin:0 0 8px;font-weight:500;letter-spacing:.01em;\">设计不是装饰，<br>而是某种秩序的可视化。</p>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.2em;\">— D. RAMS, 1976</div>\n</div>"
+}

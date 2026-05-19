@@ -1,0 +1,56 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·A WASH GROUND"
+  },
+  "variantId": "wash-ground",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "wash-ground",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "候鸟群在初冬第一次寒潮前两到三日开始低空盘旋",
+          "box": {
+            "background": {
+              "literal": "#d8c89e",
+              "tokenSuggestion": null
+            },
+            "padding": "0 4px",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:1.95;color:#1f2a2a;margin:0;\">林缘观察记录显示，<span style=\"background:#d8c89e;padding:0 4px;color:#1f2a2a;\">候鸟群在初冬第一次寒潮前两到三日开始低空盘旋</span>，此现象在川西高原表现尤为显著。</p>\n</div>"
+}

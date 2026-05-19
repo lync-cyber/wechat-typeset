@@ -1,0 +1,60 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·B DROP CAPITAL"
+  },
+  "variantId": "drop-capital",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "oversized-mark",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "22px",
+        "lineHeight": "1.55",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "fontWeight": "500"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "凡",
+          "box": {
+            "fontSize": "72px",
+            "lineHeight": ".78",
+            "fontWeight": "400",
+            "margin": "6px 10px 0 0",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "float": "left",
+              "font-family": "'Lora','Noto Serif SC',serif"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:14px 0;\">\n  <p style=\"font-size:22px;line-height:1.55;color:#0a0a0a;margin:0;font-weight:500;\">\n    <span style=\"float:left;font-family:'Lora','Noto Serif SC',serif;font-size:72px;line-height:.78;font-weight:400;margin:6px 10px 0 0;color:#0a0a0a;\">凡</span>\n    人生大半的烦恼，都来自把别人的剧本当成自己的人生。\n  </p>\n</div>"
+}

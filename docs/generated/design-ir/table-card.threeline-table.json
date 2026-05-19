@@ -1,0 +1,51 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·A THREE-LINE TABLE"
+  },
+  "variantId": "threeline-table",
+  "kind": "table-card",
+  "containerName": "table-card",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "width": "100%",
+        "borderCollapse": "collapse",
+        "fontSize": "13px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "项目\n        2023\n        2024",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "订阅12,40218,973\n      单刊销量3,1144,287\n      合作篇目2846",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <table style=\"width:100%;border-collapse:collapse;font-size:13px;color:#0a0a0a;\">\n    <thead>\n      <tr style=\"border-top:2px solid #0a0a0a;border-bottom:1px solid #0a0a0a;\">\n        <th style=\"text-align:left;padding:8px 4px;font-weight:600;letter-spacing:.06em;\">项目</th>\n        <th style=\"text-align:right;padding:8px 4px;font-weight:600;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;font-size:11px;\">2023</th>\n        <th style=\"text-align:right;padding:8px 4px;font-weight:600;letter-spacing:.06em;font-family:'IBM Plex Mono',monospace;font-size:11px;\">2024</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr><td style=\"padding:8px 4px;\">订阅</td><td style=\"text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;\">12,402</td><td style=\"text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;\">18,973</td></tr>\n      <tr><td style=\"padding:8px 4px;\">单刊销量</td><td style=\"text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;\">3,114</td><td style=\"text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;\">4,287</td></tr>\n      <tr style=\"border-bottom:2px solid #0a0a0a;\"><td style=\"padding:8px 4px;\">合作篇目</td><td style=\"text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;\">28</td><td style=\"text-align:right;padding:8px 4px;font-family:'IBM Plex Mono',monospace;font-size:13px;\">46</td></tr>\n    </tbody>\n  </table>\n</div>"
+}

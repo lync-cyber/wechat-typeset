@@ -1,0 +1,93 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·A RED SQUARE BURST"
+  },
+  "variantId": "red-square-burst",
+  "kind": "announcement",
+  "containerName": "announcement",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "56px 1fr",
+        "gap": "14px",
+        "alignItems": "stretch"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "NEW\n      v.4",
+          "box": {
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "display": "flex",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "padding": "8px 0",
+            "unrecognized": {
+              "flex-direction": "column"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "设计系统 v4 已上线",
+          "box": {
+            "fontSize": "17px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 6px",
+            "lineHeight": "1.4",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "本次更新覆盖排版组件、色彩系统与品牌指南，详见站内更新日志。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "本次更新覆盖排版组件、色彩系统与品牌指南，详见站内更新日志。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:stretch;\">\n    <div style=\"background:#c8412e;color:#efece5;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:8px 0;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;\">NEW</div>\n      <div style=\"font-family:'Lora',serif;font-size:24px;font-weight:500;line-height:1;margin-top:2px;\">v.4</div>\n    </div>\n    <div>\n      <h3 style=\"font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;color:#111;margin:0 0 6px;line-height:1.4;\">设计系统 v4 已上线</h3>\n      <p style=\"font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:0;\">本次更新覆盖排版组件、色彩系统与品牌指南，详见站内更新日志。</p>\n    </div>\n  </div>\n</div>"
+}

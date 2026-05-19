@@ -1,0 +1,144 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·A RULE BARS"
+  },
+  "variantId": "rule-bars",
+  "kind": "bar-chart",
+  "containerName": "bar-chart",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".2em",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "borderBottom": "1px solid #0a0a0a",
+        "paddingBottom": "4px",
+        "marginBottom": "10px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "60px 1fr 46px",
+        "gap": "8px",
+        "alignItems": "center",
+        "fontSize": "12.5px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "2"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "阅读",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "3.9h",
+          "box": {
+            "fontSize": "11px",
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "写作",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "2.6h",
+          "box": {
+            "fontSize": "11px",
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "会议",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "1.6h",
+          "box": {
+            "fontSize": "11px",
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "编辑",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "1.1h",
+          "box": {
+            "fontSize": "11px",
+            "textAlign": "right",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "9px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".18em",
+        "marginTop": "8px",
+        "borderTop": "1px solid #0a0a0a",
+        "paddingTop": "4px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;border-bottom:1px solid #0a0a0a;padding-bottom:4px;margin-bottom:10px;\">CHART 02 — DAILY HOURS</div>\n  <div style=\"display:grid;grid-template-columns:60px 1fr 46px;gap:8px;align-items:center;font-size:12.5px;color:#0a0a0a;line-height:2;\">\n    <span>阅读</span><span style=\"background:#0a0a0a;height:8px;width:78%;\"></span><span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;text-align:right;\">3.9h</span>\n    <span>写作</span><span style=\"background:#0a0a0a;height:8px;width:52%;\"></span><span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;text-align:right;\">2.6h</span>\n    <span>会议</span><span style=\"background:#0a0a0a;height:8px;width:32%;\"></span><span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;text-align:right;\">1.6h</span>\n    <span>编辑</span><span style=\"background:#0a0a0a;height:8px;width:22%;\"></span><span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;text-align:right;\">1.1h</span>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.18em;margin-top:8px;border-top:1px solid #0a0a0a;padding-top:4px;\">n=42 / 编辑部样本 · 2025.03</div>\n</div>"
+}

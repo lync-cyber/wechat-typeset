@@ -1,0 +1,109 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·B INTERLEAVED ROWS"
+  },
+  "variantId": "interleaved-rows",
+  "kind": "compare",
+  "containerName": "compare",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "editor-signoff",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "60px 1fr",
+        "gap": "0",
+        "borderTop": "1px solid #0a0a0a"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "PRO",
+          "box": {
+            "padding": "12px 0",
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderRight": "1px solid #0a0a0a",
+            "paddingRight": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "远程办公让通勤为零，留下更多时间给家人与自己。",
+          "box": {
+            "padding": "12px 0 12px 12px",
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "CON",
+          "box": {
+            "padding": "12px 0",
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderTop": "1px solid #0a0a0a",
+            "borderRight": "1px solid #0a0a0a",
+            "paddingRight": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "家与办公室合一，模糊了下班的边界，疲惫无处藏身。",
+          "box": {
+            "padding": "12px 0 12px 12px",
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderTop": "1px solid #0a0a0a"
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "borderBottom": "1px solid #0a0a0a"
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:60px 1fr;gap:0;border-top:1px solid #0a0a0a;\">\n    <div style=\"padding:12px 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;border-right:1px solid #0a0a0a;padding-right:8px;\">PRO</div>\n    <div style=\"padding:12px 0 12px 12px;font-size:14px;line-height:1.85;color:#0a0a0a;\">远程办公让通勤为零，留下更多时间给家人与自己。</div>\n    <div style=\"padding:12px 0;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;border-top:1px solid #0a0a0a;border-right:1px solid #0a0a0a;padding-right:8px;\">CON</div>\n    <div style=\"padding:12px 0 12px 12px;font-size:14px;line-height:1.85;color:#0a0a0a;border-top:1px solid #0a0a0a;\">家与办公室合一，模糊了下班的边界，疲惫无处藏身。</div>\n  </div>\n  <div style=\"border-bottom:1px solid #0a0a0a;\"></div>\n</div>"
+}

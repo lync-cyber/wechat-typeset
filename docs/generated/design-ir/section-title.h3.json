@@ -1,0 +1,84 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 65,
+    "varIdLabel": "02·B H3 直排小节"
+  },
+  "variantId": "h3",
+  "kind": "section-title",
+  "containerName": "section-title",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "paper-slip",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "alignItems": "flex-start",
+        "gap": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "章·三",
+          "box": {
+            "writingMode": "vertical-rl",
+            "fontSize": "11px",
+            "letterSpacing": ".4em",
+            "color": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "border": "1px solid #a03a2a",
+            "padding": "6px 4px",
+            "lineHeight": "1.4",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "林泉之趣",
+          "box": {
+            "fontSize": "17px",
+            "color": {
+              "literal": "#2a1d10",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 4px",
+            "fontWeight": "500",
+            "letterSpacing": ".04em"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "凡居山者，所贵者非山，乃心境也……",
+          "box": {
+            "fontSize": "13px",
+            "color": {
+              "literal": "#6b4a2a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "lineHeight": "1.95",
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "凡居山者，所贵者非山，乃心境也……"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:6px 0;\">\n  <div style=\"display:flex;align-items:flex-start;gap:10px;\">\n    <div style=\"writing-mode:vertical-rl;font-family:'Noto Serif SC',serif;font-size:11px;letter-spacing:.4em;color:#a03a2a;border:1px solid #a03a2a;padding:6px 4px;line-height:1.4;\">章·三</div>\n    <div style=\"flex:1;\">\n      <h3 style=\"font-size:17px;color:#2a1d10;margin:0 0 4px;font-weight:500;letter-spacing:.04em;\">林泉之趣</h3>\n      <p style=\"font-size:13px;color:#6b4a2a;line-height:1.95;margin:0;\">凡居山者，所贵者非山，乃心境也……</p>\n    </div>\n  </div>\n</div>"
+}

@@ -1,0 +1,204 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·A NUMBERED LIST"
+  },
+  "variantId": "numbered-list",
+  "kind": "recommend",
+  "containerName": "recommend",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".2em",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "borderBottom": "1px solid #0a0a0a",
+        "paddingBottom": "4px",
+        "marginBottom": "8px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "— ALSO READ —"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "32px 1fr auto",
+        "gap": "8px",
+        "alignItems": "baseline",
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "1.9",
+        "borderBottom": "1px solid #cfcabe",
+        "padding": "8px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "i.",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".14em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "当我们谈论故乡，我们究竟在谈论什么",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "vol.083",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "32px 1fr auto",
+        "gap": "8px",
+        "alignItems": "baseline",
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "1.9",
+        "borderBottom": "1px solid #cfcabe",
+        "padding": "8px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "ii.",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".14em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "北方小镇的二十年照相史",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "vol.071",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "32px 1fr auto",
+        "gap": "8px",
+        "alignItems": "baseline",
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "1.9",
+        "padding": "8px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "iii.",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".14em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "地图测绘员的日记",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "vol.062",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;border-bottom:1px solid #0a0a0a;padding-bottom:4px;margin-bottom:8px;\">— ALSO READ —</div>\n  <div style=\"display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:baseline;font-size:13.5px;color:#0a0a0a;line-height:1.9;border-bottom:1px solid #cfcabe;padding:8px 0;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.14em;\">i.</span>\n    <span>当我们谈论故乡，我们究竟在谈论什么</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b6b65;\">vol.083</span>\n  </div>\n  <div style=\"display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:baseline;font-size:13.5px;color:#0a0a0a;line-height:1.9;border-bottom:1px solid #cfcabe;padding:8px 0;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.14em;\">ii.</span>\n    <span>北方小镇的二十年照相史</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b6b65;\">vol.071</span>\n  </div>\n  <div style=\"display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:baseline;font-size:13.5px;color:#0a0a0a;line-height:1.9;padding:8px 0;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#6b6b65;letter-spacing:.14em;\">iii.</span>\n    <span>地图测绘员的日记</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b6b65;\">vol.062</span>\n  </div>\n</div>"
+}

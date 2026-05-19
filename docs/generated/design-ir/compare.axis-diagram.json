@@ -1,0 +1,119 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·B AXIS DIAGRAM"
+  },
+  "variantId": "axis-diagram",
+  "kind": "compare",
+  "containerName": "compare",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "8px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "A. 现代主义",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".18em",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600",
+            "flexShrink": "0",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "2px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "position": "relative"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "B. 后现代",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".18em",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600",
+            "flexShrink": "0",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "gap": "14px",
+        "fontSize": "13.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "秩序 / 网格 / 功能优先 / 反装饰",
+          "box": {
+            "margin": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "游戏 / 引用 / 表达优先 / 拥抱装饰",
+          "box": {
+            "margin": "0",
+            "textAlign": "right"
+          }
+        }
+      ],
+      "bodyText": "秩序 / 网格 / 功能优先 / 反装饰"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:8px 0;\">\n  <div style=\"display:flex;align-items:center;gap:10px;margin-bottom:14px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;flex-shrink:0;\">A. 现代主义</span>\n    <span style=\"flex:1;height:2px;background:#111;position:relative;\">\n      <span style=\"position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:10px;height:10px;background:#c8412e;border-radius:50%;\"></span>\n    </span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;flex-shrink:0;\">B. 后现代</span>\n  </div>\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:14px;font-family:'Noto Serif SC',serif;font-size:13.5px;line-height:1.85;color:#111;\">\n    <p style=\"margin:0;\">秩序 / 网格 / 功能优先 / 反装饰</p>\n    <p style=\"margin:0;text-align:right;\">游戏 / 引用 / 表达优先 / 拥抱装饰</p>\n  </div>\n</div>"
+}

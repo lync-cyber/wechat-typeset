@@ -1,0 +1,133 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 41,
+    "varIdLabel": "01·A NUMBERED FAQ"
+  },
+  "variantId": "numbered-faq",
+  "kind": "qa-block",
+  "containerName": "qa-block",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "baseline",
+        "gap": "10px",
+        "borderBottom": "1px solid #0a0a0a",
+        "paddingBottom": "6px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Q.01",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "订阅是否包含纸质刊？",
+          "box": {
+            "fontSize": "14px",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600"
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#3a3a38",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "margin": "0 0 14px"
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "baseline",
+        "gap": "10px",
+        "borderBottom": "1px solid #0a0a0a",
+        "paddingBottom": "6px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Q.02",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "可否退订？",
+          "box": {
+            "fontSize": "14px",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600"
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#3a3a38",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "margin": "0"
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:flex;align-items:baseline;gap:10px;border-bottom:1px solid #0a0a0a;padding-bottom:6px;margin-bottom:8px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#6b6b65;\">Q.01</span>\n    <span style=\"font-size:14px;color:#0a0a0a;font-weight:600;\">订阅是否包含纸质刊？</span>\n  </div>\n  <p style=\"font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0 0 14px;\">不含。本刊数字订阅与纸刊为独立产品，需分别购买。</p>\n  <div style=\"display:flex;align-items:baseline;gap:10px;border-bottom:1px solid #0a0a0a;padding-bottom:6px;margin-bottom:8px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#6b6b65;\">Q.02</span>\n    <span style=\"font-size:14px;color:#0a0a0a;font-weight:600;\">可否退订？</span>\n  </div>\n  <p style=\"font-size:13.5px;line-height:1.85;color:#3a3a38;margin:0;\">可以。订阅后三十日内全额退款，逾期按比例返还。</p>\n</div>"
+}

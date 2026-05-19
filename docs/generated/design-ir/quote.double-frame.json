@@ -1,0 +1,63 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·B DOUBLE FRAME"
+  },
+  "variantId": "double-frame",
+  "kind": "quote",
+  "containerName": "quote-card",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "vermilion-seal",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "10px",
+    "border": "1px solid #6b4a2a",
+    "position": "relative",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "border": "1px solid #6b4a2a",
+        "padding": "18px 14px 16px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "念念不忘，必有回响；有灯，就有人。",
+          "box": {
+            "fontSize": "18px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#2a1d10",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 12px",
+            "fontWeight": "500"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "叶问·宫二\n      语",
+          "box": {
+            "display": "flex",
+            "justifyContent": "flex-end",
+            "alignItems": "center",
+            "gap": "8px"
+          }
+        }
+      ],
+      "bodyText": "念念不忘，必有回响；有灯，就有人。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:10px;border:1px solid #6b4a2a;position:relative;\">\n  <div style=\"border:1px solid #6b4a2a;padding:18px 14px 16px;\">\n    <p style=\"font-size:18px;line-height:1.85;color:#2a1d10;margin:0 0 12px;font-weight:500;\">念念不忘，必有回响；<br>有灯，就有人。</p>\n    <div style=\"display:flex;justify-content:flex-end;align-items:center;gap:8px;\">\n      <span style=\"font-family:'Noto Serif SC',serif;font-size:11px;color:#6b4a2a;letter-spacing:.2em;\">叶问·宫二</span>\n      <span style=\"width:14px;height:14px;background:#a03a2a;color:#f3eada;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:600;\">语</span>\n    </div>\n  </div>\n</div>"
+}

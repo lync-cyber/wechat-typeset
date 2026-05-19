@@ -1,0 +1,74 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 39,
+    "varIdLabel": "01·B THREE BULLETS"
+  },
+  "variantId": "three-bullets",
+  "kind": "divider",
+  "containerName": "divider",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "oversized-mark",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "18px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "lineHeight": "1.85",
+        "margin": "0 0 22px",
+        "textAlign": "right"
+      },
+      "decorations": [],
+      "slotText": "……一段落收束于此处。"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "textAlign": "center",
+        "fontSize": "22px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "letterSpacing": "1em",
+        "lineHeight": "1",
+        "unrecognized": {
+          "font-family": "'Lora',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "•  •  •"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13.5px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "lineHeight": "1.85",
+        "margin": "22px 0 0"
+      },
+      "decorations": [],
+      "slotText": "另起一段……"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:18px 0;\">\n  <p style=\"font-size:13.5px;color:#6b6b65;line-height:1.85;margin:0 0 22px;text-align:right;\">……一段落收束于此处。</p>\n  <div style=\"text-align:center;font-family:'Lora',serif;font-size:22px;color:#0a0a0a;letter-spacing:1em;line-height:1;\">•&nbsp;&nbsp;•&nbsp;&nbsp;•</div>\n  <p style=\"font-size:13.5px;color:#6b6b65;line-height:1.85;margin:22px 0 0;\">　　另起一段……</p>\n</div>"
+}

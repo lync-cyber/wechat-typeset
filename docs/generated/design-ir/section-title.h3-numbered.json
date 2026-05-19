@@ -1,0 +1,59 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·B H3 NUMBERED"
+  },
+  "variantId": "h3-numbered",
+  "kind": "section-title",
+  "containerName": "section-title",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "48px 1fr",
+        "gap": "14px",
+        "alignItems": "end"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "N°\n      04",
+          "box": {
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "textAlign": "center",
+            "padding": "8px 0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "网格不是约束，是结构。",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:end;\">\n    <div style=\"background:#111;color:#efece5;text-align:center;padding:8px 0;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;color:#9a968a;\">N°</div>\n      <div style=\"font-family:'Lora',serif;font-size:22px;line-height:1;margin-top:2px;font-weight:500;\">04</div>\n    </div>\n    <div>\n      <h3 style=\"font-family:'Noto Serif SC',serif;font-size:18px;color:#111;margin:0;font-weight:600;letter-spacing:.02em;line-height:1.4;\">网格不是约束，是结构。</h3>\n    </div>\n  </div>\n</div>"
+}

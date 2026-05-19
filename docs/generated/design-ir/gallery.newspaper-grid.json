@@ -1,0 +1,90 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·A NEWSPAPER GRID"
+  },
+  "variantId": "newspaper-grid",
+  "kind": "gallery",
+  "containerName": "gallery",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".2em",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "borderBottom": "1px solid #0a0a0a",
+        "paddingBottom": "4px",
+        "marginBottom": "10px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "gap": "8px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "FIG. 04A\n      站台尽头的雪与一只远去的鹿。",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "FIG. 04B\n      老人推车走过，木轮在冻土上吱呀作响。",
+          "box": {}
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "unrecognized": {
+          "aspect-ratio": "16/9"
+        }
+      },
+      "decorations": [],
+      "slotText": "FIG. 04C — PANORAMA"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "11px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "marginTop": "6px",
+        "lineHeight": "1.6"
+      },
+      "decorations": [],
+      "slotText": "乌伦古湖以东的村庄，一九九八年冬。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;border-bottom:1px solid #0a0a0a;padding-bottom:4px;margin-bottom:10px;\">PLATE — N° 04 / NORTHBOUND</div>\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;\">\n    <div>\n      <div class=\"ph-img\" style=\"aspect-ratio:3/4;\">FIG. 04A</div>\n      <div style=\"font-size:11px;color:#6b6b65;margin-top:6px;line-height:1.6;\">站台尽头的雪与一只远去的鹿。</div>\n    </div>\n    <div>\n      <div class=\"ph-img\" style=\"aspect-ratio:3/4;\">FIG. 04B</div>\n      <div style=\"font-size:11px;color:#6b6b65;margin-top:6px;line-height:1.6;\">老人推车走过，木轮在冻土上吱呀作响。</div>\n    </div>\n  </div>\n  <div class=\"ph-img\" style=\"aspect-ratio:16/9;\">FIG. 04C — PANORAMA</div>\n  <div style=\"font-size:11px;color:#6b6b65;margin-top:6px;line-height:1.6;\">乌伦古湖以东的村庄，一九九八年冬。</div>\n</div>"
+}

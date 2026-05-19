@@ -1,0 +1,60 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·B STAMP CARD"
+  },
+  "variantId": "stamp-card",
+  "kind": "announcement",
+  "containerName": "announcement",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "border": "1px dashed #1f2a2a",
+        "padding": "12px 14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Annunciatio\n        通　告\n      \n      \n        EXPED\n        06",
+          "box": {
+            "display": "flex",
+            "justifyContent": "space-between",
+            "alignItems": "flex-start",
+            "marginBottom": "10px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "第六次冰川观察行将于 7 月 12 日由甘孜出发，欢迎合作机构联系本刊副主编。",
+          "box": {
+            "fontSize": "13.5px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "第六次冰川观察行将于 7 月 12 日由甘孜出发，欢迎合作机构联系本刊副主编。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"border:1px dashed #1f2a2a;padding:12px 14px;\">\n    <div style=\"display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;\">\n      <div>\n        <div style=\"font-family:'Lora',serif;font-style:italic;font-size:13px;color:#8b4a3a;\">Annunciatio</div>\n        <div style=\"font-family:'Noto Serif SC',serif;font-size:11px;color:#5e6f6a;letter-spacing:.3em;margin-top:2px;\">通　告</div>\n      </div>\n      <div style=\"border:1.5px solid #8b4a3a;color:#8b4a3a;padding:4px 6px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-align:center;\">\n        <div>EXPED</div>\n        <div style=\"font-family:'Lora',serif;font-size:14px;line-height:1;margin-top:2px;\">06</div>\n      </div>\n    </div>\n    <p style=\"font-size:13.5px;line-height:1.85;color:#1f2a2a;margin:0;\">第六次冰川观察行将于 7 月 12 日由甘孜出发，欢迎合作机构联系本刊副主编。</p>\n  </div>\n</div>"
+}

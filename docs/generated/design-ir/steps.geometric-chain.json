@@ -1,0 +1,155 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·A GEOMETRIC CHAIN"
+  },
+  "variantId": "geometric-chain",
+  "kind": "steps",
+  "containerName": "steps",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "8px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "6px",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "1",
+          "box": {
+            "width": "24px",
+            "height": "24px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderRadius": "50%",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "fontSize": "11px",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2",
+          "box": {
+            "width": "24px",
+            "height": "24px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "fontSize": "11px",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "3",
+          "box": {
+            "width": "0",
+            "height": "0",
+            "borderLeft": "13px solid transparent",
+            "borderRight": "13px solid transparent",
+            "borderBottom": "22px solid #111",
+            "position": "relative"
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "repeat(3,1fr)",
+        "gap": "6px",
+        "fontSize": "13px",
+        "lineHeight": "1.7",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "DEFINE明确问题",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "DESIGN提出方案",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "DEPLOY付诸实施",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:8px 0;\">\n  <div style=\"display:flex;align-items:center;gap:6px;margin-bottom:14px;\">\n    <span style=\"width:24px;height:24px;background:#111;border-radius:50%;color:#efece5;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;\">1</span>\n    <span style=\"flex:1;height:1px;background:#111;\"></span>\n    <span style=\"width:24px;height:24px;background:#c8412e;color:#efece5;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;\">2</span>\n    <span style=\"flex:1;height:1px;background:#111;\"></span>\n    <span style=\"width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-bottom:22px solid #111;position:relative;\">\n      <span style=\"position:absolute;top:6px;left:-5px;width:10px;text-align:center;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;\">3</span>\n    </span>\n  </div>\n  <div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.7;color:#111;\">\n    <div><b style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#454442;\">DEFINE</b><br>明确问题</div>\n    <div><b style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#454442;\">DESIGN</b><br>提出方案</div>\n    <div><b style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#454442;\">DEPLOY</b><br>付诸实施</div>\n  </div>\n</div>"
+}

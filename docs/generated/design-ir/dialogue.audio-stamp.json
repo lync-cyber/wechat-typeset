@@ -1,0 +1,89 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·A AUDIO STAMP"
+  },
+  "variantId": "audio-stamp",
+  "kind": "dialogue",
+  "containerName": "dialogue",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "marginBottom": "12px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "00:04:21\n      — interviewer",
+          "box": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "您在这片山里走了几十年，最大的变化是什么？",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.9",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "您在这片山里走了几十年，最大的变化是什么？"
+    },
+    {
+      "role": "body",
+      "box": {},
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "00:04:35\n      — villager",
+          "box": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "marginBottom": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "蝉鸣声小了。从前夏天，连说话都得喊。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.9",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "蝉鸣声小了。从前夏天，连说话都得喊。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"margin-bottom:12px;\">\n    <div style=\"display:flex;align-items:center;gap:8px;margin-bottom:4px;\">\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;\">00:04:21</span>\n      <span style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;\">— interviewer</span>\n    </div>\n    <p style=\"font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;\">您在这片山里走了几十年，最大的变化是什么？</p>\n  </div>\n  <div>\n    <div style=\"display:flex;align-items:center;gap:8px;margin-bottom:4px;\">\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.16em;\">00:04:35</span>\n      <span style=\"font-family:'Lora',serif;font-style:italic;font-size:11px;color:#5e6f6a;\">— villager</span>\n    </div>\n    <p style=\"font-size:14px;line-height:1.9;color:#1f2a2a;margin:0;\">蝉鸣声小了。从前夏天，连说话都得喊。</p>\n  </div>\n</div>"
+}

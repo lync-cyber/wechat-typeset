@@ -1,0 +1,180 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·A SHAPE INDEX"
+  },
+  "variantId": "shape-index",
+  "kind": "recommend",
+  "containerName": "recommend",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "padding": "10px 0",
+        "borderBottom": "1px solid #111"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "14px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "borderRadius": "50%",
+            "flexShrink": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "读者推荐 · 设计史的另一种讲法",
+          "box": {
+            "flex": "1",
+            "fontSize": "13.5px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "N°12",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "padding": "10px 0",
+        "borderBottom": "1px solid #111"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "14px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "flexShrink": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "编辑选 · 给青年设计师的十封信",
+          "box": {
+            "flex": "1",
+            "fontSize": "13.5px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "N°09",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px",
+        "padding": "10px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "补充阅读 · 从包豪斯到日本",
+          "box": {
+            "flex": "1",
+            "fontSize": "13.5px",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "N°04",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #111;\">\n    <span style=\"width:14px;height:14px;background:#111;border-radius:50%;flex-shrink:0;\"></span>\n    <span style=\"flex:1;font-family:'Noto Serif SC',serif;font-size:13.5px;color:#111;font-weight:500;\">读者推荐 · 设计史的另一种讲法</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.16em;\">N°12</span>\n  </div>\n  <div style=\"display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #111;\">\n    <span style=\"width:14px;height:14px;background:#c8412e;flex-shrink:0;\"></span>\n    <span style=\"flex:1;font-family:'Noto Serif SC',serif;font-size:13.5px;color:#111;font-weight:500;\">编辑选 · 给青年设计师的十封信</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.16em;\">N°09</span>\n  </div>\n  <div style=\"display:flex;align-items:center;gap:10px;padding:10px 0;\">\n    <span style=\"width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:14px solid #454442;flex-shrink:0;\"></span>\n    <span style=\"flex:1;font-family:'Noto Serif SC',serif;font-size:13.5px;color:#111;font-weight:500;\">补充阅读 · 从包豪斯到日本</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.16em;\">N°04</span>\n  </div>\n</div>"
+}

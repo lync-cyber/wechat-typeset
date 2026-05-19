@@ -1,0 +1,51 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·A DOTTED UNDERLINE"
+  },
+  "variantId": "dotted-underline",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "dotted-underline",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "所有的雪都下在了别人家屋顶上",
+          "box": {
+            "background": {
+              "literal": "linear-gradient(transparent 68%,#0a0a0a 68%,#0a0a0a 72%,transparent 72%)",
+              "tokenSuggestion": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:1.95;color:#1a1a1a;margin:0;\">那年冬天，<span style=\"background:linear-gradient(transparent 68%,#0a0a0a 68%,#0a0a0a 72%,transparent 72%);\">所有的雪都下在了别人家屋顶上</span>，而我们的屋檐还干着，像是被时间遗忘。</p>\n</div>"
+}

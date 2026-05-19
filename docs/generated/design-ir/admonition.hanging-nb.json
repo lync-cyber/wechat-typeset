@@ -1,0 +1,99 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·B HANGING NB."
+  },
+  "variantId": "hanging-nb",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "editor-signoff",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "display": "flex",
+    "gap": "14px",
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "badge",
+      "box": {
+        "flexShrink": "0",
+        "width": "38px",
+        "textAlign": "right",
+        "borderRight": "1px solid #0a0a0a",
+        "paddingRight": "10px",
+        "paddingTop": "2px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "N.B.",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "18px",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "lineHeight": "1",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "001",
+          "box": {
+            "fontSize": "9px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "marginTop": "6px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1a1a1a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "flex": "1"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "译名对照表",
+          "box": {
+            "textDecoration": "underline",
+            "unrecognized": {
+              "text-underline-offset": "3px"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;display:flex;gap:14px;padding:6px 0;\">\n  <div style=\"flex-shrink:0;width:38px;text-align:right;border-right:1px solid #0a0a0a;padding-right:10px;padding-top:2px;\">\n    <div style=\"font-family:'Lora',serif;font-style:italic;font-size:18px;color:#0a0a0a;line-height:1;\">N.B.</div>\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;margin-top:6px;\">001</div>\n  </div>\n  <p style=\"font-size:15px;line-height:1.95;color:#1a1a1a;margin:0;flex:1;\">读者若对术语之译法有疑问，请径直查阅文末<span style=\"text-decoration:underline;text-underline-offset:3px;\">译名对照表</span>，本刊不另作正文注释，以免阻断阅读节奏。</p>\n</div>"
+}

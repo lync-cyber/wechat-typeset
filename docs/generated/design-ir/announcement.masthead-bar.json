@@ -1,0 +1,115 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·A MASTHEAD BAR"
+  },
+  "variantId": "masthead-bar",
+  "kind": "announcement",
+  "containerName": "announcement",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "justifyContent": "space-between",
+        "alignItems": "baseline",
+        "borderTop": "3px solid #0a0a0a",
+        "borderBottom": "1px solid #0a0a0a",
+        "padding": "6px 0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "EXTRA",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2026.05.18",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".16em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "padding": "14px 0 6px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "新刊上市",
+          "box": {
+            "fontSize": "22px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 0 10px",
+            "letterSpacing": ".01em",
+            "lineHeight": "1.35"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "总第 084 期专题《城市的边界》，今日起所有合作书店与本刊小程序同步发售，订阅用户可在邮件中查收数字版。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#1a1a1a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "总第 084 期专题《城市的边界》，今日起所有合作书店与本刊小程序同步发售，订阅用户可在邮件中查收数字版。"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "borderBottom": "1px solid #0a0a0a"
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:flex;justify-content:space-between;align-items:baseline;border-top:3px solid #0a0a0a;border-bottom:1px solid #0a0a0a;padding:6px 0;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#0a0a0a;font-weight:600;\">EXTRA</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#6b6b65;\">2026.05.18</span>\n  </div>\n  <div style=\"padding:14px 0 6px;\">\n    <h3 style=\"font-size:22px;font-weight:600;color:#0a0a0a;margin:0 0 10px;letter-spacing:.01em;line-height:1.35;\">新刊上市</h3>\n    <p style=\"font-size:14px;line-height:1.85;color:#1a1a1a;margin:0;\">总第 084 期专题《城市的边界》，今日起所有合作书店与本刊小程序同步发售，订阅用户可在邮件中查收数字版。</p>\n  </div>\n  <div style=\"border-bottom:1px solid #0a0a0a;\"></div>\n</div>"
+}

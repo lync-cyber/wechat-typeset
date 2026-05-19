@@ -1,0 +1,90 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·B CALIPER MARK"
+  },
+  "variantId": "caliper-mark",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "alignItems": "stretch",
+        "gap": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "1px",
+            "background": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accentNaturalist"
+            }
+          }
+        },
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "14px",
+            "height": "1px",
+            "background": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accentNaturalist"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "山是凝固的水，水是流动的山。",
+          "box": {
+            "fontSize": "26px",
+            "lineHeight": "1.45",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "fontWeight": "500"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "— FIELD JOURNAL, FOL.211",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".18em",
+            "marginTop": "8px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ],
+      "bodyText": "山是凝固的水，水是流动的山。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:14px 0;\">\n  <div style=\"display:flex;align-items:stretch;gap:10px;\">\n    <div style=\"display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding:6px 0;\">\n      <div style=\"width:14px;height:1px;background:#8b4a3a;\"></div>\n      <div style=\"width:1px;flex:1;background:#8b4a3a;\"></div>\n      <div style=\"width:14px;height:1px;background:#8b4a3a;\"></div>\n    </div>\n    <div style=\"flex:1;\">\n      <p style=\"font-size:26px;line-height:1.45;color:#1f2a2a;margin:0;font-weight:500;\">山是凝固的水，<br>水是流动的山。</p>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.18em;margin-top:8px;\">— FIELD JOURNAL, FOL.211</div>\n    </div>\n  </div>\n</div>"
+}

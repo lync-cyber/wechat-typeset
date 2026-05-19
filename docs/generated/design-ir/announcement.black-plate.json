@@ -1,0 +1,88 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·B BLACK PLATE"
+  },
+  "variantId": "black-plate",
+  "kind": "announcement",
+  "containerName": "announcement",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "inverted-plate",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "color": {
+          "literal": "#efece5",
+          "tokenSuggestion": "tokens.colors.bg"
+        },
+        "padding": "18px 14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "— ISSUE 084 —\n      26 / 05",
+          "box": {
+            "display": "flex",
+            "justifyContent": "space-between",
+            "alignItems": "baseline",
+            "marginBottom": "10px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "第八十四期已发布",
+          "box": {
+            "fontSize": "21px",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "margin": "0 0 8px",
+            "fontWeight": "500",
+            "letterSpacing": ".02em",
+            "lineHeight": "1.4",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "本期特别专题《城市的边界》——三十二位作者，十四个城市，一百二十四张照片。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#9a968a",
+              "tokenSuggestion": "tokens.colors.border"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "本期特别专题《城市的边界》——三十二位作者，十四个城市，一百二十四张照片。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"background:#111;color:#efece5;padding:18px 14px;\">\n    <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;\">\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;color:#c8412e;font-weight:600;\">— ISSUE 084 —</span>\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#9a968a;\">26 / 05</span>\n    </div>\n    <h3 style=\"font-family:'Noto Serif SC',serif;font-size:21px;color:#efece5;margin:0 0 8px;font-weight:500;letter-spacing:.02em;line-height:1.4;\">第八十四期已发布</h3>\n    <p style=\"font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#9a968a;margin:0;\">本期特别专题《城市的边界》——三十二位作者，十四个城市，一百二十四张照片。</p>\n  </div>\n</div>"
+}

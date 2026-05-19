@@ -1,0 +1,159 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·A STEPPED BLOCK"
+  },
+  "variantId": "stepped-block",
+  "kind": "bar-chart",
+  "containerName": "bar-chart",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".18em",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "fontWeight": "600",
+        "marginBottom": "10px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "alignItems": "flex-end",
+        "gap": "8px",
+        "height": "120px",
+        "borderBottom": "2px solid #111",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "52k",
+          "box": {
+            "flex": "1",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "height": "88%",
+            "position": "relative"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "37k",
+          "box": {
+            "flex": "1",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "height": "62%",
+            "position": "relative"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "26k",
+          "box": {
+            "flex": "1",
+            "background": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "height": "44%",
+            "position": "relative"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "13k",
+          "box": {
+            "flex": "1",
+            "background": {
+              "literal": "#9a968a",
+              "tokenSuggestion": "tokens.colors.border"
+            },
+            "height": "22%",
+            "position": "relative"
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "gap": "8px",
+        "fontSize": "10px",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".1em",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "iOS",
+          "box": {
+            "flex": "1",
+            "textAlign": "center"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "Web",
+          "box": {
+            "flex": "1",
+            "textAlign": "center"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "And.",
+          "box": {
+            "flex": "1",
+            "textAlign": "center"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "Mac",
+          "box": {
+            "flex": "1",
+            "textAlign": "center"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#111;font-weight:600;margin-bottom:10px;\">CHART · USERS BY PLATFORM</div>\n  <div style=\"display:flex;align-items:flex-end;gap:8px;height:120px;border-bottom:2px solid #111;margin-bottom:8px;\">\n    <div style=\"flex:1;background:#111;height:88%;position:relative;\">\n      <div style=\"position:absolute;top:-18px;left:0;width:100%;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#111;font-weight:600;\">52k</div>\n    </div>\n    <div style=\"flex:1;background:#c8412e;height:62%;position:relative;\">\n      <div style=\"position:absolute;top:-18px;left:0;width:100%;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#111;font-weight:600;\">37k</div>\n    </div>\n    <div style=\"flex:1;background:#454442;height:44%;position:relative;\">\n      <div style=\"position:absolute;top:-18px;left:0;width:100%;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#111;font-weight:600;\">26k</div>\n    </div>\n    <div style=\"flex:1;background:#9a968a;height:22%;position:relative;\">\n      <div style=\"position:absolute;top:-18px;left:0;width:100%;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#111;font-weight:600;\">13k</div>\n    </div>\n  </div>\n  <div style=\"display:flex;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.1em;\">\n    <span style=\"flex:1;text-align:center;\">iOS</span>\n    <span style=\"flex:1;text-align:center;\">Web</span>\n    <span style=\"flex:1;text-align:center;\">And.</span>\n    <span style=\"flex:1;text-align:center;\">Mac</span>\n  </div>\n</div>"
+}

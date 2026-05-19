@@ -1,0 +1,73 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·B PAPER SLIP"
+  },
+  "variantId": "paper-slip",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "paper-slip",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "display": "flex",
+    "gap": "0",
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "leftCol",
+      "box": {
+        "writingMode": "vertical-rl",
+        "background": {
+          "literal": "#e6d5b3",
+          "tokenSuggestion": "tokens.colors.bgMuted"
+        },
+        "color": {
+          "literal": "#6b4a2a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "fontSize": "14px",
+        "letterSpacing": ".4em",
+        "padding": "10px 6px",
+        "fontWeight": "500"
+      },
+      "decorations": [],
+      "slotText": "示·告"
+    },
+    {
+      "role": "body",
+      "box": {
+        "flex": "1",
+        "padding": "8px 4px 8px 16px",
+        "borderBottom": "1px solid #6b4a2a"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "本卷所录碑文，俱以拓本为底，参以前贤释文。异文之处，列入文末校勘记。",
+          "box": {
+            "fontSize": "15px",
+            "lineHeight": "2",
+            "color": {
+              "literal": "#2a1d10",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "本卷所录碑文，俱以拓本为底，参以前贤释文。异文之处，列入文末校勘记。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;display:flex;gap:0;padding:6px 0;\">\n  <div style=\"writing-mode:vertical-rl;background:#e6d5b3;color:#6b4a2a;font-size:14px;letter-spacing:.4em;padding:10px 6px;font-weight:500;\">示·告</div>\n  <div style=\"flex:1;padding:8px 4px 8px 16px;border-bottom:1px solid #6b4a2a;\">\n    <p style=\"font-size:15px;line-height:2;color:#2a1d10;margin:0;\">本卷所录碑文，俱以拓本为底，参以前贤释文。<span style=\"color:#a03a2a;font-weight:500;\">异文之处，列入文末校勘记。</span></p>\n  </div>\n</div>"
+}

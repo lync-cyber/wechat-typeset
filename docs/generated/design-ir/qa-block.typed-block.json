@@ -1,0 +1,86 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·B TYPED BLOCK"
+  },
+  "variantId": "typed-block",
+  "kind": "qa-block",
+  "containerName": "qa-block",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr",
+        "gap": "0",
+        "border": "1px solid #111"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Q · 01\n      如何判断一个项目应该被砍掉？",
+          "box": {
+            "padding": "10px 12px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "A · 01",
+          "box": {
+            "fontSize": "9px",
+            "letterSpacing": ".2em",
+            "marginBottom": "4px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "当你已经无法回答\"为什么是我们来做\"时——该砍。",
+          "box": {
+            "fontSize": "14px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "当你已经无法回答\"为什么是我们来做\"时——该砍。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr;gap:0;border:1px solid #111;\">\n    <div style=\"padding:10px 12px;background:#111;color:#efece5;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;margin-bottom:4px;color:#9a968a;\">Q · 01</div>\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:14px;font-weight:500;\">如何判断一个项目应该被砍掉？</div>\n    </div>\n    <div style=\"padding:10px 12px;background:#efece5;\">\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;margin-bottom:4px;color:#454442;\">A · 01</div>\n      <p style=\"font-family:'Noto Serif SC',serif;font-size:14px;line-height:1.85;color:#111;margin:0;\">当你已经无法回答\"为什么是我们来做\"时——该砍。</p>\n    </div>\n  </div>\n</div>"
+}

@@ -1,0 +1,79 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 50,
+    "varIdLabel": "01·A WEIGHT CONTRAST"
+  },
+  "variantId": "weight-contrast",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "tracked-emphasis",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "28px",
+        "lineHeight": "1.35",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 6px",
+        "fontWeight": "600",
+        "letterSpacing": ".01em"
+      },
+      "decorations": [],
+      "slotText": "我们活在一个"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "28px",
+        "lineHeight": "1.35",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 8px",
+        "fontWeight": "300",
+        "letterSpacing": ".01em",
+        "fontStyle": "italic",
+        "unrecognized": {
+          "font-family": "'Lora','Noto Serif SC',serif"
+        }
+      },
+      "decorations": [],
+      "slotText": "越来越快，"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "28px",
+        "lineHeight": "1.35",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "fontWeight": "600",
+        "letterSpacing": ".01em"
+      },
+      "decorations": [],
+      "slotText": "却越来越慢的时代。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:14px 0;\">\n  <p style=\"font-size:28px;line-height:1.35;color:#0a0a0a;margin:0 0 6px;font-weight:600;letter-spacing:.01em;\">我们活在一个</p>\n  <p style=\"font-size:28px;line-height:1.35;color:#0a0a0a;margin:0 0 8px;font-weight:300;letter-spacing:.01em;font-style:italic;font-family:'Lora','Noto Serif SC',serif;\">越来越快，</p>\n  <p style=\"font-size:28px;line-height:1.35;color:#0a0a0a;margin:0;font-weight:600;letter-spacing:.01em;\">却越来越慢的时代。</p>\n</div>"
+}

@@ -1,0 +1,82 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 93,
+    "varIdLabel": "03·A RULER MARK"
+  },
+  "variantId": "ruler-mark",
+  "kind": "divider",
+  "containerName": "divider",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "18px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "1.95",
+        "margin": "0 0 18px"
+      },
+      "decorations": [],
+      "slotText": "……上一观察结束。"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "alignItems": "flex-end",
+        "gap": "0"
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "9px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".2em",
+        "textAlign": "right",
+        "marginTop": "4px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "FOLIO 028 → 029"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "1.95",
+        "margin": "14px 0 0"
+      },
+      "decorations": [],
+      "slotText": "下一观察开始……"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:18px 0;\">\n  <p style=\"font-size:13px;color:#1f2a2a;line-height:1.95;margin:0 0 18px;\">……上一观察结束。</p>\n  <div style=\"display:flex;align-items:flex-end;gap:0;\">\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:6px;\"></span>\n    <span style=\"flex:1;border-left:1px solid #1f2a2a;height:10px;border-right:1px solid #1f2a2a;\"></span>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.2em;text-align:right;margin-top:4px;\">FOLIO 028 → 029</div>\n  <p style=\"font-size:13px;color:#1f2a2a;line-height:1.95;margin:14px 0 0;\">下一观察开始……</p>\n</div>"
+}

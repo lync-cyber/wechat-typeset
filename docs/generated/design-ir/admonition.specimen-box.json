@@ -1,0 +1,108 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·B SPECIMEN BOX"
+  },
+  "variantId": "specimen-box",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "display": "grid",
+    "gridTemplateColumns": "48px 1fr",
+    "gap": "0",
+    "padding": "4px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "border": "1px solid #1f2a2a",
+        "padding": "6px 0",
+        "textAlign": "center"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "N°",
+          "box": {
+            "fontSize": "9px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "04",
+          "box": {
+            "fontSize": "22px",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "500",
+            "lineHeight": "1",
+            "marginTop": "2px",
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "告示",
+          "box": {
+            "fontSize": "9px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accentNaturalist"
+            },
+            "letterSpacing": ".18em",
+            "marginTop": "4px",
+            "fontWeight": "500"
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "padding": "0 0 0 14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "凡野外采集编号以\"省/年/序号\"格式记之，e.g. YN/25/0148，存于本刊副册。",
+          "box": {
+            "fontSize": "15px",
+            "lineHeight": "1.95",
+            "color": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "凡野外采集编号以\"省/年/序号\"格式记之，e.g. YN/25/0148，存于本刊副册。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;display:grid;grid-template-columns:48px 1fr;gap:0;padding:4px 0;\">\n  <div style=\"border:1px solid #1f2a2a;padding:6px 0;text-align:center;\">\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#5e6f6a;letter-spacing:.16em;\">N°</div>\n    <div style=\"font-family:'Lora',serif;font-size:22px;color:#1f2a2a;font-weight:500;line-height:1;margin-top:2px;\">04</div>\n    <div style=\"font-size:9px;color:#8b4a3a;letter-spacing:.18em;margin-top:4px;font-weight:500;\">告示</div>\n  </div>\n  <div style=\"padding:0 0 0 14px;\">\n    <p style=\"font-size:15px;line-height:1.95;color:#1f2a2a;margin:0;\">凡野外采集编号以\"省/年/序号\"格式记之，<span style=\"color:#8b4a3a;font-style:italic;font-family:'Lora',serif;\">e.g.</span> <span style=\"font-family:'IBM Plex Mono',monospace;font-size:13px;\">YN/25/0148</span>，存于本刊副册。</p>\n  </div>\n</div>"
+}

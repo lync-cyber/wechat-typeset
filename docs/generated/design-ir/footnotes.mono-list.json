@@ -1,0 +1,118 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·A MONO LIST"
+  },
+  "variantId": "mono-list",
+  "kind": "footnotes",
+  "containerName": "footnotes",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "gap": "10px",
+        "alignItems": "baseline",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "NOTES",
+          "box": {
+            "fontSize": "11px",
+            "letterSpacing": ".24em",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "04 / 04",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "11px",
+        "lineHeight": "1.8",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01 · 本文部分图片由 Unsplash 摄影师免费授权。",
+          "box": {
+            "margin": "0 0 4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "02 · 数字均经 Plot.ly 重新绘制，原始数据见附录。",
+          "box": {
+            "margin": "0 0 4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "03 · 未注明出处的引文均为作者原创。",
+          "box": {
+            "margin": "0"
+          }
+        }
+      ],
+      "bodyText": "01 · 本文部分图片由 Unsplash 摄影师免费授权。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:flex;gap:10px;align-items:baseline;margin-bottom:8px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:#111;font-weight:600;\">NOTES</span>\n    <span style=\"flex:1;height:1px;background:#111;\"></span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.16em;\">04 / 04</span>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.8;color:#454442;\">\n    <p style=\"margin:0 0 4px;\"><span style=\"color:#c8412e;font-weight:600;\">01 ·</span> 本文部分图片由 Unsplash 摄影师免费授权。</p>\n    <p style=\"margin:0 0 4px;\"><span style=\"color:#c8412e;font-weight:600;\">02 ·</span> 数字均经 Plot.ly 重新绘制，原始数据见附录。</p>\n    <p style=\"margin:0;\"><span style=\"color:#c8412e;font-weight:600;\">03 ·</span> 未注明出处的引文均为作者原创。</p>\n  </div>\n</div>"
+}

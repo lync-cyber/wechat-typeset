@@ -1,0 +1,126 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·A FIELD NOTICE"
+  },
+  "variantId": "field-notice",
+  "kind": "announcement",
+  "containerName": "announcement",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "baseline",
+        "gap": "10px",
+        "borderBottom": "1.5px solid #1f2a2a",
+        "paddingBottom": "6px",
+        "marginBottom": "12px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "NOTICE",
+          "box": {
+            "fontSize": "11px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#1f2a2a",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0 4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "N° 027",
+          "box": {
+            "fontStyle": "italic",
+            "fontSize": "12px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'Lora',serif"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "17px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 8px",
+        "fontWeight": "500",
+        "letterSpacing": ".02em"
+      },
+      "decorations": [],
+      "slotText": "川西考察队招募"
+    },
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "13.5px",
+        "lineHeight": "1.85",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 8px"
+      },
+      "decorations": []
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "color": {
+          "literal": "#5e6f6a",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "letterSpacing": ".16em",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:flex;align-items:baseline;gap:10px;border-bottom:1.5px solid #1f2a2a;padding-bottom:6px;margin-bottom:12px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:#8b4a3a;font-weight:600;\">NOTICE</span>\n    <span style=\"flex:1;height:1px;background:#1f2a2a;margin:0 4px;\"></span>\n    <span style=\"font-family:'Lora',serif;font-style:italic;font-size:12px;color:#5e6f6a;\">N° 027</span>\n  </div>\n  <h3 style=\"font-size:17px;color:#1f2a2a;margin:0 0 8px;font-weight:500;letter-spacing:.02em;\">川西考察队招募</h3>\n  <p style=\"font-size:13.5px;line-height:1.85;color:#1f2a2a;margin:0 0 8px;\">为期 21 日，需具备 3500m 以上海拔的野外经验。报名截止 6 月 8 日。</p>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5e6f6a;letter-spacing:.16em;\">DEPARTURE: 07.04 · CHENGDU</div>\n</div>"
+}

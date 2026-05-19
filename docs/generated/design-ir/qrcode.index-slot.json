@@ -1,0 +1,82 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·B INDEX SLOT"
+  },
+  "variantId": "index-slot",
+  "kind": "qrcode",
+  "containerName": "qrcode",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "display": "flex",
+    "alignItems": "stretch",
+    "gap": "10px",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "flexShrink": "0",
+        "width": "96px",
+        "background": {
+          "literal": "repeating-conic-gradient(#0a0a0a 0% 25%,#fbfaf7 25% 50%) 0/10px 10px",
+          "tokenSuggestion": null
+        },
+        "border": "1px solid #0a0a0a",
+        "unrecognized": {
+          "aspect-ratio": "1"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "body",
+      "box": {
+        "flex": "1",
+        "display": "flex",
+        "justifyContent": "space-between",
+        "padding": "4px 0",
+        "unrecognized": {
+          "flex-direction": "column"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Read more.\n      右侧扫码 · 进入官方账号",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "@ EDITORIAL · 2026",
+          "box": {
+            "fontSize": "9px",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "borderTop": "1px solid #0a0a0a",
+            "paddingTop": "4px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;display:flex;align-items:stretch;gap:10px;\">\n  <div style=\"flex-shrink:0;width:96px;aspect-ratio:1;background:repeating-conic-gradient(#0a0a0a 0% 25%,#fbfaf7 25% 50%) 0/10px 10px;border:1px solid #0a0a0a;\"></div>\n  <div style=\"flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:4px 0;\">\n    <div>\n      <div style=\"font-family:'Lora',serif;font-style:italic;font-size:18px;color:#0a0a0a;line-height:1;font-weight:500;\">Read more.</div>\n      <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;margin-top:2px;\">右侧扫码 · 进入官方账号</div>\n    </div>\n    <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;color:#6b6b65;letter-spacing:.16em;border-top:1px solid #0a0a0a;padding-top:4px;\">@ EDITORIAL · 2026</div>\n  </div>\n</div>"
+}

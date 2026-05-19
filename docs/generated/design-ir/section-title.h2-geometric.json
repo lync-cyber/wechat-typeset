@@ -1,0 +1,97 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·A H2 GEOMETRIC"
+  },
+  "variantId": "h2-geometric",
+  "kind": "section-title",
+  "containerName": "section-title",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "12px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "24px",
+            "height": "24px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "display": "inline-block"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "CHAPTER · 02",
+          "box": {
+            "fontSize": "11px",
+            "letterSpacing": ".24em",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "26px",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "fontWeight": "500",
+        "lineHeight": "1.25",
+        "letterSpacing": ".01em",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "badge",
+      "box": {
+        "height": "2px",
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "width": "48px",
+        "marginTop": "14px"
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:flex;align-items:center;gap:12px;margin-bottom:8px;\">\n    <span style=\"width:24px;height:24px;background:#c8412e;display:inline-block;\"></span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:#111;font-weight:600;\">CHAPTER · 02</span>\n  </div>\n  <h2 style=\"font-family:'Noto Serif SC',serif;font-size:26px;color:#111;margin:0;font-weight:500;line-height:1.25;letter-spacing:.01em;\">设计的<br>第二条原则</h2>\n  <div style=\"height:2px;background:#111;width:48px;margin-top:14px;\"></div>\n</div>"
+}

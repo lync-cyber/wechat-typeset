@@ -1,0 +1,56 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 113,
+    "varIdLabel": "03·B BRACKETED TICK"
+  },
+  "variantId": "bracketed-tick",
+  "kind": "highlight",
+  "containerName": "highlight",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "珙桐 Davidia involucrata",
+          "box": {
+            "display": "inline-block",
+            "borderTop": "1px solid #8b4a3a",
+            "borderBottom": "1px solid #8b4a3a",
+            "padding": "0 4px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accentNaturalist"
+            },
+            "fontWeight": "500"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <p style=\"font-size:15px;line-height:1.95;color:#1f2a2a;margin:0;\">山中行三日，得见<span style=\"display:inline-block;border-top:1px solid #8b4a3a;border-bottom:1px solid #8b4a3a;padding:0 4px;color:#8b4a3a;font-weight:500;\">珙桐 Davidia involucrata</span>四株，皆百年以上，叶背银白如雪。</p>\n</div>"
+}

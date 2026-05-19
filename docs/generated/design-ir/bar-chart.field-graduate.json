@@ -1,0 +1,75 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 117,
+    "varIdLabel": "03·A FIELD GRADUATE"
+  },
+  "variantId": "field-graduate",
+  "kind": "bar-chart",
+  "containerName": "bar-chart",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "letterSpacing": ".18em",
+        "color": {
+          "literal": "#8b4a3a",
+          "tokenSuggestion": "tokens.colors.accent"
+        },
+        "marginBottom": "8px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": []
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "flex",
+        "gap": "9px",
+        "fontSize": "12.5px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "unrecognized": {
+          "flex-direction": "column"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "Pica pica · 喜鹊\n        128",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "Corvus c. · 寒鸦\n        86",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "Garrulax · 噪鹛\n        42",
+          "box": {}
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:#8b4a3a;margin-bottom:8px;\">SAMPLE COUNT · 林缘鸟类记录</div>\n  <div style=\"display:flex;flex-direction:column;gap:9px;font-size:12.5px;color:#1f2a2a;\">\n    <div>\n      <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;\">\n        <span><span style=\"font-style:italic;font-family:'Lora',serif;color:#8b4a3a;\">Pica pica</span> · 喜鹊</span>\n        <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;\">128</span>\n      </div>\n      <div style=\"height:4px;background:#1f2a2a;width:88%;\"></div>\n    </div>\n    <div>\n      <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;\">\n        <span><span style=\"font-style:italic;font-family:'Lora',serif;color:#8b4a3a;\">Corvus c.</span> · 寒鸦</span>\n        <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;\">86</span>\n      </div>\n      <div style=\"height:4px;background:#1f2a2a;width:60%;\"></div>\n    </div>\n    <div>\n      <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;\">\n        <span><span style=\"font-style:italic;font-family:'Lora',serif;color:#8b4a3a;\">Garrulax</span> · 噪鹛</span>\n        <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;\">42</span>\n      </div>\n      <div style=\"height:4px;background:#1f2a2a;width:30%;\"></div>\n    </div>\n  </div>\n</div>"
+}

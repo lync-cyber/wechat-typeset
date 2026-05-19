@@ -1,0 +1,81 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·B BLACK CLOSER"
+  },
+  "variantId": "black-closer",
+  "kind": "footer-cta",
+  "containerName": "footer-cta",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "inverted-plate",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "background": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "color": {
+          "literal": "#efece5",
+          "tokenSuggestion": "tokens.colors.bg"
+        },
+        "padding": "16px 14px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "— END —\n      5 MIN · READ",
+          "box": {
+            "display": "flex",
+            "justifyContent": "space-between",
+            "alignItems": "baseline",
+            "marginBottom": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "如果这篇值得记住，留下你的一句话。",
+          "box": {
+            "fontSize": "18px",
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "margin": "0 0 10px",
+            "fontWeight": "500",
+            "lineHeight": "1.45",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "LEAVE A NOTE →",
+          "box": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+            "borderTop": "1px solid #454442",
+            "paddingTop": "8px"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"background:#111;color:#efece5;padding:16px 14px;\">\n    <div style=\"display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;\">\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;color:#c8412e;font-weight:600;\">— END —</span>\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;color:#9a968a;\">5 MIN · READ</span>\n    </div>\n    <h3 style=\"font-family:'Noto Serif SC',serif;font-size:18px;color:#efece5;margin:0 0 10px;font-weight:500;line-height:1.45;\">如果这篇值得记住，<br>留下你的一句话。</h3>\n    <div style=\"display:flex;align-items:center;gap:8px;border-top:1px solid #454442;padding-top:8px;\">\n      <span style=\"width:10px;height:10px;background:#c8412e;display:inline-block;\"></span>\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#efece5;letter-spacing:.16em;font-weight:600;\">LEAVE A NOTE →</span>\n    </div>\n  </div>\n</div>"
+}

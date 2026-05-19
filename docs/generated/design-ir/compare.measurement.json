@@ -1,0 +1,177 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·B MEASUREMENT"
+  },
+  "variantId": "measurement",
+  "kind": "compare",
+  "containerName": "compare",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "ruler-tick",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "auto 1fr auto 1fr",
+        "alignItems": "center",
+        "gap": "0 10px",
+        "fontSize": "14px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "2.1"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "A",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "砖木结构",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "vs.",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "钢混结构 B",
+          "box": {
+            "textAlign": "right"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "寿命",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "borderTop": "1px dashed #5e6f6a",
+            "paddingTop": "4px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "百年以上",
+          "box": {
+            "borderTop": "1px dashed #5e6f6a",
+            "paddingTop": "4px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "／",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "borderTop": "1px dashed #5e6f6a",
+            "paddingTop": "4px",
+            "textAlign": "center",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "五十年",
+          "box": {
+            "borderTop": "1px dashed #5e6f6a",
+            "paddingTop": "4px",
+            "textAlign": "right"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "维护",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "需匠人",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "／",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "textAlign": "center",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "几乎免修",
+          "box": {
+            "textAlign": "right"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center;gap:0 10px;font-size:14px;color:#1f2a2a;line-height:2.1;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;letter-spacing:.16em;\">A</span>\n    <span>砖木结构</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;letter-spacing:.16em;\">vs.</span>\n    <span style=\"text-align:right;\">钢混结构 <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;letter-spacing:.16em;margin-left:4px;\">B</span></span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dashed #5e6f6a;padding-top:4px;\">寿命</span>\n    <span style=\"border-top:1px dashed #5e6f6a;padding-top:4px;\">百年以上</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dashed #5e6f6a;padding-top:4px;text-align:center;\">／</span>\n    <span style=\"border-top:1px dashed #5e6f6a;padding-top:4px;text-align:right;\">五十年</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;\">维护</span>\n    <span>需匠人</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;text-align:center;\">／</span>\n    <span style=\"text-align:right;\">几乎免修</span>\n  </div>\n</div>"
+}

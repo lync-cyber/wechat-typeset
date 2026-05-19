@@ -1,0 +1,88 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 39,
+    "varIdLabel": "01·B HOLLOW BARS"
+  },
+  "variantId": "hollow-bars",
+  "kind": "bar-chart",
+  "containerName": "bar-chart",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "auto 1fr",
+        "gap": "14px",
+        "alignItems": "center",
+        "fontSize": "12.5px",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "2"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "城市 A",
+          "box": {
+            "width": "54px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "84",
+          "box": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "城市 B",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "62",
+          "box": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "城市 C",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "41",
+          "box": {
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "6px"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;font-size:12.5px;color:#0a0a0a;line-height:2;\">\n    <span style=\"width:54px;\">城市 A</span>\n    <span style=\"display:flex;align-items:center;gap:6px;\">\n      <span style=\"height:14px;width:84%;border:1px solid #0a0a0a;background:repeating-linear-gradient(90deg,#0a0a0a 0 2px,transparent 2px 4px);\"></span>\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;\">84</span>\n    </span>\n    <span>城市 B</span>\n    <span style=\"display:flex;align-items:center;gap:6px;\">\n      <span style=\"height:14px;width:62%;border:1px solid #0a0a0a;background:repeating-linear-gradient(90deg,#0a0a0a 0 2px,transparent 2px 4px);\"></span>\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;\">62</span>\n    </span>\n    <span>城市 C</span>\n    <span style=\"display:flex;align-items:center;gap:6px;\">\n      <span style=\"height:14px;width:41%;border:1px solid #0a0a0a;background:repeating-linear-gradient(90deg,#0a0a0a 0 2px,transparent 2px 4px);\"></span>\n      <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;\">41</span>\n    </span>\n  </div>\n</div>"
+}

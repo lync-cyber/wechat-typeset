@@ -1,0 +1,72 @@
+{
+  "source": {
+    "file": "content-3.html",
+    "line": 168,
+    "varIdLabel": "04·B NUMBER STACK"
+  },
+  "variantId": "number-stack",
+  "kind": "recommend",
+  "containerName": "recommend",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "1fr 1fr",
+        "gap": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01\n      设计史的另一种讲法",
+          "box": {
+            "border": "1px solid #111",
+            "padding": "10px",
+            "display": "flex",
+            "justifyContent": "space-between",
+            "unrecognized": {
+              "flex-direction": "column",
+              "min-height": "108px"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "02\n      给青年设计师的十封信",
+          "box": {
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "padding": "10px",
+            "display": "flex",
+            "justifyContent": "space-between",
+            "unrecognized": {
+              "flex-direction": "column",
+              "min-height": "108px"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;\">\n    <div style=\"border:1px solid #111;padding:10px;display:flex;flex-direction:column;justify-content:space-between;min-height:108px;\">\n      <div style=\"font-family:'Lora',serif;font-size:32px;font-weight:500;color:#c8412e;line-height:1;\">01</div>\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:12.5px;line-height:1.5;color:#111;\">设计史的另一种讲法</div>\n    </div>\n    <div style=\"background:#111;color:#efece5;padding:10px;display:flex;flex-direction:column;justify-content:space-between;min-height:108px;\">\n      <div style=\"font-family:'Lora',serif;font-size:32px;font-weight:500;color:#efece5;line-height:1;\">02</div>\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:12.5px;line-height:1.5;color:#efece5;\">给青年设计师的十封信</div>\n    </div>\n  </div>\n</div>"
+}

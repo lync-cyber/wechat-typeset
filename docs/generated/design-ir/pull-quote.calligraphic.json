@@ -1,0 +1,88 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·A CALLIGRAPHIC"
+  },
+  "variantId": "calligraphic",
+  "kind": "pull-quote",
+  "containerName": "pull-quote",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "vermilion-seal",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "position": "relative",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "30px",
+        "lineHeight": "1.4",
+        "color": {
+          "literal": "#2a1d10",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "fontWeight": "500",
+        "letterSpacing": ".06em",
+        "textAlign": "left"
+      },
+      "decorations": []
+    },
+    {
+      "role": "body",
+      "box": {
+        "marginTop": "14px",
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "10px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "摩诘",
+          "box": {
+            "width": "18px",
+            "height": "18px",
+            "background": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.accentClassical"
+            },
+            "color": {
+              "literal": "#f3eada",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontSize": "10px",
+            "fontWeight": "600",
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "center"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "王 维 · 终南别业",
+          "box": {
+            "fontSize": "12px",
+            "color": {
+              "literal": "#6b4a2a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".3em"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:14px 0;position:relative;\">\n  <p style=\"font-size:30px;line-height:1.4;color:#2a1d10;margin:0;font-weight:500;letter-spacing:.06em;text-align:left;\">行 到 水 穷 处<br>坐 看 云 起 时</p>\n  <div style=\"margin-top:14px;display:flex;align-items:center;gap:10px;\">\n    <span style=\"width:18px;height:18px;background:#a03a2a;color:#f3eada;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;\">摩诘</span>\n    <span style=\"font-size:12px;color:#6b4a2a;letter-spacing:.3em;\">王 维 · 终南别业</span>\n  </div>\n</div>"
+}

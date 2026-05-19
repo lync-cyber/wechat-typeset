@@ -1,0 +1,197 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 160,
+    "varIdLabel": "04·B BLOCK STACK"
+  },
+  "variantId": "block-stack",
+  "kind": "steps",
+  "containerName": "steps",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "30px 1fr",
+        "gap": "0"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "01",
+          "box": {
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontSize": "11px",
+            "letterSpacing": ".1em",
+            "textAlign": "center",
+            "padding": "14px 0",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "观察",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "不带先入之见地看。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "2px 0 0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "02",
+          "box": {
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontSize": "11px",
+            "letterSpacing": ".1em",
+            "textAlign": "center",
+            "padding": "14px 0",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "归纳",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "从混乱中提炼模式。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "2px 0 0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "03",
+          "box": {
+            "background": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "color": {
+              "literal": "#efece5",
+              "tokenSuggestion": "tokens.colors.bg"
+            },
+            "fontSize": "11px",
+            "letterSpacing": ".1em",
+            "textAlign": "center",
+            "padding": "14px 0",
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "验证",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "600",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "用反例去检验它。",
+          "box": {
+            "fontSize": "13px",
+            "lineHeight": "1.85",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "margin": "2px 0 0",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        }
+      ],
+      "bodyText": "不带先入之见地看。"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:grid;grid-template-columns:30px 1fr;gap:0;\">\n    <div style=\"background:#111;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:14px 0;font-weight:600;\">01</div>\n    <div style=\"padding:12px 0 12px 14px;border-bottom:1px solid #111;\">\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#111;\">观察</div>\n      <p style=\"font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:2px 0 0;\">不带先入之见地看。</p>\n    </div>\n    <div style=\"background:#c8412e;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:14px 0;font-weight:600;\">02</div>\n    <div style=\"padding:12px 0 12px 14px;border-bottom:1px solid #111;\">\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#111;\">归纳</div>\n      <p style=\"font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:2px 0 0;\">从混乱中提炼模式。</p>\n    </div>\n    <div style=\"background:#454442;color:#efece5;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:14px 0;font-weight:600;\">03</div>\n    <div style=\"padding:12px 0 12px 14px;\">\n      <div style=\"font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:#111;\">验证</div>\n      <p style=\"font-family:'Noto Serif SC',serif;font-size:13px;line-height:1.85;color:#454442;margin:2px 0 0;\">用反例去检验它。</p>\n    </div>\n  </div>\n</div>"
+}

@@ -1,0 +1,72 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·B GEOMETRIC MARK"
+  },
+  "variantId": "geometric-mark",
+  "kind": "note",
+  "containerName": "note",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "8px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "EDITORIAL · NOTE",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".24em",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "14.5px",
+        "lineHeight": "1.9",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "paddingLeft": "17px",
+        "borderLeft": "0",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": []
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:6px 0;\">\n  <div style=\"display:flex;align-items:center;gap:8px;margin-bottom:8px;\">\n    <span style=\"width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid #111;display:inline-block;\"></span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;color:#111;font-weight:600;\">EDITORIAL · NOTE</span>\n  </div>\n  <p style=\"font-family:'Noto Serif SC',serif;font-size:14.5px;line-height:1.9;color:#111;margin:0;padding-left:17px;border-left:0;\">将口语化的犹豫与重复原样保留，是本期访谈最重要的编辑决定。</p>\n</div>"
+}

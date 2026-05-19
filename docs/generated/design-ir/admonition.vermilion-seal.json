@@ -1,0 +1,95 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 82,
+    "varIdLabel": "02·A VERMILION SEAL"
+  },
+  "variantId": "vermilion-seal",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t2",
+  "recommendedThemeId": "literary-humanism",
+  "motif": "vermilion-seal",
+  "wrapper": {
+    "background": {
+      "literal": "#f3eada",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "18px 4px",
+    "position": "relative",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "body",
+      "box": {
+        "paddingRight": "60px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "示",
+          "box": {
+            "fontSize": "11px",
+            "letterSpacing": ".4em",
+            "color": {
+              "literal": "#a03a2a",
+              "tokenSuggestion": "tokens.colors.accentClassical"
+            },
+            "fontWeight": "500",
+            "marginBottom": "8px",
+            "unrecognized": {
+              "font-family": "'Noto Serif SC',serif"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "凡涉及帝王纪年之处，皆以括号补注公元，如「乾隆四十三年（一七七八）」之例。",
+          "box": {
+            "fontSize": "15px",
+            "lineHeight": "2",
+            "color": {
+              "literal": "#2a1d10",
+              "tokenSuggestion": "tokens.colors.text"
+            },
+            "margin": "0",
+            "fontWeight": "400"
+          }
+        }
+      ],
+      "bodyText": "凡涉及帝王纪年之处，皆以括号补注公元，如「乾隆四十三年（一七七八）」之例。"
+    }
+  ],
+  "topLevelDecorations": [
+    {
+      "kind": "rotated-mark",
+      "text": "告",
+      "box": {
+        "position": "absolute",
+        "top": "4px",
+        "right": "6px",
+        "width": "42px",
+        "height": "42px",
+        "border": "2.5px solid #a03a2a",
+        "color": {
+          "literal": "#a03a2a",
+          "tokenSuggestion": "tokens.colors.accentClassical"
+        },
+        "fontSize": "22px",
+        "fontWeight": "600",
+        "textAlign": "center",
+        "lineHeight": "38px",
+        "letterSpacing": "0",
+        "transform": "rotate(-3deg)",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "rotate": "-3deg"
+    }
+  ],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#f3eada;padding:18px 4px;position:relative;\">\n  <div style=\"position:absolute;top:4px;right:6px;width:42px;height:42px;border:2.5px solid #a03a2a;color:#a03a2a;font-size:22px;font-weight:600;text-align:center;line-height:38px;letter-spacing:0;font-family:'Noto Serif SC',serif;transform:rotate(-3deg);\">告</div>\n  <div style=\"padding-right:60px;\">\n    <div style=\"font-family:'Noto Serif SC',serif;font-size:11px;letter-spacing:.4em;color:#a03a2a;font-weight:500;margin-bottom:8px;\">　示</div>\n    <p style=\"font-size:15px;line-height:2;color:#2a1d10;margin:0;font-weight:400;\">凡涉及帝王纪年之处，皆以括号补注公元，<span style=\"color:#6b4a2a;\">如「乾隆四十三年（一七七八）」之例。</span></p>\n  </div>\n</div>"
+}

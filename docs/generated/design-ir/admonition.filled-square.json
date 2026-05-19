@@ -1,0 +1,118 @@
+{
+  "source": {
+    "file": "content-1.html",
+    "line": 157,
+    "varIdLabel": "04·A FILLED SQUARE"
+  },
+  "variantId": "filled-square",
+  "kind": "admonition",
+  "containerName": "admonition",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "4px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "center",
+        "gap": "14px",
+        "marginBottom": "14px"
+      },
+      "decorations": [
+        {
+          "kind": "mini-box",
+          "box": {
+            "width": "18px",
+            "height": "18px",
+            "background": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "display": "inline-block",
+            "flexShrink": "0"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "告　示",
+          "box": {
+            "fontSize": "14px",
+            "fontWeight": "700",
+            "letterSpacing": ".3em",
+            "color": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "flex": "1",
+            "height": "1px",
+            "background": {
+              "literal": "#111",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "N° 01",
+          "box": {
+            "fontSize": "10px",
+            "color": {
+              "literal": "#454442",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "letterSpacing": ".16em",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "15px",
+        "lineHeight": "1.95",
+        "color": {
+          "literal": "#111",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0",
+        "unrecognized": {
+          "font-family": "'Noto Serif SC',serif"
+        }
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "仅在结论性数据上使用强调色",
+          "box": {
+            "color": {
+              "literal": "#c8412e",
+              "tokenSuggestion": "tokens.colors.primary"
+            },
+            "fontWeight": "500"
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:4px 0;\">\n  <div style=\"display:flex;align-items:center;gap:14px;margin-bottom:14px;\">\n    <span style=\"width:18px;height:18px;background:#c8412e;display:inline-block;flex-shrink:0;\"></span>\n    <span style=\"font-size:14px;font-weight:700;letter-spacing:.3em;color:#111;\">告　示</span>\n    <span style=\"flex:1;height:1px;background:#111;\"></span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#454442;letter-spacing:.16em;\">N° 01</span>\n  </div>\n  <p style=\"font-family:'Noto Serif SC',serif;font-size:15px;line-height:1.95;color:#111;margin:0;\">本文图表所用配色须保持视觉一致，<span style=\"color:#c8412e;font-weight:500;\">仅在结论性数据上使用强调色</span>，他处一律单色。</p>\n</div>"
+}

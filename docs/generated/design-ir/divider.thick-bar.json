@@ -1,0 +1,55 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 127,
+    "varIdLabel": "04·B THICK BAR"
+  },
+  "variantId": "thick-bar",
+  "kind": "divider",
+  "containerName": "divider",
+  "designTheme": "t4",
+  "recommendedThemeId": "swiss-grid",
+  "motif": "filled-square",
+  "wrapper": {
+    "background": {
+      "literal": "#efece5",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "14px 0",
+    "unrecognized": {
+      "font-family": "'Noto Sans SC',sans-serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "unknown",
+      "box": {
+        "display": "flex",
+        "gap": "0",
+        "height": "6px"
+      },
+      "decorations": []
+    },
+    {
+      "role": "body",
+      "box": {
+        "fontSize": "9px",
+        "letterSpacing": ".24em",
+        "color": {
+          "literal": "#454442",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "marginTop": "6px",
+        "textAlign": "right",
+        "fontWeight": "600",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "— § ⁄ 03 —"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Sans SC',sans-serif;background:#efece5;padding:14px 0;\">\n  <div style=\"display:flex;gap:0;height:6px;\">\n    <span style=\"width:24%;background:#111;\"></span>\n    <span style=\"width:8%;background:transparent;\"></span>\n    <span style=\"flex:1;background:#111;\"></span>\n    <span style=\"width:8%;background:transparent;\"></span>\n    <span style=\"width:18%;background:#c8412e;\"></span>\n  </div>\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.24em;color:#454442;margin-top:6px;text-align:right;font-weight:600;\">— § ⁄ 03 —</div>\n</div>"
+}

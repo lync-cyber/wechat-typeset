@@ -1,0 +1,94 @@
+{
+  "source": {
+    "file": "content-4.html",
+    "line": 39,
+    "varIdLabel": "01·B H3 INLINE"
+  },
+  "variantId": "h3-inline",
+  "kind": "section-title",
+  "containerName": "section-title",
+  "designTheme": "t1",
+  "recommendedThemeId": "editorial-mook",
+  "motif": "numbered-rule",
+  "wrapper": {
+    "background": {
+      "literal": "#fbfaf7",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "display": "flex",
+        "alignItems": "baseline",
+        "gap": "10px",
+        "marginBottom": "8px"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "§ 2.1",
+          "box": {
+            "fontSize": "10px",
+            "letterSpacing": ".2em",
+            "color": {
+              "literal": "#6b6b65",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "fontWeight": "600",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "rule-line",
+          "box": {
+            "height": "1px",
+            "flex": "1",
+            "background": {
+              "literal": "#0a0a0a",
+              "tokenSuggestion": "tokens.colors.text"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "16px",
+        "fontWeight": "600",
+        "color": {
+          "literal": "#0a0a0a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "margin": "0 0 8px",
+        "letterSpacing": ".02em"
+      },
+      "decorations": [],
+      "slotText": "巷弄的尺度"
+    },
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "13px",
+        "color": {
+          "literal": "#6b6b65",
+          "tokenSuggestion": "tokens.colors.textMuted"
+        },
+        "lineHeight": "1.85",
+        "margin": "0"
+      },
+      "decorations": [],
+      "slotText": "小节正文起首段……"
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#fbfaf7;padding:6px 0;\">\n  <div style=\"display:flex;align-items:baseline;gap:10px;margin-bottom:8px;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:#6b6b65;font-weight:600;\">§ 2.1</span>\n    <span style=\"height:1px;flex:1;background:#0a0a0a;\"></span>\n  </div>\n  <h3 style=\"font-size:16px;font-weight:600;color:#0a0a0a;margin:0 0 8px;letter-spacing:.02em;\">巷弄的尺度</h3>\n  <p style=\"font-size:13px;color:#6b6b65;line-height:1.85;margin:0;\">小节正文起首段……</p>\n</div>"
+}

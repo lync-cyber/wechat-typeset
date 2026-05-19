@@ -1,0 +1,177 @@
+{
+  "source": {
+    "file": "content-2.html",
+    "line": 116,
+    "varIdLabel": "03·B SAMPLE LOG"
+  },
+  "variantId": "sample-log",
+  "kind": "table-card",
+  "containerName": "table-card",
+  "designTheme": "t3",
+  "recommendedThemeId": "life-aesthetic",
+  "motif": "numbered-cell",
+  "wrapper": {
+    "background": {
+      "literal": "#ece4d2",
+      "tokenSuggestion": "tokens.colors.bg"
+    },
+    "padding": "6px 0",
+    "unrecognized": {
+      "font-family": "'Noto Serif SC',serif"
+    }
+  },
+  "slots": [
+    {
+      "role": "kicker",
+      "box": {
+        "fontSize": "10px",
+        "color": {
+          "literal": "#8b4a3a",
+          "tokenSuggestion": "tokens.colors.accent"
+        },
+        "letterSpacing": ".18em",
+        "marginBottom": "6px",
+        "unrecognized": {
+          "font-family": "'IBM Plex Mono',monospace"
+        }
+      },
+      "decorations": [],
+      "slotText": "SAMPLE LOG · 2025.04"
+    },
+    {
+      "role": "body",
+      "box": {
+        "display": "grid",
+        "gridTemplateColumns": "auto 1fr auto",
+        "gap": "8px",
+        "alignItems": "center",
+        "fontSize": "13px",
+        "color": {
+          "literal": "#1f2a2a",
+          "tokenSuggestion": "tokens.colors.text"
+        },
+        "lineHeight": "1.7"
+      },
+      "decorations": [
+        {
+          "kind": "text",
+          "text": "04.02",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "雀儿山垭口",
+          "box": {}
+        },
+        {
+          "kind": "text",
+          "text": "4,250m",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "04.07",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "borderTop": "1px dotted #5e6f6a",
+            "paddingTop": "6px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "竹巴笼沟",
+          "box": {
+            "borderTop": "1px dotted #5e6f6a",
+            "paddingTop": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "2,180m",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "borderTop": "1px dotted #5e6f6a",
+            "paddingTop": "6px",
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "04.11",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#5e6f6a",
+              "tokenSuggestion": "tokens.colors.textMuted"
+            },
+            "borderTop": "1px dotted #5e6f6a",
+            "paddingTop": "6px",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        },
+        {
+          "kind": "text",
+          "text": "理塘草原",
+          "box": {
+            "borderTop": "1px dotted #5e6f6a",
+            "paddingTop": "6px"
+          }
+        },
+        {
+          "kind": "text",
+          "text": "3,800m",
+          "box": {
+            "fontSize": "11px",
+            "color": {
+              "literal": "#8b4a3a",
+              "tokenSuggestion": "tokens.colors.accent"
+            },
+            "borderTop": "1px dotted #5e6f6a",
+            "paddingTop": "6px",
+            "fontWeight": "500",
+            "unrecognized": {
+              "font-family": "'IBM Plex Mono',monospace"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "topLevelDecorations": [],
+  "rawHtml": "<div style=\"font-family:'Noto Serif SC',serif;background:#ece4d2;padding:6px 0;\">\n  <div style=\"font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8b4a3a;letter-spacing:.18em;margin-bottom:6px;\">SAMPLE LOG · 2025.04</div>\n  <div style=\"display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;font-size:13px;color:#1f2a2a;line-height:1.7;\">\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;\">04.02</span>\n    <span>雀儿山垭口</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;font-weight:500;\">4,250m</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dotted #5e6f6a;padding-top:6px;\">04.07</span>\n    <span style=\"border-top:1px dotted #5e6f6a;padding-top:6px;\">竹巴笼沟</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;border-top:1px dotted #5e6f6a;padding-top:6px;font-weight:500;\">2,180m</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5e6f6a;border-top:1px dotted #5e6f6a;padding-top:6px;\">04.11</span>\n    <span style=\"border-top:1px dotted #5e6f6a;padding-top:6px;\">理塘草原</span>\n    <span style=\"font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b4a3a;border-top:1px dotted #5e6f6a;padding-top:6px;font-weight:500;\">3,800m</span>\n  </div>\n</div>"
+}
