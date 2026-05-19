@@ -59,6 +59,7 @@ export const personasCapabilitiesCommand: Command<
     },
     additionalProperties: false,
   },
+  readOnly: true,
   run(input) {
     const spec = getPersona(input.id)
     const view = getThemeCapabilities(input.id)

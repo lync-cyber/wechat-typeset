@@ -7,6 +7,7 @@ export const containersListCommand: Command<Record<string, never>, readonly Cont
     'Return the complete container vocabulary (fence name → category / fenceLength / variantKind / pack / namespace / attrs / example). Theme-independent.',
   inputSchema: { type: 'object', properties: {}, additionalProperties: false },
   outputSchema: { type: 'array', items: { type: 'object', additionalProperties: true } },
+  readOnly: true,
   run() {
     return getContainerVocabulary()
   },

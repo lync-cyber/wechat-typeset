@@ -43,6 +43,7 @@ export const motifRenderCommand: Command<MotifRenderInput, string> = {
     additionalProperties: false,
   },
   outputSchema: { type: 'string' },
+  readOnly: true,
   run(input) {
     const hasShape = input.shape !== undefined
     const hasTemplate = input.template !== undefined

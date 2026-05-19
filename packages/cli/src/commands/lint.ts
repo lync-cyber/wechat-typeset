@@ -7,9 +7,9 @@ interface LintInput {
 }
 
 export const lintCommand: Command<LintInput, LintReport> = {
-  name: 'lint',
+  name: 'markdown lint',
   description:
-    'Contract-lint markdown (fence vocabulary, fence nesting, inline-extension closure, frontmatter, theme-namespace mismatch). Returns { ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }.',
+    'Contract-lint markdown (fence vocabulary, fence nesting, inline-extension closure, frontmatter, theme-namespace mismatch). Returns { ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }. When `kind` is `unknown_container`, `nesting_depth`, `unexpected_jsx_attrs`, `fence_not_closed`, or `wrong_theme_namespace`, `name` carries the offending fence name. Canonical name; `lint` is kept as a deprecated alias.',
   inputSchema: {
     type: 'object',
     required: ['md'],
@@ -34,7 +34,18 @@ export const lintCommand: Command<LintInput, LintReport> = {
           required: ['line', 'kind', 'severity', 'hint', 'excerpt'],
           properties: {
             line: { type: 'integer' },
-            kind: { type: 'string' },
+            kind: {
+              enum: [
+                'unknown_container',
+                'unexpected_jsx_attrs',
+                'html_comment_variant',
+                'fence_not_closed',
+                'nesting_depth',
+                'inline_unclosed',
+                'wrong_theme_namespace',
+                'frontmatter_invalid',
+              ],
+            },
             severity: { enum: ['error', 'warning'] },
             name: { type: 'string' },
             hint: { type: 'string' },
@@ -51,6 +62,7 @@ export const lintCommand: Command<LintInput, LintReport> = {
     },
     additionalProperties: false,
   },
+  readOnly: true,
   run(input) {
     return lintMarkdown(input.md, input.persona)
   },

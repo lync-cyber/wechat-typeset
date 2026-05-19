@@ -19,6 +19,7 @@ export const platformsListCommand: Command<Record<string, never>, readonly Publi
       additionalProperties: false,
     },
   },
+  readOnly: true,
   run() {
     return listPublishPlatforms()
   },

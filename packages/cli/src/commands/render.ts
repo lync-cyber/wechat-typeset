@@ -20,9 +20,9 @@ interface RenderOutput {
 const PLATFORM_IDS = listPublishPlatforms().map((p) => p.id)
 
 export const renderCommand: Command<RenderInput, RenderOutput> = {
-  name: 'render',
+  name: 'markdown render',
   description:
-    'Render markdown → HTML through the full pipeline (markdown-it + theme injection + wxPatch).',
+    'Render markdown → HTML through the full pipeline (markdown-it + theme injection + wxPatch). Canonical name; `render` is kept as a deprecated alias.',
   inputSchema: {
     type: 'object',
     required: ['md'],
@@ -50,12 +50,64 @@ export const renderCommand: Command<RenderInput, RenderOutput> = {
       html: { type: 'string' },
       wordCount: { type: 'integer' },
       readingTime: { type: 'integer' },
-      patchLog: { type: 'object', additionalProperties: true },
-      frontmatterIssues: { type: 'array' },
-      pageConfig: { type: 'object', additionalProperties: true },
+      patchLog: {
+        type: 'object',
+        required: ['entries', 'total'],
+        properties: {
+          entries: {
+            type: 'array',
+            items: {
+              type: 'object',
+              required: ['patch', 'label', 'count'],
+              properties: {
+                patch: { type: 'string' },
+                label: { type: 'string' },
+                count: { type: 'integer' },
+                samples: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    required: ['selector', 'before'],
+                    properties: {
+                      selector: { type: 'string' },
+                      before: { type: 'string' },
+                    },
+                    additionalProperties: false,
+                  },
+                },
+              },
+              additionalProperties: false,
+            },
+          },
+          total: { type: 'integer' },
+        },
+        additionalProperties: false,
+      },
+      frontmatterIssues: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['path', 'message', 'severity'],
+          properties: {
+            path: { type: 'string' },
+            message: { type: 'string' },
+            severity: { enum: ['error', 'warning'] },
+          },
+          additionalProperties: false,
+        },
+      },
+      pageConfig: {
+        type: 'object',
+        properties: {
+          variants: { type: 'object', additionalProperties: { type: 'string' } },
+          theme: { type: 'string' },
+        },
+        additionalProperties: false,
+      },
     },
     additionalProperties: true,
   },
+  readOnly: true,
   run(input) {
     const out = render({
       md: input.md,

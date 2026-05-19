@@ -30,6 +30,7 @@ export const validateCommand: Command<ValidateInput, ValidateOutput> = {
     additionalProperties: false,
   },
   outputSchema: VALIDATE_OUTPUT_SCHEMA,
+  readOnly: true,
   run(input) {
     if (input.spec && input.md) {
       return {

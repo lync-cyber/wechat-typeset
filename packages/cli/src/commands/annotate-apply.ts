@@ -19,9 +19,9 @@ const PATCH_KINDS = [
 const CONFIDENCE_VALUES = ['high', 'medium', 'low'] as const
 
 export const annotateApplyCommand: Command<AnnotateApplyInput, AnnotateApplyResult> = {
-  name: 'annotate apply',
+  name: 'markdown annotate apply',
   description:
-    "Pure function `(md, patches[]) → newMd`. Applies the patch plan from `annotate` mechanically: each patch wraps its declared line range in `::: <container>[ variant=X]` (or `::::` for 4-fence containers). Patches are applied in descending line order so earlier ranges stay valid. Returns { md, applied, skipped[] } — overlapping ranges, invalid line numbers, unknown containers, and `wrap_pros_cons` (which requires manual structure) are reported in `skipped[]` with a reason. The function never throws; an LLM can feed unverified patches in and inspect `skipped[]` to know what to fix.",
+    "Pure function `(md, patches[]) → newMd`. Applies the patch plan from `markdown annotate` mechanically: each patch wraps its declared line range in `::: <container>[ variant=X]` (or `::::` for 4-fence containers). Patches are applied in descending line order so earlier ranges stay valid. Returns { md, applied, skipped[] } — overlapping ranges, invalid line numbers, unknown containers, and `wrap_pros_cons` (which requires manual structure) are reported in `skipped[]` with a reason. The function never throws. Canonical name; `annotate apply` is kept as a deprecated alias.",
   inputSchema: {
     type: 'object',
     required: ['md', 'patches'],
@@ -70,6 +70,7 @@ export const annotateApplyCommand: Command<AnnotateApplyInput, AnnotateApplyResu
     },
     additionalProperties: false,
   },
+  readOnly: true,
   run(input) {
     return applyPatches(input.md, input.patches)
   },

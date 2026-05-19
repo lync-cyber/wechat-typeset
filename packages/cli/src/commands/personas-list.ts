@@ -10,6 +10,7 @@ export const personasListCommand: Command<Record<string, never>, readonly Person
     type: 'array',
     items: { type: 'object', additionalProperties: true },
   },
+  readOnly: true,
   run() {
     return listPersonas()
   },

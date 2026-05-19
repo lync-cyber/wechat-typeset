@@ -53,7 +53,7 @@ describe('command catalog · meta', () => {
       Record<string, never>,
       {
         version: string
-        commands: Array<{ name: string }>
+        commands: Array<{ name: string; readOnly: boolean }>
         errorCodes: Array<{ code: string; exitCode: number; description: string }>
         platforms: Array<{ id: string; name: string; status: string }>
         variantIds: Record<string, readonly string[]>
@@ -72,8 +72,10 @@ describe('command catalog · meta', () => {
     expect(out.version).toBeTruthy()
     expect(out.commands.some((c) => c.name === 'describe')).toBe(true)
 
+    // P1-5: RENDER_FAILED 独立 exitCode（与 CONTRACT_VIOLATION 区分）
     expect(out.errorCodes.length).toBeGreaterThanOrEqual(5)
     expect(out.errorCodes.find((e) => e.code === 'CONTRACT_VIOLATION')?.exitCode).toBe(4)
+    expect(out.errorCodes.find((e) => e.code === 'RENDER_FAILED')?.exitCode).toBe(6)
 
     expect(out.platforms.length).toBeGreaterThanOrEqual(1)
     expect(out.platforms.find((p) => p.id === 'wechat')).toBeTruthy()
@@ -87,6 +89,163 @@ describe('command catalog · meta', () => {
 
     expect(out.inlineExtensions.length).toBeGreaterThan(0)
     expect(out.inlineExtensions[0].syntax).toBeTruthy()
+
+    // P1-6: 所有 command 暴露 readOnly 字段（当前全部为 true）
+    for (const c of out.commands) {
+      expect(typeof c.readOnly).toBe('boolean')
+    }
+    expect(out.commands.every((c) => c.readOnly === true)).toBe(true)
+  })
+
+  it('所有 command 都标 readOnly: true（CLI 全部纯读）', () => {
+    for (const c of COMMANDS) {
+      expect(c.readOnly, `command ${c.name} missing readOnly`).toBe(true)
+    }
+  })
+})
+
+describe('deprecation aliases · 旧 bare-verb 仍工作但 description 前缀 DEPRECATED', () => {
+  const ALIASES: Array<{ old: string; canonical: string }> = [
+    { old: 'render', canonical: 'markdown render' },
+    { old: 'lint', canonical: 'markdown lint' },
+    { old: 'annotate', canonical: 'markdown annotate' },
+    { old: 'annotate apply', canonical: 'markdown annotate apply' },
+  ]
+
+  it.each(ALIASES)('alias `$old` → canonical `$canonical`', ({ old, canonical }) => {
+    const aliasCmd = COMMAND_BY_NAME.get(old)
+    const canonicalCmd = COMMAND_BY_NAME.get(canonical)
+    expect(aliasCmd, `alias not registered: ${old}`).toBeTruthy()
+    expect(canonicalCmd, `canonical not registered: ${canonical}`).toBeTruthy()
+    expect(aliasCmd!.description.startsWith('DEPRECATED alias of')).toBe(true)
+    // alias 与 canonical 共享同一个 run 引用 —— 不拷贝业务逻辑
+    expect(aliasCmd!.run).toBe(canonicalCmd!.run)
+    expect(aliasCmd!.inputSchema).toBe(canonicalCmd!.inputSchema)
+  })
+
+  it('`render` alias 与 `markdown render` 同 run，行为一致', async () => {
+    const oldRender = get<{ md: string; persona: string }, { html: string }>('render')
+    const newRender = get<{ md: string; persona: string }, { html: string }>('markdown render')
+    const args = { md: '# 标题\n\n::: tip\n小贴士\n:::\n', persona: 'default' }
+    const a = await oldRender.run(args)
+    const b = await newRender.run(args)
+    expect(a.html).toBe(b.html)
+  })
+})
+
+describe('new query endpoints (P1-2)', () => {
+  it('containers get → 单个 ContainerSpec', async () => {
+    const cmd = get<{ name: string }, { name: string; category: string; fenceLength: number }>(
+      'containers get',
+    )
+    const out = await cmd.run({ name: 'tip' })
+    expect(out.name).toBe('tip')
+    expect(out.fenceLength).toBe(3)
+  })
+
+  it('containers get · 未知 → WtException RESOURCE_NOT_FOUND', async () => {
+    const cmd = get<{ name: string }, unknown>('containers get')
+    await expectWt(() => cmd.run({ name: 'no-such-container' }), 'RESOURCE_NOT_FOUND')
+  })
+
+  it('containers variants → 容器可切换的 variant 列表', async () => {
+    const cmd = get<{ name: string }, Array<{ id: string }>>('containers variants')
+    const out = await cmd.run({ name: 'tip' })
+    expect(Array.isArray(out)).toBe(true)
+    expect(out.some((v) => v.id === 'accent-bar')).toBe(true)
+  })
+
+  it('inline-extensions list → 非空', async () => {
+    const cmd = get<Record<string, never>, Array<{ syntax: string }>>('inline-extensions list')
+    const out = await cmd.run({})
+    expect(out.length).toBeGreaterThan(0)
+    expect(out.some((e) => e.syntax === '==mark==')).toBe(true)
+  })
+
+  it('inline-extensions snippet → inputExample', async () => {
+    const cmd = get<{ syntax: string }, string>('inline-extensions snippet')
+    const out = await cmd.run({ syntax: '==mark==' })
+    expect(typeof out).toBe('string')
+    expect(out.length).toBeGreaterThan(0)
+  })
+
+  it('persona motifs → 含 h2Prefix', async () => {
+    const cmd = get<{ id: string }, { h2Prefix?: unknown }>('persona motifs')
+    const out = await cmd.run({ id: 'default' })
+    expect(out.h2Prefix).toBeTruthy()
+  })
+
+  it('frontmatter parse → 解析 theme 字段', async () => {
+    const cmd = get<{ md: string }, { config: { theme?: string }; body: string }>('frontmatter parse')
+    const out = await cmd.run({ md: '---\ntheme: swiss-grid\n---\n# Hi\n' })
+    expect(out.config.theme).toBe('swiss-grid')
+    expect(out.body).toContain('# Hi')
+  })
+
+  it('capabilities → schemaVersion + personas[] + containers[]', async () => {
+    const cmd = get<
+      Record<string, never>,
+      { schemaVersion: string; personas: Array<{ id: string }>; containers: Array<{ id: string }> }
+    >('capabilities')
+    const out = await cmd.run({})
+    expect(out.schemaVersion).toMatch(/^3\./)
+    expect(out.personas.length).toBeGreaterThanOrEqual(14)
+    expect(out.containers.length).toBeGreaterThan(30)
+  })
+
+  it('error-codes list → 含 RENDER_FAILED + 新 exitCode 6', async () => {
+    const cmd = get<
+      Record<string, never>,
+      Array<{ code: string; exitCode: number; description: string }>
+    >('error-codes list')
+    const out = await cmd.run({})
+    const rf = out.find((e) => e.code === 'RENDER_FAILED')
+    expect(rf?.exitCode).toBe(6)
+    const cv = out.find((e) => e.code === 'CONTRACT_VIOLATION')
+    expect(cv?.exitCode).toBe(4)
+  })
+
+  it('schema get → PersonaSpec JSON Schema', async () => {
+    const cmd = get<Record<string, never>, { type?: string; properties?: Record<string, unknown> }>(
+      'schema get',
+    )
+    const out = await cmd.run({})
+    expect(out.type).toBe('object')
+    expect(out.properties).toHaveProperty('palette')
+    expect(out.properties).toHaveProperty('variants')
+  })
+})
+
+describe('personas recommend · vibe/audience optional fields (P1-4)', () => {
+  it('只给 vibe 也能跑出 ranked[3]', async () => {
+    const cmd = get<
+      { vibe: string },
+      {
+        ranked: Array<{ id: string; staticScore: number; staticReasons: string[] }>
+        recommendNew: boolean
+      }
+    >('personas recommend')
+    const out = await cmd.run({ vibe: '暖米底圆角，慢生活散文气质' })
+    expect(out.ranked.length).toBe(3)
+    // staticReasons 应该提到 vibe
+    const r0Reasons = out.ranked[0].staticReasons.join(' ')
+    expect(r0Reasons).toMatch(/vibe/)
+  })
+
+  it('全空 input → WtException CONTRACT_VIOLATION', async () => {
+    const cmd = get<Record<string, never>, unknown>('personas recommend')
+    await expectWt(() => cmd.run({}), 'CONTRACT_VIOLATION')
+  })
+
+  it('inputSchema: title / summary 均为 optional', () => {
+    const schema = COMMAND_BY_NAME.get('personas recommend')!.inputSchema as {
+      required?: string[]
+      properties: Record<string, unknown>
+    }
+    expect(schema.required ?? []).not.toContain('title')
+    expect(schema.required ?? []).not.toContain('summary')
+    expect(schema.properties).toHaveProperty('vibe')
+    expect(schema.properties).toHaveProperty('audience')
   })
 })
 

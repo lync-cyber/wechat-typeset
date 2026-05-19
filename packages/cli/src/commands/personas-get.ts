@@ -16,6 +16,7 @@ export const personasGetCommand: Command<PersonasGetInput, PersonaSpec> = {
     additionalProperties: false,
   },
   outputSchema: { type: 'object', additionalProperties: true },
+  readOnly: true,
   run(input) {
     return getPersona(input.id)
   },

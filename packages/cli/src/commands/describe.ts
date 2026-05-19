@@ -14,6 +14,7 @@ interface DescribeEntry {
   description: string
   inputSchema: JSONSchema7
   outputSchema: JSONSchema7
+  readOnly: boolean
 }
 
 interface DescribeErrorCode {
@@ -85,12 +86,17 @@ export const describeCommand: Command<Record<string, never>, DescribeOutput> = {
         type: 'array',
         items: {
           type: 'object',
-          required: ['name', 'description', 'inputSchema', 'outputSchema'],
+          required: ['name', 'description', 'inputSchema', 'outputSchema', 'readOnly'],
           properties: {
             name: { type: 'string' },
             description: { type: 'string' },
             inputSchema: { type: 'object', additionalProperties: true },
             outputSchema: { type: 'object', additionalProperties: true },
+            readOnly: {
+              type: 'boolean',
+              description:
+                'true = pure read (safe to cache / retry / call speculatively); false = state-mutating write.',
+            },
           },
           additionalProperties: false,
         },
@@ -159,6 +165,7 @@ export const describeCommand: Command<Record<string, never>, DescribeOutput> = {
     },
     additionalProperties: false,
   },
+  readOnly: true,
   run() {
     const errorCodes: DescribeErrorCode[] = (
       Object.keys(WT_ERROR_INFO) as WtErrorCode[]
@@ -191,6 +198,7 @@ export const describeCommand: Command<Record<string, never>, DescribeOutput> = {
         description: c.description,
         inputSchema: c.inputSchema,
         outputSchema: c.outputSchema,
+        readOnly: c.readOnly,
       })),
       errorCodes,
       platforms,

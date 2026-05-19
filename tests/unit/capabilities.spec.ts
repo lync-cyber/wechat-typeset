@@ -26,7 +26,22 @@ interface DeprecationNotice {
 interface Capabilities {
   schemaVersion: string
   deprecations: DeprecationNotice[]
+  cli?: { commands?: Array<{ name: string }> }
   [k: string]: unknown
+}
+
+/**
+ * 解析 deprecation `id` 路径到 capabilities 中的实体。支持两种形式：
+ *   - 顶层字段名（如 `personaSchemaUri`）→ 字面 hasOwnProperty
+ *   - `cli.command.<canonical-name>` → 在 `cli.commands[]` 里按 name 找 alias
+ */
+function deprecatedEntityExists(caps: Capabilities, id: string): boolean {
+  const CLI_PREFIX = 'cli.command.'
+  if (id.startsWith(CLI_PREFIX)) {
+    const cmdName = id.slice(CLI_PREFIX.length)
+    return (caps.cli?.commands ?? []).some((c) => c.name === cmdName)
+  }
+  return Object.prototype.hasOwnProperty.call(caps, id)
 }
 
 const OUT = resolve(process.cwd(), 'dist/api/capabilities.json')
@@ -57,14 +72,15 @@ describe('capabilities.json 契约结构', () => {
     }
   })
 
-  it('登记 deprecated 的 id 仍在 capabilities 顶层（"已弃用但未删除"的契约承诺）', () => {
-    // 演进规则：deprecation 是"窗口期"承诺——字段还在，建议下游迁移。
-    // 等真正移除时，必须先升 major（删 deprecation 条目 + 删字段）。
+  it('登记 deprecated 的 id 仍在 capabilities 顶层 / 子表（"已弃用但未删除"的契约承诺）', () => {
+    // 演进规则：deprecation 是"窗口期"承诺——字段 / alias 还在，建议下游迁移。
+    // 等真正移除时，必须先升 major（删 deprecation 条目 + 删字段 / alias）。
+    // 支持 `cli.command.<name>` 命名空间：去 cli.commands[] 找 alias 是否仍注册。
     for (const d of caps.deprecations) {
       expect(
-        Object.prototype.hasOwnProperty.call(caps, d.id),
-        `${d.id} 已登记 deprecation 但已从 capabilities 顶层移除——这违反窗口期承诺。` +
-          `要么把字段加回（保留兼容直到 ${d.removalPlannedIn ?? '下个 major'}），` +
+        deprecatedEntityExists(caps, d.id),
+        `${d.id} 已登记 deprecation 但实体已移除——这违反窗口期承诺。` +
+          `要么把它加回（保留兼容直到 ${d.removalPlannedIn ?? '下个 major'}），` +
           `要么连同 deprecation 条目一起在 major 升级时删除。`,
       ).toBe(true)
     }

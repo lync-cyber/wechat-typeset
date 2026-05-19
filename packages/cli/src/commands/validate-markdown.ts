@@ -24,6 +24,7 @@ export const validateMarkdownCommand: Command<ValidateMarkdownInput, ValidateOut
     additionalProperties: false,
   },
   outputSchema: VALIDATE_OUTPUT_SCHEMA,
+  readOnly: true,
   run(input) {
     try {
       render({ md: input.md, persona: input.persona })

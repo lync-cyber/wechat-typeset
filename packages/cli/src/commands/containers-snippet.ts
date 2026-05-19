@@ -35,6 +35,7 @@ export const containersSnippetCommand: Command<ContainersSnippetInput, string> =
     additionalProperties: false,
   },
   outputSchema: { type: 'string' },
+  readOnly: true,
   run(input) {
     const spec = getContainerSpec(input.name)
     if (!spec) {

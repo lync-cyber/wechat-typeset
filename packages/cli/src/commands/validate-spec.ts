@@ -23,6 +23,7 @@ export const validateSpecCommand: Command<ValidateSpecInput, ValidateOutput> = {
     additionalProperties: false,
   },
   outputSchema: VALIDATE_OUTPUT_SCHEMA,
+  readOnly: true,
   run(input) {
     const result = validatePersona(input.spec)
     return {
