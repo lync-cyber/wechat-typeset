@@ -59,7 +59,7 @@ function parseArgs(argv: string[]): CliArgs {
   let allThemes = false
   let snippetOpt = 'all'
   let outOpt: string | undefined
-  let open = false
+  let openOpt: boolean | undefined
   let watch = false
   let port = DEFAULT_PORT
   let injectReload = false
@@ -67,16 +67,17 @@ function parseArgs(argv: string[]): CliArgs {
 
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
+    if (a === 'list' || a === '--list') { list = true; continue }
     if (!a.startsWith('--')) {
       if (!target) target = a
       else fail(`unexpected positional arg "${a}"`)
       continue
     }
     if (a === '--all-themes') { allThemes = true; continue }
-    if (a === '--open') { open = true; continue }
+    if (a === '--open') { openOpt = true; continue }
+    if (a === '--no-open') { openOpt = false; continue }
     if (a === '--watch') { watch = true; continue }
     if (a === '--inject-reload') { injectReload = true; continue }
-    if (a === '--list') { list = true; continue }
     const next = argv[i + 1]
     if (next === undefined || next.startsWith('--')) fail(`${a} expects a value`)
     if (a === '--theme') themeOpt = next
@@ -96,7 +97,8 @@ function parseArgs(argv: string[]): CliArgs {
     if (!target) {
       fail(
         'usage: preview-variant <kind>.<id> [--theme <id> | --all-themes] [--snippet <i|all>] [--out <path>] [--watch [--port <n>]] [--open]\n' +
-        '       preview-variant --list [--theme <id>] [--snippet <i|all>] [--open]',
+        '       preview-variant list [--theme <id> | --all-themes] [--snippet <i|all>] [--no-open]\n' +
+        '注：list 与 --list 等价；list 模式默认自动开浏览器，--no-open 抑制。',
       )
     }
     const sep = target.includes('.') ? '.' : target.includes('/') ? '/' : null
@@ -135,6 +137,8 @@ function parseArgs(argv: string[]): CliArgs {
         outOpt ??
           `.preview/${kind}-${id}${allThemes ? '.all-themes' : themeOpt ? `.${themeOpt}` : ''}.html`,
       )
+  // list 模式默认开浏览器：145 个 variant 不在浏览器看毫无意义。显式 --no-open 抑制（CI/管道场景）。
+  const open = openOpt ?? list
   return { kind, id, themes, snippetIndex, outPath, open, watch, port, injectReload, rawThemeFlags, list }
 }
 
