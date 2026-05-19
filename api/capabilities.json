@@ -1,0 +1,4780 @@
+{
+  "schemaVersion": "3.1",
+  "tool": {
+    "name": "wechat-typeset",
+    "version": "0.1.0",
+    "repo": "https://github.com/lync-cyber/wechat-typeset#readme"
+  },
+  "generatedAt": "2026-05-19T14:33:35.539Z",
+  "compatibility": {
+    "minToolVersion": "0.1.0",
+    "recommendedToolVersion": "0.1.0",
+    "supportedSchemaVersions": [
+      "3.0",
+      "3.1"
+    ]
+  },
+  "contract": {
+    "fenceOuter": "::::",
+    "fenceInner": ":::",
+    "attrSyntax": "key=value key2=\"with space\" — 写在 open 行 name 之后；不接受 {key=\"...\"}  JSX 风格",
+    "variantKey": "variant",
+    "notes": [
+      "容器名必须是 kebab-case（quote-card，不是 quoteCard）",
+      "admonition 不是容器名；用 tip / warning / info / danger / note 之一",
+      "compare 外层用 :::: 四冒号，内层 pros/cons 用 ::: 三冒号",
+      "<!-- variant=X --> HTML 注释不被解析；variant 必须写在 open 行",
+      "containers[].pack 三层 namespace：base（基础契约） / pack:<domain>（领域扩展，多主题共享） / theme:<themeId>（主题专属，仅该主题渲染）",
+      "L2 页面局部配置：markdown frontmatter `---\\nvariants:\\n  admonition: terminal\\n---` 覆盖主题默认，逐处 attrs.variant 仍优先"
+    ]
+  },
+  "personas": [
+    {
+      "id": "default",
+      "name": "默认主题",
+      "description": "有意识的中立——Medium/Notion/Substack 默认家族",
+      "audience": "通用（全题材公平阅读）",
+      "signatureContainers": [
+        "imageCaption",
+        "announcement"
+      ],
+      "variants": {
+        "admonition": "accent-bar",
+        "quote": "classic",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "rule",
+        "sectionTitle": "bordered",
+        "codeBlock": "bare",
+        "note": "minimal-callout",
+        "footnotes": "lined",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#2558b0",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "tech-geek",
+      "name": "极客夜行",
+      "description": "VT220 琥珀 + 墨炭暖底 + manpage 印刷传统，成年工程师的工程写作",
+      "audience": "技术布道 / 工程随笔 / 架构评论（manpage / RFC / TAOCP 脚注风）",
+      "signatureContainers": [],
+      "variants": {
+        "admonition": "manpage-log",
+        "quote": "frame-brackets",
+        "compare": "stacked-row",
+        "steps": "split-row",
+        "divider": "wave",
+        "sectionTitle": "cornered",
+        "codeBlock": "terminal-frame",
+        "note": "side-bar",
+        "footnotes": "dense-academic",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#c89759",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "tech-explainer",
+      "name": "文档白昼",
+      "description": "Stripe Docs / MDN 家族，手把手跟做的技术产品文档",
+      "audience": "技术布道 / 产品文档 / 教程",
+      "signatureContainers": [
+        "note"
+      ],
+      "variants": {
+        "admonition": "accent-bar",
+        "quote": "column-rule",
+        "compare": "stacked-row",
+        "steps": "step-card",
+        "divider": "dots",
+        "sectionTitle": "number-prefix",
+        "codeBlock": "header-bar",
+        "note": "box-callout",
+        "footnotes": "boxed-aside",
+        "recommend": "academic-refs",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#0066cc",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "business-finance",
+      "name": "硬核财经",
+      "description": "深栗墨 + 内参蓝，研究所内参版面，数字与判断优先",
+      "audience": "财经内参 / 研究所 newsletter（FT 中文、财新周刊、Bloomberg Terminal、HBR）",
+      "signatureContainers": [
+        "abstract",
+        "keyNumber"
+      ],
+      "variants": {
+        "admonition": "ledger-cell",
+        "quote": "frame-brackets",
+        "compare": "ledger",
+        "steps": "timeline-dot",
+        "divider": "wave",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare",
+        "note": "box-callout",
+        "footnotes": "top-rule",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#2a1a14",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "data-brief",
+      "name": "数据简报",
+      "description": "数据蓝 + 黑底代码 + 直角硬边：晚点 / 财新数据 / Morning Brew 感",
+      "audience": "数据 newsletter / 数据简报 / 行业图表周刊",
+      "signatureContainers": [
+        "abstract",
+        "masthead",
+        "sectionTag",
+        "toc",
+        "kpiDashboard",
+        "barChart",
+        "qaBlock",
+        "footnotes",
+        "colophon"
+      ],
+      "variants": {
+        "admonition": "news-row",
+        "quote": "editorial-block",
+        "compare": "data-card",
+        "steps": "step-card",
+        "divider": "flower",
+        "sectionTitle": "kicker-stack",
+        "codeBlock": "bare",
+        "note": "smallcaps-kicker",
+        "footnotes": "top-rule",
+        "recommend": "card-list",
+        "qrcode": "qr-stack",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "margin-pull",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#1756d1",
+      "kickers": {
+        "toc": "本期目录 · INDEX",
+        "qaBlock": "读者来函 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本期简报",
+        "recommend": "延伸阅读 · FURTHER",
+        "footerCTATitle": "关注数据简报",
+        "colophonNextLabel": "下 期 ·",
+        "colophonIssueLabel": "VOL ·",
+        "mastheadName": "数据简报"
+      }
+    },
+    {
+      "id": "industry-observer",
+      "name": "行业观察",
+      "description": "Stratechery / Benedict Evans 家族，业内人写给业内人的周刊深度稿",
+      "audience": "内参 newsletter / 行业周报 / analyst essay 读者",
+      "signatureContainers": [
+        "cover",
+        "author",
+        "footerCTA",
+        "abstract",
+        "keyNumber",
+        "imageCaption",
+        "authorBio",
+        "timeline"
+      ],
+      "variants": {
+        "admonition": "report-section",
+        "quote": "column-rule",
+        "compare": "data-card",
+        "steps": "timeline-dot",
+        "divider": "glyph",
+        "sectionTitle": "cornered",
+        "codeBlock": "bare",
+        "note": "side-bar",
+        "footnotes": "top-rule",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#24364f",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "commerce-pulse",
+      "name": "电商脉动",
+      "description": "朱红 + 金色 + 炭灰：促销 / 价格优势 / 限时紧迫 / KOL 推荐的高密度带货排版",
+      "audience": "B2C 电商 / 直播带货 / 双 11 大促 / 美妆服饰 KOC / 抖音电商",
+      "signatureContainers": [
+        "recommend",
+        "footerCTA",
+        "announcement",
+        "pullQuote",
+        "tableCard",
+        "compare",
+        "steps",
+        "quoteCard"
+      ],
+      "variants": {
+        "admonition": "accent-bar",
+        "quote": "frame-brackets",
+        "compare": "data-card",
+        "steps": "number-circle",
+        "divider": "dots",
+        "sectionTitle": "kicker-stack",
+        "codeBlock": "bare",
+        "note": "box-callout",
+        "footnotes": "lined",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "stamp-quote",
+        "announcement": "danger-bar",
+        "tableCard": "key-value",
+        "gallery": "triptych",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#c4310e",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "为你推荐",
+        "footerCTATitle": "立即抢购",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "literary-humanism",
+      "name": "人文札记",
+      "description": "宋椠古籍 + 克制留白，给散文、书评、长评留足呼吸",
+      "audience": "人文非虚构（散文 / 书评 / 长评 / 札记）",
+      "signatureContainers": [
+        "imageCaption",
+        "authorBio"
+      ],
+      "variants": {
+        "admonition": "marginalia",
+        "quote": "magazine-dropcap",
+        "compare": "column-card",
+        "steps": "timeline-dot",
+        "divider": "flower",
+        "sectionTitle": "cornered",
+        "codeBlock": "inline-card",
+        "note": "dotted-margin",
+        "footnotes": "boxed-aside",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#5a4a3a",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "people-story",
+      "name": "人物特稿",
+      "description": "《人物》杂志 / New Yorker Profiles 家族，特稿的\"肖像感\"排版",
+      "audience": "人物特稿 / 人文非虚构 / 杂志 Profile",
+      "signatureContainers": [
+        "cover",
+        "author",
+        "intro",
+        "quoteCard",
+        "sectionTitle",
+        "footerCTA",
+        "recommend",
+        "qrcode",
+        "imageCaption",
+        "authorBio",
+        "announcement"
+      ],
+      "variants": {
+        "admonition": "magazine-pull",
+        "quote": "magazine-dropcap",
+        "compare": "stacked-row",
+        "steps": "timeline-dot",
+        "divider": "glyph",
+        "sectionTitle": "number-prefix",
+        "codeBlock": "inline-card",
+        "note": "minimal-callout",
+        "footnotes": "boxed-aside",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#1b2330",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "editorial-mook",
+      "name": "编辑刊",
+      "description": "米白底 + 朱橙单点缀 + 极小字号 · POPEYE / BRUTUS 系慢读编辑刊",
+      "audience": "慢读 newsletter / 文化随笔季刊 / 编辑型 mook 刊物",
+      "signatureContainers": [
+        "abstract",
+        "masthead",
+        "toc",
+        "qaBlock",
+        "footnotes",
+        "colophon",
+        "imageCaption",
+        "authorBio",
+        "announcement"
+      ],
+      "variants": {
+        "admonition": "mook-tag",
+        "quote": "editorial-block",
+        "compare": "stacked-row",
+        "steps": "timeline-dot",
+        "divider": "glyph",
+        "sectionTitle": "ribbon-stamp",
+        "codeBlock": "inline-card",
+        "note": "dotted-margin",
+        "footnotes": "boxed-aside",
+        "recommend": "card-list",
+        "qrcode": "follow-card",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "hanging-qa"
+      },
+      "palettePrimary": "#e85a3c",
+      "kickers": {
+        "toc": "目 · 次",
+        "qaBlock": "读 · 者 · 通 · 信",
+        "qrFollowKicker": "訂 · 閱",
+        "qrFollowTitle": "订阅这份慢读季刊",
+        "recommend": "同 · 期 · 选 · 读",
+        "footerCTATitle": "关注 · 慢读编集",
+        "colophonNextLabel": "下 · 期 · 预 告",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "编 · 集 · 慢 · 读"
+      }
+    },
+    {
+      "id": "late-night-vinyl",
+      "name": "深夜电台",
+      "description": "深夜蓝 + 暖米白 + 橙色唱针 · 03:41 AM 黑胶播客慢读感",
+      "audience": "电台 newsletter / 夜读慢读 / 播客文化随笔 / 长夜散文",
+      "signatureContainers": [
+        "intro",
+        "cover",
+        "author",
+        "masthead",
+        "toc",
+        "qaBlock",
+        "footnotes",
+        "colophon",
+        "imageCaption",
+        "authorBio",
+        "timeline"
+      ],
+      "variants": {
+        "admonition": "pill-tag",
+        "quote": "tilted-sticker",
+        "compare": "stacked-row",
+        "steps": "split-row",
+        "divider": "dots",
+        "sectionTitle": "ribbon-stamp",
+        "codeBlock": "terminal-frame",
+        "note": "side-bar",
+        "footnotes": "boxed-aside",
+        "recommend": "card-list",
+        "qrcode": "follow-card",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "margin-pull",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#d97a3c",
+      "kickers": {
+        "toc": "— tracklist · 节目单 —",
+        "qaBlock": "听 · 众 · 连 · 线",
+        "qrFollowKicker": "tune · in",
+        "qrFollowTitle": "夜读电台",
+        "recommend": "深 夜 选 听",
+        "footerCTATitle": "长夜收听",
+        "colophonNextLabel": "下期",
+        "colophonIssueLabel": "EP ·",
+        "mastheadName": "夜读电台"
+      }
+    },
+    {
+      "id": "life-aesthetic",
+      "name": "慢生活",
+      "description": "暖米底 + 圆角柔和，写写饮食、旅行与长日",
+      "audience": "生活写作 / 非虚构随笔",
+      "signatureContainers": [
+        "imageCaption",
+        "authorBio"
+      ],
+      "variants": {
+        "admonition": "bubble-organic",
+        "quote": "magazine-dropcap",
+        "compare": "stacked-row",
+        "steps": "step-card",
+        "divider": "flower",
+        "sectionTitle": "ribbon-stamp",
+        "codeBlock": "inline-card",
+        "note": "dotted-margin",
+        "footnotes": "boxed-aside",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#d98141",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "edu-classroom",
+      "name": "教室课堂",
+      "description": "耐心讲解 / 步骤分解 / 友好亲切的教育内容，不卡通化",
+      "audience": "K-12 教育 / 亲子科普 / 童书推荐 / 兴趣启蒙 / 知识自习 / 家长读物",
+      "signatureContainers": [
+        "steps",
+        "tip",
+        "info",
+        "recommend",
+        "dialogue",
+        "announcement",
+        "intro"
+      ],
+      "variants": {
+        "admonition": "card-shadow",
+        "quote": "classic",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "wave",
+        "sectionTitle": "kicker-stack",
+        "codeBlock": "bare",
+        "note": "smallcaps-kicker",
+        "footnotes": "lined",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "giant-mark",
+        "announcement": "mono-disclaimer",
+        "tableCard": "zebra-rows",
+        "gallery": "duo",
+        "dialogue": "interview-column",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#2e7d32",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "academic-frontier",
+      "name": "学术前沿",
+      "description": "Nature / arXiv / LaTeX article 家族，研究者写给同行评审的严谨陈述",
+      "audience": "学术研究者 / 同行评审向的论文化陈述",
+      "signatureContainers": [
+        "abstract"
+      ],
+      "variants": {
+        "admonition": "sidenote-latex",
+        "quote": "frame-brackets",
+        "compare": "stacked-row",
+        "steps": "timeline-dot",
+        "divider": "dots",
+        "sectionTitle": "number-prefix",
+        "codeBlock": "line-numbers",
+        "note": "box-callout",
+        "footnotes": "dense-academic",
+        "recommend": "academic-refs",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "giant-mark",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#1e2c4a",
+      "kickers": {
+        "toc": "目录 · CONTENTS",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "推荐阅读",
+        "footerCTATitle": "关注我",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "official-gazette",
+      "name": "公文公报",
+      "description": "中央人民政府公报 / 上市公司公告 / 监管文件，服务政务通告、企业公告、监管声明等严肃文体",
+      "audience": "政务通告 / 企业公告 / 监管声明 / 招股说明书 / 严肃通报 / 公开信",
+      "signatureContainers": [
+        "announcement",
+        "footnotes",
+        "sectionTitle",
+        "colophon",
+        "byline"
+      ],
+      "variants": {
+        "admonition": "top-bottom-rule",
+        "quote": "frame-brackets",
+        "compare": "ledger",
+        "steps": "number-circle",
+        "divider": "rule",
+        "sectionTitle": "bordered",
+        "codeBlock": "bare",
+        "note": "editorial-stripe",
+        "footnotes": "dense-academic",
+        "recommend": "academic-refs",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "centered-rule",
+        "announcement": "stamped-banner",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "numbered-faq"
+      },
+      "palettePrimary": "#1c3a6e",
+      "kickers": {
+        "toc": "目　录",
+        "qaBlock": "读者问答 · Q&A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "参考文件",
+        "footerCTATitle": "联系我们",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    },
+    {
+      "id": "swiss-grid",
+      "name": "苏黎世栅格",
+      "description": "国际红 + 12 栏铁律 + 直角硬边：1958 Neue Grafik 苏黎世对开页",
+      "audience": "设计评论 / 编辑刊 / 视觉栅格杂志 / Neue Grafik 系排印随笔",
+      "signatureContainers": [
+        "abstract",
+        "sectionTag",
+        "editorialHeader",
+        "byline",
+        "toc",
+        "keyNumber",
+        "qaBlock",
+        "footnotes",
+        "colophon",
+        "barChart",
+        "imageCaption",
+        "announcement"
+      ],
+      "variants": {
+        "admonition": "news-underline",
+        "quote": "editorial-block",
+        "compare": "data-card",
+        "steps": "split-row",
+        "divider": "flower",
+        "sectionTitle": "kicker-stack",
+        "codeBlock": "inline-card",
+        "note": "side-bar",
+        "footnotes": "top-rule",
+        "recommend": "academic-refs",
+        "qrcode": "qr-stack",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "centered-rule",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "typed-block"
+      },
+      "palettePrimary": "#e30613",
+      "kickers": {
+        "toc": "INDEX",
+        "qaBlock": "Q & A",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "NEUE LESE GRAFIK",
+        "recommend": "FURTHER READING",
+        "footerCTATitle": "FOLLOW THE PUBLICATION",
+        "colophonNextLabel": "NEXT ·",
+        "colophonIssueLabel": "VOL ·",
+        "mastheadName": "NEUE LESE GRAFIK"
+      }
+    },
+    {
+      "id": "brutalist",
+      "name": "粗野主义报刊",
+      "description": "近黑底 + 荧光黄 + 直角硬边：punk-zine / 终端 / 凌晨三点印刷厂",
+      "audience": "夜读简报 / 文化批评 / 实验栏目",
+      "signatureContainers": [
+        "masthead",
+        "toc",
+        "qaBlock",
+        "footnotes",
+        "colophon",
+        "imageCaption",
+        "announcement"
+      ],
+      "variants": {
+        "admonition": "slab-corner",
+        "quote": "tilted-sticker",
+        "compare": "stacked-row",
+        "steps": "split-row",
+        "divider": "flower",
+        "sectionTitle": "ribbon-stamp",
+        "codeBlock": "inline-card",
+        "note": "side-bar",
+        "footnotes": "top-rule",
+        "recommend": "card-list",
+        "qrcode": "follow-card",
+        "footerCTA": "triptych-actions",
+        "pullQuote": "stamp-quote",
+        "announcement": "danger-bar",
+        "tableCard": "rule-grid",
+        "gallery": "duo",
+        "dialogue": "qa-rows",
+        "qaBlock": "typed-block"
+      },
+      "palettePrimary": "#ebff00",
+      "kickers": {
+        "toc": "// CONTENTS",
+        "qaBlock": "// Q&A",
+        "qrFollowKicker": "// SCAN & FOLLOW",
+        "qrFollowTitle": "慢读 // slow.read",
+        "recommend": "[READ_NEXT]",
+        "footerCTATitle": "[FOLLOW]",
+        "colophonNextLabel": "下期",
+        "colophonIssueLabel": "ISSUE",
+        "mastheadName": "慢读"
+      }
+    },
+    {
+      "id": "youth-zine",
+      "name": "青年潮志",
+      "description": "鲜玫粉主色 + 圆角胶囊 + 高行距 · 服务青年潮流文体（短段落 / 标签云 / 高饱和）",
+      "audience": "青年文化 / Gen-Z / 小红书博主 / B 站 UP 主 / 潮流安利 / 二次元周边",
+      "signatureContainers": [
+        "intro",
+        "highlight",
+        "pullQuote",
+        "gallery",
+        "dialogue",
+        "recommend",
+        "tip",
+        "warning",
+        "info",
+        "danger",
+        "announcement"
+      ],
+      "variants": {
+        "admonition": "pill-tag",
+        "quote": "column-rule",
+        "compare": "column-card",
+        "steps": "number-circle",
+        "divider": "dots",
+        "sectionTitle": "kicker-stack",
+        "codeBlock": "bare",
+        "note": "side-bar",
+        "footnotes": "lined",
+        "recommend": "card-list",
+        "qrcode": "bare",
+        "footerCTA": "button-led",
+        "pullQuote": "stamp-quote",
+        "announcement": "ai-notice",
+        "tableCard": "rule-grid",
+        "gallery": "triptych",
+        "dialogue": "chat-bubbles",
+        "qaBlock": "circle-square"
+      },
+      "palettePrimary": "#e91e63",
+      "kickers": {
+        "toc": "本期目录",
+        "qaBlock": "粉丝问答",
+        "qrFollowKicker": "SUBSCRIBE",
+        "qrFollowTitle": "订阅本刊",
+        "recommend": "你可能还喜欢",
+        "footerCTATitle": "关注我的潮流频道",
+        "colophonNextLabel": "下 期",
+        "colophonIssueLabel": "卷 · 期",
+        "mastheadName": "简报"
+      }
+    }
+  ],
+  "containers": [
+    {
+      "id": "abstract",
+      "category": "signature",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。",
+      "example": "::: abstract 摘要\n本文论点 …\n:::\n"
+    },
+    {
+      "id": "announcement",
+      "category": "admonition",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "danger-bar",
+        "mono-disclaimer",
+        "ai-notice",
+        "stamped-banner"
+      ],
+      "defaultVariant": "danger-bar",
+      "fenceLength": 3,
+      "description": "强警示横幅：文章顶部 / 中部\"置顶通告\"块，比 tip/warning 视觉强度更高。info 为标题，body 为说明文本。4 种 variant 覆盖：常规警示 / 法律免责 / AI 合规 / 印章公告。",
+      "example": "::: announcement tone=danger 重要通知\n本期推送涉及账号迁移说明 …\n:::\n",
+      "attrs": [
+        {
+          "key": "tone",
+          "description": "语义色调（默认 danger 强警示；可选 primary 中性告知 / accent 喜庆通告）",
+          "enum": [
+            "danger",
+            "primary",
+            "accent"
+          ]
+        },
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 announcement 骨架。danger-bar（默认）= 左色条 + soft 底；mono-disclaimer = 法律声明监 monospace 边框无填充；ai-notice = AI 生成内容合规告知（含徽章）；stamped-banner = 右侧 SVG 印章戳。",
+          "enum": [
+            "danger-bar",
+            "mono-disclaimer",
+            "ai-notice",
+            "stamped-banner"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "author",
+      "category": "structure",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "作者栏：单行署名块（名字 + 日期/期号）。与 author-bio 的边界见 author-bio.description。",
+      "example": "::: author\n作者 · 日期\n:::\n",
+      "attrs": [
+        {
+          "key": "issue",
+          "description": "期号（newsletter 主题可用）",
+          "example": "023"
+        },
+        {
+          "key": "date",
+          "description": "日期",
+          "example": "2026-04-20"
+        }
+      ]
+    },
+    {
+      "id": "author-bio",
+      "category": "structure",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "多行作者简介卡：头像 + 名字 + 身份 + 多行简介。与 author 的边界：author 单行署名，author-bio 是独立块（头像 + 多行 bio + 社交链接），通常用在文末\"关于作者\"。",
+      "example": "::: author-bio avatar=\"me.png\" name=\"顾留白\" role=\"专栏作者\"\n非虚构写作 8 年，关注城市与日常。\n:::\n",
+      "attrs": [
+        {
+          "key": "avatar",
+          "description": "头像图片 URL（声明则 renderer 自动渲染圆形头像）"
+        },
+        {
+          "key": "name",
+          "description": "作者姓名（缺省则取 info）"
+        },
+        {
+          "key": "role",
+          "description": "作者身份（如\"专栏作者 · 城市观察\"）"
+        }
+      ]
+    },
+    {
+      "id": "bar",
+      "category": "data",
+      "pack": "pack:data-viz",
+      "kind": "nested",
+      "parent": "bar-chart",
+      "fenceLength": 3,
+      "description": "bar-chart 内单条；attrs.label/pct/value 必填，tone 决定柱色（normal 走主色）。",
+      "example": "::: bar label=\"60+\" pct=\"84\" value=\"42 分\"\n:::\n",
+      "attrs": [
+        {
+          "key": "label",
+          "description": "类目标签",
+          "example": "60+"
+        },
+        {
+          "key": "pct",
+          "description": "柱宽百分比（0–100 整数）",
+          "example": "84"
+        },
+        {
+          "key": "value",
+          "description": "数值显示（右对齐）",
+          "example": "42 分"
+        },
+        {
+          "key": "tone",
+          "description": "色调；warn 转 danger 红",
+          "enum": [
+            "normal",
+            "warn"
+          ]
+        },
+        {
+          "key": "labelWidth",
+          "description": "标签列宽（per-bar 覆盖父 bar-chart；做对齐微调）",
+          "example": "96px"
+        },
+        {
+          "key": "valueWidth",
+          "description": "数值列宽（per-bar 覆盖父 bar-chart；做对齐微调）",
+          "example": "64px"
+        }
+      ],
+      "notes": "必须嵌在 bar-chart 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "bar-chart",
+      "category": "data",
+      "pack": "pack:data-viz",
+      "kind": "fixed",
+      "children": [
+        "bar"
+      ],
+      "fenceLength": 4,
+      "description": "横向条形图（纯 div 宽度，无 SVG）。外层用 4 个冒号，内部用 bar 条目。info 为图表标题。",
+      "example": ":::: bar-chart 每日连续阅读时长 · 按年龄分布 subtitle=\"单位：分钟\"\n::: bar label=\"60+\" pct=\"84\" value=\"42 分\"\n:::\n::::\n",
+      "attrs": [
+        {
+          "key": "subtitle",
+          "description": "副标题（单位/样本说明）",
+          "example": "单位：分钟 · n=1,024"
+        },
+        {
+          "key": "labelWidth",
+          "description": "标签列宽（CSS 长度，默认 72px / 容下 5 字中文）",
+          "example": "96px"
+        },
+        {
+          "key": "valueWidth",
+          "description": "数值列宽（CSS 长度，默认 48px / 容下 \"9 分钟\"）",
+          "example": "64px"
+        }
+      ]
+    },
+    {
+      "id": "byline",
+      "category": "structure",
+      "pack": "pack:editorial",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "署名条：N 栏分隔（kicker 小字 / value 主视），data-brief 家族签名。与 author 容器正交：author 是\"作者名 + role\"两段签名块；byline 是\"AUTHOR / EDITOR / SET\" 多栏 newspaper 形态。",
+      "example": "::: byline cells=\"AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026\" monospaceLast=\"true\"\n:::\n",
+      "attrs": [
+        {
+          "key": "cells",
+          "description": "三栏（或更多）署名单元，竖线 `|` 分隔；每格 `kicker:value` 用半角冒号分隔。例：`AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026`。为零时回退到旧 author 形态（info 作 name + role/issue attrs），但 byline 建议总是声明 cells。",
+          "example": "AUTHOR:顾留白 | EDITOR:徐稍后读 | SET:04·2026"
+        },
+        {
+          "key": "monospaceLast",
+          "description": "末格 value 是否走 monospace 字体（typically \"SET\" 期次或日期）。",
+          "enum": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "colophon",
+      "category": "signature",
+      "pack": "pack:editorial",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "刊物收束栏：上分割线 + 左右双栏 monospace 元数据（下期预告 / 卷·期）。data-brief 等刊物化主题的\"尾签名\"。",
+      "example": "::: colophon next=\"纸本之必要\" issue=\"第 004 期 · 2026\"\n:::\n",
+      "attrs": [
+        {
+          "key": "next",
+          "description": "左栏：下期预告标题",
+          "example": "纸本之必要：论书脊与手指的记忆"
+        },
+        {
+          "key": "issue",
+          "description": "右栏：期号 / 卷期说明",
+          "example": "第 004 期 · 2026"
+        }
+      ]
+    },
+    {
+      "id": "compare",
+      "category": "content",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "column-card",
+        "stacked-row",
+        "ledger",
+        "data-card",
+        "paired-specimen",
+        "measurement-table",
+        "paired-shape",
+        "axis-diagram"
+      ],
+      "defaultVariant": "column-card",
+      "children": [
+        "pros",
+        "cons"
+      ],
+      "fenceLength": 4,
+      "description": "双列对比（外层 4 个冒号，内层 pros/cons 用 3 个）。",
+      "example": ":::: compare\n::: pros 优点\n- A\n:::\n::: cons 缺点\n- B\n:::\n::::\n"
+    },
+    {
+      "id": "cons",
+      "category": "content",
+      "pack": "base",
+      "kind": "nested",
+      "parent": "compare",
+      "fenceLength": 3,
+      "description": "compare 的\"反面\"列（必须嵌在 :::: compare 内）。",
+      "example": "::: cons 缺点\n- A\n- B\n:::\n",
+      "notes": "必须嵌在 compare 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "cover",
+      "category": "structure",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "封面卡（封面图 + 题头 + 可选期号戳）。",
+      "example": "::: cover\n![](cover.png)\n\n## 主标题\n:::\n",
+      "attrs": [
+        {
+          "key": "issue",
+          "description": "期号（newsletter 主题会渲染期号戳）",
+          "example": "023"
+        },
+        {
+          "key": "date",
+          "description": "日期",
+          "example": "2026-04-20"
+        },
+        {
+          "key": "kind",
+          "description": "刊物类型",
+          "example": "周刊"
+        }
+      ]
+    },
+    {
+      "id": "danger",
+      "category": "admonition",
+      "pack": "base",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "card-shadow",
+        "terminal",
+        "dashed-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section",
+        "news-row",
+        "news-underline",
+        "mook-tag",
+        "slab-corner",
+        "numbered-rule",
+        "hanging-nb",
+        "vermilion-seal",
+        "paper-slip",
+        "field-tag",
+        "specimen-box",
+        "filled-square",
+        "triangle-top"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "danger：高风险警告／错误示范。",
+      "example": "::: danger 警告\n内容 …\n:::\n",
+      "notes": "admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。"
+    },
+    {
+      "id": "dialogue",
+      "category": "content",
+      "pack": "pack:editorial",
+      "kind": "variantized",
+      "variants": [
+        "qa-rows",
+        "chat-bubbles",
+        "name-prefix",
+        "interview-column",
+        "audio-stamp"
+      ],
+      "defaultVariant": "qa-rows",
+      "children": [
+        "dialogue-turn"
+      ],
+      "fenceLength": 4,
+      "description": "多轮访谈 / 对谈。与 qa-block 正交：qa-block 是单 Q + 单 A 签名格式，dialogue 承载 ≥2 轮 Q&A 或多人对谈。外层 4 冒号，内部 dialogue-turn 列单轮。",
+      "example": ":::: dialogue 主编访谈\n::: dialogue-turn name=\"主持人\" role=\"Q\"\n你怎么看这次行业转向？\n:::\n::: dialogue-turn name=\"张三\" role=\"A\"\n转向是必然的，但节奏会比想象慢。\n:::\n::::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "骨架：qa-rows（默认 Q/A 行）/ chat-bubbles（左右气泡）/ name-prefix（\"名字：内容\"行内）/ interview-column（杂志体 N Yorker 风）",
+          "enum": [
+            "qa-rows",
+            "chat-bubbles",
+            "name-prefix",
+            "interview-column",
+            "audio-stamp"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dialogue-turn",
+      "category": "content",
+      "pack": "base",
+      "kind": "nested",
+      "parent": "dialogue",
+      "fenceLength": 3,
+      "description": "dialogue 内单轮发言。name 与 shape 二选一必填（shape 以形状代号替代姓名），body 为发言内容。",
+      "example": "::: dialogue-turn name=\"张三\" role=\"A\"\n你说的没错。\n:::\n",
+      "attrs": [
+        {
+          "key": "name",
+          "description": "发言者姓名（与 shape 二选一必填——shape 以形状代号替代姓名时可省）",
+          "example": "张三"
+        },
+        {
+          "key": "role",
+          "description": "角色标识（\"Q\" / \"A\" / \"主持人\" / \"嘉宾\"）",
+          "example": "Q"
+        },
+        {
+          "key": "side",
+          "description": "chat-bubbles 骨架下的气泡侧（left = textMuted 左气泡 / right = primary 右气泡）。其他骨架忽略此 attr。",
+          "enum": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "key": "shape",
+          "description": "以形状代号替代姓名（用于\"形状即身份\"骨架，如 shape-speaker variant）。circle = 圆形徽章 / square = 方形徽章。声明 shape 时 name 可省，不消费此 attr 的骨架忽略。",
+          "enum": [
+            "circle",
+            "square"
+          ]
+        },
+        {
+          "key": "timestamp",
+          "description": "时间戳（用于音频 / 视频访谈整理稿，如 \"00:04:21\"）。仅 audio-stamp 等显式消费此 attr 的骨架渲染，其他骨架忽略。",
+          "example": "00:04:21"
+        }
+      ],
+      "notes": "必须嵌在 dialogue 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "divider",
+      "category": "navigation",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "wave",
+        "dots",
+        "flower",
+        "rule",
+        "glyph",
+        "seal-mark"
+      ],
+      "defaultVariant": "rule",
+      "fenceLength": 3,
+      "description": "装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。",
+      "example": "::: divider\n:::\n"
+    },
+    {
+      "id": "editorial-header",
+      "category": "structure",
+      "pack": "pack:editorial",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "装饰性副刊头：跨栏大字标题 + 可选 chip 红章 + PP 页码 + subtitle + titleDot 红点。与微信原生标题（H1）正交，本容器输出 <section>，不抢平台 H1 语义。data-brief 家族签名。",
+      "example": "::: editorial-header 在无人深夜， / 重新学习 / 如何阅读一本书 chip=\"ESSAY · 01\" pp=\"PP.04–19\" subtitle=\"论慢读在算法时代的价值\" topRule=\"6\" titleDot=\"primary\"\n:::\n",
+      "attrs": [
+        {
+          "key": "chip",
+          "description": "装饰小红章文字（如 \"ESSAY · 01\"）。声明则在大标题上方渲染 primary 实色徽章 + hairline。",
+          "example": "ESSAY · 01"
+        },
+        {
+          "key": "pp",
+          "description": "右上页码区间（monospace 小字，与 chip 同一行 hairline 居中对齐）。",
+          "example": "PP.04–19"
+        },
+        {
+          "key": "subtitle",
+          "description": "主标题下方副标题（13px 中粗黑字，无字距）。",
+          "example": "论慢读在算法时代的价值"
+        },
+        {
+          "key": "topRule",
+          "description": "顶部装饰色条宽度（px 整数，0=不渲染）。Swiss 苏黎世副刊头惯用 6。",
+          "example": "6"
+        },
+        {
+          "key": "titleDot",
+          "description": "主标题末色实心点（PaletteColorKey）。声明则在 info 末尾追加一个该色 \".\"。",
+          "enum": [
+            "primary",
+            "accent",
+            "secondary"
+          ]
+        },
+        {
+          "key": "br",
+          "description": "在 info 中作为换行分隔符的字符串（默认 \" / \"，前后各一空格）。让作者用一行 info 表达多行大标题：`info=\"在无人深夜， / 重新学习 / 如何阅读一本书\"`",
+          "example": " / "
+        }
+      ]
+    },
+    {
+      "id": "footer-cta",
+      "category": "navigation",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "button-led",
+        "triptych-actions"
+      ],
+      "defaultVariant": "button-led",
+      "fenceLength": 3,
+      "description": "文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。href 支持公众号内链白名单。",
+      "example": "::: footer-cta 觉得有用？ cta=阅读原篇 href=https://mp.weixin.qq.com/s/xxx\n如果这篇对你有启发，欢迎关注。\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 footerCTA 骨架。button-led（默认）= 居中标题 + 主色胶囊按钮；triptych-actions = 三栏 CTA（赞同 / 收藏 / 转发，display:table 等宽）。",
+          "enum": [
+            "button-led",
+            "triptych-actions"
+          ]
+        },
+        {
+          "key": "cta",
+          "description": "button-led 按钮文字（visual only）",
+          "example": "点此关注"
+        },
+        {
+          "key": "href",
+          "description": "button-led 按钮跳转 URL。为保证公众号正文可点击，建议用以下几类之一：https://mp.weixin.qq.com/s/*（同域文章）/ weixin://dl/*（小程序协议）/ tel:* / mailto:* / 页内锚点 #*。非白名单 URL 会触发 diagnose warning。",
+          "example": "https://mp.weixin.qq.com/s/xxx"
+        },
+        {
+          "key": "like",
+          "description": "triptych-actions 左格文字（默认 ♡ 赞同）",
+          "example": "♡ 赞同"
+        },
+        {
+          "key": "star",
+          "description": "triptych-actions 中格文字（实色，默认 ★ 收藏）",
+          "example": "★ 收藏"
+        },
+        {
+          "key": "share",
+          "description": "triptych-actions 右格文字（默认 ↗ 转发）",
+          "example": "↗ 转发"
+        }
+      ]
+    },
+    {
+      "id": "footnotes",
+      "category": "signature",
+      "pack": "pack:editorial",
+      "kind": "variantized",
+      "variants": [
+        "lined",
+        "inline-flow",
+        "boxed-aside",
+        "top-rule",
+        "dense-academic"
+      ],
+      "defaultVariant": "lined",
+      "fenceLength": 3,
+      "description": "脚注 / 参考文献块。两骨架可选：lined（默认，一条一行 + hanging indent）适合 5~10 条短引用；inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。info 非空时渲染主色 kicker（如 \"NOTES\" / \"参考文献\"），与 editor-note / qa-block 同源。",
+      "example": "::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 footnotes 骨架（lined = 一条一行；inline-flow = 同段流式）",
+          "enum": [
+            "lined",
+            "inline-flow",
+            "boxed-aside",
+            "top-rule",
+            "dense-academic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "free",
+      "category": "free",
+      "pack": "base",
+      "kind": "free",
+      "fenceLength": 3,
+      "description": "兜底容器：渲染器刻意不施加主题样式，写不归类内容。",
+      "example": "::: free\n编辑部补注 …\n:::\n",
+      "notes": "兜底 escape hatch：无主题样式，按作者内容原样透传。"
+    },
+    {
+      "id": "gallery",
+      "category": "content",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "duo",
+        "triptych",
+        "nine-grid",
+        "ribbon-strip"
+      ],
+      "defaultVariant": "duo",
+      "children": [
+        "image-item"
+      ],
+      "fenceLength": 4,
+      "description": "多图组合：弥补 image-caption 只能单图、markdown 多图串联无版式的缺陷。外层 4 冒号，内部 image-item 列单图。",
+      "example": ":::: gallery variant=triptych\n::: image-item src=\"a.jpg\" alt=\"A\" 春\n:::\n::: image-item src=\"b.jpg\" alt=\"B\" 夏\n:::\n::: image-item src=\"c.jpg\" alt=\"C\" 秋\n:::\n::::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "布局：duo（默认 2 联）/ triptych（3 联）/ nine-grid（3×3 自动换行）/ ribbon-strip（横滚条带 overflow-x:auto）",
+          "enum": [
+            "duo",
+            "triptych",
+            "nine-grid",
+            "ribbon-strip"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "highlight",
+      "category": "content",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "plain",
+        "dotted-underline",
+        "tracked-emphasis",
+        "vermilion-inline",
+        "side-dots",
+        "wash-ground",
+        "bracketed-tick",
+        "geometric-flag",
+        "single-stroke"
+      ],
+      "defaultVariant": "plain",
+      "fenceLength": 3,
+      "description": "行内高亮段（bgMuted 底色块）。与 quote-card 的边界：quote-card 是\"成段引用\"（外部话语、有 variant 骨架），highlight 是\"作者自己想强调的一段话\"。想强调一句\"我要让读者停下来\"用 highlight；想引用一段他人话用 quote-card。",
+      "example": "::: highlight\n需要读者停下来的一段话 …\n:::\n"
+    },
+    {
+      "id": "image-caption",
+      "category": "content",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "图 + 居中小字灰说明的图注块。声明 attrs.src 时自动渲染 img；info 为图注文本。body 内容（如长描述 / 数据来源）作为副说明跟在 caption 下方。",
+      "example": "::: image-caption src=\"cover.png\" alt=\"封面\" 图 1 · 城市夜景与霓虹\n摄于 2026 年春，北京三里屯。\n:::\n",
+      "attrs": [
+        {
+          "key": "src",
+          "description": "图片 URL（声明则 renderer 自动渲染 <img>）"
+        },
+        {
+          "key": "alt",
+          "description": "图片替代文本"
+        }
+      ]
+    },
+    {
+      "id": "image-item",
+      "category": "content",
+      "pack": "base",
+      "kind": "nested",
+      "parent": "gallery",
+      "fenceLength": 3,
+      "description": "gallery 内单图。info 为该图的图注（小字），body 内容被忽略。",
+      "example": "::: image-item src=\"cover.jpg\" alt=\"封面\" 城市夜景\n:::\n",
+      "attrs": [
+        {
+          "key": "src",
+          "description": "图片 URL",
+          "example": "cover.jpg"
+        },
+        {
+          "key": "alt",
+          "description": "替代文本（默认取 info）"
+        }
+      ],
+      "notes": "必须嵌在 gallery 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "info",
+      "category": "admonition",
+      "pack": "base",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "card-shadow",
+        "terminal",
+        "dashed-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section",
+        "news-row",
+        "news-underline",
+        "mook-tag",
+        "slab-corner",
+        "numbered-rule",
+        "hanging-nb",
+        "vermilion-seal",
+        "paper-slip",
+        "field-tag",
+        "specimen-box",
+        "filled-square",
+        "triangle-top"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "info：中性说明／补充信息。",
+      "example": "::: info 说明\n内容 …\n:::\n",
+      "notes": "admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。"
+    },
+    {
+      "id": "intro",
+      "category": "structure",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "文首引子／导语卡。独立 bgSoft 底，区别于正文段落。",
+      "example": "::: intro\n本文探讨 …\n:::\n"
+    },
+    {
+      "id": "key-number",
+      "category": "signature",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "大数字 + 说明（研究报告 / 内参版面 / issue-banner）。attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。",
+      "example": "::: key-number value=\"42%\" 同比涨幅\n占全年营收 12pp …\n:::\n",
+      "attrs": [
+        {
+          "key": "value",
+          "description": "大字号数字本体",
+          "example": "42%"
+        },
+        {
+          "key": "meta",
+          "description": "右侧 monospace 元信息浮动列（如 \"VOL.IV / 2026—04—22 / CHF 14.—\"）。声明则切到\"双栏\"布局：左 kicker+value 占主视，右 meta 多行底对齐。条目用 ` / ` 分隔。",
+          "example": "VOL.IV / 2026—04—22 / CHF 14.—"
+        }
+      ]
+    },
+    {
+      "id": "kpi-dashboard",
+      "category": "data",
+      "pack": "pack:data-viz",
+      "kind": "fixed",
+      "children": [
+        "kpi-item"
+      ],
+      "fenceLength": 4,
+      "description": "KPI 仪表盘：三指标 grid + sparkline。外层用 4 个冒号，内部用 kpi-item。info 为标题（如 \"KEY METRICS · 三项关键指标\"）。",
+      "example": ":::: kpi-dashboard KEY METRICS · 三项关键指标 period=\"2024 / YoY\" source=\"n=1,432\"\n::: kpi-item label=\"01 · MIN/DAY\" caption=\"日均连读时长\" value=\"12\" unit=\"分钟\" delta=\"-68%\" trend=\"down\" series=\"2,4,5,6,8,9,10,11\" foot=\"'15 38分 → '24 12分\"\n:::\n::::\n",
+      "attrs": [
+        {
+          "key": "period",
+          "description": "统计区间/口径",
+          "example": "2024 / YoY"
+        },
+        {
+          "key": "source",
+          "description": "数据来源（页脚 monospace 小字）",
+          "example": "n=1,432"
+        }
+      ]
+    },
+    {
+      "id": "kpi-item",
+      "category": "data",
+      "pack": "pack:data-viz",
+      "kind": "nested",
+      "parent": "kpi-dashboard",
+      "fenceLength": 3,
+      "description": "kpi-dashboard 内单指标。一切以 attrs 驱动，body 内容被忽略。",
+      "example": "::: kpi-item label=\"01·MIN/DAY\" value=\"12\" unit=\"分钟\" delta=\"-68%\" trend=\"down\" series=\"2,4,5,6,8,9,10,11\"\n:::\n",
+      "attrs": [
+        {
+          "key": "label",
+          "description": "指标编号/口径（monospace）",
+          "example": "01 · MIN/DAY"
+        },
+        {
+          "key": "caption",
+          "description": "指标中文说明",
+          "example": "日均连读时长"
+        },
+        {
+          "key": "value",
+          "description": "数字本体（大字号）",
+          "example": "12"
+        },
+        {
+          "key": "unit",
+          "description": "单位（如 分钟 / 次 / 本）",
+          "example": "分钟"
+        },
+        {
+          "key": "delta",
+          "description": "同比标签（前缀决定颜色，- 红 + 红 ± 灰）",
+          "example": "-68%"
+        },
+        {
+          "key": "trend",
+          "description": "sparkline 颜色方向",
+          "enum": [
+            "up",
+            "down",
+            "flat"
+          ]
+        },
+        {
+          "key": "series",
+          "description": "sparkline 折线数据（逗号分隔任意数值，按 min/max 自动缩放）",
+          "example": "48,51,54,56,58,59,60,61"
+        },
+        {
+          "key": "foot",
+          "description": "期端对比小字（monospace 双端）",
+          "example": "'15 38分 → '24 12分"
+        }
+      ],
+      "notes": "必须嵌在 kpi-dashboard 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "masthead",
+      "category": "structure",
+      "pack": "pack:editorial",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "刊头：默认两栏（刊名左 + 期号·日期 monospace 右）；声明 attrs.kicker 切三栏 ribbon。",
+      "example": "::: masthead 慢读简报 issue=\"004\" date=\"2026.04.22\"\n:::\n",
+      "attrs": [
+        {
+          "key": "issue",
+          "description": "期号（monospace 右对齐；默认两栏布局生效）",
+          "example": "004"
+        },
+        {
+          "key": "date",
+          "description": "日期（monospace 右对齐）",
+          "example": "2026.04.22"
+        },
+        {
+          "key": "kicker",
+          "description": "左侧前缀（如 \"第 04 期\"）。提供时切换为三栏 ribbon 布局：左=kicker / 中=name（accent 色） / 右=date —— 报刊期次条骨架。",
+          "example": "第 04 期"
+        }
+      ]
+    },
+    {
+      "id": "note",
+      "category": "admonition",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "minimal-callout",
+        "box-callout",
+        "side-bar",
+        "dotted-margin",
+        "smallcaps-kicker",
+        "editorial-stripe",
+        "research-dense",
+        "ed-signoff",
+        "inline-label",
+        "interlinear-gloss",
+        "vermilion-gloss",
+        "ruler-note",
+        "latin-subhead",
+        "initial-disc",
+        "geometric-mark"
+      ],
+      "defaultVariant": "minimal-callout",
+      "fenceLength": 3,
+      "description": "note：作者旁批 + 编辑部按 + 调研口径的统一容器。variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到\"编辑部以机构身份按语\"；research-dense 切到\"调研方法论小字栏\"。",
+      "example": "::: note 补注\n内容 …\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 note 骨架。variant 覆盖三档语气：中性（minimal-callout / box-callout / side-bar / dotted-margin / smallcaps-kicker）；编辑部按（editorial-stripe，主色左条 + bgSoft）；调研口径（research-dense，10px 紧凑 + bold label）。",
+          "enum": [
+            "minimal-callout",
+            "box-callout",
+            "side-bar",
+            "dotted-margin",
+            "smallcaps-kicker",
+            "editorial-stripe",
+            "research-dense",
+            "ed-signoff",
+            "inline-label",
+            "interlinear-gloss",
+            "vermilion-gloss",
+            "ruler-note",
+            "latin-subhead",
+            "initial-disc",
+            "geometric-mark"
+          ]
+        }
+      ],
+      "notes": "第五态补注：独立 variantKind=note，中性骨架；可通过 variant=xxx 切骨架，色彩走 textMuted 不抢色。"
+    },
+    {
+      "id": "pros",
+      "category": "content",
+      "pack": "base",
+      "kind": "nested",
+      "parent": "compare",
+      "fenceLength": 3,
+      "description": "compare 的\"正面\"列（必须嵌在 :::: compare 内）。",
+      "example": "::: pros 优点\n- A\n- B\n:::\n",
+      "notes": "必须嵌在 compare 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "pull-quote",
+      "category": "content",
+      "pack": "pack:editorial",
+      "kind": "variantized",
+      "variants": [
+        "giant-mark",
+        "centered-rule",
+        "stamp-quote",
+        "margin-pull",
+        "weight-contrast",
+        "drop-capital",
+        "calligraphic",
+        "with-gloss",
+        "bilingual-stack",
+        "caliper-mark",
+        "inverted-plate",
+        "grid-block"
+      ],
+      "defaultVariant": "giant-mark",
+      "fenceLength": 3,
+      "description": "拉引：正文中段把作者已写过的句子放大重申。info 为引用文字，body 可选为署名 / 上下文。与 quote-card 正交（quote-card 是引用他人外部话语）。",
+      "example": "::: pull-quote\n我们以为在阅读，其实只是在滑动。\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 pull-quote 骨架。giant-mark（默认）= 装饰巨号引号；centered-rule = 上下细线居中夹；stamp-quote = 右侧印章 + 大字；margin-pull = 左悬挂 monospace kicker + 大字。",
+          "enum": [
+            "giant-mark",
+            "centered-rule",
+            "stamp-quote",
+            "margin-pull",
+            "weight-contrast",
+            "drop-capital",
+            "calligraphic",
+            "with-gloss",
+            "bilingual-stack",
+            "caliper-mark",
+            "inverted-plate",
+            "grid-block"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qa-block",
+      "category": "content",
+      "pack": "pack:editorial",
+      "kind": "variantized",
+      "variants": [
+        "numbered-faq",
+        "hanging-qa",
+        "seal-stamp",
+        "query-annotation",
+        "sample-query",
+        "field-card",
+        "circle-square",
+        "typed-block"
+      ],
+      "defaultVariant": "numbered-faq",
+      "fenceLength": 3,
+      "description": "读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 \"读者问答 · Q&A\"）。",
+      "example": "::: qa-block 读者问答 · Q&A q=\"数据显示 30 岁以下日均连读仅 8 分钟，还有救吗？\"\n有。数据衡量的是习惯而非能力，从睡前 15 分钟开始即可。\n:::\n",
+      "attrs": [
+        {
+          "key": "q",
+          "description": "问题文本（visual: 主色 Q 方块头像 + 单行）",
+          "example": "数据显示 30 岁以下日均连读仅 8 分钟，还有救吗？"
+        },
+        {
+          "key": "variant",
+          "description": "覆盖主题默认 qa-block 骨架。numbered-faq（默认）= Q.NN 序号 + 底线分隔；hanging-qa = 大号斜体 Q./A. 悬挂；seal-stamp = 问/答 朱印徽章；query-annotation = 設・問 夹线 + 註 hanging；sample-query = QUERY/FINDING 双栏；field-card = 田野卡片外框；circle-square = 圆方代号；typed-block = 反白上下分栏。",
+          "enum": [
+            "numbered-faq",
+            "hanging-qa",
+            "seal-stamp",
+            "query-annotation",
+            "sample-query",
+            "field-card",
+            "circle-square",
+            "typed-block"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qrcode",
+      "category": "navigation",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "bare",
+        "follow-card",
+        "qr-stack"
+      ],
+      "defaultVariant": "bare",
+      "fenceLength": 3,
+      "description": "二维码块。两态骨架：bare（默认）= 居中 QR + caption，\"任意场景的 QR\"（赞赏码 / 活动链接 / 小程序）；follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。",
+      "example": "::: qrcode text=\"https://mp.weixin.qq.com/s/xxx\"\n扫码关注\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 qrcode 骨架。bare（默认）= 居中 QR + 下方 caption（任意 QR 场景）；follow-card = 左 QR + 右 kicker/title/desc 三行（刊物订阅卡）。",
+          "enum": [
+            "bare",
+            "follow-card",
+            "qr-stack"
+          ]
+        },
+        {
+          "key": "text",
+          "description": "内置 QR 编码器的目标文本（URL / 任意字符串）。提供时容器内联生成 SVG，主色 fg 取主题 text，bg 取主题 bg；不提供则正文图片或说明文字作为占位。",
+          "example": "https://mp.weixin.qq.com/s/xxx"
+        },
+        {
+          "key": "ecc",
+          "description": "纠错等级（L/M/Q/H）。默认 M（约 15% 容错；扫码可靠性与码大小折中）",
+          "enum": [
+            "L",
+            "M",
+            "Q",
+            "H"
+          ]
+        },
+        {
+          "key": "size",
+          "description": "SVG 像素尺寸（width=height）。未提供则按 viewBox + CSS 缩放。",
+          "example": "160"
+        },
+        {
+          "key": "kicker",
+          "description": "follow-card 右上角 kicker 文字（缺省走 ctx.kickers.qrFollowKicker）",
+          "example": "SUBSCRIBE"
+        },
+        {
+          "key": "desc",
+          "description": "follow-card 右下角描述文字（小字 textMuted）",
+          "example": "每周四，一封邮件，一组数据"
+        },
+        {
+          "key": "qr",
+          "description": "follow-card 模式下，外链 QR 图 URL（与 attrs.text 互斥；都没有走占位 SVG）",
+          "example": "https://…/qr.png"
+        }
+      ]
+    },
+    {
+      "id": "quote-card",
+      "category": "content",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "classic",
+        "magazine-dropcap",
+        "column-rule",
+        "frame-brackets",
+        "editorial-block",
+        "tilted-sticker",
+        "oversized-mark",
+        "numbered-lines",
+        "seal-kai",
+        "double-frame",
+        "specimen-quote",
+        "binomial-attrib",
+        "huge-numeral",
+        "ring-device"
+      ],
+      "defaultVariant": "classic",
+      "fenceLength": 3,
+      "description": "大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。",
+      "example": "::: quote-card\n一段值得突出的引用 …\n:::\n"
+    },
+    {
+      "id": "recommend",
+      "category": "navigation",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "card-list",
+        "academic-refs"
+      ],
+      "defaultVariant": "card-list",
+      "fenceLength": 3,
+      "description": "推荐阅读链接列表。两态骨架：card-list 走\"读者面延伸阅读\"（同一作者的其他文章、关联推送）；academic-refs 走\"学术参考引用\"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。",
+      "example": "::: recommend\n- [前作](url)\n- [续篇](url)\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 recommend 骨架。card-list（默认）= 粗体大标题 + bullet 链接列表，面向\"延伸阅读\"；academic-refs = uppercase letter-spaced 小字 kicker + textMuted 列表，面向论证\"参考引用\"。",
+          "enum": [
+            "card-list",
+            "academic-refs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-tag",
+      "category": "structure",
+      "pack": "pack:editorial",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "小栏目标签（黑底白字胶囊小字，info 为标签文字，如 \"深度\"）。body 内容会被忽略。",
+      "example": "::: section-tag 深度\n:::\n"
+    },
+    {
+      "id": "section-title",
+      "category": "structure",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "bordered",
+        "cornered",
+        "number-prefix",
+        "kicker-stack",
+        "ribbon-stamp"
+      ],
+      "defaultVariant": "bordered",
+      "fenceLength": 3,
+      "description": "章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。",
+      "example": "::: section-title\n第一章 · 缘起\n:::\n"
+    },
+    {
+      "id": "steps",
+      "category": "content",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "number-circle",
+        "timeline-dot",
+        "step-card",
+        "split-row",
+        "seal-cjk",
+        "ruler-row"
+      ],
+      "defaultVariant": "number-circle",
+      "fenceLength": 3,
+      "description": "编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。",
+      "example": "::: steps\n1. 初始化\n2. 构建\n3. 发布\n:::\n"
+    },
+    {
+      "id": "table-card",
+      "category": "content",
+      "pack": "base",
+      "kind": "variantized",
+      "variants": [
+        "rule-grid",
+        "zebra-rows",
+        "key-value",
+        "price-tier",
+        "three-line-table",
+        "index-table",
+        "matrix"
+      ],
+      "defaultVariant": "rule-grid",
+      "children": [
+        "table-row"
+      ],
+      "fenceLength": 4,
+      "description": "结构化表格：弥补 markdown 原生 table 在公众号字号小 / 列宽不可控的缺陷。外层 4 冒号，内部 table-row 列条目。与 compare 正交（compare 限 2 列 pros/cons）。",
+      "example": ":::: table-card 规格对比\n::: table-row header=true cells=\"型号 | 容量 | 价格\"\n:::\n::: table-row cells=\"A · 256G · ￥6999\"\n:::\n::::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "骨架：rule-grid（默认 1px 全网格）/ zebra-rows（斑马底）/ key-value（双栏 KV）/ price-tier（价格档位卡）",
+          "enum": [
+            "rule-grid",
+            "zebra-rows",
+            "key-value",
+            "price-tier",
+            "three-line-table",
+            "index-table",
+            "matrix"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-row",
+      "category": "content",
+      "pack": "base",
+      "kind": "nested",
+      "parent": "table-card",
+      "fenceLength": 3,
+      "description": "table-card 内单行。attrs.cells 必填，body 内容被忽略。",
+      "example": "::: table-row header=true cells=\"型号 | 容量 | 价格\"\n:::\n",
+      "attrs": [
+        {
+          "key": "cells",
+          "description": "本行单元格内容，竖线 `|` 分隔；列数由首行决定，后续行多余列被忽略 / 缺失列留空。示例：`cells=\"型号 | 容量 | 价格\"`",
+          "example": "型号 | 容量 | 价格"
+        },
+        {
+          "key": "header",
+          "description": "是否为表头行（粗体 + 顶部 hairline + monospace label）",
+          "enum": [
+            "true",
+            "false"
+          ]
+        }
+      ],
+      "notes": "必须嵌在 table-card 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "timeline",
+      "category": "content",
+      "pack": "base",
+      "kind": "fixed",
+      "children": [
+        "timeline-item"
+      ],
+      "fenceLength": 4,
+      "description": "时间线：左侧年份 + 右侧事件。外层 4 个冒号，内部 timeline-item 列条目。",
+      "example": ":::: timeline 项目里程碑\n::: timeline-item year=\"2024\" 项目立项\n方案确认，团队组建。\n:::\n::: timeline-item year=\"2025\" 公测上线\n首批用户邀请制开放。\n:::\n::::\n"
+    },
+    {
+      "id": "timeline-item",
+      "category": "content",
+      "pack": "base",
+      "kind": "nested",
+      "parent": "timeline",
+      "fenceLength": 3,
+      "description": "timeline 内单条；info 为事件标题，body 为详述。",
+      "example": "::: timeline-item year=\"2024\" 项目立项\n方案确认，团队组建。\n:::\n",
+      "attrs": [
+        {
+          "key": "year",
+          "description": "左侧年份 / 日期标签（monospace）",
+          "example": "2024"
+        }
+      ],
+      "notes": "必须嵌在 timeline 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "tip",
+      "category": "admonition",
+      "pack": "base",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "card-shadow",
+        "terminal",
+        "dashed-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section",
+        "news-row",
+        "news-underline",
+        "mook-tag",
+        "slab-corner",
+        "numbered-rule",
+        "hanging-nb",
+        "vermilion-seal",
+        "paper-slip",
+        "field-tag",
+        "specimen-box",
+        "filled-square",
+        "triangle-top"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "tip：小贴士／正向提示。",
+      "example": "::: tip 小贴士\n内容 …\n:::\n",
+      "attrs": [
+        {
+          "key": "variant",
+          "description": "覆盖主题默认的 admonition 骨架",
+          "enum": [
+            "accent-bar",
+            "pill-tag",
+            "card-shadow",
+            "terminal",
+            "dashed-border",
+            "top-bottom-rule",
+            "manpage-log",
+            "sidenote-latex",
+            "marginalia",
+            "ledger-cell",
+            "bubble-organic",
+            "magazine-pull",
+            "report-section",
+            "news-row",
+            "news-underline",
+            "mook-tag",
+            "slab-corner",
+            "numbered-rule",
+            "hanging-nb",
+            "vermilion-seal",
+            "paper-slip",
+            "field-tag",
+            "specimen-box",
+            "filled-square",
+            "triangle-top"
+          ]
+        }
+      ],
+      "notes": "admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。"
+    },
+    {
+      "id": "toc",
+      "category": "navigation",
+      "pack": "pack:editorial",
+      "kind": "fixed",
+      "children": [
+        "toc-item"
+      ],
+      "fenceLength": 4,
+      "description": "目录：默认单列（kicker 顶 + items 下）；声明 layout=split 切到双栏（左 INDEX kicker + meta 描述 / 右 toc-items）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker。",
+      "example": ":::: toc 目录 · CONTENTS\n::: toc-item no=\"01\" page=\"p.04\" 为什么我们失去了阅读的耐心\n:::\n::::\n",
+      "attrs": [
+        {
+          "key": "layout",
+          "description": "布局模式：default = 单列（kicker 顶 + items 下）；split = 双栏（左 kicker+meta / 右 toc-items）。Swiss 苏黎世双栏对开页用 split + meta 描述栏位比例。",
+          "enum": [
+            "default",
+            "split"
+          ]
+        },
+        {
+          "key": "meta",
+          "description": "split 布局时左列副说明（如 \"目次排布采用12栏 / 1/3 : 2/3 比例\"）。多行用 ` / ` 分隔。default 布局忽略。",
+          "example": "目次排布采用12栏 / 1/3 : 2/3 比例"
+        }
+      ]
+    },
+    {
+      "id": "toc-item",
+      "category": "navigation",
+      "pack": "pack:editorial",
+      "kind": "nested",
+      "parent": "toc",
+      "fenceLength": 3,
+      "description": "toc 内单条；info 为条目标题。body 内容会被忽略。",
+      "example": "::: toc-item no=\"01\" page=\"p.04\" 为什么我们失去了阅读的耐心\n:::\n",
+      "attrs": [
+        {
+          "key": "no",
+          "description": "序号（monospace 主色）",
+          "example": "01"
+        },
+        {
+          "key": "page",
+          "description": "页码（monospace 灰）",
+          "example": "p.04"
+        }
+      ],
+      "notes": "必须嵌在 toc 内（外层 ::::，内层 :::）"
+    },
+    {
+      "id": "video-card",
+      "category": "media",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "公众号视频占位卡（带 qqvid 时直出 v.qq.com iframe；其余为占位）。",
+      "example": "::: video-card title=\"片段\" qqvid=\"...\"\n:::\n",
+      "attrs": [
+        {
+          "key": "src",
+          "description": "视频 URL（公众号素材库链接）"
+        },
+        {
+          "key": "title",
+          "description": "标题"
+        },
+        {
+          "key": "qqvid",
+          "description": "腾讯视频 vid（提供时渲染 v.qq.com iframe）"
+        }
+      ]
+    },
+    {
+      "id": "voice-card",
+      "category": "media",
+      "pack": "base",
+      "kind": "fixed",
+      "fenceLength": 3,
+      "description": "公众号语音占位卡（粘贴后由微信识别为真 mpvoice 节点）。",
+      "example": "::: voice-card title=\"片头曲\" src=\"...\"\n:::\n",
+      "attrs": [
+        {
+          "key": "src",
+          "description": "音频 URL（公众号素材库链接）"
+        },
+        {
+          "key": "title",
+          "description": "标题"
+        },
+        {
+          "key": "voice_encode_fileid",
+          "description": "微信音频 fileid（粘贴后自动展开）"
+        }
+      ]
+    },
+    {
+      "id": "warning",
+      "category": "admonition",
+      "pack": "base",
+      "kind": "admonition",
+      "variants": [
+        "accent-bar",
+        "pill-tag",
+        "card-shadow",
+        "terminal",
+        "dashed-border",
+        "top-bottom-rule",
+        "manpage-log",
+        "sidenote-latex",
+        "marginalia",
+        "ledger-cell",
+        "bubble-organic",
+        "magazine-pull",
+        "report-section",
+        "news-row",
+        "news-underline",
+        "mook-tag",
+        "slab-corner",
+        "numbered-rule",
+        "hanging-nb",
+        "vermilion-seal",
+        "paper-slip",
+        "field-tag",
+        "specimen-box",
+        "filled-square",
+        "triangle-top"
+      ],
+      "defaultVariant": "accent-bar",
+      "fenceLength": 3,
+      "description": "warning：需要读者注意的提醒。",
+      "example": "::: warning 注意\n内容 …\n:::\n",
+      "notes": "admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。"
+    }
+  ],
+  "signatureContainerIds": [
+    "intro",
+    "cover",
+    "author",
+    "authorBio",
+    "sectionTitle",
+    "masthead",
+    "sectionTag",
+    "byline",
+    "editorialHeader",
+    "toc",
+    "announcement",
+    "tip",
+    "warning",
+    "info",
+    "danger",
+    "note",
+    "quoteCard",
+    "highlight",
+    "compare",
+    "steps",
+    "imageCaption",
+    "timeline",
+    "qaBlock",
+    "footerCTA",
+    "recommend",
+    "qrcode",
+    "voiceCard",
+    "videoCard",
+    "abstract",
+    "keyNumber",
+    "kpiDashboard",
+    "barChart",
+    "footnotes",
+    "colophon",
+    "pullQuote",
+    "tableCard",
+    "gallery",
+    "dialogue"
+  ],
+  "inlineExtensions": [
+    {
+      "syntax": "==mark==",
+      "description": "荧光笔高亮（markdown-it-mark）",
+      "regex": "==([^=]+)==",
+      "inputExample": "==重点==",
+      "outputHtmlExample": "<mark>重点</mark>"
+    },
+    {
+      "syntax": "~~del~~",
+      "description": "GFM 删除线",
+      "regex": "~~([^~]+)~~",
+      "inputExample": "~~已废弃~~",
+      "outputHtmlExample": "<s>已废弃</s>"
+    },
+    {
+      "syntax": "++ins++",
+      "description": "插入（markdown-it-ins）",
+      "regex": "\\+\\+([^+]+)\\+\\+",
+      "inputExample": "++新增++",
+      "outputHtmlExample": "<ins>新增</ins>"
+    },
+    {
+      "syntax": "[.text.]",
+      "description": "中文着重号",
+      "regex": "\\[\\.([^\\n]+?)\\.\\]",
+      "inputExample": "[.核心论点.]",
+      "outputHtmlExample": "<span class=\"wx-emphasis\">核心论点</span>"
+    },
+    {
+      "syntax": "[~text~]",
+      "description": "波浪下划线",
+      "regex": "\\[~([^\\n]+?)~\\]",
+      "inputExample": "[~引文出处~]",
+      "outputHtmlExample": "<span class=\"wx-wavy\">引文出处</span>"
+    }
+  ],
+  "hardRules": {
+    "minFontSize": 14,
+    "minStrokeWidth": 1,
+    "paletteHexPattern": "^#[0-9a-fA-F]{3,8}$",
+    "forbidFontFamily": true,
+    "forbidClass": true,
+    "forbidStyleTag": true,
+    "forbidPosition": true,
+    "forbidMediaQueries": true
+  },
+  "errorCodes": [
+    {
+      "code": "CONTRACT_VIOLATION",
+      "exitCode": 4,
+      "description": "markdown 容器/语法/嵌套错（fence_not_closed 等）"
+    },
+    {
+      "code": "SPEC_INVALID",
+      "exitCode": 3,
+      "description": "PersonaSpec 校验失败"
+    },
+    {
+      "code": "INPUT_AMBIGUOUS",
+      "exitCode": 1,
+      "description": "render 同时给 persona/theme/spec"
+    },
+    {
+      "code": "RESOURCE_NOT_FOUND",
+      "exitCode": 2,
+      "description": "未知 persona / 容器 / variant id"
+    },
+    {
+      "code": "PLATFORM_UNSUPPORTED",
+      "exitCode": 5,
+      "description": "未知 publish 平台 id"
+    },
+    {
+      "code": "RENDER_FAILED",
+      "exitCode": 6,
+      "description": "管线内部异常（未归类，兜底）。与 CONTRACT_VIOLATION 区分，便于 CI 程序化分支"
+    }
+  ],
+  "cli": {
+    "bin": "wechat-typeset",
+    "describeCommand": "describe",
+    "commands": [
+      {
+        "name": "markdown render",
+        "description": "Render markdown → HTML through the full pipeline (markdown-it + theme injection + wxPatch). Canonical name; `render` is kept as a deprecated alias.\n\n`dryRun: true` skips HTML output but still computes wordCount / readingTime / pageConfig / frontmatterIssues (html is empty string, patchLog has no entries). Useful for batch cost estimation before paying for full rendering.\n\n`asDocument: true` wraps the fragment in a complete HTML document (<!DOCTYPE html> … </html>); title is derived from frontmatter, then the first H1 in the markdown, then falls back to \"wechat-typeset 渲染\". No-op when dryRun is also true.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Markdown source (may include frontmatter)."
+            },
+            "persona": {
+              "type": "string",
+              "description": "Built-in persona id (mutually exclusive with spec)."
+            },
+            "spec": {
+              "type": "object",
+              "description": "Inline PersonaSpec. Validated before render.",
+              "additionalProperties": true
+            },
+            "platform": {
+              "type": "string",
+              "description": "Publish target id; defaults to 'wechat'. Use `platforms list` to enumerate available ids.",
+              "enum": [
+                "wechat",
+                "zhihu",
+                "xhs"
+              ]
+            },
+            "dryRun": {
+              "type": "boolean",
+              "description": "When true, skip HTML rendering and return an empty html string with patchLog { entries: [], total: 0 }. Metadata (wordCount, readingTime, pageConfig, frontmatterIssues) is still computed."
+            },
+            "asDocument": {
+              "type": "boolean",
+              "description": "When true, wrap the rendered fragment in a complete HTML document. Title is resolved from frontmatter → first H1 → fallback string. No-op when dryRun is true."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "html",
+            "wordCount",
+            "readingTime"
+          ],
+          "properties": {
+            "html": {
+              "type": "string"
+            },
+            "wordCount": {
+              "type": "integer"
+            },
+            "readingTime": {
+              "type": "integer"
+            },
+            "patchLog": {
+              "type": "object",
+              "required": [
+                "entries",
+                "total"
+              ],
+              "properties": {
+                "entries": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "patch",
+                      "label",
+                      "count"
+                    ],
+                    "properties": {
+                      "patch": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      },
+                      "samples": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "selector",
+                            "before"
+                          ],
+                          "properties": {
+                            "selector": {
+                              "type": "string"
+                            },
+                            "before": {
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            },
+            "frontmatterIssues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "pageConfig": {
+              "type": "object",
+              "properties": {
+                "variants": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "theme": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "validate spec",
+        "description": "Validate a PersonaSpec against hard rules (palette / status 4-states / motif font ≥14 / strokeWidth ≥1 / fontFamily whitelist / variant ids / signatureContainers whitelist). Returns { ok, errors[], warnings[] }; each entry carries `path` + `hint` when matched.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "spec"
+          ],
+          "properties": {
+            "spec": {
+              "type": "object",
+              "description": "PersonaSpec JSON to validate. Schema available via `describe` output → personaSpecSchema (or src/public:getSchema()).",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "ok",
+            "errors",
+            "warnings"
+          ],
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "validate markdown",
+        "description": "Check renderability of markdown by running the full pipeline; catches WtException(CONTRACT_VIOLATION / SPEC_INVALID / RESOURCE_NOT_FOUND). Returns { ok, errors[], warnings[] }. For contract-layer lint (fence vocabulary / nesting / inline closure / theme-namespace) use `lint` instead — it is faster and more granular.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Markdown source (may include frontmatter)."
+            },
+            "persona": {
+              "type": "string",
+              "description": "Optional persona id; when omitted defaults to \"default\"."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "ok",
+            "errors",
+            "warnings"
+          ],
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "validate",
+        "description": "DEPRECATED alias: prefer `validate spec` (PersonaSpec) or `validate markdown` (render check). Dispatches based on which input field is present.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spec": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "md": {
+              "type": "string"
+            },
+            "persona": {
+              "type": "string"
+            }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "spec"
+              ]
+            },
+            {
+              "required": [
+                "md"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "ok",
+            "errors",
+            "warnings"
+          ],
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "markdown lint",
+        "description": "Contract-lint markdown (fence vocabulary, fence nesting, inline-extension closure, frontmatter, theme-namespace mismatch). Returns { ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }. When `kind` is `unknown_container`, `nesting_depth`, `unexpected_jsx_attrs`, `fence_not_closed`, or `wrong_theme_namespace`, `name` carries the offending fence name. Canonical name; `lint` is kept as a deprecated alias.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md"
+          ],
+          "properties": {
+            "md": {
+              "type": "string"
+            },
+            "persona": {
+              "type": "string",
+              "description": "Optional persona id; enables theme-namespace warnings."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "ok",
+            "issues",
+            "count",
+            "errorCount",
+            "warningCount",
+            "personaSource"
+          ],
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "line",
+                  "kind",
+                  "severity",
+                  "hint",
+                  "excerpt"
+                ],
+                "properties": {
+                  "line": {
+                    "type": "integer"
+                  },
+                  "kind": {
+                    "enum": [
+                      "unknown_container",
+                      "unexpected_jsx_attrs",
+                      "html_comment_variant",
+                      "fence_not_closed",
+                      "nesting_depth",
+                      "inline_unclosed",
+                      "wrong_theme_namespace",
+                      "frontmatter_invalid"
+                    ]
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  },
+                  "excerpt": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "count": {
+              "type": "integer"
+            },
+            "errorCount": {
+              "type": "integer"
+            },
+            "warningCount": {
+              "type": "integer"
+            },
+            "effectivePersona": {
+              "type": "string"
+            },
+            "personaSource": {
+              "enum": [
+                "frontmatter",
+                "flag",
+                "none"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "markdown annotate",
+        "description": "Heuristic block-level patch proposals for raw markdown: scan paragraphs / lists / blockquotes / headings, suggest ::: container wraps consistent with theme capabilities. Returns { patches[], capabilitySnapshot, vocabularySubset, blockCount }. Canonical name; `annotate` is kept as a deprecated alias.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "persona"
+          ],
+          "properties": {
+            "md": {
+              "type": "string"
+            },
+            "persona": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "patches",
+            "capabilitySnapshot",
+            "vocabularySubset",
+            "blockCount"
+          ],
+          "properties": {
+            "patches": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "line",
+                  "endLine",
+                  "kind",
+                  "container",
+                  "reason",
+                  "confidence",
+                  "preview"
+                ],
+                "properties": {
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "endLine": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "kind": {
+                    "enum": [
+                      "wrap_paragraph",
+                      "wrap_blockquote",
+                      "convert_list",
+                      "wrap_first_paragraph",
+                      "wrap_section_title",
+                      "wrap_pros_cons"
+                    ]
+                  },
+                  "container": {
+                    "type": "string"
+                  },
+                  "variant": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "preview": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "capabilitySnapshot": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "vocabularySubset": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "category",
+                  "fenceLength",
+                  "description",
+                  "example"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "fenceLength": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "example": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "blockCount": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "markdown annotate apply",
+        "description": "Pure function `(md, patches[]) → newMd`. Applies the patch plan from `markdown annotate` mechanically: each patch wraps its declared line range in `::: <container>[ variant=X]` (or `::::` for 4-fence containers). Patches are applied in descending line order so earlier ranges stay valid. Returns { md, applied, skipped[] } — overlapping ranges, invalid line numbers, unknown containers, and `wrap_pros_cons` (which requires manual structure) are reported in `skipped[]` with a reason. The function never throws. Canonical name; `annotate apply` is kept as a deprecated alias.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "patches"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Original markdown source (line numbers in `patches` are 1-indexed against this)."
+            },
+            "patches": {
+              "type": "array",
+              "description": "Patch plan, typically the `patches[]` field from `annotate` output.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "line",
+                  "endLine",
+                  "kind",
+                  "container"
+                ],
+                "properties": {
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "endLine": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "kind": {
+                    "enum": [
+                      "wrap_paragraph",
+                      "wrap_blockquote",
+                      "convert_list",
+                      "wrap_first_paragraph",
+                      "wrap_section_title",
+                      "wrap_pros_cons"
+                    ]
+                  },
+                  "container": {
+                    "type": "string"
+                  },
+                  "variant": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "preview": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "applied",
+            "skipped"
+          ],
+          "properties": {
+            "md": {
+              "type": "string"
+            },
+            "applied": {
+              "type": "integer"
+            },
+            "skipped": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "patch",
+                  "reason"
+                ],
+                "properties": {
+                  "patch": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "markdown render-batch",
+        "description": "Render one markdown source through multiple personas in a single call. Returns per-persona ok/html/wordCount/readingTime or error details. Failures are isolated per persona — one bad id does not abort the rest.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "personas"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Markdown source (may include frontmatter)."
+            },
+            "personas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "description": "Ordered list of persona ids to render against."
+            },
+            "platform": {
+              "type": "string",
+              "description": "Publish target id; defaults to 'wechat'."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "results",
+            "total",
+            "succeeded",
+            "failed"
+          ],
+          "properties": {
+            "results": {
+              "type": "object",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "ok",
+                      "html",
+                      "wordCount",
+                      "readingTime"
+                    ],
+                    "properties": {
+                      "ok": {
+                        "type": "boolean",
+                        "enum": [
+                          true
+                        ]
+                      },
+                      "html": {
+                        "type": "string"
+                      },
+                      "wordCount": {
+                        "type": "integer"
+                      },
+                      "readingTime": {
+                        "type": "integer"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "ok",
+                      "code",
+                      "message"
+                    ],
+                    "properties": {
+                      "ok": {
+                        "type": "boolean",
+                        "enum": [
+                          false
+                        ]
+                      },
+                      "code": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "total": {
+              "type": "integer"
+            },
+            "succeeded": {
+              "type": "integer"
+            },
+            "failed": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "personas list",
+        "description": "List built-in personas, optionally filtered by topic (case-insensitive substring match on audience + description) or audience (case-insensitive substring match on audience only). All filters are ANDed. No filters → full list.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "description": "Case-insensitive substring match against audience + description (e.g. \"technical\", \"财经\", \"人物\")."
+            },
+            "audience": {
+              "type": "string",
+              "description": "Case-insensitive substring match against audience only."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      {
+        "name": "personas get",
+        "description": "Return full PersonaSpec for the given persona id (throws WtException RESOURCE_NOT_FOUND if unknown).",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "personas capabilities",
+        "description": "Aggregate \"what works in this theme\" view: defaultVariants, recommendedVariants (designedFor reverse index), containers[] (with available / signature / pack / namespace), kickers.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "persona",
+            "defaultVariants",
+            "recommendedVariants",
+            "recommendedVariantOverrides",
+            "containers",
+            "kickers"
+          ],
+          "properties": {
+            "persona": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "defaultVariants": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "recommendedVariants": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "recommendedVariantOverrides": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "containers": {
+              "type": "array"
+            },
+            "kickers": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "personas recommend",
+        "description": "Heuristic top-3 persona recommendation using keyword-table + style-anchor scoring. All fields are optional but at least one of title / summary / vibe / audience / topic / style must be non-empty (throws CONTRACT_VIOLATION otherwise). Returns { ranked[], recommendNew, rationaleOneLine }.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "topic": {
+              "type": "string",
+              "description": "题材：技术 / 财经 / 人文 / 生活 / 学术 / 数据 / 文化 / 其他"
+            },
+            "style": {
+              "type": "string",
+              "description": "参照锚点（如 FT中文 / Stripe Docs / Kinfolk）"
+            },
+            "vibe": {
+              "type": "string",
+              "description": "自由文字氛围/美学描述（如\"暖米底圆角，慢生活散文气质\"、\"VT220 琥珀字\"）"
+            },
+            "audience": {
+              "type": "string",
+              "description": "目标读者描述（如\"技术布道\"、\"财经内参\"、\"散文\"）"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "ranked",
+            "recommendNew",
+            "rationaleOneLine"
+          ],
+          "properties": {
+            "ranked": {
+              "type": "array"
+            },
+            "recommendNew": {
+              "type": "boolean"
+            },
+            "rationaleOneLine": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "personas derive",
+        "description": "Derive a new PersonaSpec by merging a patch over a base persona. Shallow-merges palette / variants / meta / motifs per key. Returns the merged spec + validation result without throwing on validation failure.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "base",
+            "patch"
+          ],
+          "properties": {
+            "base": {
+              "type": "string",
+              "description": "Base persona id (must exist)."
+            },
+            "patch": {
+              "type": "object",
+              "description": "Partial PersonaSpec to merge over the base.",
+              "additionalProperties": true
+            },
+            "id": {
+              "type": "string",
+              "description": "Override id for the derived persona."
+            },
+            "name": {
+              "type": "string",
+              "description": "Override name for the derived persona."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "spec",
+            "validation"
+          ],
+          "properties": {
+            "spec": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "validation": {
+              "type": "object",
+              "required": [
+                "ok",
+                "errors",
+                "warnings"
+              ],
+              "properties": {
+                "ok": {
+                  "type": "boolean"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "warnings": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "persona motifs",
+        "description": "Return the MotifSpec (motif AST collection) for the given persona id. Throws RESOURCE_NOT_FOUND if unknown.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Persona id."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "containers list",
+        "description": "Return the container vocabulary, optionally filtered by category (exact), pack (exact), or namespace (exact). All filters are ANDed. No filters → full list.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Exact match on ContainerSpec.category (e.g. 'admonition', 'structure', 'signature')."
+            },
+            "pack": {
+              "type": "string",
+              "description": "Exact match on container pack (e.g. 'base', 'pack:editorial', 'pack:data-viz', 'theme:<id>')."
+            },
+            "namespace": {
+              "type": "string",
+              "description": "High-level grouping: 'base' | 'pack' | 'theme'."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      {
+        "name": "containers get",
+        "description": "Return the ContainerSpec for a single container by fence name. Throws RESOURCE_NOT_FOUND if the name is not in the vocabulary.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Container fence name (e.g. tip / quote-card / steps)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "containers snippet",
+        "description": "Return minimal markdown snippet for a container. Pass `variant` to bind a specific skeleton. Pass `persona` (and omit `variant`) to bind that persona's default variant for the container's variantKind — useful when generating snippets pre-tuned to the active theme. If the container has no variantKind, `persona` is a no-op.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Container fence name (e.g. tip / quote-card / steps)."
+            },
+            "variant": {
+              "type": "string",
+              "description": "Explicit variant id; takes precedence over `persona` resolution."
+            },
+            "persona": {
+              "type": "string",
+              "description": "Persona id used to resolve the default variant for the container's variantKind when `variant` is omitted."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "containers variants",
+        "description": "Return all switchable variant descriptors for a container. Returns an empty array for containers with no variant system. Throws RESOURCE_NOT_FOUND if the container name is unknown.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Container fence name (e.g. quote-card / steps)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      {
+        "name": "inline-extensions list",
+        "description": "Return the full inline extension vocabulary (==mark==, ~~del~~, [.text.] etc.) with syntax, description, regex, input/output examples.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      {
+        "name": "inline-extensions snippet",
+        "description": "Return the inputExample string for a given inline extension syntax (e.g. ==mark==). Throws RESOURCE_NOT_FOUND if the syntax is unknown.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "syntax"
+          ],
+          "properties": {
+            "syntax": {
+              "type": "string",
+              "description": "Inline extension syntax key (e.g. ==mark== / ~~del~~ / [.text.])."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "frontmatter parse",
+        "description": "Parse the YAML frontmatter block at the top of a markdown string. Returns config (variants/theme overrides), the stripped body, and any parse issues. Never throws — issues are non-fatal.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Markdown source (may start with ---\\n...\\n--- frontmatter)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "config",
+            "body",
+            "issues"
+          ],
+          "properties": {
+            "config": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "body": {
+              "type": "string"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "capabilities",
+        "description": "Return the full capabilities object (same shape as dist/api/capabilities.json) without writing to disk. URI fields are empty strings when called from CLI; the build script fills them with jsDelivr URLs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "error-codes list",
+        "description": "Return all WtException error codes with their CLI exit code and one-line description.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "code",
+              "exitCode",
+              "description"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "exitCode": {
+                "type": "number"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      {
+        "name": "schema get",
+        "description": "Return the PersonaSpec JSON Schema (draft-07) object. Suitable for LLM structured-output constraints or downstream validation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "motif render",
+        "description": "Render a motif AST → SVG string. Provide EXACTLY ONE of `shape` (plain MotifShape) OR `template` (+ optional `values` for {placeholder} substitution). Passing both or neither throws CONTRACT_VIOLATION.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "shape": {
+              "type": "object",
+              "description": "Plain MotifShape AST.",
+              "additionalProperties": true
+            },
+            "template": {
+              "type": "object",
+              "description": "MotifTemplate AST with {placeholder} slots.",
+              "additionalProperties": true
+            },
+            "values": {
+              "type": "object",
+              "description": "Map of placeholder name → substitution value. Only used with `template`.",
+              "additionalProperties": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              }
+            }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "shape"
+              ]
+            },
+            {
+              "required": [
+                "template"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "platforms list",
+        "description": "List all registered publish-target platforms (id / name / status). Use these ids in `render --platform`. status enum: stable | beta | placeholder.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "status"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "stable",
+                  "beta",
+                  "placeholder"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      {
+        "name": "variant diff-geometry",
+        "description": "Compare a variant render output against its design-IR baseline (geometry diff). Returns a structured list of mismatches (display / width / padding / font-size / line-height / color literal). Use this INSTEAD of screenshot comparison to converge on a design baseline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "description": "variant kind, kebab-case (admonition / note / quote / highlight / pull-quote / compare / steps / divider / section-title / table-card / gallery / dialogue / qa-block)."
+            },
+            "variantId": {
+              "type": "string",
+              "description": "variant id (e.g. \"paper-slip\", \"numbered-rule\"). Must match src/core/variants/{kind}/{id}.ts."
+            },
+            "themeId": {
+              "type": "string",
+              "description": "Implementation theme id. Defaults to the recommended theme of the design-IR (designTheme → recommendedThemeId)."
+            },
+            "containerName": {
+              "type": "string",
+              "description": "Markdown fence name (tip / note / quote-card / pull-quote / ...). Defaults to the canonical fence for the kind."
+            },
+            "markdown": {
+              "type": "string",
+              "description": "Override markdown to render. Defaults to a minimal fence for the kind/variant."
+            }
+          },
+          "required": [
+            "kind",
+            "variantId"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "baseline": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "themeIdUsed": {
+              "type": "string"
+            },
+            "wrapperClassName": {
+              "type": "string"
+            },
+            "diffs": {
+              "type": "array"
+            },
+            "summary": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "baseline",
+            "themeIdUsed",
+            "wrapperClassName",
+            "diffs",
+            "summary"
+          ]
+        }
+      },
+      {
+        "name": "palette lookup-token",
+        "description": "Look up a literal color hex in the 18-theme palette index. Returns ctx.tokens path suggestions (preferred theme first), so variant authors and LLMs can write `${ctx.tokens.colors.<key>}` instead of guessing or hardcoding hex. Data source: derived from src/core/themes/registry.ts ORDERED_SPECS — auto-syncs with palette changes.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "literal": {
+              "type": "string",
+              "description": "Literal color hex (#RGB / #RRGGBB / #RRGGBBAA). Plain CSS color names like \"transparent\" are returned with empty matches."
+            },
+            "themeId": {
+              "type": "string",
+              "description": "Preferred implementation theme id (e.g. \"literary-humanism\"). Hits in this theme appear in `preferred` / `matches`; hits in other themes go to `alternatives`."
+            }
+          },
+          "required": [
+            "literal"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "literal": {
+              "type": "string"
+            },
+            "preferred": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "additionalProperties": true
+            },
+            "matches": {
+              "type": "array"
+            },
+            "alternatives": {
+              "type": "array"
+            },
+            "advice": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "literal",
+            "preferred",
+            "matches",
+            "alternatives",
+            "advice"
+          ]
+        }
+      },
+      {
+        "name": "describe",
+        "description": "Self-describing manifest: returns every command name / description / inputSchema / outputSchema, plus error-code catalog, registered platforms, variantIds whitelist, signatureContainers whitelist, hard-rule thresholds, and inline-extension catalog. One call gives MCP / LLM tool registries everything needed to register and reason about the tool.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "version",
+            "commands",
+            "errorCodes",
+            "platforms",
+            "variantIds",
+            "signatureContainers",
+            "hardRules",
+            "inlineExtensions"
+          ],
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "commands": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "description",
+                  "inputSchema",
+                  "outputSchema",
+                  "readOnly"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "inputSchema": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "outputSchema": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "readOnly": {
+                    "type": "boolean",
+                    "description": "true = pure read (safe to cache / retry / call speculatively); false = state-mutating write."
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "errorCodes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "code",
+                  "exitCode",
+                  "description"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "exitCode": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "platforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "status"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "variantIds": {
+              "type": "object",
+              "description": "Whitelist of variant ids per VariantKind. Validators reject anything outside.",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "signatureContainers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "hardRules": {
+              "type": "object",
+              "required": [
+                "minFontSize",
+                "minStrokeWidth",
+                "allowedFontFamilies",
+                "hexPattern"
+              ],
+              "properties": {
+                "minFontSize": {
+                  "type": "integer"
+                },
+                "minStrokeWidth": {
+                  "type": "number"
+                },
+                "allowedFontFamilies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "hexPattern": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "inlineExtensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "syntax",
+                  "description",
+                  "regex",
+                  "inputExample",
+                  "outputHtmlExample"
+                ],
+                "properties": {
+                  "syntax": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "regex": {
+                    "type": "string"
+                  },
+                  "inputExample": {
+                    "type": "string"
+                  },
+                  "outputHtmlExample": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "render",
+        "description": "DEPRECATED alias of `markdown render`. Render markdown → HTML through the full pipeline (markdown-it + theme injection + wxPatch). Canonical name; `render` is kept as a deprecated alias.\n\n`dryRun: true` skips HTML output but still computes wordCount / readingTime / pageConfig / frontmatterIssues (html is empty string, patchLog has no entries). Useful for batch cost estimation before paying for full rendering.\n\n`asDocument: true` wraps the fragment in a complete HTML document (<!DOCTYPE html> … </html>); title is derived from frontmatter, then the first H1 in the markdown, then falls back to \"wechat-typeset 渲染\". No-op when dryRun is also true.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Markdown source (may include frontmatter)."
+            },
+            "persona": {
+              "type": "string",
+              "description": "Built-in persona id (mutually exclusive with spec)."
+            },
+            "spec": {
+              "type": "object",
+              "description": "Inline PersonaSpec. Validated before render.",
+              "additionalProperties": true
+            },
+            "platform": {
+              "type": "string",
+              "description": "Publish target id; defaults to 'wechat'. Use `platforms list` to enumerate available ids.",
+              "enum": [
+                "wechat",
+                "zhihu",
+                "xhs"
+              ]
+            },
+            "dryRun": {
+              "type": "boolean",
+              "description": "When true, skip HTML rendering and return an empty html string with patchLog { entries: [], total: 0 }. Metadata (wordCount, readingTime, pageConfig, frontmatterIssues) is still computed."
+            },
+            "asDocument": {
+              "type": "boolean",
+              "description": "When true, wrap the rendered fragment in a complete HTML document. Title is resolved from frontmatter → first H1 → fallback string. No-op when dryRun is true."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "html",
+            "wordCount",
+            "readingTime"
+          ],
+          "properties": {
+            "html": {
+              "type": "string"
+            },
+            "wordCount": {
+              "type": "integer"
+            },
+            "readingTime": {
+              "type": "integer"
+            },
+            "patchLog": {
+              "type": "object",
+              "required": [
+                "entries",
+                "total"
+              ],
+              "properties": {
+                "entries": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "patch",
+                      "label",
+                      "count"
+                    ],
+                    "properties": {
+                      "patch": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      },
+                      "samples": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "selector",
+                            "before"
+                          ],
+                          "properties": {
+                            "selector": {
+                              "type": "string"
+                            },
+                            "before": {
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "total": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            },
+            "frontmatterIssues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "message",
+                  "severity"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "pageConfig": {
+              "type": "object",
+              "properties": {
+                "variants": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "theme": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "lint",
+        "description": "DEPRECATED alias of `markdown lint`. Contract-lint markdown (fence vocabulary, fence nesting, inline-extension closure, frontmatter, theme-namespace mismatch). Returns { ok, issues[], count, errorCount, warningCount, effectivePersona, personaSource }. When `kind` is `unknown_container`, `nesting_depth`, `unexpected_jsx_attrs`, `fence_not_closed`, or `wrong_theme_namespace`, `name` carries the offending fence name. Canonical name; `lint` is kept as a deprecated alias.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md"
+          ],
+          "properties": {
+            "md": {
+              "type": "string"
+            },
+            "persona": {
+              "type": "string",
+              "description": "Optional persona id; enables theme-namespace warnings."
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "ok",
+            "issues",
+            "count",
+            "errorCount",
+            "warningCount",
+            "personaSource"
+          ],
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "line",
+                  "kind",
+                  "severity",
+                  "hint",
+                  "excerpt"
+                ],
+                "properties": {
+                  "line": {
+                    "type": "integer"
+                  },
+                  "kind": {
+                    "enum": [
+                      "unknown_container",
+                      "unexpected_jsx_attrs",
+                      "html_comment_variant",
+                      "fence_not_closed",
+                      "nesting_depth",
+                      "inline_unclosed",
+                      "wrong_theme_namespace",
+                      "frontmatter_invalid"
+                    ]
+                  },
+                  "severity": {
+                    "enum": [
+                      "error",
+                      "warning"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "hint": {
+                    "type": "string"
+                  },
+                  "excerpt": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "count": {
+              "type": "integer"
+            },
+            "errorCount": {
+              "type": "integer"
+            },
+            "warningCount": {
+              "type": "integer"
+            },
+            "effectivePersona": {
+              "type": "string"
+            },
+            "personaSource": {
+              "enum": [
+                "frontmatter",
+                "flag",
+                "none"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "annotate",
+        "description": "DEPRECATED alias of `markdown annotate`. Heuristic block-level patch proposals for raw markdown: scan paragraphs / lists / blockquotes / headings, suggest ::: container wraps consistent with theme capabilities. Returns { patches[], capabilitySnapshot, vocabularySubset, blockCount }. Canonical name; `annotate` is kept as a deprecated alias.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "persona"
+          ],
+          "properties": {
+            "md": {
+              "type": "string"
+            },
+            "persona": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "patches",
+            "capabilitySnapshot",
+            "vocabularySubset",
+            "blockCount"
+          ],
+          "properties": {
+            "patches": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "line",
+                  "endLine",
+                  "kind",
+                  "container",
+                  "reason",
+                  "confidence",
+                  "preview"
+                ],
+                "properties": {
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "endLine": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "kind": {
+                    "enum": [
+                      "wrap_paragraph",
+                      "wrap_blockquote",
+                      "convert_list",
+                      "wrap_first_paragraph",
+                      "wrap_section_title",
+                      "wrap_pros_cons"
+                    ]
+                  },
+                  "container": {
+                    "type": "string"
+                  },
+                  "variant": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "preview": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "capabilitySnapshot": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "vocabularySubset": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "category",
+                  "fenceLength",
+                  "description",
+                  "example"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "fenceLength": {
+                    "type": "integer"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "example": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "blockCount": {
+              "type": "integer"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "annotate apply",
+        "description": "DEPRECATED alias of `markdown annotate apply`. Pure function `(md, patches[]) → newMd`. Applies the patch plan from `markdown annotate` mechanically: each patch wraps its declared line range in `::: <container>[ variant=X]` (or `::::` for 4-fence containers). Patches are applied in descending line order so earlier ranges stay valid. Returns { md, applied, skipped[] } — overlapping ranges, invalid line numbers, unknown containers, and `wrap_pros_cons` (which requires manual structure) are reported in `skipped[]` with a reason. The function never throws. Canonical name; `annotate apply` is kept as a deprecated alias.",
+        "inputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "patches"
+          ],
+          "properties": {
+            "md": {
+              "type": "string",
+              "description": "Original markdown source (line numbers in `patches` are 1-indexed against this)."
+            },
+            "patches": {
+              "type": "array",
+              "description": "Patch plan, typically the `patches[]` field from `annotate` output.",
+              "items": {
+                "type": "object",
+                "required": [
+                  "line",
+                  "endLine",
+                  "kind",
+                  "container"
+                ],
+                "properties": {
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "endLine": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "kind": {
+                    "enum": [
+                      "wrap_paragraph",
+                      "wrap_blockquote",
+                      "convert_list",
+                      "wrap_first_paragraph",
+                      "wrap_section_title",
+                      "wrap_pros_cons"
+                    ]
+                  },
+                  "container": {
+                    "type": "string"
+                  },
+                  "variant": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ]
+                  },
+                  "preview": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": {
+          "type": "object",
+          "required": [
+            "md",
+            "applied",
+            "skipped"
+          ],
+          "properties": {
+            "md": {
+              "type": "string"
+            },
+            "applied": {
+              "type": "integer"
+            },
+            "skipped": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "patch",
+                  "reason"
+                ],
+                "properties": {
+                  "patch": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    ]
+  },
+  "platforms": [
+    {
+      "id": "wechat",
+      "name": "微信公众号",
+      "status": "stable"
+    },
+    {
+      "id": "zhihu",
+      "name": "知乎专栏",
+      "status": "placeholder"
+    },
+    {
+      "id": "xhs",
+      "name": "小红书",
+      "status": "placeholder"
+    }
+  ],
+  "selfUri": "https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@main/dist/api/capabilities.json",
+  "versionedSelfUri": "https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@v0.1.0/dist/api/capabilities.json",
+  "coverUriPattern": "https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@main/dist/api/covers/{personaId}.svg",
+  "coverUriPatternVersioned": "https://cdn.jsdelivr.net/gh/lync-cyber/wechat-typeset@v0.1.0/dist/api/covers/{personaId}.svg",
+  "deprecations": [
+    {
+      "id": "cli.command.render",
+      "sinceVersion": "0.2",
+      "replacement": "markdown render"
+    },
+    {
+      "id": "cli.command.lint",
+      "sinceVersion": "0.2",
+      "replacement": "markdown lint"
+    },
+    {
+      "id": "cli.command.annotate",
+      "sinceVersion": "0.2",
+      "replacement": "markdown annotate"
+    },
+    {
+      "id": "cli.command.annotate apply",
+      "sinceVersion": "0.2",
+      "replacement": "markdown annotate apply"
+    },
+    {
+      "id": "cli.command.validate",
+      "sinceVersion": "0.2",
+      "replacement": "validate spec / validate markdown"
+    }
+  ],
+  "fallbackBehavior": {
+    "variantChain": [
+      {
+        "level": "L1",
+        "source": "attrs.variant",
+        "action": "逐处覆盖。非法 id 静默忽略，回退 L2/L3/L4"
+      },
+      {
+        "level": "L2",
+        "source": "markdown frontmatter `variants:`",
+        "action": "页面级覆盖。非法 id 写入 frontmatterIssues warning，回退 L3/L4"
+      },
+      {
+        "level": "L3",
+        "source": "theme.variants[slot]",
+        "action": "主题映射表。注册表里不存在则回退 L4"
+      },
+      {
+        "level": "L4",
+        "source": "DEFAULT_VARIANTS / makeVariantContainer.fallbackId",
+        "action": "系统默认，保证渲染必定有骨架"
+      }
+    ],
+    "defaultVariants": {
+      "admonition": "accent-bar",
+      "quote": "classic",
+      "compare": "column-card",
+      "steps": "number-circle",
+      "divider": "rule",
+      "sectionTitle": "bordered",
+      "codeBlock": "bare",
+      "note": "minimal-callout",
+      "highlight": "plain",
+      "footnotes": "lined",
+      "recommend": "card-list",
+      "qrcode": "bare",
+      "footerCTA": "button-led",
+      "pullQuote": "giant-mark",
+      "announcement": "danger-bar",
+      "tableCard": "rule-grid",
+      "gallery": "duo",
+      "dialogue": "qa-rows",
+      "qaBlock": "numbered-faq"
+    },
+    "triggers": [
+      {
+        "condition": "attrs.variant 非法 id",
+        "action": "silent-fallback",
+        "report": "回退 L2/L3/L4；lint 阶段用 getVariantsForContainer 校验"
+      },
+      {
+        "condition": "frontmatter variants[slot] 非法 id",
+        "action": "warning",
+        "report": "RenderOutput.frontmatterIssues[]"
+      },
+      {
+        "condition": "frontmatter theme 未知 id",
+        "action": "warning",
+        "report": "RenderOutput.frontmatterIssues[]；回退 input.persona/theme/spec"
+      },
+      {
+        "condition": "theme:<X> 容器在非该主题渲染",
+        "action": "silent-fallback",
+        "report": "wrapper CSS 走 token 中性兜底；通过 getThemeCapabilities().containers[].available 提前发现"
+      },
+      {
+        "condition": "render 同时给 persona/theme/spec",
+        "action": "error",
+        "report": "抛 WtException(INPUT_AMBIGUOUS)"
+      },
+      {
+        "condition": "render(spec) 投影失败",
+        "action": "error",
+        "report": "抛 WtException(SPEC_INVALID)，e.errors 携带逐条 WtError"
+      },
+      {
+        "condition": "未知 persona id",
+        "action": "error",
+        "report": "抛 WtException(RESOURCE_NOT_FOUND)"
+      },
+      {
+        "condition": "未知 platform id",
+        "action": "error",
+        "report": "抛 WtException(PLATFORM_UNSUPPORTED)"
+      }
+    ]
+  },
+  "personaSchemaUri": "../schema/persona-spec.schema.json",
+  "docs": {
+    "writerContract": "docs/contract/README.md",
+    "containerSyntax": "docs/contract/syntax.md",
+    "containerBase": "docs/contract/base.md",
+    "containerPackEditorial": "docs/contract/packs/editorial.md",
+    "containerThemeDataBrief": "docs/contract/packs/data-brief.md",
+    "fallback": "docs/contract/fallback.md",
+    "skillReadme": "skills/wechat-typeset/SKILL.md",
+    "personas": "skills/wechat-typeset/references/personas.md",
+    "hardRules": "skills/wechat-typeset/references/hard-rules.md",
+    "api": "skills/wechat-typeset/references/api.md"
+  }
+}
