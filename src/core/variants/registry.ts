@@ -87,6 +87,7 @@ const ADMONITION_ORDER: readonly string[] = [
   'paper-slip',
   'field-tag',
   'specimen-box',
+  'filled-square',
   'triangle-top',
 ]
 const QUOTE_ORDER: readonly string[] = [

@@ -450,6 +450,11 @@ specimen-box 骨架 —— 左 1px border 方格 N°。
 :::
 
 <!-- designedFor: brutalist 独占 -->
+::: tip 告示 variant=filled-square
+filled-square 骨架 —— 顶 18px accent 方块 + 告示 + 中线 + N° 单行 header。
+:::
+
+<!-- designedFor: brutalist 独占 -->
 ::: tip 告示 variant=triangle-top
 triangle-top 骨架 —— 顶 -9px 三角徽 + 1px 边框。
 :::

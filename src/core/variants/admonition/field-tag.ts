@@ -49,16 +49,19 @@ const variantDef: VariantDef<AdmonitionRenderArgs> = {
         `padding:4px 0`,
       ].join(';'),
       titleCSS: '',
+      // header 走 display:table —— flex 在 wxPatch 阶段被剥成 block，刻度尺会塌到
+      // FIG.CAVE 下方而非右对齐。table-cell + text-align:right 保住左右两端布局。
       svgSlot:
-        `<div style="display:flex;align-items:flex-end;justify-content:space-between;` +
+        `<div style="display:table;width:100%;` +
         `border-bottom:1px solid ${text};padding-bottom:6px;margin-bottom:14px;">` +
-        `<div>` +
+        `<div style="display:table-cell;vertical-align:bottom;">` +
         `<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;` +
         `letter-spacing:.2em;color:${textMuted};">FIG. CAVE — 04</div>` +
         `<div style="font-family:'Lora',serif;font-style:italic;font-size:13px;` +
         `color:${text};margin-top:2px;">Notabene · 告示</div>` +
         `</div>` +
-        `<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;` +
+        `<div style="display:table-cell;vertical-align:bottom;text-align:right;` +
+        `font-family:'IBM Plex Mono',monospace;font-size:9px;` +
         `color:${textMuted};letter-spacing:.2em;line-height:1;">` +
         `<span style="display:inline-block;border-left:1px solid ${textMuted};height:6px;margin-right:3px;vertical-align:bottom;"></span>` +
         `<span style="display:inline-block;border-left:1px solid ${textMuted};height:10px;margin-right:3px;vertical-align:bottom;"></span>` +
