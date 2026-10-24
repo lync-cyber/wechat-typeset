@@ -18,7 +18,6 @@ ENABLE_ESLINT="true"        # 未使用变量（沿用 eslint.config.js）
 ENABLE_COMPLEXITY="true"    # 函数复杂度扫描
 ENABLE_CIRCULAR="true"      # 循环依赖（Madge）
 ENABLE_DEPCRUISE="true"     # 架构边界规则（dependency-cruiser）
-ENABLE_TSARCH="false"       # ts-arch 架构单测（需先调整 arch.test.ts）
 ENABLE_REPORT="true"        # 生成 LLM prompt
 ENABLE_GRAPH="false"        # 生成依赖 SVG（需安装 Graphviz dot）
 
@@ -62,9 +61,3 @@ MADGE_EXCLUDE="\.test\.|\.spec\.|\.d\.ts$|/__snapshots__/|/dist/|/audit-report/"
 VERBOSE="false"
 FAIL_FAST="false"
 COLOR="true"
-
-# ═══════════════════════════════════════════════
-#  ts-arch 测试运行器
-#  本项目用 vitest（非 jest）；ENABLE_TSARCH=true 时生效
-# ═══════════════════════════════════════════════
-TSARCH_RUNNER="vitest"

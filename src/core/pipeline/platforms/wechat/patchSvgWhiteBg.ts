@@ -6,15 +6,13 @@
  *   公众号的 SVG→PNG 光栅化管线会把纯白像素转成 alpha=0，导致白色填充区域
  *   变成透明洞（在深色主题里尤其明显）。用不可察觉的偏色避开这个规则。
  *
- * 默认不开：
- *   只有确认当前主题使用深色背景 / 需要白色实心元素时才通过 opts 启用。
- *   因此 applyWxPatches 的 opts.svgWhiteBg 默认 false。
+ * applyWxPatches 默认开启；显式传 opts.svgWhiteBg=false 可关闭。
  *
  * 作用范围：
  *   只在 svg 子树内生效——正文里的白色（如段落背景）不应被改。
  */
 
-import { parseStyle, patchSvgSubtree, stringifyStyle } from './utils'
+import { parseFragment, parseStyle, patchSvgSubtreeInPlace, serializeFragment, stringifyStyle } from './utils'
 import { NEAR_WHITE } from '../../rules'
 
 const WHITE_VALUES = new Set(['#fff', '#ffffff', 'white'])
@@ -29,7 +27,13 @@ const COLOR_ATTRS = new Set(['fill', 'stroke', 'stop-color', 'flood-color', 'lig
 const COLOR_STYLE_PROPS = new Set(['fill', 'stroke', 'color', 'background', 'background-color', 'stop-color'])
 
 export function patchSvgWhiteBg(html: string): string {
-  return patchSvgSubtree(html, (el) => {
+  const { container } = parseFragment(html)
+  patchSvgWhiteBgInPlace(container)
+  return serializeFragment(container)
+}
+
+export function patchSvgWhiteBgInPlace(container: HTMLElement): void {
+  patchSvgSubtreeInPlace(container, (el) => {
     for (const name of Array.from(COLOR_ATTRS)) {
       const v = el.getAttribute(name)
       if (v && isWhite(v)) el.setAttribute(name, NEAR_WHITE)

@@ -21,6 +21,7 @@ export interface BuildCommandsDeps {
   activeDraftId: Ref<string | null>
   handleSave: () => void
   handleSelectDraft: (id: string) => void
+  handleThemeChange?: (id: string) => void
   /** 剪贴板 / 分享 */
   handleCopy: () => void
   handleCopyShareLink: () => void
@@ -72,7 +73,7 @@ export function buildCommands(deps: BuildCommandsDeps): ComputedRef<Command[]> {
         title: `主题 · ${t.name}`,
         group: '主题',
         keywords: `${t.id} theme`,
-        run: () => { baseThemeId.value = t.id },
+        run: () => { if (deps.handleThemeChange) deps.handleThemeChange(t.id); else baseThemeId.value = t.id },
       })
     })
 

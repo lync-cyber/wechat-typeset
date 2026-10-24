@@ -3,11 +3,10 @@
  * 编辑栏 / 预览栏中间的可拖动分隔条
  *
  * 设计约束（与 App.vue 协作）：
- *   - 预览栏 width 锁 375 + 16+16 padding（WeChat 保真）；拖动**只调编辑栏宽度**，
- *     不缩放预览内容。
+ *   - 预览正文保持 375px 视口；拖动只调编辑栏宽度。
  *   - editorWidth === null 时编辑栏走 flex:1 1 auto 默认填充；
- *     editorWidth 为 number 时切到 flex:0 0 ${editorWidth}px，预览栏靠 margin-left:auto
- *     贴右；中间空隙是 .main 的 paper-300 底，与预览外缘连成"纸面"。
+ *     为 number 时以该宽度作为编辑栏的 flex-basis。
+ *   - 分隔条包含左右间距，总宽与 usePaneSizing 的预留空间一致。
  *   - 双击 / 键盘 Enter → 复位到默认（editorWidth = null）。
  *
  * 移动端（≤767px）不渲染：移动端是 mobileTab 切换，没有分割线。
@@ -25,7 +24,7 @@ const props = defineProps<{
   width: number | null
   /** 编辑栏最小宽度（再窄不能用），默认 320 */
   min?: number
-  /** 编辑栏最大宽度（视口宽 - 预览栏 - splitter 自身），由父级根据视口算 */
+  /** 编辑栏最大宽度（工作区宽 - 预览栏 - splitter 自身），由父级测量计算 */
   max?: number
 }>()
 
@@ -42,6 +41,13 @@ function clamp(value: number): number {
   return value
 }
 
+function currentWidth(target: HTMLElement): number {
+  if (props.width !== null) return props.width
+  // offsetLeft 包含左侧文章库等祖先偏移，不能作为编辑器宽度。
+  const width = target.previousElementSibling?.getBoundingClientRect().width ?? 0
+  return width > 0 ? width : min.value
+}
+
 // --- mouse ---
 let startX = 0
 let startWidth = 0
@@ -52,9 +58,7 @@ function onMouseDown(ev: MouseEvent) {
   ev.preventDefault()
   dragging.value = true
   startX = ev.clientX
-  // 起拖时若还在默认 flex 状态，把编辑栏当前实际宽度作为起点——
-  // 通过 splitter DOM 的 offsetLeft 推断（它就是编辑栏的右边界）。
-  startWidth = props.width ?? (ev.currentTarget as HTMLElement).offsetLeft
+  startWidth = currentWidth(ev.currentTarget as HTMLElement)
   document.body.classList.add('splitter-dragging')
   window.addEventListener('mousemove', onMouseMove)
   window.addEventListener('mouseup', onMouseUp, { once: true })
@@ -77,7 +81,7 @@ function onTouchStart(ev: TouchEvent) {
   if (ev.touches.length !== 1) return
   dragging.value = true
   touchStartX = ev.touches[0].clientX
-  touchStartWidth = props.width ?? (ev.currentTarget as HTMLElement).offsetLeft
+  touchStartWidth = currentWidth(ev.currentTarget as HTMLElement)
 }
 function onTouchMove(ev: TouchEvent) {
   if (!dragging.value || ev.touches.length !== 1) return
@@ -116,13 +120,14 @@ function onKeyDown(ev: KeyboardEvent) {
     return
   }
   ev.preventDefault()
-  const base = props.width ?? (ev.currentTarget as HTMLElement).offsetLeft
+  const base = currentWidth(ev.currentTarget as HTMLElement)
   emit('update:width', clamp(base + delta))
 }
 
 onBeforeUnmount(() => {
   // 拖动中组件被销毁的兜底——避免遗留监听器
   window.removeEventListener('mousemove', onMouseMove)
+  window.removeEventListener('mouseup', onMouseUp)
   document.body.classList.remove('splitter-dragging')
 })
 </script>
@@ -153,11 +158,11 @@ onBeforeUnmount(() => {
 <style scoped>
 .splitter {
   flex: 0 0 6px;
+  margin-inline: 4px;
   align-self: stretch;
   position: relative;
   cursor: col-resize;
-  /* 顶替原来的 .pane-editor border-right：让 splitter 自己当那条线 */
-  border-right: 1px solid var(--border);
+  border-radius: var(--radius-pill);
   background: transparent;
   transition: background var(--dur-quick) var(--ease-craft);
   -webkit-tap-highlight-color: transparent;
@@ -167,23 +172,22 @@ onBeforeUnmount(() => {
 .splitter:focus-visible,
 .splitter.dragging {
   background: var(--accent-soft);
-  border-right-color: var(--accent);
   outline: none;
 }
 .splitter:focus-visible {
   box-shadow: var(--focus-ring);
 }
 
-/* 真实"抓手"——居中竖条，hover/drag 时显形；非交互时只露 1px 分割线 */
+/* 居中抓手保持轻量可见，悬停和键盘聚焦时强化。 */
 .splitter-handle {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 2px;
-  height: 36px;
+  height: 24px;
   border-radius: 1px;
-  background: transparent;
+  background: var(--border-strong);
   transition: background var(--dur-quick) var(--ease-craft);
 }
 .splitter:hover .splitter-handle,

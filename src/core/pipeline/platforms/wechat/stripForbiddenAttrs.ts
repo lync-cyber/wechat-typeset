@@ -23,7 +23,11 @@ const ID_WHITELIST = /^(fn|fnref|footnote)[-\d]/i
 
 export function stripForbiddenAttrs(html: string): string {
   const { container } = parseFragment(html)
+  stripForbiddenAttrsInPlace(container)
+  return serializeFragment(container)
+}
 
+export function stripForbiddenAttrsInPlace(container: HTMLElement): void {
   walkElements(container, (el) => {
     if (el.hasAttribute('id')) {
       const id = el.getAttribute('id') ?? ''
@@ -44,6 +48,4 @@ export function stripForbiddenAttrs(html: string): string {
       el.setAttribute('style', stringifyStyle(kept))
     }
   })
-
-  return serializeFragment(container)
 }

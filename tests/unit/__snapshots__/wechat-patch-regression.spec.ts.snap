@@ -1,0 +1,253 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`微信完整渲染矩阵 > 'academic-frontier' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "a0819636056e79544dd5b2058941068de4bf6d607cf906eef812a135651b5bc2",
+  "patchLogSha256": "880345320529a98ba391fa61df3862418f7f86bcceef896466a1903be2a95eae",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'academic-frontier' / 'story' 1`] = `
+{
+  "htmlSha256": "72d379a9c241ae6b91f0ce731ed7cc5953392b607376377745d72c72eef3ae11",
+  "patchLogSha256": "272e1bcdb7224abd186808b99fc7c0c97d15b732c2d82d830de6813de6580270",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'brutalist' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "59559c459c462ab51cf1312e423299811cff594e9e58e029bf3fdcbd4f3fb800",
+  "patchLogSha256": "757abcd83ea330c09e3a6d1a6a9e86af578ea756f7b0264caeff177c8d7e57b0",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'brutalist' / 'story' 1`] = `
+{
+  "htmlSha256": "45d378de667c45a129aabea14928e861eb007a18d201ff62dd8d0ba8c8940886",
+  "patchLogSha256": "773bfea8b909695b4027aaabc0f360598f887ecb42c2aac1ae73f32991e59dd4",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'business-finance' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "4c0408df2713c72b6ef8def0845fc72eaf11c8b5161f8e103dbb01837489a264",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'business-finance' / 'story' 1`] = `
+{
+  "htmlSha256": "6ebb23817e99f4a715dcf75c8a35ba01e41afb072880b29c0b3a77a24933fb27",
+  "patchLogSha256": "8f147bc4efc00f275e6c4ff85a69472d3bfa5e0360701e01bb79e70ca9843f7a",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'commerce-pulse' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "ade6c7b3c1b5288d0d69cc5664a5e25ed2d7f85579aecf60f1bf3f02c927582d",
+  "patchLogSha256": "c0385cde8d57b834040d120f4ded29d8fd76e2f9f6232e9e16ad21fdca2c7ca1",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'commerce-pulse' / 'story' 1`] = `
+{
+  "htmlSha256": "9c0bac34e31ebe74e917672455f5376f7b67df40fea4f4040b76bb7a88e27751",
+  "patchLogSha256": "201d048fd954c943f06e52783229c56e79fd43226902921bc2dd31a268eaf076",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'data-brief' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "214237ef24ad1e784802706e0487c8df77c501b3c77441c06650da626fdf6a8e",
+  "patchLogSha256": "e40740296a0265569191fcc024ca8af35b473292775027377bc9348806f6404a",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'data-brief' / 'story' 1`] = `
+{
+  "htmlSha256": "1329d81783e20ba6c12f25fabd2187eee91aa3308e1057b8e409214281217576",
+  "patchLogSha256": "a0b66d1a582f399800c2057acdc29242a70f775686307adb28840f8b907d069a",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'default' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "6ffdbcda73325d423c984121930c8f4aeb00c9e4b1e2bf18ebf6fc490533f6e1",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'default' / 'story' 1`] = `
+{
+  "htmlSha256": "08abc5e76eeeda6da967453567864794f1024996ffb1cffe6478d4f21f897d64",
+  "patchLogSha256": "4b46edf8468bf7ee5985eb9b754d554e297af6103acf4cfac819173c04cea149",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'editorial-mook' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "d73374e09c762acdd02a839a328de23fa0f1447cb88f67799a1ea4822d292d02",
+  "patchLogSha256": "757abcd83ea330c09e3a6d1a6a9e86af578ea756f7b0264caeff177c8d7e57b0",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'editorial-mook' / 'story' 1`] = `
+{
+  "htmlSha256": "45fcc385502064a1a25e447e8720d48b2d7b772d14b95e886459bf5645336d99",
+  "patchLogSha256": "2d3d807f850c76a4bbe04e3fdc5287f0064afc4cb8782cc50dd164159f67a32e",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'edu-classroom' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "b5091ed1818336712ef309d48641960b1a957d65944b7976e087a448e0f6ed2d",
+  "patchLogSha256": "c0385cde8d57b834040d120f4ded29d8fd76e2f9f6232e9e16ad21fdca2c7ca1",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'edu-classroom' / 'story' 1`] = `
+{
+  "htmlSha256": "057ce645a31dcd360504382717644a80d34f31773c1b77782c4d8c343d4227fe",
+  "patchLogSha256": "ebb6e50c7169f7cab642e7604225bcdf31cd6f6dda5ab57723efc1b8e0c8be7a",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'industry-observer' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "f365ee9ea21278f0ce5aa948d568491efd821abfc934539312807f711a30e0b7",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'industry-observer' / 'story' 1`] = `
+{
+  "htmlSha256": "5d4303ec20f824c559f5f247d9869bdcf9e4ca3f874068b033beea3abc2fbdd6",
+  "patchLogSha256": "9b739c126ec33aa5e3bfbb320498d428aca12b7f08d3de047d76304dd5498e35",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'late-night-vinyl' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "35f6de8c737d6684d65f913ba2d8915c805101b75a256ed8ea33b37f7b688585",
+  "patchLogSha256": "02d0cef2ea7d5a522983df8079c52fc9240a4bb324d03863c5285d8081ca5f44",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'late-night-vinyl' / 'story' 1`] = `
+{
+  "htmlSha256": "2c619f44743226b025f09561e4a6e132c1ba9430e11cb66066ccc9c09124f368",
+  "patchLogSha256": "475cbf44ae8be4299a46e4e65d48ab259a4fb2f46d635a21e4aef0479946ec5a",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'life-aesthetic' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "30c0312385bc99080b8f38f3bc8c26bcb78ef1908d1966c38c29cf45d6d372b4",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'life-aesthetic' / 'story' 1`] = `
+{
+  "htmlSha256": "86c0af84038ac5265bd27aba2bbb6f2af1a1bfb592642819320f6bdde89ff326",
+  "patchLogSha256": "5f5b22538f6c49ad67714070aa23bdcf7b794bbea1328c2bf7048fed07170d4f",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'literary-humanism' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "72f8b3c4bbe5d521d9f13957d4caf1936deb2efd3bede53546d9e9b313bf96ae",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'literary-humanism' / 'story' 1`] = `
+{
+  "htmlSha256": "f4ba95bad199d01b44589ae578ce7a1d67b2834d45e2adff01522ef0112496dc",
+  "patchLogSha256": "4b46edf8468bf7ee5985eb9b754d554e297af6103acf4cfac819173c04cea149",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'official-gazette' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "b045fca8199545616c03735333968b92372c56a8f22654449457f719c4f1bc54",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'official-gazette' / 'story' 1`] = `
+{
+  "htmlSha256": "01c22259b9da1162d5461d9664c98c5714570971237339a70d1e4ef6a1981095",
+  "patchLogSha256": "315eb27a1f029d9def371d7d08a7365fe42ad4c60a22f9a97d7da168f5cb2491",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'people-story' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "103183480b0c04083f80fd78ed5c142b4c1dae1e7e9d97050b3d11ca5d774e1a",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'people-story' / 'story' 1`] = `
+{
+  "htmlSha256": "86ad053b9d91b9f3da50547affaeb90f6b1c32a517c10fd61cce40a842b4510e",
+  "patchLogSha256": "ccc2c3bfdd8d444aa26a0fba80a31d2f0d600cfe6cfb53d7fc1a7eca82325aea",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'swiss-grid' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "788743d63d820fe34d6ede5d864376fe6413983e8922d2bfe25d8a11d4da277a",
+  "patchLogSha256": "757abcd83ea330c09e3a6d1a6a9e86af578ea756f7b0264caeff177c8d7e57b0",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'swiss-grid' / 'story' 1`] = `
+{
+  "htmlSha256": "13fdf300f894497bbe87f8ed2725e509e0a20be43a273e68c615257e53ddeef6",
+  "patchLogSha256": "d9884a0a05af9be5b00e5cea4535e29739b657613c526c02d18526351496c6c0",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'tech-explainer' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "23e7258966029fc76a7bd34252b06bcd32ba8fcfa90f9c758283e4cff28cfd6c",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'tech-explainer' / 'story' 1`] = `
+{
+  "htmlSha256": "225627b52fb98a3686f1e27886087d811fb6e71feb1ee4436cf29c097e3fab35",
+  "patchLogSha256": "cbc72817f36423af4e7470e7ed68e29552ff524dea180651b1cb1caf013bfd44",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'tech-geek' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "b0a4188c4f2aed4a617b7271acdc5f55e4cff7a27c14697a2b882ce328c4dbad",
+  "patchLogSha256": "8eec4f990812c9a06834ec75d695b1ad8332126ce5b82e8d9b28b1219884af7c",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'tech-geek' / 'story' 1`] = `
+{
+  "htmlSha256": "dd941da299fc53eaa172e0b71c5f045c690bfb391d0abf4ea420e8bb3e0c4cb4",
+  "patchLogSha256": "8df4d33e9d963c6b55af7445a371b5815ef6d8b9aa0d229e9d8854a2a6ad7999",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'youth-zine' / 'all-containers' 1`] = `
+{
+  "htmlSha256": "92de905d0cbd5db92330de334198a92c5ae95ce564270c53191e442761376b43",
+  "patchLogSha256": "b2b2b0883124f8f305ef21e482f176bfc915c8f7502c3972ae43bf26fdfd6b96",
+}
+`;
+
+exports[`微信完整渲染矩阵 > 'youth-zine' / 'story' 1`] = `
+{
+  "htmlSha256": "ccc4877e57f3c57834803e20d4df00bee2efe89a1cde2e8e814ba928d45f3b91",
+  "patchLogSha256": "71d8b58d6664dbffac494fdfbd3e2fb5119163123fb86c2792287a8eff146b3f",
+}
+`;

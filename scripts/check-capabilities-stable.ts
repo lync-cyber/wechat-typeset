@@ -6,12 +6,9 @@
  * 用法：
  *   npx tsx scripts/check-capabilities-stable.ts <before.json> <after.json>
  *
- * 推荐 CI 接线（GitHub Actions / 本地）：
- *   1. 从主分支拉一份 baseline：`git show main:dist/api/capabilities.json > prev.json`
- *      （或从 jsDelivr cache 拉 selfUri 内容）
- *   2. 在当前分支重新跑 `npm run build:capabilities`
- *   3. 调用本脚本：`tsx scripts/check-capabilities-stable.ts prev.json dist/api/capabilities.json`
- *   4. 退出码 0 = 兼容；1 = 有破坏；2 = 用法错误 / 解析失败
+ * CI 从 PR base SHA 的隔离工作树安装锁定依赖并构建基线，与 PR 合并结果比较。
+ * dist/ 不受版本控制；本地比较也需要分别在两个修订上运行 build:capabilities。
+ * 退出码：0 = 兼容；1 = 有破坏；2 = 用法错误 / 解析失败。
  *
  * 破坏维度与豁免规则见 capabilities-diff.ts 注释。
  */

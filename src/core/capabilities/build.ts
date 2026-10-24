@@ -1,4 +1,5 @@
-import { getPersona, listPersonas, listPublishPlatforms } from '../../public'
+import { ORDERED_SPECS } from '../themes/registry'
+import { listPlatforms } from '../pipeline/platforms/registry'
 import { VARIANT_IDS, DEFAULT_VARIANTS, DEFAULT_KICKERS } from '../themes/types'
 import { SUPPORTED_SIGNATURE_CONTAINERS } from '../themes/_shared/spec'
 import { HEX_RE, MIN_FONT_SIZE, MIN_STROKE_WIDTH } from '../themes/_shared/spec/validate'
@@ -164,30 +165,29 @@ function buildErrorCodes(): CapabilitiesV3['errorCodes'] {
 }
 
 export function buildCapabilitiesV3(options: BuildCapabilitiesV3Options): CapabilitiesV3 {
-  const personas = listPersonas().map((p) => {
-    const fullSpec = getPersona(p.id)
-    const kickers = { ...DEFAULT_KICKERS, ...(fullSpec.kickers ?? {}) }
+  const personas = ORDERED_SPECS.map((spec) => {
+    const kickers = { ...DEFAULT_KICKERS, ...(spec.kickers ?? {}) }
     const out: CapabilitiesV3['personas'][number] = {
-      id: p.id,
-      name: p.name,
-      description: p.description,
-      audience: p.audience,
-      signatureContainers: p.signatureContainers,
-      variants: p.variants as unknown as Record<string, string>,
-      palettePrimary: p.palette.primary,
+      id: spec.id,
+      name: spec.name,
+      description: spec.description,
+      audience: spec.audience,
+      signatureContainers: spec.signatureContainers ?? [],
+      variants: spec.variants as unknown as Record<string, string>,
+      palettePrimary: spec.palette.primary,
       kickers: kickers as unknown as Record<string, string>,
     }
-    if (fullSpec.capabilities) {
+    if (spec.capabilities) {
       out.capabilities = {
-        containers: fullSpec.capabilities.containers,
-        variantOverrides: fullSpec.capabilities.variantOverrides as unknown as Record<string, string> | undefined,
-        excluded: fullSpec.capabilities.excluded,
+        containers: spec.capabilities.containers,
+        variantOverrides: spec.capabilities.variantOverrides as unknown as Record<string, string> | undefined,
+        excluded: spec.capabilities.excluded,
       }
     }
     return out
   })
 
-  const platforms = listPublishPlatforms().map((p) => ({
+  const platforms = listPlatforms().map((p) => ({
     id: p.id,
     name: p.name,
     status: p.status,

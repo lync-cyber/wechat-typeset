@@ -7,6 +7,7 @@
  *   - 当前活跃 id (wechat-typeset:drafts:active)
  */
 
+import { parseFrontmatter } from '../../core/pipeline/frontmatter'
 import { genId as genKvId, safeRead, safeReadJson, safeRemove, safeWrite, safeWriteJson } from './_kv'
 
 const INDEX_KEY = 'wechat-typeset:drafts:index'
@@ -51,9 +52,12 @@ function writeIndex(list: DraftMeta[]): boolean {
   return safeWriteJson(INDEX_KEY, list)
 }
 
-/** 从 md 里抽一行作为标题（第一个 # 或前 20 字） */
+/** 优先用发布标题，否则从正文首个非空行推断，最多 24 字。 */
 export function deriveTitle(md: string): string {
-  const line = md
+  const { publication, body } = parseFrontmatter(md)
+  const title = publication.title?.trim()
+  if (title) return title
+  const line = body
     .split('\n')
     .map((l) => l.trim())
     .find((l) => l.length > 0)

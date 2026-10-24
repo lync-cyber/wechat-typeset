@@ -1,14 +1,14 @@
 /* ================================================================
- * wechat-typeset · Typesetter's Bench — Design Tokens
+ * wechat-typeset · 轻盈编辑室 — Design Tokens
  * ----------------------------------------------------------------
  * Scope: App shell only (toolbar / editor chrome / drawers / modals).
  *        NOT for the in-iframe WeChat article output.
  *
- * Character: paper + ink + proof-red. Three materials, one voice.
+ * Character: neutral surfaces, clear typography, restrained proof-red.
  *
  * Hard rules:
  *   - No gradients. No backdrop-filter. No elevation overload.
- *   - Radii capped at 6px (with one pill exception for status dots).
+ *   - 4 / 8 / 12px radii for controls, cards and dialogs.
  *   - Proof red is allowed in exactly 3 contexts:
  *       (1) primary action, (2) errors/delete, (3) brand/ruler marks.
  *   - All numerics (stats, px, hex, ratios) MUST render in mono + tnum.
@@ -20,30 +20,30 @@
    * 1. COLOR — 纸 / 墨 / 朱 + 3 semantic hues, each 9–10 steps
    * -------------------------------------------------------------- */
 
-  /* Paper (neutral warm) — the base surface */
-  --paper-50:  #fdfcf8;
-  --paper-100: #f8f6ef;
-  --paper-200: #eeebe0;
-  --paper-300: #d8d4c4;
-  --paper-400: #b8b3a0;
-  --paper-500: #8f8a77;
-  --paper-600: #6a6655;
-  --paper-700: #4a4739;
-  --paper-800: #2c2a22;
-  --paper-900: #1a1914;
-  --paper-950: #0e0e0a;
+  /* Neutral surfaces — shared by every workspace panel. */
+  --paper-50:  #ffffff;
+  --paper-100: #f4f5f4;
+  --paper-200: #ecefed;
+  --paper-300: #e0e4e1;
+  --paper-400: #b9c1bc;
+  --paper-500: #76817a;
+  --paper-600: #5f6a63;
+  --paper-700: #414c45;
+  --paper-800: #252e29;
+  --paper-900: #191f1c;
+  --paper-950: #101512;
 
-  /* Ink (true dark, warm black) */
-  --ink-50:  #e7e5df;
-  --ink-100: #b8b4a8;
-  --ink-200: #898574;
-  --ink-300: #5b5749;
-  --ink-400: #3e3b30;
-  --ink-500: #2a2822;
-  --ink-600: #1f1d18;
-  --ink-700: #16140f;
-  --ink-800: #0e0d09;
-  --ink-900: #050503;
+  /* Ink — neutral graphite for the existing dark appearance. */
+  --ink-50:  #e9eeeb;
+  --ink-100: #b7c1bb;
+  --ink-200: #8a9790;
+  --ink-300: #5d6b63;
+  --ink-400: #3b4840;
+  --ink-500: #2a352e;
+  --ink-600: #212b25;
+  --ink-700: #19211c;
+  --ink-800: #101813;
+  --ink-900: #070d09;
 
   /* Proof red (校样红) — the single expressive hue */
   --proof-50:  #fbeeeb;
@@ -51,7 +51,7 @@
   --proof-200: #e8a498;
   --proof-300: #d87465;
   --proof-400: #c54a38;
-  --proof-500: #a83420; /* canonical accent */
+  --proof-500: #b44232; /* canonical accent */
   --proof-600: #8a271a;
   --proof-700: #6c1e14;
   --proof-800: #4e150e;
@@ -125,26 +125,25 @@
    * Light：温暖纸色底 + 深墨字，与 toolbar / drawer 同语；
    * Dark（[data-theme="dark"]）：深墨底 + 浅字，CodeMirror 同步换 oneDark。 */
   --editor-bg:        var(--paper-50);
-  --editor-surface:   var(--paper-100);
+  --editor-surface:   var(--paper-50);
   --editor-text:      var(--paper-800);
   --editor-muted:     var(--paper-600);
-  --editor-selection: rgba(168, 52, 32, 0.16);
+  --editor-selection: rgba(180, 66, 50, 0.13);
   --editor-linenum:   var(--paper-500);
-  --editor-active:    rgba(35, 30, 20, 0.04);
+  --editor-active:    rgba(37, 46, 41, 0.025);
 
   /* --------------------------------------------------------------
    * 2. TYPOGRAPHY — 3 families, modular scale (1.125), base 15
    * -------------------------------------------------------------- */
-  --font-display:
-    "GT Super Display", "Tiempos Headline", "Noto Serif SC",
-    "Songti SC", Georgia, serif;
+  --font-display: var(--font-text);
   --font-text:
     "Inter var", "Inter", -apple-system, BlinkMacSystemFont,
     "Segoe UI", "PingFang SC", "Hiragino Sans GB",
     "Microsoft YaHei", sans-serif;
   --font-mono:
     "JetBrains Mono NL", "JetBrains Mono", "Berkeley Mono",
-    ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    ui-monospace, "SF Mono", "Menlo", "Consolas",
+    "PingFang SC", "Microsoft YaHei", monospace;
 
   /* font-sizes — 1.125 modular scale, hand-tuned */
   --fs-11: 10.7px;
@@ -198,19 +197,20 @@
   --sp-10: 96px;
 
   /* --------------------------------------------------------------
-   * 4. RADII — 3 steps + pill. Nothing larger than 6px.
+   * 4. RADII — controls / cards / dialogs + pill.
    * -------------------------------------------------------------- */
   --radius-0:    0;
-  --radius-1:    3px;
-  --radius-2:    6px;
+  --radius-1:    4px;
+  --radius-2:    8px;
+  --radius-3:    12px;
   --radius-pill: 9999px;
 
   /* --------------------------------------------------------------
    * 5. SHADOWS — 3 layers, warm-ink tint. No pure-black shadows.
    * -------------------------------------------------------------- */
   --shadow-rest:
-    0 1px 0 0 rgba(35, 30, 20, 0.04),
-    0 1px 2px 0 rgba(35, 30, 20, 0.06);
+    0 1px 2px rgba(25, 35, 29, 0.025),
+    0 4px 16px -8px rgba(25, 35, 29, 0.08);
 
   --shadow-lift:
     0 1px 0 0 rgba(35, 30, 20, 0.05),
@@ -222,10 +222,7 @@
     0 16px 32px -12px rgba(35, 30, 20, 0.18),
     0 32px 64px -24px rgba(35, 30, 20, 0.12);
 
-  /* Inset shadow for the CodeMirror slot & code blocks */
-  --shadow-inset:
-    inset 0 1px 0 0 rgba(0, 0, 0, 0.30),
-    inset -14px 0 10px -10px rgba(0, 0, 0, 0.35);
+  --shadow-inset: inset 0 1px 2px rgba(25, 35, 29, 0.035);
 
   --focus-ring:
     0 0 0 2px var(--bg),
@@ -250,9 +247,9 @@
   --ico-size-sm:  16px;
   --ico-size-md:  20px;
   --ico-size-lg:  24px;
-  --ico-stroke:   1.25;
-  --ico-linecap:  square;
-  --ico-linejoin: miter;
+  --ico-stroke:   1.5;
+  --ico-linecap:  round;
+  --ico-linejoin: round;
 
   /* --------------------------------------------------------------
    * 8. LAYOUT PRIMITIVES — the bench structure

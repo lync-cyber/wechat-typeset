@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 /**
- * Playwright 端到端配置 —— 专注移动端（375×667）验收。
+ * Playwright 端到端配置 —— 移动端（375×667）交互、桌面路径与渲染一致性。
  *
  * 目录分工：
  *   - `tests/unit/**\/*.spec.ts` —— vitest 在 jsdom 下跑（见 vite.config.ts test.include）
@@ -37,7 +37,7 @@ export default defineConfig({
           ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
           : {}),
       },
-      testIgnore: /(studio-modal|toolbar-overflow|closing-contract)\.spec\.ts/,
+      testIgnore: /(studio-modal|toolbar-overflow|closing-contract|pipeline-parity)\.spec\.ts/,
     },
     {
       name: 'mobile-webkit',
@@ -45,7 +45,7 @@ export default defineConfig({
         ...devices['iPhone 13'],
         viewport: { width: 375, height: 667 },
       },
-      testIgnore: /(studio-modal|toolbar-overflow|closing-contract)\.spec\.ts/,
+      testIgnore: /(studio-modal|toolbar-overflow|closing-contract|pipeline-parity)\.spec\.ts/,
     },
     {
       name: 'desktop-chromium',
@@ -56,7 +56,7 @@ export default defineConfig({
           ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
           : {}),
       },
-      testMatch: /(studio-modal|toolbar-overflow|closing-contract)\.spec\.ts/,
+      testMatch: /(studio-modal|toolbar-overflow|closing-contract|pipeline-parity)\.spec\.ts/,
     },
   ],
   webServer: {

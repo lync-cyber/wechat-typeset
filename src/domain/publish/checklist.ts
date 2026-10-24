@@ -5,10 +5,10 @@
  * 方便单测 + 复用到 CLI / CI（未来如果做"发稿前体检"可直接复用）。
  *
  * 规则（面向公众号作者的硬约束）：
- *   1. cover-image          是否有封面图（第一张 `![](...)`）
+ *   1. cover-image          frontmatter cover 优先，否则使用第一张 `![](...)`
  *   2. cover-ratio          封面比例提示（公众号支持 3.35:1 与 1:1 两档；静态源码
  *                            无法读图片尺寸，这里仅在存在封面时给提示条）
- *   3. abstract-length      摘要段（第一段非标题正文）字符数 ≤ 120
+ *   3. abstract-length      frontmatter digest 优先，否则使用第一段正文，字符数 ≤ 120
  *   4. word-count           正文字数 ≥ 400（过短文章不进"已读量高效发文"区间）
  *   5. author-declaration   ::: author 容器是否出现
  *   6. external-links       站外链接数（> 10 时提示降级方案；依赖 Stage 4 #17）
@@ -16,6 +16,8 @@
  *
  * 返回值：一串 ChecklistItem，每条 { status, label, hint }；UI 按 status 着色。
  */
+
+import { parseFrontmatter } from '../../core/pipeline/frontmatter'
 
 export type CheckStatus = 'pass' | 'warn' | 'fail' | 'info'
 
@@ -32,7 +34,9 @@ export interface ChecklistReport {
   pass: boolean
 }
 
-const RE_IMAGE = /!\[[^\]]*\]\(([^)\s]+)(?:\s"[^"]*")?\)/g
+export type CoverState = 'loading' | 'missing' | 'error' | 'present'
+
+const RE_IMAGE = /!\[[^\]]*\]\((?:<([^<>\r\n]+)>|([^<>\s)]+))(?:\s+"[^"]*")?\)/g
 const RE_HTTP_LINK = /\[[^\]]+\]\((https?:\/\/[^)\s]+)(?:\s"[^"]*")?\)/g
 const RE_AUTHOR_CONTAINER = /^:::\s*author\b/m
 const RE_HEADING = /^#{1,6}\s+/
@@ -47,8 +51,11 @@ const INLINE_IMAGE_WARN_BYTES = 1024 * 1024
  * 扫描 markdown 源码，返回逐条检查结果。
  * 不抛异常；空稿返回"空稿"提示条而不是全红。
  */
-export function buildChecklist(source: string): ChecklistReport {
+export function buildChecklist(source: string, options: { missingImages?: readonly string[]; coverState?: CoverState } = {}): ChecklistReport {
   const items: ChecklistItem[] = []
+  const firstImage = getChecklistCover(source)
+  const { body, publication } = parseFrontmatter(source)
+  source = body
 
   if (!source || !source.trim()) {
     items.push({
@@ -60,9 +67,20 @@ export function buildChecklist(source: string): ChecklistReport {
     return { items, pass: false }
   }
 
+  if (options.missingImages?.length) {
+    items.push({ id: 'missing-images', status: 'fail', label: `缺少 ${options.missingImages.length} 张本地图片`, hint: options.missingImages.join('、') })
+  }
+
   // 1/2. 封面图
-  const firstImage = findFirstImageUrl(source)
-  if (firstImage) {
+  const coverState = firstImage?.startsWith('images/') ? options.coverState : undefined
+  const coverMissing = firstImage && options.missingImages?.some((path) => imagePath(path) === imagePath(firstImage))
+  if (firstImage && coverState === 'loading') {
+    items.push({ id: 'cover-image', status: 'info', label: '正在检查封面图片', hint: '正在读取本篇图片列表。' })
+  } else if (firstImage && coverState === 'error') {
+    items.push({ id: 'cover-image', status: 'warn', label: '封面图片尚未核实', hint: '本篇图片读取失败，请恢复文件夹权限后重试。' })
+  } else if (firstImage && (coverMissing || coverState === 'missing')) {
+    items.push({ id: 'cover-image', status: 'fail', label: '封面图片缺失', hint: firstImage })
+  } else if (firstImage) {
     items.push({
       id: 'cover-image',
       status: 'pass',
@@ -85,8 +103,8 @@ export function buildChecklist(source: string): ChecklistReport {
   }
 
   // 3. 摘要段长度
-  const abstract = extractFirstProseParagraph(source)
-  const abstractLen = abstract.length
+  const abstract = publication.digest?.trim() || extractFirstProseParagraph(source)
+  const abstractLen = Array.from(abstract).length
   if (abstractLen === 0) {
     items.push({
       id: 'abstract-length',
@@ -177,10 +195,21 @@ export function buildChecklist(source: string): ChecklistReport {
   }
 }
 
+/** 封面选择与检查共用同一个优先级，发布信息为空时沿用正文首图。 */
+export function getChecklistCover(source: string): string | null {
+  const { body, publication } = parseFrontmatter(source)
+  return publication.cover?.trim() || findFirstImageUrl(body)
+}
+
+/** 本地解析器返回解码后的路径；与 Markdown 中的编码路径按同一个文件比较。 */
+function imagePath(path: string): string {
+  try { return decodeURIComponent(path.split(/[?#]/, 1)[0]) } catch { return path }
+}
+
 function findFirstImageUrl(source: string): string | null {
   RE_IMAGE.lastIndex = 0
   const m = RE_IMAGE.exec(source)
-  return m ? m[1] : null
+  return m ? m[1] ?? m[2] : null
 }
 
 /**

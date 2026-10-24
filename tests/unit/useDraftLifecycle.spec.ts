@@ -136,6 +136,25 @@ describe('handleDeleteDraftRequest', () => {
     expect(readDraft(a.id)?.body).toBe('restore-me')
     expect(h_!.api.activeDraftId.value).toBe(a.id)
   })
+
+  it('撤销被文件文章保护阻止后，保留恢复机会并允许重试', () => {
+    const draft = createDraft({ title: '待恢复', body: '原草稿正文' })
+    const beforeRestore = vi.fn().mockReturnValueOnce(false).mockReturnValueOnce(true)
+    h_!.api.activeDraftId.value = draft.id
+    h_!.api.handleDeleteDraftRequest(draft.id, draft.title, beforeRestore)
+    h_!.md.value = '文件文章未保存的正文'
+    h_!.api.onUndo()
+    expect(readDraft(draft.id)).toBeNull()
+    expect(h_!.md.value).toBe('文件文章未保存的正文')
+    expect(h_!.api.undo.value).not.toBeNull()
+
+    h_!.api.onUndo()
+    expect(beforeRestore).toHaveBeenCalledTimes(2)
+    expect(readDraft(draft.id)?.body).toBe('原草稿正文')
+    expect(h_!.api.activeDraftId.value).toBe(draft.id)
+    expect(h_!.md.value).toBe('原草稿正文')
+    expect(h_!.api.undo.value).toBeNull()
+  })
 })
 
 describe('displayedSavingState / Label · 优先级', () => {

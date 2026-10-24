@@ -1,0 +1,784 @@
+{
+  "baseline": {
+    "head": "794335e3f82df7cd7fe463b248f8a7fbe52b672c",
+    "patchSha256": "cb7107d3e72cf708d0ba28112d804c4f035b00fd382dbe7a7a4e5a4b32f207ba",
+    "note": "Captured from the legacy string pipeline before the shared DOM refactor. Review expected HTML/log changes individually."
+  },
+  "cases": [
+    {
+      "id": "plain",
+      "input": "<p style=\"color:red\">你好 &amp; hello</p>",
+      "expectedHtml": "<p style=\"color:red\">你好 &amp; hello</p>",
+      "expectedPatchLog": {
+        "entries": [],
+        "total": 0
+      }
+    },
+    {
+      "id": "deep-text",
+      "input": "<ul><li>L1<ul><li>L2<ul><li>deep text</li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· deep text</p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-empty-li",
+      "input": "<ul><li>L1<ul><li>L2<ul><li></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2</li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-comment",
+      "input": "<ul><li>L1<ul><li>L2<ul><li> <!-- preserved comment --> </li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">·  <!-- preserved comment --> </p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-inline",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><span>inline<strong>bold</strong><br>tail</span></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· <span>inline<strong>bold</strong><br>tail</span></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-direct-paragraph",
+      "input": "<ul><li>L1<ul><li>L2<ul><li>before<p id=\"random\">paragraph</p>after</li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· beforeafter</p><p>paragraph</p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          },
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "删除 id 属性（脚注锚点除外）",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "p",
+                "before": "id=\"random\""
+              }
+            ]
+          }
+        ],
+        "total": 5
+      }
+    },
+    {
+      "id": "deep-div",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><div id=\"random\" style=\"font-family:serif;color:red\">block</div></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· </p><div style=\"color: red\">block</div><p></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          },
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "删除 id 属性（脚注锚点除外）",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "id=\"random\""
+              }
+            ]
+          },
+          {
+            "patch": "stripFontFamily",
+            "label": "剥离 inline font-family",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "font-family: serif"
+              }
+            ]
+          }
+        ],
+        "total": 6
+      }
+    },
+    {
+      "id": "deep-section",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><section><p>paragraph</p></section> tail</li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· </p><section><p>paragraph</p></section> tail<p></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-inline-block",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><span>inline<div>block</div>tail</span></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· <span>inline</span></p><div>block</div>tail<p></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-table",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><table><tbody><tr><td>x</td></tr></tbody></table></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· </p><table><tbody><tr><td>x</td></tr></tbody></table><p></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "deep-four-level",
+      "input": "<ul><li>L1<ul><li>L2<ul><li>L3<div>block</div><ul><li>L4<span>inline</span></li></ul></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· L3</p><div>block</div><p></p><p data-wx-list-flatten=\"\">· L4<span>inline</span></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 4
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 5
+      }
+    },
+    {
+      "id": "deep-multiple-roots",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><div>first</div></li></ul></li></ul></li></ul><ul><li>L1<ul><li>L2<ul><li><section>second</section></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· </p><div>first</div><p></p></li></ul></section></li></ul></section><section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· </p><section>second</section><p></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 6
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 2
+          }
+        ],
+        "total": 8
+      }
+    },
+    {
+      "id": "deep-svg",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><svg viewBox=\"0 0 12 12\"><rect id=\"r\" fill=\"#fff\" width=\"12\" height=\"12\"></rect></svg></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· <svg viewBox=\"0 0 12 12\"><rect fill=\"#fefefe\" width=\"12\" height=\"12\"></rect></svg></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          },
+          {
+            "patch": "patchSvgIds",
+            "label": "SVG 子树 id 清理",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "rect",
+                "before": "id=\"r\""
+              }
+            ]
+          }
+        ],
+        "total": 5
+      }
+    },
+    {
+      "id": "foreign-object-deep",
+      "input": "<svg><foreignObject><ul><li>L1<ul><li>L2<ul><li><div style=\"display:flex\">block</div></li></ul></li></ul></li></ul></foreignObject></svg>",
+      "expectedHtml": "<svg><foreignObject><section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· </p><div style=\"display: block\">block</div><p></p></li></ul></section></li></ul></section></foreignObject></svg>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          },
+          {
+            "patch": "patchFlexToFallback",
+            "label": "display:flex → block 降级",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "display: flex"
+              }
+            ]
+          }
+        ],
+        "total": 5
+      }
+    },
+    {
+      "id": "deep-mathml",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><math><mrow><mi>x</mi></mrow></math></li></ul></li></ul></li></ul>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· <math><mrow><mi>x</mi></mrow></math></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "options-white-disabled",
+      "input": "<ul><li>L1<ul><li>L2<ul><li><svg><rect fill=\"#fff\"></rect></svg></li></ul></li></ul></li></ul>",
+      "options": {
+        "svgWhiteBg": false
+      },
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ul><li>L1<section data-wx-list-wrap=\"\"><ul><li>L2<p data-wx-list-flatten=\"\">· <svg><rect fill=\"#fff\"></rect></svg></p></li></ul></section></li></ul></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 3
+          },
+          {
+            "patch": "patchListWrap",
+            "label": "≥ 3 层嵌套列表扁平化为段落",
+            "count": 1
+          }
+        ],
+        "total": 4
+      }
+    },
+    {
+      "id": "raw-malformed-list",
+      "input": "<p><ul><li>item</li></ul>tail</p>",
+      "expectedHtml": "<p></p><section data-wx-list-wrap=\"\"><ul><li>item</li></ul></section>tail<p></p>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 1
+          }
+        ],
+        "total": 1
+      }
+    },
+    {
+      "id": "empty",
+      "input": "",
+      "expectedHtml": "",
+      "expectedPatchLog": {
+        "entries": [],
+        "total": 0
+      }
+    },
+    {
+      "id": "combined-patches",
+      "input": "<section id=\"outer\" style=\"position:absolute;top:0;font-family:serif;display:flex;color:red\"><ul style=\"margin:12px 0\"><li>A</li></ul><style>p{color:red}</style><script>ignored()</script><iframe src=\"https://v.qq.com/x/page/allowed.html\"></iframe><iframe src=\"https://other.example/video\"></iframe><svg id=\"graphic\"><defs><linearGradient id=\"gradient\"></linearGradient></defs><rect fill=\"url(&quot;#gradient&quot;)\" style=\"stroke:white\"/></svg></section>",
+      "expectedHtml": "<section style=\"display: block; color: red\"><section data-wx-list-wrap=\"\" style=\"margin:12px 0\"><ul style=\"margin:12px 0\"><li>A</li></ul></section><iframe src=\"https://v.qq.com/x/page/allowed.html\"></iframe><svg><defs><linearGradient></linearGradient></defs><rect fill=\"url(#gradient)\" style=\"stroke: #fefefe\"></rect></svg></section>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 1
+          },
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "删除 id 属性（脚注锚点除外）",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "section",
+                "before": "id=\"outer\""
+              }
+            ]
+          },
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "剥离 position/top/z-index 等定位声明",
+            "count": 2,
+            "samples": [
+              {
+                "selector": "section",
+                "before": "position: absolute"
+              },
+              {
+                "selector": "section",
+                "before": "top: 0"
+              }
+            ]
+          },
+          {
+            "patch": "stripForbiddenTags",
+            "label": "移除 style/script/meta/link 等标签",
+            "count": 2,
+            "samples": [
+              {
+                "selector": "style",
+                "before": "<style>"
+              },
+              {
+                "selector": "script",
+                "before": "<script>"
+              }
+            ]
+          },
+          {
+            "patch": "stripForbiddenTags",
+            "label": "剥离非白名单 iframe",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "iframe",
+                "before": "src=\"https://other.example/video\""
+              }
+            ]
+          },
+          {
+            "patch": "stripFontFamily",
+            "label": "剥离 inline font-family",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "section",
+                "before": "font-family: serif"
+              }
+            ]
+          },
+          {
+            "patch": "patchFlexToFallback",
+            "label": "display:flex → block 降级",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "section",
+                "before": "display: flex"
+              }
+            ]
+          },
+          {
+            "patch": "patchSvgIds",
+            "label": "SVG 子树 id 清理",
+            "count": 2,
+            "samples": [
+              {
+                "selector": "svg",
+                "before": "id=\"graphic\""
+              },
+              {
+                "selector": "lineargradient",
+                "before": "id=\"gradient\""
+              }
+            ]
+          }
+        ],
+        "total": 11
+      }
+    },
+    {
+      "id": "css-order-important-data-url",
+      "input": "<div style=\"font-family:serif; COLOR:red; color:blue !important; top:0; background-image:url(data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=); display:inline-flex; padding:2px\"></div>",
+      "expectedHtml": "<div style=\"COLOR: red; color: blue !important; background-image: url(data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=); display: inline-block; padding: 2px\"></div>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "剥离 position/top/z-index 等定位声明",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "top: 0"
+              }
+            ]
+          },
+          {
+            "patch": "stripFontFamily",
+            "label": "剥离 inline font-family",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "font-family: serif"
+              }
+            ]
+          },
+          {
+            "patch": "patchFlexToFallback",
+            "label": "display:flex → block 降级",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "display: inline-flex"
+              }
+            ]
+          }
+        ],
+        "total": 3
+      }
+    },
+    {
+      "id": "svg-data-url-and-white-colors",
+      "input": "<div style=\"background:#fff;background-image:url('outside.png')\"></div><svg viewBox=\"0 0 10 10\"><image href=\"data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=\"/><rect style=\"fill:url('data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=');stroke:rgb(255, 255, 255) !important\"/><stop stop-color=\"#FFFFFF\"/></svg>",
+      "expectedHtml": "<div style=\"background:#fff;background-image:url('outside.png')\"></div><svg viewBox=\"0 0 10 10\"><image href=\"data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=\"></image><rect style=\"fill: url(data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=); stroke: #fefefe !important\"></rect><stop stop-color=\"#fefefe\"></stop></svg>",
+      "expectedPatchLog": {
+        "entries": [],
+        "total": 0
+      }
+    },
+    {
+      "id": "footnote-id-exceptions-and-svg",
+      "input": "<a id=\"fnref1\" href=\"#fn1\">1</a><li id=\"fn1\"><a id=\"fnref-return-1\" href=\"#fnref1\">back</a></li><p id=\"footnote-2\">note</p><p id=\"fnord\">remove</p><svg id=\"fn1\"><g id=\"footnote-2\"/></svg>",
+      "expectedHtml": "<a id=\"fnref1\" href=\"#fn1\">1</a><li id=\"fn1\"><a id=\"fnref-return-1\" href=\"#fnref1\">back</a></li><p id=\"footnote-2\">note</p><p>remove</p><svg><g></g></svg>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "删除 id 属性（脚注锚点除外）",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "p",
+                "before": "id=\"fnord\""
+              }
+            ]
+          },
+          {
+            "patch": "patchSvgIds",
+            "label": "SVG 子树 id 清理",
+            "count": 2,
+            "samples": [
+              {
+                "selector": "svg",
+                "before": "id=\"fn1\""
+              },
+              {
+                "selector": "g",
+                "before": "id=\"footnote-2\""
+              }
+            ]
+          }
+        ],
+        "total": 3
+      }
+    },
+    {
+      "id": "foreign-object-html-and-style",
+      "input": "<svg viewBox=\"0 0 10 10\"><foreignObject><div id=\"fn1\" style=\"font-family:serif;display:flex;background:white\"><p style=\"color:#fff\">HTML inside SVG</p><svg><rect fill=\"#fff\"/></svg></div></foreignObject></svg>",
+      "expectedHtml": "<svg viewBox=\"0 0 10 10\"><foreignObject><div style=\"display: block; background: #fefefe\"><p style=\"color: #fefefe\">HTML inside SVG</p><svg><rect fill=\"#fefefe\"></rect></svg></div></foreignObject></svg>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "stripFontFamily",
+            "label": "剥离 inline font-family",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "font-family: serif"
+              }
+            ]
+          },
+          {
+            "patch": "patchFlexToFallback",
+            "label": "display:flex → block 降级",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "display: flex"
+              }
+            ]
+          },
+          {
+            "patch": "patchSvgIds",
+            "label": "SVG 子树 id 清理",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "id=\"fn1\""
+              }
+            ]
+          }
+        ],
+        "total": 3
+      }
+    },
+    {
+      "id": "already-wrapped-and-keep-flex",
+      "input": "<section data-wx-list-wrap=\"\"><ol style=\"margin:1px\"><li>one<ul><li>two</li></ul></li></ol></section><div data-wx-keep-flex=\"\" style=\"display:flex;font-family:serif;position:relative;color:blue\">kept flex</div>",
+      "expectedHtml": "<section data-wx-list-wrap=\"\"><ol style=\"margin:1px\"><li>one<section data-wx-list-wrap=\"\"><ul><li>two</li></ul></section></li></ol></section><div data-wx-keep-flex=\"\" style=\"display: flex; color: blue\">kept flex</div>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "patchListWrap",
+            "label": "列表外包 <section>（保住外边距）",
+            "count": 1
+          },
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "剥离 position/top/z-index 等定位声明",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "position: relative"
+              }
+            ]
+          },
+          {
+            "patch": "stripFontFamily",
+            "label": "剥离 inline font-family",
+            "count": 1,
+            "samples": [
+              {
+                "selector": "div",
+                "before": "font-family: serif"
+              }
+            ]
+          }
+        ],
+        "total": 3
+      }
+    },
+    {
+      "id": "log-sample-limit",
+      "input": "<p id=\"p0\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">0</p><p id=\"p1\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">1</p><p id=\"p2\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">2</p><p id=\"p3\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">3</p><p id=\"p4\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">4</p><p id=\"p5\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">5</p><p id=\"p6\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">6</p><p id=\"p7\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">7</p><p id=\"p8\" class=\"a b c d\" style=\"position:absolute;font-family:serif\">8</p>",
+      "expectedHtml": "<p class=\"a b c d\">0</p><p class=\"a b c d\">1</p><p class=\"a b c d\">2</p><p class=\"a b c d\">3</p><p class=\"a b c d\">4</p><p class=\"a b c d\">5</p><p class=\"a b c d\">6</p><p class=\"a b c d\">7</p><p class=\"a b c d\">8</p>",
+      "expectedPatchLog": {
+        "entries": [
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "删除 id 属性（脚注锚点除外）",
+            "count": 9,
+            "samples": [
+              {
+                "selector": "p.a.b.c",
+                "before": "id=\"p0\""
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "id=\"p1\""
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "id=\"p2\""
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "id=\"p3\""
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "id=\"p4\""
+              }
+            ]
+          },
+          {
+            "patch": "stripForbiddenAttrs",
+            "label": "剥离 position/top/z-index 等定位声明",
+            "count": 9,
+            "samples": [
+              {
+                "selector": "p.a.b.c",
+                "before": "position: absolute"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "position: absolute"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "position: absolute"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "position: absolute"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "position: absolute"
+              }
+            ]
+          },
+          {
+            "patch": "stripFontFamily",
+            "label": "剥离 inline font-family",
+            "count": 9,
+            "samples": [
+              {
+                "selector": "p.a.b.c",
+                "before": "font-family: serif"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "font-family: serif"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "font-family: serif"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "font-family: serif"
+              },
+              {
+                "selector": "p.a.b.c",
+                "before": "font-family: serif"
+              }
+            ]
+          }
+        ],
+        "total": 27
+      }
+    },
+    {
+      "id": "white-explicitly-enabled",
+      "input": "<svg><rect fill=\"#fff\" style=\"stroke:white\"/></svg>",
+      "options": {
+        "svgWhiteBg": true
+      },
+      "expectedHtml": "<svg><rect fill=\"#fefefe\" style=\"stroke: #fefefe\"></rect></svg>",
+      "expectedPatchLog": {
+        "entries": [],
+        "total": 0
+      }
+    },
+    {
+      "id": "whitespace-only",
+      "input": "  \n  ",
+      "expectedHtml": "  \n  ",
+      "expectedPatchLog": {
+        "entries": [],
+        "total": 0
+      }
+    }
+  ]
+}

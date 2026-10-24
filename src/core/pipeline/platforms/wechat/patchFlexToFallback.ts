@@ -19,7 +19,11 @@ const KEEP_MARKER = 'data-wx-keep-flex'
 
 export function patchFlexToFallback(html: string): string {
   const { container } = parseFragment(html)
+  patchFlexToFallbackInPlace(container)
+  return serializeFragment(container)
+}
 
+export function patchFlexToFallbackInPlace(container: HTMLElement): void {
   walkElements(container, (el) => {
     if (el.hasAttribute(KEEP_MARKER)) return
     const style = el.getAttribute('style')
@@ -37,6 +41,4 @@ export function patchFlexToFallback(html: string): string {
     })
     if (changed) el.setAttribute('style', stringifyStyle(next))
   })
-
-  return serializeFragment(container)
 }

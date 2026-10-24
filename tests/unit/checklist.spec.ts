@@ -153,6 +153,11 @@ describe('buildChecklist · 内联图片体积', () => {
 })
 
 describe('buildChecklist · pass 汇总', () => {
+  it('缺失本地图片列出文件名并阻止发文', () => {
+    const report = buildChecklist('正文', { missingImages: ['images/a.webp', 'images/封面.png'] })
+    expect(report.items.find((item) => item.id === 'missing-images')).toMatchObject({ status: 'fail', hint: 'images/a.webp、images/封面.png' })
+    expect(report.pass).toBe(false)
+  })
   it('只有 warn/info 没有 fail → report.pass = true', () => {
     const r = buildChecklist('# 题\n\n一小段')
     // warn 项存在但不算阻断

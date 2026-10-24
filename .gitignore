@@ -6,6 +6,9 @@ playwright-report/
 test-results/
 audit-report/
 .preview/
+/tmp/
+/package-lock.json
+/vite*.config.ts.timestamp-*.mjs
 *.log
 .DS_Store
 .vscode/

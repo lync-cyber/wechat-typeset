@@ -1,20 +1,28 @@
 ---
 name: wechat-typeset-annotate-markdown
-description: 把普通 Markdown 改写成 wechat-typeset 写作契约（::: 容器 + 行内扩展），并推荐 persona。触发词："改成公众号格式" / "加排版块" / "标注成 tip" / "挑一套主题" / "按契约改写" / "规范化 markdown" / "为这段文章选个 persona"。**只改 markdown，不渲染**——渲染由 wechat-typeset-export-richtext 接手。完整容器/扩展清单见正文。
+description: 用户明确要求加排版块、标注容器或修复扩展语法时，对 Markdown 做保守标注，保留原文内容。零标注也是有效结果。仅要求公众号排版、选主题或渲染时直接用 wechat-typeset-export-richtext，普通 Markdown 无需先标注。本 skill 不渲染。
 ---
 
 # wechat-typeset · Markdown 标注
 
-把"普通 markdown 文章"翻译成"满足契约的 markdown"——按段落语义插入 `:::` 容器、行内扩展、并推荐 persona。**本 skill 不做渲染**——产出仍是 markdown，交给 `wechat-typeset-export-richtext` 渲染。
+对已完成内容编辑的 Markdown 按需添加少量语义明确的容器或行内扩展。普通 Markdown 本身就是合法输入，**不添加任何标注也是完整结果**。本 skill 不做渲染；渲染交给 `wechat-typeset-export-richtext`。
+
+## 保守标注原则
+
+- 只在原文已有明确语义、且特殊呈现有阅读收益时添加标注；没有把握就保留普通 Markdown。
+- 保留原文字句、事实、数字及单位、限定词、链接、引用署名和内容顺序。新增摘要、提炼金句、补 CTA、改写比较项属于内容编辑，不能夹带在标注步骤中。
+- 不按文章长度、标题数量或主题签名凑组件。所有组件和行内扩展都没有最低数量要求；已有标题、列表、引用、粗体足够时不重复装饰。
+- `confidence` 是启发式信号强弱，不是必须应用的指令；高置信度也要结合上下文复核。
+- 用户明确指定的标注可以按需应用，但不能为填充组件编造内容；语法修复只修错误，不顺带新增标注。
 
 ## 边界
 
-本 skill 处理 **markdown → 契约 markdown** 的改写，不做视觉设计、不做渲染。完整的进入/退出信号见**路由总表**：[`../wechat-typeset/SKILL.md#routing-table`](../wechat-typeset/SKILL.md#routing-table)。
+本 skill 处理 **Markdown → 可选标注后的 Markdown**，不负责初稿写作、内容改写、视觉设计或渲染。完整的进入/退出信号见**路由总表**：[`../wechat-typeset/SKILL.md#routing-table`](../wechat-typeset/SKILL.md#routing-table)。
 
 最常见的退出信号：
 
-- ❌ markdown 已含合法 `:::` 容器要"渲染" → 转 `wechat-typeset-export-richtext`
-- ❌ 要造主题色 / motif / `personas recommend` 输出 `recommendNew=true` → 转 `wechat-typeset-author-persona`
+- 只要“渲染 / 导出 / 套主题”，无论是否含 `:::` → 转 `wechat-typeset-export-richtext`
+- 明确要造主题色 / motif → 转 `wechat-typeset-author-persona`；推荐器的 `recommendNew=true` 本身不触发新主题创作
 
 ## CLI / MCP 入口
 
@@ -37,7 +45,7 @@ npm run cli -- containers snippet --name tip
 
 权威映射 / 错误返回结构 见 [`../_shared/references/mcp-cli-mapping.md`](../_shared/references/mcp-cli-mapping.md)；命令签名 / 退出码 / JSON 形状 见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)；`WtException` → 应转向哪个 skill 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。
 
-> **工作目录约定**：所有中间产物落在 `tmp/`（已在 `.gitignore`）。如不存在请先 `mkdir -p tmp`。
+> **工作目录约定**：中间产物落在已被 Git 忽略的 `tmp/`，建议使用本次任务子目录；交付后清理不再需要的过程文件。
 
 ## 主线工作流（6 步）
 
@@ -45,11 +53,11 @@ npm run cli -- containers snippet --name tip
 
 ```
 Task Progress:
-- [ ] 1. 意图判定 + persona 推荐 → `personas recommend` 输出 ranked[3] + recommendNew
+- [ ] 1. 确认是标注需求；沿用已选 persona，未选时推荐现有主题或使用 default
 - [ ] 2. 查主题能力 → `personas capabilities` 输出 containers[] / defaultVariants
-- [ ] 3. 结构扫描（H1 / H2 / 列表 / 引用块 / 代码块）→ 心里有一张段落→容器的预设
+- [ ] 3. 结构扫描 → 找出确有特殊呈现收益的位置，其余保留原样
 - [ ] 4. 段落分类 + 容器提议 → `annotate` 输出 patches.json，逐条决策
-- [ ] 5. 筛选 + 应用 patches → `annotate apply` 输出新 md（applied + skipped 计数）
+- [ ] 5. 保守筛选 + 应用 patches → 允许空集合；核对原文内容、顺序和强调含义未改变
 - [ ] 6. 校验 → `lint --persona <id> --json` 输出 `ok=true` 且 `errorCount=0`
        warning 不阻塞，但交付时复述给用户
 ```
@@ -71,8 +79,8 @@ echo '{
 | --- | --- |
 | `recommendNew=false` 且 `ranked[0].staticScore ≥ 0.85` | 用 `ranked[0].id`，进 Step 2 |
 | `recommendNew=false` 但 score 一般 | ranked 三者任一可用，按用户审美挑 |
-| `recommendNew=true` | 退出本 skill，先去 `wechat-typeset-author-persona` 造新主题 |
-| 用户明确说"不要花哨" | 用 `default`，跳过 abstract / key-number / cover 等签名容器的提议 |
+| `recommendNew=true` | 仍从现有主题挑合适的或用 default；用户明确要求新主题时才转 author-persona |
+| 用户明确说"不要花哨" | 沿用用户选定主题，否则用 default；优先直接渲染普通 Markdown |
 
 ### Step 2 · 查主题能力
 
@@ -85,38 +93,30 @@ npm run cli -- personas capabilities --id <persona-id>
 **Agent 决策规则**：
 
 - ✅ 只对 `available: true` 的容器做提议
-- ✅ `kpi-dashboard`/`bar-chart` 属于 `pack:data-viz`，多主题可用；只在主题签名了 `kpiDashboard`/`barChart` 时才建议（`signature: true`），否则回退兜底样式
-- ✅ 优先用 `signature: true` 的容器承担"主题 voice"（如 brutalist 的 `masthead`/`colophon`、tech-explainer 的 `note`/`see-also`）
+- ✅ `kpi-dashboard`/`bar-chart` 只在原文数据、口径与来源足够且用户需要图表时考虑；主题签名仅决定视觉支持，不为展示组件补数据
+- ✅ 先按内容决定是否需要容器，再查主题能力；`signature: true` 仅说明视觉支持，不是添加组件的理由
 - ❌ 不要凭记忆写 variant id；从 `recommendedVariants` 里挑
 
-筛签名容器例：
+查本次候选能力例（先有语义需要，再查可用性）：
 
 ```bash
 npm run cli -- personas capabilities --id swiss-grid \
-  | jq '.containers | map(select(.available and .signature)) | map(.id)'
-# → ["abstract", "section-tag", "editorial-header", "byline", ...]
+  | jq '.containers | map(select(.available and .id == "tip"))'
 ```
 
 ### Step 3 · 结构扫描
 
-按以下顺序扫一遍原文，建立"段落→容器"预设；最终决策见 Step 4。
+先识别需保留的标题、叙事、引用、代码、表格和已有容器，再检查剩余内容是否有明确的呈现需求。配方见 [`references/annotation-recipes.md`](references/annotation-recipes.md)，配方是可选用法，不是待填清单。
 
-完整 8 类段落识别表（与 [`references/annotation-recipes.md`](references/annotation-recipes.md) 同源）：
-
-| 正则信号 | 文本信号 | 推荐容器 | confidence |
-| --- | --- | --- | --- |
-| `^# ` 唯一 H1 | — | 保留 H1，可加 `::: intro` 引子 | 高 |
-| `^## ` 全文≥3 处 | — | 升级 `::: section-title`（见 recipes） | 中 |
-| `^\d+\. ` 连续≥3 + 动词开头 | "第一步" / "打开" / "切换到" | `::: steps` | 高 |
-| `^- ` 连续≥3 + 名词短语 | — | 保留原列表 + `==高亮==` 关键词 | 中 |
-| `^> ` 短句句末完整 | 含"——作者"署名 | `::: quote-card` | 高 |
-| `^> ` + `[1]` / `\s*注：` | "出处" / "注释" | `::: note` 或 `::: footnotes` | 中 |
-| 行内代码 ≥3 处的段落 | — | 段落上方提议 `::: tip` 或 `::: warning` | 中 |
-| 文首 2-4 行总览 | "本文" / "TL;DR" / "简言之" | `::: intro` 或 `::: abstract` | 高 |
-| 数字密度高 `\d+%`/`\d+倍`/`\d+亿` | "X% 用户" / "Y 倍" | `::: key-number value=X 标签` | 中 |
-| 双列对比 | "优点 / 缺点"、"A 派 / B 派" | `:::: compare` + `::: pros` / `::: cons` | 高 |
-| 命令含 `sudo rm` 或 `⚠️`/`❌` | "切忌" / "千万不要" | `::: danger` 或 `::: warning` | 高 |
-| 文末引导 | "关注我" / "点赞" / "转发" / 二维码邻近 | `::: footer-cta` | 高 |
+| 原文情况 | 默认处理 |
+| --- | --- |
+| 普通开篇、故事场景、H1/H2、要点列表 | 保留，不按位置、长度或数量升级组件 |
+| 已有明确总览 / 导读 | 可提议 intro；不能把叙事改写成摘要 |
+| 明确的操作步骤列表 | 可提议 steps；枚举观点、经历或复杂嵌套列表保留 |
+| 直接面向读者的提示 / 警告 | 可提议相应容器；正文提到“注意”“危险”不等于警告 |
+| 引用、数字段落、现有粗体 | 默认保留；不自动变金句、数据卡或重复高亮 |
+| 原文已有对比、CTA 或延伸阅读 | 仅在有阅读收益或用户指定时考虑；不新增内容来补齐版式 |
+| 代码示例、已有容器及其内部内容 | 保留，不重复包裹 |
 
 ### Step 4 · 容器提议（启发式 patch 表）
 
@@ -140,15 +140,16 @@ npm run cli -- annotate --input <input.md> --persona <id> > tmp/patches.json
 
 合法 `kind` 枚举：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
 
-**策略**：脚本不直接改 md，只输出建议。Agent（你）拿着 `patches.json` + 原文，逐条决策"应用 / 跳过 / 改改 confidence"，最后写出新的 md。
+**策略**：脚本只输出候选。Agent 结合原文逐条判断“应用 / 跳过”，不把 confidence 当审批结果，也不为使用主题签名而添加候选。没有适合的候选时直接保留原文。
 
 ### Step 5 · 筛选 + 应用 patches
 
-**核心**：你只**筛**，文本替换交给 `annotate apply`——零行号风险。
+**核心**：你只筛选，文本替换交给 `annotate apply`。patches 必须对应同一份未改动原文；原文变动后重新生成建议，避免行号失效。
 
 1. **筛**：从 `tmp/patches.json` 挑保留集，落到 `tmp/patches.filtered.json`
-   - ✅ 保留：`confidence: 'high'` 全部 + 大部分 `'medium'` + signature 容器
-   - ❌ 丢：明显误判（preview 与文意不符）、多数 `'low'`、与更强 patch 同行的弱 patch
+   - ✅ 仅保留：语义与上下文相符、有明确阅读收益、不会改变原意或重复强调的候选
+   - ❌ 跳过：语义不确定、只因主题签名 / 数量 / 位置提出、与已有强调重复或范围冲突的候选；high 也不例外
+   - 全部跳过是正常结果：保留原文，直接进入校验与渲染；不补“至少一个”组件
 2. **应用**：
 
    ```bash
@@ -157,11 +158,11 @@ npm run cli -- annotate --input <input.md> --persona <id> > tmp/patches.json
    jq -r .md tmp/apply.json > tmp/annotated.md
    ```
 
-   核对 `applied + skipped.length == patches.length`；`skipped[].reason` 含义见 [cli-contract.md · annotate apply 输出](../_shared/references/cli-contract.md#annotate-apply-输出)。
+   核对 `applied + skipped.length == patches.length`，并检查 diff：字句、数字单位、限定词、链接、署名与顺序不变；标题与引用标记变化仍需保留原有语义。`skipped[].reason` 含义见 [cli-contract.md · annotate apply 输出](../_shared/references/cli-contract.md#annotate-apply-输出)。空集合无需调用 apply，直接沿用原文。
 
-3. **CLI 不替你做的**——手工补到 `tmp/annotated.md`：
-   - 签名容器（abstract / keyNumber / seeAlso 等）在无自然位置时**弃**，别硬塞
-   - 行内扩展每千字 ≤3 处 `==高亮==` / `[.着重.]`；详见 [`references/inline-extensions.md`](references/inline-extensions.md)
+3. **确有需要才手工标注**：
+   - CLI 不支持的结构（如 compare）仅在能保留原文结构与内容时处理，否则保留普通 Markdown；不重写内容来适配组件
+   - 行内扩展默认不加，已有强调足够时不叠加；确需强调时只标语义完整的必要范围，不按字数配额添加。详见 [`references/inline-extensions.md`](references/inline-extensions.md)
    - 取容器骨架：`containers snippet --name <X> [--persona <id>]`（传 `--persona` 自动绑定该主题 default variant）
 
 ### Step 6 · 校验（主题敏感）
@@ -208,7 +209,7 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 
 ### 容器密度
 
-✅ 3000 字文章 3-6 个内容容器（节奏点）
+✅ 可以整篇零容器；只在确有收益的位置添加，数量取决于内容
 ❌ 每段一个 `::: tip` 或 `::: highlight`（地板砖式铺满）
 
 ### intro 与 H1
@@ -255,8 +256,8 @@ issue 修复表见 [`../_shared/references/cli-contract.md`](../_shared/referenc
 
 | 模板 | 用途 |
 | --- | --- |
-| `templates/article-skeleton.md` | intro / cover / author / section-title / body / footer-cta 全骨架 |
-| `templates/snippets/` | 各容器的最小 example（由 build 脚本从 vocabulary.ts 派生） |
+| `templates/article-skeleton.md` | 普通 Markdown 起稿模板与可选标注指引；无必含组件 |
+| `containers snippet --name <X>` | 按需获取容器的最小 example，无需维护本地片段副本 |
 
 ## 相关参考
 

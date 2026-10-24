@@ -8,9 +8,11 @@ import { oneDark } from '@codemirror/theme-one-dark'
 import { createContainerAutocomplete, createContainerLinter } from '../editor-extensions'
 import { containerAwareExtensions } from '../editor-container-aware'
 import { applyZhFixHighlight, zhFixHighlightExtension } from '../editor-extensions-zhfix'
-import { foldGutter, foldKeymap } from '@codemirror/language'
+import { defaultHighlightStyle, foldEffect, foldGutter, foldKeymap, syntaxHighlighting } from '@codemirror/language'
+import { frontmatterFolding, frontmatterRange } from '../editor-frontmatter'
 import { sanitizePastedHtml, shouldSanitize } from '../../infra/clipboard/pasteSanitize'
 import { uploadImages, isImageFile } from '../../infra/clipboard/imageIntake'
+import { writeLocalImage } from '../../infra/fs/images'
 import { uiThemeMode } from '../state/uiTheme'
 
 /**
@@ -26,14 +28,18 @@ const editorChromeTheme = EditorView.theme({
     height: '100%',
     fontSize: '14px',
   },
-  '.cm-scroller': { overflow: 'auto' },
-  '.cm-content': { caretColor: 'var(--accent)' },
+  '.cm-scroller': { overflow: 'auto', fontFamily: 'var(--font-mono)', lineHeight: '1.9' },
+  '.cm-content': { caretColor: 'var(--accent)', padding: '18px 0 32px' },
+  '.cm-line': { padding: '0 20px 0 10px' },
   '&.cm-focused .cm-cursor': { borderLeftColor: 'var(--accent)' },
   '.cm-gutters': {
     backgroundColor: 'var(--editor-surface)',
     color: 'var(--editor-linenum)',
     border: 'none',
   },
+  '.cm-lineNumbers .cm-gutterElement': { minWidth: '30px', padding: '0 5px 0 12px', fontSize: '11px' },
+  '.cm-foldGutter .cm-gutterElement': { padding: '0 4px', opacity: '0.6' },
+  '.cm-foldPlaceholder': { border: 'none', borderRadius: '4px', backgroundColor: 'var(--surface)', color: 'var(--text-muted)', padding: '2px 8px', fontFamily: 'var(--font-text)', fontSize: '12px', cursor: 'pointer' },
   '.cm-activeLine': { backgroundColor: 'var(--editor-active)' },
   '.cm-activeLineGutter': { backgroundColor: 'transparent' },
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
@@ -42,24 +48,26 @@ const editorChromeTheme = EditorView.theme({
 })
 
 /**
- * 语法染色 compartment —— UI 亮色时返回空，使用浏览器默认（黑字纸底）；
+ * 语法染色 compartment —— 亮色复用 CodeMirror 的默认 Markdown 高亮；
  * UI 暗色时挂 oneDark 提供整套 CodeMirror 暗色 + Markdown 语法高亮。
  * 两侧 chrome 还是同一个 editorChromeTheme 兜底，互相不打架（oneDark
  * 给的颜色优先级更高，会覆盖 var()——这正是我们想要的）。
  */
 const syntaxCompartment = new Compartment()
 function syntaxExtensionFor(mode: 'light' | 'dark'): Extension {
-  return mode === 'dark' ? oneDark : []
+  return mode === 'dark' ? oneDark : syntaxHighlighting(defaultHighlightStyle)
 }
 
-const props = defineProps<{ modelValue: string }>()
+const props = defineProps<{ modelValue: string; imageDirectory?: FileSystemDirectoryHandle; documentId?: string }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
   (e: 'scroll', ratio: number): void
+  (e: 'imageBusy', busy: boolean): void
 }>()
 
 const host = ref<HTMLDivElement | null>(null)
 let view: EditorView | null = null
+const imageTasks = ref(0)
 
 /** 在当前光标处插入一段文本（替换选区）；父组件通过 ref 调用 */
 function insertAtCursor(text: string): void {
@@ -101,6 +109,17 @@ function focus(): void {
   view?.focus()
 }
 
+/** 从发文清单定位到源码行；选择整行便于直接修改。 */
+function goToLine(number: number): void {
+  if (!view || !Number.isFinite(number)) return
+  const line = view.state.doc.line(Math.max(1, Math.min(view.state.doc.lines, Math.trunc(number))))
+  view.dispatch({
+    selection: { anchor: line.from, head: line.to },
+    effects: EditorView.scrollIntoView(line.from, { y: 'center' }),
+  })
+  view.focus()
+}
+
 /**
  * F3 一键修复中文排版后，把命中范围短时间高亮 5s。
  * actions.handleFixZhTypo 流程：先用 fixZhTypoWithRanges 拿 fixed + ranges，
@@ -118,6 +137,7 @@ defineExpose({
   getScroller,
   scrollToRatio,
   focus,
+  goToLine,
   highlightZhFix,
 })
 
@@ -195,14 +215,19 @@ function handleDrop(ev: DragEvent, targetView: EditorView): boolean {
  * 失败项会被 uploadImages 写成 `<!-- image upload failed -->` 注释，方便作者排查。
  */
 function insertImagesAsync(targetView: EditorView, files: readonly File[]): void {
-  const placeholder = `<!-- 图片上传中… (${files.length}) -->`
-  const { from } = targetView.state.selection.main
+  const placeholder = `<!-- 图片处理中 ${crypto.randomUUID()} -->`
+  const documentId = props.documentId
+  const dir = props.imageDirectory
   replaceSelection(targetView, placeholder)
-  void uploadImages(files).then((md) => {
+  imageTasks.value++
+  emit('imageBusy', true)
+  const provider = dir ? { name: 'article-folder', upload: (file: File) => writeLocalImage(dir, file) } : undefined
+  void uploadImages(files, provider).then((md) => {
+    if (documentId !== props.documentId || targetView !== view) return
     // view.destroy() 后 state 会抛；用 try 做 best-effort，销毁场景静默
     try {
       const current = targetView.state.doc.toString()
-      const idx = current.indexOf(placeholder, Math.max(0, from - 1))
+      const idx = current.indexOf(placeholder)
       if (idx < 0) return // 作者已经自己删掉占位
       targetView.dispatch({
         changes: { from: idx, to: idx + placeholder.length, insert: md },
@@ -210,7 +235,17 @@ function insertImagesAsync(targetView: EditorView, files: readonly File[]): void
     } catch {
       // editor 已销毁，放弃
     }
+  }).finally(() => {
+    imageTasks.value--
+    emit('imageBusy', imageTasks.value > 0)
   })
+}
+
+function onImageUpload(event: Event) {
+  const input = event.target as HTMLInputElement
+  const files = Array.from(input.files ?? []).filter(isImageFile)
+  if (view && files.length) insertImagesAsync(view, files)
+  input.value = ''
 }
 
 /**
@@ -264,13 +299,12 @@ function createView(doc: string) {
     extensions: [
       lineNumbers(),
       foldGutter(),
+      frontmatterFolding,
       highlightActiveLine(),
       history(),
       keymap.of([...defaultKeymap, ...historyKeymap, ...foldKeymap, indentWithTab]),
       markdown(),
-      // 先放 chrome 兜底，再放 syntax compartment——compartment 内的 oneDark
-      // 在 dark 时会覆盖 chrome 颜色（顺序后定义优先）；light 时 compartment 为空,
-      // chrome 的 CSS 变量配色保持生效。
+      // oneDark 必须在 chrome 后注册，才能覆盖暗色编辑区配色。
       editorChromeTheme,
       syntaxCompartment.of(syntaxExtensionFor(uiThemeMode.value)),
       createContainerAutocomplete(),
@@ -291,6 +325,15 @@ function createView(doc: string) {
     ],
   })
   view = new EditorView({ state, parent: host.value })
+  foldPublicationInfo()
+}
+
+function foldPublicationInfo() {
+  if (!view) return
+  const range = frontmatterRange(view.state.doc)
+  if (!range || range.to === view.state.doc.length) return
+  // 只在打开文章时收起；折叠不改原文，正文输入和发布表单编辑不会反复收起。
+  view.dispatch({ effects: foldEffect.of(range), selection: { anchor: range.to + 1 } })
 }
 
 onMounted(() => {
@@ -309,6 +352,7 @@ watch(
     }
   },
 )
+watch(() => props.documentId, foldPublicationInfo, { flush: 'post' })
 
 // UI 主题切换时 reconfigure syntax compartment——光标 / 选区 / 撤销栈 保留
 watch(uiThemeMode, (mode) => {
@@ -324,16 +368,33 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="editor-host" ref="host" />
+  <div class="editor-shell">
+    <div class="editor-tools">
+      <span class="editor-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4m8-8 4 4-4 4m-3-11-2 22"/></svg>Markdown</span>
+      <label class="image-upload" :class="{ busy: imageTasks > 0 }"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>{{ imageTasks ? '图片处理中…' : '插入图片' }}<input type="file" accept="image/*" multiple :disabled="imageTasks > 0" aria-label="插入图片" @change="onImageUpload" /></label>
+    </div>
+    <div class="editor-host" ref="host" />
+  </div>
 </template>
 
 <style scoped>
+.editor-shell { display: flex; flex-direction: column; width: 100%; height: 100%; min-height: 0; }
+.editor-tools { display: flex; flex: 0 0 40px; box-sizing: border-box; justify-content: space-between; align-items: center; padding: 0 12px 0 16px; background: var(--bg); border-bottom: 1px solid var(--border); color: var(--text); font: var(--fs-12) var(--font-text); }
+.editor-label, .image-upload { display: inline-flex; align-items: center; gap: 7px; }
+.editor-label { font-weight: var(--fw-medium); }
+.editor-tools svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.editor-label svg { color: var(--text-subtle); }
+.image-upload { position: relative; cursor: pointer; color: var(--text-muted); padding: 5px 7px; border-radius: var(--radius-1); transition: var(--t-quick); }
+.image-upload:hover { background: var(--surface); color: var(--text); }
+.image-upload input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
+.image-upload:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.image-upload.busy { opacity: .6; cursor: progress; }
 .editor-host {
+  flex: 1; min-height: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
   background: var(--editor-bg);
-  box-shadow: var(--shadow-inset);
 }
 .editor-host :deep(.cm-editor) {
   height: 100%;

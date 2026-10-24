@@ -1,686 +1,363 @@
 <script setup lang="ts">
-// 草稿抽屉：列出/搜索/重命名/删除/导入导出。CRUD 走 useDraftManager，本 SFC 只管 UI 状态。
 import { computed, nextTick, ref, watch } from 'vue'
-import { type DraftMeta } from '../../infra/storage/drafts'
+import type { DraftMeta } from '../../infra/storage/drafts'
+import type { ArticleEntry } from '../../infra/fs/library'
 import { useDraftManager } from '../composables/useDraftManager'
 import { downloadBlob } from '../../infra/exporters/exportFile'
-import PanelHeader from '../primitives/PanelHeader.vue'
 
-const props = defineProps<{ activeId: string | null }>()
+const props = defineProps<{
+  activeId: string | null
+  draftIndexTick?: number
+  librarySupported?: boolean
+  libraryName?: string
+  libraryPermitted?: boolean
+  articles?: ArticleEntry[]
+  activeArticle?: string
+  libraryBusy?: boolean
+  libraryError?: string
+}>()
 const emit = defineEmits<{
   (e: 'select', id: string): void
   (e: 'close'): void
   (e: 'requestDelete', id: string, title: string): void
   (e: 'refresh'): void
+  (e: 'connectLibrary'): void
+  (e: 'chooseLibrary'): void
+  (e: 'selectArticle', article: ArticleEntry): void
+  (e: 'createArticle', title: string): void
 }>()
 
 const mgr = useDraftManager()
-// 模板里直接消费的派生 —— 解构 ComputedRef / Ref 保持响应性
 const drafts = mgr.drafts
 const knownTags = mgr.knownTags
 const storageStat = mgr.storageStat
 const storagePct = mgr.storagePct
 const formatBytes = mgr.formatBytes
-
+const hasLibrary = computed(() => props.librarySupported && props.libraryPermitted)
+const browserOpen = ref(!props.libraryPermitted)
+const articleQuery = ref('')
+const newArticleTitle = ref('')
+const creatingArticle = ref(false)
+const articleTitleInput = ref<HTMLInputElement | null>(null)
+const folderMenu = ref<HTMLDetailsElement | null>(null)
+const filteredArticles = computed(() => (props.articles ?? []).filter((article) =>
+  article.title.toLocaleLowerCase().includes(articleQuery.value.trim().toLocaleLowerCase()),
+))
 const query = ref('')
 const renamingId = ref<string | null>(null)
 const renameValue = ref('')
 const renameInputRef = ref<HTMLInputElement | null>(null)
 const importFeedback = ref<string | null>(null)
 const tagFilter = ref<string | null>(null)
-
-// 切换活动草稿时（外部主动 mutate 走 useDraftLifecycle）让本组件重读列表
-watch(() => props.activeId, () => mgr.refresh())
-
-/**
- * 列表过滤走 mgr.search —— 扫标题 + 正文 + tag。
- * query 里写 `#技术` 当 tag 过滤；叠加 tagFilter.value 的显式选择取交集。
- */
-const filtered = computed<DraftMeta[]>(() => {
-  const q = query.value.trim()
-  const tags = tagFilter.value ? [tagFilter.value] : undefined
-  if (!q && !tags) return mgr.drafts.value
-  return mgr.search({ query: q, tags })
-})
-
-function refresh() {
-  mgr.refresh()
-  emit('refresh')
-}
-
-function fmt(ts: number): string {
-  const d = new Date(ts)
-  const now = new Date()
-  const sameDay = d.toDateString() === now.toDateString()
-  const hh = d.getHours().toString().padStart(2, '0')
-  const mm = d.getMinutes().toString().padStart(2, '0')
-  if (sameDay) return `今天 ${hh}:${mm}`
-  const m = (d.getMonth() + 1).toString().padStart(2, '0')
-  const day = d.getDate().toString().padStart(2, '0')
-  return `${m}-${day} ${hh}:${mm}`
-}
-
-function bodySummary(id: string): string {
-  const body = mgr.read(id)?.body ?? ''
-  const first = body
-    .split('\n')
-    .map((l) => l.replace(/^#+\s*/, '').replace(/^\s*[-*>:]+\s*/, '').trim())
-    .find((l) => l.length > 0 && !l.startsWith(':::'))
-  if (!first) return '（空白草稿）'
-  return first.length > 60 ? first.slice(0, 60) + '…' : first
-}
-
-function newDraft() {
-  const created = mgr.create({ title: '新草稿', body: '# 新草稿\n' })
-  emit('select', created.id)
-}
-
-function startRename(d: DraftMeta, ev: Event) {
-  ev.stopPropagation()
-  renamingId.value = d.id
-  renameValue.value = d.title || ''
-  void nextTick(() => renameInputRef.value?.focus())
-}
-
-function commitRename() {
-  if (!renamingId.value) return
-  const title = renameValue.value.trim() || '未命名草稿'
-  mgr.update(renamingId.value, { title })
-  renamingId.value = null
-}
-
-function cancelRename() {
-  renamingId.value = null
-}
-
-function requestDelete(d: DraftMeta, ev: Event) {
-  ev.stopPropagation()
-  emit('requestDelete', d.id, d.title || '未命名草稿')
-}
-
-/**
- * Inline chip 标签编辑器 —— 替代原 window.prompt。
- *
- * 行内展开：editingTagsFor 指向当前编辑的 draft id；其它行渲染保持只读 chip。
- * editingTagDraft 是工作副本（数组），commit 时一次性写回 storage，避免每按一键
- * 都触发 draftIndexTick + 父侧 re-render 抖动。
- *
- * 用户输入流：
- *   - 输入框打字 → Enter / 逗号 / 空格 → push 到 chip 列表
- *   - chip × → splice 删除
- *   - "✓ 完成" / blur 整个面板 → commit
- *   - Esc → 取消（丢弃工作副本，回到旧 tags）
- */
 const editingTagsFor = ref<string | null>(null)
 const editingTagDraft = ref<string[]>([])
 const tagInputValue = ref('')
 const tagInputRef = ref<HTMLInputElement | null>(null)
 
-function startEditTags(d: DraftMeta, ev: Event) {
-  ev.stopPropagation()
-  editingTagsFor.value = d.id
-  editingTagDraft.value = [...(d.tags ?? [])]
+watch(() => props.draftIndexTick, () => mgr.refresh())
+watch(() => props.libraryPermitted, (permitted) => { browserOpen.value = !permitted })
+watch(() => props.activeId, (id) => {
+  mgr.refresh()
+  if (id) browserOpen.value = true
+})
+const filtered = computed<DraftMeta[]>(() => {
+  const text = query.value.trim()
+  const tags = tagFilter.value ? [tagFilter.value] : undefined
+  return !text && !tags ? mgr.drafts.value : mgr.search({ query: text, tags })
+})
+
+function refresh() { mgr.refresh(); emit('refresh') }
+function selectFolderAction(action: 'chooseLibrary' | 'connectLibrary') {
+  if (folderMenu.value) folderMenu.value.open = false
+  if (action === 'chooseLibrary') emit('chooseLibrary')
+  else emit('connectLibrary')
+}
+function startArticle() {
+  creatingArticle.value = true
+  void nextTick(() => articleTitleInput.value?.focus())
+}
+function createFileArticle() {
+  if (!newArticleTitle.value.trim() || props.libraryBusy) return
+  emit('createArticle', newArticleTitle.value.trim())
+  newArticleTitle.value = ''
+  creatingArticle.value = false
+}
+function dateLabel(value: string, timestamp: number) {
+  if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10).replaceAll('-', '.')
+  const date = new Date(timestamp)
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`
+}
+function newDraft() {
+  if (props.libraryBusy) return
+  const created = mgr.create({ title: '新草稿', body: '# 新草稿\n' })
+  emit('select', created.id)
+}
+function selectDraft(id: string) { emit('select', id) }
+function closeRowMenu(event: Event) {
+  const details = (event.currentTarget as HTMLElement).closest('details')
+  if (details) details.open = false
+}
+function startRename(draft: DraftMeta, event: Event) {
+  closeRowMenu(event)
+  renamingId.value = draft.id
+  renameValue.value = draft.title
+  void nextTick(() => { renameInputRef.value?.focus(); renameInputRef.value?.select() })
+}
+function commitRename() {
+  if (!renamingId.value) return
+  mgr.update(renamingId.value, { title: renameValue.value.trim() || '未命名草稿' })
+  renamingId.value = null
+  emit('refresh')
+}
+function requestDelete(draft: DraftMeta, event: Event) {
+  closeRowMenu(event)
+  emit('requestDelete', draft.id, draft.title || '未命名草稿')
+}
+function startEditTags(draft: DraftMeta, event: Event) {
+  closeRowMenu(event)
+  editingTagsFor.value = draft.id
+  editingTagDraft.value = [...(draft.tags ?? [])]
   tagInputValue.value = ''
   void nextTick(() => tagInputRef.value?.focus())
 }
-
-function dedupePush(t: string) {
-  const trimmed = t.trim()
-  if (!trimmed) return
-  if (editingTagDraft.value.includes(trimmed)) return
-  editingTagDraft.value.push(trimmed)
-}
-
 function flushTagInput() {
-  // 支持一次粘贴含分隔符的串："工程, 经验   速记" → 三条
-  const parts = tagInputValue.value.split(/[,，\s]+/g).filter((s) => s.length > 0)
-  parts.forEach(dedupePush)
+  for (const tag of tagInputValue.value.split(/[,，\s]+/g).filter(Boolean)) {
+    if (!editingTagDraft.value.includes(tag)) editingTagDraft.value.push(tag)
+  }
   tagInputValue.value = ''
 }
-
-function onTagInputKey(ev: KeyboardEvent) {
-  // 逗号 / 空格触发分词：让用户像打 Twitter hashtag 一样连打
-  if (ev.key === ',' || ev.key === '，' || ev.key === ' ') {
-    ev.preventDefault()
-    flushTagInput()
-    return
-  }
-  if (ev.key === 'Backspace' && tagInputValue.value === '') {
-    // 空输入态再 Backspace = 撤一个 chip
-    ev.preventDefault()
-    editingTagDraft.value.pop()
-  }
+function onTagInputKey(event: KeyboardEvent) {
+  if ([',', '，', ' '].includes(event.key)) { event.preventDefault(); flushTagInput() }
+  if (event.key === 'Backspace' && !tagInputValue.value) { event.preventDefault(); editingTagDraft.value.pop() }
 }
-
-function removeChip(idx: number) {
-  editingTagDraft.value.splice(idx, 1)
-}
-
 function commitTags() {
-  if (editingTagsFor.value === null) return
+  if (!editingTagsFor.value) return
   flushTagInput()
   mgr.update(editingTagsFor.value, { tags: [...editingTagDraft.value] })
   editingTagsFor.value = null
-  editingTagDraft.value = []
+  emit('refresh')
 }
-
-function cancelTags() {
-  editingTagsFor.value = null
-  editingTagDraft.value = []
-  tagInputValue.value = ''
-}
-
-function toggleTagFilter(tag: string) {
-  tagFilter.value = tagFilter.value === tag ? null : tag
-}
-
-function exportAll() {
-  downloadBlob(
-    `wechat-typeset-drafts-${Date.now()}.json`,
-    mgr.exportJSON(),
-    'application/json',
-  )
-}
-
-function onImport(ev: Event) {
-  const input = ev.target as HTMLInputElement
+function toggleTagFilter(tag: string) { tagFilter.value = tagFilter.value === tag ? null : tag }
+function exportAll() { downloadBlob(`wechat-typeset-drafts-${Date.now()}.json`, mgr.exportJSON(), 'application/json') }
+function onImport(event: Event) {
+  const input = event.target as HTMLInputElement
   const file = input.files?.[0]
   if (!file) return
   const reader = new FileReader()
   reader.onload = () => {
-    const r = mgr.importJSON(String(reader.result ?? ''))
-    importFeedback.value = `导入 ${r.added} 篇（跳过 ${r.skipped}，非法 ${r.invalid}）`
+    const result = mgr.importJSON(String(reader.result ?? ''))
+    importFeedback.value = `导入 ${result.added} 篇，跳过 ${result.skipped} 篇，无效 ${result.invalid} 篇`
     input.value = ''
-    setTimeout(() => (importFeedback.value = null), 3200)
+    emit('refresh')
   }
+  reader.onerror = () => { importFeedback.value = '文件读取失败，请重新选择。'; input.value = '' }
   reader.readAsText(file)
 }
-
 defineExpose({ refresh })
 </script>
 
 <template>
-  <aside class="drawer" aria-label="草稿列表">
-    <PanelHeader title="草稿" size="sm" @close="emit('close')" />
+  <aside class="drawer" :class="{ 'only-browser': !hasLibrary }" aria-label="文章库">
+    <div class="sidebar-brand">
+      <svg class="brand-mark" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 5 5 5M3 21l4.5-1 12-12a2.12 2.12 0 0 0-3-3l-12 12L3 21Z" /></svg>
+      <div><strong>wechat-typeset</strong><span>本地文章与排版工具</span></div>
+      <button class="sidebar-close" type="button" aria-label="关闭文章库" @click="emit('close')">关闭</button>
+    </div>
 
-    <div class="head-tools">
-      <button class="btn btn-primary" @click="newDraft">+ 新建</button>
-      <div class="search">
-        <span class="search-icon">⌕</span>
-        <input
-          v-model="query"
-          class="search-input"
-          type="search"
-          placeholder="搜索标题 / 正文 / #标签"
-          aria-label="搜索草稿"
-        />
+    <section v-if="librarySupported" class="file-library" :class="{ connected: hasLibrary }" aria-label="文件夹文章库">
+      <div class="library-heading">
+        <svg class="heading-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h6l2 2h10v12H3V6Z" /></svg>
+        <h2 :title="libraryName">{{ libraryName || '我的文章库' }}</h2>
+        <details ref="folderMenu" class="folder-menu" @keydown.esc.prevent.stop="folderMenu && (folderMenu.open = false)">
+          <summary aria-label="文章库操作" title="文章库操作"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary>
+          <div class="folder-menu-content">
+            <button type="button" :disabled="libraryBusy" @click="selectFolderAction('connectLibrary')">{{ libraryPermitted ? '刷新文章列表' : libraryName ? '恢复文件夹访问' : '打开文件夹' }}</button>
+            <button v-if="libraryName" type="button" :disabled="libraryBusy" @click="selectFolderAction('chooseLibrary')">更换文件夹</button>
+          </div>
+        </details>
       </div>
-    </div>
 
-    <div class="io-row">
-      <button class="btn btn-ghost" @click="exportAll">导出 JSON</button>
-      <label class="btn btn-ghost">
-        导入 JSON
-        <input type="file" accept="application/json" hidden @change="onImport" />
-      </label>
-      <span v-if="importFeedback" class="io-feedback">{{ importFeedback }}</span>
-    </div>
-
-    <div v-if="knownTags.length > 0" class="tagbar" aria-label="标签过滤">
-      <button
-        v-for="t in knownTags"
-        :key="t"
-        class="tag-pill"
-        :class="{ active: tagFilter === t }"
-        :aria-pressed="tagFilter === t"
-        @click="toggleTagFilter(t)"
-      >#{{ t }}</button>
-    </div>
-
-    <div v-if="storageStat.warn" class="quota-warn" role="status">
-      <span class="quota-warn-icon" aria-hidden="true">!</span>
-      <span class="quota-warn-text">
-        存储占用 {{ storagePct }}%，建议导出 JSON 并删除不再需要的草稿
-      </span>
-    </div>
-
-    <ul class="list">
-      <li
-        v-for="d in filtered"
-        :key="d.id"
-        class="item"
-        :class="{ active: d.id === props.activeId }"
-        @click="emit('select', d.id)"
-      >
-        <div class="item-main">
-          <div v-if="renamingId === d.id" class="rename-row" @click.stop>
-            <input
-              ref="renameInputRef"
-              v-model="renameValue"
-              class="rename-input"
-              maxlength="48"
-              @keydown.enter.prevent.stop="commitRename"
-              @keydown.esc.prevent.stop="cancelRename"
-              @blur="commitRename"
-            />
-          </div>
-          <div
-            v-else
-            class="title"
-            :title="`双击重命名 · ${d.title}`"
-            @dblclick.stop="startRename(d, $event)"
-          >{{ d.title || '未命名' }}</div>
-          <div class="summary">{{ bodySummary(d.id) }}</div>
-          <div v-if="editingTagsFor === d.id" class="tag-editor" @click.stop>
-            <span
-              v-for="(t, i) in editingTagDraft"
-              :key="`${t}-${i}`"
-              class="tag-chip tag-chip-edit"
-            >
-              #{{ t }}
-              <button
-                type="button"
-                class="tag-chip-remove"
-                title="删除此标签"
-                aria-label="删除标签"
-                @click="removeChip(i)"
-              >×</button>
-            </span>
-            <input
-              ref="tagInputRef"
-              v-model="tagInputValue"
-              class="tag-input"
-              placeholder="新标签 · Enter / 逗号 / 空格 添加"
-              aria-label="新标签"
-              @keydown.enter.prevent.stop="flushTagInput"
-              @keydown.esc.prevent.stop="cancelTags"
-              @keydown="onTagInputKey"
-            />
-            <button
-              type="button"
-              class="tag-editor-done"
-              title="完成"
-              @click="commitTags"
-            >✓</button>
-          </div>
-          <div v-else-if="d.tags && d.tags.length > 0" class="tags">
-            <span
-              v-for="t in d.tags"
-              :key="t"
-              class="tag-chip"
-              @click.stop="toggleTagFilter(t)"
-            >#{{ t }}</span>
-          </div>
-          <div class="meta mono">
-            <span class="meta-theme">{{ d.themeId }}</span>
-            <span class="dot">·</span>
-            <span>{{ fmt(d.updatedAt) }}</span>
-          </div>
+      <template v-if="hasLibrary">
+        <div class="library-tools">
+        <label class="search-field">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5" /><path d="m16 16 5 5" /></svg>
+          <input v-model="articleQuery" type="search" placeholder="搜索文章" aria-label="搜索文件夹文章" />
+        </label>
+        <button class="icon-button" type="button" aria-label="新建文章" title="新建文章" :disabled="libraryBusy || creatingArticle" @click="startArticle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+        </button>
         </div>
-        <div class="item-actions">
-          <button
-            class="icon-btn"
-            :class="{ active: editingTagsFor === d.id }"
-            title="编辑标签"
-            @click="startEditTags(d, $event)"
-          >#</button>
-          <button class="icon-btn" title="重命名" @click="startRename(d, $event)">✎</button>
-          <button class="icon-btn danger" title="删除" @click="requestDelete(d, $event)">×</button>
-        </div>
-      </li>
-      <li v-if="drafts.length === 0" class="empty">
-        <div class="empty-body">
-          <div class="empty-title">还没有草稿</div>
-          <div class="empty-hint">新建一篇开始，或者把旧 JSON 导进来继续写。</div>
-          <button class="btn btn-primary" @click="newDraft">新建第一篇</button>
-        </div>
-      </li>
-      <li v-else-if="filtered.length === 0" class="empty">
-        <div class="empty-body">
-          <div class="empty-title mono">没有匹配 "{{ query }}" 的草稿</div>
-        </div>
-      </li>
-    </ul>
-
-    <footer class="drawer-foot mono">
-      <div class="cap-bar">
-        <div class="cap-fill" :style="{ width: storagePct + '%' }" />
+        <form v-if="creatingArticle" class="new-article-form" @submit.prevent="createFileArticle">
+          <input ref="articleTitleInput" v-model="newArticleTitle" aria-label="新文章标题" placeholder="写下文章标题" maxlength="120" :disabled="libraryBusy" @keydown.esc.prevent="creatingArticle = false" />
+          <button type="submit" class="create-confirm" aria-label="创建文章" title="创建文章" :disabled="libraryBusy || !newArticleTitle.trim()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg></button>
+          <button type="button" class="create-cancel" aria-label="取消新建" title="取消" @click="creatingArticle = false"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12" /></svg></button>
+        </form>
+        <ul class="article-list" :aria-busy="libraryBusy">
+          <li v-for="article in filteredArticles" :key="article.name">
+            <button class="article-item" type="button" :class="{ active: article.name === activeArticle }" :aria-current="article.name === activeArticle ? 'page' : undefined" :disabled="libraryBusy" :title="article.title" @click="emit('selectArticle', article)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1" /><path d="M8 7h8M8 11h8M8 15h5" /></svg>
+              <span class="article-copy"><span class="article-title">{{ article.title }}</span><span class="article-date">{{ dateLabel(article.date, article.lastModified) }}</span></span>
+            </button>
+          </li>
+          <li v-if="!filteredArticles.length" class="empty-message">{{ libraryBusy ? '正在读取文章…' : articleQuery ? '没有匹配的文章' : '还没有文章，开始写第一篇。' }}</li>
+        </ul>
+      </template>
+      <div v-else class="library-empty-state">
+        <p>{{ libraryName ? '恢复文件夹访问，接着写。' : '从一个文件夹开始，文章与图片都在本机。' }}</p>
+        <button class="connect-button" type="button" :disabled="libraryBusy" @click="emit('connectLibrary')"><span>{{ libraryBusy ? '正在连接…' : libraryName ? '恢复访问' : '打开文章文件夹' }}</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
       </div>
-      <div class="cap-text">
-        <span>{{ drafts.length }} 篇</span>
-        <span class="dot">·</span>
-        <span>
-          {{ storagePct }}% · {{ formatBytes(storageStat.used) }} / {{ formatBytes(storageStat.quota) }}
-          <span v-if="!storageStat.supported" class="dot" title="浏览器未暴露 storage.estimate API，此为 localStorage 估算值">估算</span>
-        </span>
+      <p v-if="libraryError" class="library-error" role="alert">{{ libraryError }}</p>
+    </section>
+
+    <section class="browser-library" :class="{ expanded: browserOpen }" aria-label="浏览器草稿">
+      <button class="browser-heading" type="button" :aria-expanded="browserOpen" aria-controls="browser-drafts-panel" @click="browserOpen = !browserOpen">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h6l2 2h10v12H3V6Z" /></svg>
+        <span>浏览器草稿</span>
+        <span class="draft-count">{{ drafts.length }}</span>
+        <svg class="section-chevron" :class="{ expanded: browserOpen }" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+      </button>
+      <div v-show="browserOpen" id="browser-drafts-panel" class="browser-panel">
+        <div class="library-tools">
+          <label class="search-field browser-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5" /><path d="m16 16 5 5" /></svg><input v-model="query" type="search" placeholder="搜索草稿 / #标签" aria-label="搜索浏览器草稿" /></label>
+          <button class="icon-button" type="button" aria-label="新建浏览器草稿" title="新建浏览器草稿" :disabled="libraryBusy" @click="newDraft"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>
+        </div>
+        <div v-if="knownTags.length" class="tag-filters" aria-label="按标签筛选草稿">
+          <button v-for="tag in knownTags" :key="tag" type="button" :class="{ selected: tagFilter === tag }" :aria-pressed="tagFilter === tag" @click="toggleTagFilter(tag)">#{{ tag }}</button>
+        </div>
+        <ul class="browser-list">
+          <li v-for="draft in filtered" :key="draft.id" class="browser-item" :class="{ active: draft.id === activeId }">
+            <div class="browser-item-main">
+              <svg class="draft-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1" /><path d="M8 7h8M8 11h8M8 15h5" /></svg>
+              <input v-if="renamingId === draft.id" :ref="(el) => renameInputRef = el as HTMLInputElement | null" v-model="renameValue" class="rename-input" aria-label="草稿名称" maxlength="48" @keydown.enter.prevent="commitRename" @keydown.esc.prevent.stop="renamingId = null" @blur="commitRename" />
+              <button v-else class="draft-select" type="button" :disabled="libraryBusy" :aria-current="draft.id === activeId ? 'page' : undefined" :title="draft.title || '未命名草稿'" @click="selectDraft(draft.id)" @dblclick="startRename(draft, $event)">
+                <span class="article-title">{{ draft.title || '未命名草稿' }}</span><span class="article-date">{{ dateLabel('', draft.updatedAt) }}</span>
+              </button>
+              <details class="row-menu" @keydown.esc.prevent.stop="closeRowMenu($event)">
+                <summary :aria-label="`管理草稿：${draft.title}`" title="管理草稿"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="5" cy="12" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /></svg></summary>
+                <div class="row-menu-content"><button type="button" @click="startRename(draft, $event)">重命名</button><button type="button" @click="startEditTags(draft, $event)">编辑标签</button><button type="button" class="danger" @click="requestDelete(draft, $event)">删除草稿</button></div>
+              </details>
+            </div>
+            <div v-if="editingTagsFor === draft.id" class="tag-editor">
+              <div class="tag-filters"><button v-for="(tag, index) in editingTagDraft" :key="tag" type="button" :aria-label="`移除标签 ${tag}`" @click="editingTagDraft.splice(index, 1)">#{{ tag }} · 移除</button></div>
+              <input :ref="(el) => tagInputRef = el as HTMLInputElement | null" v-model="tagInputValue" aria-label="新标签" placeholder="输入标签，回车添加" @keydown.enter.prevent="flushTagInput" @keydown.esc.prevent="editingTagsFor = null" @keydown="onTagInputKey" />
+              <div class="tag-editor-actions"><button class="text-button" type="button" @click="editingTagsFor = null">取消</button><button class="text-button" type="button" @click="commitTags">完成</button></div>
+            </div>
+            <div v-else-if="draft.tags?.length" class="draft-tags"><button v-for="tag in draft.tags" :key="tag" type="button" @click="toggleTagFilter(tag)">#{{ tag }}</button></div>
+          </li>
+          <li v-if="!filtered.length" class="empty-message">{{ drafts.length ? '没有匹配的草稿' : '暂时没有浏览器草稿' }}</li>
+        </ul>
+        <details class="browser-management">
+          <summary>管理与备份</summary>
+          <div class="backup-actions"><button type="button" @click="exportAll">导出 JSON</button><label>导入 JSON<input type="file" accept="application/json" @change="onImport" /></label></div>
+          <p v-if="importFeedback" class="import-feedback" role="status">{{ importFeedback }}</p>
+          <p class="storage-summary" :class="{ warning: storageStat.warn }">已用 {{ storagePct }}% · {{ formatBytes(storageStat.used) }} / {{ formatBytes(storageStat.quota) }}{{ !storageStat.supported ? '（估算）' : '' }}</p>
+          <p v-if="storageStat.warn" class="storage-summary warning">存储空间不足，建议先导出备份。</p>
+        </details>
       </div>
-    </footer>
+    </section>
+    <footer class="sidebar-footer"><span class="local-dot" aria-hidden="true" />仅在本机保存</footer>
   </aside>
 </template>
 
 <style scoped>
-.drawer {
-  width: var(--drawer-w-sm);
-  height: 100%;
-  display: flex; flex-direction: column;
-  background: var(--surface-raised);
-  border-right: 1px solid var(--border);
-  font-family: var(--font-text);
-  font-size: var(--fs-13);
-  color: var(--text);
-}
-.head-tools {
-  display: flex; gap: var(--sp-3);
-  padding: var(--sp-3) var(--sp-4);
-  border-bottom: 1px solid var(--border);
-}
-.search {
-  flex: 1 1 auto;
-  display: flex; align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-2);
-  padding: 0 var(--sp-3);
-}
-.search:focus-within { border-color: var(--accent); box-shadow: var(--focus-ring); }
-.search-icon { color: var(--text-subtle); font-size: var(--fs-13); margin-right: 4px; }
-.search-input {
-  flex: 1 1 auto;
-  border: none;
-  background: transparent;
-  outline: none;
-  font: inherit;
-  height: 26px;
-  color: var(--text);
-}
-
-.io-row {
-  display: flex; gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4);
-  border-bottom: 1px solid var(--border);
-  align-items: center;
-  flex-wrap: wrap;
-}
-.io-feedback {
-  font-family: var(--font-mono);
-  font-size: var(--fs-11);
-  color: var(--success);
-  letter-spacing: var(--ls-wide);
-}
-
-.btn {
-  height: 26px; padding: 0 var(--sp-3);
-  font-size: var(--fs-12); border-radius: var(--radius-2);
-  cursor: pointer; font-family: var(--font-text);
-  white-space: nowrap;
-  flex: 0 0 auto;
-}
-.btn-primary {
-  background: var(--accent); color: var(--accent-on);
-  border: 1px solid var(--accent);
-}
-.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-.btn-ghost {
-  background: var(--surface-raised);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover { background: var(--surface); }
-
-.tagbar {
-  display: flex; flex-wrap: wrap; gap: 4px;
-  padding: var(--sp-2) var(--sp-4);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
-.tag-pill {
-  padding: 2px 8px;
-  font-size: var(--fs-11);
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: var(--t-quick);
-  letter-spacing: var(--ls-wide);
-}
-.tag-pill:hover { color: var(--text); border-color: var(--accent); }
-.tag-pill.active {
-  color: var(--accent-on);
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.quota-warn {
-  display: flex; align-items: center; gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-4);
-  background: var(--warn-soft);
-  border-bottom: 1px solid var(--border);
-  font-size: var(--fs-11);
-  color: var(--warn);
-  line-height: var(--lh-tight);
-}
-.quota-warn-icon {
-  width: 16px; height: 16px;
-  display: inline-flex; align-items: center; justify-content: center;
-  background: var(--amber-500);
-  color: white;
-  border-radius: 50%;
-  font-weight: var(--fw-bold);
-  font-size: var(--fs-11);
-  flex: 0 0 auto;
-}
-
-.list {
-  list-style: none; margin: 0; padding: var(--sp-2) 0;
-  overflow-y: auto; flex: 1 1 auto;
-}
-
-.tags {
-  display: flex; flex-wrap: wrap; gap: 3px;
-  margin-top: 3px;
-}
-.tag-chip {
-  font-size: var(--fs-11);
-  font-family: var(--font-mono);
-  color: var(--text-subtle);
-  background: var(--surface);
-  padding: 1px 6px;
-  border-radius: var(--radius-pill);
-  letter-spacing: var(--ls-wide);
-  cursor: pointer;
-  transition: var(--t-quick);
-}
-.tag-chip:hover { color: var(--accent); background: var(--accent-soft); }
-
-/* Inline tag editor —— 行内展开的 chip + input 编辑器，替代 window.prompt */
-.tag-editor {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  margin-top: 3px;
-  padding: 4px;
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-2);
-}
-.tag-chip-edit {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  cursor: default;
-  padding: 1px 4px 1px 6px;
-}
-.tag-chip-remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  margin-left: 2px;
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: var(--fs-13);
-  line-height: 1;
-  cursor: pointer;
-  border-radius: var(--radius-pill);
-}
-.tag-chip-remove:hover {
-  background: var(--accent);
-  color: var(--accent-on);
-}
-.tag-input {
-  flex: 1 1 80px;
-  min-width: 80px;
-  height: 20px;
-  border: none;
-  background: transparent;
-  font: inherit;
-  font-size: var(--fs-11);
-  color: var(--text);
-  outline: none;
-}
-.tag-input::placeholder {
-  color: var(--text-subtle);
-  font-size: var(--fs-10);
-}
-.tag-editor-done {
-  width: 22px;
-  height: 22px;
-  border: 1px solid var(--accent);
-  background: var(--accent);
-  color: var(--accent-on);
-  border-radius: var(--radius-1);
-  font-size: var(--fs-12);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.tag-editor-done:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-.icon-btn.active {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.item {
-  position: relative;
-  display: flex; align-items: flex-start; gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4);
-  cursor: pointer;
-  border-left: 2px solid transparent;
-}
-.item:hover { background: var(--surface); }
-.item:hover .item-actions { opacity: 1; }
-/* 触摸设备上无 hover —— 操作按钮常驻显示 */
-@media (hover: none) {
-  .item-actions { opacity: 1; }
-}
-.item.active {
-  background: var(--accent-soft);
-  border-left-color: var(--accent);
-}
-.item-main { flex: 1 1 auto; min-width: 0; }
-.title {
-  font-size: var(--fs-13);
-  font-weight: var(--fw-semibold);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.summary {
-  font-size: var(--fs-12);
-  color: var(--text-muted);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  margin-top: 2px;
-}
-.meta {
-  font-size: var(--fs-11);
-  color: var(--text-subtle);
-  margin-top: 4px;
-  font-feature-settings: var(--font-feat-num);
-  letter-spacing: var(--ls-wide);
-}
-.meta-theme { text-transform: lowercase; }
-.dot { opacity: .5; margin: 0 4px; }
-
-.item-actions {
-  display: flex; gap: 2px;
-  opacity: 0;
-  transition: var(--t-quick);
-}
-.icon-btn {
-  width: 22px; height: 22px;
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid transparent;
-  border-radius: var(--radius-1);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: var(--fs-13);
-}
-.icon-btn:hover { background: var(--surface-raised); border-color: var(--border); color: var(--text); }
-.icon-btn.danger:hover { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
-
-.rename-row { display: flex; }
-.rename-input {
-  width: 100%; height: 22px; padding: 0 6px;
-  font: inherit; font-size: var(--fs-13); font-weight: var(--fw-semibold);
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-1);
-  background: var(--surface-raised);
-  color: var(--text);
-  outline: none;
-}
-
-.empty {
-  list-style: none;
-  padding: var(--sp-6) var(--sp-5);
-}
-.empty-body {
-  text-align: center;
-  display: flex; flex-direction: column; align-items: center; gap: var(--sp-3);
-}
-.empty-title { color: var(--text); font-size: var(--fs-13); font-weight: var(--fw-medium); }
-.empty-hint { color: var(--text-muted); font-size: var(--fs-12); line-height: var(--lh-normal); max-width: 240px; }
-
-.drawer-foot {
-  flex: 0 0 auto;
-  padding: var(--sp-3) var(--sp-4);
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  font-size: var(--fs-11);
-  color: var(--text-subtle);
-  letter-spacing: var(--ls-wide);
-}
-.cap-bar {
-  height: 2px; background: var(--border); border-radius: var(--radius-pill); overflow: hidden;
-  margin-bottom: 4px;
-}
-.cap-fill {
-  height: 100%; background: var(--accent); transition: var(--t-quick);
-}
-.cap-text { display: flex; gap: 4px; align-items: baseline; }
-
-/* ---- 移动端适配 ---- */
-@media (max-width: 767px) and (pointer: coarse), (max-width: 540px) {
-  /* 关闭按钮触摸目标走 PanelHeader 内的 .panel-header__close（44px 由该原语自身保证） */
-  .icon-btn { width: 40px; height: 40px; font-size: var(--fs-15); }
-  .btn { height: 40px; padding: 0 var(--sp-4); font-size: 16px; }
-  .search-input { height: 40px; font-size: 16px; }
-  .rename-input { height: 36px; font-size: 16px; }
-  /* head-tools 两行堆叠：新建在第一行，搜索单独一行 */
-  .head-tools { flex-wrap: wrap; }
-  .search { flex: 1 1 100%; order: 2; }
-  /* io-row 同理换行更容易阅读 */
-  .io-row { gap: var(--sp-3); }
-  .io-row .btn { flex: 1 1 calc(50% - var(--sp-3)); justify-content: center; }
-  .io-feedback { flex: 1 1 100%; text-align: center; }
-  /* 草稿项：按钮常驻，留出右侧可触区域 */
-  .item { padding: var(--sp-4); }
-  .item-actions { gap: 4px; }
-}
+.drawer { width: 100%; min-width: 0; box-sizing: border-box; height: 100%; min-height: 0; display: flex; flex-direction: column; background: var(--surface); color: var(--text); font-family: var(--font-text); font-size: var(--fs-13); }
+button, input, summary { font: inherit; }
+button, summary { cursor: pointer; }
+button:disabled { opacity: .55; cursor: wait; }
+button:focus-visible, summary:focus-visible, input:focus-visible, .backup-actions label:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+svg { flex: 0 0 auto; color: var(--text-muted); }
+.sidebar-brand { box-sizing: border-box; display: flex; align-items: center; gap: 9px; min-height: 84px; padding: 18px 16px 15px; flex: 0 0 auto; }
+.sidebar-brand .brand-mark { color: var(--accent); flex: 0 0 25px; }
+.sidebar-brand > div { min-width: 0; }
+.sidebar-brand strong { display: block; font-family: var(--font-text); font-size: 17px; font-weight: var(--fw-bold); letter-spacing: -.045em; color: var(--text); white-space: nowrap; }
+.sidebar-brand span { display: block; margin-top: 5px; font-size: var(--fs-11); color: var(--text-subtle); }
+.sidebar-close { display: none; flex: 0 0 auto; margin-left: auto; padding: 5px; border: 0; background: transparent; color: var(--text-muted); font-size: var(--fs-12); }
+.file-library { padding: 8px 14px 14px; display: flex; flex-direction: column; gap: 10px; min-height: 0; flex: 0 0 auto; }
+.file-library.connected { flex: 1 1 auto; }
+.library-heading { display: flex; align-items: center; gap: 9px; min-height: 32px; padding: 0 3px; flex: 0 0 auto; }
+.library-heading .heading-icon, .browser-heading > svg:first-child { width: 16px; height: 16px; color: var(--text); }
+.library-heading h2 { margin: 0; font-size: var(--fs-13); font-weight: var(--fw-semibold); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; flex: 1; }
+.folder-menu { position: relative; }
+.folder-menu summary, .row-menu summary { list-style: none; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--text-muted); border-radius: var(--radius-1); }
+summary::-webkit-details-marker { display: none; }
+.folder-menu summary:hover, .row-menu summary:hover { background: var(--surface-alt); }
+.folder-menu-content, .row-menu-content { position: absolute; top: calc(100% + 4px); right: 0; z-index: 40; width: 150px; padding: 5px; border: 1px solid var(--border); border-radius: var(--radius-2); background: var(--surface-raised); box-shadow: var(--shadow-lift); }
+.folder-menu-content button, .row-menu-content button { width: 100%; text-align: left; padding: 9px 10px; border: 0; border-radius: var(--radius-1); background: transparent; color: var(--text); font-size: var(--fs-12); }
+.folder-menu-content button:hover, .row-menu-content button:hover { background: var(--surface); }
+.library-tools { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+.search-field { min-width: 0; display: flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 8px; border: 1px solid var(--border); border-radius: var(--radius-2); color: var(--text-muted); background: var(--surface-raised); flex: 1 1 auto; }
+.search-field > svg { width: 14px; height: 14px; color: var(--text-subtle); }
+.search-field input { width: 100%; min-width: 0; height: 30px; padding: 0; outline: 0; border: 0; background: transparent; color: var(--text); font-size: var(--fs-12); }
+.search-field:focus-within { border-color: var(--accent); box-shadow: var(--focus-ring); }
+input::placeholder { color: var(--text-subtle); }
+.icon-button { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; padding: 0; border: 1px solid var(--border); border-radius: var(--radius-2); background: var(--surface-raised); color: var(--text); }
+.icon-button svg { color: inherit; }
+.icon-button:hover:not(:disabled) { border-color: var(--border-strong); background: var(--bg); }
+.new-article-form { display: grid; grid-template-columns: minmax(0, 1fr) 25px 25px; align-items: center; gap: 2px; flex: 0 0 auto; padding: 4px; border: 1px solid var(--border-strong); border-radius: var(--radius-2); background: var(--surface-raised); }
+.new-article-form:focus-within { border-color: var(--accent); }
+.new-article-form input { width: 100%; min-width: 0; height: 28px; padding: 0 4px; border: 0; background: transparent; color: var(--text); font-size: var(--fs-12); outline: none; }
+.create-confirm, .create-cancel { display: grid; place-items: center; width: 25px; height: 25px; padding: 0; border: 0; border-radius: var(--radius-1); }
+.create-confirm { background: var(--accent); color: var(--accent-on); }
+.create-confirm svg { color: inherit; }
+.create-confirm:hover:not(:disabled) { background: var(--accent-hover); }
+.create-cancel { background: transparent; color: var(--text-muted); }
+.create-cancel:hover { background: var(--surface); }
+.rename-input, .tag-editor input { width: 100%; min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius-1); background: var(--surface-raised); color: var(--text); font-size: var(--fs-12); }
+.text-button { padding: 5px 3px; border: 0; background: transparent; color: var(--text-muted); font-size: var(--fs-12); }
+.text-button:hover { color: var(--accent); }
+.article-list { list-style: none; margin: 0 -4px; padding: 3px 3px 8px; min-height: 0; overflow-y: auto; scrollbar-width: thin; flex: 1 1 auto; }
+.article-item { box-sizing: border-box; width: 100%; display: flex; align-items: flex-start; gap: 9px; padding: 10px 9px; margin-bottom: 4px; text-align: left; border: 1px solid transparent; border-left: 2px solid transparent; border-radius: var(--radius-2); background: transparent; color: var(--text); transition: background var(--t-quick), box-shadow var(--t-quick); }
+.article-item > svg { width: 16px; height: 16px; margin-top: 2px; }
+.article-item:hover, .browser-item:hover { background: var(--bg); }
+.article-item.active, .browser-item.active { border-color: var(--border); border-left-color: var(--accent); background: var(--surface-raised); box-shadow: 0 2px 5px color-mix(in srgb, var(--text) 4%, transparent); }
+.article-copy { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
+.article-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: var(--fs-13); line-height: 1.5; overflow-wrap: anywhere; }
+.article-item.active .article-title { font-weight: var(--fw-semibold); }
+.article-date { color: var(--text-subtle); font-family: var(--font-mono); font-size: 10px; font-feature-settings: var(--font-feat-num); letter-spacing: -.02em; }
+.empty-message, .library-empty-state p { color: var(--text-muted); font-size: var(--fs-12); line-height: 1.8; }
+.empty-message { padding: 20px 9px; text-align: left; }
+.library-empty-state { padding: 4px 3px 14px; }
+.library-empty-state p { margin: 0 0 12px; color: var(--text-subtle); font-size: var(--fs-11); line-height: 1.8; }
+.connect-button { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 35px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-2); background: var(--surface-raised); color: var(--text); font-size: var(--fs-12); }
+.connect-button:hover:not(:disabled) { border-color: var(--border-strong); box-shadow: 0 2px 4px color-mix(in srgb, var(--text) 4%, transparent); }
+.library-error { flex: 0 0 auto; max-height: 100px; overflow-y: auto; color: var(--danger); margin: 0; font-size: var(--fs-12); line-height: 1.7; overflow-wrap: anywhere; }
+.browser-library { flex: 0 0 auto; min-height: 0; margin: auto 14px 0; border-top: 1px solid var(--border); }
+.browser-heading { width: 100%; min-height: 48px; display: flex; align-items: center; gap: 9px; padding: 10px 3px; border: 0; background: transparent; color: var(--text); text-align: left; font-size: var(--fs-12); font-weight: var(--fw-semibold); }
+.draft-count { margin-left: auto; font-size: var(--fs-11); color: var(--text-subtle); font-family: var(--font-mono); font-feature-settings: var(--font-feat-num); font-weight: var(--fw-regular); }
+.section-chevron { transform: rotate(-90deg); }
+.section-chevron.expanded { transform: rotate(0); }
+.browser-panel { max-height: min(42vh, 390px); padding: 0 0 12px; overflow-y: auto; scrollbar-width: thin; }
+.only-browser .browser-library { margin-top: 0; flex: 1 1 auto; display: flex; flex-direction: column; }
+.only-browser .browser-heading { flex: 0 0 auto; }
+.only-browser .browser-panel { flex: 1 1 auto; min-height: 0; max-height: none; }
+.tag-filters { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
+.tag-filters button, .draft-tags button { border: 0; border-radius: var(--radius-1); padding: 3px 6px; background: var(--bg); color: var(--text-muted); font-size: var(--fs-11); line-height: 1.5; }
+.tag-filters button:hover, .tag-filters button.selected { color: var(--accent); background: var(--accent-soft); }
+.browser-list { list-style: none; padding: 8px 0 0; margin: 0; }
+.browser-item { padding: 8px 7px; margin-bottom: 3px; border: 1px solid transparent; border-left: 2px solid transparent; border-radius: var(--radius-2); }
+.browser-item-main { display: flex; align-items: flex-start; gap: 7px; }
+.draft-icon { margin-top: 5px; }
+.draft-select { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: stretch; gap: 4px; padding: 3px 0; text-align: left; background: transparent; color: var(--text); border: 0; }
+.draft-select .article-title { font-size: var(--fs-12); }
+.row-menu { position: relative; flex: 0 0 auto; margin-left: auto; }
+.row-menu summary { width: 23px; height: 26px; opacity: .65; }
+.row-menu[open] summary, .browser-item:hover .row-menu summary, .row-menu summary:focus-visible { opacity: 1; }
+.row-menu-content .danger { color: var(--danger); }
+.draft-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+.draft-tags button { padding: 2px 4px; background: transparent; }
+.tag-editor { padding: 9px 0 0; }
+.tag-editor .tag-filters { margin-top: 0; }
+.tag-editor-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px; }
+.browser-management { margin-top: 13px; padding: 10px 0 0; border-top: 1px solid var(--border); }
+.browser-management > summary { color: var(--text-muted); padding: 3px 0; font-size: var(--fs-11); }
+.backup-actions { display: flex; gap: 7px; margin: 10px 0; }
+.backup-actions button, .backup-actions label { display: inline-flex; align-items: center; justify-content: center; flex: 1; min-width: 0; min-height: 30px; padding: 5px; border: 1px solid var(--border); border-radius: var(--radius-1); background: var(--bg); color: var(--text-muted); font-size: var(--fs-11); cursor: pointer; position: relative; }
+.backup-actions input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.import-feedback, .storage-summary { margin: 7px 0; font-size: var(--fs-11); color: var(--text-muted); line-height: 1.7; overflow-wrap: anywhere; }
+.storage-summary { font-family: var(--font-mono); font-feature-settings: var(--font-feat-num); }
+.storage-summary.warning { color: var(--warn); }
+.sidebar-footer { display: flex; align-items: center; gap: 8px; margin: 0 14px; padding: 16px 3px; border-top: 1px solid var(--border); color: var(--text-subtle); font-size: var(--fs-11); flex: 0 0 auto; }
+.local-dot { width: 5px; height: 5px; flex: 0 0 5px; border-radius: var(--radius-pill); background: var(--success); }
+@media (max-width: 900px) { .sidebar-close { display: block; } .sidebar-brand { min-height: 76px; } .article-item { min-height: 64px; } .browser-panel { max-height: 40vh; } }
+@media (pointer: coarse) { .folder-menu summary, .row-menu summary { min-width: 36px; min-height: 36px; } .search-field, .search-field input, .icon-button, .connect-button { min-height: 40px; } .icon-button { flex-basis: 40px; width: 40px; } .search-field input, .new-article-form input, .rename-input, .tag-editor input { font-size: 16px; } .new-article-form { grid-template-columns: minmax(0, 1fr) 32px 32px; } .create-confirm, .create-cancel { width: 32px; height: 32px; } .folder-menu-content button, .row-menu-content button { min-height: 40px; } }
 </style>

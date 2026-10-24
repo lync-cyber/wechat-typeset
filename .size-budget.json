@@ -154,6 +154,63 @@
       "ext": "css",
       "limit": 250,
       "gzipLimit": 200
+    },
+    {
+      "$comment": "主题检查器只在进入排版流程时加载；从主入口拆出，保持主包原有预算。",
+      "name": "theme inspector chunk (lazy)",
+      "prefix": "ThemeInspector",
+      "ext": "js",
+      "limit": 4400,
+      "gzipLimit": 2000
+    },
+    {
+      "name": "theme inspector stylesheet (lazy)",
+      "prefix": "ThemeInspector",
+      "ext": "css",
+      "limit": 5100,
+      "gzipLimit": 1600
+    },
+    {
+      "name": "publication checklist chunk (lazy)",
+      "prefix": "PublishChecklist",
+      "ext": "js",
+      "limit": 19000,
+      "gzipLimit": 8400
+    },
+    {
+      "name": "publication checklist stylesheet (lazy)",
+      "prefix": "PublishChecklist",
+      "ext": "css",
+      "limit": 4500,
+      "gzipLimit": 1300
+    },
+    {
+      "name": "writing style selector chunk",
+      "prefix": "WritingStyleControl",
+      "ext": "js",
+      "limit": 2800,
+      "gzipLimit": 1500
+    },
+    {
+      "name": "writing style selector stylesheet",
+      "prefix": "WritingStyleControl",
+      "ext": "css",
+      "limit": 1000,
+      "gzipLimit": 500
+    },
+    {
+      "name": "writing style configuration chunk (lazy)",
+      "prefix": "WritingStyleDialog",
+      "ext": "js",
+      "limit": 15500,
+      "gzipLimit": 5600
+    },
+    {
+      "name": "writing style configuration stylesheet (lazy)",
+      "prefix": "WritingStyleDialog",
+      "ext": "css",
+      "limit": 7900,
+      "gzipLimit": 1800
     }
   ]
 }

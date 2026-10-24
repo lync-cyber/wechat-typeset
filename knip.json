@@ -7,6 +7,7 @@
     "scripts/serve.mjs",
     "scripts/check-capabilities-stable.ts",
     "scripts/check-comments.mjs",
+    "scripts/check-secrets.mjs",
     "scripts/sync-showcase.mjs",
     "scripts/_audit-jsdom.mjs",
     "scripts/install-git-hooks.mjs",
@@ -26,8 +27,6 @@
     "audit-report/**",
     "dist/**",
     "src/core/themes/_template/**",
-    "scripts/audit/arch.test.ts",
-    "scripts/audit/.dep-cruiser.cjs",
     "src/core/themes/_shared/spec/theme-to-spec.ts"
   ],
   "ignoreBinaries": [
@@ -42,7 +41,6 @@
     "jscpd",
     "madge",
     "ts-morph",
-    "tsarch",
     "@types/qrcode-generator",
     "tsx"
   ]

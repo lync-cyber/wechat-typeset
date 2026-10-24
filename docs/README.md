@@ -31,14 +31,16 @@
 
 项目按"用户意图边界"拆成 3 个工作流 skill + 1 个路由入口；同一份引擎另以 Node 库 / CLI / MCP Server 三种形态分发，schema 同源。
 
+默认流程是**普通 Markdown 写作与内容编辑 → 选主题 → lint → render**。扩展标注是可选分支：仅在用户需要特殊呈现时，运行 `markdown annotate`、保守筛选建议、再用 `markdown annotate apply` 应用。零容器、零行内扩展也可直接交付；不为文章长度或主题签名补摘要、金句、数据卡或 CTA。标注保留原文字句、事实和顺序，内容改写单独处理。
+
 ### Skills（挂载到 Claude / Cursor / 其它 Agent）
 
 | 文档 | 面向 | 何时使用 |
 | --- | --- | --- |
 | [../skills/wechat-typeset/SKILL.md](../skills/wechat-typeset/SKILL.md) | 不确定走哪条线时的路由入口 | 用户笼统说"想发到公众号"，由本 skill 判断分发 |
 | [../skills/wechat-typeset-author-persona/SKILL.md](../skills/wechat-typeset-author-persona/SKILL.md) | 主题视觉设计 | 造新主题 / 派生现有主题 / 改色板与 motif |
-| [../skills/wechat-typeset-annotate-markdown/SKILL.md](../skills/wechat-typeset-annotate-markdown/SKILL.md) | 写作契约改写 | 普通 markdown → 满足契约的 markdown（含 `:::` 容器） |
-| [../skills/wechat-typeset-export-richtext/SKILL.md](../skills/wechat-typeset-export-richtext/SKILL.md) | 渲染 / 导出 / 复制 | 契约 md → 可粘贴公众号的富文本 HTML |
+| [../skills/wechat-typeset-annotate-markdown/SKILL.md](../skills/wechat-typeset-annotate-markdown/SKILL.md) | 可选保守标注 / 语法修复 | 明确要求添加排版块或修复扩展语法时使用；允许零标注 |
+| [../skills/wechat-typeset-export-richtext/SKILL.md](../skills/wechat-typeset-export-richtext/SKILL.md) | 渲染 / 导出 / 复制 | 普通或扩展 Markdown → 可粘贴公众号的富文本 HTML，无需先标注 |
 | [../skills/_shared/references/](../skills/_shared/references/) | 给 LLM 读的共享参考 | `hard-rules.md` / `motif-ast.md` / `personas.md` / `container-vocabulary.md` / `cli-contract.md` |
 
 ### 包级入口（与 skill 同源，可独立挂载）

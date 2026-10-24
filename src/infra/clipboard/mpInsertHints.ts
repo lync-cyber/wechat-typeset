@@ -1,5 +1,5 @@
 /**
- * 在复制路径里把 voice-card / video-card 容器旁注入微信识别的 mpvoice / mpvideo 注释串。
+ * 为预览和复制的共同 HTML 注入微信识别的 mpvoice / mpvideo 注释串。
  *
  * 命名分层：作者面 fence 是 voice-card / video-card（语义化）；平台契约
  * （HTML 注释 + data-wx-mp-kind 锚点）仍是 mpvoice / mpvideo（微信后台读这串）。
@@ -7,7 +7,6 @@
  *
  * 为什么放在 infra/clipboard 而不是渲染管线：
  *   - renderer 不知道下游平台是哪个；mp 注释串是"微信生态专属粘贴技巧"。
- *   - 预览里这些注释纯属噪音；只在复制时为粘贴侧准备。
  *   - 与 outlinkDegrade 同位（剪贴板适配层），调用次序：先 wxPatch，再 outlink，
  *     再 mpInsertHints —— 注释插入是最后一步，避免被 patch 流程吞掉。
  *

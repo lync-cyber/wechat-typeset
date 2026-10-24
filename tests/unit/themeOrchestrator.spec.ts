@@ -13,7 +13,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApp, defineComponent, h, markRaw, nextTick, ref } from 'vue'
+import { createApp, defineComponent, h, markRaw, nextTick, ref, type Ref } from 'vue'
 import {
   useThemeOrchestrator,
   type UseThemeOrchestratorDeps,
@@ -28,11 +28,11 @@ interface Mounted {
   deps: UseThemeOrchestratorDeps & { showUndo: ReturnType<typeof vi.fn> }
 }
 
-function mountOrchestrator(): Mounted {
+function mountOrchestrator(fileArticleActive?: Ref<boolean>): Mounted {
   const showUndo = vi.fn()
   const activeDraftId = ref<string | null>(null)
   const draftIndexTick = ref(0)
-  const deps = { showUndo, activeDraftId, draftIndexTick }
+  const deps = { showUndo, activeDraftId, draftIndexTick, fileArticleActive }
   const Comp = defineComponent({
     setup() {
       useThemeOrchestrator(deps)
@@ -92,6 +92,18 @@ describe('resetCustomThemeWithUndo', () => {
 })
 
 describe('autoSwapPristineSample', () => {
+  it('文件文章即使恰好等于内置样例，切主题也不能替换磁盘正文', async () => {
+    mounted!.unmount()
+    mounted = mountOrchestrator(ref(true))
+    const fileText = getSample('default')
+    md.value = fileText
+    baseThemeId.value = 'tech-geek'
+    await nextTick()
+    expect(md.value).toBe(fileText)
+    expect(baseThemeId.value).toBe('tech-geek')
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('tech-geek')
+  })
+
   it('md 是某主题 sample → 切主题后跟着换 sample', async () => {
     md.value = getSample('default')
     baseThemeId.value = 'tech-geek'

@@ -20,7 +20,11 @@ import { HARD_REMOVE_TAGS, IFRAME_SRC_ALLOW } from '../../rules'
 
 export function stripForbiddenTags(html: string): string {
   const { container } = parseFragment(html)
+  stripForbiddenTagsInPlace(container)
+  return serializeFragment(container)
+}
 
+export function stripForbiddenTagsInPlace(container: HTMLElement): void {
   // 收集后再删，避免改动中结构
   const toRemove: Element[] = []
 
@@ -40,6 +44,4 @@ export function stripForbiddenTags(html: string): string {
   }
 
   for (const el of toRemove) el.remove()
-
-  return serializeFragment(container)
 }

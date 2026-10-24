@@ -25,7 +25,7 @@ CONFIG_FILE="${SCRIPT_DIR}/audit.config.sh"
   AUDIT_SRC="src"; AUDIT_OUT="audit-report"; AUDIT_TSCONFIG="tsconfig.json"
   ENABLE_KNIP="true"; ENABLE_JSCPD="true"; ENABLE_ESLINT="true"
   ENABLE_COMPLEXITY="true"; ENABLE_CIRCULAR="true"
-  ENABLE_DEPCRUISE="true"; ENABLE_TSARCH="false"
+  ENABLE_DEPCRUISE="true"
   ENABLE_REPORT="true"; ENABLE_GRAPH="false"
   THRESHOLD_DUPLICATION=15; THRESHOLD_CIRCULAR=0
   THRESHOLD_DEAD_EXPORTS=-1; THRESHOLD_ARCH_VIOLATIONS=0
@@ -33,7 +33,6 @@ CONFIG_FILE="${SCRIPT_DIR}/audit.config.sh"
   JSCPD_MIN_TOKENS=40; JSCPD_MIN_LINES=5
   JSCPD_IGNORE="**/*.test.ts,**/*.spec.ts,**/*.d.ts"
   MADGE_EXTENSIONS="ts,tsx"; MADGE_EXCLUDE="\.test\.|\.spec\.|\.d\.ts$"
-  TSARCH_RUNNER="vitest"
   VERBOSE="false"; FAIL_FAST="false"; COLOR="true"
 }
 
@@ -73,7 +72,6 @@ ENABLE_ESLINT=$(apply_filter eslint)
 ENABLE_COMPLEXITY=$(apply_filter complexity)
 ENABLE_CIRCULAR=$(apply_filter circular)
 ENABLE_DEPCRUISE=$(apply_filter depcruise)
-ENABLE_TSARCH=$(apply_filter tsarch)
 
 # ── 工具函数 ─────────────────────────────────────────
 FAILS=()
@@ -228,7 +226,7 @@ fi
 # ── 6. dependency-cruiser — 架构规则 ─────────────────
 if [[ "$ENABLE_DEPCRUISE" == "true" ]]; then
   log "[depcruise] 架构边界规则校验…"
-  DCFG="${SCRIPT_DIR}/.dep-cruiser.cjs"
+  DCFG="${PROJECT_ROOT}/.dependency-cruiser.cjs"
   if [[ ! -f "$DCFG" ]]; then
     warn "$DCFG 不存在，跳过 depcruise"
   else
@@ -256,35 +254,6 @@ if [[ "$ENABLE_DEPCRUISE" == "true" ]]; then
   fi
 else
   skip depcruise
-fi
-
-# ── 7. ts-arch 架构单测（vitest 运行） ────────────────
-if [[ "$ENABLE_TSARCH" == "true" ]]; then
-  log "[ts-arch] 架构约束单测…"
-  ARCH_TEST="${SCRIPT_DIR}/arch.test.ts"
-  if [[ ! -f "$ARCH_TEST" ]]; then
-    warn "$ARCH_TEST 不存在"
-  else
-    if [[ "$TSARCH_RUNNER" == "vitest" ]]; then
-      if npx vitest run "$ARCH_TEST" --reporter=json \
-           --outputFile="$AUDIT_OUT/tsarch.json" 2>&1 | tail -5; then
-        ok "ts-arch: 所有架构约束通过"
-      else
-        warn "ts-arch: 架构约束有失败项"
-        FAILS+=("tsarch_tests")
-      fi
-    else
-      if npx jest "$ARCH_TEST" --json \
-           --outputFile="$AUDIT_OUT/tsarch.json" 2>&1 | tail -5; then
-        ok "ts-arch: 所有架构约束通过"
-      else
-        warn "ts-arch: 架构约束有失败项"
-        FAILS+=("tsarch_tests")
-      fi
-    fi
-  fi
-else
-  skip tsarch
 fi
 
 # ════════════════════════════════════════════════════

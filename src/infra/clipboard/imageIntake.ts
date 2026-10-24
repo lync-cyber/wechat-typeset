@@ -87,10 +87,8 @@ export const base64Provider: ImageProvider = {
     if (file.size <= threshold) {
       return readAsDataUrl(file)
     }
-    const baseQuality = opts.quality ?? 0.85
-    const target = opts.targetBytes ?? DEFAULT_TARGET_BYTES
     try {
-      const candidate = await encodeWithTargetBudget(file, baseQuality, target)
+      const candidate = await compressImageToWebp(file, opts)
       // 压缩后的体积若大于原图（SVG 转 webp 有时会变大），回退
       if (candidate.length < file.size * 1.5) return candidate
     } catch {
@@ -98,6 +96,11 @@ export const base64Provider: ImageProvider = {
     }
     return readAsDataUrl(file)
   },
+}
+
+/** 文件文章必须写入真实 WebP：复用质量阶梯，小图也编码，失败交由调用方反馈。 */
+export function compressImageToWebp(file: File, opts: ImageUploadOptions = {}): Promise<string> {
+  return encodeWithTargetBudget(file, opts.quality ?? 0.85, opts.targetBytes ?? DEFAULT_TARGET_BYTES)
 }
 
 /**

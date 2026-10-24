@@ -8,7 +8,7 @@
  *
  * 因为这层 shim 同时撑住了 node + jsdom 两种 environment，凡是只用
  * localStorage（不直接调 document/window/HTMLElement）的 spec 都能落在 node 上
- * 跑——vite.config.ts 的 environmentMatchGlobs 据此把绝大多数 spec 留在 node。
+ * 跑——vite.config.ts 的 jsdom / node 两个 test project 据此把绝大多数 spec 留在 node。
  */
 
 class InMemoryStorage implements Storage {

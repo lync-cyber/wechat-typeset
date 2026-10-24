@@ -161,8 +161,16 @@ export function render(input: RenderInput): RenderOutput {
 
   // inspect 必须在 patch 之前：patches 幂等，应用后计数归零，"渲染透明度面板"就看不到改动列表。
   const platform = getPlatform(input.platform ?? DEFAULT_PLATFORM_ID)
-  const patchLog: PatchLog = platform.inspect ? platform.inspect(inlined) : { entries: [], total: 0 }
-  const finalHtml = platform.patch(inlined, input.wxPatch)
+  let patchLog: PatchLog
+  let finalHtml: string
+  if (platform.patchWithLog) {
+    const patched = platform.patchWithLog(inlined, input.wxPatch)
+    patchLog = patched.patchLog
+    finalHtml = patched.html
+  } else {
+    patchLog = platform.inspect ? platform.inspect(inlined) : { entries: [], total: 0 }
+    finalHtml = platform.patch(inlined, input.wxPatch)
+  }
 
   const wordCount = countWords(body)
   const readingTime = Math.max(1, Math.ceil(wordCount / 300))

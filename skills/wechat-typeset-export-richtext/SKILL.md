@@ -1,22 +1,22 @@
 ---
 name: wechat-typeset-export-richtext
-description: 把满足 wechat-typeset 写作契约的 Markdown 渲染并导出为可直接粘贴到微信公众号编辑器的富文本 HTML。内置多套 persona 即选即用，支持自定义 PersonaSpec。触发词："渲染出来" / "导出公众号" / "一键复制" / "生成最终 HTML" / "粘到公众号" / "比较几套主题哪个更好"。渲染管线自动处理微信硬约束（剥 font-family / SVG 颜色规范化 / flex 降级 block 等），写作者无需手工修。
+description: 把普通 Markdown 或带合法扩展语法的 Markdown 直接渲染、导出为微信公众号富文本 HTML，无需先添加容器。适用于“按公众号格式排版”“渲染出来”“导出公众号”“一键复制”“挑主题”“比较几套主题”。支持内置 persona 和自定义 PersonaSpec，渲染管线自动处理微信样式约束。
 ---
 
 # wechat-typeset · 渲染导出
 
-把"满足契约的 markdown"渲染成"可粘贴的富文本 HTML"。**本 skill 不改 markdown 内容**——只跑渲染管线、应用 wxPatch、复制富文本。
+把普通 Markdown 或带合法扩展语法的 Markdown 渲染成可粘贴的富文本 HTML。**不要求先标注，不改正文，不添加组件**；只选择主题、运行渲染管线并导出。完全没有 `:::` 或行内扩展也是有效输入。
 
 ## 边界
 
-本 skill 处理 **契约 markdown → 公众号富文本 HTML** 的渲染导出，不改 markdown 内容、不造主题。完整的进入/退出信号见**路由总表**：[`../wechat-typeset/SKILL.md#routing-table`](../wechat-typeset/SKILL.md#routing-table)。
+本 skill 处理 **普通或扩展 Markdown → 公众号富文本 HTML**，不改 markdown 内容、不造主题。完整的进入/退出信号见**路由总表**：[`../wechat-typeset/SKILL.md#routing-table`](../wechat-typeset/SKILL.md#routing-table)。
 
 最常见的退出信号（渲染失败时尤其要看）：
 
-- ❌ markdown 还没标 `:::` → 转 `wechat-typeset-annotate-markdown`
+- 用户明确要求额外加排版块 → 转 `wechat-typeset-annotate-markdown`；缺少 `:::` 本身不是转向理由
 - ❌ 要造新主题 → 转 `wechat-typeset-author-persona`
 - ❌ 渲染失败 `WtException(SPEC_INVALID)` → 转 `wechat-typeset-author-persona` 修 spec
-- ❌ 渲染失败 `WtException(CONTRACT_VIOLATION)` 或 lint 报 `unknown_container` → 转 `wechat-typeset-annotate-markdown` 修 markdown
+- ❌ 渲染失败 `WtException(CONTRACT_VIOLATION)` 或 lint 报 `unknown_container` → 转 `wechat-typeset-annotate-markdown` 只修对应语法，不附带新增标注
 
 ## CLI / MCP 入口
 
@@ -35,7 +35,7 @@ description: 把满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 
 权威映射 / 错误返回 见 [`../_shared/references/mcp-cli-mapping.md`](../_shared/references/mcp-cli-mapping.md)；命令签名 / 退出码 / JSON 形状 见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md)；渲染失败的 WtException 转向 见 [`../_shared/references/error-routing.md`](../_shared/references/error-routing.md)。
 
-> **工作目录约定**：所有中间产物落在 `tmp/`（已在 `.gitignore`）。如不存在请先 `mkdir -p tmp`。
+> **工作目录约定**：中间产物落在已被 Git 忽略的 `tmp/`，建议使用本次任务子目录；交付后清理不再需要的过程文件。
 
 ## 主线工作流（4 步）
 
@@ -43,7 +43,7 @@ description: 把满足 wechat-typeset 写作契约的 Markdown 渲染并导出�
 
 ```
 Task Progress:
-- [ ] 1. lint --persona 确认契约合法（主题敏感）→ ok=true 且 errorCount=0
+- [ ] 1. 沿用用户指定主题，否则推荐现有主题或用 default；lint 确认输入合法，不要求有容器
 - [ ] 2. render → output.html → JSON 含 html / wordCount / readingTime
 - [ ] 3. （可选）render-gallery 多 persona 比较 → gallery.html 含 N 个并排预览
 - [ ] 4. 浏览器打开 → 全选复制 → 粘公众号 / 或 copy-richtext → 公众号编辑器有内容
@@ -65,7 +65,7 @@ npm run cli -- lint --input <md> --persona <id>
 | 输出 | 动作 |
 | --- | --- |
 | `ok=true` 且 `warningCount=0` | 直接进 Step 2 |
-| `ok=true` 但 `warningCount>0` | 通常是 `wrong_theme_namespace`（用了 theme:* 容器但当前主题不是其专属）。渲染仍出 HTML 但失去签名视觉。**告知用户后再决定是否进 Step 2** |
+| `ok=true` 但 `warningCount>0` | 逐条检查并在交付时说明相关限制；普通非阻塞 warning 不要求添加容器，也不阻塞已授权的渲染 |
 | `ok=false`（含 error） | 修完再 render。render 阶段才发现错误成本更高 |
 
 issue 修复指南见 [`../_shared/references/cli-contract.md`](../_shared/references/cli-contract.md#lint-issue-修复表)。
@@ -130,8 +130,9 @@ tsx skills/wechat-typeset-export-richtext/scripts/copy-richtext.ts \
 
 | 场景 | 动作 |
 | --- | --- |
-| 用户在 annotate-markdown 阶段已经定了 persona | 直接用，跳过 gallery 比较 |
-| 用户没定 | 先跑 `render-gallery.ts` 看 `default` + 受众强匹配的 2 套（共 3 套），让用户选 |
+| 用户指定了 persona（不论是否经过标注） | 直接用 |
+| 用户没定 | 按受众推荐现有主题，无明显偏好时用 default；无需先标注或创作新主题 |
+| 用户要求比较 | 再跑 render-gallery 或 markdown render-batch 比较候选主题；同一份原文，不为主题补组件 |
 
 ## 渲染失败排查路径
 

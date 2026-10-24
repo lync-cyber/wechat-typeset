@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 import type { PatchLog } from '../../core/pipeline/platforms/types'
 
 const props = defineProps<{ html: string; patchLog?: PatchLog }>()
@@ -12,6 +12,22 @@ const emit = defineEmits<{
 
 const iframeEl = ref<HTMLIFrameElement | null>(null)
 let shellReady = false
+let sizeObserver: ResizeObserver | null = null
+
+function fitViewport() {
+  const doc = iframeEl.value?.contentDocument
+  const page = doc?.querySelector<HTMLElement>('.phone-viewport')
+  const width = doc?.documentElement.clientWidth ?? 0
+  if (page && width > 0) page.style.zoom = String(Math.min(1, width / 375))
+}
+
+watch(iframeEl, (frame) => {
+  sizeObserver?.disconnect()
+  if (!frame || typeof ResizeObserver === 'undefined') return
+  sizeObserver = new ResizeObserver(fitViewport)
+  sizeObserver.observe(frame)
+})
+onBeforeUnmount(() => sizeObserver?.disconnect())
 
 /** 暴露 iframe 元素给父组件（长图导出等场景需要访问 iframe.contentDocument） */
 function getIframe(): HTMLIFrameElement | null {
@@ -67,6 +83,7 @@ const SHELL_DOC = `<!doctype html>
   }
   .phone-viewport {
     width: 375px;
+    flex: 0 0 375px;
     min-height: 100vh;
     background: #ffffff;
     box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
@@ -74,8 +91,7 @@ const SHELL_DOC = `<!doctype html>
   }
   /* 当 iframe 宿主窄于 375 时，等比缩放，避免横向滚动 */
   @media (max-width: 374px) {
-    body { align-items: flex-start; }
-    .phone-viewport { transform: scale(calc(100vw / 375)); transform-origin: top left; }
+    body { align-items: flex-start; justify-content: flex-start; }
   }
 </style>
 </head>
@@ -90,6 +106,7 @@ function applyHtml(): boolean {
   const slot = doc.querySelector('.phone-viewport') as HTMLElement | null
   if (!slot) return false
   slot.innerHTML = props.html
+  fitViewport()
   return true
 }
 
@@ -124,10 +141,12 @@ watch(() => props.html, () => {
 
 <template>
   <div class="preview-shell">
-    <div class="preview-meta mono">
-      <span class="meta-dot" />
-      移动端视口 · 所见即所得
+    <div class="preview-meta">
+      <span class="preview-label">公众号预览</span>
+      <span class="viewport-badge mono" title="与公众号正文一致的 375px 视口">375 px</span>
+      <span class="preview-fidelity" title="预览与复制使用同一份 HTML">所见即所得</span>
     </div>
+    <div class="preview-canvas">
     <iframe
       ref="iframeEl"
       class="preview-frame wechat-typeset-preview"
@@ -136,6 +155,7 @@ watch(() => props.html, () => {
       title="wechat-typeset 预览"
       @load="onIframeLoad"
     />
+    </div>
     <div
       v-if="props.patchLog && props.patchLog.total > 0"
       class="transparency-strip"
@@ -170,33 +190,35 @@ watch(() => props.html, () => {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  background: var(--preview-frame);
+  background: var(--bg);
 }
 .preview-meta {
   flex: 0 0 auto;
-  height: 28px;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 14px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: var(--fs-11);
-  letter-spacing: var(--ls-wide);
-  color: var(--text-subtle);
-  background: var(--surface);
+  gap: 8px;
+  font-size: var(--fs-12);
+  color: var(--text-muted);
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
   user-select: none;
 }
-.meta-dot {
-  width: 6px; height: 6px; border-radius: var(--radius-pill);
-  background: var(--accent);
-  display: inline-block;
-}
+.preview-label { color: var(--text); font-weight: var(--fw-medium); white-space: nowrap; }
+.viewport-badge { padding: 2px 5px; border-radius: var(--radius-1); background: var(--surface); font-size: var(--fs-11); white-space: nowrap; }
+.preview-fidelity { margin-left: auto; font-size: var(--fs-11); color: var(--text-subtle); white-space: nowrap; }
+.preview-canvas { display: flex; flex: 1; min-height: 0; padding: 16px 14px 0; background: var(--preview-frame); }
 .preview-frame {
   flex: 1 1 auto;
   width: 100%;
+  min-width: 0;
   border: none;
+  border-radius: 6px 6px 0 0;
   display: block;
   background: var(--preview-frame);
+  box-shadow: var(--shadow-rest);
 }
 
 /* 透明度面板：只在有 patch log 时显示，默认折叠为单行 */

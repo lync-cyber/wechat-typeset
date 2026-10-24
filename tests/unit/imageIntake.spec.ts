@@ -2,17 +2,17 @@
  * 图片入站契约测试
  *
  * 只断言"provider 接口约定 + 文件筛选 + 串行顺序 + 错误降级"这四件事。
- * 真 webp 编码依赖 jsdom 里不可用的 canvas / URL.createObjectURL，
- * 因此所有涉及 DOM 绘图的 case 走 mockProvider 绕过。
+ * 编码测试模拟 canvas 返回值，验证质量阶梯、MIME 与失败语义；真实图像由手动验收核对。
  */
 
-import { afterEach, describe, it, expect } from 'vitest'
+import { afterEach, describe, it, expect, vi } from 'vitest'
 import {
   uploadImages,
   isImageFile,
   setImageProvider,
   getImageProvider,
   base64Provider,
+  compressImageToWebp,
   type ImageProvider,
   DEFAULT_TARGET_BYTES,
   DEFAULT_TOTAL_BUDGET_BYTES,
@@ -226,5 +226,51 @@ describe('setImageProvider · 模块级注入点', () => {
     const md = await uploadImages([makeFile('a.png', 'image/png')], explicit)
     expect(md).toContain('cdn:explicit')
     expect(md).not.toContain('cdn:fork')
+  })
+})
+
+describe('compressImageToWebp · 文件图片编码', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+  })
+
+  function mockCanvas(results: string[]) {
+    vi.stubGlobal('URL', { createObjectURL: vi.fn(() => 'blob:test'), revokeObjectURL: vi.fn() })
+    vi.stubGlobal('Image', class {
+      naturalWidth = 20
+      naturalHeight = 10
+      onload: (() => void) | null = null
+      set src(_value: string) { queueMicrotask(() => this.onload?.()) }
+    })
+    const encode = vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL')
+    for (const result of results) encode.mockReturnValueOnce(result)
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({ drawImage: vi.fn() } as unknown as CanvasRenderingContext2D)
+    return encode
+  }
+
+  it('小图也编码 WebP；本地草稿的原 base64 小图行为保持不变', async () => {
+    const encode = mockCanvas(['data:image/webp;base64,d2VicA=='])
+    const tiny = makeFile('tiny.png', 'image/png', 4)
+    await expect(compressImageToWebp(tiny)).resolves.toBe('data:image/webp;base64,d2VicA==')
+    expect(encode).toHaveBeenCalledWith('image/webp', 0.85)
+    await expect(base64Provider.upload(tiny)).resolves.toMatch(/^data:image\/png;base64,/)
+    expect(encode).toHaveBeenCalledTimes(1)
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:test')
+  })
+
+  it('超过目标时降低质量，复用已有阶梯', async () => {
+    const first = `data:image/webp;base64,${'A'.repeat(100)}`
+    const second = 'data:image/webp;base64,AAAA'
+    const encode = mockCanvas([first, second])
+    await expect(compressImageToWebp(makeFile('a.png', 'image/png'), { quality: 0.85, targetBytes: 40 }))
+      .resolves.toBe(second)
+    expect(encode.mock.calls.map((args) => args[1])).toEqual([0.85, 0.7])
+  })
+
+  it('浏览器回退 PNG 时拒绝，不能以 .webp 扩展名掩盖编码失败', async () => {
+    mockCanvas(['data:image/png;base64,cG5n'])
+    await expect(compressImageToWebp(makeFile('a.png', 'image/png'))).rejects.toThrow('webp encoding unsupported')
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:test')
   })
 })
