@@ -82,6 +82,7 @@ export interface UseThemeOrchestratorDeps {
   showUndo: (message: string, onUndo: () => void) => void
   activeDraftId: Ref<string | null>
   draftIndexTick: Ref<number>
+  fileArticleActive?: Ref<boolean>
 }
 
 /**
@@ -104,7 +105,7 @@ export function useThemeOrchestrator(deps: UseThemeOrchestratorDeps) {
     }
     if (val === prev) return
     resetCustomThemeWithUndo(prev, deps.showUndo)
-    autoSwapPristineSample(val)
+    if (!deps.fileArticleActive?.value) autoSwapPristineSample(val)
     persistDraftTheme(val, deps.activeDraftId, deps.draftIndexTick)
   })
 }

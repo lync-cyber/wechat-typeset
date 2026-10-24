@@ -1,90 +1,49 @@
-/**
- * 移动端草稿抽屉：打开 → 新建 → 列表里出现新条目 → 关闭。
- *
- * 注：移动端 `@media (max-width: 767px)` 下抽屉 fixed 占满视口（toolbar 与 tab 栏之间），
- * `.mobile-drawer-mask` 在抽屉背后、同区域 —— 用户实际上无法点到它关闭。
- * 这对用户 OK（关闭按钮在 header 里很明显），对 E2E 意味着不测"点遮罩关"。
- */
-
+/** 移动文章库：新建/选择浏览器草稿，以及覆盖层关闭与滚动锁。 */
 import { expect, test } from '@playwright/test'
-import { freshMobilePage } from './_helpers'
+import { freshMobilePage, setEditorContent } from './_helpers'
 
-test.beforeEach(async ({ page }) => {
-  await freshMobilePage(page)
-})
+test.beforeEach(async ({ page }) => { await freshMobilePage(page) })
 
-/**
- * IA4 后：点 .draft-switch 先开 popover（最近 5 篇 + 新建 + 全部）。
- * "全部草稿与搜索"才打开完整 DraftDrawer。
- * 下面两个测试对齐这条新路径。
- */
-test('移动端：popover → 全部草稿入口 → 抽屉 → 新建草稿 → 列表新增', async ({ page }) => {
+test('移动端：文章库 → 新建浏览器草稿 → 列表新增', async ({ page }) => {
   await page.goto('/')
-
-  // 第一次点击：开 draft popover（不再直接开 drawer）
-  await page.locator('.draft-switch').click()
-  const popover = page.locator('.popover-draft')
-  await expect(popover).toBeVisible()
-
-  // 走"全部草稿与搜索"入口进 drawer
-  await popover.locator('.draft-pop-action', { hasText: '全部草稿' }).click()
+  await page.getByRole('button', { name: '打开文章库', exact: true }).click()
   const drawer = page.locator('aside.drawer')
   await expect(drawer).toBeVisible()
-
-  const beforeCount = await drawer.locator('li.item').count()
-
-  await drawer.locator('.btn.btn-primary', { hasText: '新建' }).first().click()
-
-  await expect.poll(async () => drawer.locator('li.item').count()).toBe(beforeCount + 1)
-
-  await drawer.locator('.btn-text', { hasText: '关闭' }).click()
+  const beforeCount = await drawer.locator('li.browser-item').count()
+  await drawer.getByRole('button', { name: '新建浏览器草稿', exact: true }).click()
+  await expect(drawer.locator('li.browser-item')).toHaveCount(beforeCount + 1)
+  await expect(page.locator('.document-bar h1')).toHaveText('新草稿')
+  await drawer.getByRole('button', { name: '关闭文章库', exact: true }).click()
   await expect(drawer).toBeHidden()
+  await expect(page.locator('.cm-content')).toContainText('新草稿')
 })
 
-test('移动端：抽屉打开时 body 挂 drawer-scroll-lock 类（背景不滚）', async ({ page }) => {
+test('移动端：文章库打开锁定背景滚动，关闭后解除', async ({ page }) => {
   await page.goto('/')
-
-  const bodyBefore = await page.evaluate(() =>
-    document.body.classList.contains('drawer-scroll-lock'),
-  )
-  expect(bodyBefore).toBe(false)
-
-  // popover → 全部草稿入口（新路径，与 IA4 设计一致）
-  await page.locator('.draft-switch').click()
-  await page.locator('.popover-draft .draft-pop-action', { hasText: '全部草稿' }).click()
+  await expect(page.locator('body')).not.toHaveClass(/drawer-scroll-lock/)
+  await page.getByRole('button', { name: '打开文章库', exact: true }).click()
   await expect(page.locator('aside.drawer')).toBeVisible()
-
-  await expect
-    .poll(async () => page.evaluate(() => document.body.classList.contains('drawer-scroll-lock')))
-    .toBe(true)
-
-  await page.locator('aside.drawer .btn-text', { hasText: '关闭' }).click()
+  await expect(page.locator('body')).toHaveClass(/drawer-scroll-lock/)
+  await page.getByRole('button', { name: '关闭文章库', exact: true }).click()
   await expect(page.locator('aside.drawer')).toBeHidden()
-
-  await expect
-    .poll(async () => page.evaluate(() => document.body.classList.contains('drawer-scroll-lock')))
-    .toBe(false)
+  await expect(page.locator('body')).not.toHaveClass(/drawer-scroll-lock/)
 })
 
-/**
- * IA4 直接路径：popover 内"新建草稿"绕过 drawer，1 步达成。
- */
-test('移动端：popover 内"新建草稿" → 直接切到新草稿（不开 drawer）', async ({ page }) => {
+test('移动端：新建后可切回原草稿，正文与当前标题同步', async ({ page }) => {
   await page.goto('/')
-
-  await page.locator('.draft-switch').click()
-  const popover = page.locator('.popover-draft')
-  await expect(popover).toBeVisible()
-
-  // 记录当前 draft-switch 标题（活动草稿名）
-  const titleBefore = await page.locator('.draft-title').innerText()
-
-  await popover.locator('.draft-pop-action', { hasText: '新建草稿' }).click()
-
-  // popover 自动关闭
-  await expect(popover).toBeHidden()
-  // drawer 不应该被打开
-  await expect(page.locator('aside.drawer')).toBeHidden()
-  // 顶部标题切到了新建草稿
-  await expect.poll(async () => page.locator('.draft-title').innerText()).not.toBe(titleBefore)
+  const titleBefore = '返回测试的原草稿'
+  await setEditorContent(page, `# ${titleBefore}\n\n切回时应恢复的原稿正文。`)
+  await page.keyboard.press('ControlOrMeta+S')
+  await expect(page.locator('.document-bar h1')).toHaveText(titleBefore)
+  await page.getByRole('button', { name: '打开文章库', exact: true }).click()
+  const drawer = page.locator('aside.drawer')
+  const original = drawer.locator('.draft-select').filter({ hasText: titleBefore })
+  await expect(original).toHaveCount(1)
+  await drawer.getByRole('button', { name: '新建浏览器草稿', exact: true }).click()
+  await expect(page.locator('.document-bar h1')).toHaveText('新草稿')
+  await original.click()
+  await expect(original).toHaveAttribute('aria-current', 'page')
+  await expect(page.locator('.document-bar h1')).toHaveText(titleBefore)
+  await drawer.getByRole('button', { name: '关闭文章库', exact: true }).click()
+  await expect(page.locator('.cm-content')).toContainText('切回时应恢复的原稿正文。')
 })

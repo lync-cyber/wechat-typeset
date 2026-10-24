@@ -9,7 +9,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { createApp, defineComponent, h, nextTick, ref } from 'vue'
+import { createApp, defineComponent, h, nextTick, ref, watch } from 'vue'
 import { useExportActions } from '../../src/ui/composables/useExportActions'
 import { themeRegistry } from '../../src/core/themes'
 const defaultTheme = themeRegistry.default
@@ -70,19 +70,41 @@ afterEach(() => {
 })
 
 describe('doExportHtml', () => {
-  it('flush + 调 exportHtml + ping 文案 + isExporting 落回', () => {
-    h_!.api.doExportHtml()
+  it('flush + 调 exportHtml + ping 文案 + isExporting 落回', async () => {
+    await h_!.api.doExportHtml()
     expect(h_!.flush).toHaveBeenCalledOnce()
     expect(exportHtml).toHaveBeenCalledOnce()
     expect(h_!.pingTransient).toHaveBeenCalledWith('已导出 HTML')
+    expect(h_!.api.isExporting.value).toBe(false)
+  })
+
+  it('等待本地图片进入最终 HTML 后再导出', async () => {
+    let finish!: () => void
+    h_!.flush.mockImplementationOnce(() => new Promise<void>((resolve) => { finish = resolve }))
+    const exporting = h_!.api.doExportHtml()
+    expect(exportHtml).not.toHaveBeenCalled()
+    h_!.rendered.value.html = '<img src="data:image/webp;base64,AAAA">'
+    finish()
+    await exporting
+    expect(exportHtml).toHaveBeenCalledWith('stem.html', h_!.rendered.value.html, expect.any(Object))
+  })
+
+  it('异步解析失败时停止导出并释放锁', async () => {
+    h_!.flush.mockRejectedValueOnce(new Error('图片权限失效'))
+    await h_!.api.doExportHtml()
+    expect(exportHtml).not.toHaveBeenCalled()
+    expect(h_!.setPersistentError).toHaveBeenCalledWith(expect.stringContaining('图片权限失效'))
     expect(h_!.api.isExporting.value).toBe(false)
   })
 })
 
 describe('doExportMd', () => {
   it('调 exportMd + ping 文案 + 不 flush（md 是源）', () => {
+    h_!.md.value = '# 本地文章\n![](images/local.webp)'
     h_!.api.doExportMd()
     expect(exportMd).toHaveBeenCalledOnce()
+    expect(exportMd).toHaveBeenCalledWith('stem.md', '# 本地文章\n![](images/local.webp)')
+    expect(h_!.flush).not.toHaveBeenCalled()
     expect(h_!.pingTransient).toHaveBeenCalledWith('已导出 Markdown')
     expect(h_!.api.isExporting.value).toBe(false)
   })
@@ -112,6 +134,29 @@ describe('doExportImage', () => {
     const msg = h_!.setPersistentError.mock.calls[0][0] as string
     expect(msg).toContain('canvas fail')
   })
+
+  it('长图等待渲染完成和 Vue 更新预览节点', async () => {
+    const body = h_!.getPreviewBody()!
+    const stop = watch(h_!.rendered, (rendered) => { body.innerHTML = rendered.html })
+    h_!.flush.mockImplementationOnce(async () => {
+      h_!.rendered.value = { ...h_!.rendered.value, html: '<p>完成图片解析的预览</p>' }
+    })
+    vi.mocked(exportImage).mockImplementationOnce(async (element) => {
+      expect(element.innerHTML).toContain('完成图片解析的预览')
+      return { ok: true }
+    })
+    await h_!.api.doExportImage()
+    expect(h_!.flush).toHaveBeenCalledOnce()
+    stop()
+  })
+
+  it('长图解析失败不调用截图并反馈错误', async () => {
+    h_!.flush.mockRejectedValueOnce(new Error('本地图片无法读取'))
+    await h_!.api.doExportImage()
+    expect(exportImage).not.toHaveBeenCalled()
+    expect(h_!.setPersistentError).toHaveBeenCalledWith(expect.stringContaining('本地图片无法读取'))
+    expect(h_!.api.isExporting.value).toBe(false)
+  })
 })
 
 describe('isExporting 互斥锁', () => {
@@ -123,9 +168,10 @@ describe('isExporting 互斥锁', () => {
     )
     const imagePromise = h_!.api.doExportImage()
     await nextTick()
+    await nextTick()
     expect(h_!.api.isExporting.value).toBe(true)
 
-    h_!.api.doExportHtml()
+    await h_!.api.doExportHtml()
     h_!.api.doExportMd()
     expect(exportHtml).not.toHaveBeenCalled()
     expect(exportMd).not.toHaveBeenCalled()
@@ -135,7 +181,7 @@ describe('isExporting 互斥锁', () => {
     expect(h_!.api.isExporting.value).toBe(false)
 
     // 锁释放后再次调用应成功
-    h_!.api.doExportHtml()
+    await h_!.api.doExportHtml()
     expect(exportHtml).toHaveBeenCalledOnce()
   })
 })

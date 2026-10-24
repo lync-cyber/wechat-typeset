@@ -52,7 +52,7 @@ export const renderCommand: Command<RenderInput, RenderOutput> = {
     type: 'object',
     required: ['md'],
     properties: {
-      md: { type: 'string', description: 'Markdown source (may include frontmatter).' },
+      md: { type: 'string', description: 'Plain Markdown or Markdown with optional container/inline extensions (may include frontmatter). Annotation is not required before rendering.' },
       persona: { type: 'string', description: 'Built-in persona id (mutually exclusive with spec).' },
       spec: {
         type: 'object',

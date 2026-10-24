@@ -26,7 +26,12 @@ const FLATTEN_BULLET = '· '
 
 export function patchListWrap(html: string): string {
   const { container } = parseFragment(html)
+  patchListWrapInPlace(container)
+  return serializeFragment(container)
+}
 
+/** 原地处理列表；返回是否扁平化过深层列表，供组合链保留旧 HTML 重解析行为。 */
+export function patchListWrapInPlace(container: HTMLElement): boolean {
   // 1) 先扁平化 ≥ 3 层嵌套的列表（深度 ≥ 2 的 <ul>/<ol> 为外层"太深"子树根）
   //    只收集"depth === 2"那一层，递归 flatten 会顺带吃掉更深的 4/5 层。
   //    这一步必须在 section-wrap 之前，否则扁平化会误操作已包好的层级计数。
@@ -63,7 +68,7 @@ export function patchListWrap(html: string): string {
     section.appendChild(list)
   }
 
-  return serializeFragment(container)
+  return deepRoots.length > 0
 }
 
 /** 数"当前节点之上"的 <ul>/<ol> 祖先数（不含自身）。depth 0 = 顶层列表，2 = 第三层。 */

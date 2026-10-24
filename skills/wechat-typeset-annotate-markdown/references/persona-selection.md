@@ -3,6 +3,8 @@
 > 给 LLM 在标注阶段判断"这篇文章用哪套主题"的精细决策图。
 > 配合速查表 [../../_shared/references/personas.md](../../_shared/references/personas.md) 使用——本文档是"判别"，那是"画像"。
 
+用户已指定主题时直接沿用。选主题不要求给文章添加任何容器；签名匹配只参考原文已经需要的结构，不能反过来为主题补内容。没有明确偏好时可用 `default`，普通 Markdown 直接渲染。推荐器建议新主题也不自动启动主题创作。
+
 ## 输入信号优先级
 
 按以下三层信号判断，**前层强匹配则不必看后层**：
@@ -113,34 +115,14 @@ score = audience_match × 3 + signature_container_match × 2 + style_match × 1
 
 当题材模糊时回退 `default` 是对的；但**用户明显是写散文 / 财经 / 周刊**时还选 default，是浪费 persona 系统。
 
-## 推荐输出格式
+## 推荐命令与输出
 
-`recommend-persona.ts` 输出的结构应该是：
+使用现有 CLI / MCP 命令 `personas recommend`，不依赖独立推荐脚本：
 
-```json
-{
-  "ranked": [
-    {
-      "id": "tech-explainer",
-      "score": 0.92,
-      "reasons": [
-        "受众匹配：教程文 ↔ tech-explainer.audience='教程文档'",
-        "结构匹配：检测到 5+ 代码块 → 偏好 codeBlock=header-bar"
-      ]
-    },
-    {
-      "id": "tech-geek",
-      "score": 0.68,
-      "reasons": [
-        "受众部分匹配：技术题材",
-        "但参照锚点 'Stripe Docs' 强烈指向 tech-explainer，本项次选"
-      ]
-    },
-    { "id": "default", "score": 0.45, "reasons": ["回退选项"] }
-  ],
-  "recommend_new": false,
-  "rationale_one_line": "教程文 + 多代码块 → tech-explainer 是强匹配"
-}
+```bash
+npm run cli -- personas recommend --topic 技术 --style "Stripe Docs"
 ```
 
-`recommend_new: true` 仅在 top-1 score < 0.6 时返回——意味"内置主题都不够匹配，建议造新"。
+返回 `{ ranked, recommendNew, rationaleOneLine }`。候选中的评分与理由字段为 `staticScore` 和 `staticReasons`，其余元信息由注册主题派生；完整契约见 [cli-contract.md](../../_shared/references/cli-contract.md)。
+
+`recommendNew=true` 表示现有主题匹配较弱，仍可选择现有主题或 default。只有用户要求设计新主题时才进入主题创作，不因此给文章补组件。

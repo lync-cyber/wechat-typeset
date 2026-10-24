@@ -17,8 +17,35 @@
  *   - 真机粘贴验收仍走 docs/release-checklist.md 的移动端手动清单（Safari/Chrome 各一次）。
  */
 
-import { expect, test } from '@playwright/test'
-import { freshMobilePage } from './_helpers'
+import { expect, test, type Page } from '@playwright/test'
+import { editorModifier, freshMobilePage } from './_helpers'
+
+/** 先等 CodeMirror 完成文末定位，再制造“光标在文末、视口在顶部”的测试前提。 */
+async function placeCursorBelowViewport(page: Page) {
+  await page.goto('/')
+  const content = page.locator('.cm-content')
+  await content.waitFor()
+  await content.click()
+  await page.keyboard.press(`${await editorModifier(page)}+End`)
+
+  const scroller = page.locator('.cm-scroller')
+  await expect.poll(() => scroller.evaluate((el: HTMLElement) => el.scrollTop)).toBeGreaterThan(0)
+  await scroller.evaluate(async (el: HTMLElement) => {
+    let previous = el.scrollTop
+    let stableFrames = 0
+    while (stableFrames < 3) {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+      const current = el.scrollTop
+      stableFrames = current === previous ? stableFrames + 1 : 0
+      previous = current
+    }
+    el.scrollTop = 0
+    // 等浏览器处理主动回顶，避免把文末定位的延迟滚动误认为键盘 resize 的结果。
+    await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+  })
+  await expect.poll(() => scroller.evaluate((el: HTMLElement) => el.scrollTop)).toBe(0)
+  return scroller
+}
 
 test.describe('visualViewport 键盘遮挡防护', () => {
   test.beforeEach(async ({ page }) => {
@@ -63,56 +90,32 @@ test.describe('visualViewport 键盘遮挡防护', () => {
   })
 
   test('键盘弹起 ≥100px 时 CM scroller 位置被拉动', async ({ page }) => {
-    await page.goto('/')
-    const content = page.locator('.cm-content')
-    await content.waitFor()
-    await content.click()
-    // 光标到文末
-    await page.keyboard.press('End')
-    await page.keyboard.press('Control+End')
-
-    // 手动把 scroller 拉回顶部 —— 现在光标（在末尾）离视口很远
-    const scroller = page.locator('.cm-scroller')
-    await scroller.evaluate((el: HTMLElement) => {
-      el.scrollTop = 0
-    })
-    // 等一帧，确保 scrollTop 写入生效
-    await page.waitForTimeout(50)
-    const before = await scroller.evaluate((el: HTMLElement) => el.scrollTop)
+    const scroller = await placeCursorBelowViewport(page)
 
     // 模拟键盘弹起 240px（远超 100px 阈值）
     await page.evaluate(() => {
       ;(window as unknown as { __simulateKeyboard: (h: number) => void }).__simulateKeyboard(240)
     })
-    // 等 CM 的 dispatch 落盘
-    await page.waitForTimeout(80)
-
-    const after = await scroller.evaluate((el: HTMLElement) => el.scrollTop)
     // 预期光标被卷回视口 → scrollTop 不再是 0
-    expect(after).toBeGreaterThan(before)
+    await expect.poll(() => scroller.evaluate((el: HTMLElement) => el.scrollTop)).toBeGreaterThan(0)
   })
 
   test('键盘弹起 <100px 的轻微缩水（浏览器栏隐藏）走 no-op', async ({ page }) => {
-    await page.goto('/')
-    const content = page.locator('.cm-content')
-    await content.waitFor()
-    await content.click()
-    await page.keyboard.press('Control+End')
-
-    const scroller = page.locator('.cm-scroller')
-    await scroller.evaluate((el: HTMLElement) => {
-      el.scrollTop = 0
-    })
-    await page.waitForTimeout(50)
-    const before = await scroller.evaluate((el: HTMLElement) => el.scrollTop)
+    const scroller = await placeCursorBelowViewport(page)
 
     // 仅 60px 缩水（如浏览器地址栏隐藏）—— 低于阈值不应触发滚动
     await page.evaluate(() => {
       ;(window as unknown as { __simulateKeyboard: (h: number) => void }).__simulateKeyboard(60)
     })
-    await page.waitForTimeout(80)
-
-    const after = await scroller.evaluate((el: HTMLElement) => el.scrollTop)
-    expect(after).toBe(before)
+    // 跨过 CM 的测量帧，确认没有延迟滚动，而非只检查 dispatch 后的瞬时值。
+    const positions = await scroller.evaluate(async (el: HTMLElement) => {
+      const values: number[] = []
+      for (let frame = 0; frame < 3; frame++) {
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+        values.push(el.scrollTop)
+      }
+      return values
+    })
+    expect(positions).toEqual([0, 0, 0])
   })
 })

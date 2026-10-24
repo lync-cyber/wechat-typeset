@@ -5,7 +5,7 @@
  * 副作用入口（pingTransient / persistentError）由调用方注入，避免与具体 UI 反馈耦合。
  */
 
-import { ref, type Ref } from 'vue'
+import { nextTick, ref, type Ref } from 'vue'
 import type { RenderOutput } from '../../core/pipeline'
 import type { Theme } from '../../core/themes/types'
 import { exportHtml, exportImage, exportMd } from '../../infra/exporters/exportFile'
@@ -17,7 +17,7 @@ import type { Palette } from '../../core/themes/_shared/spec/types'
 export interface ExportActionsDeps {
   md: Ref<string>
   rendered: Ref<RenderOutput>
-  flush: () => void
+  flush: () => void | Promise<void>
   activeTheme: Ref<Theme>
   /** 取预览 iframe 的 body，失败返回 null（长图渲染源） */
   getPreviewBody: () => HTMLElement | null
@@ -32,22 +32,24 @@ export function useExportActions(deps: ExportActionsDeps) {
    * 三个导出入口共享互斥锁：
    *   - 长图导出（doExportImage）持续 100~1000ms，期间快速连点会启动多个 html2canvas
    *     实例并发渲染，引发显存膨胀 + 多次浏览器下载弹窗
-   *   - HTML / MD 同步导出本身瞬时完成，但与长图并发也会触发多次下载
+   *   - HTML 导出会等待图片解析；与长图或 Markdown 并发会触发多次下载
    *   - 任一入口在跑时其他入口被静默忽略；UI 上靠 transient 文案"长图渲染中…"提示
    */
   const isExporting = ref(false)
 
-  function doExportHtml() {
+  async function doExportHtml() {
     if (isExporting.value) return
     isExporting.value = true
     try {
-      deps.flush()
+      await deps.flush()
       const colors = deps.activeTheme.value.tokens.colors
       exportHtml(`${deps.fileStem()}.html`, deps.rendered.value.html, {
         background: colors.bg,
         color: colors.text,
       })
       deps.pingTransient('已导出 HTML')
+    } catch (err) {
+      deps.setPersistentError(`HTML 导出失败：${err instanceof Error ? err.message : String(err)}`)
     } finally {
       isExporting.value = false
     }
@@ -69,6 +71,8 @@ export function useExportActions(deps: ExportActionsDeps) {
     isExporting.value = true
     try {
       deps.pingTransient('长图渲染中…', 4000)
+      await deps.flush()
+      await nextTick()
       const body = deps.getPreviewBody()
       if (!body) {
         deps.setPersistentError('长图导出失败：未找到预览节点')
@@ -79,6 +83,8 @@ export function useExportActions(deps: ExportActionsDeps) {
       })
       if (result.ok) deps.pingTransient('已导出长图')
       else deps.setPersistentError(`长图导出失败：${result.error ?? '未知错误'}`)
+    } catch (err) {
+      deps.setPersistentError(`长图导出失败：${err instanceof Error ? err.message : String(err)}`)
     } finally {
       isExporting.value = false
     }

@@ -103,9 +103,17 @@ export function patchSvgSubtree(
   visitor: (el: Element) => void,
 ): string {
   const { container } = parseFragment(html)
+  patchSvgSubtreeInPlace(container, visitor)
+  return serializeFragment(container)
+}
+
+/** 在已解析的片段上执行相同的 SVG 遍历，供组合链共享 DOM。 */
+export function patchSvgSubtreeInPlace(
+  container: HTMLElement,
+  visitor: (el: Element) => void,
+): void {
   const svgs = container.querySelectorAll('svg')
   svgs.forEach((svg) => {
     walkElements(svg, visitor)
   })
-  return serializeFragment(container)
 }

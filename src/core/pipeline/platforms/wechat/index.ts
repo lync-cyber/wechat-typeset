@@ -3,7 +3,7 @@
  * 供 registry 统一派发；同时直接 export，pipeline / public API / 测试从此 import。
  */
 
-import { applyWxPatches, type WxPatchOptions } from './patch'
+import { applyWxPatches, applyWxPatchesWithLog, type WxPatchOptions } from './patch'
 import { inspectPatchTargets } from './inspect'
 import type { PlatformAdapter } from '../types'
 
@@ -13,6 +13,7 @@ export const wechatAdapter: PlatformAdapter = {
   status: 'stable',
   patch: (html, opts) => applyWxPatches(html, (opts ?? {}) as WxPatchOptions),
   inspect: inspectPatchTargets,
+  patchWithLog: (html, opts) => applyWxPatchesWithLog(html, (opts ?? {}) as WxPatchOptions),
 }
 
 export { applyWxPatches, inspectPatchTargets }

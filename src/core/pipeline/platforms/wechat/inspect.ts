@@ -1,11 +1,9 @@
 /**
  * wechat patch 变更计数 —— 供"渲染透明度面板"展示本次渲染对原始 HTML 做的适配。
  *
- * 为什么走"扫描计数"而不是"改装每个 patch 返回 log"：
- *   所有 patch 都是幂等的（满足"看到已处理标记跳过"的性质），因此
- *   **扫描尚未修补的 HTML** 得到的目标数 === 即将被修补的元素数。
- *   这样每个 patch 的函数签名无需改变，测试也不需要配合重写；计数逻辑在
- *   单一模块里维护，一次 DOM 遍历拿到全部数据。
+ * 日志记录尚未修补的 HTML 中的目标，不是各步骤实际执行的修改次数：
+ *   后续被删除的子树、被更早步骤清理的属性，仍按原输入计数。
+ *   计数逻辑在单一模块里维护，一次 DOM 遍历拿到全部数据。
  *
  * 与 ./patch.ts 的约束关系：
  *   每新增一个 patch，此处对应加一段扫描。Stage 3 当前覆盖：
@@ -83,6 +81,16 @@ function pushSample(bucket: PatchLogSample[], sample: PatchLogSample): void {
  * 解析失败 / 空 HTML 返回空 log，不抛异常。
  */
 export function inspectPatchTargets(html: string): PatchLog {
+  if (!html || !html.trim()) return { entries: [], total: 0 }
+  try {
+    return inspectContainer(parseFragment(html).container)
+  } catch {
+    return { entries: [], total: 0 }
+  }
+}
+
+/** 扫描尚未修补的共享 DOM；扫描中断时保留已经收集的日志。 */
+export function inspectContainer(container: HTMLElement): PatchLog {
   const counts = {
     listWrap: 0,
     deepList: 0,
@@ -106,79 +114,76 @@ export function inspectPatchTargets(html: string): PatchLog {
     svgId: [] as PatchLogSample[],
   }
 
-  if (html && html.trim()) {
-    try {
-      const { container } = parseFragment(html)
-      walkElements(container, (el) => {
-        if (el === container) return // `__wx_root__` 是 parseFragment 的包壳，不属于用户 HTML
-        const tag = el.tagName.toLowerCase()
-        const selector = describeSelector(el)
+  try {
+    walkElements(container, (el) => {
+      if (el === container) return // `__wx_root__` 是 parseFragment 的包壳，不属于用户 HTML
+      const tag = el.tagName.toLowerCase()
+      const selector = describeSelector(el)
 
-        if (tag === 'ul' || tag === 'ol') {
-          const parent = el.parentElement
-          if (!parent || !parent.hasAttribute(WRAP_MARKER)) counts.listWrap++
-          // 深层嵌套计数：祖先 <ul>/<ol> 正好 2 层 → 本节点是第三层根
-          let depth = 0
-          let cur: Element | null = el.parentElement
-          while (cur) {
-            const t = cur.tagName.toLowerCase()
-            if (t === 'ul' || t === 'ol') depth++
-            cur = cur.parentElement
+      if (tag === 'ul' || tag === 'ol') {
+        const parent = el.parentElement
+        if (!parent || !parent.hasAttribute(WRAP_MARKER)) counts.listWrap++
+        // 深层嵌套计数：祖先 <ul>/<ol> 正好 2 层 → 本节点是第三层根
+        let depth = 0
+        let cur: Element | null = el.parentElement
+        while (cur) {
+          const t = cur.tagName.toLowerCase()
+          if (t === 'ul' || t === 'ol') depth++
+          cur = cur.parentElement
+        }
+        if (depth === 2) counts.deepList++
+      }
+
+      if (el.hasAttribute('id')) {
+        const id = el.getAttribute('id') ?? ''
+        if (isInSvg(el)) {
+          counts.svgId++
+          pushSample(samples.svgId, { selector, before: `id="${id}"` })
+        } else if (!ID_WHITELIST.test(id)) {
+          counts.strippedId++
+          pushSample(samples.strippedId, { selector, before: `id="${id}"` })
+        }
+      }
+
+      if (HARD_REMOVE_TAGS.has(tag)) {
+        counts.hardTag++
+        pushSample(samples.hardTag, { selector, before: `<${tag}>` })
+      }
+      if (tag === 'iframe') {
+        const src = el.getAttribute('src') ?? ''
+        const allowed = IFRAME_SRC_ALLOW.some((re) => re.test(src))
+        if (!allowed) {
+          counts.disallowedIframe++
+          pushSample(samples.disallowedIframe, { selector, before: `src="${src}"` })
+        }
+      }
+
+      const style = el.getAttribute('style')
+      if (style) {
+        const decls = parseStyle(style)
+        for (const d of decls) {
+          const prop = d.prop.toLowerCase()
+          if (FORBIDDEN_POSITION_PROPS.has(prop)) {
+            counts.strippedPos++
+            pushSample(samples.strippedPos, { selector, before: `${d.prop}: ${d.value}` })
           }
-          if (depth === 2) counts.deepList++
-        }
-
-        if (el.hasAttribute('id')) {
-          const id = el.getAttribute('id') ?? ''
-          if (isInSvg(el)) {
-            counts.svgId++
-            pushSample(samples.svgId, { selector, before: `id="${id}"` })
-          } else if (!ID_WHITELIST.test(id)) {
-            counts.strippedId++
-            pushSample(samples.strippedId, { selector, before: `id="${id}"` })
+          if (prop === 'font-family') {
+            counts.fontFamily++
+            pushSample(samples.fontFamily, { selector, before: `${d.prop}: ${d.value}` })
           }
-        }
-
-        if (HARD_REMOVE_TAGS.has(tag)) {
-          counts.hardTag++
-          pushSample(samples.hardTag, { selector, before: `<${tag}>` })
-        }
-        if (tag === 'iframe') {
-          const src = el.getAttribute('src') ?? ''
-          const allowed = IFRAME_SRC_ALLOW.some((re) => re.test(src))
-          if (!allowed) {
-            counts.disallowedIframe++
-            pushSample(samples.disallowedIframe, { selector, before: `src="${src}"` })
-          }
-        }
-
-        const style = el.getAttribute('style')
-        if (style) {
-          const decls = parseStyle(style)
-          for (const d of decls) {
-            const prop = d.prop.toLowerCase()
-            if (FORBIDDEN_POSITION_PROPS.has(prop)) {
-              counts.strippedPos++
-              pushSample(samples.strippedPos, { selector, before: `${d.prop}: ${d.value}` })
-            }
-            if (prop === 'font-family') {
-              counts.fontFamily++
-              pushSample(samples.fontFamily, { selector, before: `${d.prop}: ${d.value}` })
-            }
-            if (
-              prop === 'display' &&
-              /flex/i.test(d.value) &&
-              !el.hasAttribute(KEEP_FLEX_MARKER)
-            ) {
-              counts.flexFallback++
-              pushSample(samples.flexFallback, { selector, before: `display: ${d.value}` })
-            }
+          if (
+            prop === 'display' &&
+            /flex/i.test(d.value) &&
+            !el.hasAttribute(KEEP_FLEX_MARKER)
+          ) {
+            counts.flexFallback++
+            pushSample(samples.flexFallback, { selector, before: `display: ${d.value}` })
           }
         }
-      })
-    } catch {
-      // parse 失败：返回空 log，别阻塞渲染
-    }
+      }
+    })
+  } catch {
+    // 扫描失败不阻塞渲染；保留异常发生前收集的 counts / samples。
   }
 
   const entries: PatchLogEntry[] = []

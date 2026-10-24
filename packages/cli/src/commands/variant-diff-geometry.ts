@@ -16,14 +16,12 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
+  compareGeometry,
   render as pipelineRender,
   WtException,
-} from '../../../../src/public'
-import {
-  compareGeometry,
   type DesignIR,
   type GeometryDiff,
-} from '../../../../src/core/design-ir'
+} from '../../../../src/public'
 import { parseRenderedToIR } from './_shared/parse-rendered-ir'
 import type { Command } from '../types'
 

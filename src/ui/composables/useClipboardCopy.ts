@@ -3,11 +3,11 @@
  *
  * 一并打包的原因：
  *   - 三处都写 persistentError / transientStatus，合在一个 composable 里共享 setError 入口
- *   - 外链策略（keep/tail-list/drop）是复制时决策的上游输入，跟复制语义绑定
+ *   - 外链策略（keep/tail-list/drop）产出预览和剪贴板共用的最终 HTML
  *   - 分享链接的 hash 解码也是"粘贴链接 → 载入本地"，与复制形成往返对
  */
 
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import type { RenderOutput } from '../../core/pipeline'
 import { copyHtmlToClipboard } from '../../infra/clipboard/copyHtml'
 import { countInlineImages } from '../../infra/clipboard/copyHints'
@@ -31,7 +31,7 @@ const OUTLINK_STRATEGY_KEY = 'wechat-typeset:outlink-strategy'
 export interface ClipboardCopyDeps {
   md: Ref<string>
   rendered: Ref<RenderOutput>
-  flush: () => void
+  flush: () => void | Promise<void>
   baseThemeId: Ref<string>
   activeDraftId: Ref<string | null>
   draftIndexTick: Ref<number>
@@ -73,6 +73,13 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
   const outlinkStrategy = ref<OutlinkStrategy>(readOutlinkStrategy())
   const persistentError = ref<string | null>(null)
   const copyResult = ref<CopyResult | null>(null)
+  const output = computed(() => {
+    const raw = deps.rendered.value
+    const { html: degradedHtml, count } = degradeOutlinks(raw.html, outlinkStrategy.value)
+    const { html } = insertMpHints(degradedHtml)
+    return { rendered: { ...raw, html }, count }
+  })
+  const rendered = computed(() => output.value.rendered)
 
   function setOutlinkStrategy(v: OutlinkStrategy) {
     outlinkStrategy.value = v
@@ -84,40 +91,41 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
   }
 
   async function handleCopy() {
-    deps.flush()
-    const rawHtml = deps.rendered.value.html
-    const { html: degradedHtml, count } = degradeOutlinks(rawHtml, outlinkStrategy.value)
-    // mp 容器注释串注入：在 outlink 降级之后，让公众号粘贴侧识别音视频组件锚点。
-    const { html } = insertMpHints(degradedHtml)
-    // 自检在降级后的 HTML 上跑——若未来 outlink 策略也影响图片，这里能跟上
-    const inlineImages = countInlineImages(html)
-    const plain = deps.md.value
-    const result = await copyHtmlToClipboard(html, plain)
-    if (result.ok) {
-      const details: string[] = []
-      // F4：先放"全文体量"——作者发文前最关心"刚才复制了多少字 / 几段"
-      const wordCount = deps.rendered.value.wordCount
-      const paragraphCount = countParagraphs(plain)
-      if (wordCount > 0) details.push(`${wordCount} 字`)
-      if (paragraphCount > 0) details.push(`${paragraphCount} 段`)
-      if (count > 0 && outlinkStrategy.value === 'tail-list') details.push(`${count} 条外链已尾注`)
-      else if (count > 0 && outlinkStrategy.value === 'drop') details.push(`${count} 条外链已丢弃`)
-      if (inlineImages > 0) details.push(`${inlineImages} 张内联图待微信转存`)
-      if (result.mode !== 'clipboard-api') details.push('已降级走 execCommand')
+    try {
+      await deps.flush()
+      const { rendered: current, count } = output.value
+      const strategy = outlinkStrategy.value
+      const inlineImages = countInlineImages(current.html)
+      const plain = deps.md.value
+      const result = await copyHtmlToClipboard(current.html, plain)
+      if (result.ok) {
+        const details: string[] = []
+        // F4：先放"全文体量"——作者发文前最关心"刚才复制了多少字 / 几段"
+        const wordCount = current.wordCount
+        const paragraphCount = countParagraphs(plain)
+        if (wordCount > 0) details.push(`${wordCount} 字`)
+        if (paragraphCount > 0) details.push(`${paragraphCount} 段`)
+        if (count > 0 && strategy === 'tail-list') details.push(`${count} 条外链已尾注`)
+        else if (count > 0 && strategy === 'drop') details.push(`${count} 条外链已丢弃`)
+        if (inlineImages > 0) details.push(`${inlineImages} 张内联图待微信转存`)
+        if (result.mode !== 'clipboard-api') details.push('已降级走 execCommand')
 
-      // 顶栏短促 label —— 留作兜底（窄屏下 toast 可能被键盘遮挡时仍可见保存条上变化）
-      const base = result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）'
-      deps.pingTransient(details.length > 0 ? `${base}（${details.join(' · ')}）` : base)
+        // 顶栏短促 label —— 留作兜底（窄屏下 toast 可能被键盘遮挡时仍可见保存条上变化）
+        const base = result.mode === 'clipboard-api' ? '已复制' : '已复制（降级）'
+        deps.pingTransient(details.length > 0 ? `${base}（${details.join(' · ')}）` : base)
 
-      // 主反馈：CopyResultToast，含"打开公众号后台"CTA
-      copyResult.value = {
-        message: '已复制到剪贴板',
-        details,
-        cta: { label: '打开公众号后台', url: WECHAT_MP_URL },
+        // 主反馈：CopyResultToast，含"打开公众号后台"CTA
+        copyResult.value = {
+          message: '已复制到剪贴板',
+          details,
+          cta: { label: '打开公众号后台', url: WECHAT_MP_URL },
+        }
+        persistentError.value = null
+      } else {
+        persistentError.value = `复制失败：${result.error ?? '未知错误'}（请换 Chrome/Safari 或关闭跨域 iframe）`
       }
-      persistentError.value = null
-    } else {
-      persistentError.value = `复制失败：${result.error ?? '未知错误'}（请换 Chrome/Safari 或关闭跨域 iframe）`
+    } catch (err) {
+      persistentError.value = `复制失败：${err instanceof Error ? err.message : String(err)}`
     }
   }
 
@@ -182,6 +190,7 @@ export function useClipboardCopy(deps: ClipboardCopyDeps) {
   }
 
   return {
+    rendered,
     outlinkStrategy,
     setOutlinkStrategy,
     persistentError,

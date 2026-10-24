@@ -8,7 +8,7 @@
  */
 
 import { expect, test } from '@playwright/test'
-import { freshMobilePage } from './_helpers'
+import { freshMobilePage, showWritingPreview } from './_helpers'
 
 test.beforeEach(async ({ page }) => {
   await freshMobilePage(page)
@@ -32,7 +32,7 @@ test('带 #share= 打开 → 落为新草稿 + md 注入编辑器', async ({ pag
   await page.goto('/' + makeShareHash(MD, 'default'))
 
   // iframe 的预览里应能看到 "分享链接载入" 标题
-  await page.locator('.mobile-tab', { hasText: '预览' }).click()
+  await showWritingPreview(page)
   const iframe = page.frameLocator('iframe.preview-frame')
   await expect(iframe.locator('h1, h2').filter({ hasText: '分享链接载入' })).toBeVisible()
 
@@ -44,7 +44,7 @@ test('非法 #share= 不会崩，走正常草稿路径', async ({ page }) => {
   // 非法 base64url → decodeShare 返回 null → initActiveDraft 走正常路径
   await page.goto('/#share=!!!not-valid!!!')
   // 页面仍能完整加载
-  await expect(page.locator('.brand-mark')).toHaveText('wechat')
+  await expect(page.getByRole('navigation', { name: '创作流程' })).toBeVisible()
   // 编辑器可见
   await expect(page.locator('.cm-content')).toBeVisible()
 })

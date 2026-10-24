@@ -15,7 +15,7 @@
  *   2. inline style 中的 url()
  */
 
-import { parseStyle, patchSvgSubtree, stringifyStyle } from './utils'
+import { parseFragment, parseStyle, patchSvgSubtreeInPlace, serializeFragment, stringifyStyle } from './utils'
 
 const URL_RE = /url\(\s*(['"])([^'"]*)\1\s*\)/g
 
@@ -24,7 +24,13 @@ function stripQuotesInUrl(s: string): string {
 }
 
 export function patchSvgUrlQuotes(html: string): string {
-  return patchSvgSubtree(html, (el) => {
+  const { container } = parseFragment(html)
+  patchSvgUrlQuotesInPlace(container)
+  return serializeFragment(container)
+}
+
+export function patchSvgUrlQuotesInPlace(container: HTMLElement): void {
+  patchSvgSubtreeInPlace(container, (el) => {
     // 所有属性值里的 url("")
     for (let i = 0; i < el.attributes.length; i++) {
       const attr = el.attributes[i]

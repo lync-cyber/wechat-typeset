@@ -1,7 +1,7 @@
-// .dep-cruiser.js — wechat-typeset 架构边界规则
-// 层级约定（见 audit.config.sh）：core → domain → infra → ui → app
+// wechat-typeset 架构边界规则：pnpm guard:arch / pre-commit / CI 共用
+// 层级约定：core → domain → infra → ui → app；packages/* 只经 src/public 消费引擎
 //   core   只能被依赖，不能依赖任何 src 子目录
-//   domain 可依赖 core
+//   domain 可依赖 core，暂允许 infra/storage 仓储适配器
 //   infra  可依赖 core / domain
 //   ui     可依赖 core / domain / infra
 //   app    可依赖任意层（编排层）
@@ -49,17 +49,13 @@ module.exports = {
       to:   { path: '^src/app' }
     },
 
-    // ── domain：可依赖 core 与 infra/storage（仓储抽象），禁止依赖副作用层（clipboard / share / exporters）与 ui/app ───
-    //
-    // 设计：infra/storage 是 repository pattern 的实现层——纯函数 CRUD（createUserComponent /
-    // listDrafts 等），接口稳定，把它视为 domain 的数据访问端口。其他 infra 子模块（剪贴板写、
-    // 文件分享、图片导出）才是真正的浏览器副作用，domain 不应直接触发，得让 ui/app 编排。
+    // storage 适配器仍直接访问 localStorage；这是明确保留的依赖例外，不是无副作用的领域端口。
     {
       name: 'domain-no-infra-effects',
       severity: 'error',
-      comment: 'domain 不应直接依赖 infra 的副作用层（clipboard / share / exporters）；如需通过 ui/app 编排',
+      comment: 'domain 仅允许依赖 infra/storage；文件、剪贴板、分享与导出由 ui/app 编排',
       from: { path: '^src/domain' },
-      to:   { path: '^src/infra/(clipboard|share|exporters)' }
+      to:   { path: '^src/infra/', pathNot: '^src/infra/storage/' }
     },
     {
       name: 'domain-no-ui',
@@ -117,13 +113,50 @@ module.exports = {
       to:   { path: '^tests/' }
     },
 
+    // ── src/public 是对外出口，内部层不得回头依赖 ─────
+    {
+      name: 'internal-no-public',
+      severity: 'error',
+      comment: 'core / domain / infra 依赖 src/public 会形成「出口 → 内部 → 出口」的环',
+      from: { path: '^src/(core|domain|infra)/' },
+      to:   { path: '^src/public/' }
+    },
+
+    // ── src 与周边目录的方向 ─────────────────────────
+    {
+      name: 'src-no-packages',
+      severity: 'error',
+      comment: 'packages/* 依赖 src；反向依赖会让 npm 包与 CLI/MCP 互相锁死',
+      from: { path: '^src/' },
+      to:   { path: '^packages/' }
+    },
+    {
+      name: 'src-no-build-tools',
+      severity: 'error',
+      comment: 'scripts/ 与 tools/ 是构建期工具，进入运行时会把 Node 依赖带进浏览器 bundle',
+      from: { path: '^src/' },
+      to:   { path: '^(scripts|tools)/' }
+    },
+    {
+      name: 'packages-via-public-api',
+      severity: 'error',
+      comment: 'packages/* 只能经 src/public 消费引擎，深引用内部模块会绕开 capabilities 契约',
+      from: { path: '^packages/' },
+      to:   { path: '^src/', pathNot: '^src/public/' }
+    },
+
     // ── 过深相对路径（结构信号）──────────────────────
+    // 规则只能匹配解析后的路径，所以用「目标不在源文件曾祖父目录之内」表达「≥ 4 层 ../」。
+    // packages/* → src/public 是唯一放行的跨包入口，深度由 packages-via-public-api 管。
     {
       name: 'no-deep-relative',
       severity: 'warn',
-      comment: '超过 3 层的相对路径 import 说明模块边界可能不清晰',
-      from: {},
-      to:   { path: '^\\.\\.[\\/]\\.\\.[\\/]\\.\\.' }
+      comment: '相对路径向上超过 3 层说明模块边界可能不清晰：改走 @/ 别名或经该层的 index 出口',
+      from: { path: '^(.+)/[^/]+/[^/]+/[^/]+/[^/]+$' },
+      to:   {
+        dependencyTypes: ['local'],
+        pathNot: ['^$1/', '^src/public/']
+      }
     },
 
     // ── 禁止依赖 node_modules 内部嵌套路径 ────────────
@@ -137,10 +170,10 @@ module.exports = {
 
   options: {
     doNotFollow: {
-      path: 'node_modules|dist|build|coverage|audit-report|\\.d\\.ts$'
+      path: 'node_modules|\\.d\\.ts$'
     },
     exclude: {
-      path: 'node_modules|dist|build|coverage|audit-report|\\.d\\.ts$|__snapshots__'
+      path: '(^|/)(node_modules|dist|coverage|audit-report|__snapshots__)/|\\.d\\.ts$'
     },
     tsPreCompilationDeps: true,
     tsConfig: {

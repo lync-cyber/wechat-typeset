@@ -200,6 +200,10 @@ export function getRecommendedVariantsFor(
   })
 }
 
+/** `packOf(spec)` 取容器所属扩展包，`namespaceOf(pack)` 归到 base / pack / theme 三类，用于按包分组展示词汇表。 */
+export { packOf, namespaceOf } from '../core/vocabulary'
+export type { PackNamespace } from '../core/vocabulary'
+
 // region 校验
 
 /** 对任意 PersonaSpec 跑硬约束校验。LLM 生成的 spec 先靠 JSON Schema 做结构拦截再传入。 */
@@ -325,6 +329,14 @@ export function renderMotifWithValues(
 ): string {
   return renderMotifTemplate(template, values, tokens)
 }
+
+// region 能力清单与设计稿 IR（CLI / MCP 共用的纯函数）
+
+export { buildCapabilitiesV3 } from '../core/capabilities/build'
+export type { BuildCapabilitiesV3Options, CapabilitiesV3 } from '../core/capabilities/build'
+
+export { compareGeometry, lookupToken, styleToBox } from '../core/design-ir'
+export type { DesignIR, DesignTheme, GeometryDiff, IRBox, IRSlot, TokenHit } from '../core/design-ir'
 
 // region 类型再导出（消费方单点引用）
 

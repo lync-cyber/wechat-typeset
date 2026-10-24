@@ -14,7 +14,7 @@ env:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -30,8 +30,52 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Architecture + secrets guard
+        run: pnpm guard
+
       - name: Typecheck + build
         run: pnpm build
 
       - name: Run tests
         run: pnpm test
+
+      - name: Prepare capabilities baseline from PR base
+        id: capabilities_base
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          git worktree add --detach "$RUNNER_TEMP/capabilities-base" "$BASE_SHA"
+          node -e "const fs = require('node:fs'); const path = require('node:path'); fs.appendFileSync(process.env.GITHUB_OUTPUT, 'package_json=' + path.relative(process.env.GITHUB_WORKSPACE, path.join(process.env.RUNNER_TEMP, 'capabilities-base/package.json')) + '\n')"
+
+      - name: Setup baseline pnpm
+        if: github.event_name == 'pull_request'
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: ${{ steps.capabilities_base.outputs.package_json }}
+          dest: ${{ runner.temp }}/capabilities-base-pnpm
+
+      - name: Build base capabilities with locked dependencies
+        if: github.event_name == 'pull_request'
+        working-directory: ${{ runner.temp }}/capabilities-base
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm build:capabilities
+
+      - name: Check capabilities compatibility against PR base
+        if: github.event_name == 'pull_request'
+        run: node --import tsx scripts/check-capabilities-stable.ts "$RUNNER_TEMP/capabilities-base/dist/api/capabilities.json" dist/api/capabilities.json
+
+  secrets-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan full git history for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

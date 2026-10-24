@@ -12,6 +12,7 @@ import { escText } from '../../core/pipeline/containers/_shared/escape'
 export interface UseDebouncedRenderOptions {
   delayMs?: number
   immediate?: boolean
+  prepareInput?: (input: RenderInput) => Promise<RenderInput>
 }
 
 const EMPTY_OUTPUT: RenderOutput = {
@@ -26,44 +27,90 @@ const EMPTY_OUTPUT: RenderOutput = {
 export function useDebouncedRender(
   source: Ref<RenderInput>,
   options: UseDebouncedRenderOptions = {},
-): { rendered: Ref<RenderOutput>; flush: () => void } {
+): { rendered: Ref<RenderOutput>; flush: () => void | Promise<void> } {
   const delayMs = options.delayMs ?? 80
   const immediate = options.immediate ?? true
 
   const rendered = ref<RenderOutput>(EMPTY_OUTPUT)
   let timer: number | null = null
+  let generation = 0
+  let disposed = false
+  let flushing: Promise<void> | null = null
 
-  function runRender(input: RenderInput) {
+  function showError(err: unknown) {
+    // eslint-disable-next-line no-console
+    console.error('[useDebouncedRender] render failed:', err)
+    rendered.value = {
+      ...EMPTY_OUTPUT,
+      html: `<pre style="color:#c00;padding:16px;white-space:pre-wrap">渲染失败：${escText(String(err))}</pre>`,
+    }
+  }
+
+  function runRender(input: RenderInput, rethrow = false) {
     try {
       rendered.value = pipelineRender(input)
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('[useDebouncedRender] render failed:', err)
-      rendered.value = {
-        html: `<pre style="color:#c00;padding:16px;white-space:pre-wrap">渲染失败：${escText(String(err))}</pre>`,
-        wordCount: 0,
-        readingTime: 1,
-        patchLog: { entries: [], total: 0 },
-        pageConfig: {},
-        frontmatterIssues: [],
-      }
+      showError(err)
+      if (rethrow) throw err
+    }
+  }
+
+  function clearTimer() {
+    if (timer === null) return
+    window.clearTimeout(timer)
+    timer = null
+  }
+
+  async function prepareAndRender(input: RenderInput, request: number) {
+    try {
+      const prepared = await options.prepareInput!(input)
+      if (!disposed && request === generation && input === source.value) runRender(prepared)
+    } catch (err) {
+      if (!disposed && request === generation && input === source.value) showError(err)
     }
   }
 
   function schedule(input: RenderInput) {
-    if (timer !== null) window.clearTimeout(timer)
+    const request = ++generation
+    clearTimer()
+    if (flushing || disposed) return
     timer = window.setTimeout(() => {
       timer = null
-      runRender(input)
+      if (options.prepareInput) void prepareAndRender(input, request)
+      else runRender(input)
     }, delayMs)
   }
 
-  function flush() {
-    if (timer !== null) {
-      window.clearTimeout(timer)
-      timer = null
+  async function flushPrepared() {
+    while (!disposed) {
+      const input = source.value
+      const request = ++generation
+      let prepared: RenderInput
+      try {
+        prepared = await options.prepareInput!(input)
+      } catch (err) {
+        if (disposed) break
+        if (request !== generation || input !== source.value) continue
+        showError(err)
+        throw err
+      }
+      if (disposed) break
+      if (request !== generation || input !== source.value) continue
+      runRender(prepared, true)
+      return
     }
-    runRender(source.value)
+    throw new Error('渲染已停止')
+  }
+
+  function flush(): void | Promise<void> {
+    clearTimer()
+    if (!options.prepareInput) {
+      ++generation
+      if (!disposed) runRender(source.value)
+      return
+    }
+    if (!flushing) flushing = flushPrepared().finally(() => { flushing = null })
+    return flushing
   }
 
   // shallow watch：source 是 computed，依赖变更时整个引用会换；
@@ -78,10 +125,9 @@ export function useDebouncedRender(
   )
 
   onBeforeUnmount(() => {
-    if (timer !== null) {
-      window.clearTimeout(timer)
-      timer = null
-    }
+    disposed = true
+    ++generation
+    clearTimer()
   })
 
   return { rendered, flush }

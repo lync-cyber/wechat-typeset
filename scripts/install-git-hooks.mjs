@@ -13,6 +13,7 @@
  *   - 已存在的同名 hook：
  *       · 若是指向源码的 symlink → 视为已就位，跳过
  *       · 若是与源码内容一致的副本 → 视为已就位，跳过
+ *       · 若是带 managed-by 标记的旧副本 → 覆盖为当前源码
  *       · 否则保留作者自定义 + 警告
  */
 import {
@@ -66,6 +67,16 @@ if (!existsSync(HOOKS_SRC)) {
 
 mkdirSync(HOOKS_DST, { recursive: true })
 
+const MANAGED_MARKER = '# managed-by: scripts/install-git-hooks.mjs'
+
+function isManagedCopy(path) {
+  try {
+    return readFileSync(path, 'utf8').includes(MANAGED_MARKER)
+  } catch {
+    return false
+  }
+}
+
 function contentsMatch(a, b) {
   try {
     return readFileSync(a).equals(readFileSync(b))
@@ -108,6 +119,8 @@ for (const name of HOOKS) {
       unlinkSync(dst) // 旧链接指向别处，重建
     } else if (contentsMatch(src, dst)) {
       continue // copy 模式下已是最新内容
+    } else if (isManagedCopy(dst)) {
+      unlinkSync(dst)
     } else {
       console.warn(
         `[install-git-hooks] ${name} 已存在且内容与源码不一致，保留作者自定义（手动 rm 后再跑可覆盖）`,

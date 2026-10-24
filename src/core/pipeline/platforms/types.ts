@@ -4,6 +4,7 @@
  * 一个 PlatformAdapter 描述 "把通用 HTML 适配到某发布平台" 的完整能力：
  *   - patch(html, opts)   渲染管线最后一步调用的 html → html 纯函数链
  *   - inspect(html)?      可选：扫描即将命中的修补点，供透明度面板展示
+ *   - patchWithLog(html, opts)? 可选：共享解析，同时返回修补结果和原输入目标日志
  *
  * 渲染管线（pipeline/index.ts）按 RenderInput.platform 经 registry 查表派发；
  * 各平台自管 patch 链与示例集，互不依赖。新增平台只需在本 platforms/ 下新建一个目录，
@@ -43,6 +44,8 @@ export interface PlatformAdapter {
    * 仅 wechat 当前实现；其它平台缺省时 UI 透明度面板按 entries:[] / total:0 处理。
    */
   inspect?(html: string): PatchLog
+  /** 可选的组合入口；日志须与 inspect 原输入一致，patch 异常仍向调用方传播。 */
+  patchWithLog?(html: string, opts?: unknown): { html: string; patchLog: PatchLog }
 }
 
 export type { PatchLog, PatchLogEntry, PatchLogSample }

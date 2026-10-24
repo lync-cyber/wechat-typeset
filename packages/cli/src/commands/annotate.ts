@@ -10,7 +10,7 @@ interface AnnotateInput {
 export const annotateCommand: Command<AnnotateInput, AnnotateResult> = {
   name: 'markdown annotate',
   description:
-    'Heuristic block-level patch proposals for raw markdown: scan paragraphs / lists / blockquotes / headings, suggest ::: container wraps consistent with theme capabilities. Returns { patches[], capabilitySnapshot, vocabularySubset, blockCount }. Canonical name; `annotate` is kept as a deprecated alias.',
+    'Conservative, optional block-level proposals for raw markdown: suggest available containers only for explicit introductory summaries, labeled tips/warnings, or actionable ordered steps. Plain markdown is already renderable; an empty patches[] is a valid result. Existing containers, code, quotations, and ordinary headings are preserved. Theme signatures never require wrappers. Returns { patches[], capabilitySnapshot, vocabularySubset, blockCount }. Canonical name; `annotate` is kept as a deprecated alias.',
   inputSchema: {
     type: 'object',
     required: ['md', 'persona'],

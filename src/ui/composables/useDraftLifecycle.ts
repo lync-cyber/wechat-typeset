@@ -66,7 +66,7 @@ export interface DraftLifecycleDeps {
 
 export interface UndoEntry {
   message: string
-  restore: () => void
+  restore: () => void | boolean
 }
 
 export function useDraftLifecycle(deps: DraftLifecycleDeps) {
@@ -110,12 +110,11 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
     return savingState.value
   })
 
-  function showUndo(message: string, restore: () => void) {
+  function showUndo(message: string, restore: () => void | boolean) {
     undo.value = { message, restore }
   }
   function onUndo() {
-    undo.value?.restore()
-    undo.value = null
+    if (undo.value?.restore() !== false) undo.value = null
   }
   function onUndoExpire() {
     undo.value = null
@@ -238,7 +237,7 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
     draftIndexTick.value += 1
   }
 
-  function handleDeleteDraftRequest(id: string, title: string) {
+  function handleDeleteDraftRequest(id: string, title: string, beforeRestore?: () => boolean) {
     const full = readDraft(id)
     if (!full) return
     const wasActive = activeDraftId.value === id
@@ -258,6 +257,7 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
     }
     draftIndexTick.value += 1
     showUndo(`已删除「${title}」`, () => {
+      if (beforeRestore && !beforeRestore()) return false
       const record: Draft = { ...full }
       importDraftsJSONDetailed(JSON.stringify({ version: 1, drafts: [record] }))
       activeDraftId.value = record.id
@@ -265,6 +265,7 @@ export function useDraftLifecycle(deps: DraftLifecycleDeps) {
       deps.md.value = record.body
       if (record.themeId) deps.baseThemeId.value = record.themeId
       draftIndexTick.value += 1
+      return true
     })
   }
 

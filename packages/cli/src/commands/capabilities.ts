@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module'
-import { buildCapabilitiesV3, type CapabilitiesV3 } from '../../../../src/core/capabilities/build'
+import { buildCapabilitiesV3, type CapabilitiesV3 } from '../../../../src/public'
 import type { Command } from '../types'
 
 const require_ = createRequire(import.meta.url)

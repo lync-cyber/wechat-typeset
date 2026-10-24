@@ -1,5 +1,9 @@
-import { getContainerVocabulary, type ContainerSpec } from '../../../../src/public'
-import { packOf, namespaceOf } from '../../../../src/core/vocabulary'
+import {
+  getContainerVocabulary,
+  namespaceOf,
+  packOf,
+  type ContainerSpec,
+} from '../../../../src/public'
 import type { Command } from '../types'
 
 interface ContainersListInput {

@@ -1,101 +1,75 @@
-/**
- * P2 关闭契约统一冒烟：
- *   - 抽屉打开后 Esc 关闭（DraftDrawer / ComponentPalette / PublishChecklist）
- *   - 重命名 input 内的 Esc 仅取消重命名，不连带关掉抽屉（stop propagation 起效）
- *
- * P2 chip 标签编辑器冒烟：
- *   - 点 # 按钮展开 chip 编辑器
- *   - 输入 + Enter 添加 chip；× 删除 chip；✓ 提交
- */
-import { expect, test, type Page } from '@playwright/test'
+/** 桌面文章库/组件工具的 Esc 关闭，以及草稿重命名、标签编辑。 */
+import { expect, test } from '@playwright/test'
+import { freshMobilePage, openComponents } from './_helpers'
 
-test.use({ viewport: { width: 1280, height: 800 } })
+test.beforeEach(async ({ page }) => { await freshMobilePage(page) })
 
-async function dismissOnboard(page: Page) {
-  const close = page.locator('.onboard .close')
-  if (await close.isVisible().catch(() => false)) await close.click()
-}
-
-test('桌面：Esc 关闭 DraftDrawer（左抽屉）', async ({ page }) => {
+test('桌面：Esc 关闭文章库，快捷键可重新打开', async ({ page }) => {
   await page.goto('/')
-  await dismissOnboard(page)
-
-  // 用 ⌘⇧D 打开草稿抽屉
-  const isMac = await page.evaluate(() => /Mac|iPhone|iPad|iPod/.test(navigator.platform))
-  await page.keyboard.press(`${isMac ? 'Meta' : 'Control'}+Shift+KeyD`)
-  await expect(page.locator('.drawer')).toBeVisible()
-
+  const drawer = page.locator('aside.drawer')
+  await expect(drawer).toBeVisible()
   await page.keyboard.press('Escape')
-  await expect(page.locator('.drawer')).toHaveCount(0)
+  await expect(drawer).toBeHidden()
+  await page.keyboard.press('ControlOrMeta+Shift+KeyD')
+  await expect(drawer).toBeVisible()
 })
 
-test('桌面：Esc 关闭 ComponentPalette（右抽屉）', async ({ page }) => {
+test('桌面：Esc 收起组件工具，展开后保留组件库', async ({ page }) => {
   await page.goto('/')
-  await dismissOnboard(page)
-
-  await page.locator('.btn-insert').click()
+  await openComponents(page)
+  await page.keyboard.press('Escape')
+  await expect(page.locator('.palette')).toBeHidden()
+  await page.getByRole('button', { name: '展开工具', exact: true }).click()
   await expect(page.locator('.palette')).toBeVisible()
-
-  await page.keyboard.press('Escape')
-  await expect(page.locator('.palette')).toHaveCount(0)
 })
 
-test('桌面：DraftDrawer 重命名 input 里按 Esc 仅取消重命名，抽屉保持打开', async ({ page }) => {
+test('桌面：重命名输入内 Esc 只取消重命名，文章库保持打开', async ({ page }) => {
   await page.goto('/')
-  await dismissOnboard(page)
-
-  const isMac = await page.evaluate(() => /Mac|iPhone|iPad|iPod/.test(navigator.platform))
-  await page.keyboard.press(`${isMac ? 'Meta' : 'Control'}+Shift+KeyD`)
-  await expect(page.locator('.drawer')).toBeVisible()
-
-  // 让至少有一篇草稿可重命名（启动注入的默认草稿一般有一篇）
-  const firstItem = page.locator('.drawer .item').first()
-  await expect(firstItem).toBeVisible()
-  await firstItem.locator('.title').dblclick()
-  const renameInput = page.locator('.drawer .rename-input')
-  await expect(renameInput).toBeVisible()
-
-  // Esc 应只关 rename input
+  const drawer = page.locator('aside.drawer')
+  await drawer.getByRole('button', { name: '新建浏览器草稿', exact: true }).click()
+  await expect(page.locator('.document-bar h1')).toHaveText('新草稿')
+  const activeDraft = page.locator('.draft-select[aria-current="page"]')
+  await expect(activeDraft).toHaveAttribute('title', '新草稿')
+  const draftItem = drawer.locator('.browser-item').filter({ has: activeDraft })
+  await expect(draftItem).toHaveCount(1)
+  const draft = draftItem.locator('.draft-select')
+  await expect(draft).toBeVisible()
+  const originalTitle = await draft.getAttribute('title')
+  await draftItem.locator('summary[title="管理草稿"]').click()
+  await draftItem.getByRole('button', { name: '重命名', exact: true }).click()
+  const renameInput = drawer.getByRole('textbox', { name: '草稿名称', exact: true })
+  await renameInput.fill('不应保存的重命名')
   await renameInput.press('Escape')
   await expect(renameInput).toHaveCount(0)
-  await expect(page.locator('.drawer')).toBeVisible()
+  await expect(drawer).toBeVisible()
+  await expect(draft).toHaveAttribute('title', originalTitle!)
 })
 
-test('桌面：DraftDrawer chip 标签编辑器 — 添加 / 删除 / 提交', async ({ page }) => {
+test('桌面：草稿标签添加、移除、提交后可重新读取', async ({ page }) => {
   await page.goto('/')
-  await dismissOnboard(page)
-
-  const isMac = await page.evaluate(() => /Mac|iPhone|iPad|iPod/.test(navigator.platform))
-  await page.keyboard.press(`${isMac ? 'Meta' : 'Control'}+Shift+KeyD`)
-  await expect(page.locator('.drawer')).toBeVisible()
-
-  const firstItem = page.locator('.drawer .item').first()
-  // hover 让 .item-actions 显形（@media hover:hover）
-  await firstItem.hover()
-  const tagBtn = firstItem.locator('.icon-btn', { hasText: '#' }).first()
-  await tagBtn.click()
-
-  const editor = firstItem.locator('.tag-editor')
-  await expect(editor).toBeVisible()
-
-  // 添加两条 chip
-  const input = editor.locator('.tag-input')
+  await page.getByRole('button', { name: '新建浏览器草稿', exact: true }).click()
+  await expect(page.locator('.document-bar h1')).toHaveText('新草稿')
+  const activeDraft = page.locator('.draft-select[aria-current="page"]')
+  await expect(activeDraft).toHaveAttribute('title', '新草稿')
+  const draftItem = page.locator('aside.drawer .browser-item').filter({ has: activeDraft })
+  await expect(draftItem).toHaveCount(1)
+  await draftItem.locator('summary[title="管理草稿"]').click()
+  await draftItem.getByRole('button', { name: '编辑标签', exact: true }).click()
+  const editor = draftItem.locator('.tag-editor')
+  const input = editor.getByRole('textbox', { name: '新标签', exact: true })
   await input.fill('技术')
   await input.press('Enter')
-  await expect(editor.locator('.tag-chip-edit', { hasText: '技术' })).toBeVisible()
-
-  // 逗号也触发 push
+  await expect(editor.getByRole('button', { name: '移除标签 技术', exact: true })).toBeVisible()
   await input.fill('随笔')
   await input.press(',')
-  await expect(editor.locator('.tag-chip-edit', { hasText: '随笔' })).toBeVisible()
-
-  // 删一个
-  await editor.locator('.tag-chip-edit', { hasText: '技术' })
-    .locator('.tag-chip-remove').click()
-  await expect(editor.locator('.tag-chip-edit', { hasText: '技术' })).toHaveCount(0)
-
-  // ✓ 提交 → 编辑器收起，只读 chip 列表显示剩下的 '随笔'
-  await editor.locator('.tag-editor-done').click()
+  await expect(editor.getByRole('button', { name: '移除标签 随笔', exact: true })).toBeVisible()
+  await editor.getByRole('button', { name: '移除标签 技术', exact: true }).click()
+  await expect(editor.getByRole('button', { name: '移除标签 技术', exact: true })).toHaveCount(0)
+  await editor.getByRole('button', { name: '完成', exact: true }).click()
   await expect(editor).toHaveCount(0)
-  await expect(firstItem.locator('.tags .tag-chip', { hasText: '随笔' })).toBeVisible()
+  await expect(draftItem.locator('.draft-tags').getByRole('button', { name: '#随笔', exact: true })).toBeVisible()
+  await draftItem.locator('summary[title="管理草稿"]').click()
+  await draftItem.getByRole('button', { name: '编辑标签', exact: true }).click()
+  await expect(editor.getByRole('button', { name: '移除标签 随笔', exact: true })).toBeVisible()
+  await expect(editor.getByRole('button', { name: '移除标签 技术', exact: true })).toHaveCount(0)
 })

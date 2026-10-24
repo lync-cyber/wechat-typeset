@@ -1,8 +1,8 @@
 /**
  * 轻量 frontmatter 解析（P0 · L2 页面局部配置）。
  *
- * 设计纪律：只识别白名单字段（variants / theme），其它键收进 unknown 报告但不写入
- * 渲染上下文。严格 YAML 子集——支持 `key: value` 与一层缩进的 `key:` 嵌套对象，
+ * 渲染配置只消费 variants / theme；发布信息独立返回，其它键报告为未知字段。
+ * 严格 YAML 子集——支持 `key: value` 与一层缩进的 `key:` 嵌套对象，
  * 足够 variants slot 表达；故意不引入 yaml/gray-matter 依赖（bundle 体积 + 平台粘贴
  * 安全考虑：复杂 YAML 让作者写出 anchors / tags / multiline 反而是漂移源）。
  *
@@ -21,6 +21,10 @@ export interface PageConfig {
   theme?: string
 }
 
+export const PUBLICATION_FIELDS = ['title', 'digest', 'author', 'cover', 'source', 'date', 'writingStyle'] as const
+export type PublicationField = typeof PUBLICATION_FIELDS[number]
+export type PublicationInfo = Partial<Record<PublicationField, string>>
+
 export interface FrontmatterParseIssue {
   path: string
   message: string
@@ -30,29 +34,43 @@ export interface FrontmatterParseIssue {
 export interface FrontmatterParseResult {
   /** 解析得到的页面配置（白名单字段） */
   config: PageConfig
+  /** 发布信息不进入渲染上下文。 */
+  publication: PublicationInfo
   /** 剥去 frontmatter 后的 markdown 正文 */
   body: string
   /** 解析期间发现的问题（非法 variant id / 未知主题 / 未知键 等） */
   issues: FrontmatterParseIssue[]
 }
 
-const FENCE_RE = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n|$)/
+function splitFrontmatter(source: string) {
+  const opening = /^\uFEFF?---[ \t]*\r?\n/.exec(source)?.[0]
+  if (!opening) return null
+  const rest = source.slice(opening.length)
+  const closing = /^---[ \t]*(?:\r?\n|$)/m.exec(rest)
+  if (!closing) return null
+  return {
+    opening,
+    yaml: rest.slice(0, closing.index),
+    closing: closing[0],
+    body: rest.slice(closing.index + closing[0].length),
+  }
+}
 
 /**
  * 解析 markdown 开头 `---\nyaml\n---` frontmatter。
  *
- *   - 没有 frontmatter：返回 { config: {}, body: 原文, issues: [] }
+ *   - 没有 frontmatter：返回空配置、空发布信息与原文
  *   - 有 frontmatter：剥离 + 校验后返回；非法字段写 issues 不抛错
  */
 export function parseFrontmatter(source: string): FrontmatterParseResult {
-  const m = FENCE_RE.exec(source)
-  if (!m) return { config: {}, body: source, issues: [] }
+  const block = splitFrontmatter(source)
+  if (!block) return { config: {}, publication: {}, body: source, issues: [] }
 
-  const yamlText = m[1]
-  const body = source.slice(m[0].length)
-  const { tree, issues } = parseShallowYaml(yamlText)
+  const { body } = block
+  const { tree, issues } = parseShallowYaml(block.yaml)
 
   const config: PageConfig = {}
+  const publication: PublicationInfo = {}
 
   // variants: 嵌套对象
   const variantsNode = tree.variants
@@ -111,17 +129,69 @@ export function parseFrontmatter(source: string): FrontmatterParseResult {
     }
   }
 
+  for (const key of PUBLICATION_FIELDS) {
+    const value = tree[key]
+    if (typeof value === 'string') publication[key] = value
+    else if (value !== undefined) {
+      issues.push({ path: key, message: `${key} 应为字符串（发布信息）`, severity: 'error' })
+    }
+  }
+
   for (const key of Object.keys(tree)) {
-    if (key !== 'variants' && key !== 'theme') {
+    if (key !== 'variants' && key !== 'theme' && !PUBLICATION_FIELDS.includes(key as PublicationField)) {
       issues.push({
         path: key,
-        message: `未识别 frontmatter 字段 "${key}"——本契约目前只消费 variants / theme`,
+        message: `未识别 frontmatter 字段 "${key}"——支持 variants / theme 及发布信息`,
         severity: 'warning',
       })
     }
   }
 
-  return { config, body, issues }
+  return { config, publication, body, issues }
+}
+
+/** 只替换指定发布字段，保留渲染配置、未知字段和正文原文。 */
+export function updatePublication(source: string, patch: Partial<PublicationInfo>): string {
+  const values: Record<string, string> = {}
+  for (const key of PUBLICATION_FIELDS) {
+    if (typeof patch[key] === 'string') values[key] = patch[key]
+  }
+  return updateFrontmatterFields(source, values)
+}
+
+export function updateArticleTheme(source: string, theme: string): string {
+  return updateFrontmatterFields(source, { theme })
+}
+
+function updateFrontmatterFields(source: string, patch: Readonly<Record<string, string>>): string {
+  const keys = Object.keys(patch)
+  if (keys.length === 0) return source
+  const newline = source.includes('\r\n') ? '\r\n' : '\n'
+  const block = splitFrontmatter(source)
+  const fieldLine = (key: string) => `${key}: ${JSON.stringify(patch[key])}${newline}`
+  if (!block) {
+    const bom = source.startsWith('\uFEFF') ? '\uFEFF' : ''
+    return `${bom}---${newline}${keys.map(fieldLine).join('')}---${newline}${source.slice(bom.length)}`
+  }
+
+  const remaining = new Set(keys)
+  const lines = block.yaml.match(/[^\r\n]*(?:\r?\n|$)/g)?.filter(Boolean) ?? []
+  const result: string[] = []
+  let replacing = false
+  for (const line of lines) {
+    const key = KV_RE.exec(line.replace(/\r?\n$/, ''))?.[1]
+    if (key && keys.includes(key)) {
+      if (remaining.delete(key)) result.push(fieldLine(key))
+      replacing = true
+    } else if (replacing && /^[ \t]+\S/.test(line) && !line.trimStart().startsWith('#')) {
+      continue
+    } else {
+      if (/^\S/.test(line)) replacing = false
+      result.push(line)
+    }
+  }
+  for (const key of remaining) result.push(fieldLine(key))
+  return block.opening + result.join('') + block.closing + block.body
 }
 
 type ShallowYamlNode = string | Record<string, string>
@@ -136,9 +206,10 @@ const KV_RE = /^([A-Za-z_][\w-]*)\s*:\s*(.*)$/
 function unquote(s: string): string {
   const t = s.trim()
   if (t.length >= 2) {
-    if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
-      return t.slice(1, -1)
+    if (t.startsWith('"') && t.endsWith('"')) {
+      try { return JSON.parse(t) as string } catch { return t.slice(1, -1) }
     }
+    if (t.startsWith("'") && t.endsWith("'")) return t.slice(1, -1).replace(/''/g, "'")
   }
   return t
 }
@@ -201,7 +272,9 @@ function parseShallowYaml(text: string): ShallowYamlResult {
         nested[cm[1]] = unquote(cm[2])
         i++
       }
-      tree[key] = nested
+      tree[key] = Object.keys(nested).length === 0 && PUBLICATION_FIELDS.includes(key as PublicationField)
+        ? ''
+        : nested
     } else {
       tree[key] = unquote(value)
       i++

@@ -1,48 +1,43 @@
-/**
- * 移动端冒烟：页面加载、两行工具栏、底部 tab 栏可见。
- *
- * 这是 E2E 的最小覆盖，确保未来 refactor 没有把 mobile 布局打碎——
- * 单测（jsdom）看不到 `@media (max-width: 767px)` 的真实效果。
- */
-
+/** 移动工作台：文章库、创作流程、复制入口及写作视图切换。 */
 import { expect, test } from '@playwright/test'
+import { freshMobilePage, showWritingPreview } from './_helpers'
 
-test('页面可加载，品牌名可见', async ({ page }) => {
+test.beforeEach(async ({ page }) => { await freshMobilePage(page) })
+
+test('页面可加载，文章库内品牌名可见', async ({ page }) => {
   await page.goto('/')
-  await expect(page.locator('.brand-mark')).toHaveText('wechat')
-  await expect(page.locator('.brand-name')).toHaveText('typeset')
+  await page.getByRole('button', { name: '打开文章库', exact: true }).click()
+  await expect(page.locator('.sidebar-brand strong')).toHaveText('wechat-typeset')
+  await expect(page.getByRole('button', { name: '新建浏览器草稿', exact: true })).toBeVisible()
 })
 
-test('移动端：底部 tab 栏（编辑 / 一键复制 / 预览）显示', async ({ page }) => {
+test('移动端：底部写作视图及顶部复制入口可见', async ({ page }) => {
   await page.goto('/')
-  const tabs = page.locator('.mobile-tabs')
+  const tabs = page.getByRole('navigation', { name: '写作视图' })
   await expect(tabs).toBeVisible()
-  await expect(tabs.locator('.mobile-tab', { hasText: '编辑' })).toBeVisible()
-  await expect(tabs.locator('.mobile-tab-copy', { hasText: '一键复制' })).toBeVisible()
-  await expect(tabs.locator('.mobile-tab', { hasText: '预览' })).toBeVisible()
+  await expect(tabs.getByRole('button', { name: '编辑', exact: true })).toBeVisible()
+  await expect(tabs.getByRole('button', { name: '预览', exact: true })).toBeVisible()
+  await expect(page.getByRole('button', { name: '复制到公众号', exact: true })).toBeVisible()
 })
 
-test('移动端：两行工具栏（第一行品牌，第二行工具）', async ({ page }) => {
+test('移动端：工具栏提供文章库与三个创作阶段', async ({ page }) => {
   await page.goto('/')
-  // grid-template-rows: auto auto 下第一行 .zone-left 占 grid-column 1/3
-  // 简单验收：品牌 + 草稿入口 + 中心工具按钮都在 toolbar 内且都能见
   const toolbar = page.locator('.toolbar')
   await expect(toolbar).toBeVisible()
-  await expect(toolbar.locator('.brand')).toBeVisible()
-  await expect(toolbar.locator('.draft-switch')).toBeVisible()
-  await expect(toolbar.locator('.btn-theme')).toBeVisible()
-  await expect(toolbar.locator('.btn-insert')).toBeVisible()
+  await expect(toolbar.getByRole('button', { name: '打开文章库', exact: true })).toBeVisible()
+  const stages = toolbar.getByRole('navigation', { name: '创作流程' })
+  for (const name of ['写作', '排版', '发布准备']) {
+    await expect(stages.getByRole('button', { name, exact: true })).toBeVisible()
+  }
+  await expect(stages.getByRole('button', { name: '写作', exact: true })).toHaveAttribute('aria-current', 'page')
 })
 
-test('移动端：点底部编辑/预览 tab 切换面板', async ({ page }) => {
+test('移动端：点底部编辑/预览切换面板', async ({ page }) => {
   await page.goto('/')
-  // 初始默认 editor 面板
   await expect(page.locator('.pane-editor')).toBeVisible()
-  // 切到 preview
-  await page.locator('.mobile-tab', { hasText: '预览' }).click()
-  await expect(page.locator('.pane-preview')).toBeVisible()
+  await showWritingPreview(page)
   await expect(page.locator('.pane-editor')).toBeHidden()
-  // 切回 editor
-  await page.locator('.mobile-tab', { hasText: '编辑' }).click()
+  await page.getByRole('navigation', { name: '写作视图' }).getByRole('button', { name: '编辑', exact: true }).click()
   await expect(page.locator('.pane-editor')).toBeVisible()
+  await expect(page.locator('.pane-preview')).toBeHidden()
 })

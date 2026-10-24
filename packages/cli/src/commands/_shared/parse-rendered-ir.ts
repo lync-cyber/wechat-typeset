@@ -19,7 +19,7 @@ import {
   type IRBox,
   type IRSlot,
   styleToBox,
-} from '../../../../../src/core/design-ir'
+} from '../../../../../src/public'
 
 export interface ParsedActualIR {
   /** 找到的 wrapper section className（debug 用）。 */

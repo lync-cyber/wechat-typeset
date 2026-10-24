@@ -224,6 +224,8 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
 
 ### `annotate` 输出
 
+返回可选的保守标注候选，不是必须应用的排版计划。`patches: []` 是有效结果，普通 Markdown 可直接 `markdown render`；不按首段长度、标题数量或主题签名补组件。当前启发式仅建议明确的开篇总览 / 摘要、段首提示 / 警告标签与简单操作列表，跳过已有容器、引用、代码和复杂列表。`confidence` 描述信号强弱，仍需结合上下文判断是否有阅读收益。
+
 ```json
 {
   "patches": [
@@ -231,8 +233,8 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
       "line": 3,
       "endLine": 3,
       "kind": "wrap_first_paragraph",
-      "container": "abstract",
-      "reason": "文首总览段（80 字符）——典型 abstract 位置",
+      "container": "intro",
+      "reason": "开篇段落明确介绍本文内容，可选用 intro 帮助读者建立阅读预期",
       "confidence": "high",
       "preview": "本文将探讨 …"
     }
@@ -241,7 +243,7 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
     "personaId": "swiss-grid",
     "defaultVariants": { "admonition": "accent-bar" },
     "recommendedVariants": { "admonition": ["accent-bar", "pill-tag"] },
-    "containers": [ { "id": "abstract", "available": true, "signature": true, "namespace": "base", "pack": "base" } ]
+    "containers": [ { "id": "intro", "available": true, "signature": true, "namespace": "base", "pack": "base" } ]
   },
   "vocabularySubset": [ { "name": "tip", "category": "admonition", "fenceLength": 3, "description": "…", "example": "…" } ],
   "blockCount": 24
@@ -249,6 +251,8 @@ cli `validate` 输出 `errors[]`，每条按规则匹配后附 `hint` 字段。L
 ```
 
 合法 `kind`：`wrap_paragraph` / `wrap_blockquote` / `convert_list` / `wrap_first_paragraph` / `wrap_section_title` / `wrap_pros_cons`。
+
+为兼容既有调用，保留完整 `kind` 枚举及 apply 能力；当前启发式不自动提议引用卡、章节组件或双列对比。`vocabularySubset` 仍为完整词汇速查，不代表本次应使用的组件集合；可用性以 `capabilitySnapshot.containers` 为准。
 
 ### `annotate apply` 输出
 

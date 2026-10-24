@@ -40,6 +40,14 @@ describe('deriveTitle', () => {
     expect(deriveTitle('  \n\n 开场白 \n正文')).toBe('开场白')
     expect(deriveTitle('')).toBe('')
   })
+
+  it('frontmatter 发布标题优先于正文标题', () => {
+    expect(deriveTitle('---\ntitle: "发布标题"\n---\n# 正文标题\n内容')).toBe('发布标题')
+  })
+
+  it('frontmatter 只有主题时从剥离后的正文推断标题', () => {
+    expect(deriveTitle('---\ntheme: default\n---\n\n# 正文标题\n内容')).toBe('正文标题')
+  })
 })
 
 describe('CRUD 基本流', () => {

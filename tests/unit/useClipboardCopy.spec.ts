@@ -96,6 +96,36 @@ describe('handleCopy', () => {
     const msg = h_!.pingTransient.mock.calls[0][0] as string
     expect(msg).toContain('外链已尾注')
   })
+
+  it('预览与剪贴板共用含尾注和微信组件提示的同一份 HTML', async () => {
+    h_!.rendered.value.html += '<section data-wx-mp-kind="voice" data-wx-mp-name="声音" data-wx-mp-fileid="abc">声音</section>'
+    h_!.api.setOutlinkStrategy('tail-list')
+    const preview = h_!.api.rendered.value.html
+    expect(preview).toContain('https://example.com')
+    expect(preview).toContain('<!-- mpvoice')
+    expect(preview).not.toBe(h_!.rendered.value.html)
+    await h_!.api.handleCopy()
+    expect(copyHtmlToClipboard).toHaveBeenCalledWith(preview, h_!.md.value)
+  })
+
+  it('等待图片解析和最新渲染完成再复制', async () => {
+    let finish!: () => void
+    h_!.flush.mockImplementationOnce(() => new Promise<void>((resolve) => { finish = resolve }))
+    const copying = h_!.api.handleCopy()
+    expect(copyHtmlToClipboard).not.toHaveBeenCalled()
+    h_!.rendered.value.html = '<p>最新内容</p><img src="data:image/webp;base64,AAAA">'
+    finish()
+    await copying
+    expect(copyHtmlToClipboard).toHaveBeenCalledWith(h_!.api.rendered.value.html, h_!.md.value)
+    expect(vi.mocked(copyHtmlToClipboard).mock.calls[0][0]).toContain('data:image/webp')
+  })
+
+  it('异步解析失败时提示错误，不复制旧 HTML', async () => {
+    h_!.flush.mockRejectedValueOnce(new Error('图片读取失败'))
+    await h_!.api.handleCopy()
+    expect(copyHtmlToClipboard).not.toHaveBeenCalled()
+    expect(h_!.api.persistentError.value).toContain('图片读取失败')
+  })
 })
 
 describe('handleCopyShareLink', () => {

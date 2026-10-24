@@ -47,4 +47,8 @@
 
 ## 其它约定
 
+代理写稿时，在仓库根目录新建 `articles/<YYYY-MM-DD-slug>/article.md`，用 YAML frontmatter 保存发布信息。
+正文使用本仓库已有的 [容器语法](docs/contract/README.md)，图片放入本篇 `images/`，使用 `images/文件名` 相对引用。
+可选：填写 `writingStyle` 绑定 `articles/.writing-styles.json` 中的风格 ID，并遵循该风格指引或用户提供的「创作指令」。
+
 详见 [CONTRIBUTING.md](CONTRIBUTING.md)：本地开发命令、PR 自检清单、不可破坏的硬约束（写作契约 / 微信粘贴兼容性 / 预览=剪贴板 / 本地 only / 启动路径）。

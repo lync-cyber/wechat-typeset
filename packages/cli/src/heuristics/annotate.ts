@@ -1,7 +1,10 @@
+import MarkdownIt from 'markdown-it'
+import markdownItContainer from 'markdown-it-container'
 import {
   getContainerVocabulary,
   getRecommendedVariantsFor,
   getThemeCapabilities,
+  parseFrontmatter,
 } from '../../../../src/public'
 
 export interface AnnotatePatch {
@@ -24,142 +27,77 @@ export interface AnnotatePatch {
 interface Block {
   start: number
   end: number
-  type:
-    | 'heading1'
-    | 'heading2'
-    | 'paragraph'
-    | 'blockquote'
-    | 'olist'
-    | 'ulist'
-    | 'codeblock'
-    | 'fence'
-    | 'blank'
+  type: string
+  tag: string
   lines: string[]
+  items?: string[]
 }
 
 const VERBS = [
-  '打开',
-  '切换',
-  '运行',
-  '复制',
-  '粘贴',
-  '创建',
-  '删除',
-  '安装',
-  '配置',
-  '检查',
-  '点击',
-  '选择',
-  '输入',
-  '关闭',
-  '保存',
-  '重启',
-  '设置',
-  '导入',
-  '导出',
-  '提交',
-  '推送',
-  '拉取',
-  '下载',
-  '上传',
+  '打开', '切换', '运行', '复制', '粘贴', '创建', '删除', '安装',
+  '配置', '检查', '点击', '选择', '输入', '关闭', '保存', '重启',
+  '设置', '导入', '导出', '提交', '推送', '拉取', '下载', '上传',
 ]
 
-function startsWithVerbCh(s: string): boolean {
-  const m = s.replace(/^\d+\.\s*/, '')
-  return VERBS.some((v) => m.startsWith(v))
+function startsWithInstruction(text: string): boolean {
+  const instruction = text.trim().replace(/^请\s*/, '')
+  return VERBS.some((verb) => {
+    if (!instruction.startsWith(verb)) return false
+    const object = instruction.slice(verb.length).trim()
+    // Past-tense recollections are not instructions, even in a numbered list.
+    return object.length > 0 && !/^[了过着]/.test(object)
+  })
 }
+
+// Reuse the existing Markdown dependencies for source ranges. This scanner does
+// not render or alter the authoring grammar, and avoids internal engine imports.
+const scanner = new MarkdownIt({ html: true })
+// The container package's bundled typings target an older markdown-it version.
+scanner.use(markdownItContainer as unknown as Parameters<MarkdownIt['use']>[0], 'annotation_existing', {
+  // Also protect unknown/custom fences: annotation is not a repair operation.
+  validate: (params: string) => /^[\w-]+(?:\s|$)/.test(params.trim()),
+})
 
 function splitBlocks(md: string): Block[] {
   const lines = md.split(/\r?\n/)
+  const { body } = parseFrontmatter(md)
+  const offset = md.slice(0, md.length - body.length).split('\n').length - 1
+  const tokens = scanner.parse(body, {})
   const blocks: Block[] = []
-  let current: Block | null = null
-  let inCode = false
 
-  const flush = () => {
-    if (current) blocks.push(current)
-    current = null
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]
+    // A whole top-level block is the smallest safe patch unit. In particular,
+    // never enter containers, blockquotes, code, HTML, or nested list paragraphs.
+    if (token.level !== 0 || !token.map || token.nesting < 0 || token.type === 'inline') continue
+    const start = token.map[0] + offset
+    let end = token.map[1] + offset - 1
+    while (end > start && !lines[end].trim()) end--
+    const block: Block = {
+      start, end, type: token.type, tag: token.tag,
+      lines: lines.slice(start, end + 1),
+    }
+    if (token.type === 'ordered_list_open') {
+      const children = []
+      let j = i + 1
+      while (j < tokens.length && tokens[j].level > token.level) children.push(tokens[j++])
+      const items = children.filter((child) => child.type === 'list_item_open')
+      const paragraphs = children.filter((child) => child.type === 'paragraph_open')
+      // Only simple, single-paragraph items. Loose lists, nested lists, code,
+      // containers and continuation paragraphs retain their original structure.
+      if (
+        items.length >= 3 &&
+        paragraphs.length === items.length &&
+        paragraphs.every((child) => child.hidden) &&
+        children.every((child) =>
+          ['list_item_open', 'list_item_close', 'paragraph_open', 'paragraph_close', 'inline'].includes(child.type),
+        )
+      ) {
+        block.items = children.filter((child) => child.type === 'inline').map((child) => child.content)
+      }
+    }
+    blocks.push(block)
   }
-
-  for (let i = 0; i < lines.length; i++) {
-    const ln = lines[i]
-    if (/^```/.test(ln)) {
-      if (inCode) {
-        if (current) current.lines.push(ln)
-        flush()
-        inCode = false
-      } else {
-        flush()
-        current = { start: i, end: i, type: 'codeblock', lines: [ln] }
-        inCode = true
-      }
-      continue
-    }
-    if (inCode) {
-      if (current) {
-        current.end = i
-        current.lines.push(ln)
-      }
-      continue
-    }
-    if (/^:{3,}/.test(ln)) {
-      flush()
-      blocks.push({ start: i, end: i, type: 'fence', lines: [ln] })
-      continue
-    }
-    if (/^\s*$/.test(ln)) {
-      flush()
-      blocks.push({ start: i, end: i, type: 'blank', lines: [ln] })
-      continue
-    }
-    if (/^# /.test(ln)) {
-      flush()
-      blocks.push({ start: i, end: i, type: 'heading1', lines: [ln] })
-      continue
-    }
-    if (/^## /.test(ln)) {
-      flush()
-      blocks.push({ start: i, end: i, type: 'heading2', lines: [ln] })
-      continue
-    }
-    if (/^> /.test(ln)) {
-      if (current?.type === 'blockquote') {
-        current.end = i
-        current.lines.push(ln)
-      } else {
-        flush()
-        current = { start: i, end: i, type: 'blockquote', lines: [ln] }
-      }
-      continue
-    }
-    if (/^\d+\. /.test(ln)) {
-      if (current?.type === 'olist') {
-        current.end = i
-        current.lines.push(ln)
-      } else {
-        flush()
-        current = { start: i, end: i, type: 'olist', lines: [ln] }
-      }
-      continue
-    }
-    if (/^[-*] /.test(ln)) {
-      if (current?.type === 'ulist') {
-        current.end = i
-        current.lines.push(ln)
-      } else {
-        flush()
-        current = { start: i, end: i, type: 'ulist', lines: [ln] }
-      }
-      continue
-    }
-    if (current?.type === 'paragraph') {
-      current.end = i
-      current.lines.push(ln)
-    } else {
-      flush()
-      current = { start: i, end: i, type: 'paragraph', lines: [ln] }
-    }
-  }
-  flush()
   return blocks
 }
 
@@ -181,133 +119,71 @@ export interface AnnotateResult {
   blockCount: number
 }
 
+// Match authored labels at the start of a paragraph, not words occurring in
+// narration, quoted speech, inline code or links. Bold labels are also common.
+function hasLabel(text: string, labels: string): boolean {
+  return new RegExp(`^(?:\\*\\*|__)?(?:${labels})(?:\\*\\*|__)?[：:]\\s*\\S`, 'i').test(text)
+}
+
 export function annotateMarkdown(md: string, personaId: string): AnnotateResult {
   const blocks = splitBlocks(md)
   const caps = getThemeCapabilities(personaId)
   const recommended = getRecommendedVariantsFor(personaId)
   const availableSet = new Set(caps.containers.filter((c) => c.available).map((c) => c.id))
-  const signatureSet = new Set(caps.containers.filter((c) => c.signature).map((c) => c.id))
-  const has = (id: string) => availableSet.has(id)
-  const isSig = (id: string) => signatureSet.has(id)
-
   const patches: AnnotatePatch[] = []
+  // Intro requires both an opening position and explicit summary intent. A
+  // paragraph following an H2 (even the first paragraph) is section body text.
+  const openingIndex = blocks[0]?.type === 'heading_open' && blocks[0].tag === 'h1' ? 1 : 0
 
-  const firstHeading = blocks.findIndex((b) => b.type === 'heading1')
-  const firstParaAfterH1 = blocks.findIndex(
-    (b, i) => i > firstHeading && b.type === 'paragraph',
-  )
-  if (firstParaAfterH1 >= 0) {
-    const b = blocks[firstParaAfterH1]
-    const text = b.lines.join(' ')
-    if (text.length >= 50 && text.length <= 300) {
-      const container = isSig('abstract') ? 'abstract' : 'intro'
+  for (const [index, block] of blocks.entries()) {
+    const text = block.lines.join(' ').trim()
+    let container: string | undefined
+    let reason = ''
+    let kind: AnnotatePatch['kind'] = 'wrap_paragraph'
+
+    if (block.items?.every(startsWithInstruction)) {
+      container = 'steps'
+      kind = 'convert_list'
+      reason = `完整有序列表的 ${block.items.length} 个简单条目均以操作指令开头，可选用 steps 突出执行顺序`
+    } else if (block.type === 'paragraph_open') {
+      const labeledText = text.replace(/^(?:⚠️?|💡|❌)\s*/, '')
+      if (hasLabel(labeledText, '危险|严重警告|danger')) {
+        container = 'danger'
+        reason = '段首有明确的危险标签，可选用 danger 强调风险'
+      } else if (hasLabel(labeledText, '注意|警告|warning|caution')) {
+        container = 'warning'
+        reason = '段首有明确的注意或警告标签，可选用 warning 便于识别'
+      } else if (hasLabel(labeledText, '提示|小贴士|小提示|tip')) {
+        container = 'tip'
+        reason = '段首有明确的提示标签，可选用 tip 区分补充建议与正文'
+      } else if (index === openingIndex) {
+        if (hasLabel(text, '摘要|abstract')) {
+          container = 'abstract'
+          reason = '开篇段落明确标为摘要，可选用 abstract 表达其概括作用'
+        } else if (
+          hasLabel(text, '导语|导读|内容提要') ||
+          /^本文(?:将|会)?(?:介绍|探讨|解释|梳理|概述|讲解|说明|分享|讨论|总结)/.test(text)
+        ) {
+          container = 'intro'
+          reason = '开篇段落明确介绍本文内容，可选用 intro 帮助读者建立阅读预期'
+        }
+        if (container) kind = 'wrap_first_paragraph'
+      }
+    }
+
+    if (container && availableSet.has(container)) {
       patches.push({
-        line: b.start + 1,
-        endLine: b.end + 1,
-        kind: 'wrap_first_paragraph',
+        line: block.start + 1,
+        endLine: block.end + 1,
+        kind,
         container,
-        reason: `文首总览段（${text.length} 字符）——典型 ${container} 位置`,
+        reason,
         confidence: 'high',
         preview: text.slice(0, 60) + (text.length > 60 ? '…' : ''),
       })
     }
   }
 
-  for (const b of blocks) {
-    const text = b.lines.join(' ')
-    if (b.type === 'olist' && b.lines.length >= 3) {
-      const allVerb = b.lines.filter((l) => /^\d+\. /.test(l)).every(startsWithVerbCh)
-      if (allVerb) {
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'convert_list',
-          container: 'steps',
-          reason: `有序列表 ${b.lines.length} 条，每条动词开头——操作流程`,
-          confidence: 'high',
-          preview: b.lines[0].slice(0, 50),
-        })
-      }
-    }
-    if (b.type === 'blockquote') {
-      const cleanText = b.lines.map((l) => l.replace(/^>\s?/, '')).join('').trim()
-      if (cleanText.length >= 15 && cleanText.length <= 200 && /[。.！？!?]$/.test(cleanText)) {
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'wrap_blockquote',
-          container: 'quote-card',
-          reason: `blockquote 单段短句（${cleanText.length} 字符，句末完整）——典型金句`,
-          confidence: 'medium',
-          preview: cleanText.slice(0, 60),
-        })
-      }
-    }
-    if (b.type === 'paragraph') {
-      if (/切忌|千万不要|❌|危险|⚠️\s*严重/.test(text)) {
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'wrap_paragraph',
-          container: 'danger',
-          reason: '段落含"切忌/千万不要/❌"——典型 danger',
-          confidence: 'high',
-          preview: text.slice(0, 60),
-        })
-      } else if (/⚠️|注意|留意|需注意/.test(text) && text.length >= 30 && text.length <= 200) {
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'wrap_paragraph',
-          container: 'warning',
-          reason: '段落含"注意/留意/⚠️"——典型 warning',
-          confidence: 'medium',
-          preview: text.slice(0, 60),
-        })
-      } else if (/💡|小贴士|顺便|tip:/i.test(text)) {
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'wrap_paragraph',
-          container: 'tip',
-          reason: '段落含"💡/小贴士/顺便"——典型 tip',
-          confidence: 'medium',
-          preview: text.slice(0, 60),
-        })
-      } else if (
-        /\d+(\.\d+)?\s?[%倍亿万千]/.test(text) &&
-        text.length <= 150 &&
-        isSig('key-number')
-      ) {
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'wrap_paragraph',
-          container: 'key-number',
-          reason: '段落含显著数字（%/倍/亿/万）+ 主题登记了 key-number 签名',
-          confidence: 'low',
-          preview: text.slice(0, 60),
-        })
-      }
-    }
-    if (b.type === 'heading2') {
-      const h2Count = blocks.filter((bb) => bb.type === 'heading2').length
-      if (h2Count >= 3) {
-        const title = b.lines[0].replace(/^## /, '')
-        patches.push({
-          line: b.start + 1,
-          endLine: b.end + 1,
-          kind: 'wrap_section_title',
-          container: 'section-title',
-          reason: `文章有 ${h2Count} 个 H2——建议至少前几个升级 section-title 分节`,
-          confidence: 'low',
-          preview: title.slice(0, 60),
-        })
-      }
-    }
-  }
-
-  const filtered = patches.filter((p) => has(p.container))
   const vocab = getContainerVocabulary().map((v) => ({
     name: v.name,
     category: v.category,
@@ -317,7 +193,7 @@ export function annotateMarkdown(md: string, personaId: string): AnnotateResult 
   }))
 
   return {
-    patches: filtered,
+    patches,
     capabilitySnapshot: {
       personaId,
       defaultVariants: caps.defaultVariants,

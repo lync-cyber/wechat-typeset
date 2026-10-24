@@ -12,7 +12,11 @@ import { parseFragment, parseStyle, serializeFragment, stringifyStyle, walkEleme
 
 export function stripFontFamily(html: string): string {
   const { container } = parseFragment(html)
+  stripFontFamilyInPlace(container)
+  return serializeFragment(container)
+}
 
+export function stripFontFamilyInPlace(container: HTMLElement): void {
   walkElements(container, (el) => {
     const style = el.getAttribute('style')
     if (!style) return
@@ -25,6 +29,4 @@ export function stripFontFamily(html: string): string {
       el.setAttribute('style', stringifyStyle(kept))
     }
   })
-
-  return serializeFragment(container)
 }

@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { spawn } from 'node:child_process'
 import { resolve, sep } from 'node:path'
 import { defineConfig, type Plugin, type ViteDevServer } from 'vite'
@@ -10,6 +11,7 @@ import { fileURLToPath, URL } from 'node:url'
 //   - 部署到 GitHub Pages 项目页（repo 名为子路径）时设 VITE_BASE=/<repo>/
 //   - 需以 '/' 开头与结尾；本地 dev 不读此变量，始终从 '/' 提供
 const BASE = process.env.VITE_BASE ?? '/'
+const IS_VITEST = process.env.VITEST === 'true'
 
 /**
  * samplesDevPlugin · dev 模式自动同步样本 → 浏览器
@@ -92,13 +94,61 @@ function samplesDevPlugin(): Plugin {
   }
 }
 
+/**
+ * 导入闭包触达 DOMParser / requestAnimationFrame / document.* / navigator.* 的 spec，必须跑 jsdom。
+ * 新增 spec 后跑 `node scripts/_audit-jsdom.mjs`，按其 NEED JSDOM 输出更新本列表。
+ */
+const JSDOM_SPECS = [
+  'tests/unit/actions.spec.ts',
+  'tests/unit/cli-commands.spec.ts',
+  'tests/unit/component-lib.spec.ts',
+  'tests/unit/container-api.spec.ts',
+  'tests/unit/containers.spec.ts',
+  'tests/unit/copyHints.spec.ts',
+  'tests/unit/copyHtml.spec.ts',
+  'tests/unit/coverPlaceholder.spec.ts',
+  'tests/unit/debounce.spec.ts',
+  'tests/unit/exportFile.spec.ts',
+  'tests/unit/heading-autonumber.spec.ts',
+  'tests/unit/imageIntake.spec.ts',
+  'tests/unit/inline.spec.ts',
+  'tests/unit/inspect.spec.ts',
+  'tests/unit/mpInsertHints.spec.ts',
+  'tests/unit/outlinkDegrade.spec.ts',
+  'tests/unit/page-variants.spec.ts',
+  'tests/unit/pipeline.spec.ts',
+  'tests/unit/preview.spec.ts',
+  'tests/unit/public-api.spec.ts',
+  'tests/unit/quota.spec.ts',
+  'tests/unit/showcase-generator.spec.ts',
+  'tests/unit/theme-capabilities.spec.ts',
+  'tests/unit/theme-rendered-snapshot.spec.ts',
+  'tests/unit/theme-signature-coverage.spec.ts',
+  'tests/unit/themeOrchestrator.spec.ts',
+  'tests/unit/themes.spec.ts',
+  'tests/unit/tokenSchema.spec.ts',
+  'tests/unit/useClipboardCopy.spec.ts',
+  'tests/unit/useDraftLifecycle.spec.ts',
+  'tests/unit/useExportActions.spec.ts',
+  'tests/unit/usePersonaDraft.spec.ts',
+  'tests/unit/userVariant-resolve.spec.ts',
+  'tests/unit/userVariantCustom-render.spec.ts',
+  'tests/unit/variant-sanity.spec.ts',
+  'tests/unit/variant-sanity-codeblock.spec.ts',
+  'tests/unit/variant-sanity-matrix.spec.ts',
+  'tests/unit/variant-sanity-matrix-tail.spec.ts',
+  'tests/unit/visual-parity.spec.ts',
+  'tests/unit/wxPatch.spec.ts',
+]
+
 export default defineConfig({
   base: BASE,
   plugins: [
     vue(),
-    samplesDevPlugin(),
+    !IS_VITEST && samplesDevPlugin(),
     // juice 的浏览器入口 juice/client 依赖 cheerio → 需要 node polyfill
-    nodePolyfills({
+    // Node/jsdom 测试必须保留原生 process/Buffer，不能注入浏览器 shim。
+    !IS_VITEST && nodePolyfills({
       include: ['buffer', 'events', 'stream', 'util', 'process'],
       globals: { Buffer: true, process: true },
       protocolImports: true,
@@ -178,63 +228,28 @@ export default defineConfig({
     },
   },
   test: {
-    // 默认 node：jsdom 启动每文件 ~1.5-2s。65 spec 里约一半（含 transitive）拉到
-    // src/core/pipeline 的 DOMParser / src/infra/clipboard 的 navigator —— 这些必须
-    // 跑 jsdom；其余跑 node。
-    //
-    // 维护：列表来源 `node scripts/_audit-jsdom.mjs`（按导入闭包内是否触达
-    // DOMParser / requestAnimationFrame / document.* / navigator.* 判断）。
-    // 新增 spec 后跑一次脚本更新本列表。
-    environment: 'node',
-    environmentMatchGlobs: [
-      ['tests/unit/actions.spec.ts', 'jsdom'],
-      ['tests/unit/cli-commands.spec.ts', 'jsdom'],
-      ['tests/unit/component-lib.spec.ts', 'jsdom'],
-      ['tests/unit/container-api.spec.ts', 'jsdom'],
-      ['tests/unit/containers.spec.ts', 'jsdom'],
-      ['tests/unit/copyHints.spec.ts', 'jsdom'],
-      ['tests/unit/copyHtml.spec.ts', 'jsdom'],
-      ['tests/unit/coverPlaceholder.spec.ts', 'jsdom'],
-      ['tests/unit/debounce.spec.ts', 'jsdom'],
-      ['tests/unit/exportFile.spec.ts', 'jsdom'],
-      ['tests/unit/heading-autonumber.spec.ts', 'jsdom'],
-      ['tests/unit/imageIntake.spec.ts', 'jsdom'],
-      ['tests/unit/inline.spec.ts', 'jsdom'],
-      ['tests/unit/inspect.spec.ts', 'jsdom'],
-      ['tests/unit/mpInsertHints.spec.ts', 'jsdom'],
-      ['tests/unit/outlinkDegrade.spec.ts', 'jsdom'],
-      ['tests/unit/page-variants.spec.ts', 'jsdom'],
-      ['tests/unit/pipeline.spec.ts', 'jsdom'],
-      ['tests/unit/preview.spec.ts', 'jsdom'],
-      ['tests/unit/public-api.spec.ts', 'jsdom'],
-      ['tests/unit/quota.spec.ts', 'jsdom'],
-      ['tests/unit/showcase-generator.spec.ts', 'jsdom'],
-      ['tests/unit/theme-capabilities.spec.ts', 'jsdom'],
-      ['tests/unit/theme-rendered-snapshot.spec.ts', 'jsdom'],
-      ['tests/unit/theme-signature-coverage.spec.ts', 'jsdom'],
-      ['tests/unit/themeOrchestrator.spec.ts', 'jsdom'],
-      ['tests/unit/themes.spec.ts', 'jsdom'],
-      ['tests/unit/tokenSchema.spec.ts', 'jsdom'],
-      ['tests/unit/useClipboardCopy.spec.ts', 'jsdom'],
-      ['tests/unit/useDraftLifecycle.spec.ts', 'jsdom'],
-      ['tests/unit/useExportActions.spec.ts', 'jsdom'],
-      ['tests/unit/usePersonaDraft.spec.ts', 'jsdom'],
-      ['tests/unit/userVariant-resolve.spec.ts', 'jsdom'],
-      ['tests/unit/userVariantCustom-render.spec.ts', 'jsdom'],
-      ['tests/unit/variant-sanity.spec.ts', 'jsdom'],
-      ['tests/unit/variant-sanity-codeblock.spec.ts', 'jsdom'],
-      ['tests/unit/variant-sanity-matrix.spec.ts', 'jsdom'],
-      ['tests/unit/variant-sanity-matrix-tail.spec.ts', 'jsdom'],
-      ['tests/unit/visual-parity.spec.ts', 'jsdom'],
-      ['tests/unit/wxPatch.spec.ts', 'jsdom'],
-    ],
     // threads + isolate:false：worker 内复用模块缓存，砍掉 collect 阶段的重复 parse。
     // 全局 afterEach（tests/setup.ts）清理 localStorage + state，spec 间不串台。
     pool: 'threads',
-    poolOptions: { threads: { isolate: false, useAtomics: true } },
+    isolate: false,
     globals: true,
+    // 默认 node：jsdom 启动每文件 ~1.5-2s，只有导入闭包触达 DOM API 的 spec 才进 jsdom 项目。
     // 只抓 tests/unit/；tests/e2e/ 是 Playwright 专属，跑 vitest 会炸
-    include: ['tests/unit/**/*.spec.ts'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'node',
+          environment: 'node',
+          include: ['tests/unit/**/*.spec.ts'],
+          exclude: ['**/node_modules/**', ...JSDOM_SPECS],
+        },
+      },
+      {
+        extends: true,
+        test: { name: 'jsdom', environment: 'jsdom', include: JSDOM_SPECS },
+      },
+    ],
     // Node 24+ 的原生退化 localStorage 会影子掉 jsdom 的实现；setup 里强制替换
     setupFiles: ['tests/setup.ts'],
     // 覆盖率聚焦"应用层"：core/pipeline 已被 themes/conformance/variant-sanity 等

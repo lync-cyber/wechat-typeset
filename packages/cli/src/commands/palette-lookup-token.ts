@@ -28,7 +28,7 @@
 import {
   lookupToken,
   type TokenHit,
-} from '../../../../src/core/design-ir'
+} from '../../../../src/public'
 import type { Command } from '../types'
 
 interface PaletteLookupInput {

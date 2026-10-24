@@ -16,10 +16,16 @@
  *   即使上游顺序变了，或有 patch 在中间又引入 id，svg 子树也能保证干净。
  */
 
-import { patchSvgSubtree } from './utils'
+import { parseFragment, patchSvgSubtreeInPlace, serializeFragment } from './utils'
 
 export function patchSvgIds(html: string): string {
-  return patchSvgSubtree(html, (el) => {
+  const { container } = parseFragment(html)
+  patchSvgIdsInPlace(container)
+  return serializeFragment(container)
+}
+
+export function patchSvgIdsInPlace(container: HTMLElement): void {
+  patchSvgSubtreeInPlace(container, (el) => {
     if (el.hasAttribute('id')) el.removeAttribute('id')
   })
 }
