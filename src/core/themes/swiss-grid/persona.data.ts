@@ -755,7 +755,7 @@ VOL.IV · 2026—04—22 · CHF 14.—
 撰文 **顾留白**　·　编辑 **徐稍后读**　·　SET **04·2026**
 :::
 `,
-    footerCTA: `::: cta-bar like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
+    footerCTA: `::: footer-cta variant=triptych-actions like="♡  LIKE" star="◎  SEEN" share="→  SHARE"
 :::
 `,
     tip: `::: tip TIP

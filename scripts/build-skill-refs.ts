@@ -2,13 +2,14 @@
 /**
  * 从 src 派生 `skills/_shared/references/` 下的速查表段。
  *
- * 为什么：personas / variant 白名单两份是给 LLM 的权威 reference，但内容（主题
- * 数、variant id 集合）全是 src 派生信息——任何手维护版本都会与源漂移。
+ * 为什么：容器 / 签名容器 / personas / variant 白名单是给 LLM 的权威 reference，
+ * 内容全是 src 派生信息——手维护版本容易与源漂移。
  *
  * 工作方式：
  *   - personas 表 → 从 listPersonas() 派生（含 audience / variants / signatureContainers）
  *   - 变体白名单 → 从 VARIANT_IDS 派生
- *   - 两份 reference 各自留 `<!-- generated:<key>:start/end -->` 标记对，原地替换；
+ *   - 容器清单 → 从 CONTAINER_VOCABULARY 派生；签名白名单 → 从 SUPPORTED_SIGNATURE_CONTAINERS 派生
+ *   - reference 各自留 `<!-- generated:<key>:start/end -->` 标记对，原地替换；
  *     其余手写段（决策树、设计原型、独有能力描述）不动
  *
  * 命令：
@@ -23,6 +24,8 @@ import { resolve } from 'node:path'
 
 import { listPersonas } from '../src/public'
 import { VARIANT_IDS } from '../src/core/themes/types'
+import { CONTAINER_VOCABULARY, packOf } from '../src/core/vocabulary/vocabulary'
+import { SUPPORTED_SIGNATURE_CONTAINERS } from '../src/core/themes/_shared/spec'
 import { normalizeEol } from './_lib'
 
 interface SpliceTarget {
@@ -83,7 +86,29 @@ function renderVariantWhitelist(): string {
   return lines.join('\n')
 }
 
+function renderContainerVocabulary(): string {
+  const signatures = new Set<string>(SUPPORTED_SIGNATURE_CONTAINERS)
+  const lines = ['| 扩展包 | fence 名 | ★ | 用途 | variantKind |', '| --- | --- | :-: | --- | --- |']
+  for (const spec of CONTAINER_VOCABULARY) {
+    const sig = spec.styleKey && signatures.has(spec.styleKey) ? '★' : ''
+    const name = `${':'.repeat(spec.fenceLength)} ${spec.name}`
+    const description = spec.description.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\|/g, '\\|')
+    lines.push(`| ${packOf(spec)} | \`${name}\` | ${sig} | ${description} | ${spec.variantKind ?? '—'} |`)
+  }
+  return lines.join('\n')
+}
+
 const TARGETS = (): SpliceTarget[] => [
+  {
+    docPath: resolve(process.cwd(), 'skills/_shared/references/hard-rules.md'),
+    key: 'signature-whitelist',
+    generated: SUPPORTED_SIGNATURE_CONTAINERS.map((id) => `\`${id}\``).join(' · '),
+  },
+  {
+    docPath: resolve(process.cwd(), 'skills/_shared/references/container-vocabulary.md'),
+    key: 'container-vocabulary',
+    generated: renderContainerVocabulary(),
+  },
   {
     docPath: resolve(process.cwd(), 'skills/_shared/references/personas.md'),
     key: 'personas-table',

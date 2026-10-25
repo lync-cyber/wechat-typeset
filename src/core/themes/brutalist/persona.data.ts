@@ -710,7 +710,7 @@ export const spec: PersonaSpec = {
 日期　2026.04.22
 :::
 `,
-    footerCTA: `::: cta-bar like="LIKE" star="STAR ★" share="FWD →"
+    footerCTA: `::: footer-cta variant=triptych-actions like="LIKE" star="STAR ★" share="FWD →"
 :::
 `,
     tip: `::: tip TIP

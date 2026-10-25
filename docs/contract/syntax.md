@@ -15,8 +15,8 @@
 :::
 ```
 
-- **name**：容器 id（kebab-case），决定走哪个渲染器。完整可用名单见 [base.md · 速查表](base.md#速查表) 与 [packs/data-brief.md · 速查表](packs/data-brief.md#速查表)。
-- **标题**：`name` 之后、首个 `key=` 之前的空格分隔串被收为 `info.title`。各容器按需使用（`author` 当作者名、`tip` 当醒目标题、`intro/cover` 当标题行）。
+- **name**：容器 id（kebab-case），决定走哪个渲染器。完整可用名单见 [base.md · 速查表](base.md#速查表)、[editorial · 速查表](packs/editorial.md#速查表) 与 [data-viz · 速查表](packs/data-viz.md#速查表)。
+- **标题**：从 `name` 后的文字中提取所有 `key=value` 属性，剩余文字合并空白后成为 `info.title`。属性可放在标题前后；例如 `::: tip 重要 variant=pill-tag` 与 `::: tip variant=pill-tag 重要` 等效。各容器按需使用标题。
 - **键值对**：`key=value` 或 `key="v with space"`，**仅在 open 行生效**。渲染器从 `ctx.attrs.key` 读取。
   - 正文里写 `key: value`（YAML 风格）会被当作普通段落，**不是 attr**。
 - **正文**：两行 fence 之间的内容仍是完整 Markdown——可继续嵌套强调、图片、列表、行内扩展。
@@ -38,8 +38,8 @@
 ::::
 ```
 
-按 markdown-it-container 原生行为，**同名 + 同长度**的 fence 才互相关闭。
-本契约里强制外层 `::::` 的容器有 `compare` / `toc` / `kpi-dashboard` / `bar-chart`——见各容器自己的小节示例。
+闭合行只写冒号，数量至少与对应开启行相同；闭合行不带容器名。嵌套时内层闭合行的冒号应少于外层，避免提前关闭外层。
+本契约建议外层 `::::` 的容器有 `compare` / `toc` / `timeline` / `kpi-dashboard` / `bar-chart` / `table-card` / `gallery` / `dialogue`——见各容器自己的小节示例。
 
 ---
 
@@ -72,9 +72,9 @@ variants:                   # 页面级 variant 覆盖（可选），按 slot �
 
 ## variant 覆盖
 
-主题在 spec 里为每个类目（admonition / quote / compare / steps / divider / sectionTitle / note / codeBlock）挑了**默认骨架**。如果某一处想要不同骨架，可在 fence 的 attrs 里覆盖。两种语法形式：
+主题在 spec 里为各个 variant 类目挑选**默认骨架**。如果某一处想要不同骨架，可在 fence 的 attrs 里覆盖。容器是否支持切换及对应类目见 `getVariantsForContainer(name)`；完整类目和 id 见 `getVariantIds()`。两种语法形式：
 
-**容器 fence**（admonition / quote / compare / steps / divider / sectionTitle / note）写在 open 行的 attrs 里：
+**支持 variant 的容器 fence**写在 open 行的 attrs 里：
 
 ```
 ::: tip variant=pill-tag 重要
@@ -101,7 +101,11 @@ const u: User = { id: 'u1', name: 'Ada' }
 | `steps` | `number-circle` · `ribbon-chain` · `timeline-dot` |
 | `divider` | `wave` · `dots` · `flower` · `rule` · `glyph` |
 | `sectionTitle` | `bordered` · `cornered` |
-| `note` | `minimal-callout` · `box-callout` · `side-bar` |
+| `note` | `minimal-callout` · `box-callout` · `side-bar` · `editorial-stripe` · `research-dense` · ... |
+| `recommend` | `card-list` · `academic-refs` |
+| `qrcode` | `bare` · `follow-card` |
+| `footerCTA` | `button-led` · `triptych-actions` |
+| `footnotes` | `lined` · `inline-flow` |
 | `codeBlock` | `bare` · `header-bar` |
 
 > **渲染**：不在合法 id 列表内的 variant 值会被静默忽略，回退到主题默认骨架——换主题不塌版。

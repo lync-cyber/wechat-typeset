@@ -185,12 +185,12 @@
 
 缺少这些材料时，保留已有文末文字或链接，不用示例地址补齐。
 
-## 配方 10：已有参考阅读（see-also / recommend）
+## 配方 10：已有参考阅读（recommend）
 
-文末已有参考资料或相关文章列表，需要独立呈现时，可以使用 `see-also` 或 `recommend`。依据原有列表用途选择，不按主题自动补推荐链接；保留链接标题、URL 和原有顺序。
+文末已有参考资料或相关文章列表，需要独立呈现时，可以使用 `recommend variant=academic-refs`（参考引用）或 `recommend variant=card-list`（延伸阅读）。依据原有列表用途选择，不按主题自动补推荐链接；保留链接标题、URL 和原有顺序。
 
 ```markdown
-::: see-also 延伸阅读
+::: recommend variant=academic-refs 延伸阅读
 - [Markdown Guide](https://www.markdownguide.org/)
 - [CommonMark](https://commonmark.org/)
 :::

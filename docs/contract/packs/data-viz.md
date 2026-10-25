@@ -4,7 +4,7 @@
 
 为数据驱动文章设计的跨主题可视化容器集——KPI 仪表盘、横向条形图。气质参照：晚点 LatePost · 财新数据 · Morning Brew "By the numbers" 板块。
 
-本包是**领域扩展**，多主题可借用（不绑定 `data-brief` 主题）。在 `signatureContainers` 里声明 `kpiDashboard` 或 `barChart` 即激活整包签名视觉；未声明的主题语法仍合法，但会回退到中性兜底样式。
+本包是**领域扩展**，多主题可借用（不绑定 `data-brief` 主题）。在 `signatureContainers` 里分别声明 `kpiDashboard` / `barChart`，登记对应容器的签名视觉；未声明的主题语法仍合法，但会回退到中性兜底样式。
 
 ## 何时用本扩展包
 
@@ -16,7 +16,7 @@
 
 <!-- generated:container-quick-ref:pack:data-viz:start -->
 
-数据可视化容器集（多主题可借用）：KPI 仪表盘 / 横向条形图。在 `signatureContainers` 里声明 `kpiDashboard` 或 `barChart` 即启用整包签名视觉。带 ★ 是可登记的**签名容器**。
+数据可视化容器集（多主题可借用）：KPI 仪表盘 / 横向条形图。在 `signatureContainers` 里分别声明 `kpiDashboard` / `barChart`，登记对应容器的签名视觉。带 ★ 是可登记的**签名容器**。
 
 | 类 | 容器 | ★ | 一句话用途 |
 | --- | --- | :-: | --- |
@@ -25,7 +25,7 @@
 |  | `bar-chart` | ★ | 横向条形图（纯 div 宽度，无 SVG）。外层用 4 个冒号，内部用 bar 条目。info 为图表标题。 |
 |  | `bar` |  | bar-chart 内单条；attrs.label/pct/value 必填，tone 决定柱色（normal 走主色）。 |
 
-> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
+> 由 `pnpm build:writer-docs` 从 `src/core/vocabulary/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
 
 <!-- generated:container-quick-ref:pack:data-viz:end -->
 

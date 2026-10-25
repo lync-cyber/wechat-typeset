@@ -34,7 +34,7 @@ const lined: VariantDef = {
       presetId: 'footnotes-lined',
       name: '脚注 · 逐条',
       description: '一行一条 + hanging indent，5~10 条短引用',
-      markdown: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
+      markdown: '::: footnotes variant=lined\n[1] 数据覆盖 2010–2025。\n\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
     },
   ],
   render: (ctx) => {

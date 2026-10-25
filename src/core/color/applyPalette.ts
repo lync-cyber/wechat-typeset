@@ -13,7 +13,7 @@
  *   - 基主题里 hardcoded 的非 tokens 色（已知限制）→ 保持原样
  */
 
-import { baseContainers, baseElements, baseInline, buildTheme } from '../themes/_shared/buildTheme'
+import { baseContainers, baseElements, baseInline, baseInnerStyles, buildTheme } from '../themes/_shared/buildTheme'
 import type { CSSObject, SvgVariant, Theme, ThemeTokens } from '../themes/types'
 import { derivePalette, type PaletteSeed } from './generator'
 
@@ -53,20 +53,31 @@ export function applyPalette(opts: ApplyPaletteOptions): Theme {
   const baseElBaseline = baseElements(base.tokens)
   const baseCoBaseline = baseContainers(base.tokens)
   const baseInBaseline = baseInline(base.tokens)
+  const baseInnerBaseline = baseInnerStyles(base.tokens)
 
   const elementsDelta = diff(base.elements as unknown as CSSMap, baseElBaseline as unknown as CSSMap)
   const containersDelta = diff(base.containers as unknown as CSSMap, baseCoBaseline as unknown as CSSMap)
   const inlineDelta = diff(base.inline as unknown as CSSMap, baseInBaseline as unknown as CSSMap)
+  const innerStylesDelta = diff(base.innerStyles as unknown as CSSMap, baseInnerBaseline as unknown as CSSMap)
 
   return buildTheme({
     id: opts.id ?? `${base.id}--custom`,
     name: opts.name ?? `${base.name} · 自定义`,
     description: `基于 ${base.name} 的自定义配色`,
+    author: base.author,
+    preview: base.preview,
+    baseTheme: base.baseTheme,
     variant,
     tokens: newTokens,
     elements: recolor(elementsDelta, base.tokens.colors, newColors) as never,
     containers: recolor(containersDelta, base.tokens.colors, newColors) as never,
     inline: recolor(inlineDelta, base.tokens.colors, newColors) as never,
+    innerStyles: recolor(innerStylesDelta, base.tokens.colors, newColors) as never,
+    // 配色只替换颜色；组件骨架、模板与声明式装饰仍属于原主题。
+    variants: base.variants,
+    templates: base.templates,
+    decorations: base.decorations,
+    capabilities: base.capabilities,
     // 保留 base 主题的 kickers 覆盖：用户调色不应丢失主题母语 kicker。
     kickers: base.kickers,
   })

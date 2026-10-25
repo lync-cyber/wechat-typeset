@@ -151,10 +151,15 @@
 
 ::: footnotes 参 考 文 献
 [1] CNNIC 第 57 次《中国互联网络发展状况统计报告》，2026年3月
+
 [2] 全国国民阅读调查 2026Q1，中国新闻出版研究院
+
 [3] OECD Digital Reading Behaviour Study 2025
+
 [4] 国家图书馆全民阅读数据年鉴 2025
+
 [5] 中国传媒大学媒介素养研究院，《数字阅读中断行为实验报告》，2025
+
 [6] Nielsen Book Research，Global Reading Tracker Q4 2025
 :::
 

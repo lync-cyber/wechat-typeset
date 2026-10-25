@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * 从 `src/containers/vocabulary.ts` 派生写作契约文档里的速查表段。
+ * 从 `src/core/vocabulary/vocabulary.ts` 派生写作契约文档里的速查表段。
  *
  * 为什么：速查表（容器清单 + 签名标记 + 一句话用途）是词汇表的完整下游投影——
  * 作者按表写 fence，新增容器时表必须同步更新。手写容易漂移。
@@ -17,7 +17,7 @@
  *   tsx scripts/build-writer-docs.ts --check  # CI 模式：差异即 exit 1
  *
  * 新增 pack：
- *   1. 在 `src/containers/vocabulary.ts` 的 ContainerPack union 追加 pack id
+ *   1. 在 `src/core/vocabulary/vocabulary.ts` 为新包确定 `pack:<domain>` id
  *   2. 给该 pack 的每个容器 spec 标 `pack: '<id>'`
  *   3. 在 PACK_TARGETS 里登记 packId → 目标文档路径
  *   4. 目标文档里手工放置 `<!-- generated:container-quick-ref:<packId>:start/end -->` 标记对
@@ -56,7 +56,7 @@ const PACK_TARGETS: Partial<Record<ContainerPack, PackTarget>> = {
     docPath: resolve(process.cwd(), 'docs/contract/packs/data-viz.md'),
     intro:
       '数据可视化容器集（多主题可借用）：KPI 仪表盘 / 横向条形图。' +
-      '在 `signatureContainers` 里声明 `kpiDashboard` 或 `barChart` 即启用整包签名视觉。带 ★ 是可登记的**签名容器**。',
+      '在 `signatureContainers` 里分别声明 `kpiDashboard` / `barChart`，登记对应容器的签名视觉。带 ★ 是可登记的**签名容器**。',
   },
 }
 
@@ -111,14 +111,14 @@ function renderPackTable(packId: ContainerPack): string {
         spec.styleKey !== null &&
         signatureSet.has(spec.styleKey as (typeof SUPPORTED_SIGNATURE_CONTAINERS)[number])
       const mark = isSig ? '★' : ''
-      const desc = spec.description.replace(/\|/g, '\\|')
+      const desc = spec.description.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\|/g, '\\|')
       lines.push(`| ${groupCell} | \`${spec.name}\` | ${mark} | ${desc} |`)
     })
   }
 
   lines.push('')
   lines.push(
-    `> 由 \`npm run build:writer-docs\` 从 \`src/containers/vocabulary.ts\` 生成，请勿手改。` +
+    `> 由 \`pnpm build:writer-docs\` 从 \`src/core/vocabulary/vocabulary.ts\` 生成，请勿手改。` +
       `新增容器先改 vocabulary（含 \`pack\` 字段），需要划入扩展包就声明 \`pack: '<id>'\`。`,
   )
 

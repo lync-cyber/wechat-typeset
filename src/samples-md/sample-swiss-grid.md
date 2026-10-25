@@ -155,8 +155,11 @@ const column = (total, gutter) =>
 
 ::: footnotes NOTES
 [1] Josef Müller-Brockmann, *Grid Systems in Graphic Design*, Niggli Verlag, 1981, p.10.
+
 [2] Jan Tschichold, *Asymmetric Typography*, Reinhold Publishing, 1967.
+
 [3] Karl Gerstner, *Designing Programmes*, Arthur Niggli, 1964, p.22.
+
 [4] 样本调研：取 12 本瑞士设计年鉴（1955–1975），逐页记录主栏数，共 240 对开页，排除广告版。
 :::
 

@@ -36,6 +36,9 @@ jobs:
       - name: Typecheck + build
         run: pnpm build
 
+      - name: Check authored asset generation drift
+        run: git diff --exit-code -- src/domain/samples/_generated.ts src/domain/samples/_references.ts src/domain/samples/_showcase.ts
+
       - name: Run tests
         run: pnpm test
 

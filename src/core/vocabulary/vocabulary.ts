@@ -3,7 +3,7 @@
  *
  * 这是 "Headless 组件契约 + 主题化渲染" 的契约层：
  *   - 主题无关：不含任何 CSS，不引用具体主题
- *   - 覆盖全集：枚举所有合法 `:::` markdown fence 名（覆盖 CONTAINER_REGISTRY 全部 24 个）
+ *   - 覆盖全集：枚举所有合法容器 fence 名，与 CONTAINER_REGISTRY 一一对应
  *   - 派生数据：ThemeContainerStyles 类型、capabilities.json、运行时查询 API 都从这里派生
  *
  * 术语：
@@ -19,7 +19,7 @@
  *   2. 若 styleKey 非 null，同步在 themes/types.ts:ThemeContainers 里补字段
  *      + buildTheme.baseContainers() 里补默认值（可以是 `{}`）
  *   3. 在 pipeline/containers 里加 renderer，登记到 pipeline/containers/index.ts
- *   4. 若需要 signatureContainer 支持，只需补 SUPPORTED_SIGNATURE_CONTAINERS；
+ *   4. 运行 pnpm codegen:sigcontainers，从非空 styleKey 派生 SUPPORTED_SIGNATURE_CONTAINERS；
  *      fence 名映射由本文件末尾 STYLE_KEY_TO_CONTAINER_NAME 自动派生
  *
  * 本文件不 import renderer 实现，避免循环依赖 —— renderer 在独立层消费本词汇表。
@@ -39,7 +39,7 @@ export type ContainerCategory =
   | 'structure' // 骨架：intro / cover / author / section-title / author-bio / masthead / byline / editorial-header
   | 'admonition' // 五态提示：tip / warning / info / danger / note / announcement
   | 'content' // 内容块：quote-card / highlight / compare / pros / cons / steps / image-caption / timeline
-  | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / qr-follow / cta-bar / toc
+  | 'navigation' // 导航/收束：divider / footer-cta / recommend / qrcode / toc
   | 'media' // 公众号原生媒体占位：voice-card / video-card（粘贴后由微信识别为 mpvoice / mpvideo）
   | 'signature' // 签名块：abstract / key-number / colophon / footnotes
   | 'data' // 数据可视化：kpi-dashboard / kpi-item / bar-chart / bar
@@ -87,7 +87,7 @@ export interface ContainerSpec {
   /**
    * 所属契约扩展包。缺省（未声明）= 'base'。
    * 设计为可选：base 容器**不需要**显式标注 pack，减少日常新增 base 容器的样板；
-   * 仅扩展包（如 'data-brief'）成员需要主动声明。
+   * 仅扩展包（如 'pack:editorial'）成员需要主动声明。
    */
   pack?: ContainerPack
   /** 绑定的 variant slot；无 variantKind = 固定骨架，渲染器不读 theme.variants。 */
@@ -100,7 +100,7 @@ export interface ContainerSpec {
   children?: readonly string[]
   /** 若本容器必须嵌在某父容器内，填父容器 name */
   parent?: string
-  /** markdown-it-container fence 长度（compare 外层 4 个冒号，其他 3 个） */
+  /** 推荐 fence 长度：含子容器的外层用 4 个冒号，普通容器与子项用 3 个。 */
   fenceLength: 3 | 4
   /**
    * 叙述强度梯度（1 ≤ x ≤ 5）。docs/wechat-typeset-container/persona-contracts.md
@@ -184,7 +184,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     category: 'structure',
     variantKind: 'sectionTitle',
     fenceLength: 3,
-    description: '章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。',
+    description: '章节标题块（比 ## 更强势的分节）。常用骨架有 bordered / cornered，完整清单见对应 variantKind。',
     example: '::: section-title\n第一章 · 缘起\n:::\n',
   },
   {
@@ -444,7 +444,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     category: 'content',
     variantKind: 'quote',
     fenceLength: 3,
-    description: '大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。',
+    description: '大段引用卡。常用骨架有 classic / magazine-dropcap / column-rule / frame-brackets，完整清单见对应 variantKind。',
     example: '::: quote-card\n一段值得突出的引用 …\n:::\n',
     narrativeStrength: 4,
   },
@@ -496,7 +496,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     category: 'content',
     variantKind: 'steps',
     fenceLength: 3,
-    description: '编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。',
+    description: '编号步骤列表。常用骨架有 number-circle / ribbon-chain / timeline-dot，完整清单见对应 variantKind。',
     example: '::: steps\n1. 初始化\n2. 构建\n3. 发布\n:::\n',
   },
   {
@@ -581,7 +581,7 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
     category: 'navigation',
     variantKind: 'divider',
     fenceLength: 3,
-    description: '装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。',
+    description: '装饰分隔线。常用骨架有 wave / dots / flower / rule / glyph / seal-mark，完整清单见对应 variantKind。',
     example: '::: divider\n:::\n',
   },
   {
@@ -688,15 +688,15 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       },
     ],
     description:
-      '二维码块。两态骨架：bare（默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；' +
+      '二维码块。bare（系统默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；' +
       'follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。' +
-      '带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。',
+      'qr-stack = 上 QR + 下 kicker/title/desc 居中堆叠。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。',
     example: '::: qrcode text="https://mp.weixin.qq.com/s/xxx"\n扫码关注\n:::\n',
   },
   {
     // 作者面 fence 名走语义命名（voice-card），平台粘贴契约（<!--mpvoice--> HTML 注释、
     // data-wx-mp-kind="voice" 锚点）仍走微信原生标识，由 infra/clipboard/mpInsertHints 注入。
-    // 兼容期：旧 ::: mpvoice 仍可识别（见 vocabulary 末尾的 LEGACY_CONTAINER_ALIASES）。
+    // 作者只使用 voice-card；mpvoice 仅用于平台 HTML 占位协议。
     name: 'voice-card',
     styleKey: 'voiceCard',
     category: 'media',
@@ -861,11 +861,12 @@ const VOCAB_ENTRIES: ContainerSpec[] = [
       },
     ],
     description:
-      '脚注 / 参考文献块。两骨架可选：' +
-      'lined（默认，一条一行 + hanging indent）适合 5~10 条短引用；' +
+      '脚注 / 参考文献块。常用骨架：' +
+      'lined（系统默认，分段条目 + hanging indent）适合 5~10 条短引用；' +
       'inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。' +
-      'info 非空时渲染主色 kicker（如 "NOTES" / "参考文献"），与 editor-note / qa-block 同源。',
-    example: '::: footnotes\n[1] 数据覆盖 2010–2025。\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
+      '另有 boxed-aside 旁白卡 / top-rule 报纸尾注 / dense-academic 论文文献表。' +
+      'info 非空时按所选骨架渲染标题。',
+    example: '::: footnotes variant=lined\n[1] 数据覆盖 2010–2025。\n\n[2] 深度理解得分取自 24h 回忆测试。\n:::\n',
   },
   {
     name: 'colophon',
@@ -1191,7 +1192,7 @@ export function notesFor(spec: ContainerSpec): string | undefined {
   if (ADMONITION_NAMES.has(spec.name))
     return 'admonition 四态（tip/warning/info/danger）共享 variant 清单；可通过 variant=xxx 在 open 行覆盖主题默认。第五态 note 已独立为 variantKind=note。'
   if (spec.name === 'note')
-    return '第五态补注：独立 variantKind=note，中性骨架；可通过 variant=xxx 切骨架，色彩走 textMuted 不抢色。'
+    return '统一补注容器：独立 variantKind=note；中性补注走 textMuted，editorial-stripe 表达编辑部按语，research-dense 表达调研口径。'
   if (spec.category === 'free') return '兜底 escape hatch：无主题样式，按作者内容原样透传。'
   return undefined
 }

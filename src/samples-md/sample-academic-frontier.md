@@ -79,21 +79,21 @@ for epoch in range(E):
 
 ## 3.1 研究时间线
 
-::::: timeline
+:::: timeline
 
-:::: timeline-item year=2020
+::: timeline-item year=2020
 SimCLR 与 MoCo 同期发表，对比学习进入爆发期；负样本数量被视作核心超参。
-::::
+:::
 
-:::: timeline-item year=2022
+::: timeline-item year=2022
 BYOL 与 Barlow Twins 展示"无负样本"路径，但坍缩机制的理论解释仍缺失。
-::::
+:::
 
-:::: timeline-item year=2024
+::: timeline-item year=2024
 温度系数 *τ* 与坍缩的关系开始在若干 workshop 论文中被独立观察到；本文是首篇系统性实证。
-::::
+:::
 
-:::::
+::::
 
 ::: divider
 :::
@@ -157,7 +157,6 @@ CITE AS — 张三, 李四, 王五. (2026). 关于对比学习中表征坍缩的
 - [5] Liu, M. (2026). On temperature scaling in contrastive objectives. arXiv: 2604.01234.
 :::
 
-::: footnotes
 [^1]: *τ*-adaptive 调度在推理阶段不引入任何额外计算：调度仅在训练中运行，推理时 τ 已固定为 *τ**。
+
 [^2]: "批次越大越好"的观点主要来自 Chen et al. (2020) 的 Figure 9，其实验条件固定 τ = 0.07。本文结果在 τ 自适应条件下不再成立。
-:::

@@ -48,7 +48,20 @@ export interface RenderOutput {
 }
 
 // 容器渲染器在 createMarkdown 闭包里绑了 theme + customVariants 引用，任一变化必须
-// 换新实例；key 由 theme.id + customsSig 拼成。tokens/patch UV 走 env 派发不影响 key。
+// 换新实例；同 id 的不同配色也必须隔离。Theme 按不可变快照使用，修改时创建新对象。
+// WeakMap 只分配对象身份，不持有主题；tokens/patch UV 走 env 派发不影响 key。
+const themeIdentities = new WeakMap<Theme, number>()
+let nextThemeIdentity = 0
+
+function themeIdentity(theme: Theme): number {
+  let identity = themeIdentities.get(theme)
+  if (identity === undefined) {
+    identity = ++nextThemeIdentity
+    themeIdentities.set(theme, identity)
+  }
+  return identity
+}
+
 const MD_CACHE_MAX = 12
 const mdCache = createLRU<string, MarkdownIt>(MD_CACHE_MAX)
 
@@ -62,7 +75,7 @@ function customsSig(uvs: readonly UserVariantCustom[]): string {
 }
 
 function getMarkdown(theme: Theme, customVariants: readonly UserVariantCustom[]): MarkdownIt {
-  const key = `${theme.id}:${customsSig(customVariants)}`
+  const key = `${themeIdentity(theme)}:${customsSig(customVariants)}`
   const cached = mdCache.get(key)
   if (cached) return cached
   const md = createMarkdown({ theme, customVariants })
@@ -90,14 +103,6 @@ function getMarkdown(theme: Theme, customVariants: readonly UserVariantCustom[])
 const RENDER_OUTPUT_CACHE_MAX = 16
 const renderCache = createLRU<string, RenderOutput>(RENDER_OUTPUT_CACHE_MAX)
 
-function djb2(s: string): string {
-  let h = 5381
-  for (let i = 0; i < s.length; i++) {
-    h = ((h << 5) + h + s.charCodeAt(i)) | 0
-  }
-  return h.toString(36)
-}
-
 function uvSig(uvs: readonly UserVariant[] | undefined): string {
   if (!uvs || uvs.length === 0) return ''
   return [...uvs]
@@ -108,14 +113,15 @@ function uvSig(uvs: readonly UserVariant[] | undefined): string {
 
 function buildRenderCacheKey(input: RenderInput): string {
   const platform = input.platform ?? DEFAULT_PLATFORM_ID
-  const wxPatchSig = input.wxPatch ? djb2(JSON.stringify(input.wxPatch)) : ''
-  return [
-    input.theme.id,
-    djb2(input.md),
+  // 只缓存 16 份结果；保留正文与选项的完整值，不能用短哈希代替相等性。
+  // 结构化数组同时避免正文里的分隔符与其它字段意外拼成相同 key。
+  return JSON.stringify([
+    themeIdentity(input.theme),
+    input.md,
     platform,
-    wxPatchSig,
+    input.wxPatch ?? null,
     uvSig(input.userVariants),
-  ].join(':')
+  ])
 }
 
 export function render(input: RenderInput): RenderOutput {

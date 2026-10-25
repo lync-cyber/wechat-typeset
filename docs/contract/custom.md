@@ -9,8 +9,8 @@
 
 先问三次"能不能不加"：
 
-1. **能用基础契约的容器拼出来吗？** —— 优先复用，少新增。基础契约 23 个容器覆盖面已经很广。
-2. **能用 `::: free` 装下吗？** —— 一次性的、不可复用的版面（推荐合集、致谢页），写进 `free` 即可，无需建容器。注意：`free` 内的内容退出契约保护。
+1. **现有容器无法表达吗？** —— 先看基础契约与领域扩展包，优先复用已有容器及其变体。
+2. **确实需要可复用的独立语义吗？** —— 一次性的版面可写进 `free`，无需建容器。注意：`free` 内的内容退出契约保护。
 3. **它在产品里至少出现 3 次了吗？** —— 三次以上的重复模式才值得抽出来。一次性需求别污染词汇表。
 
 三次都"是"，再开始走自定义流程。
@@ -23,7 +23,7 @@
 
 ### 1. 在词汇表登记
 
-[`src/containers/vocabulary.ts`](../../src/containers/vocabulary.ts) 末尾追加 `ContainerSpec`：
+[`src/core/vocabulary/vocabulary.ts`](../../src/core/vocabulary/vocabulary.ts) 末尾追加 `ContainerSpec`：
 
 ```ts
 {
@@ -42,7 +42,7 @@
 
 ### 2. 写渲染器
 
-在 `src/pipeline/containers/` 下新建文件，导出一个 `ContainerRenderer`：
+在 `src/core/pipeline/containers/` 下新建文件，导出一个 `ContainerRenderer`：
 
 ```ts
 export const episodeCardContainer: ContainerRenderer = {
@@ -51,21 +51,21 @@ export const episodeCardContainer: ContainerRenderer = {
 }
 ```
 
-在 `src/pipeline/containers/index.ts` 的 `CONTAINER_REGISTRY` 里登记 `'episode-card': episodeCardContainer`。
+在 `src/core/pipeline/containers/index.ts` 的 `CONTAINER_REGISTRY` 里登记 `'episode-card': episodeCardContainer`。
 
 ### 3. （可选）参与主题 CSS 槽位
 
 如果希望主题作者能为本容器调样式：
 
 - `vocabulary.ts` 里 `styleKey` 写 camelCase（如 `'episodeCard'`）
-- 在 [`src/themes/types.ts`](../../src/themes/types.ts) 的 `ThemeContainers` 接口补 `episodeCard?: CSSObject`
-- 在 [`src/themes/_shared/buildTheme.ts`](../../src/themes/_shared/buildTheme.ts) 的 `baseContainers()` 里补默认值（可以是 `{}`）
+- 在 [`src/core/themes/types.ts`](../../src/core/themes/types.ts) 的 `ThemeContainers` 接口补 `episodeCard?: CSSObject`
+- 在 [`src/core/themes/_shared/buildTheme.ts`](../../src/core/themes/_shared/buildTheme.ts) 的 `baseContainers()` 里补默认值（可以是 `{}`）
 
 ### 4. （可选）登记为签名容器
 
 如果某些主题想"承诺"渲染本容器，使其出现在 `signatureContainers` 声明里：
 
-- 在 [`src/themes/_shared/spec/`](../../src/themes/_shared/spec/) 的 `SUPPORTED_SIGNATURE_CONTAINERS` 数组里追加 styleKey
+- 运行 `pnpm codegen:sigcontainers`，从词汇表的非空 `styleKey` 派生 `SUPPORTED_SIGNATURE_CONTAINERS`；不要手改生成文件
 - 主题 spec 里加 `signatureContainers: [..., 'episodeCard']`
 
 ---
@@ -75,7 +75,7 @@ export const episodeCardContainer: ContainerRenderer = {
 | 情况 | 建议 |
 | --- | --- |
 | 通用度高，预计大多数主题都该支持 | 归入 **base**（基础契约） |
-| 服务特定写作品类（数据简报 / 学术 / 电商 / 播客 / 本地生活……） | 新建 **扩展包**：在 [`scripts/build-writer-docs.ts`](../../scripts/build-writer-docs.ts) 的 `PACK_OF` 里登记，并在 `docs/contract/packs/` 下新建文档 |
+| 服务特定写作品类（数据简报 / 学术 / 电商 / 播客 / 本地生活……） | 新建 **扩展包**：给容器 spec 声明 `pack: 'pack:<domain>'`，在 [`scripts/build-writer-docs.ts`](../../scripts/build-writer-docs.ts) 的 `PACK_TARGETS` 登记目标文档，并在文档中放置生成标记 |
 | 仅供单个集成方使用 | 不要进 vocabulary，走 fork 私有维护 |
 
 > 同一容器**只能属于一个 pack**。pack 是文档分组手段，不是运行时加载边界——所有 vocabulary 里的容器都会被注册到 markdown-it。
@@ -84,7 +84,7 @@ export const episodeCardContainer: ContainerRenderer = {
 
 ## 自定义 variant 骨架
 
-不是新加容器，而是给某个**已有 variant 池**（admonition / quote / compare / steps / divider / sectionTitle / note / codeBlock）加一种新骨架，按下面三步：
+不是新加容器，而是给某个**已有 variant 池**加一种新骨架。完整池清单见 `VARIANT_IDS`；按下面三步：
 
 ### 1. 实现 variant 文件
 
@@ -167,7 +167,7 @@ export const spec: PersonaSpec = {
 
 ## 自定义扩展不在契约保护内
 
-写进 [`vocabulary.ts`](../../src/containers/vocabulary.ts) 的容器在**本仓库的承诺保护下**——通过测试、走 wxPatch、与硬约束验证集成。
+写进 [`vocabulary.ts`](../../src/core/vocabulary/vocabulary.ts) 的容器在**本仓库的承诺保护下**——通过测试、走 wxPatch、与硬约束验证集成。
 但**fork 私有维护、绕过 PR 流程添加**的容器：
 
 - 不参与 `dist/api/capabilities.json` 的对外契约

@@ -73,25 +73,21 @@
 
 ## 签名容器白名单
 
-`spec.signatureContainers` 只能取以下 id 之一（权威清单见 `src/core/themes/_shared/spec/types.ts` 的 `SUPPORTED_SIGNATURE_CONTAINERS` 常量；改清单需走仓库 PR）：
+`spec.signatureContainers` 只能取以下 id 之一（权威清单 `SUPPORTED_SIGNATURE_CONTAINERS` 由词汇表的非空 `styleKey` 自动派生，见 `src/core/themes/_shared/spec/signature-containers.generated.ts`）：
 
-```
-intro · author · cover
-tip · warning · info · danger · note
-quoteCard · highlight · compare · steps · sectionTitle
-footerCTA · recommend · qrcode · mpvoice · mpvideo
-abstract · keyNumber · seeAlso
-masthead · sectionTag · toc · kpiDashboard · barChart · qaBlock
-footnotes · ctaBar · qrFollow · editorNote · methodology · colophon
-```
+<!-- generated:signature-whitelist:start -->
+
+`intro` · `cover` · `author` · `authorBio` · `sectionTitle` · `masthead` · `sectionTag` · `byline` · `editorialHeader` · `toc` · `announcement` · `tip` · `warning` · `info` · `danger` · `note` · `quoteCard` · `highlight` · `compare` · `steps` · `imageCaption` · `timeline` · `qaBlock` · `footerCTA` · `recommend` · `qrcode` · `voiceCard` · `videoCard` · `abstract` · `keyNumber` · `kpiDashboard` · `barChart` · `footnotes` · `colophon` · `pullQuote` · `tableCard` · `gallery` · `dialogue`
+
+<!-- generated:signature-whitelist:end -->
 
 - **camelCase**，不是 kebab-case（kebab 名由 `STYLE_KEY_TO_CONTAINER_NAME` 派生）。
 - 新造主题时只声明该主题确实渲染的容器；未声明 ≠ 不能写，只是没人格签名。
-- 添加新 id 需要同步改 `SUPPORTED_SIGNATURE_CONTAINERS` 常量 + 加对应 renderer。
+- 添加新 id 需要修改词汇表、实现对应 renderer，再运行 `pnpm codegen:sigcontainers` 与 `pnpm build:skill-refs`；不要手改生成清单。
 
 ## Variants 合法性
 
-`variants` 8 个字段各有固定 id 清单（权威源：`src/core/themes/types.ts` 的 `VARIANT_IDS` 常量）。**下方清单由 `npm run build:skill-refs` 派生，勿手改**：
+`variants` 各字段均有固定 id 清单（权威源：`src/core/themes/types.ts` 的 `VARIANT_IDS` 常量）。**下方清单由 `pnpm build:skill-refs` 派生，勿手改**：
 
 <!-- generated:variant-whitelist:start -->
 

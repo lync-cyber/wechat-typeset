@@ -158,8 +158,11 @@ def spread_pressure(cost_of_liab, asset_pricing, non_interest):
 
 ::: footnotes 参考文献
 [1] 中国人民银行，《2026年第一季度货币政策执行报告》，2026年5月
+
 [2] 各上市银行 2026Q1 季报，Wind 资讯整理
+
 [3] 易纲，《利率市场化改革的逻辑》，中国金融出版社，2024
+
 [4] BIS Working Paper No. 1124，Net Interest Margin Compression in Emerging Markets，2025
 :::
 

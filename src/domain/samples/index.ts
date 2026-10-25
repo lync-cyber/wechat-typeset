@@ -14,9 +14,9 @@
  *   - 全功能展示的源头就是 e2e 测试 fixture——保证 UI 演示永远和测试覆盖等价
  */
 
-import { SAMPLE_BY_THEME, SAMPLE_BUILD_ID } from './_generated'
+import { SAMPLE_BY_THEME } from './_generated'
 
-export { SAMPLE_BY_THEME, SAMPLE_BUILD_ID }
+export { SAMPLE_BY_THEME }
 
 /** 主题 id → story 样张；未知 id 回退到 default。 */
 export function getSample(themeId: string): string {
