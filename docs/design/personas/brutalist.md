@@ -18,7 +18,7 @@
 | # | 决策 | 理由 |
 |---|---|---|
 | 1 | `radius = { sm:0, md:0, lg:0 }` 全直角 | 圆角即软，软即软文。粗野主义的几何语言是**未加工的版面骨架**，任何弧度都把"粗野"软化成"复古" |
-| 2 | `primary = #ebff00` 荧光黄，唯一强调色 | 整篇文章里，黄色等同于"被点名"。文中需要被点名的位置只有：章节编号、关键术语 `==highlight==`、editor-note 整块、inline code、subtitle pill。多于这些，黄色就贬值成装饰 |
+| 2 | `primary = #ebff00` 荧光黄，唯一强调色 | 整篇文章里，黄色等同于"被点名"。文中需要被点名的位置只有：章节编号、关键术语 `==highlight==`、编者按、inline code、subtitle pill。多于这些，黄色就贬值成装饰 |
 | 3 | status 四联词 `NOTE / TIP / WARN / HALT` | 跳出 mkdocs 的 `INFO / TIP / WARN / STOP` 工业默认。"HALT" 比 "STOP" 更 brutalist-aggressive（承袭终端 / 汇编语言传统）；语义信号靠 **色相 + 方括号 [TAG] 字** 双重冗余，不靠纯色块 |
 
 ---
@@ -28,7 +28,7 @@
 读者应该一眼把这篇文章认出是 brutalist 主题。三条视觉签名：
 
 1. **三栏 ribbon 刊头**（masthead `kicker` 模式）：上下双 2px 实线 + monospace 三栏（`第 04 期 | 慢读 | 2026.04.22`），中间期名是荧光黄。这是粗野主义版面骨架的"压舱物"——开篇定调，结尾的 colophon 以同款双线对称收束
-2. **荧光黄整块 editor-note**：通栏荧光黄底 + 反色"编 · 者 · 按" kicker + 反色正文。整篇 1 次出现，承担"编辑发声"的视觉重量
+2. **主色编者按**：`note variant=editorial-stripe` 用主色竖线与标题标出编辑发声；整篇控制出现次数，保持强调色稀缺
 3. **旋转贴纸金句**（quote.tilted-sticker）：反色卡片 `transform: rotate(-1deg)` + 大字 sans 粗体左对齐。punk-zine 的撕贴语义——金句不是被尊敬地引用，是被"贴"上去的
 
 ---
@@ -64,64 +64,27 @@
 
 ---
 
-## 复用关系（架构纪律）
+## 当前实现入口
 
-brutalist 严格遵守"最大复用 + 最小架构侵入"原则。新引入的容器组件为 **0** 个。新引入的变体为 **1** 个（`quote.tilted-sticker`，generic，可被未来 zine / punk 主题复用）。其余视觉签名全部走现有词汇 + spec patch：
+[PersonaSpec](../../../src/core/themes/brutalist/persona.data.ts) 定义色板、默认骨架与样式；[主题样稿](../../../src/samples-md/sample-brutalist.md) 提供完整写法。设计原型用于对照视觉意图，语法以 [写作契约](../../contract/README.md) 为准。
 
 | 设计元素 | 复用方式 |
 |---|---|
-| masthead 三栏 ribbon | `masthead` 容器增 `kicker` attr → 三栏布局开关（通用增强） |
-| toc 虚线框 | spec.containers.toc 覆盖 `border: 1px dashed` |
-| cover-header 大字 + subtitle pill | h1 元素样式 + 一段 `::: highlight` 黄底 |
-| byline 灰小字 | `::: author` + spec.containers.author 覆盖 |
-| intro 关键词高亮 | spec.inline.highlight = 黄底反色 |
-| section-heading 顶线 + 黄序号 | spec.elements.h2 + decorations.headingPrefix `arabic-padded` |
-| sub-heading 黄色 2.x | spec.elements.h3 + decorations.headingPrefix `arabic-section` |
-| pull-quote 旋转贴纸 | `quote.tilted-sticker` variant（**唯一新增**） |
-| image yellow 边框 | spec.elements.img 边框 |
-| inline / block code 黄底反色 | spec.elements.code / pre |
-| callout 黄整块 | `::: editor-note` + spec.containers.editorNote 覆盖 + innerStyles.editorNoteKicker 反色 |
-| Q&A 终端风 | data-brief `::: qa-block` + spec.containers.qaBlock 边框收紧 |
-| multi-callout NOTE/TIP/WARN/HALT | data-brief `admonition: news-row` 变体 + 作者写 `::: info NOTE` 覆盖徽章字 |
-| CTA 三栏 | data-brief `::: cta-bar` |
-| qr-follow | data-brief `::: qr-follow` |
-| footnotes fn[] | data-brief `::: footnotes` + 紧凑灰小字覆盖 |
-| divider em-dash bar | spec.elements.hr = 2px 黄色实线（语义等价的"光栅化"近似） |
-| end-marker 完 badge | 用 `**完**` markdown + spec.elements.strong = 黄色（视觉等价） |
-| footer colophon | data-brief `::: colophon` + 上 2px 双粗线覆盖（与 masthead 头尾呼应） |
+| 三栏刊头 | `masthead` 的 `kicker`、`issue`、`date` 属性 |
+| 虚线目录 | `toc` + `toc-item`，主题设置外框 |
+| 章节编号 | `decorations.headingPrefix`，作者只写 Markdown 标题 |
+| 旋转贴纸金句 | `quote.tilted-sticker` 骨架 |
+| 编者按 | `note variant=editorial-stripe` |
+| 问答 | `qa-block`，主题默认 `typed-block` 骨架 |
+| NOTE / TIP / WARN / HALT | `news-row` 骨架，作者通过标题设置标签 |
+| 三栏互动 | `footer-cta variant=triptych-actions` |
+| 订阅卡 | `qrcode variant=follow-card` |
+| 参考文献 | `footnotes`，各条引用间保留空行 |
+| 卷尾信息 | `colophon`，与刊头的双线呼应 |
 
-**新增内层样式槽位 1 个**：`innerStyles.editorNoteKicker`。理由：editor-note renderer 内 kicker 颜色硬编码为 `primary`，brutalist 把 editor-note bg 涂满 primary 后 kicker 与 bg 同色不可见——这是个**所有用 primary 整块底色的主题**都会遇到的问题，把 kicker 提到 innerStyles 槽位与现有 `abstractKicker` / `keyNumberKicker` / `seeAlsoTitle` 同构。
+## 平台边界
 
-**新增 masthead 属性 1 个**：`kicker`。理由：粗野主义的三栏 ribbon 刊头（issue / name / date）是杂志编辑系常见的视觉骨架，但与 data-brief 默认的"刊名左 + 期号·日期右"两栏不同。给 masthead 一个可选 `kicker` 属性切换布局，是更通用的"杂志期次条" pattern，未来其他报刊感主题（如 zine、newsweek）可直接复用。
-
----
-
-## 微信公众号兼容性
-
-| 风险点 | brutalist 处理 |
-|---|---|
-| `font-family` 全平台被剥 | 不依赖等宽字体的视觉信号——letter-spacing + 字号节奏承担"等宽气质"。tilted-sticker 不写 monospace 字体属性 |
-| `flex` 被 wxPatch 转 block | masthead ribbon / cta-bar / qa-block / qr-follow 全部走 `display: grid` 或 `display: table`（公众号粘贴稳定） |
-| `transform: rotate(-1deg)` 是否被剥 | 不在 `FORBIDDEN_POSITION_PROPS` 列表（position/top/right/bottom/left/z-index 才被剥）。tilted-sticker 在公众号粘贴期保留 |
-| 纯白 `#ffffff` → 透明（PNG 光栅化） | 全主题用 `#f0f0f0` 替代纯白，`#fefefe` 替代 SVG 内白 |
-| `repeating-linear-gradient` 图片占位 | 公众号实测对 gradient 支持不稳定——brutalist 改用纯 hex bgMuted 底（spec.elements.img 黄框承担"占位"视觉） |
-| `aspect-ratio` 可能被剥 | brutalist 不依赖 aspect-ratio——图片走原图比例，img 黄框由 border 承担识别 |
-| `display: grid` 在 masthead/qa-block | grid 在 themeCSS 层会被守卫拒绝，但 renderer 在 **inline style** 里写 grid 是被允许的（被 wxPatch 后由 grid 退化为 block，子项作为兄弟堆叠——masthead 三栏会变成三行，仍可阅读；这是合规的优雅降级） |
-
----
-
-## 未复用而新增实现的清单（终归只有 3 项）
-
-| 新增项 | 类型 | 通用性论证 | 替代方案被驳回原因 |
-|---|---|---|---|
-| `quote.tilted-sticker` variant | 变体 | punk-zine "撕贴纸" pull-quote 是公认视觉档位，未来任何 zine / 朋克编辑系主题可复用 | 复用 `quote.classic`：locks `text-align: center` 与 `border-radius: 8px`；不符合左对齐 + 直角硬边要求 |
-| `masthead.kicker` attr | 容器属性 | 报刊三栏期次条（kicker / name / date）是杂志编辑系经典骨架；未来 zine / newsweek / mook 主题可直接复用 | 新增 `issue-band` 容器：违反"能扩配置不新增容器"纪律。masthead 已是刊头容器，加一个 attr 切布局是最小侵入 |
-| `innerStyles.editorNoteKicker` | 内层样式槽位 | 任何把 editor-note 整块涂成 primary 底色的主题都会遇到 kicker 与 bg 同色的问题；与既有 `abstractKicker` / `keyNumberKicker` 同构 | 修改 editor-note renderer 硬编码：会让其他主题失去主题作者覆盖的入口 |
-
----
-
-## Owner notes
-
-- **设计稿与实现的明确妥协**：（1）设计稿原 cover-header 36px 大字 + display:inline-block subtitle pill：brutalist 落地用 h1 30px + 独立段 `::: highlight` 黄底块表达，少 1 个像素维度的"贴边"感但语义等价；（2）设计稿 `━━━━━━━━━━━━━━━━━━━━━━━━━━` 等宽破折分割线：brutalist 落地为 hr 黄色 2px 实线（font-family 被剥后真等宽不可达，光栅化等价物即可）；（3）news-row admonition 徽章默认是宽边距 + 大写徽章字，没有 `[NOTE]` 方括号——作者在 ctx.info 里自写 `[NOTE]` 即可（写作侧成本极低）
-- **作者契约的稳定性**：本主题不要求作者写任何内联 HTML。所有视觉签名走容器 / decoration / spec patch 表达。换主题不动稿
-- **未来扩展**：tilted-sticker 的 -1deg 角度刻意保守。若未来出现更"猛"的 zine 主题想要 -3deg 撕贴感，可在 variant 里加可选 attr 而非新开一个 variant
+- 多栏布局采用 `table`、`inline-block` 或 `block`；不可依赖 flex/grid 在公众号中维持布局。
+- 视觉层次依靠颜色、字重、字距和边框，不能只依赖特定字体。
+- 作者不需要内联 HTML；视觉签名由容器、骨架与主题配置表达。
+- 公众号处理规则以 [平台契约](../../contract/platform.md) 为准，发布前按 [验收清单](../../release-checklist.md) 检查实际预览与粘贴结果。

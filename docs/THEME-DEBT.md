@@ -1,18 +1,8 @@
 # 主题系统 · 显式技术债务清单
 
-本文件**不是**变更日志，是"我们知道这里有问题但故意先这样"的**显式登记**——
-比"偷偷绕过校验"诚实，比"等什么时候记得了再修"可执行。
+本文只登记当前仍存在的例外。源码中的 grace 集合与实验性标记是事实来源，已完成事项保留在 Git 历史中。
 
-每一条债务都对应代码里的一个 `_TEMPORARY_GRACE` 集合或 `@experimental` 标注；
-源码是真源，本文档是"目录与背景"。修复一条 → 从代码里删登记 → 在本文件 changelog 一笔。
-
-更新规则：
-
-- 新增 grace 条目时，本文档同步加条目（含"为何 grace、Phase x.y 计划"）
-- 移除 grace 条目时，从本文档移到下方"已偿还"段
-- 不允许"代码里登记了，文档里没写"——CI 守卫见 `theme-debt-sync.spec.ts`（TODO）
-
----
+更新规则：新增例外时同步记录原因与退出条件；解除例外时同时删除登记。字号和对比度检查由 `validateSpec` 执行，实验性骨架由 `tests/unit/variant-coverage.spec.ts` 检查。
 
 ## A. 字号下限债（`TYPOGRAPHY_TEMPORARY_GRACE`）
 
@@ -77,29 +67,14 @@ conformance: `experimental: true` 必须配 `experimentalSince`（守卫见 vari
 > 代码：各 `src/core/variants/<kind>/<id>.ts`
 > 报告：`pnpm variant:usage --orphans`
 
-11 个 variant 当前无主题以默认骨架使用、无 `designedFor` 推荐，仍保留在
-`VARIANT_IDS` 主表中是因为"骨架已就绪、等首个采用方"。**按 kind 分布**：
+未被主题默认采用、也没有 `designedFor` 推荐的骨架，应登记 `experimental` 与 `experimentalSince`。当前清单通过命令查看，避免手写数量与实现漂移：
 
-- admonition (2): `ticket-notch`, `minimal-underline`
-- quote (1): `left-bar`
-- steps (1): `ribbon-chain`
-- note (1): `research-dense`
-- footnotes (1): `inline-flow`
-- pullQuote (1): `margin-pull`
-- tableCard (1): `price-tier`
-- gallery (2): `nine-grid`, `ribbon-strip`
-- dialogue (1): `name-prefix`
+```sh
+pnpm variant:usage --orphans
+pnpm variant:usage --stale
+```
 
-**Phase-4 偿还纪录**：原 25 个 orphan，4 个新主题（youth-zine / commerce-pulse /
-edu-classroom / official-gazette）共消化 14 个升级为默认骨架。
-
-详见 `pnpm variant:usage --orphans` 实时报告。
-
-**偿还路径**：
-
-1. 让某主题升级它为默认骨架（spec.variants[kind] = id）→ 删 `experimental: true`
-2. 加入 `meta.designedFor`（声明"为这些主题设计"软推荐）→ 删 `experimental: true`
-3. 连续两个版本仍无采用 → 提案下架，迁到 `src/core/variants/experimental/` 子目录
+被主题采用或获得明确的 `designedFor` 推荐后，移除实验标记；长期未采用的条目应结合引用与设计用途审查后再决定去留。
 
 守卫：`tests/unit/variant-coverage.spec.ts` 断言每个 VARIANT_IDS 成员满足
 default ∨ designedFor ∨ experimental。
@@ -119,21 +94,7 @@ default ∨ designedFor ∨ experimental。
 
 - 接入流程：在 inline `<a>` / codeBlock 'terminal-frame' renderer 读取 theme.assets，
   命中后拼接 SVG，加 1 个 conformance 用例
-- 若 Phase 2.x 仍无消费方 → 迁到 `ThemeAssets.experimental?` 嵌套子对象（避免持续误导作者）
-
----
-
-## 已偿还（changelog）
-
-**Phase-5 (2026-05-19)** —— 容器变体冗余系统清理：净删 14 个 variant（10 个纯孤儿 +
-3 个合并候选 + note/hanging-indent 合并到 smallcaps-kicker layout=hanging）；
-admonition/top-bottom-rule designedFor 冲突修复（前称 signatureOf）；4 个 variant 错误的 experimental
-标移除；新增 VariantMeta.experimentalSince 字段 + conformance 守卫，防 orphan
-静默积累。variant total 185→171，orphan 31→20。
-
-**Phase-4 (2026-05)** —— 4 个新主题（commerce-pulse / youth-zine / official-gazette /
-edu-classroom）填补"电商 / 青年潮 / 政务 / 教育"四档场景缺口；连带消化 14 个 orphan
-variant 升级为默认骨架（详见 D 段）。
+- 无明确消费场景时，审查公共 API 引用后决定是否移除。
 
 ---
 

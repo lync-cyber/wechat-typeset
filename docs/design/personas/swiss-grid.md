@@ -24,80 +24,34 @@
 | 主视觉媒介 | KPI dashboard + sparkline | 巨号 Nº 期号 + 红章 H2 |
 | 排印气质 | 数据报表 | 栅格构成 |
 
-两者共享 data-brief 家族容器（toc / qa-block / editor-note / footnotes / cta-bar / qr-follow /
-colophon / methodology / bar-chart / key-number），仅在 tokens / variants / innerStyles 上分叉视觉个性。
+两者复用通用容器，通过 tokens、variants、innerStyles 与装饰配置表达视觉差异。当前结构以 [PersonaSpec](../../../src/core/themes/swiss-grid/persona.data.ts) 和 [主题样稿](../../../src/samples-md/sample-swiss-grid.md) 为准。
 
-## 复用与扩展的边界
+## 配置与写作边界
 
-### 复用 (zero new container)
-- `news-row` admonition variant —— 设计稿 multi-callout (INFO/TIP/WARN/STOP) 1:1 复刻
-- `key-number` 容器承担 issue-banner —— kicker / value / body 三段堆叠适配 375px 移动端
-- `footnotes variant=inline-flow` 承担 NOTES 脚注 —— 自带 kicker info 槽 + 长引用列表内滚动
-- `bar-chart` + `bar` 承担 FIG.01 条形图
-- 全部 data-brief 家族容器（除 masthead / methodology 略弱化）
+- `decorations.headingPrefix` 注入章节编号；`style.backgroundColor`、`paddingX`、`paddingY` 控制红色徽章，反白文字使用 `textInverse`。
+- `decorations.introDropcap` 注入导语首字下沉；正文不手写装饰字符。
+- 编者按使用 `note variant=editorial-stripe`，标题与主体由变体渲染；普通旁注保留主题默认的 `side-bar` 骨架。
+- 嵌套目录、条形图和对照块使用四冒号外层、三冒号子项；每个子项独立闭合。
+- 手写参考文献使用 `footnotes`；原生 `[^id]:` 定义直接写在正文中。
 
-### 配置扩展（非主题专属，全局可用）
+## 主要组件映射
 
-`HeadingPrefixDecoration.style` 三个新字段：
+| 设计元素 | 当前写法 |
+|---|---|
+| 巨型期号 | `key-number`，含 `value` 属性 |
+| 分行刊头 | `editorial-header`，含 `chip`、`pp`、`subtitle` 属性 |
+| AUTHOR / EDITOR / SET | `byline`，`cells` 内的单元格以竖线分隔 |
+| 副刊导读 | `abstract` |
+| 双栏目录 | `toc layout=split` + `toc-item` |
+| 红章章节标题 | Markdown H2 + `decorations.headingPrefix` |
+| 条形图 | `bar-chart` + `bar` |
+| INFO / TIP / WARN / STOP | `info` / `tip` / `warning` / `danger`，使用 `news-row` 骨架 |
+| 问答 | `qa-block` |
+| 编者按 | `note variant=editorial-stripe` |
+| 方法说明 | `note variant=research-dense` |
+| 参考文献 | `footnotes`；长列表可显式选择 `variant=inline-flow` |
+| 三栏互动 | `footer-cta variant=triptych-actions`，含 `like`、`star`、`share` 属性 |
+| 订阅卡 | `qrcode variant=follow-card`，含 `kicker`、`desc` 属性 |
+| 卷尾信息 | `colophon`，含 `next`、`issue` 属性 |
 
-```ts
-backgroundColor?: PaletteColorKey  // 编号底色，撑成色块徽章
-paddingX?: number                  // 徽章左右内边距 px
-paddingY?: number                  // 徽章上下内边距 px
-```
-
-> 加入动机：swiss-grid H2 「01」红方块徽章是设计稿最强签名；扩展三个字段后,
-> 任何想用"色块章号"做章节锚点的未来主题都能直接复用,不绑定 swiss-grid。
-
-`ThemeInnerStyles` 一个新槽位：
-
-```ts
-editorNoteKicker: CSSObject
-```
-
-> 加入动机：editor-note 的 kicker 之前 renderer 硬编码 (`primary` 色 + 11px + letter-spacing)。
-> swiss-grid 需要全幅黑底白字 header bar 形态——通过负 margin 把 kicker 撑到 wrapper 边缘。
-> 同时把 renderer 改为 `ctx.innerStyles.editorNoteKicker`，与 R8 的 abstractKicker /
-> keyNumberKicker 同构。baseInnerStyles 兜底保持 default / data-brief / 其它主题字节等价。
-
-`PaletteColorKey` 增 `'textInverse'`：
-
-> 装饰前缀加底色时，文字色经常需要"反白"（红底白字、黑底白字）。原五 key 缺这个常用色。
-
-## 已知 acceptable deviation
-
-- **QA-block 徽章配色反相**：设计稿 Q 黑 / A 红；本主题 primary=红, renderer 硬编码
-  Q=primary / A=text → 渲染为 Q 红 / A 黑。两态仍可区分，仅角色用色反相。
-- **Issue-banner 取消右侧浮动列**：设计稿 issue-banner 有右侧"VOL.IV / 2026-04-22 / CHF 14.—"
-  浮动列;本主题用 key-number 承载,改为 body 单段堆叠（375px 移动端更稳）。
-- **Pull-quote 25% 左偏移**：设计稿 12 栏 3/12 偏移；本主题用 `margin-left: 25%`
-  在 blockquote element 上近似（无栏 grid）。
-
-## 写作纪律（content vs presentation 解耦）
-
-- 不要在 markdown 里手写视觉装饰字符（如 ■ 红方块、章节序号、kicker 标签等）
-- 红章 H2 编号由 `decorations.headingPrefix` 注入；作者只写 `## 章节标题`
-- 红 W 首字下沉由 `decorations.introDropcap` 注入；作者只写 `::: intro\nW e did not lose...`
-- 编辑部注的黑色 header bar 由 `innerStyles.editorNoteKicker` 注入；作者只写 `::: editor-note 编 者 按 · 01`
-
-## sample-swiss-grid.md 容器覆盖
-
-| 设计稿 # | 设计稿组件 | 本主题实现 |
-|---|---|---|
-| 01 | issue-banner 巨型期号 | `::: key-number NEUE LESE GRAFIK value="Nº04"` |
-| 03 | toc 双栏目录 | `:::: toc INDEX · 目次` + `::: toc-item no= page=` |
-| 04 | cover-header ESSAY · 01 | `::: section-tag ESSAY · 01` + `::: cover` |
-| 05 | byline AUTHOR/EDITOR/SET | `::: author` |
-| 06 | intro-para 大字导语 | `::: abstract INDEX · 副刊导读` |
-| 07 | drop-cap W | `::: intro\nWe did not lose...`（decorations.introDropcap 注入） |
-| 08 | section-heading 红章 H2 | `## 章节名`（decorations.headingPrefix 注入「01」红章） |
-| 10 | data-chart FIG.01 | `:::: bar-chart FIG.01 ...` + `::: bar` |
-| 12 | h3-heading 2.1/2.2 | `### 子节名`（decorations.headingPrefix arabic-section 注入） |
-| 15 | multi-callout INFO/TIP/WARN/STOP | `::: info INFO` ... `::: danger STOP`（admonition: news-row） |
-| 17 | code-block 黑底白字 | ``` ```javascript ``` ```（elements.pre __reset 黑底白字） |
-| 18 | qa-block Q/A | `::: qa-block READER Q&A q="..."` |
-| 19 | editor-note 黑底头 | `::: editor-note 编 者 按 · 01`（innerStyles.editorNoteKicker 黑 bar） |
-| 20 | footnotes NOTES | `::: footnotes NOTES` 或 `::: footnotes variant=inline-flow REFERENCES` |
-| 22 | cta-bar 三栏 | `::: cta-bar like= star= share=` |
-| 23 | qr-follow SUBSCRIBE | `::: qr-follow NEUE LESE GRAFIK kicker= desc=` |
-| 24 | footer NEXT/VOL | `::: colophon next= issue=` |
+完整语法见 [基础契约](../../contract/base.md) 和 [编辑扩展包](../../contract/packs/editorial.md)。

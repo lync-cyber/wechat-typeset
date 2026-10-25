@@ -26,35 +26,9 @@
 
 ## 2. 集成状态盘点
 
-### 2.1 现状
+### 2.1 集成边界
 
-**已对齐**（设计稿 IR 全部能找到对应 `.ts` 实现，并已纳入 [`tests/unit/visual-parity-geometry.spec.ts`](../../tests/unit/visual-parity-geometry.spec.ts) 几何断言）：
-
-| kind | IR 数 | 实现数 | 状态 |
-|---|---|---|---|
-| admonition | 8 | 25 | 全部对应 + 17 个早期版本 variant 仍保留 |
-| note | 8 | 15 | 全部对应 |
-| quote | 8 | 14 | 全部对应 |
-| highlight | 8 | 9 | 全部对应 |
-| pull-quote | 8 | 12 | 全部对应 |
-
-**待集成**（设计稿存在 IR，实现侧缺少 `src/core/variants/<kind>/<id>.ts` 或命名不对齐）：
-
-| kind | 待补 variant id（来自 var-id 推断） |
-|---|---|
-| compare | numbered-cols / interleaved-rows / specimen-ab / measurement / circle-square |
-| steps | large-numeral / timeline-row / ruler-ticks / field-stages / geometric-chain / block-stack |
-| dialogue | screenplay / short-initial / specimen-tag / shape-speaker / code-name |
-| qa-block | circle-vs-square（实现是 `circle-square.ts`，命名要对齐） |
-| table-card | threeline-table（实现是 `three-line-table.ts`）/ specimen-table / sample-log / grid-block |
-| gallery | newspaper-grid / strip-legend / sample-plate / folio-strip / asymmetric-grid / circle-frame |
-| announcement | masthead-bar / index-card / field-notice / stamp-card / red-square-burst / black-plate |
-| recommend | numbered-list / thumbnail-rows / folio-refs / file-cards / shape-index / number-stack |
-| qrcode | news-card / index-slot / field-collate / specimen-pin / geometric-card / corner-mark |
-| divider | double-rule / three-bullets / ruler-mark / folio-break / shape-trio / thick-bar |
-| section-title | h2-numeral / h3-inline / h2 / h3 / h2-folio-head / h3-binomial / h2-geometric / h3-numbered |
-| footer-cta | subscription-call / coupon-card / field-stub / specimen-voucher / shape-cta / black-closer |
-| footnotes | numbered-list / column-gloss / reference-table / field-appendix / mono-list / indent-block |
+设计稿与实现的对应关系由 IR 检查派生，不维护静态的“已完成 / 待集成”数量表。变体是否存在、名称是否对齐，以本节命令输出为准。
 
 特殊：[content-3.html](content-3.html) 的 `bar-chart` 6 个变体（field-graduate / hollow-bars / rule-bars / stacked-rows / stepped-block / tick-ruler）**不**走 variant 系——见 [§3.2](#32-路径-2--无-variant-系容器)。
 
@@ -66,7 +40,7 @@ meta-1 / meta-2 / media.html 的 21 类容器全部走 [§3.3](#33-路径-3--单
 pnpm tsx tools/extract-design-ir.ts --check
 ```
 
-输出每行 `[warning] content-X.html:NN variant 'kind/id' 未在 src/core/variants/<kind>/<id>.ts 实现（label="..."）`。**这是唯一的事实来源**——本表会随设计稿/实现演进过期，**别用本表做决策，跑命令**。
+输出每行 `[warning] content-X.html:NN variant 'kind/id' 未在 src/core/variants/<kind>/<id>.ts 实现（label="..."）`。据此定位尚未实现或命名不一致的条目，再检查对应代码；不要从旧的数量快照推断集成状态。
 
 ---
 
