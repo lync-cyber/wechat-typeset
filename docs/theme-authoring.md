@@ -65,7 +65,7 @@ export const spec: PersonaSpec = {
 
   motifs: { /* 见下节「Motif AST」 */ },
   variants: {
-    // 9 个骨架槽位的合法 id 清单：`getVariantIds()` / VARIANT_IDS（src/core/themes/types.ts）。
+    // 骨架槽位的合法 id 清单：`getVariantIds()` / VARIANT_IDS（src/core/themes/types.ts）。
     // 主题不声明的槽位由 buildTheme 注入 DEFAULT_VARIANTS 兜底，但 PersonaSpec.variants
     // 类型上是全量 ThemeVariants —— 一处填，全数declare。
     admonition: 'accent-bar',
@@ -216,12 +216,12 @@ getVariantIds('admonition')   // ['accent-bar', 'pill-tag', 'ticket-notch', ...]
 getVariantIds('footnotes')    // ['lined', 'inline-flow']
 ```
 
-骨架槽位（9 个）一览：
+骨架槽位一览（系统默认；主题可以覆盖）：
 
 | 类目 | 谁消费 | 默认 | 一句话定位 |
 | --- | --- | --- | --- |
 | `admonition` | tip / warning / info / danger（4 态共享池） | `accent-bar` | 提示类视觉骨架（左色条 / 胶囊 / 卡片 / 终端 / 报告条款 ...） |
-| `note` | note（第五态独立池） | `minimal-callout` | 中性补注，textMuted 不抢色 |
+| `note` | note（独立池） | `minimal-callout` | 中性补注、编辑部按语（editorial-stripe）、方法论（research-dense） |
 | `quote` | quote-card | `classic` | 引用块骨架（装饰引号 / 杂志首字 / 双线 / 四角 / 撕贴纸） |
 | `compare` | compare（pros/cons 嵌内） | `column-card` | 双栏对比骨架（两栏卡 / 上下堆叠 / 账本双色 / 数据卡） |
 | `steps` | steps | `number-circle` | 编号步骤骨架（圆圈 / 飘带链 / 时间轴点） |
@@ -229,6 +229,16 @@ getVariantIds('footnotes')    // ['lined', 'inline-flow']
 | `sectionTitle` | section-title | `bordered` | 章节标题骨架（底边线 / 左上角装饰） |
 | `codeBlock` | 代码 fence | `bare` | 代码块骨架（裸 pre / 顶部语言标签带） |
 | `footnotes` | footnotes（脚注 / 参考文献） | `lined` | 脚注骨架（一条一行 hanging indent / 同段流式 + 内滚动） |
+| `highlight` | highlight | `plain` | 作者重点段落 |
+| `recommend` | recommend | `card-list` | 延伸阅读 / 学术引用（academic-refs） |
+| `qrcode` | qrcode | `bare` | 通用二维码 / 刊物订阅卡（follow-card） |
+| `footerCTA` | footer-cta | `button-led` | 单按钮 / 三栏动作（triptych-actions） |
+| `pullQuote` | pull-quote | `giant-mark` | 作者观点拉引 |
+| `announcement` | announcement | `danger-bar` | 强警示横幅 |
+| `tableCard` | table-card | `rule-grid` | 结构化表格 |
+| `gallery` | gallery | `duo` | 多图组合 |
+| `dialogue` | dialogue | `qa-rows` | 多轮对谈 |
+| `qaBlock` | qa-block | `numbered-faq` | 单轮问答 |
 
 完整 variant 模块在 `src/core/variants/<kind>/<id>.ts`。
 
@@ -252,8 +262,8 @@ PersonaSpec 在必填字段（palette / status / typography / spacing / radius /
 
 | 字段 | 类型 | 用途 | 不声明的兜底 |
 | --- | --- | --- | --- |
-| `innerStyles` | `StylePatch<ThemeInnerStyles>` | 容器内层子元素 inline-style：abstract / key-number / see-also / editor-note 的 kicker 与 value 字号、字距、大写转换 | `baseInnerStyles(tokens)` —— primary / textMuted 派生的中性小字 |
-| `kickers` | `Partial<ThemeKickers>` | renderer 默认 kicker 文案的主题级覆盖：toc/qa-block/editor-note/methodology/qr-follow/recommend/footer-cta/colophon/masthead 共 11 个字面量 | `DEFAULT_KICKERS`（如 toc → "目录 · CONTENTS"） |
+| `innerStyles` | `StylePatch<ThemeInnerStyles>` | abstract 的 kicker、key-number 的 kicker 与 value 字号、字距、大写转换 | `baseInnerStyles(tokens)` —— primary / textMuted 派生的中性小字 |
+| `kickers` | `Partial<ThemeKickers>` | renderer 默认文案的主题级覆盖：toc / qa-block / qrcode 的 follow-card / recommend / footer-cta / colophon / masthead，共 9 个字段；note 的标题通过 Markdown info 设置 | `DEFAULT_KICKERS`（如 toc → "目录 · CONTENTS"） |
 | `decorations` | `Decorations` | 声明式装饰规则：`headingPrefix`（h2/h3 编号 + 色块徽章 + 后缀）/ `introDropcap`（首段首字下沉色 + 字号 + 字重） | 不应用任何装饰；标题与正文按 elements 兜底渲染 |
 | `capabilities` | `ThemeCapabilities` | LLM / 写作集成的"本主题愿意演什么"自描述：`containers`（白名单）/ `variantOverrides`（额外推荐 variant）/ `excluded`（排除项） | 全集兜底 = `base + pack:* + 本主题 theme:* 全集` |
 
@@ -263,13 +273,11 @@ PersonaSpec 在必填字段（palette / status / typography / spacing / radius /
 innerStyles: {
   abstractKicker: { color: 'primary', 'font-size': '11px', 'letter-spacing': '2px',
                     'text-transform': 'uppercase' },
-  editorNoteKicker: { __reset: true, display: 'block',
-                      'background-color': '#000000', color: '#ffffff',
-                      'margin-left': '-16px', 'margin-right': '-16px' },
+  keyNumberValue: { color: '#ffffff', 'font-size': '56px', 'font-weight': 700 },
 },
 kickers: {
-  editorNote: '编 者 按 · 01',
-  methodology: '方法论 · 04',
+  qrFollowKicker: 'SUBSCRIBE',
+  qrFollowTitle: 'NEUE LESE GRAFIK',
   colophonNextLabel: '下 期',
   colophonIssueLabel: 'Nº · 卷',
 },
@@ -285,8 +293,8 @@ decorations: {
   ],
 },
 capabilities: {
-  // 显式排除：本主题不演 tilted-sticker（撕贴纸 punk 风）
-  excluded: ['tilted-sticker'],
+  // 显式排除：本主题的能力查询不推荐二维码容器（这里填 fence 名）
+  excluded: ['qrcode'],
 },
 ```
 

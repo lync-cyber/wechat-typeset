@@ -64,7 +64,7 @@ node serve.mjs            # 或双击 ./launcher.{bat,command}
 
 **文末引导**
 
-- [ ] `footer-cta` / `recommend` / `qrcode` / `see-also`
+- [ ] `footer-cta`（`button-led` / `triptych-actions`）/ `recommend`（`card-list` / `academic-refs`）/ `qrcode`（`bare` / `follow-card`）
 
 **媒体**
 

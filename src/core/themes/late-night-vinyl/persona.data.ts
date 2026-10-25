@@ -191,7 +191,7 @@ export const spec: PersonaSpec = {
   //
   // 让作者侧 markdown 不必把"听 · 众 · 连 · 线" / "播 · 后 · 札记" / "tune · in"
   // 这些主题装饰文案写在 info 里——renderer 缺省读 ctx.kickers.<key>。
-  // 单稿仍可用 info 个性化覆盖：`::: editor-note 这一期特别的"播后随感"`。
+  // 单稿仍可用 info 个性化覆盖：`::: note variant=editorial-stripe 这一期特别的"播后随感"`。
   // 未声明的 key 从 DEFAULT_KICKERS（types.ts）继承。
   // ============================================================
   kickers: {
@@ -786,7 +786,7 @@ export const spec: PersonaSpec = {
 录音　·　2026.04.22　·　03:41
 :::
 `,
-    footerCTA: `::: cta-bar like="♡ 喜欢" star="★ 收藏" share="↗ 分享"
+    footerCTA: `::: footer-cta variant=triptych-actions like="♡ 喜欢" star="★ 收藏" share="↗ 分享"
 :::
 `,
     tip: `::: tip b-side

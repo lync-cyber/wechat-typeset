@@ -16,7 +16,7 @@
 | `:::` 名不在白名单 | markdown-it-container 不识别，整段当普通 markdown 渲染（文本会出现在最终 HTML） | lint 阶段可读 capabilities.json 提前发现 |
 | `theme:<X>` 容器在非该主题里使用 | renderer 仍出 HTML，但 wrapper CSS 走 token 兜底（`baseContainers(tokens)`），失去主题签名 voice | `getThemeCapabilities(personaId)` 的 `containers[].available === false` |
 
-> 容器 namespace（`base` / `pack:*` / `theme:*`）见 [README.md 三层契约](README.md#契约的三层) 与 [packs/](packs/)。
+> 容器 namespace（`base` / `pack:*` / `theme:*`）见 [README.md 契约层次](README.md#契约的层次) 与 [packs/](packs/)。
 
 ---
 
@@ -50,6 +50,17 @@ L4 各 slot fallbackId（见 `DEFAULT_VARIANTS`，与 `makeVariantContainer.fall
 | sectionTitle | `bordered` |
 | codeBlock | `bare` |
 | note | `minimal-callout` |
+| highlight | `plain` |
+| footnotes | `lined` |
+| recommend | `card-list` |
+| qrcode | `bare` |
+| footerCTA | `button-led` |
+| pullQuote | `giant-mark` |
+| announcement | `danger-bar` |
+| tableCard | `rule-grid` |
+| gallery | `duo` |
+| dialogue | `qa-rows` |
+| qaBlock | `numbered-faq` |
 
 ---
 
@@ -88,7 +99,7 @@ L4 各 slot fallbackId（见 `DEFAULT_VARIANTS`，与 `makeVariantContainer.fall
 | HTML 含 `position` / `float` / `@media` 等禁用 CSS | wxPatch 剥离对应属性（白底无视觉降级） |
 | HTML 含 `#ffffff` 纯白 SVG | wxPatch 替换为 `#fefefe`（公众号 SVG → PNG 透明化保护） |
 | `<style>` 标签 | wxPatch 在 inline 阶段已合并到节点 style；标签被剥 |
-| 未知平台 id（`platform: 'unknown'`） | 走 placeholder adapter（patch=identity） |
+| 已注册的 placeholder 平台（如 `platform: 'zhihu'`） | 使用该平台的占位适配器（patch=identity）；未知 id 仍抛 `PLATFORM_UNSUPPORTED`，见主题层降级 |
 
 > 完整 patch 行为见 [`skills/wechat-typeset-export-richtext/references/wxpatch-behavior.md`](../../skills/wechat-typeset-export-richtext/references/wxpatch-behavior.md)。
 

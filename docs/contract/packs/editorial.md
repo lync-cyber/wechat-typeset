@@ -2,7 +2,7 @@
 
 [← 回 README](../README.md) · [基础契约](../base.md) · [data-brief 主题专属](data-brief.md) · [自定义扩展](../custom.md)
 
-为**刊物排版 / 栏目化深度文 / newsletter / Q&A 杂志**设计的领域扩展包——刊头、目录、问答、脚注、CTA、订阅卡、编辑部注、收束栏等容器全集。
+为**刊物排版 / 栏目化深度文 / newsletter / Q&A 杂志**设计的领域扩展包——刊头、目录、问答、脚注、收束栏等。本文还说明基础容器 `footer-cta` / `qrcode` / `note` 的刊物用法；它们仍属于基础契约。
 本包是**领域扩展**，多主题可借用（不绑定单一主题）。气质参照：晚点 LatePost · 财新数据 · 机器之心 · Morning Brew · POPEYE / BRUTUS。
 
 ## 何时用本扩展包
@@ -13,7 +13,7 @@
 
 > **可移植性**：本包容器在任何主题里**语法都合法**，但只有"承诺渲染本包"的主题才会给出签名视觉。
 > 其他主题里它会回退到中性兜底样式——**不塌版、不丢内容，但少签名感**。
-> 谁承诺了：在 `src/themes/<slug>/persona.data.ts` 的 `signatureContainers` 字段里登记本包的容器 styleKey。
+> 谁承诺了：在 `src/core/themes/<slug>/persona.data.ts` 的 `signatureContainers` 字段里登记本包的容器 styleKey。
 
 ## 速查表
 
@@ -26,16 +26,16 @@
 | 结构 | `masthead` | ★ | 刊头：默认两栏（刊名左 + 期号·日期 monospace 右）；声明 attrs.kicker 切三栏 ribbon。 |
 |  | `section-tag` | ★ | 小栏目标签（黑底白字胶囊小字，info 为标签文字，如 "深度"）。body 内容会被忽略。 |
 |  | `byline` | ★ | 署名条：N 栏分隔（kicker 小字 / value 主视），data-brief 家族签名。与 author 容器正交：author 是"作者名 + role"两段签名块；byline 是"AUTHOR / EDITOR / SET" 多栏 newspaper 形态。 |
-|  | `editorial-header` | ★ | 装饰性副刊头：跨栏大字标题 + 可选 chip 红章 + PP 页码 + subtitle + titleDot 红点。与微信原生标题（H1）正交，本容器输出 <section>，不抢平台 H1 语义。data-brief 家族签名。 |
-| 内容 | `qa-block` | ★ | 读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 "读者问答 · Q&A"）。 |
+|  | `editorial-header` | ★ | 装饰性副刊头：跨栏大字标题 + 可选 chip 红章 + PP 页码 + subtitle + titleDot 红点。与微信原生标题（H1）正交，本容器输出 &lt;section&gt;，不抢平台 H1 语义。data-brief 家族签名。 |
+| 内容 | `qa-block` | ★ | 读者问答：attrs.q 为问题，body 为回答（支持 markdown）。info 为 kicker（如 "读者问答 · Q&amp;A"）。 |
 |  | `pull-quote` | ★ | 拉引：正文中段把作者已写过的句子放大重申。info 为引用文字，body 可选为署名 / 上下文。与 quote-card 正交（quote-card 是引用他人外部话语）。 |
-|  | `dialogue` | ★ | 多轮访谈 / 对谈。与 qa-block 正交：qa-block 是单 Q + 单 A 签名格式，dialogue 承载 ≥2 轮 Q&A 或多人对谈。外层 4 冒号，内部 dialogue-turn 列单轮。 |
+|  | `dialogue` | ★ | 多轮访谈 / 对谈。与 qa-block 正交：qa-block 是单 Q + 单 A 签名格式，dialogue 承载 ≥2 轮 Q&amp;A 或多人对谈。外层 4 冒号，内部 dialogue-turn 列单轮。 |
 | 导航 | `toc` | ★ | 目录：默认单列（kicker 顶 + items 下）；声明 layout=split 切到双栏（左 INDEX kicker + meta 描述 / 右 toc-items）。外层用 4 个冒号，内部用 toc-item 列条目。info 为 kicker。 |
 |  | `toc-item` |  | toc 内单条；info 为条目标题。body 内容会被忽略。 |
-| 签名 | `footnotes` | ★ | 脚注 / 参考文献块。两骨架可选：lined（默认，一条一行 + hanging indent）适合 5~10 条短引用；inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。info 非空时渲染主色 kicker（如 "NOTES" / "参考文献"），与 editor-note / qa-block 同源。 |
+| 签名 | `footnotes` | ★ | 脚注 / 参考文献块。常用骨架：lined（系统默认，分段条目 + hanging indent）适合 5~10 条短引用；inline-flow（同段流式排列 + 内滚动）适合 20+ 条长文献列表，作者用 `·` / `／` 分隔条目。另有 boxed-aside 旁白卡 / top-rule 报纸尾注 / dense-academic 论文文献表。info 非空时按所选骨架渲染标题。 |
 |  | `colophon` | ★ | 刊物收束栏：上分割线 + 左右双栏 monospace 元数据（下期预告 / 卷·期）。data-brief 等刊物化主题的"尾签名"。 |
 
-> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
+> 由 `pnpm build:writer-docs` 从 `src/core/vocabulary/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
 
 <!-- generated:container-quick-ref:pack:editorial:end -->
 
@@ -132,11 +132,12 @@
 
 ## 脚注块 / 参考文献
 
-`footnotes` 一个容器、两套骨架，按"条目数 × 字数"选 variant：
+`footnotes` 按用途与信息密度选 variant。最常用的两种写法：
 
 ```
-::: footnotes
+::: footnotes variant=lined
 [1] 数据覆盖 2010–2025，以两年为滑动窗口平滑处理。
+
 [2] "深度理解得分"取自阅读后 24h 回忆测试，满分 100。
 :::
 
@@ -145,19 +146,21 @@
 :::
 ```
 
-- `variant=lined`（默认）：一条一行 + hanging indent，编号 `[N]` 悬挂在外、正文左缘对齐。适合 ≤ 6 条带说明性文字的脚注。
+- `variant=lined`（系统默认，主题可覆盖）：一条一行 + hanging indent，编号 `[N]` 悬挂在外、正文左缘对齐。适合 5–10 条短引用或少量带说明的脚注。
 - `variant=inline-flow`：所有条目同段流式排列，作者用 `·` / `／` 手动分隔条目。同样高度可装 2~3 倍条目，自带 `max-height:320px + overflow-y:auto + -webkit-overflow-scrolling:touch` 内滚动（公众号移动端实测启用触摸滑动，参见 mdnice `.multiquote-1`）；适合 20+ 条纯出处列表。
-- `info` 非空时渲染主色 kicker（`参 考 文 献` / `NOTES`），与 `editor-note` / `qa-block` 同源。
+- `info` 非空时渲染主色 kicker（`参 考 文 献` / `NOTES`），与 `note variant=editorial-stripe` / `qa-block` 同源。
+
+分条脚注应在条目之间留空行，确保 Markdown 解析成独立段落；普通换行会合并到同一段。另有 `boxed-aside`（旁白卡）、`top-rule`（报纸尾注）、`dense-academic`（论文文献表）可用，标题样式随骨架变化。
 
 ---
 
 ## 文末三栏 CTA
 
 ```
-::: cta-bar
+::: footer-cta variant=triptych-actions
 :::
 
-::: cta-bar like="♡ 同意" star="★ 收藏" share="↗ 转发"
+::: footer-cta variant=triptych-actions like="♡ 同意" star="★ 收藏" share="↗ 转发"
 :::
 ```
 
@@ -168,11 +171,11 @@
 ## 订阅二维码卡
 
 ```
-::: qr-follow 慢读简报 desc="每周四，一封邮件，一组数据" qr="https://.../qr.png"
+::: qrcode variant=follow-card 慢读简报 desc="每周四，一封邮件，一组数据" qr="https://.../qr.png"
 :::
 ```
 
-- 左 60×60 QR + 右三行：`kicker`（默认 SUBSCRIBE）/ 标题（info）/ `desc`。
+- 左 64×64 QR + 右三行：`kicker`（默认 SUBSCRIBE）/ 标题（info）/ `desc`。
 - `qr` 留空时画占位 SVG，发文前换成实际二维码图片。
 
 ---
@@ -180,24 +183,24 @@
 ## 编辑部注 callout
 
 ```
-::: editor-note 编 者 按
+::: note variant=editorial-stripe 编 者 按
 慢读并非复古姿态，而是一种对自己时间主权的重新申明。
 :::
 ```
 
-主色左竖条 + 浅底卡片 + kicker 小标题（info 文字）+ 正文。区别于通用 `note`：`note` 走中性 `textMuted` 调，`editor-note` 是栏目编辑发声块，主色介入。
+主色左竖条 + 浅底卡片 + kicker 小标题（info 文字）+ 正文。`note variant=editorial-stripe` 用于栏目编辑发声，主色介入；中性补注可用 `note variant=side-bar`。
 
 ---
 
 ## 方法论小字注释
 
 ```
-::: methodology 方法论
+::: note variant=research-dense 方法论
 本文数据为作者自行整理，n=1,024，样本覆盖 18–72 岁都市读者。
 :::
 ```
 
-浅底 + 10px `textMuted` + 粗体标签头（info 文字）。**与 `note` 的差别**：`methodology` 排印更紧密（10px、padding 10/12），用于"调研口径 / 数据说明"这类紧凑脚注；`note` 是叙事性补注，行距更松。
+浅底 + 10px `textMuted` + 粗体标签头（info 文字）。`note variant=research-dense` 排印更紧密（10px、padding 10/12），用于"调研口径 / 数据说明"这类紧凑脚注；中性补注则行距更松。
 
 ---
 
@@ -231,4 +234,4 @@
 
 ## 完整示例
 
-可直接套用的端到端示范：[`src/samples-md/sample-data-brief.md`](../../../src/samples-md/sample-data-brief.md) 同时演示了 editorial 家族容器与 data-brief 主题专属的 KPI/条形图。
+可直接套用的端到端示范：[`src/samples-md/sample-data-brief.md`](../../../src/samples-md/sample-data-brief.md) 同时演示了 editorial 家族容器与跨主题的 data-viz KPI/条形图。

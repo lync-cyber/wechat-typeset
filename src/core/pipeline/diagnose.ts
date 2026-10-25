@@ -95,9 +95,9 @@ const VALID_CONTAINER_NAMES: ReadonlySet<string> = new Set(
 
 // open 行典型形态：`::: name rest` 或 `:::: name rest`
 // 捕获：group 1 = 冒号串（长度决定 fenceLength），group 2 = 名字（可选），group 3 = 名字之后的 rest
-const OPEN_FENCE_RE = /^(:{3,})[ \t]*([A-Za-z][\w-]*)?[ \t]*(.*?)[ \t]*$/
+const OPEN_FENCE_RE = /^ {0,3}(:{3,})[ \t]*([A-Za-z][\w-]*)?[ \t]*(.*?)[ \t]*$/
 // 纯闭合 fence：仅 `:::`（可能跟空白）
-const CLOSE_FENCE_RE = /^(:{3,})[ \t]*$/
+const CLOSE_FENCE_RE = /^ {0,3}(:{3,})[ \t]*$/
 // 列表项：可选前导空白 + 标记（-/*/+ 或 digits.）+ 至少一个空白
 // 捕获：group 1 = 前导空白，group 2 = 标记
 const LIST_LINE_RE = /^([ \t]*)([-*+]|\d+\.)\s/
@@ -120,6 +120,7 @@ export function diagnose(source: string): Diagnostic[] {
   const diagnostics: Diagnostic[] = []
   const lines = source.split('\n')
   const stack: OpenFrame[] = []
+  let codeFence: string | null = null
 
   // 预计算每行起始偏移（含该行首字符位置）
   const lineOffsets = new Array<number>(lines.length)
@@ -130,9 +131,23 @@ export function diagnose(source: string): Diagnostic[] {
   }
 
   for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
-    const line = lines[lineIdx]
+    const line = lines[lineIdx].replace(/\r$/, '')
     const lineStart = lineOffsets[lineIdx]
     const lineEnd = lineStart + line.length
+
+    // 代码示例不是容器声明。闭合必须同字符、长度不少于开头，且尾部只有空白。
+    const codeMarker = /^ {0,3}(`{3,}|~{3,})(.*)$/.exec(line)
+    if (codeFence) {
+      if (codeMarker && codeMarker[1][0] === codeFence[0]
+        && codeMarker[1].length >= codeFence.length && /^\s*$/.test(codeMarker[2])) {
+        codeFence = null
+      }
+      continue
+    }
+    if (codeMarker && (codeMarker[1][0] === '~' || !codeMarker[2].includes('`'))) {
+      codeFence = codeMarker[1]
+      continue
+    }
 
     // ── 0. 列表嵌套过深（commonmark 默认 2 空格一级，≥ 4 空格 ≈ 第三层及更深）──
     const listHit = LIST_LINE_RE.exec(line)

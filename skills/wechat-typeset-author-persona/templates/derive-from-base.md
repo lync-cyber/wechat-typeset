@@ -64,7 +64,7 @@ export const spec: PersonaSpec = {
   name: '硬核财经·专业版',
   signatureContainers: [
     ...(base.signatureContainers ?? []),
-    'methodology',
+    'note',
     'colophon',
   ],
   meta: {

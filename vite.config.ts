@@ -1,6 +1,6 @@
 /// <reference types="vitest/config" />
 import { spawn } from 'node:child_process'
-import { resolve, sep } from 'node:path'
+import { sep } from 'node:path'
 import { defineConfig, type Plugin, type ViteDevServer } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
@@ -14,30 +14,14 @@ const BASE = process.env.VITE_BASE ?? '/'
 const IS_VITEST = process.env.VITEST === 'true'
 
 /**
- * samplesDevPlugin · dev 模式自动同步样本 → 浏览器
- *
- * 解决的问题：
- *   作者编辑 src/samples-md/sample-*.md 后，浏览器侧仍展示旧 sample（localStorage
- *   草稿缓存的就是旧版本）。原本要手动 `npm run build:samples` + 刷新页面 + 在 UI
- *   上点"载入当前主题示例"才能看到新内容。
- *
- * 这个插件把这条链路打通：
- *   ① 监听 src/samples-md/sample-*.md 变更 → 自动 spawn `tsx scripts/build-samples.ts`
- *     重写 src/domain/samples/_generated.ts（其中含 SAMPLE_BUILD_ID 哈希）
- *   ② 监听 src/domain/samples/_generated.ts 自身的变更（hot update）→ 直接 send full-reload，
- *     让浏览器整页刷一次。整页刷期间 useDraftLifecycle.initActiveDraft 会比对
- *     localStorage 里存的 SAMPLE_BUILD_ID 与刚加载的新 id，不一致即把活跃草稿
- *     正文重置为该草稿对应主题的最新 sample 内容。
- *
- * 只在 dev / serve 启用；生产构建（vite build）走单次 `build:samples` 即可，不需要
- * watcher。
+ * 开发时监听样稿源文件并重建模块。正文由草稿管理负责；更新示例不覆盖已保存的草稿，
+ * 作者可通过“载入当前主题示例”显式使用新版内容。
  */
 function samplesDevPlugin(): Plugin {
   let building = false
   let pending = false
   let server: ViteDevServer | undefined
   const SAMPLE_MD_RE = /[\\/]src[\\/]samples-md[\\/]sample-.+\.md$/i
-  const GENERATED_TS = resolve(__dirname, 'src', 'domain', 'samples', '_generated.ts')
 
   function rebuild() {
     if (building) {
@@ -56,8 +40,6 @@ function samplesDevPlugin(): Plugin {
         // eslint-disable-next-line no-console
         console.error(`[samples-dev] build:samples 退出码 ${code}`)
       }
-      // generated.ts 更新会触发我们的 handleHotUpdate → full-reload；
-      // 这里不主动 send，避免 reload 比 build 输出还早造成竞态。
       if (pending) {
         pending = false
         rebuild()
@@ -78,15 +60,6 @@ function samplesDevPlugin(): Plugin {
         }
       })
     },
-    handleHotUpdate({ file, server: hot }) {
-      // generated.ts 变更（来自 build:samples 写盘，或作者手动 npm run build:samples）：
-      // 不走 HMR 部分模块热更，直接整页刷——因为 SAMPLE_BUILD_ID 比对发生在 mount 时。
-      if (resolve(file) === GENERATED_TS) {
-        hot.ws.send({ type: 'full-reload' })
-        return []
-      }
-      return undefined
-    },
     buildStart() {
       // 仅 dev 启动时做一次初始打包，避免 _generated.ts 与 src/samples-md 漂移
       if (server && !building) rebuild()
@@ -99,6 +72,7 @@ function samplesDevPlugin(): Plugin {
  * 新增 spec 后跑 `node scripts/_audit-jsdom.mjs`，按其 NEED JSDOM 输出更新本列表。
  */
 const JSDOM_SPECS = [
+  'tests/unit/authored-markdown.spec.ts',
   'tests/unit/actions.spec.ts',
   'tests/unit/cli-commands.spec.ts',
   'tests/unit/component-lib.spec.ts',

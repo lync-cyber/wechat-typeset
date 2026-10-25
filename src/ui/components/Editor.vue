@@ -371,7 +371,14 @@ onBeforeUnmount(() => {
   <div class="editor-shell">
     <div class="editor-tools">
       <span class="editor-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4m8-8 4 4-4 4m-3-11-2 22"/></svg>Markdown</span>
-      <label class="image-upload" :class="{ busy: imageTasks > 0 }"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>{{ imageTasks ? '图片处理中…' : '插入图片' }}<input type="file" accept="image/*" multiple :disabled="imageTasks > 0" aria-label="插入图片" @change="onImageUpload" /></label>
+      <!--
+        显式扩展名绕过 Chromium 对 image/* 的 MIME 展开及 Windows 注册表查询；
+        这里只提示文件过滤范围，不改变选取后的 MIME 检查与浏览器解码能力。
+        参考 GetFileTypesFromAcceptType / GetExtensionsForMimeType：
+        https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/file_select_helper.cc
+        https://chromium.googlesource.com/chromium/src/+/HEAD/net/base/mime_util.cc
+      -->
+      <label class="image-upload" :class="{ busy: imageTasks > 0 }"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>{{ imageTasks ? '图片处理中…' : '插入图片' }}<input type="file" accept=".png,.apng,.jpg,.jpeg,.jpe,.jfif,.pjpeg,.pjp,.webp,.gif,.avif,.avifs,.jxl,.bmp,.dib,.svg,.svgz,.ico,.cur,.heic,.heif,.heics,.heifs,.hif,.tif,.tiff,.pict,.pic,.pct,.cod,.ief,.ras,.cmx,.pnm,.pbm,.pgm,.ppm,.rgb,.xbm,.xpm,.xwd" multiple :disabled="imageTasks > 0" aria-label="插入图片" @change="onImageUpload" /></label>
     </div>
     <div class="editor-host" ref="host" />
   </div>

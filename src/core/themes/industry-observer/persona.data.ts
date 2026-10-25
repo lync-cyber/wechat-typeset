@@ -640,7 +640,7 @@ export const spec: PersonaSpec = {
 `,
     // 规范 §2.2 author：撰文条（attrs 携带 issue 信息）
     authorBar: `::: author 林磊 role=深响编辑 date=2025-04-20 issue=023 kind=周刊
-\`\`\`
+:::
 `,
     // 规范 §2.10 tip 签名：pill-tag + "要点"中文胶囊
     tip: `::: tip 要点

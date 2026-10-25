@@ -241,7 +241,32 @@ describe('diagnose · list-too-deep', () => {
   })
 })
 
+describe('diagnose · fenced code 不参与容器诊断', () => {
+  it.each(['```', '~~~', '````', '~~~~'])('%s 内的教学语法不会触发错误或污染外层栈', (marker) => {
+    const source = `::: note\n${marker}markdown\n::: removed-container\n::: compare\n::: pros\n${marker}\n:::\n`
+    expect(diagnose(source).filter((d) => d.severity === 'error')).toEqual([])
+  })
+
+  it('较短、不同字符、带尾文的 fence 都不能关闭代码块', () => {
+    const source = '````md\n```\n~~~\n```` trailing\n::: invalid\n`````\n::: real-error\n:::'
+    const errors = diagnose(source).filter((d) => d.severity === 'error')
+    expect(errors).toHaveLength(1)
+    expect(source.slice(errors[0].from, errors[0].to)).toBe('real-error')
+  })
+
+  it('未闭合代码块持续保护到文末；支持三个空格缩进和 CRLF', () => {
+    expect(diagnose('   ~~~markdown\r\n::: invalid\r\n::: note').filter((d) => d.severity === 'error')).toEqual([])
+  })
+})
+
 describe('diagnose · offset 正确性', () => {
+  it('识别三个空格以内缩进的容器，并保留 CRLF 原文偏移', () => {
+    const source = '前言\r\n\r\n  ::: removed-container\r\n  :::\r\n'
+    const errors = diagnose(source).filter((d) => d.severity === 'error')
+    expect(errors).toHaveLength(1)
+    expect(source.slice(errors[0].from, errors[0].to)).toBe('removed-container')
+    expect(diagnose('  ::: note\r\n内容\r\n  :::').filter((d) => d.severity === 'error')).toEqual([])
+  })
   it('from/to 覆盖名字本身，方便编辑器高亮', () => {
     const md = 'prefix\n\n::: badname\n:::\n'
     const ds = diagnose(md)

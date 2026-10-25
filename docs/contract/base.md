@@ -19,19 +19,19 @@
 |  | `cover` | ★ | 封面卡（封面图 + 题头 + 可选期号戳）。 |
 |  | `author` | ★ | 作者栏：单行署名块（名字 + 日期/期号）。与 author-bio 的边界见 author-bio.description。 |
 |  | `author-bio` | ★ | 多行作者简介卡：头像 + 名字 + 身份 + 多行简介。与 author 的边界：author 单行署名，author-bio 是独立块（头像 + 多行 bio + 社交链接），通常用在文末"关于作者"。 |
-|  | `section-title` | ★ | 章节标题块（比 ## 更强势的分节）。可切 bordered / cornered。 |
+|  | `section-title` | ★ | 章节标题块（比 ## 更强势的分节）。常用骨架有 bordered / cornered，完整清单见对应 variantKind。 |
 | 提示 | `announcement` | ★ | 强警示横幅：文章顶部 / 中部"置顶通告"块，比 tip/warning 视觉强度更高。info 为标题，body 为说明文本。4 种 variant 覆盖：常规警示 / 法律免责 / AI 合规 / 印章公告。 |
 |  | `tip` | ★ | tip：小贴士／正向提示。 |
 |  | `warning` | ★ | warning：需要读者注意的提醒。 |
 |  | `info` | ★ | info：中性说明／补充信息。 |
 |  | `danger` | ★ | danger：高风险警告／错误示范。 |
 |  | `note` | ★ | note：作者旁批 + 编辑部按 + 调研口径的统一容器。variant 切换语气主体：默认中性（textMuted 不抢色）；editorial-stripe 切到"编辑部以机构身份按语"；research-dense 切到"调研方法论小字栏"。 |
-| 内容 | `quote-card` | ★ | 大段引用卡。可切 classic / magazine-dropcap / column-rule / frame-brackets。 |
+| 内容 | `quote-card` | ★ | 大段引用卡。常用骨架有 classic / magazine-dropcap / column-rule / frame-brackets，完整清单见对应 variantKind。 |
 |  | `highlight` | ★ | 行内高亮段（bgMuted 底色块）。与 quote-card 的边界：quote-card 是"成段引用"（外部话语、有 variant 骨架），highlight 是"作者自己想强调的一段话"。想强调一句"我要让读者停下来"用 highlight；想引用一段他人话用 quote-card。 |
 |  | `compare` | ★ | 双列对比（外层 4 个冒号，内层 pros/cons 用 3 个）。 |
 |  | `pros` |  | compare 的"正面"列（必须嵌在 :::: compare 内）。 |
 |  | `cons` |  | compare 的"反面"列（必须嵌在 :::: compare 内）。 |
-|  | `steps` | ★ | 编号步骤列表。可切 number-circle / ribbon-chain / timeline-dot。 |
+|  | `steps` | ★ | 编号步骤列表。常用骨架有 number-circle / ribbon-chain / timeline-dot，完整清单见对应 variantKind。 |
 |  | `image-caption` | ★ | 图 + 居中小字灰说明的图注块。声明 attrs.src 时自动渲染 img；info 为图注文本。body 内容（如长描述 / 数据来源）作为副说明跟在 caption 下方。 |
 |  | `timeline` | ★ | 时间线：左侧年份 + 右侧事件。外层 4 个冒号，内部 timeline-item 列条目。 |
 |  | `timeline-item` |  | timeline 内单条；info 为事件标题，body 为详述。 |
@@ -40,17 +40,17 @@
 |  | `gallery` | ★ | 多图组合：弥补 image-caption 只能单图、markdown 多图串联无版式的缺陷。外层 4 冒号，内部 image-item 列单图。 |
 |  | `image-item` |  | gallery 内单图。info 为该图的图注（小字），body 内容被忽略。 |
 |  | `dialogue-turn` |  | dialogue 内单轮发言。name 与 shape 二选一必填（shape 以形状代号替代姓名），body 为发言内容。 |
-| 导航 | `divider` |  | 装饰分隔线。可切 wave / dots / flower / rule / glyph / seal-mark。 |
+| 导航 | `divider` |  | 装饰分隔线。常用骨架有 wave / dots / flower / rule / glyph / seal-mark，完整清单见对应 variantKind。 |
 |  | `footer-cta` | ★ | 文末 CTA 块。两态骨架：button-led（默认）= 单按钮 + 引导文案（关注、投喂、阅读原篇）；triptych-actions = 三栏赞同 / 收藏 / 转发并列动作集（data-brief 家族签名）。href 支持公众号内链白名单。 |
 |  | `recommend` | ★ | 推荐阅读链接列表。两态骨架：card-list 走"读者面延伸阅读"（同一作者的其他文章、关联推送）；academic-refs 走"学术参考引用"（论文 / 原始数据 / 二次研究，更克制 uppercase 小字）。 |
-|  | `qrcode` | ★ | 二维码块。两态骨架：bare（默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。 |
+|  | `qrcode` | ★ | 二维码块。bare（系统默认）= 居中 QR + caption，"任意场景的 QR"（赞赏码 / 活动链接 / 小程序）；follow-card = 左 QR + 右 kicker/title/desc 三行刊物订阅卡。qr-stack = 上 QR + 下 kicker/title/desc 居中堆叠。带 text= 时内置 QR 编码生成 SVG，无需外链 / 外部生成。 |
 | 媒体 | `voice-card` | ★ | 公众号语音占位卡（粘贴后由微信识别为真 mpvoice 节点）。 |
 |  | `video-card` | ★ | 公众号视频占位卡（带 qqvid 时直出 v.qq.com iframe；其余为占位）。 |
 | 签名 | `abstract` | ★ | 文首 tl;dr 摘要块（business-finance / industry-observer 等深度主题）。 |
 |  | `key-number` | ★ | 大数字 + 说明（研究报告 / 内参版面 / issue-banner）。attrs.value 为数字，info 为 kicker；声明 attrs.meta 切到双栏布局（issue-banner 模式）。 |
 | 兜底 | `free` |  | 兜底容器：渲染器刻意不施加主题样式，写不归类内容。 |
 
-> 由 `npm run build:writer-docs` 从 `src/containers/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
+> 由 `pnpm build:writer-docs` 从 `src/core/vocabulary/vocabulary.ts` 生成，请勿手改。新增容器先改 vocabulary（含 `pack` 字段），需要划入扩展包就声明 `pack: '<id>'`。
 
 <!-- generated:container-quick-ref:base:end -->
 
@@ -218,13 +218,13 @@ TL;DR · 一段 80–160 字的摘要。学术 / 行业观察家族推荐在正�
 数据卡：巨号数字 + 标签 + 注释。attrs.value 放数字本体，info 放 kicker。
 :::
 
-::: see-also 延伸阅读
+::: recommend variant=academic-refs 延伸阅读
 - [相关资料 A](https://...)
 - [相关资料 B](https://...)
 :::
 ```
 
-> 数据简报家族（masthead / toc / kpi-dashboard / bar-chart / qa-block / footnotes / cta-bar / qr-follow）是更结构化的签名元素，独立放在 [`data-brief` 扩展包](packs/data-brief.md)。
+> 刊物签名元素（masthead / toc / qa-block / footnotes 等）见 [`editorial` 扩展包](packs/editorial.md)；KPI 仪表盘和条形图见 [`data-viz` 扩展包](packs/data-viz.md)。[`data-brief`](packs/data-brief.md) 另述该主题的章节装饰。
 
 ---
 

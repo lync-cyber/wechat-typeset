@@ -181,7 +181,6 @@ def merge_timeline(sources: list[list[dict]]) -> list[dict]:
 某某 · 2026-04-20 · 若此文对你有用，请回信告诉我一件**你改了的行为**
 :::
 
-::: footnotes
 [^1]: 数据来源：Google SRE Book Chapter 15、Stripe Engineering Blog（2019）、Amazon Builder's Library（2020）。三处来源的模板骨架在"时间轴精度 / 根因问题 / 可拒绝行动项"三点上高度收敛。
+
 [^2]: 统计周期 2024-10 至 2026-03，覆盖 3 家公司 47 份 postmortem，其中 SaaS 产品类 29 份、基础设施类 18 份。有 runbook / 无 runbook 的分组依据是事故发生时 on-call 能否在 2 分钟内定位操作手册。
-:::

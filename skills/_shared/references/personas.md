@@ -2,7 +2,7 @@
 
 > author-persona / annotate-markdown 两个 skill 通过 `../_shared/references/personas.md` 相对路径共同引用本文件，零副本零同步。改本文件 = 两个 skill 同时生效。
 >
-> **本文件部分内容由 `npm run build:skill-refs` 从 `src/public/personas.ts` 派生**——速查表与逐个画像段落不要手改；新增主题只需在 `src/public/personas.ts` 注册，跑一次 build 脚本即可。
+> **本文件部分内容由 `pnpm build:skill-refs` 从 `listPersonas()` 派生**——速查表与逐个画像段落不要手改；主题登记入口为 `src/core/themes/registry.ts`，更新后运行生成脚本。
 >
 > 决策树与"什么时候选 / 选它的信号"等手写指引保留在本文件末尾。
 
@@ -255,11 +255,11 @@
 - **tech-explainer** — 全项目唯一 `codeBlock=header-bar` 的主题（顶部语言标签 + copy icon）。
 - **industry-observer** — 主题自带 `issueStamp` 模板 motif。markdown 容器里写 `issue=023 date=2025-04-20 kind=周刊` 时，cover / author / footerCTA 三处自动贴上期号印章 SVG。
 - **people-story** — 声明了 `decorations.introDropcap`（首段首字下沉）+ `decorations.headingPrefix` h2 罗马数字（I / II / III）。
-- **swiss-grid** — H2 红章前缀（`backgroundColor='primary' + textInverse`），全 0 圆角（"半径 ≥ 1 即破"）。`editorNoteKicker` 走全幅黑底白字 header bar 形态。
+- **swiss-grid** — H2 红章前缀（`backgroundColor='primary' + textInverse`），全 0 圆角（"半径 ≥ 1 即破"）。编辑部按语使用 `note variant=editorial-stripe`，其形态由该变体控制。
 - **brutalist** — `quote=tilted-sticker`（反色卡片 + `transform:rotate(-1deg)`），status 四态打破交通灯（NOTE 蓝 / TIP 绿 / WARN 黄 / HALT 红）。
 - **editorial-mook** — `admonition=mook-tag`（参 / 編 / 注 / 禁 单字 CJK 标签）；`decorations.headingPrefix` 走 `arabic-padded` + 中文小写后缀 `第{cn}章`。
 - **late-night-vinyl** — `admonition=news-row`，深夜蓝 + 暖米白 + 橙色唱针的"03:41 AM"播客慢读 voice。
-- **data-brief** — `compare=data-card`（顶 3px 色条 + bgSoft + monospace 数字），`admonition=news-row`，signatureContainers 含全套 data-brief 家族（masthead / toc / kpiDashboard / barChart / qaBlock / footnotes / ctaBar / qrFollow / editorNote / methodology / colophon）。
+- **data-brief** — `compare=data-card`（顶 3px 色条 + bgSoft + monospace 数字），`admonition=news-row`。刊物内容使用 masthead / toc / kpiDashboard / barChart / qaBlock / footnotes / colophon；三栏动作、订阅卡、编辑部按语和方法论分别写作 `footer-cta variant=triptych-actions` / `qrcode variant=follow-card` / `note variant=editorial-stripe` / `note variant=research-dense`。
 
 ## 重要：派生 vs 全新造的硬规则
 

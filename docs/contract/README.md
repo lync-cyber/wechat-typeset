@@ -8,7 +8,7 @@
 
 ---
 
-## 契约的三层
+## 契约的层次
 
 | 层 | 由什么构成 | 谁负责 | 入口文档 |
 | --- | --- | --- | --- |
@@ -27,7 +27,7 @@
 | --- | --- | --- |
 | [syntax.md](syntax.md) | 容器 fence 通用语法、行内扩展、常见错误 | 任何写作者 |
 | [base.md](base.md) | 基础契约的通用容器全集（结构 / 提示 / 内容 / 导航 / 媒体 / 签名 / 兜底） | 任何写作者 |
-| [packs/editorial.md](packs/editorial.md) | `pack:editorial` 领域扩展包：刊头 / 目录 / 问答 / 脚注 / CTA / 订阅卡 / 编辑部注 / 收束栏 等（多主题共享） | 写栏目化深度文 / newsletter |
+| [packs/editorial.md](packs/editorial.md) | `pack:editorial` 领域扩展包：刊头 / 目录 / 问答 / 脚注 / 收束栏等，并说明基础容器的刊物用法（多主题共享） | 写栏目化深度文 / newsletter |
 | [packs/data-viz.md](packs/data-viz.md) | `pack:data-viz` 数据可视化包：KPI 仪表盘 / 横向条形图（多主题共享） | 写数据简报 / 行业报告 |
 | [packs/data-brief.md](packs/data-brief.md) | `data-brief` 主题私有排版说明：章节 monospace 编号等主题专属装饰 | 写数据简报 |
 | [custom.md](custom.md) | 在 fork 里加私有容器的流程，与契约保护范围的边界 | 集成方 / 主题作者 |

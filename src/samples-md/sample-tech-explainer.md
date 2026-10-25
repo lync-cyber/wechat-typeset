@@ -179,5 +179,6 @@ JWT 是信任契约，不是加密容器。签名确保"数据未被篡改"，�
 
 ::: footnotes 参考资料
 [1] RFC 7519 · JSON Web Token (JWT) · IETF 2015。
+
 [2] OWASP JWT Cheatsheet · 2024 最新版。
 :::

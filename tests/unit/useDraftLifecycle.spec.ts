@@ -73,6 +73,19 @@ describe('initActiveDraft', () => {
     expect(h_!.md.value).toBe('hello body')
     expect(h_!.baseThemeId.value).toBe('tech-geek')
   })
+
+  it.each([true, false])('示例源更新不会覆盖用户正文（存在活跃指针：%s）', async (active) => {
+    const draft = createDraft({ title: '自己的文章', body: '编辑后的正文', themeId: 'swiss-grid' })
+    // 旧开发版本留下的标记也不得触发正文重置。
+    localStorage.setItem('wechat-typeset:dev:sampleBuildId', 'previous-build')
+    if (!active) localStorage.removeItem(`${DRAFT_STORAGE_PREFIX}active`)
+    h_!.api.initActiveDraft()
+    await nextTick()
+    vi.advanceTimersByTime(500)
+    expect(h_!.md.value).toBe('编辑后的正文')
+    expect(readDraft(draft.id)?.body).toBe('编辑后的正文')
+    expect(h_!.getSample).not.toHaveBeenCalled()
+  })
 })
 
 describe('handleSelectDraft', () => {

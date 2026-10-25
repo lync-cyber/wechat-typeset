@@ -20,11 +20,11 @@
 
 ## 硬约束（主题作者不能突破，写作者不会踩到）
 
-主题通过 [`persona.data.ts`](../../src/themes/) 声明调色板、排版、装饰与 variant 选择。
-以下约束由 `src/pipeline/rules.ts` / `src/themes/_shared/spec/validate.ts` 在构建期校验：
+主题通过 [`persona.data.ts`](../../src/core/themes/) 声明调色板、排版、装饰与 variant 选择。
+以下约束由 `src/core/pipeline/rules.ts` / `src/core/themes/_shared/spec/validate.ts` 在构建期校验：
 
-- 字号 ≥ 14、SVG `stroke-width` ≥ 1、`fill` 纯白 `#ffffff` 统一换 `#fefefe`
-- 禁用 `position` / `float` / `font-family` / `@media` / `:hover` / `-webkit-*` / flex `gap`
+- motif 字号 ≥ 14、SVG `stroke-width` ≥ 1；脚注等紧凑正文可由已注册变体控制；`fill` 纯白 `#ffffff` 统一换 `#fefefe`
+- 禁用 `position` / `float` / 任意 `font-family` / `@media` / `:hover` / flex `gap`；motif 字体只允许平台白名单。`-webkit-*` 仅保留 `print-color-adjust` 与 `overflow-scrolling` 两个明确例外
 - 禁止扩展 fence 词汇表——新视觉一律注册为 variant，不得新增容器名（自定义扩展走 [custom.md](custom.md)）
 - 禁止在 `spec.elements` / `motifs` 之外写自定义 HTML
 

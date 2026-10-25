@@ -13,6 +13,7 @@ import { globSync } from 'node:fs'
 import { basename, dirname, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { validateSpec, type PersonaSpec } from '../src/core/themes/_shared/spec'
+import { diagnose } from '../src/core/pipeline/diagnose'
 
 const REPO_ROOT = process.cwd()
 const REGISTRY_TS = resolve(REPO_ROOT, 'src/core/themes/registry.ts')
@@ -74,6 +75,15 @@ async function main() {
     const mod = await import(pathToFileURL(t.path).href)
     const spec = (mod.spec ?? mod.default) as PersonaSpec
     const r = validateSpec(spec)
+    for (const [name, markdown] of Object.entries(spec.templates ?? {})) {
+      if (!markdown) continue
+      const errors = diagnose(markdown).filter((d) => d.severity === 'error' || d.code === 'unknown-variant')
+      if (errors.length > 0) {
+        invalid++
+        console.error(`[fail] ${t.specId}.templates.${name}:`)
+        for (const error of errors) console.error(`  ${error.message}`)
+      }
+    }
     if (!r.ok) {
       invalid++
       console.error(`[fail] validateSpec(${t.specId}):`)
@@ -93,6 +103,9 @@ async function main() {
 
   // 1. 磁盘上每个目录都在 import 里
   for (const t of onDisk) {
+    if (t.dir !== t.specId) {
+      errors.push(`themes/${t.dir} 的 spec.id="${t.specId}" 必须与目录名一致`)
+    }
     if (!importedSet.has(t.dir)) {
       errors.push(
         `themes/${t.dir}/persona.data.ts 存在,但 themes/registry.ts 未 import './${t.dir}/persona.data'`,
