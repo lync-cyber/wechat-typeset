@@ -8,8 +8,17 @@ import { render } from '../../src/core/pipeline'
 import { SAMPLE_BY_THEME } from '../../src/domain/samples'
 import { getThemeTemplateEntries } from '../../src/domain/components-lib/sources/theme-template-source'
 import { BUILTIN_COMPONENTS } from '../../src/domain/components-lib/sources/builtin-source'
+import { parseFrontmatter } from '../../src/core/pipeline/frontmatter'
 
 describe('内置写作内容遵守当前容器契约', () => {
+  it('每个主题只有一份演示稿，标题明确、简短且互不重复', () => {
+    expect(Object.keys(SAMPLE_BY_THEME).sort()).toEqual(themeList.map((theme) => theme.id).sort())
+    const titles = Object.values(SAMPLE_BY_THEME).map((sample) => parseFrontmatter(sample).publication.title)
+    expect(new Set(titles).size).toBe(themeList.length)
+    for (const title of titles) expect(title).toMatch(/^.{1,8}主题演示稿$/)
+    expect(parseFrontmatter(SAMPLE_BY_THEME['swiss-grid']).publication.title).toBe('苏黎世主题演示稿')
+  })
+
   for (const theme of themeList) {
     const sample = readFileSync(`src/samples-md/sample-${theme.id}.md`, 'utf8').replace(/\r\n/g, '\n')
 

@@ -495,6 +495,7 @@ useBootstrap({ activeDraftId, initActiveDraft, flushDraftSave, tryLoadShareFromH
 .pane-editor.fixed-width { flex: 0 1 var(--editor-w); }
 .pane-preview { flex: 1 1 0; overflow: hidden; background: var(--bg); }
 .main[data-stage="write"] .pane-preview { flex: 0 1 407px; }
+.main[data-stage="write"] .pane-editor.fixed-width ~ .pane-preview { flex-grow: 1; }
 .context-inspector { flex: 0 0 320px; width: 320px; min-width: 0; min-height: 0; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-3); background: var(--bg); box-shadow: var(--shadow-rest); overflow: hidden; }
 .context-inspector.inspector-wide { flex-basis: 380px; width: 380px; }
 .context-inspector.publish-inspector { flex-basis: 360px; width: 360px; }
@@ -514,7 +515,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .file-conflict-actions { display: flex; gap: var(--sp-3); }
 .file-conflict-actions button { padding: var(--sp-2) var(--sp-3); border: 1px solid var(--border); border-radius: var(--radius-2); background: var(--surface); color: var(--text); cursor: pointer; font: inherit; }
 .file-conflict-actions button:last-child { background: var(--accent); color: var(--accent-on); border-color: var(--accent); }
-@media (max-width: 1280px) { .main[data-stage="write"].has-inspector .pane-preview { display: none; } .main[data-stage="write"].has-inspector :deep(.splitter) { display: none; } }
+@media (max-width: 1280px) { .main[data-stage="write"].has-inspector .pane-preview { display: none; } .main[data-stage="write"].has-inspector .pane-editor { flex: 1 1 0; } .main[data-stage="write"].has-inspector :deep(.splitter) { display: none; } }
 @media (max-width: 1100px) { .library-sidebar { flex-basis: 216px; width: 216px; } .context-inspector { flex-basis: 288px; width: 288px; } .main[data-stage="write"] .pane-preview { flex-basis: 390px; } .document-bar { padding-inline: 16px; gap: 8px; } .main { padding-inline: 12px; gap: 12px; } .document-actions { gap: 4px; } .preview-toggle { font-size: var(--fs-11); } }
 @media (max-width: 900px) {
   .library-sidebar { position: fixed; inset: 0 auto 0 0; width: min(300px, 88vw); z-index: 70; background: var(--bg); }

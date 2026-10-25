@@ -1,3 +1,7 @@
+---
+title: 人物特稿主题演示稿
+---
+
 ::: cover 林若华
 ![封面肖像](https://placehold.co/1200x1400?text=portrait)
 

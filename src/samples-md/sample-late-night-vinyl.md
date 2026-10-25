@@ -1,3 +1,7 @@
+---
+title: 深夜电台主题演示稿
+---
+
 # 深夜电台 · late-night-vinyl 主题示例
 
 ::: masthead 夜读电台 · EP.04 date="ON AIR · 03:41"

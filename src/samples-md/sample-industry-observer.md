@@ -1,3 +1,7 @@
+---
+title: 行业观察主题演示稿
+---
+
 ::: cover 专题头 · 技术并不淘汰公司 issue=023 date=2025-04-20 kind=周刊
 ![封面占位](https://placehold.co/1200x630?text=industry-observer+cover)
 

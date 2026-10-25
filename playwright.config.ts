@@ -56,7 +56,7 @@ export default defineConfig({
           ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } }
           : {}),
       },
-      testMatch: /(studio-modal|toolbar-overflow|closing-contract|pipeline-parity)\.spec\.ts/,
+      testMatch: /(studio-modal|toolbar-overflow|closing-contract|pipeline-parity|pane-layout)\.spec\.ts/,
     },
   ],
   webServer: {
