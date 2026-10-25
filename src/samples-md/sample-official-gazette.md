@@ -1,4 +1,5 @@
 ---
+title: 公文公报主题演示稿
 theme: official-gazette
 ---
 

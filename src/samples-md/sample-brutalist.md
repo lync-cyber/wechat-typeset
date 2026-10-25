@@ -1,3 +1,7 @@
+---
+title: 粗野主义主题演示稿
+---
+
 # 粗野主义 · brutalist 主题示例
 
 ::: masthead INK issue="07" date="2026.05.16" kicker="第 07 期"

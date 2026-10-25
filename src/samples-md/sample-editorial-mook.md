@@ -1,3 +1,7 @@
+---
+title: 编辑刊主题演示稿
+---
+
 ::: masthead slow reading issue="05" date="2026.05.15"
 :::
 

@@ -1,3 +1,7 @@
+---
+title: 苏黎世主题演示稿
+---
+
 ::: key-number NEUE GRAFIK REVUE value="Nº09"
 VOL.IX · 2026—05—16 · CHF 14.—
 :::

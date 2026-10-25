@@ -1,3 +1,7 @@
+---
+title: 硬核财经主题演示稿
+---
+
 ::: cover 本期议题 · 消费信贷利率结构性下行
 ![封面占位](https://placehold.co/1200x630?text=business-finance+cover)
 
